@@ -165,7 +165,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                     request
                 );
 
-                if (this._last) {
+                if (this._last && this.ScorerUserId == null) {
                     this._gs2.Cache.SetListCached<Gs2.Gs2Ranking.Model.Score>(
                         (null as Gs2.Gs2Ranking.Model.Score).CacheParentKey(
                             NamespaceName,

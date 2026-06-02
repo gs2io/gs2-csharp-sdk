@@ -23,6 +23,7 @@ using System.Linq;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
+using Gs2.Core.Util;
 using Gs2.Util.LitJson;
 
 #if UNITY_2017_1_OR_NEWER
@@ -54,9 +55,9 @@ namespace Gs2.Gs2Deploy
 
         public class PreCreateStackTask : Gs2WebSocketSessionTask<Request.PreCreateStackRequest, Result.PreCreateStackResult>
         {
-	        public PreCreateStackTask(IGs2Session session, Request.PreCreateStackRequest request) : base(session, request)
-	        {
-	        }
+            public PreCreateStackTask(IGs2Session session, Request.PreCreateStackRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.PreCreateStackRequest request)
             {
@@ -91,70 +92,58 @@ namespace Gs2.Gs2Deploy
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator PreCreateStack(
+        public IEnumerator PreCreateStack(
                 Request.PreCreateStackRequest request,
                 UnityAction<AsyncResult<Result.PreCreateStackResult>> callback
-        )
-		{
-			var task = new PreCreateStackTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.PreCreateStackResult>(task.Result, task.Error));
-        }
+        ) =>
+            new PreCreateStackTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.PreCreateStackResult> PreCreateStackFuture(
+        public IFuture<Result.PreCreateStackResult> PreCreateStackFuture(
                 Request.PreCreateStackRequest request
-        )
-		{
-			return new PreCreateStackTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new PreCreateStackTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.PreCreateStackResult> PreCreateStackAsync(
+        public UniTask<Result.PreCreateStackResult> PreCreateStackAsync(
             Request.PreCreateStackRequest request
-        )
-		{
-		    var task = new PreCreateStackTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new PreCreateStackTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.PreCreateStackResult>();
     #else
-		public PreCreateStackTask PreCreateStackAsync(
+        public PreCreateStackTask PreCreateStackAsync(
                 Request.PreCreateStackRequest request
         )
-		{
-			return new PreCreateStackTask(
+        {
+            return new PreCreateStackTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.PreCreateStackResult> PreCreateStackAsync(
+        public Task<Result.PreCreateStackResult> PreCreateStackAsync(
             Request.PreCreateStackRequest request
-        )
-		{
-		    var task = new PreCreateStackTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new PreCreateStackTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class PreValidateTask : Gs2WebSocketSessionTask<Request.PreValidateRequest, Result.PreValidateResult>
         {
-	        public PreValidateTask(IGs2Session session, Request.PreValidateRequest request) : base(session, request)
-	        {
-	        }
+            public PreValidateTask(IGs2Session session, Request.PreValidateRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.PreValidateRequest request)
             {
@@ -189,70 +178,58 @@ namespace Gs2.Gs2Deploy
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator PreValidate(
+        public IEnumerator PreValidate(
                 Request.PreValidateRequest request,
                 UnityAction<AsyncResult<Result.PreValidateResult>> callback
-        )
-		{
-			var task = new PreValidateTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.PreValidateResult>(task.Result, task.Error));
-        }
+        ) =>
+            new PreValidateTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.PreValidateResult> PreValidateFuture(
+        public IFuture<Result.PreValidateResult> PreValidateFuture(
                 Request.PreValidateRequest request
-        )
-		{
-			return new PreValidateTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new PreValidateTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.PreValidateResult> PreValidateAsync(
+        public UniTask<Result.PreValidateResult> PreValidateAsync(
             Request.PreValidateRequest request
-        )
-		{
-		    var task = new PreValidateTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new PreValidateTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.PreValidateResult>();
     #else
-		public PreValidateTask PreValidateAsync(
+        public PreValidateTask PreValidateAsync(
                 Request.PreValidateRequest request
         )
-		{
-			return new PreValidateTask(
+        {
+            return new PreValidateTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.PreValidateResult> PreValidateAsync(
+        public Task<Result.PreValidateResult> PreValidateAsync(
             Request.PreValidateRequest request
-        )
-		{
-		    var task = new PreValidateTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new PreValidateTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class ValidateTask : Gs2WebSocketSessionTask<Request.ValidateRequest, Result.ValidateResult>
         {
-	        public ValidateTask(IGs2Session session, Request.ValidateRequest request) : base(session, request)
-	        {
-	        }
+            public ValidateTask(IGs2Session session, Request.ValidateRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.ValidateRequest request)
             {
@@ -302,70 +279,58 @@ namespace Gs2.Gs2Deploy
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator Validate(
+        public IEnumerator Validate(
                 Request.ValidateRequest request,
                 UnityAction<AsyncResult<Result.ValidateResult>> callback
-        )
-		{
-			var task = new ValidateTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ValidateResult>(task.Result, task.Error));
-        }
+        ) =>
+            new ValidateTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.ValidateResult> ValidateFuture(
+        public IFuture<Result.ValidateResult> ValidateFuture(
                 Request.ValidateRequest request
-        )
-		{
-			return new ValidateTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new ValidateTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ValidateResult> ValidateAsync(
+        public UniTask<Result.ValidateResult> ValidateAsync(
             Request.ValidateRequest request
-        )
-		{
-		    var task = new ValidateTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new ValidateTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.ValidateResult>();
     #else
-		public ValidateTask ValidateAsync(
+        public ValidateTask ValidateAsync(
                 Request.ValidateRequest request
         )
-		{
-			return new ValidateTask(
+        {
+            return new ValidateTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.ValidateResult> ValidateAsync(
+        public Task<Result.ValidateResult> ValidateAsync(
             Request.ValidateRequest request
-        )
-		{
-		    var task = new ValidateTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new ValidateTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class PreUpdateStackTask : Gs2WebSocketSessionTask<Request.PreUpdateStackRequest, Result.PreUpdateStackResult>
         {
-	        public PreUpdateStackTask(IGs2Session session, Request.PreUpdateStackRequest request) : base(session, request)
-	        {
-	        }
+            public PreUpdateStackTask(IGs2Session session, Request.PreUpdateStackRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.PreUpdateStackRequest request)
             {
@@ -405,70 +370,58 @@ namespace Gs2.Gs2Deploy
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator PreUpdateStack(
+        public IEnumerator PreUpdateStack(
                 Request.PreUpdateStackRequest request,
                 UnityAction<AsyncResult<Result.PreUpdateStackResult>> callback
-        )
-		{
-			var task = new PreUpdateStackTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.PreUpdateStackResult>(task.Result, task.Error));
-        }
+        ) =>
+            new PreUpdateStackTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.PreUpdateStackResult> PreUpdateStackFuture(
+        public IFuture<Result.PreUpdateStackResult> PreUpdateStackFuture(
                 Request.PreUpdateStackRequest request
-        )
-		{
-			return new PreUpdateStackTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new PreUpdateStackTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.PreUpdateStackResult> PreUpdateStackAsync(
+        public UniTask<Result.PreUpdateStackResult> PreUpdateStackAsync(
             Request.PreUpdateStackRequest request
-        )
-		{
-		    var task = new PreUpdateStackTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new PreUpdateStackTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.PreUpdateStackResult>();
     #else
-		public PreUpdateStackTask PreUpdateStackAsync(
+        public PreUpdateStackTask PreUpdateStackAsync(
                 Request.PreUpdateStackRequest request
         )
-		{
-			return new PreUpdateStackTask(
+        {
+            return new PreUpdateStackTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.PreUpdateStackResult> PreUpdateStackAsync(
+        public Task<Result.PreUpdateStackResult> PreUpdateStackAsync(
             Request.PreUpdateStackRequest request
-        )
-		{
-		    var task = new PreUpdateStackTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new PreUpdateStackTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class PreChangeSetTask : Gs2WebSocketSessionTask<Request.PreChangeSetRequest, Result.PreChangeSetResult>
         {
-	        public PreChangeSetTask(IGs2Session session, Request.PreChangeSetRequest request) : base(session, request)
-	        {
-	        }
+            public PreChangeSetTask(IGs2Session session, Request.PreChangeSetRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.PreChangeSetRequest request)
             {
@@ -508,70 +461,58 @@ namespace Gs2.Gs2Deploy
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator PreChangeSet(
+        public IEnumerator PreChangeSet(
                 Request.PreChangeSetRequest request,
                 UnityAction<AsyncResult<Result.PreChangeSetResult>> callback
-        )
-		{
-			var task = new PreChangeSetTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.PreChangeSetResult>(task.Result, task.Error));
-        }
+        ) =>
+            new PreChangeSetTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.PreChangeSetResult> PreChangeSetFuture(
+        public IFuture<Result.PreChangeSetResult> PreChangeSetFuture(
                 Request.PreChangeSetRequest request
-        )
-		{
-			return new PreChangeSetTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new PreChangeSetTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.PreChangeSetResult> PreChangeSetAsync(
+        public UniTask<Result.PreChangeSetResult> PreChangeSetAsync(
             Request.PreChangeSetRequest request
-        )
-		{
-		    var task = new PreChangeSetTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new PreChangeSetTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.PreChangeSetResult>();
     #else
-		public PreChangeSetTask PreChangeSetAsync(
+        public PreChangeSetTask PreChangeSetAsync(
                 Request.PreChangeSetRequest request
         )
-		{
-			return new PreChangeSetTask(
+        {
+            return new PreChangeSetTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.PreChangeSetResult> PreChangeSetAsync(
+        public Task<Result.PreChangeSetResult> PreChangeSetAsync(
             Request.PreChangeSetRequest request
-        )
-		{
-		    var task = new PreChangeSetTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new PreChangeSetTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class GetServiceVersionTask : Gs2WebSocketSessionTask<Request.GetServiceVersionRequest, Result.GetServiceVersionResult>
         {
-	        public GetServiceVersionTask(IGs2Session session, Request.GetServiceVersionRequest request) : base(session, request)
-	        {
-	        }
+            public GetServiceVersionTask(IGs2Session session, Request.GetServiceVersionRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetServiceVersionRequest request)
             {
@@ -606,62 +547,50 @@ namespace Gs2.Gs2Deploy
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetServiceVersion(
+        public IEnumerator GetServiceVersion(
                 Request.GetServiceVersionRequest request,
                 UnityAction<AsyncResult<Result.GetServiceVersionResult>> callback
-        )
-		{
-			var task = new GetServiceVersionTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetServiceVersionResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetServiceVersionTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetServiceVersionResult> GetServiceVersionFuture(
+        public IFuture<Result.GetServiceVersionResult> GetServiceVersionFuture(
                 Request.GetServiceVersionRequest request
-        )
-		{
-			return new GetServiceVersionTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetServiceVersionTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetServiceVersionResult> GetServiceVersionAsync(
+        public UniTask<Result.GetServiceVersionResult> GetServiceVersionAsync(
             Request.GetServiceVersionRequest request
-        )
-		{
-		    var task = new GetServiceVersionTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetServiceVersionTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetServiceVersionResult>();
     #else
-		public GetServiceVersionTask GetServiceVersionAsync(
+        public GetServiceVersionTask GetServiceVersionAsync(
                 Request.GetServiceVersionRequest request
         )
-		{
-			return new GetServiceVersionTask(
+        {
+            return new GetServiceVersionTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetServiceVersionResult> GetServiceVersionAsync(
+        public Task<Result.GetServiceVersionResult> GetServiceVersionAsync(
             Request.GetServiceVersionRequest request
-        )
-		{
-		    var task = new GetServiceVersionTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetServiceVersionTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 	}
 }

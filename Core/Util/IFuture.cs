@@ -6,10 +6,8 @@ namespace Gs2.Core.Net
 {
     public interface IFuture<TResult> : IEnumerator
     {
-        TResult Result { set; get; }
-        Gs2Exception Error { set; get; }
-
-        IEnumerator Action();
+        TResult Result { get; }
+        Gs2Exception Error { get; }
 
         bool IsComplete();
         void OnError(Gs2Exception error);

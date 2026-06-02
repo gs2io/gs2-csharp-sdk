@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Threading.Tasks;
+using Gs2.Core.Control;
 using Gs2.Core.Exception;
 using Gs2.Core.Model;
 using Gs2.Core.Result;
@@ -16,15 +17,15 @@ using Cysharp.Threading.Tasks;
 
 namespace Gs2.Core.Net
 {
-    public abstract class Gs2SessionTask<TRequest, TResult>  : TaskFuture<TRequest, TResult>
-        where TRequest : IRequest
+    public abstract class Gs2SessionTask<TRequest, TResult>  : TaskFuture<TResult>
+        where TRequest : Gs2Request<TRequest>
         where TResult : IResult
     {
         protected abstract IGs2SessionRequest CreateRequest(TRequest request);
 
-        protected new Gs2SessionTaskId TaskId { get; set; }
+        protected Gs2SessionTaskId TaskId { get; set; }
 
-        protected new TRequest Request { get; set; }
+        protected TRequest Request { get; set; }
 
         protected IGs2Session Session;
 
@@ -35,72 +36,10 @@ namespace Gs2.Core.Net
             TaskId = Gs2SessionTaskId.Generator.Issue();
         }
 
-        public override IEnumerator Action()
-        {
-            var request = CreateRequest(Request);
-            request.TaskId = TaskId;
-            
-            if (this.Session.IsCanceled())
-            {
-                OnError(new UserCancelException(Array.Empty<RequestError>()));
-                yield break;
-            }
-
-            if (this.Session.IsDisconnected())
-            {
-                OnError(new SessionNotOpenException("Session no longer open."));
-                yield break;
-            }
-            
-            Telemetry.StartRequest(request.TaskId, Request);
-
-            yield return this.Session.Send(request);
-            var begin = DateTime.Now;
-            while (!this.Session.IsCompleted(request))
-            {
-                if ((DateTime.Now - begin).Seconds > 10)
-                {
-                    OnError(new RequestTimeoutException(Array.Empty<RequestError>()));
-                    yield break;
-                }
-                if (this.Session.IsCanceled())
-                {
-                    OnError(new UserCancelException(Array.Empty<RequestError>()));
-                    yield break;
-                }
-
-#if UNITY_WEBGL && !UNITY_EDITOR
-                yield return new WaitForSeconds(0.005f);
-#else
-                yield return null;
-#endif
-            }
-            
-            var response = this.Session.MarkRead(request);
-            
-            Telemetry.EndRequest(request.TaskId, Request, response);
-
-            if (response.IsSuccess)
-            {
-                var transactionResult = Gs2.Core.Result.TransactionResult.FromJson(response.Body);
-                if (transactionResult != null) {
-                    if (transactionResult.TransactionId != null && 
-                        (transactionResult.AutoRunStampSheet ?? false)) {
-                        Telemetry.StartTransaction(transactionResult.TransactionId, Request);
-                    }
-                }
-                OnComplete((TResult)typeof(TResult).GetMethod("FromJson")?.Invoke(null, new object[] { response.Body }));
-            }
-            else
-            {
-                OnError(response.Error);
-            }
-        }
-
 #if GS2_ENABLE_UNITASK
-        public override async UniTask<TResult> Invoke()
+        protected override async UniTask<TResult> InvokeImpl()
 #else
-        public override async Task<TResult> Invoke()
+        protected override async Task<TResult> InvokeImpl()
 #endif
         {
             var request = CreateRequest(Request);
@@ -118,15 +57,8 @@ namespace Gs2.Core.Net
 
             Telemetry.StartRequest(request.TaskId, Request);
 
-#if UNITY_2017_1_OR_NEWER
-#if GS2_ENABLE_UNITASK
             await this.Session.SendAsync(request);
-#else
-            this.Session.Send(request);
-#endif
-#else
-            await this.Session.SendAsync(request);
-#endif
+
             var begin = DateTime.Now;
             while (!this.Session.IsCompleted(request))
             {
@@ -138,11 +70,7 @@ namespace Gs2.Core.Net
                 {
                     throw new UserCancelException(Array.Empty<RequestError>());
                 }
-#if GS2_ENABLE_UNITASK
-                await UniTask.Delay(5);
-#else
-                await Task.Delay(5);
-#endif
+                await TaskUtilities.Yield();
             }
             var response = this.Session.MarkRead(request);
             

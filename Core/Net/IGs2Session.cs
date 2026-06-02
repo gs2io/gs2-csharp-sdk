@@ -38,16 +38,14 @@ namespace Gs2.Core.Net
 
         bool Ping();
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         UniTask<OpenResult> OpenAsync();
         UniTask SendAsync(IGs2SessionRequest request);
         UniTask CloseAsync();
-    #else
+#else
         Task<OpenResult> OpenAsync();
         Task SendAsync(IGs2SessionRequest request);
         Task CloseAsync();
-    #endif
 #endif
     }
 }

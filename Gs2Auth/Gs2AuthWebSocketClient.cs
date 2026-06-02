@@ -23,6 +23,7 @@ using System.Linq;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
+using Gs2.Core.Util;
 using Gs2.Util.LitJson;
 
 #if UNITY_2017_1_OR_NEWER
@@ -54,9 +55,9 @@ namespace Gs2.Gs2Auth
 
         public class LoginTask : Gs2WebSocketSessionTask<Request.LoginRequest, Result.LoginResult>
         {
-	        public LoginTask(IGs2Session session, Request.LoginRequest request) : base(session, request)
-	        {
-	        }
+            public LoginTask(IGs2Session session, Request.LoginRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.LoginRequest request)
             {
@@ -106,70 +107,58 @@ namespace Gs2.Gs2Auth
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator Login(
+        public IEnumerator Login(
                 Request.LoginRequest request,
                 UnityAction<AsyncResult<Result.LoginResult>> callback
-        )
-		{
-			var task = new LoginTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.LoginResult>(task.Result, task.Error));
-        }
+        ) =>
+            new LoginTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.LoginResult> LoginFuture(
+        public IFuture<Result.LoginResult> LoginFuture(
                 Request.LoginRequest request
-        )
-		{
-			return new LoginTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new LoginTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.LoginResult> LoginAsync(
+        public UniTask<Result.LoginResult> LoginAsync(
             Request.LoginRequest request
-        )
-		{
-		    var task = new LoginTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new LoginTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.LoginResult>();
     #else
-		public LoginTask LoginAsync(
+        public LoginTask LoginAsync(
                 Request.LoginRequest request
         )
-		{
-			return new LoginTask(
+        {
+            return new LoginTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.LoginResult> LoginAsync(
+        public Task<Result.LoginResult> LoginAsync(
             Request.LoginRequest request
-        )
-		{
-		    var task = new LoginTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new LoginTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class LoginBySignatureTask : Gs2WebSocketSessionTask<Request.LoginBySignatureRequest, Result.LoginBySignatureResult>
         {
-	        public LoginBySignatureTask(IGs2Session session, Request.LoginBySignatureRequest request) : base(session, request)
-	        {
-	        }
+            public LoginBySignatureTask(IGs2Session session, Request.LoginBySignatureRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.LoginBySignatureRequest request)
             {
@@ -219,70 +208,58 @@ namespace Gs2.Gs2Auth
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator LoginBySignature(
+        public IEnumerator LoginBySignature(
                 Request.LoginBySignatureRequest request,
                 UnityAction<AsyncResult<Result.LoginBySignatureResult>> callback
-        )
-		{
-			var task = new LoginBySignatureTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.LoginBySignatureResult>(task.Result, task.Error));
-        }
+        ) =>
+            new LoginBySignatureTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.LoginBySignatureResult> LoginBySignatureFuture(
+        public IFuture<Result.LoginBySignatureResult> LoginBySignatureFuture(
                 Request.LoginBySignatureRequest request
-        )
-		{
-			return new LoginBySignatureTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new LoginBySignatureTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.LoginBySignatureResult> LoginBySignatureAsync(
+        public UniTask<Result.LoginBySignatureResult> LoginBySignatureAsync(
             Request.LoginBySignatureRequest request
-        )
-		{
-		    var task = new LoginBySignatureTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new LoginBySignatureTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.LoginBySignatureResult>();
     #else
-		public LoginBySignatureTask LoginBySignatureAsync(
+        public LoginBySignatureTask LoginBySignatureAsync(
                 Request.LoginBySignatureRequest request
         )
-		{
-			return new LoginBySignatureTask(
+        {
+            return new LoginBySignatureTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.LoginBySignatureResult> LoginBySignatureAsync(
+        public Task<Result.LoginBySignatureResult> LoginBySignatureAsync(
             Request.LoginBySignatureRequest request
-        )
-		{
-		    var task = new LoginBySignatureTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new LoginBySignatureTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class FederationTask : Gs2WebSocketSessionTask<Request.FederationRequest, Result.FederationResult>
         {
-	        public FederationTask(IGs2Session session, Request.FederationRequest request) : base(session, request)
-	        {
-	        }
+            public FederationTask(IGs2Session session, Request.FederationRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.FederationRequest request)
             {
@@ -342,70 +319,58 @@ namespace Gs2.Gs2Auth
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator Federation(
+        public IEnumerator Federation(
                 Request.FederationRequest request,
                 UnityAction<AsyncResult<Result.FederationResult>> callback
-        )
-		{
-			var task = new FederationTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.FederationResult>(task.Result, task.Error));
-        }
+        ) =>
+            new FederationTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.FederationResult> FederationFuture(
+        public IFuture<Result.FederationResult> FederationFuture(
                 Request.FederationRequest request
-        )
-		{
-			return new FederationTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new FederationTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.FederationResult> FederationAsync(
+        public UniTask<Result.FederationResult> FederationAsync(
             Request.FederationRequest request
-        )
-		{
-		    var task = new FederationTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new FederationTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.FederationResult>();
     #else
-		public FederationTask FederationAsync(
+        public FederationTask FederationAsync(
                 Request.FederationRequest request
         )
-		{
-			return new FederationTask(
+        {
+            return new FederationTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.FederationResult> FederationAsync(
+        public Task<Result.FederationResult> FederationAsync(
             Request.FederationRequest request
-        )
-		{
-		    var task = new FederationTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new FederationTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class IssueTimeOffsetTokenByUserIdTask : Gs2WebSocketSessionTask<Request.IssueTimeOffsetTokenByUserIdRequest, Result.IssueTimeOffsetTokenByUserIdResult>
         {
-	        public IssueTimeOffsetTokenByUserIdTask(IGs2Session session, Request.IssueTimeOffsetTokenByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public IssueTimeOffsetTokenByUserIdTask(IGs2Session session, Request.IssueTimeOffsetTokenByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.IssueTimeOffsetTokenByUserIdRequest request)
             {
@@ -455,70 +420,58 @@ namespace Gs2.Gs2Auth
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator IssueTimeOffsetTokenByUserId(
+        public IEnumerator IssueTimeOffsetTokenByUserId(
                 Request.IssueTimeOffsetTokenByUserIdRequest request,
                 UnityAction<AsyncResult<Result.IssueTimeOffsetTokenByUserIdResult>> callback
-        )
-		{
-			var task = new IssueTimeOffsetTokenByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.IssueTimeOffsetTokenByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new IssueTimeOffsetTokenByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.IssueTimeOffsetTokenByUserIdResult> IssueTimeOffsetTokenByUserIdFuture(
+        public IFuture<Result.IssueTimeOffsetTokenByUserIdResult> IssueTimeOffsetTokenByUserIdFuture(
                 Request.IssueTimeOffsetTokenByUserIdRequest request
-        )
-		{
-			return new IssueTimeOffsetTokenByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new IssueTimeOffsetTokenByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.IssueTimeOffsetTokenByUserIdResult> IssueTimeOffsetTokenByUserIdAsync(
+        public UniTask<Result.IssueTimeOffsetTokenByUserIdResult> IssueTimeOffsetTokenByUserIdAsync(
             Request.IssueTimeOffsetTokenByUserIdRequest request
-        )
-		{
-		    var task = new IssueTimeOffsetTokenByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new IssueTimeOffsetTokenByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.IssueTimeOffsetTokenByUserIdResult>();
     #else
-		public IssueTimeOffsetTokenByUserIdTask IssueTimeOffsetTokenByUserIdAsync(
+        public IssueTimeOffsetTokenByUserIdTask IssueTimeOffsetTokenByUserIdAsync(
                 Request.IssueTimeOffsetTokenByUserIdRequest request
         )
-		{
-			return new IssueTimeOffsetTokenByUserIdTask(
+        {
+            return new IssueTimeOffsetTokenByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.IssueTimeOffsetTokenByUserIdResult> IssueTimeOffsetTokenByUserIdAsync(
+        public Task<Result.IssueTimeOffsetTokenByUserIdResult> IssueTimeOffsetTokenByUserIdAsync(
             Request.IssueTimeOffsetTokenByUserIdRequest request
-        )
-		{
-		    var task = new IssueTimeOffsetTokenByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new IssueTimeOffsetTokenByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class GetServiceVersionTask : Gs2WebSocketSessionTask<Request.GetServiceVersionRequest, Result.GetServiceVersionResult>
         {
-	        public GetServiceVersionTask(IGs2Session session, Request.GetServiceVersionRequest request) : base(session, request)
-	        {
-	        }
+            public GetServiceVersionTask(IGs2Session session, Request.GetServiceVersionRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetServiceVersionRequest request)
             {
@@ -553,62 +506,50 @@ namespace Gs2.Gs2Auth
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetServiceVersion(
+        public IEnumerator GetServiceVersion(
                 Request.GetServiceVersionRequest request,
                 UnityAction<AsyncResult<Result.GetServiceVersionResult>> callback
-        )
-		{
-			var task = new GetServiceVersionTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetServiceVersionResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetServiceVersionTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetServiceVersionResult> GetServiceVersionFuture(
+        public IFuture<Result.GetServiceVersionResult> GetServiceVersionFuture(
                 Request.GetServiceVersionRequest request
-        )
-		{
-			return new GetServiceVersionTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetServiceVersionTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetServiceVersionResult> GetServiceVersionAsync(
+        public UniTask<Result.GetServiceVersionResult> GetServiceVersionAsync(
             Request.GetServiceVersionRequest request
-        )
-		{
-		    var task = new GetServiceVersionTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetServiceVersionTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetServiceVersionResult>();
     #else
-		public GetServiceVersionTask GetServiceVersionAsync(
+        public GetServiceVersionTask GetServiceVersionAsync(
                 Request.GetServiceVersionRequest request
         )
-		{
-			return new GetServiceVersionTask(
+        {
+            return new GetServiceVersionTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetServiceVersionResult> GetServiceVersionAsync(
+        public Task<Result.GetServiceVersionResult> GetServiceVersionAsync(
             Request.GetServiceVersionRequest request
-        )
-		{
-		    var task = new GetServiceVersionTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetServiceVersionTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 	}
 }

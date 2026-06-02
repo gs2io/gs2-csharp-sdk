@@ -23,6 +23,7 @@ using System.Linq;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
+using Gs2.Core.Util;
 using Gs2.Util.LitJson;
 
 #if UNITY_2017_1_OR_NEWER
@@ -54,9 +55,9 @@ namespace Gs2.Gs2Key
 
         public class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
         {
-	        public CreateNamespaceTask(IGs2Session session, Request.CreateNamespaceRequest request) : base(session, request)
-	        {
-	        }
+            public CreateNamespaceTask(IGs2Session session, Request.CreateNamespaceRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.CreateNamespaceRequest request)
             {
@@ -106,70 +107,58 @@ namespace Gs2.Gs2Key
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator CreateNamespace(
+        public IEnumerator CreateNamespace(
                 Request.CreateNamespaceRequest request,
                 UnityAction<AsyncResult<Result.CreateNamespaceResult>> callback
-        )
-		{
-			var task = new CreateNamespaceTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
-        }
+        ) =>
+            new CreateNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
+        public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
                 Request.CreateNamespaceRequest request
-        )
-		{
-			return new CreateNamespaceTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new CreateNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+        public UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
             Request.CreateNamespaceRequest request
-        )
-		{
-		    var task = new CreateNamespaceTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new CreateNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.CreateNamespaceResult>();
     #else
-		public CreateNamespaceTask CreateNamespaceAsync(
+        public CreateNamespaceTask CreateNamespaceAsync(
                 Request.CreateNamespaceRequest request
         )
-		{
-			return new CreateNamespaceTask(
+        {
+            return new CreateNamespaceTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
+        public Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
             Request.CreateNamespaceRequest request
-        )
-		{
-		    var task = new CreateNamespaceTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new CreateNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class GetNamespaceStatusTask : Gs2WebSocketSessionTask<Request.GetNamespaceStatusRequest, Result.GetNamespaceStatusResult>
         {
-	        public GetNamespaceStatusTask(IGs2Session session, Request.GetNamespaceStatusRequest request) : base(session, request)
-	        {
-	        }
+            public GetNamespaceStatusTask(IGs2Session session, Request.GetNamespaceStatusRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetNamespaceStatusRequest request)
             {
@@ -209,70 +198,58 @@ namespace Gs2.Gs2Key
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetNamespaceStatus(
+        public IEnumerator GetNamespaceStatus(
                 Request.GetNamespaceStatusRequest request,
                 UnityAction<AsyncResult<Result.GetNamespaceStatusResult>> callback
-        )
-		{
-			var task = new GetNamespaceStatusTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetNamespaceStatusResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetNamespaceStatusTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetNamespaceStatusResult> GetNamespaceStatusFuture(
+        public IFuture<Result.GetNamespaceStatusResult> GetNamespaceStatusFuture(
                 Request.GetNamespaceStatusRequest request
-        )
-		{
-			return new GetNamespaceStatusTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetNamespaceStatusTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+        public UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
             Request.GetNamespaceStatusRequest request
-        )
-		{
-		    var task = new GetNamespaceStatusTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetNamespaceStatusTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetNamespaceStatusResult>();
     #else
-		public GetNamespaceStatusTask GetNamespaceStatusAsync(
+        public GetNamespaceStatusTask GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
         )
-		{
-			return new GetNamespaceStatusTask(
+        {
+            return new GetNamespaceStatusTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+        public Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
             Request.GetNamespaceStatusRequest request
-        )
-		{
-		    var task = new GetNamespaceStatusTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetNamespaceStatusTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
         {
-	        public GetNamespaceTask(IGs2Session session, Request.GetNamespaceRequest request) : base(session, request)
-	        {
-	        }
+            public GetNamespaceTask(IGs2Session session, Request.GetNamespaceRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetNamespaceRequest request)
             {
@@ -312,70 +289,58 @@ namespace Gs2.Gs2Key
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetNamespace(
+        public IEnumerator GetNamespace(
                 Request.GetNamespaceRequest request,
                 UnityAction<AsyncResult<Result.GetNamespaceResult>> callback
-        )
-		{
-			var task = new GetNamespaceTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
+        public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
                 Request.GetNamespaceRequest request
-        )
-		{
-			return new GetNamespaceTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+        public UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
             Request.GetNamespaceRequest request
-        )
-		{
-		    var task = new GetNamespaceTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetNamespaceResult>();
     #else
-		public GetNamespaceTask GetNamespaceAsync(
+        public GetNamespaceTask GetNamespaceAsync(
                 Request.GetNamespaceRequest request
         )
-		{
-			return new GetNamespaceTask(
+        {
+            return new GetNamespaceTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
+        public Task<Result.GetNamespaceResult> GetNamespaceAsync(
             Request.GetNamespaceRequest request
-        )
-		{
-		    var task = new GetNamespaceTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
         {
-	        public UpdateNamespaceTask(IGs2Session session, Request.UpdateNamespaceRequest request) : base(session, request)
-	        {
-	        }
+            public UpdateNamespaceTask(IGs2Session session, Request.UpdateNamespaceRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.UpdateNamespaceRequest request)
             {
@@ -425,70 +390,58 @@ namespace Gs2.Gs2Key
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator UpdateNamespace(
+        public IEnumerator UpdateNamespace(
                 Request.UpdateNamespaceRequest request,
                 UnityAction<AsyncResult<Result.UpdateNamespaceResult>> callback
-        )
-		{
-			var task = new UpdateNamespaceTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
-        }
+        ) =>
+            new UpdateNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
+        public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
                 Request.UpdateNamespaceRequest request
-        )
-		{
-			return new UpdateNamespaceTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new UpdateNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+        public UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
             Request.UpdateNamespaceRequest request
-        )
-		{
-		    var task = new UpdateNamespaceTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new UpdateNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.UpdateNamespaceResult>();
     #else
-		public UpdateNamespaceTask UpdateNamespaceAsync(
+        public UpdateNamespaceTask UpdateNamespaceAsync(
                 Request.UpdateNamespaceRequest request
         )
-		{
-			return new UpdateNamespaceTask(
+        {
+            return new UpdateNamespaceTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+        public Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
             Request.UpdateNamespaceRequest request
-        )
-		{
-		    var task = new UpdateNamespaceTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new UpdateNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
         {
-	        public DeleteNamespaceTask(IGs2Session session, Request.DeleteNamespaceRequest request) : base(session, request)
-	        {
-	        }
+            public DeleteNamespaceTask(IGs2Session session, Request.DeleteNamespaceRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.DeleteNamespaceRequest request)
             {
@@ -528,70 +481,58 @@ namespace Gs2.Gs2Key
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator DeleteNamespace(
+        public IEnumerator DeleteNamespace(
                 Request.DeleteNamespaceRequest request,
                 UnityAction<AsyncResult<Result.DeleteNamespaceResult>> callback
-        )
-		{
-			var task = new DeleteNamespaceTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
-        }
+        ) =>
+            new DeleteNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
+        public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
                 Request.DeleteNamespaceRequest request
-        )
-		{
-			return new DeleteNamespaceTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new DeleteNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+        public UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
             Request.DeleteNamespaceRequest request
-        )
-		{
-		    var task = new DeleteNamespaceTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new DeleteNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.DeleteNamespaceResult>();
     #else
-		public DeleteNamespaceTask DeleteNamespaceAsync(
+        public DeleteNamespaceTask DeleteNamespaceAsync(
                 Request.DeleteNamespaceRequest request
         )
-		{
-			return new DeleteNamespaceTask(
+        {
+            return new DeleteNamespaceTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+        public Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
             Request.DeleteNamespaceRequest request
-        )
-		{
-		    var task = new DeleteNamespaceTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new DeleteNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class GetServiceVersionTask : Gs2WebSocketSessionTask<Request.GetServiceVersionRequest, Result.GetServiceVersionResult>
         {
-	        public GetServiceVersionTask(IGs2Session session, Request.GetServiceVersionRequest request) : base(session, request)
-	        {
-	        }
+            public GetServiceVersionTask(IGs2Session session, Request.GetServiceVersionRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetServiceVersionRequest request)
             {
@@ -626,70 +567,58 @@ namespace Gs2.Gs2Key
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetServiceVersion(
+        public IEnumerator GetServiceVersion(
                 Request.GetServiceVersionRequest request,
                 UnityAction<AsyncResult<Result.GetServiceVersionResult>> callback
-        )
-		{
-			var task = new GetServiceVersionTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetServiceVersionResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetServiceVersionTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetServiceVersionResult> GetServiceVersionFuture(
+        public IFuture<Result.GetServiceVersionResult> GetServiceVersionFuture(
                 Request.GetServiceVersionRequest request
-        )
-		{
-			return new GetServiceVersionTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetServiceVersionTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetServiceVersionResult> GetServiceVersionAsync(
+        public UniTask<Result.GetServiceVersionResult> GetServiceVersionAsync(
             Request.GetServiceVersionRequest request
-        )
-		{
-		    var task = new GetServiceVersionTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetServiceVersionTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetServiceVersionResult>();
     #else
-		public GetServiceVersionTask GetServiceVersionAsync(
+        public GetServiceVersionTask GetServiceVersionAsync(
                 Request.GetServiceVersionRequest request
         )
-		{
-			return new GetServiceVersionTask(
+        {
+            return new GetServiceVersionTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetServiceVersionResult> GetServiceVersionAsync(
+        public Task<Result.GetServiceVersionResult> GetServiceVersionAsync(
             Request.GetServiceVersionRequest request
-        )
-		{
-		    var task = new GetServiceVersionTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetServiceVersionTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class CreateKeyTask : Gs2WebSocketSessionTask<Request.CreateKeyRequest, Result.CreateKeyResult>
         {
-	        public CreateKeyTask(IGs2Session session, Request.CreateKeyRequest request) : base(session, request)
-	        {
-	        }
+            public CreateKeyTask(IGs2Session session, Request.CreateKeyRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.CreateKeyRequest request)
             {
@@ -739,70 +668,58 @@ namespace Gs2.Gs2Key
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator CreateKey(
+        public IEnumerator CreateKey(
                 Request.CreateKeyRequest request,
                 UnityAction<AsyncResult<Result.CreateKeyResult>> callback
-        )
-		{
-			var task = new CreateKeyTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateKeyResult>(task.Result, task.Error));
-        }
+        ) =>
+            new CreateKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.CreateKeyResult> CreateKeyFuture(
+        public IFuture<Result.CreateKeyResult> CreateKeyFuture(
                 Request.CreateKeyRequest request
-        )
-		{
-			return new CreateKeyTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new CreateKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateKeyResult> CreateKeyAsync(
+        public UniTask<Result.CreateKeyResult> CreateKeyAsync(
             Request.CreateKeyRequest request
-        )
-		{
-		    var task = new CreateKeyTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new CreateKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.CreateKeyResult>();
     #else
-		public CreateKeyTask CreateKeyAsync(
+        public CreateKeyTask CreateKeyAsync(
                 Request.CreateKeyRequest request
         )
-		{
-			return new CreateKeyTask(
+        {
+            return new CreateKeyTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.CreateKeyResult> CreateKeyAsync(
+        public Task<Result.CreateKeyResult> CreateKeyAsync(
             Request.CreateKeyRequest request
-        )
-		{
-		    var task = new CreateKeyTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new CreateKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class UpdateKeyTask : Gs2WebSocketSessionTask<Request.UpdateKeyRequest, Result.UpdateKeyResult>
         {
-	        public UpdateKeyTask(IGs2Session session, Request.UpdateKeyRequest request) : base(session, request)
-	        {
-	        }
+            public UpdateKeyTask(IGs2Session session, Request.UpdateKeyRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.UpdateKeyRequest request)
             {
@@ -852,70 +769,58 @@ namespace Gs2.Gs2Key
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator UpdateKey(
+        public IEnumerator UpdateKey(
                 Request.UpdateKeyRequest request,
                 UnityAction<AsyncResult<Result.UpdateKeyResult>> callback
-        )
-		{
-			var task = new UpdateKeyTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateKeyResult>(task.Result, task.Error));
-        }
+        ) =>
+            new UpdateKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.UpdateKeyResult> UpdateKeyFuture(
+        public IFuture<Result.UpdateKeyResult> UpdateKeyFuture(
                 Request.UpdateKeyRequest request
-        )
-		{
-			return new UpdateKeyTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new UpdateKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateKeyResult> UpdateKeyAsync(
+        public UniTask<Result.UpdateKeyResult> UpdateKeyAsync(
             Request.UpdateKeyRequest request
-        )
-		{
-		    var task = new UpdateKeyTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new UpdateKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.UpdateKeyResult>();
     #else
-		public UpdateKeyTask UpdateKeyAsync(
+        public UpdateKeyTask UpdateKeyAsync(
                 Request.UpdateKeyRequest request
         )
-		{
-			return new UpdateKeyTask(
+        {
+            return new UpdateKeyTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.UpdateKeyResult> UpdateKeyAsync(
+        public Task<Result.UpdateKeyResult> UpdateKeyAsync(
             Request.UpdateKeyRequest request
-        )
-		{
-		    var task = new UpdateKeyTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new UpdateKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class GetKeyTask : Gs2WebSocketSessionTask<Request.GetKeyRequest, Result.GetKeyResult>
         {
-	        public GetKeyTask(IGs2Session session, Request.GetKeyRequest request) : base(session, request)
-	        {
-	        }
+            public GetKeyTask(IGs2Session session, Request.GetKeyRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetKeyRequest request)
             {
@@ -960,70 +865,58 @@ namespace Gs2.Gs2Key
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetKey(
+        public IEnumerator GetKey(
                 Request.GetKeyRequest request,
                 UnityAction<AsyncResult<Result.GetKeyResult>> callback
-        )
-		{
-			var task = new GetKeyTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetKeyResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetKeyResult> GetKeyFuture(
+        public IFuture<Result.GetKeyResult> GetKeyFuture(
                 Request.GetKeyRequest request
-        )
-		{
-			return new GetKeyTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetKeyResult> GetKeyAsync(
+        public UniTask<Result.GetKeyResult> GetKeyAsync(
             Request.GetKeyRequest request
-        )
-		{
-		    var task = new GetKeyTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetKeyResult>();
     #else
-		public GetKeyTask GetKeyAsync(
+        public GetKeyTask GetKeyAsync(
                 Request.GetKeyRequest request
         )
-		{
-			return new GetKeyTask(
+        {
+            return new GetKeyTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetKeyResult> GetKeyAsync(
+        public Task<Result.GetKeyResult> GetKeyAsync(
             Request.GetKeyRequest request
-        )
-		{
-		    var task = new GetKeyTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class DeleteKeyTask : Gs2WebSocketSessionTask<Request.DeleteKeyRequest, Result.DeleteKeyResult>
         {
-	        public DeleteKeyTask(IGs2Session session, Request.DeleteKeyRequest request) : base(session, request)
-	        {
-	        }
+            public DeleteKeyTask(IGs2Session session, Request.DeleteKeyRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.DeleteKeyRequest request)
             {
@@ -1068,70 +961,58 @@ namespace Gs2.Gs2Key
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator DeleteKey(
+        public IEnumerator DeleteKey(
                 Request.DeleteKeyRequest request,
                 UnityAction<AsyncResult<Result.DeleteKeyResult>> callback
-        )
-		{
-			var task = new DeleteKeyTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteKeyResult>(task.Result, task.Error));
-        }
+        ) =>
+            new DeleteKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.DeleteKeyResult> DeleteKeyFuture(
+        public IFuture<Result.DeleteKeyResult> DeleteKeyFuture(
                 Request.DeleteKeyRequest request
-        )
-		{
-			return new DeleteKeyTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new DeleteKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteKeyResult> DeleteKeyAsync(
+        public UniTask<Result.DeleteKeyResult> DeleteKeyAsync(
             Request.DeleteKeyRequest request
-        )
-		{
-		    var task = new DeleteKeyTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new DeleteKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.DeleteKeyResult>();
     #else
-		public DeleteKeyTask DeleteKeyAsync(
+        public DeleteKeyTask DeleteKeyAsync(
                 Request.DeleteKeyRequest request
         )
-		{
-			return new DeleteKeyTask(
+        {
+            return new DeleteKeyTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.DeleteKeyResult> DeleteKeyAsync(
+        public Task<Result.DeleteKeyResult> DeleteKeyAsync(
             Request.DeleteKeyRequest request
-        )
-		{
-		    var task = new DeleteKeyTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new DeleteKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class CreateGitHubApiKeyTask : Gs2WebSocketSessionTask<Request.CreateGitHubApiKeyRequest, Result.CreateGitHubApiKeyResult>
         {
-	        public CreateGitHubApiKeyTask(IGs2Session session, Request.CreateGitHubApiKeyRequest request) : base(session, request)
-	        {
-	        }
+            public CreateGitHubApiKeyTask(IGs2Session session, Request.CreateGitHubApiKeyRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.CreateGitHubApiKeyRequest request)
             {
@@ -1191,70 +1072,58 @@ namespace Gs2.Gs2Key
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator CreateGitHubApiKey(
+        public IEnumerator CreateGitHubApiKey(
                 Request.CreateGitHubApiKeyRequest request,
                 UnityAction<AsyncResult<Result.CreateGitHubApiKeyResult>> callback
-        )
-		{
-			var task = new CreateGitHubApiKeyTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateGitHubApiKeyResult>(task.Result, task.Error));
-        }
+        ) =>
+            new CreateGitHubApiKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.CreateGitHubApiKeyResult> CreateGitHubApiKeyFuture(
+        public IFuture<Result.CreateGitHubApiKeyResult> CreateGitHubApiKeyFuture(
                 Request.CreateGitHubApiKeyRequest request
-        )
-		{
-			return new CreateGitHubApiKeyTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new CreateGitHubApiKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateGitHubApiKeyResult> CreateGitHubApiKeyAsync(
+        public UniTask<Result.CreateGitHubApiKeyResult> CreateGitHubApiKeyAsync(
             Request.CreateGitHubApiKeyRequest request
-        )
-		{
-		    var task = new CreateGitHubApiKeyTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new CreateGitHubApiKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.CreateGitHubApiKeyResult>();
     #else
-		public CreateGitHubApiKeyTask CreateGitHubApiKeyAsync(
+        public CreateGitHubApiKeyTask CreateGitHubApiKeyAsync(
                 Request.CreateGitHubApiKeyRequest request
         )
-		{
-			return new CreateGitHubApiKeyTask(
+        {
+            return new CreateGitHubApiKeyTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.CreateGitHubApiKeyResult> CreateGitHubApiKeyAsync(
+        public Task<Result.CreateGitHubApiKeyResult> CreateGitHubApiKeyAsync(
             Request.CreateGitHubApiKeyRequest request
-        )
-		{
-		    var task = new CreateGitHubApiKeyTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new CreateGitHubApiKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class UpdateGitHubApiKeyTask : Gs2WebSocketSessionTask<Request.UpdateGitHubApiKeyRequest, Result.UpdateGitHubApiKeyResult>
         {
-	        public UpdateGitHubApiKeyTask(IGs2Session session, Request.UpdateGitHubApiKeyRequest request) : base(session, request)
-	        {
-	        }
+            public UpdateGitHubApiKeyTask(IGs2Session session, Request.UpdateGitHubApiKeyRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.UpdateGitHubApiKeyRequest request)
             {
@@ -1314,70 +1183,58 @@ namespace Gs2.Gs2Key
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator UpdateGitHubApiKey(
+        public IEnumerator UpdateGitHubApiKey(
                 Request.UpdateGitHubApiKeyRequest request,
                 UnityAction<AsyncResult<Result.UpdateGitHubApiKeyResult>> callback
-        )
-		{
-			var task = new UpdateGitHubApiKeyTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateGitHubApiKeyResult>(task.Result, task.Error));
-        }
+        ) =>
+            new UpdateGitHubApiKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.UpdateGitHubApiKeyResult> UpdateGitHubApiKeyFuture(
+        public IFuture<Result.UpdateGitHubApiKeyResult> UpdateGitHubApiKeyFuture(
                 Request.UpdateGitHubApiKeyRequest request
-        )
-		{
-			return new UpdateGitHubApiKeyTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new UpdateGitHubApiKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateGitHubApiKeyResult> UpdateGitHubApiKeyAsync(
+        public UniTask<Result.UpdateGitHubApiKeyResult> UpdateGitHubApiKeyAsync(
             Request.UpdateGitHubApiKeyRequest request
-        )
-		{
-		    var task = new UpdateGitHubApiKeyTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new UpdateGitHubApiKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.UpdateGitHubApiKeyResult>();
     #else
-		public UpdateGitHubApiKeyTask UpdateGitHubApiKeyAsync(
+        public UpdateGitHubApiKeyTask UpdateGitHubApiKeyAsync(
                 Request.UpdateGitHubApiKeyRequest request
         )
-		{
-			return new UpdateGitHubApiKeyTask(
+        {
+            return new UpdateGitHubApiKeyTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.UpdateGitHubApiKeyResult> UpdateGitHubApiKeyAsync(
+        public Task<Result.UpdateGitHubApiKeyResult> UpdateGitHubApiKeyAsync(
             Request.UpdateGitHubApiKeyRequest request
-        )
-		{
-		    var task = new UpdateGitHubApiKeyTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new UpdateGitHubApiKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class GetGitHubApiKeyTask : Gs2WebSocketSessionTask<Request.GetGitHubApiKeyRequest, Result.GetGitHubApiKeyResult>
         {
-	        public GetGitHubApiKeyTask(IGs2Session session, Request.GetGitHubApiKeyRequest request) : base(session, request)
-	        {
-	        }
+            public GetGitHubApiKeyTask(IGs2Session session, Request.GetGitHubApiKeyRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetGitHubApiKeyRequest request)
             {
@@ -1422,70 +1279,58 @@ namespace Gs2.Gs2Key
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetGitHubApiKey(
+        public IEnumerator GetGitHubApiKey(
                 Request.GetGitHubApiKeyRequest request,
                 UnityAction<AsyncResult<Result.GetGitHubApiKeyResult>> callback
-        )
-		{
-			var task = new GetGitHubApiKeyTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetGitHubApiKeyResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetGitHubApiKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetGitHubApiKeyResult> GetGitHubApiKeyFuture(
+        public IFuture<Result.GetGitHubApiKeyResult> GetGitHubApiKeyFuture(
                 Request.GetGitHubApiKeyRequest request
-        )
-		{
-			return new GetGitHubApiKeyTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetGitHubApiKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetGitHubApiKeyResult> GetGitHubApiKeyAsync(
+        public UniTask<Result.GetGitHubApiKeyResult> GetGitHubApiKeyAsync(
             Request.GetGitHubApiKeyRequest request
-        )
-		{
-		    var task = new GetGitHubApiKeyTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetGitHubApiKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetGitHubApiKeyResult>();
     #else
-		public GetGitHubApiKeyTask GetGitHubApiKeyAsync(
+        public GetGitHubApiKeyTask GetGitHubApiKeyAsync(
                 Request.GetGitHubApiKeyRequest request
         )
-		{
-			return new GetGitHubApiKeyTask(
+        {
+            return new GetGitHubApiKeyTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetGitHubApiKeyResult> GetGitHubApiKeyAsync(
+        public Task<Result.GetGitHubApiKeyResult> GetGitHubApiKeyAsync(
             Request.GetGitHubApiKeyRequest request
-        )
-		{
-		    var task = new GetGitHubApiKeyTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetGitHubApiKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class DeleteGitHubApiKeyTask : Gs2WebSocketSessionTask<Request.DeleteGitHubApiKeyRequest, Result.DeleteGitHubApiKeyResult>
         {
-	        public DeleteGitHubApiKeyTask(IGs2Session session, Request.DeleteGitHubApiKeyRequest request) : base(session, request)
-	        {
-	        }
+            public DeleteGitHubApiKeyTask(IGs2Session session, Request.DeleteGitHubApiKeyRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.DeleteGitHubApiKeyRequest request)
             {
@@ -1530,62 +1375,50 @@ namespace Gs2.Gs2Key
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator DeleteGitHubApiKey(
+        public IEnumerator DeleteGitHubApiKey(
                 Request.DeleteGitHubApiKeyRequest request,
                 UnityAction<AsyncResult<Result.DeleteGitHubApiKeyResult>> callback
-        )
-		{
-			var task = new DeleteGitHubApiKeyTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteGitHubApiKeyResult>(task.Result, task.Error));
-        }
+        ) =>
+            new DeleteGitHubApiKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.DeleteGitHubApiKeyResult> DeleteGitHubApiKeyFuture(
+        public IFuture<Result.DeleteGitHubApiKeyResult> DeleteGitHubApiKeyFuture(
                 Request.DeleteGitHubApiKeyRequest request
-        )
-		{
-			return new DeleteGitHubApiKeyTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new DeleteGitHubApiKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteGitHubApiKeyResult> DeleteGitHubApiKeyAsync(
+        public UniTask<Result.DeleteGitHubApiKeyResult> DeleteGitHubApiKeyAsync(
             Request.DeleteGitHubApiKeyRequest request
-        )
-		{
-		    var task = new DeleteGitHubApiKeyTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new DeleteGitHubApiKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.DeleteGitHubApiKeyResult>();
     #else
-		public DeleteGitHubApiKeyTask DeleteGitHubApiKeyAsync(
+        public DeleteGitHubApiKeyTask DeleteGitHubApiKeyAsync(
                 Request.DeleteGitHubApiKeyRequest request
         )
-		{
-			return new DeleteGitHubApiKeyTask(
+        {
+            return new DeleteGitHubApiKeyTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.DeleteGitHubApiKeyResult> DeleteGitHubApiKeyAsync(
+        public Task<Result.DeleteGitHubApiKeyResult> DeleteGitHubApiKeyAsync(
             Request.DeleteGitHubApiKeyRequest request
-        )
-		{
-		    var task = new DeleteGitHubApiKeyTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new DeleteGitHubApiKeyTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 	}
 }

@@ -23,6 +23,7 @@ using System.Linq;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
+using Gs2.Core.Util;
 using Gs2.Util.LitJson;
 
 #if UNITY_2017_1_OR_NEWER
@@ -54,9 +55,9 @@ namespace Gs2.Gs2Enchant
 
         public class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
         {
-	        public CreateNamespaceTask(IGs2Session session, Request.CreateNamespaceRequest request) : base(session, request)
-	        {
-	        }
+            public CreateNamespaceTask(IGs2Session session, Request.CreateNamespaceRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.CreateNamespaceRequest request)
             {
@@ -111,70 +112,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator CreateNamespace(
+        public IEnumerator CreateNamespace(
                 Request.CreateNamespaceRequest request,
                 UnityAction<AsyncResult<Result.CreateNamespaceResult>> callback
-        )
-		{
-			var task = new CreateNamespaceTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
-        }
+        ) =>
+            new CreateNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
+        public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
                 Request.CreateNamespaceRequest request
-        )
-		{
-			return new CreateNamespaceTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new CreateNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+        public UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
             Request.CreateNamespaceRequest request
-        )
-		{
-		    var task = new CreateNamespaceTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new CreateNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.CreateNamespaceResult>();
     #else
-		public CreateNamespaceTask CreateNamespaceAsync(
+        public CreateNamespaceTask CreateNamespaceAsync(
                 Request.CreateNamespaceRequest request
         )
-		{
-			return new CreateNamespaceTask(
+        {
+            return new CreateNamespaceTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
+        public Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
             Request.CreateNamespaceRequest request
-        )
-		{
-		    var task = new CreateNamespaceTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new CreateNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class GetNamespaceStatusTask : Gs2WebSocketSessionTask<Request.GetNamespaceStatusRequest, Result.GetNamespaceStatusResult>
         {
-	        public GetNamespaceStatusTask(IGs2Session session, Request.GetNamespaceStatusRequest request) : base(session, request)
-	        {
-	        }
+            public GetNamespaceStatusTask(IGs2Session session, Request.GetNamespaceStatusRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetNamespaceStatusRequest request)
             {
@@ -214,70 +203,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetNamespaceStatus(
+        public IEnumerator GetNamespaceStatus(
                 Request.GetNamespaceStatusRequest request,
                 UnityAction<AsyncResult<Result.GetNamespaceStatusResult>> callback
-        )
-		{
-			var task = new GetNamespaceStatusTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetNamespaceStatusResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetNamespaceStatusTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetNamespaceStatusResult> GetNamespaceStatusFuture(
+        public IFuture<Result.GetNamespaceStatusResult> GetNamespaceStatusFuture(
                 Request.GetNamespaceStatusRequest request
-        )
-		{
-			return new GetNamespaceStatusTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetNamespaceStatusTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+        public UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
             Request.GetNamespaceStatusRequest request
-        )
-		{
-		    var task = new GetNamespaceStatusTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetNamespaceStatusTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetNamespaceStatusResult>();
     #else
-		public GetNamespaceStatusTask GetNamespaceStatusAsync(
+        public GetNamespaceStatusTask GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
         )
-		{
-			return new GetNamespaceStatusTask(
+        {
+            return new GetNamespaceStatusTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+        public Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
             Request.GetNamespaceStatusRequest request
-        )
-		{
-		    var task = new GetNamespaceStatusTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetNamespaceStatusTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
         {
-	        public GetNamespaceTask(IGs2Session session, Request.GetNamespaceRequest request) : base(session, request)
-	        {
-	        }
+            public GetNamespaceTask(IGs2Session session, Request.GetNamespaceRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetNamespaceRequest request)
             {
@@ -317,70 +294,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetNamespace(
+        public IEnumerator GetNamespace(
                 Request.GetNamespaceRequest request,
                 UnityAction<AsyncResult<Result.GetNamespaceResult>> callback
-        )
-		{
-			var task = new GetNamespaceTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
+        public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
                 Request.GetNamespaceRequest request
-        )
-		{
-			return new GetNamespaceTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+        public UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
             Request.GetNamespaceRequest request
-        )
-		{
-		    var task = new GetNamespaceTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetNamespaceResult>();
     #else
-		public GetNamespaceTask GetNamespaceAsync(
+        public GetNamespaceTask GetNamespaceAsync(
                 Request.GetNamespaceRequest request
         )
-		{
-			return new GetNamespaceTask(
+        {
+            return new GetNamespaceTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
+        public Task<Result.GetNamespaceResult> GetNamespaceAsync(
             Request.GetNamespaceRequest request
-        )
-		{
-		    var task = new GetNamespaceTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
         {
-	        public UpdateNamespaceTask(IGs2Session session, Request.UpdateNamespaceRequest request) : base(session, request)
-	        {
-	        }
+            public UpdateNamespaceTask(IGs2Session session, Request.UpdateNamespaceRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.UpdateNamespaceRequest request)
             {
@@ -435,70 +400,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator UpdateNamespace(
+        public IEnumerator UpdateNamespace(
                 Request.UpdateNamespaceRequest request,
                 UnityAction<AsyncResult<Result.UpdateNamespaceResult>> callback
-        )
-		{
-			var task = new UpdateNamespaceTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
-        }
+        ) =>
+            new UpdateNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
+        public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
                 Request.UpdateNamespaceRequest request
-        )
-		{
-			return new UpdateNamespaceTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new UpdateNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+        public UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
             Request.UpdateNamespaceRequest request
-        )
-		{
-		    var task = new UpdateNamespaceTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new UpdateNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.UpdateNamespaceResult>();
     #else
-		public UpdateNamespaceTask UpdateNamespaceAsync(
+        public UpdateNamespaceTask UpdateNamespaceAsync(
                 Request.UpdateNamespaceRequest request
         )
-		{
-			return new UpdateNamespaceTask(
+        {
+            return new UpdateNamespaceTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+        public Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
             Request.UpdateNamespaceRequest request
-        )
-		{
-		    var task = new UpdateNamespaceTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new UpdateNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
         {
-	        public DeleteNamespaceTask(IGs2Session session, Request.DeleteNamespaceRequest request) : base(session, request)
-	        {
-	        }
+            public DeleteNamespaceTask(IGs2Session session, Request.DeleteNamespaceRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.DeleteNamespaceRequest request)
             {
@@ -538,70 +491,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator DeleteNamespace(
+        public IEnumerator DeleteNamespace(
                 Request.DeleteNamespaceRequest request,
                 UnityAction<AsyncResult<Result.DeleteNamespaceResult>> callback
-        )
-		{
-			var task = new DeleteNamespaceTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
-        }
+        ) =>
+            new DeleteNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
+        public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
                 Request.DeleteNamespaceRequest request
-        )
-		{
-			return new DeleteNamespaceTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new DeleteNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+        public UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
             Request.DeleteNamespaceRequest request
-        )
-		{
-		    var task = new DeleteNamespaceTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new DeleteNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.DeleteNamespaceResult>();
     #else
-		public DeleteNamespaceTask DeleteNamespaceAsync(
+        public DeleteNamespaceTask DeleteNamespaceAsync(
                 Request.DeleteNamespaceRequest request
         )
-		{
-			return new DeleteNamespaceTask(
+        {
+            return new DeleteNamespaceTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+        public Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
             Request.DeleteNamespaceRequest request
-        )
-		{
-		    var task = new DeleteNamespaceTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new DeleteNamespaceTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class GetServiceVersionTask : Gs2WebSocketSessionTask<Request.GetServiceVersionRequest, Result.GetServiceVersionResult>
         {
-	        public GetServiceVersionTask(IGs2Session session, Request.GetServiceVersionRequest request) : base(session, request)
-	        {
-	        }
+            public GetServiceVersionTask(IGs2Session session, Request.GetServiceVersionRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetServiceVersionRequest request)
             {
@@ -636,70 +577,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetServiceVersion(
+        public IEnumerator GetServiceVersion(
                 Request.GetServiceVersionRequest request,
                 UnityAction<AsyncResult<Result.GetServiceVersionResult>> callback
-        )
-		{
-			var task = new GetServiceVersionTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetServiceVersionResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetServiceVersionTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetServiceVersionResult> GetServiceVersionFuture(
+        public IFuture<Result.GetServiceVersionResult> GetServiceVersionFuture(
                 Request.GetServiceVersionRequest request
-        )
-		{
-			return new GetServiceVersionTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetServiceVersionTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetServiceVersionResult> GetServiceVersionAsync(
+        public UniTask<Result.GetServiceVersionResult> GetServiceVersionAsync(
             Request.GetServiceVersionRequest request
-        )
-		{
-		    var task = new GetServiceVersionTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetServiceVersionTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetServiceVersionResult>();
     #else
-		public GetServiceVersionTask GetServiceVersionAsync(
+        public GetServiceVersionTask GetServiceVersionAsync(
                 Request.GetServiceVersionRequest request
         )
-		{
-			return new GetServiceVersionTask(
+        {
+            return new GetServiceVersionTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetServiceVersionResult> GetServiceVersionAsync(
+        public Task<Result.GetServiceVersionResult> GetServiceVersionAsync(
             Request.GetServiceVersionRequest request
-        )
-		{
-		    var task = new GetServiceVersionTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetServiceVersionTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class DumpUserDataByUserIdTask : Gs2WebSocketSessionTask<Request.DumpUserDataByUserIdRequest, Result.DumpUserDataByUserIdResult>
         {
-	        public DumpUserDataByUserIdTask(IGs2Session session, Request.DumpUserDataByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public DumpUserDataByUserIdTask(IGs2Session session, Request.DumpUserDataByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.DumpUserDataByUserIdRequest request)
             {
@@ -744,70 +673,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator DumpUserDataByUserId(
+        public IEnumerator DumpUserDataByUserId(
                 Request.DumpUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DumpUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new DumpUserDataByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DumpUserDataByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new DumpUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdFuture(
+        public IFuture<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdFuture(
                 Request.DumpUserDataByUserIdRequest request
-        )
-		{
-			return new DumpUserDataByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new DumpUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdAsync(
+        public UniTask<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdAsync(
             Request.DumpUserDataByUserIdRequest request
-        )
-		{
-		    var task = new DumpUserDataByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new DumpUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.DumpUserDataByUserIdResult>();
     #else
-		public DumpUserDataByUserIdTask DumpUserDataByUserIdAsync(
+        public DumpUserDataByUserIdTask DumpUserDataByUserIdAsync(
                 Request.DumpUserDataByUserIdRequest request
         )
-		{
-			return new DumpUserDataByUserIdTask(
+        {
+            return new DumpUserDataByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdAsync(
+        public Task<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdAsync(
             Request.DumpUserDataByUserIdRequest request
-        )
-		{
-		    var task = new DumpUserDataByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new DumpUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class CheckDumpUserDataByUserIdTask : Gs2WebSocketSessionTask<Request.CheckDumpUserDataByUserIdRequest, Result.CheckDumpUserDataByUserIdResult>
         {
-	        public CheckDumpUserDataByUserIdTask(IGs2Session session, Request.CheckDumpUserDataByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public CheckDumpUserDataByUserIdTask(IGs2Session session, Request.CheckDumpUserDataByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.CheckDumpUserDataByUserIdRequest request)
             {
@@ -852,70 +769,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator CheckDumpUserDataByUserId(
+        public IEnumerator CheckDumpUserDataByUserId(
                 Request.CheckDumpUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.CheckDumpUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new CheckDumpUserDataByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CheckDumpUserDataByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new CheckDumpUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdFuture(
+        public IFuture<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdFuture(
                 Request.CheckDumpUserDataByUserIdRequest request
-        )
-		{
-			return new CheckDumpUserDataByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new CheckDumpUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdAsync(
+        public UniTask<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdAsync(
             Request.CheckDumpUserDataByUserIdRequest request
-        )
-		{
-		    var task = new CheckDumpUserDataByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new CheckDumpUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.CheckDumpUserDataByUserIdResult>();
     #else
-		public CheckDumpUserDataByUserIdTask CheckDumpUserDataByUserIdAsync(
+        public CheckDumpUserDataByUserIdTask CheckDumpUserDataByUserIdAsync(
                 Request.CheckDumpUserDataByUserIdRequest request
         )
-		{
-			return new CheckDumpUserDataByUserIdTask(
+        {
+            return new CheckDumpUserDataByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdAsync(
+        public Task<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdAsync(
             Request.CheckDumpUserDataByUserIdRequest request
-        )
-		{
-		    var task = new CheckDumpUserDataByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new CheckDumpUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class CleanUserDataByUserIdTask : Gs2WebSocketSessionTask<Request.CleanUserDataByUserIdRequest, Result.CleanUserDataByUserIdResult>
         {
-	        public CleanUserDataByUserIdTask(IGs2Session session, Request.CleanUserDataByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public CleanUserDataByUserIdTask(IGs2Session session, Request.CleanUserDataByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.CleanUserDataByUserIdRequest request)
             {
@@ -960,70 +865,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator CleanUserDataByUserId(
+        public IEnumerator CleanUserDataByUserId(
                 Request.CleanUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.CleanUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new CleanUserDataByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CleanUserDataByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new CleanUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdFuture(
+        public IFuture<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdFuture(
                 Request.CleanUserDataByUserIdRequest request
-        )
-		{
-			return new CleanUserDataByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new CleanUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdAsync(
+        public UniTask<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdAsync(
             Request.CleanUserDataByUserIdRequest request
-        )
-		{
-		    var task = new CleanUserDataByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new CleanUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.CleanUserDataByUserIdResult>();
     #else
-		public CleanUserDataByUserIdTask CleanUserDataByUserIdAsync(
+        public CleanUserDataByUserIdTask CleanUserDataByUserIdAsync(
                 Request.CleanUserDataByUserIdRequest request
         )
-		{
-			return new CleanUserDataByUserIdTask(
+        {
+            return new CleanUserDataByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdAsync(
+        public Task<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdAsync(
             Request.CleanUserDataByUserIdRequest request
-        )
-		{
-		    var task = new CleanUserDataByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new CleanUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class CheckCleanUserDataByUserIdTask : Gs2WebSocketSessionTask<Request.CheckCleanUserDataByUserIdRequest, Result.CheckCleanUserDataByUserIdResult>
         {
-	        public CheckCleanUserDataByUserIdTask(IGs2Session session, Request.CheckCleanUserDataByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public CheckCleanUserDataByUserIdTask(IGs2Session session, Request.CheckCleanUserDataByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.CheckCleanUserDataByUserIdRequest request)
             {
@@ -1068,70 +961,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator CheckCleanUserDataByUserId(
+        public IEnumerator CheckCleanUserDataByUserId(
                 Request.CheckCleanUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.CheckCleanUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new CheckCleanUserDataByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CheckCleanUserDataByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new CheckCleanUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdFuture(
+        public IFuture<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdFuture(
                 Request.CheckCleanUserDataByUserIdRequest request
-        )
-		{
-			return new CheckCleanUserDataByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new CheckCleanUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdAsync(
+        public UniTask<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdAsync(
             Request.CheckCleanUserDataByUserIdRequest request
-        )
-		{
-		    var task = new CheckCleanUserDataByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new CheckCleanUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.CheckCleanUserDataByUserIdResult>();
     #else
-		public CheckCleanUserDataByUserIdTask CheckCleanUserDataByUserIdAsync(
+        public CheckCleanUserDataByUserIdTask CheckCleanUserDataByUserIdAsync(
                 Request.CheckCleanUserDataByUserIdRequest request
         )
-		{
-			return new CheckCleanUserDataByUserIdTask(
+        {
+            return new CheckCleanUserDataByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdAsync(
+        public Task<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdAsync(
             Request.CheckCleanUserDataByUserIdRequest request
-        )
-		{
-		    var task = new CheckCleanUserDataByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new CheckCleanUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class PrepareImportUserDataByUserIdTask : Gs2WebSocketSessionTask<Request.PrepareImportUserDataByUserIdRequest, Result.PrepareImportUserDataByUserIdResult>
         {
-	        public PrepareImportUserDataByUserIdTask(IGs2Session session, Request.PrepareImportUserDataByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public PrepareImportUserDataByUserIdTask(IGs2Session session, Request.PrepareImportUserDataByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.PrepareImportUserDataByUserIdRequest request)
             {
@@ -1176,70 +1057,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator PrepareImportUserDataByUserId(
+        public IEnumerator PrepareImportUserDataByUserId(
                 Request.PrepareImportUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.PrepareImportUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new PrepareImportUserDataByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.PrepareImportUserDataByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new PrepareImportUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdFuture(
+        public IFuture<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdFuture(
                 Request.PrepareImportUserDataByUserIdRequest request
-        )
-		{
-			return new PrepareImportUserDataByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new PrepareImportUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdAsync(
+        public UniTask<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdAsync(
             Request.PrepareImportUserDataByUserIdRequest request
-        )
-		{
-		    var task = new PrepareImportUserDataByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new PrepareImportUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.PrepareImportUserDataByUserIdResult>();
     #else
-		public PrepareImportUserDataByUserIdTask PrepareImportUserDataByUserIdAsync(
+        public PrepareImportUserDataByUserIdTask PrepareImportUserDataByUserIdAsync(
                 Request.PrepareImportUserDataByUserIdRequest request
         )
-		{
-			return new PrepareImportUserDataByUserIdTask(
+        {
+            return new PrepareImportUserDataByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdAsync(
+        public Task<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdAsync(
             Request.PrepareImportUserDataByUserIdRequest request
-        )
-		{
-		    var task = new PrepareImportUserDataByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new PrepareImportUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class ImportUserDataByUserIdTask : Gs2WebSocketSessionTask<Request.ImportUserDataByUserIdRequest, Result.ImportUserDataByUserIdResult>
         {
-	        public ImportUserDataByUserIdTask(IGs2Session session, Request.ImportUserDataByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public ImportUserDataByUserIdTask(IGs2Session session, Request.ImportUserDataByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.ImportUserDataByUserIdRequest request)
             {
@@ -1289,70 +1158,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator ImportUserDataByUserId(
+        public IEnumerator ImportUserDataByUserId(
                 Request.ImportUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.ImportUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new ImportUserDataByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ImportUserDataByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new ImportUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdFuture(
+        public IFuture<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdFuture(
                 Request.ImportUserDataByUserIdRequest request
-        )
-		{
-			return new ImportUserDataByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new ImportUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdAsync(
+        public UniTask<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdAsync(
             Request.ImportUserDataByUserIdRequest request
-        )
-		{
-		    var task = new ImportUserDataByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new ImportUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.ImportUserDataByUserIdResult>();
     #else
-		public ImportUserDataByUserIdTask ImportUserDataByUserIdAsync(
+        public ImportUserDataByUserIdTask ImportUserDataByUserIdAsync(
                 Request.ImportUserDataByUserIdRequest request
         )
-		{
-			return new ImportUserDataByUserIdTask(
+        {
+            return new ImportUserDataByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdAsync(
+        public Task<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdAsync(
             Request.ImportUserDataByUserIdRequest request
-        )
-		{
-		    var task = new ImportUserDataByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new ImportUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class CheckImportUserDataByUserIdTask : Gs2WebSocketSessionTask<Request.CheckImportUserDataByUserIdRequest, Result.CheckImportUserDataByUserIdResult>
         {
-	        public CheckImportUserDataByUserIdTask(IGs2Session session, Request.CheckImportUserDataByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public CheckImportUserDataByUserIdTask(IGs2Session session, Request.CheckImportUserDataByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.CheckImportUserDataByUserIdRequest request)
             {
@@ -1402,70 +1259,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator CheckImportUserDataByUserId(
+        public IEnumerator CheckImportUserDataByUserId(
                 Request.CheckImportUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.CheckImportUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new CheckImportUserDataByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CheckImportUserDataByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new CheckImportUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdFuture(
+        public IFuture<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdFuture(
                 Request.CheckImportUserDataByUserIdRequest request
-        )
-		{
-			return new CheckImportUserDataByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new CheckImportUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdAsync(
+        public UniTask<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdAsync(
             Request.CheckImportUserDataByUserIdRequest request
-        )
-		{
-		    var task = new CheckImportUserDataByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new CheckImportUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.CheckImportUserDataByUserIdResult>();
     #else
-		public CheckImportUserDataByUserIdTask CheckImportUserDataByUserIdAsync(
+        public CheckImportUserDataByUserIdTask CheckImportUserDataByUserIdAsync(
                 Request.CheckImportUserDataByUserIdRequest request
         )
-		{
-			return new CheckImportUserDataByUserIdTask(
+        {
+            return new CheckImportUserDataByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdAsync(
+        public Task<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdAsync(
             Request.CheckImportUserDataByUserIdRequest request
-        )
-		{
-		    var task = new CheckImportUserDataByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new CheckImportUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class GetBalanceParameterModelTask : Gs2WebSocketSessionTask<Request.GetBalanceParameterModelRequest, Result.GetBalanceParameterModelResult>
         {
-	        public GetBalanceParameterModelTask(IGs2Session session, Request.GetBalanceParameterModelRequest request) : base(session, request)
-	        {
-	        }
+            public GetBalanceParameterModelTask(IGs2Session session, Request.GetBalanceParameterModelRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetBalanceParameterModelRequest request)
             {
@@ -1510,70 +1355,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetBalanceParameterModel(
+        public IEnumerator GetBalanceParameterModel(
                 Request.GetBalanceParameterModelRequest request,
                 UnityAction<AsyncResult<Result.GetBalanceParameterModelResult>> callback
-        )
-		{
-			var task = new GetBalanceParameterModelTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetBalanceParameterModelResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetBalanceParameterModelTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetBalanceParameterModelResult> GetBalanceParameterModelFuture(
+        public IFuture<Result.GetBalanceParameterModelResult> GetBalanceParameterModelFuture(
                 Request.GetBalanceParameterModelRequest request
-        )
-		{
-			return new GetBalanceParameterModelTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetBalanceParameterModelTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetBalanceParameterModelResult> GetBalanceParameterModelAsync(
+        public UniTask<Result.GetBalanceParameterModelResult> GetBalanceParameterModelAsync(
             Request.GetBalanceParameterModelRequest request
-        )
-		{
-		    var task = new GetBalanceParameterModelTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetBalanceParameterModelTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetBalanceParameterModelResult>();
     #else
-		public GetBalanceParameterModelTask GetBalanceParameterModelAsync(
+        public GetBalanceParameterModelTask GetBalanceParameterModelAsync(
                 Request.GetBalanceParameterModelRequest request
         )
-		{
-			return new GetBalanceParameterModelTask(
+        {
+            return new GetBalanceParameterModelTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetBalanceParameterModelResult> GetBalanceParameterModelAsync(
+        public Task<Result.GetBalanceParameterModelResult> GetBalanceParameterModelAsync(
             Request.GetBalanceParameterModelRequest request
-        )
-		{
-		    var task = new GetBalanceParameterModelTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetBalanceParameterModelTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class CreateBalanceParameterModelMasterTask : Gs2WebSocketSessionTask<Request.CreateBalanceParameterModelMasterRequest, Result.CreateBalanceParameterModelMasterResult>
         {
-	        public CreateBalanceParameterModelMasterTask(IGs2Session session, Request.CreateBalanceParameterModelMasterRequest request) : base(session, request)
-	        {
-	        }
+            public CreateBalanceParameterModelMasterTask(IGs2Session session, Request.CreateBalanceParameterModelMasterRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.CreateBalanceParameterModelMasterRequest request)
             {
@@ -1648,70 +1481,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator CreateBalanceParameterModelMaster(
+        public IEnumerator CreateBalanceParameterModelMaster(
                 Request.CreateBalanceParameterModelMasterRequest request,
                 UnityAction<AsyncResult<Result.CreateBalanceParameterModelMasterResult>> callback
-        )
-		{
-			var task = new CreateBalanceParameterModelMasterTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateBalanceParameterModelMasterResult>(task.Result, task.Error));
-        }
+        ) =>
+            new CreateBalanceParameterModelMasterTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.CreateBalanceParameterModelMasterResult> CreateBalanceParameterModelMasterFuture(
+        public IFuture<Result.CreateBalanceParameterModelMasterResult> CreateBalanceParameterModelMasterFuture(
                 Request.CreateBalanceParameterModelMasterRequest request
-        )
-		{
-			return new CreateBalanceParameterModelMasterTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new CreateBalanceParameterModelMasterTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateBalanceParameterModelMasterResult> CreateBalanceParameterModelMasterAsync(
+        public UniTask<Result.CreateBalanceParameterModelMasterResult> CreateBalanceParameterModelMasterAsync(
             Request.CreateBalanceParameterModelMasterRequest request
-        )
-		{
-		    var task = new CreateBalanceParameterModelMasterTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new CreateBalanceParameterModelMasterTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.CreateBalanceParameterModelMasterResult>();
     #else
-		public CreateBalanceParameterModelMasterTask CreateBalanceParameterModelMasterAsync(
+        public CreateBalanceParameterModelMasterTask CreateBalanceParameterModelMasterAsync(
                 Request.CreateBalanceParameterModelMasterRequest request
         )
-		{
-			return new CreateBalanceParameterModelMasterTask(
+        {
+            return new CreateBalanceParameterModelMasterTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.CreateBalanceParameterModelMasterResult> CreateBalanceParameterModelMasterAsync(
+        public Task<Result.CreateBalanceParameterModelMasterResult> CreateBalanceParameterModelMasterAsync(
             Request.CreateBalanceParameterModelMasterRequest request
-        )
-		{
-		    var task = new CreateBalanceParameterModelMasterTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new CreateBalanceParameterModelMasterTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class GetBalanceParameterModelMasterTask : Gs2WebSocketSessionTask<Request.GetBalanceParameterModelMasterRequest, Result.GetBalanceParameterModelMasterResult>
         {
-	        public GetBalanceParameterModelMasterTask(IGs2Session session, Request.GetBalanceParameterModelMasterRequest request) : base(session, request)
-	        {
-	        }
+            public GetBalanceParameterModelMasterTask(IGs2Session session, Request.GetBalanceParameterModelMasterRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetBalanceParameterModelMasterRequest request)
             {
@@ -1756,70 +1577,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetBalanceParameterModelMaster(
+        public IEnumerator GetBalanceParameterModelMaster(
                 Request.GetBalanceParameterModelMasterRequest request,
                 UnityAction<AsyncResult<Result.GetBalanceParameterModelMasterResult>> callback
-        )
-		{
-			var task = new GetBalanceParameterModelMasterTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetBalanceParameterModelMasterResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetBalanceParameterModelMasterTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetBalanceParameterModelMasterResult> GetBalanceParameterModelMasterFuture(
+        public IFuture<Result.GetBalanceParameterModelMasterResult> GetBalanceParameterModelMasterFuture(
                 Request.GetBalanceParameterModelMasterRequest request
-        )
-		{
-			return new GetBalanceParameterModelMasterTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetBalanceParameterModelMasterTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetBalanceParameterModelMasterResult> GetBalanceParameterModelMasterAsync(
+        public UniTask<Result.GetBalanceParameterModelMasterResult> GetBalanceParameterModelMasterAsync(
             Request.GetBalanceParameterModelMasterRequest request
-        )
-		{
-		    var task = new GetBalanceParameterModelMasterTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetBalanceParameterModelMasterTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetBalanceParameterModelMasterResult>();
     #else
-		public GetBalanceParameterModelMasterTask GetBalanceParameterModelMasterAsync(
+        public GetBalanceParameterModelMasterTask GetBalanceParameterModelMasterAsync(
                 Request.GetBalanceParameterModelMasterRequest request
         )
-		{
-			return new GetBalanceParameterModelMasterTask(
+        {
+            return new GetBalanceParameterModelMasterTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetBalanceParameterModelMasterResult> GetBalanceParameterModelMasterAsync(
+        public Task<Result.GetBalanceParameterModelMasterResult> GetBalanceParameterModelMasterAsync(
             Request.GetBalanceParameterModelMasterRequest request
-        )
-		{
-		    var task = new GetBalanceParameterModelMasterTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetBalanceParameterModelMasterTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class UpdateBalanceParameterModelMasterTask : Gs2WebSocketSessionTask<Request.UpdateBalanceParameterModelMasterRequest, Result.UpdateBalanceParameterModelMasterResult>
         {
-	        public UpdateBalanceParameterModelMasterTask(IGs2Session session, Request.UpdateBalanceParameterModelMasterRequest request) : base(session, request)
-	        {
-	        }
+            public UpdateBalanceParameterModelMasterTask(IGs2Session session, Request.UpdateBalanceParameterModelMasterRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.UpdateBalanceParameterModelMasterRequest request)
             {
@@ -1894,70 +1703,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator UpdateBalanceParameterModelMaster(
+        public IEnumerator UpdateBalanceParameterModelMaster(
                 Request.UpdateBalanceParameterModelMasterRequest request,
                 UnityAction<AsyncResult<Result.UpdateBalanceParameterModelMasterResult>> callback
-        )
-		{
-			var task = new UpdateBalanceParameterModelMasterTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateBalanceParameterModelMasterResult>(task.Result, task.Error));
-        }
+        ) =>
+            new UpdateBalanceParameterModelMasterTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.UpdateBalanceParameterModelMasterResult> UpdateBalanceParameterModelMasterFuture(
+        public IFuture<Result.UpdateBalanceParameterModelMasterResult> UpdateBalanceParameterModelMasterFuture(
                 Request.UpdateBalanceParameterModelMasterRequest request
-        )
-		{
-			return new UpdateBalanceParameterModelMasterTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new UpdateBalanceParameterModelMasterTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateBalanceParameterModelMasterResult> UpdateBalanceParameterModelMasterAsync(
+        public UniTask<Result.UpdateBalanceParameterModelMasterResult> UpdateBalanceParameterModelMasterAsync(
             Request.UpdateBalanceParameterModelMasterRequest request
-        )
-		{
-		    var task = new UpdateBalanceParameterModelMasterTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new UpdateBalanceParameterModelMasterTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.UpdateBalanceParameterModelMasterResult>();
     #else
-		public UpdateBalanceParameterModelMasterTask UpdateBalanceParameterModelMasterAsync(
+        public UpdateBalanceParameterModelMasterTask UpdateBalanceParameterModelMasterAsync(
                 Request.UpdateBalanceParameterModelMasterRequest request
         )
-		{
-			return new UpdateBalanceParameterModelMasterTask(
+        {
+            return new UpdateBalanceParameterModelMasterTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.UpdateBalanceParameterModelMasterResult> UpdateBalanceParameterModelMasterAsync(
+        public Task<Result.UpdateBalanceParameterModelMasterResult> UpdateBalanceParameterModelMasterAsync(
             Request.UpdateBalanceParameterModelMasterRequest request
-        )
-		{
-		    var task = new UpdateBalanceParameterModelMasterTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new UpdateBalanceParameterModelMasterTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class DeleteBalanceParameterModelMasterTask : Gs2WebSocketSessionTask<Request.DeleteBalanceParameterModelMasterRequest, Result.DeleteBalanceParameterModelMasterResult>
         {
-	        public DeleteBalanceParameterModelMasterTask(IGs2Session session, Request.DeleteBalanceParameterModelMasterRequest request) : base(session, request)
-	        {
-	        }
+            public DeleteBalanceParameterModelMasterTask(IGs2Session session, Request.DeleteBalanceParameterModelMasterRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.DeleteBalanceParameterModelMasterRequest request)
             {
@@ -2002,70 +1799,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator DeleteBalanceParameterModelMaster(
+        public IEnumerator DeleteBalanceParameterModelMaster(
                 Request.DeleteBalanceParameterModelMasterRequest request,
                 UnityAction<AsyncResult<Result.DeleteBalanceParameterModelMasterResult>> callback
-        )
-		{
-			var task = new DeleteBalanceParameterModelMasterTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteBalanceParameterModelMasterResult>(task.Result, task.Error));
-        }
+        ) =>
+            new DeleteBalanceParameterModelMasterTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.DeleteBalanceParameterModelMasterResult> DeleteBalanceParameterModelMasterFuture(
+        public IFuture<Result.DeleteBalanceParameterModelMasterResult> DeleteBalanceParameterModelMasterFuture(
                 Request.DeleteBalanceParameterModelMasterRequest request
-        )
-		{
-			return new DeleteBalanceParameterModelMasterTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new DeleteBalanceParameterModelMasterTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteBalanceParameterModelMasterResult> DeleteBalanceParameterModelMasterAsync(
+        public UniTask<Result.DeleteBalanceParameterModelMasterResult> DeleteBalanceParameterModelMasterAsync(
             Request.DeleteBalanceParameterModelMasterRequest request
-        )
-		{
-		    var task = new DeleteBalanceParameterModelMasterTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new DeleteBalanceParameterModelMasterTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.DeleteBalanceParameterModelMasterResult>();
     #else
-		public DeleteBalanceParameterModelMasterTask DeleteBalanceParameterModelMasterAsync(
+        public DeleteBalanceParameterModelMasterTask DeleteBalanceParameterModelMasterAsync(
                 Request.DeleteBalanceParameterModelMasterRequest request
         )
-		{
-			return new DeleteBalanceParameterModelMasterTask(
+        {
+            return new DeleteBalanceParameterModelMasterTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.DeleteBalanceParameterModelMasterResult> DeleteBalanceParameterModelMasterAsync(
+        public Task<Result.DeleteBalanceParameterModelMasterResult> DeleteBalanceParameterModelMasterAsync(
             Request.DeleteBalanceParameterModelMasterRequest request
-        )
-		{
-		    var task = new DeleteBalanceParameterModelMasterTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new DeleteBalanceParameterModelMasterTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class PreUpdateCurrentParameterMasterTask : Gs2WebSocketSessionTask<Request.PreUpdateCurrentParameterMasterRequest, Result.PreUpdateCurrentParameterMasterResult>
         {
-	        public PreUpdateCurrentParameterMasterTask(IGs2Session session, Request.PreUpdateCurrentParameterMasterRequest request) : base(session, request)
-	        {
-	        }
+            public PreUpdateCurrentParameterMasterTask(IGs2Session session, Request.PreUpdateCurrentParameterMasterRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.PreUpdateCurrentParameterMasterRequest request)
             {
@@ -2105,70 +1890,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator PreUpdateCurrentParameterMaster(
+        public IEnumerator PreUpdateCurrentParameterMaster(
                 Request.PreUpdateCurrentParameterMasterRequest request,
                 UnityAction<AsyncResult<Result.PreUpdateCurrentParameterMasterResult>> callback
-        )
-		{
-			var task = new PreUpdateCurrentParameterMasterTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.PreUpdateCurrentParameterMasterResult>(task.Result, task.Error));
-        }
+        ) =>
+            new PreUpdateCurrentParameterMasterTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.PreUpdateCurrentParameterMasterResult> PreUpdateCurrentParameterMasterFuture(
+        public IFuture<Result.PreUpdateCurrentParameterMasterResult> PreUpdateCurrentParameterMasterFuture(
                 Request.PreUpdateCurrentParameterMasterRequest request
-        )
-		{
-			return new PreUpdateCurrentParameterMasterTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new PreUpdateCurrentParameterMasterTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.PreUpdateCurrentParameterMasterResult> PreUpdateCurrentParameterMasterAsync(
+        public UniTask<Result.PreUpdateCurrentParameterMasterResult> PreUpdateCurrentParameterMasterAsync(
             Request.PreUpdateCurrentParameterMasterRequest request
-        )
-		{
-		    var task = new PreUpdateCurrentParameterMasterTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new PreUpdateCurrentParameterMasterTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.PreUpdateCurrentParameterMasterResult>();
     #else
-		public PreUpdateCurrentParameterMasterTask PreUpdateCurrentParameterMasterAsync(
+        public PreUpdateCurrentParameterMasterTask PreUpdateCurrentParameterMasterAsync(
                 Request.PreUpdateCurrentParameterMasterRequest request
         )
-		{
-			return new PreUpdateCurrentParameterMasterTask(
+        {
+            return new PreUpdateCurrentParameterMasterTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.PreUpdateCurrentParameterMasterResult> PreUpdateCurrentParameterMasterAsync(
+        public Task<Result.PreUpdateCurrentParameterMasterResult> PreUpdateCurrentParameterMasterAsync(
             Request.PreUpdateCurrentParameterMasterRequest request
-        )
-		{
-		    var task = new PreUpdateCurrentParameterMasterTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new PreUpdateCurrentParameterMasterTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class GetBalanceParameterStatusTask : Gs2WebSocketSessionTask<Request.GetBalanceParameterStatusRequest, Result.GetBalanceParameterStatusResult>
         {
-	        public GetBalanceParameterStatusTask(IGs2Session session, Request.GetBalanceParameterStatusRequest request) : base(session, request)
-	        {
-	        }
+            public GetBalanceParameterStatusTask(IGs2Session session, Request.GetBalanceParameterStatusRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetBalanceParameterStatusRequest request)
             {
@@ -2228,70 +2001,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetBalanceParameterStatus(
+        public IEnumerator GetBalanceParameterStatus(
                 Request.GetBalanceParameterStatusRequest request,
                 UnityAction<AsyncResult<Result.GetBalanceParameterStatusResult>> callback
-        )
-		{
-			var task = new GetBalanceParameterStatusTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetBalanceParameterStatusResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetBalanceParameterStatusTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetBalanceParameterStatusResult> GetBalanceParameterStatusFuture(
+        public IFuture<Result.GetBalanceParameterStatusResult> GetBalanceParameterStatusFuture(
                 Request.GetBalanceParameterStatusRequest request
-        )
-		{
-			return new GetBalanceParameterStatusTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetBalanceParameterStatusTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetBalanceParameterStatusResult> GetBalanceParameterStatusAsync(
+        public UniTask<Result.GetBalanceParameterStatusResult> GetBalanceParameterStatusAsync(
             Request.GetBalanceParameterStatusRequest request
-        )
-		{
-		    var task = new GetBalanceParameterStatusTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetBalanceParameterStatusTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetBalanceParameterStatusResult>();
     #else
-		public GetBalanceParameterStatusTask GetBalanceParameterStatusAsync(
+        public GetBalanceParameterStatusTask GetBalanceParameterStatusAsync(
                 Request.GetBalanceParameterStatusRequest request
         )
-		{
-			return new GetBalanceParameterStatusTask(
+        {
+            return new GetBalanceParameterStatusTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetBalanceParameterStatusResult> GetBalanceParameterStatusAsync(
+        public Task<Result.GetBalanceParameterStatusResult> GetBalanceParameterStatusAsync(
             Request.GetBalanceParameterStatusRequest request
-        )
-		{
-		    var task = new GetBalanceParameterStatusTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetBalanceParameterStatusTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class GetBalanceParameterStatusByUserIdTask : Gs2WebSocketSessionTask<Request.GetBalanceParameterStatusByUserIdRequest, Result.GetBalanceParameterStatusByUserIdResult>
         {
-	        public GetBalanceParameterStatusByUserIdTask(IGs2Session session, Request.GetBalanceParameterStatusByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public GetBalanceParameterStatusByUserIdTask(IGs2Session session, Request.GetBalanceParameterStatusByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetBalanceParameterStatusByUserIdRequest request)
             {
@@ -2351,70 +2112,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetBalanceParameterStatusByUserId(
+        public IEnumerator GetBalanceParameterStatusByUserId(
                 Request.GetBalanceParameterStatusByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetBalanceParameterStatusByUserIdResult>> callback
-        )
-		{
-			var task = new GetBalanceParameterStatusByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetBalanceParameterStatusByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetBalanceParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetBalanceParameterStatusByUserIdResult> GetBalanceParameterStatusByUserIdFuture(
+        public IFuture<Result.GetBalanceParameterStatusByUserIdResult> GetBalanceParameterStatusByUserIdFuture(
                 Request.GetBalanceParameterStatusByUserIdRequest request
-        )
-		{
-			return new GetBalanceParameterStatusByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetBalanceParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetBalanceParameterStatusByUserIdResult> GetBalanceParameterStatusByUserIdAsync(
+        public UniTask<Result.GetBalanceParameterStatusByUserIdResult> GetBalanceParameterStatusByUserIdAsync(
             Request.GetBalanceParameterStatusByUserIdRequest request
-        )
-		{
-		    var task = new GetBalanceParameterStatusByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetBalanceParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetBalanceParameterStatusByUserIdResult>();
     #else
-		public GetBalanceParameterStatusByUserIdTask GetBalanceParameterStatusByUserIdAsync(
+        public GetBalanceParameterStatusByUserIdTask GetBalanceParameterStatusByUserIdAsync(
                 Request.GetBalanceParameterStatusByUserIdRequest request
         )
-		{
-			return new GetBalanceParameterStatusByUserIdTask(
+        {
+            return new GetBalanceParameterStatusByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetBalanceParameterStatusByUserIdResult> GetBalanceParameterStatusByUserIdAsync(
+        public Task<Result.GetBalanceParameterStatusByUserIdResult> GetBalanceParameterStatusByUserIdAsync(
             Request.GetBalanceParameterStatusByUserIdRequest request
-        )
-		{
-		    var task = new GetBalanceParameterStatusByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetBalanceParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class DeleteBalanceParameterStatusByUserIdTask : Gs2WebSocketSessionTask<Request.DeleteBalanceParameterStatusByUserIdRequest, Result.DeleteBalanceParameterStatusByUserIdResult>
         {
-	        public DeleteBalanceParameterStatusByUserIdTask(IGs2Session session, Request.DeleteBalanceParameterStatusByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public DeleteBalanceParameterStatusByUserIdTask(IGs2Session session, Request.DeleteBalanceParameterStatusByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.DeleteBalanceParameterStatusByUserIdRequest request)
             {
@@ -2479,70 +2228,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator DeleteBalanceParameterStatusByUserId(
+        public IEnumerator DeleteBalanceParameterStatusByUserId(
                 Request.DeleteBalanceParameterStatusByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DeleteBalanceParameterStatusByUserIdResult>> callback
-        )
-		{
-			var task = new DeleteBalanceParameterStatusByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteBalanceParameterStatusByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new DeleteBalanceParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.DeleteBalanceParameterStatusByUserIdResult> DeleteBalanceParameterStatusByUserIdFuture(
+        public IFuture<Result.DeleteBalanceParameterStatusByUserIdResult> DeleteBalanceParameterStatusByUserIdFuture(
                 Request.DeleteBalanceParameterStatusByUserIdRequest request
-        )
-		{
-			return new DeleteBalanceParameterStatusByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new DeleteBalanceParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteBalanceParameterStatusByUserIdResult> DeleteBalanceParameterStatusByUserIdAsync(
+        public UniTask<Result.DeleteBalanceParameterStatusByUserIdResult> DeleteBalanceParameterStatusByUserIdAsync(
             Request.DeleteBalanceParameterStatusByUserIdRequest request
-        )
-		{
-		    var task = new DeleteBalanceParameterStatusByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new DeleteBalanceParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.DeleteBalanceParameterStatusByUserIdResult>();
     #else
-		public DeleteBalanceParameterStatusByUserIdTask DeleteBalanceParameterStatusByUserIdAsync(
+        public DeleteBalanceParameterStatusByUserIdTask DeleteBalanceParameterStatusByUserIdAsync(
                 Request.DeleteBalanceParameterStatusByUserIdRequest request
         )
-		{
-			return new DeleteBalanceParameterStatusByUserIdTask(
+        {
+            return new DeleteBalanceParameterStatusByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.DeleteBalanceParameterStatusByUserIdResult> DeleteBalanceParameterStatusByUserIdAsync(
+        public Task<Result.DeleteBalanceParameterStatusByUserIdResult> DeleteBalanceParameterStatusByUserIdAsync(
             Request.DeleteBalanceParameterStatusByUserIdRequest request
-        )
-		{
-		    var task = new DeleteBalanceParameterStatusByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new DeleteBalanceParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class ReDrawBalanceParameterStatusByUserIdTask : Gs2WebSocketSessionTask<Request.ReDrawBalanceParameterStatusByUserIdRequest, Result.ReDrawBalanceParameterStatusByUserIdResult>
         {
-	        public ReDrawBalanceParameterStatusByUserIdTask(IGs2Session session, Request.ReDrawBalanceParameterStatusByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public ReDrawBalanceParameterStatusByUserIdTask(IGs2Session session, Request.ReDrawBalanceParameterStatusByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.ReDrawBalanceParameterStatusByUserIdRequest request)
             {
@@ -2617,70 +2354,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator ReDrawBalanceParameterStatusByUserId(
+        public IEnumerator ReDrawBalanceParameterStatusByUserId(
                 Request.ReDrawBalanceParameterStatusByUserIdRequest request,
                 UnityAction<AsyncResult<Result.ReDrawBalanceParameterStatusByUserIdResult>> callback
-        )
-		{
-			var task = new ReDrawBalanceParameterStatusByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ReDrawBalanceParameterStatusByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new ReDrawBalanceParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.ReDrawBalanceParameterStatusByUserIdResult> ReDrawBalanceParameterStatusByUserIdFuture(
+        public IFuture<Result.ReDrawBalanceParameterStatusByUserIdResult> ReDrawBalanceParameterStatusByUserIdFuture(
                 Request.ReDrawBalanceParameterStatusByUserIdRequest request
-        )
-		{
-			return new ReDrawBalanceParameterStatusByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new ReDrawBalanceParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ReDrawBalanceParameterStatusByUserIdResult> ReDrawBalanceParameterStatusByUserIdAsync(
+        public UniTask<Result.ReDrawBalanceParameterStatusByUserIdResult> ReDrawBalanceParameterStatusByUserIdAsync(
             Request.ReDrawBalanceParameterStatusByUserIdRequest request
-        )
-		{
-		    var task = new ReDrawBalanceParameterStatusByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new ReDrawBalanceParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.ReDrawBalanceParameterStatusByUserIdResult>();
     #else
-		public ReDrawBalanceParameterStatusByUserIdTask ReDrawBalanceParameterStatusByUserIdAsync(
+        public ReDrawBalanceParameterStatusByUserIdTask ReDrawBalanceParameterStatusByUserIdAsync(
                 Request.ReDrawBalanceParameterStatusByUserIdRequest request
         )
-		{
-			return new ReDrawBalanceParameterStatusByUserIdTask(
+        {
+            return new ReDrawBalanceParameterStatusByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.ReDrawBalanceParameterStatusByUserIdResult> ReDrawBalanceParameterStatusByUserIdAsync(
+        public Task<Result.ReDrawBalanceParameterStatusByUserIdResult> ReDrawBalanceParameterStatusByUserIdAsync(
             Request.ReDrawBalanceParameterStatusByUserIdRequest request
-        )
-		{
-		    var task = new ReDrawBalanceParameterStatusByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new ReDrawBalanceParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class ReDrawBalanceParameterStatusByStampSheetTask : Gs2WebSocketSessionTask<Request.ReDrawBalanceParameterStatusByStampSheetRequest, Result.ReDrawBalanceParameterStatusByStampSheetResult>
         {
-	        public ReDrawBalanceParameterStatusByStampSheetTask(IGs2Session session, Request.ReDrawBalanceParameterStatusByStampSheetRequest request) : base(session, request)
-	        {
-	        }
+            public ReDrawBalanceParameterStatusByStampSheetTask(IGs2Session session, Request.ReDrawBalanceParameterStatusByStampSheetRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.ReDrawBalanceParameterStatusByStampSheetRequest request)
             {
@@ -2725,70 +2450,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator ReDrawBalanceParameterStatusByStampSheet(
+        public IEnumerator ReDrawBalanceParameterStatusByStampSheet(
                 Request.ReDrawBalanceParameterStatusByStampSheetRequest request,
                 UnityAction<AsyncResult<Result.ReDrawBalanceParameterStatusByStampSheetResult>> callback
-        )
-		{
-			var task = new ReDrawBalanceParameterStatusByStampSheetTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ReDrawBalanceParameterStatusByStampSheetResult>(task.Result, task.Error));
-        }
+        ) =>
+            new ReDrawBalanceParameterStatusByStampSheetTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.ReDrawBalanceParameterStatusByStampSheetResult> ReDrawBalanceParameterStatusByStampSheetFuture(
+        public IFuture<Result.ReDrawBalanceParameterStatusByStampSheetResult> ReDrawBalanceParameterStatusByStampSheetFuture(
                 Request.ReDrawBalanceParameterStatusByStampSheetRequest request
-        )
-		{
-			return new ReDrawBalanceParameterStatusByStampSheetTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new ReDrawBalanceParameterStatusByStampSheetTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ReDrawBalanceParameterStatusByStampSheetResult> ReDrawBalanceParameterStatusByStampSheetAsync(
+        public UniTask<Result.ReDrawBalanceParameterStatusByStampSheetResult> ReDrawBalanceParameterStatusByStampSheetAsync(
             Request.ReDrawBalanceParameterStatusByStampSheetRequest request
-        )
-		{
-		    var task = new ReDrawBalanceParameterStatusByStampSheetTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new ReDrawBalanceParameterStatusByStampSheetTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.ReDrawBalanceParameterStatusByStampSheetResult>();
     #else
-		public ReDrawBalanceParameterStatusByStampSheetTask ReDrawBalanceParameterStatusByStampSheetAsync(
+        public ReDrawBalanceParameterStatusByStampSheetTask ReDrawBalanceParameterStatusByStampSheetAsync(
                 Request.ReDrawBalanceParameterStatusByStampSheetRequest request
         )
-		{
-			return new ReDrawBalanceParameterStatusByStampSheetTask(
+        {
+            return new ReDrawBalanceParameterStatusByStampSheetTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.ReDrawBalanceParameterStatusByStampSheetResult> ReDrawBalanceParameterStatusByStampSheetAsync(
+        public Task<Result.ReDrawBalanceParameterStatusByStampSheetResult> ReDrawBalanceParameterStatusByStampSheetAsync(
             Request.ReDrawBalanceParameterStatusByStampSheetRequest request
-        )
-		{
-		    var task = new ReDrawBalanceParameterStatusByStampSheetTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new ReDrawBalanceParameterStatusByStampSheetTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class SetBalanceParameterStatusByUserIdTask : Gs2WebSocketSessionTask<Request.SetBalanceParameterStatusByUserIdRequest, Result.SetBalanceParameterStatusByUserIdResult>
         {
-	        public SetBalanceParameterStatusByUserIdTask(IGs2Session session, Request.SetBalanceParameterStatusByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public SetBalanceParameterStatusByUserIdTask(IGs2Session session, Request.SetBalanceParameterStatusByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.SetBalanceParameterStatusByUserIdRequest request)
             {
@@ -2863,70 +2576,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator SetBalanceParameterStatusByUserId(
+        public IEnumerator SetBalanceParameterStatusByUserId(
                 Request.SetBalanceParameterStatusByUserIdRequest request,
                 UnityAction<AsyncResult<Result.SetBalanceParameterStatusByUserIdResult>> callback
-        )
-		{
-			var task = new SetBalanceParameterStatusByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.SetBalanceParameterStatusByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new SetBalanceParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.SetBalanceParameterStatusByUserIdResult> SetBalanceParameterStatusByUserIdFuture(
+        public IFuture<Result.SetBalanceParameterStatusByUserIdResult> SetBalanceParameterStatusByUserIdFuture(
                 Request.SetBalanceParameterStatusByUserIdRequest request
-        )
-		{
-			return new SetBalanceParameterStatusByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new SetBalanceParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.SetBalanceParameterStatusByUserIdResult> SetBalanceParameterStatusByUserIdAsync(
+        public UniTask<Result.SetBalanceParameterStatusByUserIdResult> SetBalanceParameterStatusByUserIdAsync(
             Request.SetBalanceParameterStatusByUserIdRequest request
-        )
-		{
-		    var task = new SetBalanceParameterStatusByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new SetBalanceParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.SetBalanceParameterStatusByUserIdResult>();
     #else
-		public SetBalanceParameterStatusByUserIdTask SetBalanceParameterStatusByUserIdAsync(
+        public SetBalanceParameterStatusByUserIdTask SetBalanceParameterStatusByUserIdAsync(
                 Request.SetBalanceParameterStatusByUserIdRequest request
         )
-		{
-			return new SetBalanceParameterStatusByUserIdTask(
+        {
+            return new SetBalanceParameterStatusByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.SetBalanceParameterStatusByUserIdResult> SetBalanceParameterStatusByUserIdAsync(
+        public Task<Result.SetBalanceParameterStatusByUserIdResult> SetBalanceParameterStatusByUserIdAsync(
             Request.SetBalanceParameterStatusByUserIdRequest request
-        )
-		{
-		    var task = new SetBalanceParameterStatusByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new SetBalanceParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class SetBalanceParameterStatusByStampSheetTask : Gs2WebSocketSessionTask<Request.SetBalanceParameterStatusByStampSheetRequest, Result.SetBalanceParameterStatusByStampSheetResult>
         {
-	        public SetBalanceParameterStatusByStampSheetTask(IGs2Session session, Request.SetBalanceParameterStatusByStampSheetRequest request) : base(session, request)
-	        {
-	        }
+            public SetBalanceParameterStatusByStampSheetTask(IGs2Session session, Request.SetBalanceParameterStatusByStampSheetRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.SetBalanceParameterStatusByStampSheetRequest request)
             {
@@ -2971,70 +2672,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator SetBalanceParameterStatusByStampSheet(
+        public IEnumerator SetBalanceParameterStatusByStampSheet(
                 Request.SetBalanceParameterStatusByStampSheetRequest request,
                 UnityAction<AsyncResult<Result.SetBalanceParameterStatusByStampSheetResult>> callback
-        )
-		{
-			var task = new SetBalanceParameterStatusByStampSheetTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.SetBalanceParameterStatusByStampSheetResult>(task.Result, task.Error));
-        }
+        ) =>
+            new SetBalanceParameterStatusByStampSheetTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.SetBalanceParameterStatusByStampSheetResult> SetBalanceParameterStatusByStampSheetFuture(
+        public IFuture<Result.SetBalanceParameterStatusByStampSheetResult> SetBalanceParameterStatusByStampSheetFuture(
                 Request.SetBalanceParameterStatusByStampSheetRequest request
-        )
-		{
-			return new SetBalanceParameterStatusByStampSheetTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new SetBalanceParameterStatusByStampSheetTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.SetBalanceParameterStatusByStampSheetResult> SetBalanceParameterStatusByStampSheetAsync(
+        public UniTask<Result.SetBalanceParameterStatusByStampSheetResult> SetBalanceParameterStatusByStampSheetAsync(
             Request.SetBalanceParameterStatusByStampSheetRequest request
-        )
-		{
-		    var task = new SetBalanceParameterStatusByStampSheetTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new SetBalanceParameterStatusByStampSheetTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.SetBalanceParameterStatusByStampSheetResult>();
     #else
-		public SetBalanceParameterStatusByStampSheetTask SetBalanceParameterStatusByStampSheetAsync(
+        public SetBalanceParameterStatusByStampSheetTask SetBalanceParameterStatusByStampSheetAsync(
                 Request.SetBalanceParameterStatusByStampSheetRequest request
         )
-		{
-			return new SetBalanceParameterStatusByStampSheetTask(
+        {
+            return new SetBalanceParameterStatusByStampSheetTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.SetBalanceParameterStatusByStampSheetResult> SetBalanceParameterStatusByStampSheetAsync(
+        public Task<Result.SetBalanceParameterStatusByStampSheetResult> SetBalanceParameterStatusByStampSheetAsync(
             Request.SetBalanceParameterStatusByStampSheetRequest request
-        )
-		{
-		    var task = new SetBalanceParameterStatusByStampSheetTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new SetBalanceParameterStatusByStampSheetTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class GetRarityParameterStatusTask : Gs2WebSocketSessionTask<Request.GetRarityParameterStatusRequest, Result.GetRarityParameterStatusResult>
         {
-	        public GetRarityParameterStatusTask(IGs2Session session, Request.GetRarityParameterStatusRequest request) : base(session, request)
-	        {
-	        }
+            public GetRarityParameterStatusTask(IGs2Session session, Request.GetRarityParameterStatusRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetRarityParameterStatusRequest request)
             {
@@ -3094,70 +2783,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetRarityParameterStatus(
+        public IEnumerator GetRarityParameterStatus(
                 Request.GetRarityParameterStatusRequest request,
                 UnityAction<AsyncResult<Result.GetRarityParameterStatusResult>> callback
-        )
-		{
-			var task = new GetRarityParameterStatusTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetRarityParameterStatusResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetRarityParameterStatusTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetRarityParameterStatusResult> GetRarityParameterStatusFuture(
+        public IFuture<Result.GetRarityParameterStatusResult> GetRarityParameterStatusFuture(
                 Request.GetRarityParameterStatusRequest request
-        )
-		{
-			return new GetRarityParameterStatusTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetRarityParameterStatusTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetRarityParameterStatusResult> GetRarityParameterStatusAsync(
+        public UniTask<Result.GetRarityParameterStatusResult> GetRarityParameterStatusAsync(
             Request.GetRarityParameterStatusRequest request
-        )
-		{
-		    var task = new GetRarityParameterStatusTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetRarityParameterStatusTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetRarityParameterStatusResult>();
     #else
-		public GetRarityParameterStatusTask GetRarityParameterStatusAsync(
+        public GetRarityParameterStatusTask GetRarityParameterStatusAsync(
                 Request.GetRarityParameterStatusRequest request
         )
-		{
-			return new GetRarityParameterStatusTask(
+        {
+            return new GetRarityParameterStatusTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetRarityParameterStatusResult> GetRarityParameterStatusAsync(
+        public Task<Result.GetRarityParameterStatusResult> GetRarityParameterStatusAsync(
             Request.GetRarityParameterStatusRequest request
-        )
-		{
-		    var task = new GetRarityParameterStatusTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetRarityParameterStatusTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class GetRarityParameterStatusByUserIdTask : Gs2WebSocketSessionTask<Request.GetRarityParameterStatusByUserIdRequest, Result.GetRarityParameterStatusByUserIdResult>
         {
-	        public GetRarityParameterStatusByUserIdTask(IGs2Session session, Request.GetRarityParameterStatusByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public GetRarityParameterStatusByUserIdTask(IGs2Session session, Request.GetRarityParameterStatusByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetRarityParameterStatusByUserIdRequest request)
             {
@@ -3217,70 +2894,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetRarityParameterStatusByUserId(
+        public IEnumerator GetRarityParameterStatusByUserId(
                 Request.GetRarityParameterStatusByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetRarityParameterStatusByUserIdResult>> callback
-        )
-		{
-			var task = new GetRarityParameterStatusByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetRarityParameterStatusByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetRarityParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetRarityParameterStatusByUserIdResult> GetRarityParameterStatusByUserIdFuture(
+        public IFuture<Result.GetRarityParameterStatusByUserIdResult> GetRarityParameterStatusByUserIdFuture(
                 Request.GetRarityParameterStatusByUserIdRequest request
-        )
-		{
-			return new GetRarityParameterStatusByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetRarityParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetRarityParameterStatusByUserIdResult> GetRarityParameterStatusByUserIdAsync(
+        public UniTask<Result.GetRarityParameterStatusByUserIdResult> GetRarityParameterStatusByUserIdAsync(
             Request.GetRarityParameterStatusByUserIdRequest request
-        )
-		{
-		    var task = new GetRarityParameterStatusByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetRarityParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetRarityParameterStatusByUserIdResult>();
     #else
-		public GetRarityParameterStatusByUserIdTask GetRarityParameterStatusByUserIdAsync(
+        public GetRarityParameterStatusByUserIdTask GetRarityParameterStatusByUserIdAsync(
                 Request.GetRarityParameterStatusByUserIdRequest request
         )
-		{
-			return new GetRarityParameterStatusByUserIdTask(
+        {
+            return new GetRarityParameterStatusByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetRarityParameterStatusByUserIdResult> GetRarityParameterStatusByUserIdAsync(
+        public Task<Result.GetRarityParameterStatusByUserIdResult> GetRarityParameterStatusByUserIdAsync(
             Request.GetRarityParameterStatusByUserIdRequest request
-        )
-		{
-		    var task = new GetRarityParameterStatusByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetRarityParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class DeleteRarityParameterStatusByUserIdTask : Gs2WebSocketSessionTask<Request.DeleteRarityParameterStatusByUserIdRequest, Result.DeleteRarityParameterStatusByUserIdResult>
         {
-	        public DeleteRarityParameterStatusByUserIdTask(IGs2Session session, Request.DeleteRarityParameterStatusByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public DeleteRarityParameterStatusByUserIdTask(IGs2Session session, Request.DeleteRarityParameterStatusByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.DeleteRarityParameterStatusByUserIdRequest request)
             {
@@ -3345,70 +3010,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator DeleteRarityParameterStatusByUserId(
+        public IEnumerator DeleteRarityParameterStatusByUserId(
                 Request.DeleteRarityParameterStatusByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DeleteRarityParameterStatusByUserIdResult>> callback
-        )
-		{
-			var task = new DeleteRarityParameterStatusByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteRarityParameterStatusByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new DeleteRarityParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.DeleteRarityParameterStatusByUserIdResult> DeleteRarityParameterStatusByUserIdFuture(
+        public IFuture<Result.DeleteRarityParameterStatusByUserIdResult> DeleteRarityParameterStatusByUserIdFuture(
                 Request.DeleteRarityParameterStatusByUserIdRequest request
-        )
-		{
-			return new DeleteRarityParameterStatusByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new DeleteRarityParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteRarityParameterStatusByUserIdResult> DeleteRarityParameterStatusByUserIdAsync(
+        public UniTask<Result.DeleteRarityParameterStatusByUserIdResult> DeleteRarityParameterStatusByUserIdAsync(
             Request.DeleteRarityParameterStatusByUserIdRequest request
-        )
-		{
-		    var task = new DeleteRarityParameterStatusByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new DeleteRarityParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.DeleteRarityParameterStatusByUserIdResult>();
     #else
-		public DeleteRarityParameterStatusByUserIdTask DeleteRarityParameterStatusByUserIdAsync(
+        public DeleteRarityParameterStatusByUserIdTask DeleteRarityParameterStatusByUserIdAsync(
                 Request.DeleteRarityParameterStatusByUserIdRequest request
         )
-		{
-			return new DeleteRarityParameterStatusByUserIdTask(
+        {
+            return new DeleteRarityParameterStatusByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.DeleteRarityParameterStatusByUserIdResult> DeleteRarityParameterStatusByUserIdAsync(
+        public Task<Result.DeleteRarityParameterStatusByUserIdResult> DeleteRarityParameterStatusByUserIdAsync(
             Request.DeleteRarityParameterStatusByUserIdRequest request
-        )
-		{
-		    var task = new DeleteRarityParameterStatusByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new DeleteRarityParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class ReDrawRarityParameterStatusByUserIdTask : Gs2WebSocketSessionTask<Request.ReDrawRarityParameterStatusByUserIdRequest, Result.ReDrawRarityParameterStatusByUserIdResult>
         {
-	        public ReDrawRarityParameterStatusByUserIdTask(IGs2Session session, Request.ReDrawRarityParameterStatusByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public ReDrawRarityParameterStatusByUserIdTask(IGs2Session session, Request.ReDrawRarityParameterStatusByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.ReDrawRarityParameterStatusByUserIdRequest request)
             {
@@ -3483,70 +3136,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator ReDrawRarityParameterStatusByUserId(
+        public IEnumerator ReDrawRarityParameterStatusByUserId(
                 Request.ReDrawRarityParameterStatusByUserIdRequest request,
                 UnityAction<AsyncResult<Result.ReDrawRarityParameterStatusByUserIdResult>> callback
-        )
-		{
-			var task = new ReDrawRarityParameterStatusByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ReDrawRarityParameterStatusByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new ReDrawRarityParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.ReDrawRarityParameterStatusByUserIdResult> ReDrawRarityParameterStatusByUserIdFuture(
+        public IFuture<Result.ReDrawRarityParameterStatusByUserIdResult> ReDrawRarityParameterStatusByUserIdFuture(
                 Request.ReDrawRarityParameterStatusByUserIdRequest request
-        )
-		{
-			return new ReDrawRarityParameterStatusByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new ReDrawRarityParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ReDrawRarityParameterStatusByUserIdResult> ReDrawRarityParameterStatusByUserIdAsync(
+        public UniTask<Result.ReDrawRarityParameterStatusByUserIdResult> ReDrawRarityParameterStatusByUserIdAsync(
             Request.ReDrawRarityParameterStatusByUserIdRequest request
-        )
-		{
-		    var task = new ReDrawRarityParameterStatusByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new ReDrawRarityParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.ReDrawRarityParameterStatusByUserIdResult>();
     #else
-		public ReDrawRarityParameterStatusByUserIdTask ReDrawRarityParameterStatusByUserIdAsync(
+        public ReDrawRarityParameterStatusByUserIdTask ReDrawRarityParameterStatusByUserIdAsync(
                 Request.ReDrawRarityParameterStatusByUserIdRequest request
         )
-		{
-			return new ReDrawRarityParameterStatusByUserIdTask(
+        {
+            return new ReDrawRarityParameterStatusByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.ReDrawRarityParameterStatusByUserIdResult> ReDrawRarityParameterStatusByUserIdAsync(
+        public Task<Result.ReDrawRarityParameterStatusByUserIdResult> ReDrawRarityParameterStatusByUserIdAsync(
             Request.ReDrawRarityParameterStatusByUserIdRequest request
-        )
-		{
-		    var task = new ReDrawRarityParameterStatusByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new ReDrawRarityParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class ReDrawRarityParameterStatusByStampSheetTask : Gs2WebSocketSessionTask<Request.ReDrawRarityParameterStatusByStampSheetRequest, Result.ReDrawRarityParameterStatusByStampSheetResult>
         {
-	        public ReDrawRarityParameterStatusByStampSheetTask(IGs2Session session, Request.ReDrawRarityParameterStatusByStampSheetRequest request) : base(session, request)
-	        {
-	        }
+            public ReDrawRarityParameterStatusByStampSheetTask(IGs2Session session, Request.ReDrawRarityParameterStatusByStampSheetRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.ReDrawRarityParameterStatusByStampSheetRequest request)
             {
@@ -3591,70 +3232,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator ReDrawRarityParameterStatusByStampSheet(
+        public IEnumerator ReDrawRarityParameterStatusByStampSheet(
                 Request.ReDrawRarityParameterStatusByStampSheetRequest request,
                 UnityAction<AsyncResult<Result.ReDrawRarityParameterStatusByStampSheetResult>> callback
-        )
-		{
-			var task = new ReDrawRarityParameterStatusByStampSheetTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ReDrawRarityParameterStatusByStampSheetResult>(task.Result, task.Error));
-        }
+        ) =>
+            new ReDrawRarityParameterStatusByStampSheetTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.ReDrawRarityParameterStatusByStampSheetResult> ReDrawRarityParameterStatusByStampSheetFuture(
+        public IFuture<Result.ReDrawRarityParameterStatusByStampSheetResult> ReDrawRarityParameterStatusByStampSheetFuture(
                 Request.ReDrawRarityParameterStatusByStampSheetRequest request
-        )
-		{
-			return new ReDrawRarityParameterStatusByStampSheetTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new ReDrawRarityParameterStatusByStampSheetTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ReDrawRarityParameterStatusByStampSheetResult> ReDrawRarityParameterStatusByStampSheetAsync(
+        public UniTask<Result.ReDrawRarityParameterStatusByStampSheetResult> ReDrawRarityParameterStatusByStampSheetAsync(
             Request.ReDrawRarityParameterStatusByStampSheetRequest request
-        )
-		{
-		    var task = new ReDrawRarityParameterStatusByStampSheetTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new ReDrawRarityParameterStatusByStampSheetTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.ReDrawRarityParameterStatusByStampSheetResult>();
     #else
-		public ReDrawRarityParameterStatusByStampSheetTask ReDrawRarityParameterStatusByStampSheetAsync(
+        public ReDrawRarityParameterStatusByStampSheetTask ReDrawRarityParameterStatusByStampSheetAsync(
                 Request.ReDrawRarityParameterStatusByStampSheetRequest request
         )
-		{
-			return new ReDrawRarityParameterStatusByStampSheetTask(
+        {
+            return new ReDrawRarityParameterStatusByStampSheetTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.ReDrawRarityParameterStatusByStampSheetResult> ReDrawRarityParameterStatusByStampSheetAsync(
+        public Task<Result.ReDrawRarityParameterStatusByStampSheetResult> ReDrawRarityParameterStatusByStampSheetAsync(
             Request.ReDrawRarityParameterStatusByStampSheetRequest request
-        )
-		{
-		    var task = new ReDrawRarityParameterStatusByStampSheetTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new ReDrawRarityParameterStatusByStampSheetTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class AddRarityParameterStatusByUserIdTask : Gs2WebSocketSessionTask<Request.AddRarityParameterStatusByUserIdRequest, Result.AddRarityParameterStatusByUserIdResult>
         {
-	        public AddRarityParameterStatusByUserIdTask(IGs2Session session, Request.AddRarityParameterStatusByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public AddRarityParameterStatusByUserIdTask(IGs2Session session, Request.AddRarityParameterStatusByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.AddRarityParameterStatusByUserIdRequest request)
             {
@@ -3724,70 +3353,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator AddRarityParameterStatusByUserId(
+        public IEnumerator AddRarityParameterStatusByUserId(
                 Request.AddRarityParameterStatusByUserIdRequest request,
                 UnityAction<AsyncResult<Result.AddRarityParameterStatusByUserIdResult>> callback
-        )
-		{
-			var task = new AddRarityParameterStatusByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.AddRarityParameterStatusByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new AddRarityParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.AddRarityParameterStatusByUserIdResult> AddRarityParameterStatusByUserIdFuture(
+        public IFuture<Result.AddRarityParameterStatusByUserIdResult> AddRarityParameterStatusByUserIdFuture(
                 Request.AddRarityParameterStatusByUserIdRequest request
-        )
-		{
-			return new AddRarityParameterStatusByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new AddRarityParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.AddRarityParameterStatusByUserIdResult> AddRarityParameterStatusByUserIdAsync(
+        public UniTask<Result.AddRarityParameterStatusByUserIdResult> AddRarityParameterStatusByUserIdAsync(
             Request.AddRarityParameterStatusByUserIdRequest request
-        )
-		{
-		    var task = new AddRarityParameterStatusByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new AddRarityParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.AddRarityParameterStatusByUserIdResult>();
     #else
-		public AddRarityParameterStatusByUserIdTask AddRarityParameterStatusByUserIdAsync(
+        public AddRarityParameterStatusByUserIdTask AddRarityParameterStatusByUserIdAsync(
                 Request.AddRarityParameterStatusByUserIdRequest request
         )
-		{
-			return new AddRarityParameterStatusByUserIdTask(
+        {
+            return new AddRarityParameterStatusByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.AddRarityParameterStatusByUserIdResult> AddRarityParameterStatusByUserIdAsync(
+        public Task<Result.AddRarityParameterStatusByUserIdResult> AddRarityParameterStatusByUserIdAsync(
             Request.AddRarityParameterStatusByUserIdRequest request
-        )
-		{
-		    var task = new AddRarityParameterStatusByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new AddRarityParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class AddRarityParameterStatusByStampSheetTask : Gs2WebSocketSessionTask<Request.AddRarityParameterStatusByStampSheetRequest, Result.AddRarityParameterStatusByStampSheetResult>
         {
-	        public AddRarityParameterStatusByStampSheetTask(IGs2Session session, Request.AddRarityParameterStatusByStampSheetRequest request) : base(session, request)
-	        {
-	        }
+            public AddRarityParameterStatusByStampSheetTask(IGs2Session session, Request.AddRarityParameterStatusByStampSheetRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.AddRarityParameterStatusByStampSheetRequest request)
             {
@@ -3832,70 +3449,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator AddRarityParameterStatusByStampSheet(
+        public IEnumerator AddRarityParameterStatusByStampSheet(
                 Request.AddRarityParameterStatusByStampSheetRequest request,
                 UnityAction<AsyncResult<Result.AddRarityParameterStatusByStampSheetResult>> callback
-        )
-		{
-			var task = new AddRarityParameterStatusByStampSheetTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.AddRarityParameterStatusByStampSheetResult>(task.Result, task.Error));
-        }
+        ) =>
+            new AddRarityParameterStatusByStampSheetTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.AddRarityParameterStatusByStampSheetResult> AddRarityParameterStatusByStampSheetFuture(
+        public IFuture<Result.AddRarityParameterStatusByStampSheetResult> AddRarityParameterStatusByStampSheetFuture(
                 Request.AddRarityParameterStatusByStampSheetRequest request
-        )
-		{
-			return new AddRarityParameterStatusByStampSheetTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new AddRarityParameterStatusByStampSheetTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.AddRarityParameterStatusByStampSheetResult> AddRarityParameterStatusByStampSheetAsync(
+        public UniTask<Result.AddRarityParameterStatusByStampSheetResult> AddRarityParameterStatusByStampSheetAsync(
             Request.AddRarityParameterStatusByStampSheetRequest request
-        )
-		{
-		    var task = new AddRarityParameterStatusByStampSheetTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new AddRarityParameterStatusByStampSheetTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.AddRarityParameterStatusByStampSheetResult>();
     #else
-		public AddRarityParameterStatusByStampSheetTask AddRarityParameterStatusByStampSheetAsync(
+        public AddRarityParameterStatusByStampSheetTask AddRarityParameterStatusByStampSheetAsync(
                 Request.AddRarityParameterStatusByStampSheetRequest request
         )
-		{
-			return new AddRarityParameterStatusByStampSheetTask(
+        {
+            return new AddRarityParameterStatusByStampSheetTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.AddRarityParameterStatusByStampSheetResult> AddRarityParameterStatusByStampSheetAsync(
+        public Task<Result.AddRarityParameterStatusByStampSheetResult> AddRarityParameterStatusByStampSheetAsync(
             Request.AddRarityParameterStatusByStampSheetRequest request
-        )
-		{
-		    var task = new AddRarityParameterStatusByStampSheetTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new AddRarityParameterStatusByStampSheetTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class VerifyRarityParameterStatusTask : Gs2WebSocketSessionTask<Request.VerifyRarityParameterStatusRequest, Result.VerifyRarityParameterStatusResult>
         {
-	        public VerifyRarityParameterStatusTask(IGs2Session session, Request.VerifyRarityParameterStatusRequest request) : base(session, request)
-	        {
-	        }
+            public VerifyRarityParameterStatusTask(IGs2Session session, Request.VerifyRarityParameterStatusRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.VerifyRarityParameterStatusRequest request)
             {
@@ -3980,70 +3585,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator VerifyRarityParameterStatus(
+        public IEnumerator VerifyRarityParameterStatus(
                 Request.VerifyRarityParameterStatusRequest request,
                 UnityAction<AsyncResult<Result.VerifyRarityParameterStatusResult>> callback
-        )
-		{
-			var task = new VerifyRarityParameterStatusTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifyRarityParameterStatusResult>(task.Result, task.Error));
-        }
+        ) =>
+            new VerifyRarityParameterStatusTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.VerifyRarityParameterStatusResult> VerifyRarityParameterStatusFuture(
+        public IFuture<Result.VerifyRarityParameterStatusResult> VerifyRarityParameterStatusFuture(
                 Request.VerifyRarityParameterStatusRequest request
-        )
-		{
-			return new VerifyRarityParameterStatusTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new VerifyRarityParameterStatusTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifyRarityParameterStatusResult> VerifyRarityParameterStatusAsync(
+        public UniTask<Result.VerifyRarityParameterStatusResult> VerifyRarityParameterStatusAsync(
             Request.VerifyRarityParameterStatusRequest request
-        )
-		{
-		    var task = new VerifyRarityParameterStatusTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new VerifyRarityParameterStatusTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.VerifyRarityParameterStatusResult>();
     #else
-		public VerifyRarityParameterStatusTask VerifyRarityParameterStatusAsync(
+        public VerifyRarityParameterStatusTask VerifyRarityParameterStatusAsync(
                 Request.VerifyRarityParameterStatusRequest request
         )
-		{
-			return new VerifyRarityParameterStatusTask(
+        {
+            return new VerifyRarityParameterStatusTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.VerifyRarityParameterStatusResult> VerifyRarityParameterStatusAsync(
+        public Task<Result.VerifyRarityParameterStatusResult> VerifyRarityParameterStatusAsync(
             Request.VerifyRarityParameterStatusRequest request
-        )
-		{
-		    var task = new VerifyRarityParameterStatusTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new VerifyRarityParameterStatusTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class VerifyRarityParameterStatusByUserIdTask : Gs2WebSocketSessionTask<Request.VerifyRarityParameterStatusByUserIdRequest, Result.VerifyRarityParameterStatusByUserIdResult>
         {
-	        public VerifyRarityParameterStatusByUserIdTask(IGs2Session session, Request.VerifyRarityParameterStatusByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public VerifyRarityParameterStatusByUserIdTask(IGs2Session session, Request.VerifyRarityParameterStatusByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.VerifyRarityParameterStatusByUserIdRequest request)
             {
@@ -4128,70 +3721,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator VerifyRarityParameterStatusByUserId(
+        public IEnumerator VerifyRarityParameterStatusByUserId(
                 Request.VerifyRarityParameterStatusByUserIdRequest request,
                 UnityAction<AsyncResult<Result.VerifyRarityParameterStatusByUserIdResult>> callback
-        )
-		{
-			var task = new VerifyRarityParameterStatusByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifyRarityParameterStatusByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new VerifyRarityParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.VerifyRarityParameterStatusByUserIdResult> VerifyRarityParameterStatusByUserIdFuture(
+        public IFuture<Result.VerifyRarityParameterStatusByUserIdResult> VerifyRarityParameterStatusByUserIdFuture(
                 Request.VerifyRarityParameterStatusByUserIdRequest request
-        )
-		{
-			return new VerifyRarityParameterStatusByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new VerifyRarityParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifyRarityParameterStatusByUserIdResult> VerifyRarityParameterStatusByUserIdAsync(
+        public UniTask<Result.VerifyRarityParameterStatusByUserIdResult> VerifyRarityParameterStatusByUserIdAsync(
             Request.VerifyRarityParameterStatusByUserIdRequest request
-        )
-		{
-		    var task = new VerifyRarityParameterStatusByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new VerifyRarityParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.VerifyRarityParameterStatusByUserIdResult>();
     #else
-		public VerifyRarityParameterStatusByUserIdTask VerifyRarityParameterStatusByUserIdAsync(
+        public VerifyRarityParameterStatusByUserIdTask VerifyRarityParameterStatusByUserIdAsync(
                 Request.VerifyRarityParameterStatusByUserIdRequest request
         )
-		{
-			return new VerifyRarityParameterStatusByUserIdTask(
+        {
+            return new VerifyRarityParameterStatusByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.VerifyRarityParameterStatusByUserIdResult> VerifyRarityParameterStatusByUserIdAsync(
+        public Task<Result.VerifyRarityParameterStatusByUserIdResult> VerifyRarityParameterStatusByUserIdAsync(
             Request.VerifyRarityParameterStatusByUserIdRequest request
-        )
-		{
-		    var task = new VerifyRarityParameterStatusByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new VerifyRarityParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class SetRarityParameterStatusByUserIdTask : Gs2WebSocketSessionTask<Request.SetRarityParameterStatusByUserIdRequest, Result.SetRarityParameterStatusByUserIdResult>
         {
-	        public SetRarityParameterStatusByUserIdTask(IGs2Session session, Request.SetRarityParameterStatusByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public SetRarityParameterStatusByUserIdTask(IGs2Session session, Request.SetRarityParameterStatusByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.SetRarityParameterStatusByUserIdRequest request)
             {
@@ -4266,70 +3847,58 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator SetRarityParameterStatusByUserId(
+        public IEnumerator SetRarityParameterStatusByUserId(
                 Request.SetRarityParameterStatusByUserIdRequest request,
                 UnityAction<AsyncResult<Result.SetRarityParameterStatusByUserIdResult>> callback
-        )
-		{
-			var task = new SetRarityParameterStatusByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.SetRarityParameterStatusByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new SetRarityParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.SetRarityParameterStatusByUserIdResult> SetRarityParameterStatusByUserIdFuture(
+        public IFuture<Result.SetRarityParameterStatusByUserIdResult> SetRarityParameterStatusByUserIdFuture(
                 Request.SetRarityParameterStatusByUserIdRequest request
-        )
-		{
-			return new SetRarityParameterStatusByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new SetRarityParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.SetRarityParameterStatusByUserIdResult> SetRarityParameterStatusByUserIdAsync(
+        public UniTask<Result.SetRarityParameterStatusByUserIdResult> SetRarityParameterStatusByUserIdAsync(
             Request.SetRarityParameterStatusByUserIdRequest request
-        )
-		{
-		    var task = new SetRarityParameterStatusByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new SetRarityParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.SetRarityParameterStatusByUserIdResult>();
     #else
-		public SetRarityParameterStatusByUserIdTask SetRarityParameterStatusByUserIdAsync(
+        public SetRarityParameterStatusByUserIdTask SetRarityParameterStatusByUserIdAsync(
                 Request.SetRarityParameterStatusByUserIdRequest request
         )
-		{
-			return new SetRarityParameterStatusByUserIdTask(
+        {
+            return new SetRarityParameterStatusByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.SetRarityParameterStatusByUserIdResult> SetRarityParameterStatusByUserIdAsync(
+        public Task<Result.SetRarityParameterStatusByUserIdResult> SetRarityParameterStatusByUserIdAsync(
             Request.SetRarityParameterStatusByUserIdRequest request
-        )
-		{
-		    var task = new SetRarityParameterStatusByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new SetRarityParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class SetRarityParameterStatusByStampSheetTask : Gs2WebSocketSessionTask<Request.SetRarityParameterStatusByStampSheetRequest, Result.SetRarityParameterStatusByStampSheetResult>
         {
-	        public SetRarityParameterStatusByStampSheetTask(IGs2Session session, Request.SetRarityParameterStatusByStampSheetRequest request) : base(session, request)
-	        {
-	        }
+            public SetRarityParameterStatusByStampSheetTask(IGs2Session session, Request.SetRarityParameterStatusByStampSheetRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.SetRarityParameterStatusByStampSheetRequest request)
             {
@@ -4374,62 +3943,50 @@ namespace Gs2.Gs2Enchant
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator SetRarityParameterStatusByStampSheet(
+        public IEnumerator SetRarityParameterStatusByStampSheet(
                 Request.SetRarityParameterStatusByStampSheetRequest request,
                 UnityAction<AsyncResult<Result.SetRarityParameterStatusByStampSheetResult>> callback
-        )
-		{
-			var task = new SetRarityParameterStatusByStampSheetTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.SetRarityParameterStatusByStampSheetResult>(task.Result, task.Error));
-        }
+        ) =>
+            new SetRarityParameterStatusByStampSheetTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.SetRarityParameterStatusByStampSheetResult> SetRarityParameterStatusByStampSheetFuture(
+        public IFuture<Result.SetRarityParameterStatusByStampSheetResult> SetRarityParameterStatusByStampSheetFuture(
                 Request.SetRarityParameterStatusByStampSheetRequest request
-        )
-		{
-			return new SetRarityParameterStatusByStampSheetTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new SetRarityParameterStatusByStampSheetTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.SetRarityParameterStatusByStampSheetResult> SetRarityParameterStatusByStampSheetAsync(
+        public UniTask<Result.SetRarityParameterStatusByStampSheetResult> SetRarityParameterStatusByStampSheetAsync(
             Request.SetRarityParameterStatusByStampSheetRequest request
-        )
-		{
-		    var task = new SetRarityParameterStatusByStampSheetTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new SetRarityParameterStatusByStampSheetTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.SetRarityParameterStatusByStampSheetResult>();
     #else
-		public SetRarityParameterStatusByStampSheetTask SetRarityParameterStatusByStampSheetAsync(
+        public SetRarityParameterStatusByStampSheetTask SetRarityParameterStatusByStampSheetAsync(
                 Request.SetRarityParameterStatusByStampSheetRequest request
         )
-		{
-			return new SetRarityParameterStatusByStampSheetTask(
+        {
+            return new SetRarityParameterStatusByStampSheetTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.SetRarityParameterStatusByStampSheetResult> SetRarityParameterStatusByStampSheetAsync(
+        public Task<Result.SetRarityParameterStatusByStampSheetResult> SetRarityParameterStatusByStampSheetAsync(
             Request.SetRarityParameterStatusByStampSheetRequest request
-        )
-		{
-		    var task = new SetRarityParameterStatusByStampSheetTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new SetRarityParameterStatusByStampSheetTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 	}
 }

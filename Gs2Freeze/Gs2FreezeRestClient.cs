@@ -25,17 +25,18 @@ using Cysharp.Threading.Tasks;
 #else
 using System.Web;
 using System.Net.Http;
-using System.Threading.Tasks;
 #endif
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Linq;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
+using Gs2.Core.Util;
 using Gs2.Gs2Freeze.Request;
 using Gs2.Gs2Freeze.Result;
 using Gs2.Util.LitJson;
@@ -101,44 +102,31 @@ namespace Gs2.Gs2Freeze
 		public IEnumerator DescribeStages(
                 Request.DescribeStagesRequest request,
                 UnityAction<AsyncResult<Result.DescribeStagesResult>> callback
-        )
-		{
-			var task = new DescribeStagesTask(
+        ) =>
+            new DescribeStagesTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeStagesResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeStagesResult> DescribeStagesFuture(
                 Request.DescribeStagesRequest request
-        )
-		{
-			return new DescribeStagesTask(
+        ) =>
+            new DescribeStagesTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeStagesResult> DescribeStagesAsync(
+		public UniTask<Result.DescribeStagesResult> DescribeStagesAsync(
                 Request.DescribeStagesRequest request
-        )
-		{
-            AsyncResult<Result.DescribeStagesResult> result = null;
-			await DescribeStages(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeStagesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeStagesResult>();
     #else
 		public DescribeStagesTask DescribeStagesAsync(
                 Request.DescribeStagesRequest request
@@ -152,17 +140,14 @@ namespace Gs2.Gs2Freeze
         }
     #endif
 #else
-		public async Task<Result.DescribeStagesResult> DescribeStagesAsync(
+		public Task<Result.DescribeStagesResult> DescribeStagesAsync(
                 Request.DescribeStagesRequest request
-        )
-		{
-			var task = new DescribeStagesTask(
+        ) =>
+            new DescribeStagesTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -204,44 +189,31 @@ namespace Gs2.Gs2Freeze
 		public IEnumerator GetStage(
                 Request.GetStageRequest request,
                 UnityAction<AsyncResult<Result.GetStageResult>> callback
-        )
-		{
-			var task = new GetStageTask(
+        ) =>
+            new GetStageTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetStageResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetStageResult> GetStageFuture(
                 Request.GetStageRequest request
-        )
-		{
-			return new GetStageTask(
+        ) =>
+            new GetStageTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetStageResult> GetStageAsync(
+		public UniTask<Result.GetStageResult> GetStageAsync(
                 Request.GetStageRequest request
-        )
-		{
-            AsyncResult<Result.GetStageResult> result = null;
-			await GetStage(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetStageTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetStageResult>();
     #else
 		public GetStageTask GetStageAsync(
                 Request.GetStageRequest request
@@ -255,17 +227,14 @@ namespace Gs2.Gs2Freeze
         }
     #endif
 #else
-		public async Task<Result.GetStageResult> GetStageAsync(
+		public Task<Result.GetStageResult> GetStageAsync(
                 Request.GetStageRequest request
-        )
-		{
-			var task = new GetStageTask(
+        ) =>
+            new GetStageTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -320,44 +289,31 @@ namespace Gs2.Gs2Freeze
 		public IEnumerator PromoteStage(
                 Request.PromoteStageRequest request,
                 UnityAction<AsyncResult<Result.PromoteStageResult>> callback
-        )
-		{
-			var task = new PromoteStageTask(
+        ) =>
+            new PromoteStageTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.PromoteStageResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.PromoteStageResult> PromoteStageFuture(
                 Request.PromoteStageRequest request
-        )
-		{
-			return new PromoteStageTask(
+        ) =>
+            new PromoteStageTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.PromoteStageResult> PromoteStageAsync(
+		public UniTask<Result.PromoteStageResult> PromoteStageAsync(
                 Request.PromoteStageRequest request
-        )
-		{
-            AsyncResult<Result.PromoteStageResult> result = null;
-			await PromoteStage(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new PromoteStageTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.PromoteStageResult>();
     #else
 		public PromoteStageTask PromoteStageAsync(
                 Request.PromoteStageRequest request
@@ -371,17 +327,14 @@ namespace Gs2.Gs2Freeze
         }
     #endif
 #else
-		public async Task<Result.PromoteStageResult> PromoteStageAsync(
+		public Task<Result.PromoteStageResult> PromoteStageAsync(
                 Request.PromoteStageRequest request
-        )
-		{
-			var task = new PromoteStageTask(
+        ) =>
+            new PromoteStageTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -436,44 +389,31 @@ namespace Gs2.Gs2Freeze
 		public IEnumerator RollbackStage(
                 Request.RollbackStageRequest request,
                 UnityAction<AsyncResult<Result.RollbackStageResult>> callback
-        )
-		{
-			var task = new RollbackStageTask(
+        ) =>
+            new RollbackStageTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.RollbackStageResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.RollbackStageResult> RollbackStageFuture(
                 Request.RollbackStageRequest request
-        )
-		{
-			return new RollbackStageTask(
+        ) =>
+            new RollbackStageTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.RollbackStageResult> RollbackStageAsync(
+		public UniTask<Result.RollbackStageResult> RollbackStageAsync(
                 Request.RollbackStageRequest request
-        )
-		{
-            AsyncResult<Result.RollbackStageResult> result = null;
-			await RollbackStage(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new RollbackStageTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.RollbackStageResult>();
     #else
 		public RollbackStageTask RollbackStageAsync(
                 Request.RollbackStageRequest request
@@ -487,17 +427,14 @@ namespace Gs2.Gs2Freeze
         }
     #endif
 #else
-		public async Task<Result.RollbackStageResult> RollbackStageAsync(
+		public Task<Result.RollbackStageResult> RollbackStageAsync(
                 Request.RollbackStageRequest request
-        )
-		{
-			var task = new RollbackStageTask(
+        ) =>
+            new RollbackStageTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -545,44 +482,31 @@ namespace Gs2.Gs2Freeze
 		public IEnumerator DescribeOutputs(
                 Request.DescribeOutputsRequest request,
                 UnityAction<AsyncResult<Result.DescribeOutputsResult>> callback
-        )
-		{
-			var task = new DescribeOutputsTask(
+        ) =>
+            new DescribeOutputsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeOutputsResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeOutputsResult> DescribeOutputsFuture(
                 Request.DescribeOutputsRequest request
-        )
-		{
-			return new DescribeOutputsTask(
+        ) =>
+            new DescribeOutputsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeOutputsResult> DescribeOutputsAsync(
+		public UniTask<Result.DescribeOutputsResult> DescribeOutputsAsync(
                 Request.DescribeOutputsRequest request
-        )
-		{
-            AsyncResult<Result.DescribeOutputsResult> result = null;
-			await DescribeOutputs(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeOutputsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeOutputsResult>();
     #else
 		public DescribeOutputsTask DescribeOutputsAsync(
                 Request.DescribeOutputsRequest request
@@ -596,17 +520,14 @@ namespace Gs2.Gs2Freeze
         }
     #endif
 #else
-		public async Task<Result.DescribeOutputsResult> DescribeOutputsAsync(
+		public Task<Result.DescribeOutputsResult> DescribeOutputsAsync(
                 Request.DescribeOutputsRequest request
-        )
-		{
-			var task = new DescribeOutputsTask(
+        ) =>
+            new DescribeOutputsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -649,44 +570,31 @@ namespace Gs2.Gs2Freeze
 		public IEnumerator GetOutput(
                 Request.GetOutputRequest request,
                 UnityAction<AsyncResult<Result.GetOutputResult>> callback
-        )
-		{
-			var task = new GetOutputTask(
+        ) =>
+            new GetOutputTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetOutputResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetOutputResult> GetOutputFuture(
                 Request.GetOutputRequest request
-        )
-		{
-			return new GetOutputTask(
+        ) =>
+            new GetOutputTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetOutputResult> GetOutputAsync(
+		public UniTask<Result.GetOutputResult> GetOutputAsync(
                 Request.GetOutputRequest request
-        )
-		{
-            AsyncResult<Result.GetOutputResult> result = null;
-			await GetOutput(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetOutputTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetOutputResult>();
     #else
 		public GetOutputTask GetOutputAsync(
                 Request.GetOutputRequest request
@@ -700,17 +608,14 @@ namespace Gs2.Gs2Freeze
         }
     #endif
 #else
-		public async Task<Result.GetOutputResult> GetOutputAsync(
+		public Task<Result.GetOutputResult> GetOutputAsync(
                 Request.GetOutputRequest request
-        )
-		{
-			var task = new GetOutputTask(
+        ) =>
+            new GetOutputTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 	}
 }

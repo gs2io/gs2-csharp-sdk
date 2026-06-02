@@ -46,6 +46,16 @@ namespace Gs2.Gs2Showcase.Model.Cache
             int? timeOffset,
             DescribeRandomDisplayItemsRequest request
         ) {
+            foreach (var item in self.Items) {
+                item.PutCache(
+                    cache,
+                    request.NamespaceName,
+                    userId,
+                    request.ShowcaseName,
+                    item.Name,
+                    timeOffset
+                );
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER

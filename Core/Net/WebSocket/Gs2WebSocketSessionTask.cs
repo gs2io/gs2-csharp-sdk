@@ -1,11 +1,12 @@
-﻿using Gs2.Core.Model;
+﻿using Gs2.Core.Control;
+using Gs2.Core.Model;
 using Gs2.Util.LitJson;
 
 namespace Gs2.Core.Net
 {
     public abstract class Gs2WebSocketSessionTask<TRequest, TResult> : 
         Gs2SessionTask<TRequest, TResult>
-        where TRequest : IRequest
+        where TRequest : Gs2Request<TRequest>
         where TResult : IResult
     {
         protected Gs2WebSocketSessionTask(IGs2Session session, TRequest request) : base(session, request)

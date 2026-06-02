@@ -23,6 +23,7 @@ using System.Linq;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
+using Gs2.Core.Util;
 using Gs2.Util.LitJson;
 
 #if UNITY_2017_1_OR_NEWER
@@ -54,9 +55,9 @@ namespace Gs2.Gs2Freeze
 
         public class PromoteStageTask : Gs2WebSocketSessionTask<Request.PromoteStageRequest, Result.PromoteStageResult>
         {
-	        public PromoteStageTask(IGs2Session session, Request.PromoteStageRequest request) : base(session, request)
-	        {
-	        }
+            public PromoteStageTask(IGs2Session session, Request.PromoteStageRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.PromoteStageRequest request)
             {
@@ -96,70 +97,58 @@ namespace Gs2.Gs2Freeze
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator PromoteStage(
+        public IEnumerator PromoteStage(
                 Request.PromoteStageRequest request,
                 UnityAction<AsyncResult<Result.PromoteStageResult>> callback
-        )
-		{
-			var task = new PromoteStageTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.PromoteStageResult>(task.Result, task.Error));
-        }
+        ) =>
+            new PromoteStageTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.PromoteStageResult> PromoteStageFuture(
+        public IFuture<Result.PromoteStageResult> PromoteStageFuture(
                 Request.PromoteStageRequest request
-        )
-		{
-			return new PromoteStageTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new PromoteStageTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.PromoteStageResult> PromoteStageAsync(
+        public UniTask<Result.PromoteStageResult> PromoteStageAsync(
             Request.PromoteStageRequest request
-        )
-		{
-		    var task = new PromoteStageTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new PromoteStageTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.PromoteStageResult>();
     #else
-		public PromoteStageTask PromoteStageAsync(
+        public PromoteStageTask PromoteStageAsync(
                 Request.PromoteStageRequest request
         )
-		{
-			return new PromoteStageTask(
+        {
+            return new PromoteStageTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.PromoteStageResult> PromoteStageAsync(
+        public Task<Result.PromoteStageResult> PromoteStageAsync(
             Request.PromoteStageRequest request
-        )
-		{
-		    var task = new PromoteStageTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new PromoteStageTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class RollbackStageTask : Gs2WebSocketSessionTask<Request.RollbackStageRequest, Result.RollbackStageResult>
         {
-	        public RollbackStageTask(IGs2Session session, Request.RollbackStageRequest request) : base(session, request)
-	        {
-	        }
+            public RollbackStageTask(IGs2Session session, Request.RollbackStageRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.RollbackStageRequest request)
             {
@@ -199,62 +188,50 @@ namespace Gs2.Gs2Freeze
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator RollbackStage(
+        public IEnumerator RollbackStage(
                 Request.RollbackStageRequest request,
                 UnityAction<AsyncResult<Result.RollbackStageResult>> callback
-        )
-		{
-			var task = new RollbackStageTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.RollbackStageResult>(task.Result, task.Error));
-        }
+        ) =>
+            new RollbackStageTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.RollbackStageResult> RollbackStageFuture(
+        public IFuture<Result.RollbackStageResult> RollbackStageFuture(
                 Request.RollbackStageRequest request
-        )
-		{
-			return new RollbackStageTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new RollbackStageTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.RollbackStageResult> RollbackStageAsync(
+        public UniTask<Result.RollbackStageResult> RollbackStageAsync(
             Request.RollbackStageRequest request
-        )
-		{
-		    var task = new RollbackStageTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new RollbackStageTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.RollbackStageResult>();
     #else
-		public RollbackStageTask RollbackStageAsync(
+        public RollbackStageTask RollbackStageAsync(
                 Request.RollbackStageRequest request
         )
-		{
-			return new RollbackStageTask(
+        {
+            return new RollbackStageTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.RollbackStageResult> RollbackStageAsync(
+        public Task<Result.RollbackStageResult> RollbackStageAsync(
             Request.RollbackStageRequest request
-        )
-		{
-		    var task = new RollbackStageTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new RollbackStageTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 	}
 }

@@ -25,17 +25,18 @@ using Cysharp.Threading.Tasks;
 #else
 using System.Web;
 using System.Net.Http;
-using System.Threading.Tasks;
 #endif
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Linq;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
+using Gs2.Core.Util;
 using Gs2.Gs2Friend.Request;
 using Gs2.Gs2Friend.Result;
 using Gs2.Util.LitJson;
@@ -110,44 +111,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator DescribeNamespaces(
                 Request.DescribeNamespacesRequest request,
                 UnityAction<AsyncResult<Result.DescribeNamespacesResult>> callback
-        )
-		{
-			var task = new DescribeNamespacesTask(
+        ) =>
+            new DescribeNamespacesTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeNamespacesResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeNamespacesResult> DescribeNamespacesFuture(
                 Request.DescribeNamespacesRequest request
-        )
-		{
-			return new DescribeNamespacesTask(
+        ) =>
+            new DescribeNamespacesTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
+		public UniTask<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
                 Request.DescribeNamespacesRequest request
-        )
-		{
-            AsyncResult<Result.DescribeNamespacesResult> result = null;
-			await DescribeNamespaces(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeNamespacesResult>();
     #else
 		public DescribeNamespacesTask DescribeNamespacesAsync(
                 Request.DescribeNamespacesRequest request
@@ -161,17 +149,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
+		public Task<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
                 Request.DescribeNamespacesRequest request
-        )
-		{
-			var task = new DescribeNamespacesTask(
+        ) =>
+            new DescribeNamespacesTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -314,44 +299,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator CreateNamespace(
                 Request.CreateNamespaceRequest request,
                 UnityAction<AsyncResult<Result.CreateNamespaceResult>> callback
-        )
-		{
-			var task = new CreateNamespaceTask(
+        ) =>
+            new CreateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
                 Request.CreateNamespaceRequest request
-        )
-		{
-			return new CreateNamespaceTask(
+        ) =>
+            new CreateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+		public UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
                 Request.CreateNamespaceRequest request
-        )
-		{
-            AsyncResult<Result.CreateNamespaceResult> result = null;
-			await CreateNamespace(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CreateNamespaceResult>();
     #else
 		public CreateNamespaceTask CreateNamespaceAsync(
                 Request.CreateNamespaceRequest request
@@ -365,17 +337,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
+		public Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
                 Request.CreateNamespaceRequest request
-        )
-		{
-			var task = new CreateNamespaceTask(
+        ) =>
+            new CreateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -417,44 +386,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator GetNamespaceStatus(
                 Request.GetNamespaceStatusRequest request,
                 UnityAction<AsyncResult<Result.GetNamespaceStatusResult>> callback
-        )
-		{
-			var task = new GetNamespaceStatusTask(
+        ) =>
+            new GetNamespaceStatusTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetNamespaceStatusResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetNamespaceStatusResult> GetNamespaceStatusFuture(
                 Request.GetNamespaceStatusRequest request
-        )
-		{
-			return new GetNamespaceStatusTask(
+        ) =>
+            new GetNamespaceStatusTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+		public UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
-        )
-		{
-            AsyncResult<Result.GetNamespaceStatusResult> result = null;
-			await GetNamespaceStatus(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetNamespaceStatusResult>();
     #else
 		public GetNamespaceStatusTask GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
@@ -468,17 +424,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+		public Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
-        )
-		{
-			var task = new GetNamespaceStatusTask(
+        ) =>
+            new GetNamespaceStatusTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -520,44 +473,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator GetNamespace(
                 Request.GetNamespaceRequest request,
                 UnityAction<AsyncResult<Result.GetNamespaceResult>> callback
-        )
-		{
-			var task = new GetNamespaceTask(
+        ) =>
+            new GetNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
                 Request.GetNamespaceRequest request
-        )
-		{
-			return new GetNamespaceTask(
+        ) =>
+            new GetNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+		public UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
                 Request.GetNamespaceRequest request
-        )
-		{
-            AsyncResult<Result.GetNamespaceResult> result = null;
-			await GetNamespace(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetNamespaceResult>();
     #else
 		public GetNamespaceTask GetNamespaceAsync(
                 Request.GetNamespaceRequest request
@@ -571,17 +511,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
+		public Task<Result.GetNamespaceResult> GetNamespaceAsync(
                 Request.GetNamespaceRequest request
-        )
-		{
-			var task = new GetNamespaceTask(
+        ) =>
+            new GetNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -721,44 +658,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator UpdateNamespace(
                 Request.UpdateNamespaceRequest request,
                 UnityAction<AsyncResult<Result.UpdateNamespaceResult>> callback
-        )
-		{
-			var task = new UpdateNamespaceTask(
+        ) =>
+            new UpdateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
                 Request.UpdateNamespaceRequest request
-        )
-		{
-			return new UpdateNamespaceTask(
+        ) =>
+            new UpdateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+		public UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
                 Request.UpdateNamespaceRequest request
-        )
-		{
-            AsyncResult<Result.UpdateNamespaceResult> result = null;
-			await UpdateNamespace(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UpdateNamespaceResult>();
     #else
 		public UpdateNamespaceTask UpdateNamespaceAsync(
                 Request.UpdateNamespaceRequest request
@@ -772,17 +696,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+		public Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
                 Request.UpdateNamespaceRequest request
-        )
-		{
-			var task = new UpdateNamespaceTask(
+        ) =>
+            new UpdateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -824,44 +745,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator DeleteNamespace(
                 Request.DeleteNamespaceRequest request,
                 UnityAction<AsyncResult<Result.DeleteNamespaceResult>> callback
-        )
-		{
-			var task = new DeleteNamespaceTask(
+        ) =>
+            new DeleteNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
                 Request.DeleteNamespaceRequest request
-        )
-		{
-			return new DeleteNamespaceTask(
+        ) =>
+            new DeleteNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+		public UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
                 Request.DeleteNamespaceRequest request
-        )
-		{
-            AsyncResult<Result.DeleteNamespaceResult> result = null;
-			await DeleteNamespace(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteNamespaceResult>();
     #else
 		public DeleteNamespaceTask DeleteNamespaceAsync(
                 Request.DeleteNamespaceRequest request
@@ -875,17 +783,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+		public Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
                 Request.DeleteNamespaceRequest request
-        )
-		{
-			var task = new DeleteNamespaceTask(
+        ) =>
+            new DeleteNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -925,44 +830,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator GetServiceVersion(
                 Request.GetServiceVersionRequest request,
                 UnityAction<AsyncResult<Result.GetServiceVersionResult>> callback
-        )
-		{
-			var task = new GetServiceVersionTask(
+        ) =>
+            new GetServiceVersionTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetServiceVersionResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetServiceVersionResult> GetServiceVersionFuture(
                 Request.GetServiceVersionRequest request
-        )
-		{
-			return new GetServiceVersionTask(
+        ) =>
+            new GetServiceVersionTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetServiceVersionResult> GetServiceVersionAsync(
+		public UniTask<Result.GetServiceVersionResult> GetServiceVersionAsync(
                 Request.GetServiceVersionRequest request
-        )
-		{
-            AsyncResult<Result.GetServiceVersionResult> result = null;
-			await GetServiceVersion(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetServiceVersionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetServiceVersionResult>();
     #else
 		public GetServiceVersionTask GetServiceVersionAsync(
                 Request.GetServiceVersionRequest request
@@ -976,17 +868,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.GetServiceVersionResult> GetServiceVersionAsync(
+		public Task<Result.GetServiceVersionResult> GetServiceVersionAsync(
                 Request.GetServiceVersionRequest request
-        )
-		{
-			var task = new GetServiceVersionTask(
+        ) =>
+            new GetServiceVersionTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1045,44 +934,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator DumpUserDataByUserId(
                 Request.DumpUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DumpUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new DumpUserDataByUserIdTask(
+        ) =>
+            new DumpUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DumpUserDataByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdFuture(
                 Request.DumpUserDataByUserIdRequest request
-        )
-		{
-			return new DumpUserDataByUserIdTask(
+        ) =>
+            new DumpUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdAsync(
+		public UniTask<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdAsync(
                 Request.DumpUserDataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DumpUserDataByUserIdResult> result = null;
-			await DumpUserDataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DumpUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DumpUserDataByUserIdResult>();
     #else
 		public DumpUserDataByUserIdTask DumpUserDataByUserIdAsync(
                 Request.DumpUserDataByUserIdRequest request
@@ -1096,17 +972,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdAsync(
+		public Task<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdAsync(
                 Request.DumpUserDataByUserIdRequest request
-        )
-		{
-			var task = new DumpUserDataByUserIdTask(
+        ) =>
+            new DumpUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1152,44 +1025,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator CheckDumpUserDataByUserId(
                 Request.CheckDumpUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.CheckDumpUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new CheckDumpUserDataByUserIdTask(
+        ) =>
+            new CheckDumpUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CheckDumpUserDataByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdFuture(
                 Request.CheckDumpUserDataByUserIdRequest request
-        )
-		{
-			return new CheckDumpUserDataByUserIdTask(
+        ) =>
+            new CheckDumpUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdAsync(
+		public UniTask<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdAsync(
                 Request.CheckDumpUserDataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.CheckDumpUserDataByUserIdResult> result = null;
-			await CheckDumpUserDataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CheckDumpUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CheckDumpUserDataByUserIdResult>();
     #else
 		public CheckDumpUserDataByUserIdTask CheckDumpUserDataByUserIdAsync(
                 Request.CheckDumpUserDataByUserIdRequest request
@@ -1203,17 +1063,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdAsync(
+		public Task<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdAsync(
                 Request.CheckDumpUserDataByUserIdRequest request
-        )
-		{
-			var task = new CheckDumpUserDataByUserIdTask(
+        ) =>
+            new CheckDumpUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1272,44 +1129,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator CleanUserDataByUserId(
                 Request.CleanUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.CleanUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new CleanUserDataByUserIdTask(
+        ) =>
+            new CleanUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CleanUserDataByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdFuture(
                 Request.CleanUserDataByUserIdRequest request
-        )
-		{
-			return new CleanUserDataByUserIdTask(
+        ) =>
+            new CleanUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdAsync(
+		public UniTask<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdAsync(
                 Request.CleanUserDataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.CleanUserDataByUserIdResult> result = null;
-			await CleanUserDataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CleanUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CleanUserDataByUserIdResult>();
     #else
 		public CleanUserDataByUserIdTask CleanUserDataByUserIdAsync(
                 Request.CleanUserDataByUserIdRequest request
@@ -1323,17 +1167,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdAsync(
+		public Task<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdAsync(
                 Request.CleanUserDataByUserIdRequest request
-        )
-		{
-			var task = new CleanUserDataByUserIdTask(
+        ) =>
+            new CleanUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1379,44 +1220,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator CheckCleanUserDataByUserId(
                 Request.CheckCleanUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.CheckCleanUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new CheckCleanUserDataByUserIdTask(
+        ) =>
+            new CheckCleanUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CheckCleanUserDataByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdFuture(
                 Request.CheckCleanUserDataByUserIdRequest request
-        )
-		{
-			return new CheckCleanUserDataByUserIdTask(
+        ) =>
+            new CheckCleanUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdAsync(
+		public UniTask<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdAsync(
                 Request.CheckCleanUserDataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.CheckCleanUserDataByUserIdResult> result = null;
-			await CheckCleanUserDataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CheckCleanUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CheckCleanUserDataByUserIdResult>();
     #else
 		public CheckCleanUserDataByUserIdTask CheckCleanUserDataByUserIdAsync(
                 Request.CheckCleanUserDataByUserIdRequest request
@@ -1430,17 +1258,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdAsync(
+		public Task<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdAsync(
                 Request.CheckCleanUserDataByUserIdRequest request
-        )
-		{
-			var task = new CheckCleanUserDataByUserIdTask(
+        ) =>
+            new CheckCleanUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1499,44 +1324,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator PrepareImportUserDataByUserId(
                 Request.PrepareImportUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.PrepareImportUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new PrepareImportUserDataByUserIdTask(
+        ) =>
+            new PrepareImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.PrepareImportUserDataByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdFuture(
                 Request.PrepareImportUserDataByUserIdRequest request
-        )
-		{
-			return new PrepareImportUserDataByUserIdTask(
+        ) =>
+            new PrepareImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdAsync(
+		public UniTask<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdAsync(
                 Request.PrepareImportUserDataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.PrepareImportUserDataByUserIdResult> result = null;
-			await PrepareImportUserDataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new PrepareImportUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.PrepareImportUserDataByUserIdResult>();
     #else
 		public PrepareImportUserDataByUserIdTask PrepareImportUserDataByUserIdAsync(
                 Request.PrepareImportUserDataByUserIdRequest request
@@ -1550,17 +1362,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdAsync(
+		public Task<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdAsync(
                 Request.PrepareImportUserDataByUserIdRequest request
-        )
-		{
-			var task = new PrepareImportUserDataByUserIdTask(
+        ) =>
+            new PrepareImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1624,44 +1433,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator ImportUserDataByUserId(
                 Request.ImportUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.ImportUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new ImportUserDataByUserIdTask(
+        ) =>
+            new ImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ImportUserDataByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdFuture(
                 Request.ImportUserDataByUserIdRequest request
-        )
-		{
-			return new ImportUserDataByUserIdTask(
+        ) =>
+            new ImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdAsync(
+		public UniTask<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdAsync(
                 Request.ImportUserDataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.ImportUserDataByUserIdResult> result = null;
-			await ImportUserDataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new ImportUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.ImportUserDataByUserIdResult>();
     #else
 		public ImportUserDataByUserIdTask ImportUserDataByUserIdAsync(
                 Request.ImportUserDataByUserIdRequest request
@@ -1675,17 +1471,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdAsync(
+		public Task<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdAsync(
                 Request.ImportUserDataByUserIdRequest request
-        )
-		{
-			var task = new ImportUserDataByUserIdTask(
+        ) =>
+            new ImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1732,44 +1525,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator CheckImportUserDataByUserId(
                 Request.CheckImportUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.CheckImportUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new CheckImportUserDataByUserIdTask(
+        ) =>
+            new CheckImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CheckImportUserDataByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdFuture(
                 Request.CheckImportUserDataByUserIdRequest request
-        )
-		{
-			return new CheckImportUserDataByUserIdTask(
+        ) =>
+            new CheckImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdAsync(
+		public UniTask<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdAsync(
                 Request.CheckImportUserDataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.CheckImportUserDataByUserIdResult> result = null;
-			await CheckImportUserDataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CheckImportUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CheckImportUserDataByUserIdResult>();
     #else
 		public CheckImportUserDataByUserIdTask CheckImportUserDataByUserIdAsync(
                 Request.CheckImportUserDataByUserIdRequest request
@@ -1783,17 +1563,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdAsync(
+		public Task<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdAsync(
                 Request.CheckImportUserDataByUserIdRequest request
-        )
-		{
-			var task = new CheckImportUserDataByUserIdTask(
+        ) =>
+            new CheckImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1839,44 +1616,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator GetProfile(
                 Request.GetProfileRequest request,
                 UnityAction<AsyncResult<Result.GetProfileResult>> callback
-        )
-		{
-			var task = new GetProfileTask(
+        ) =>
+            new GetProfileTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetProfileResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetProfileResult> GetProfileFuture(
                 Request.GetProfileRequest request
-        )
-		{
-			return new GetProfileTask(
+        ) =>
+            new GetProfileTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetProfileResult> GetProfileAsync(
+		public UniTask<Result.GetProfileResult> GetProfileAsync(
                 Request.GetProfileRequest request
-        )
-		{
-            AsyncResult<Result.GetProfileResult> result = null;
-			await GetProfile(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetProfileTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetProfileResult>();
     #else
 		public GetProfileTask GetProfileAsync(
                 Request.GetProfileRequest request
@@ -1890,17 +1654,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.GetProfileResult> GetProfileAsync(
+		public Task<Result.GetProfileResult> GetProfileAsync(
                 Request.GetProfileRequest request
-        )
-		{
-			var task = new GetProfileTask(
+        ) =>
+            new GetProfileTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1947,44 +1708,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator GetProfileByUserId(
                 Request.GetProfileByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetProfileByUserIdResult>> callback
-        )
-		{
-			var task = new GetProfileByUserIdTask(
+        ) =>
+            new GetProfileByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetProfileByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetProfileByUserIdResult> GetProfileByUserIdFuture(
                 Request.GetProfileByUserIdRequest request
-        )
-		{
-			return new GetProfileByUserIdTask(
+        ) =>
+            new GetProfileByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetProfileByUserIdResult> GetProfileByUserIdAsync(
+		public UniTask<Result.GetProfileByUserIdResult> GetProfileByUserIdAsync(
                 Request.GetProfileByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.GetProfileByUserIdResult> result = null;
-			await GetProfileByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetProfileByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetProfileByUserIdResult>();
     #else
 		public GetProfileByUserIdTask GetProfileByUserIdAsync(
                 Request.GetProfileByUserIdRequest request
@@ -1998,17 +1746,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.GetProfileByUserIdResult> GetProfileByUserIdAsync(
+		public Task<Result.GetProfileByUserIdResult> GetProfileByUserIdAsync(
                 Request.GetProfileByUserIdRequest request
-        )
-		{
-			var task = new GetProfileByUserIdTask(
+        ) =>
+            new GetProfileByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2086,44 +1831,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator UpdateProfile(
                 Request.UpdateProfileRequest request,
                 UnityAction<AsyncResult<Result.UpdateProfileResult>> callback
-        )
-		{
-			var task = new UpdateProfileTask(
+        ) =>
+            new UpdateProfileTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateProfileResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UpdateProfileResult> UpdateProfileFuture(
                 Request.UpdateProfileRequest request
-        )
-		{
-			return new UpdateProfileTask(
+        ) =>
+            new UpdateProfileTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateProfileResult> UpdateProfileAsync(
+		public UniTask<Result.UpdateProfileResult> UpdateProfileAsync(
                 Request.UpdateProfileRequest request
-        )
-		{
-            AsyncResult<Result.UpdateProfileResult> result = null;
-			await UpdateProfile(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UpdateProfileTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UpdateProfileResult>();
     #else
 		public UpdateProfileTask UpdateProfileAsync(
                 Request.UpdateProfileRequest request
@@ -2137,17 +1869,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.UpdateProfileResult> UpdateProfileAsync(
+		public Task<Result.UpdateProfileResult> UpdateProfileAsync(
                 Request.UpdateProfileRequest request
-        )
-		{
-			var task = new UpdateProfileTask(
+        ) =>
+            new UpdateProfileTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2226,44 +1955,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator UpdateProfileByUserId(
                 Request.UpdateProfileByUserIdRequest request,
                 UnityAction<AsyncResult<Result.UpdateProfileByUserIdResult>> callback
-        )
-		{
-			var task = new UpdateProfileByUserIdTask(
+        ) =>
+            new UpdateProfileByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateProfileByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UpdateProfileByUserIdResult> UpdateProfileByUserIdFuture(
                 Request.UpdateProfileByUserIdRequest request
-        )
-		{
-			return new UpdateProfileByUserIdTask(
+        ) =>
+            new UpdateProfileByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateProfileByUserIdResult> UpdateProfileByUserIdAsync(
+		public UniTask<Result.UpdateProfileByUserIdResult> UpdateProfileByUserIdAsync(
                 Request.UpdateProfileByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.UpdateProfileByUserIdResult> result = null;
-			await UpdateProfileByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UpdateProfileByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UpdateProfileByUserIdResult>();
     #else
 		public UpdateProfileByUserIdTask UpdateProfileByUserIdAsync(
                 Request.UpdateProfileByUserIdRequest request
@@ -2277,17 +1993,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.UpdateProfileByUserIdResult> UpdateProfileByUserIdAsync(
+		public Task<Result.UpdateProfileByUserIdResult> UpdateProfileByUserIdAsync(
                 Request.UpdateProfileByUserIdRequest request
-        )
-		{
-			var task = new UpdateProfileByUserIdTask(
+        ) =>
+            new UpdateProfileByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2338,44 +2051,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator DeleteProfileByUserId(
                 Request.DeleteProfileByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DeleteProfileByUserIdResult>> callback
-        )
-		{
-			var task = new DeleteProfileByUserIdTask(
+        ) =>
+            new DeleteProfileByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteProfileByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteProfileByUserIdResult> DeleteProfileByUserIdFuture(
                 Request.DeleteProfileByUserIdRequest request
-        )
-		{
-			return new DeleteProfileByUserIdTask(
+        ) =>
+            new DeleteProfileByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteProfileByUserIdResult> DeleteProfileByUserIdAsync(
+		public UniTask<Result.DeleteProfileByUserIdResult> DeleteProfileByUserIdAsync(
                 Request.DeleteProfileByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DeleteProfileByUserIdResult> result = null;
-			await DeleteProfileByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteProfileByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteProfileByUserIdResult>();
     #else
 		public DeleteProfileByUserIdTask DeleteProfileByUserIdAsync(
                 Request.DeleteProfileByUserIdRequest request
@@ -2389,17 +2089,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.DeleteProfileByUserIdResult> DeleteProfileByUserIdAsync(
+		public Task<Result.DeleteProfileByUserIdResult> DeleteProfileByUserIdAsync(
                 Request.DeleteProfileByUserIdRequest request
-        )
-		{
-			var task = new DeleteProfileByUserIdTask(
+        ) =>
+            new DeleteProfileByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2462,44 +2159,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator UpdateProfileByStampSheet(
                 Request.UpdateProfileByStampSheetRequest request,
                 UnityAction<AsyncResult<Result.UpdateProfileByStampSheetResult>> callback
-        )
-		{
-			var task = new UpdateProfileByStampSheetTask(
+        ) =>
+            new UpdateProfileByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateProfileByStampSheetResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UpdateProfileByStampSheetResult> UpdateProfileByStampSheetFuture(
                 Request.UpdateProfileByStampSheetRequest request
-        )
-		{
-			return new UpdateProfileByStampSheetTask(
+        ) =>
+            new UpdateProfileByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateProfileByStampSheetResult> UpdateProfileByStampSheetAsync(
+		public UniTask<Result.UpdateProfileByStampSheetResult> UpdateProfileByStampSheetAsync(
                 Request.UpdateProfileByStampSheetRequest request
-        )
-		{
-            AsyncResult<Result.UpdateProfileByStampSheetResult> result = null;
-			await UpdateProfileByStampSheet(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UpdateProfileByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UpdateProfileByStampSheetResult>();
     #else
 		public UpdateProfileByStampSheetTask UpdateProfileByStampSheetAsync(
                 Request.UpdateProfileByStampSheetRequest request
@@ -2513,17 +2197,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.UpdateProfileByStampSheetResult> UpdateProfileByStampSheetAsync(
+		public Task<Result.UpdateProfileByStampSheetResult> UpdateProfileByStampSheetAsync(
                 Request.UpdateProfileByStampSheetRequest request
-        )
-		{
-			var task = new UpdateProfileByStampSheetTask(
+        ) =>
+            new UpdateProfileByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2578,44 +2259,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator DescribeFriends(
                 Request.DescribeFriendsRequest request,
                 UnityAction<AsyncResult<Result.DescribeFriendsResult>> callback
-        )
-		{
-			var task = new DescribeFriendsTask(
+        ) =>
+            new DescribeFriendsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeFriendsResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeFriendsResult> DescribeFriendsFuture(
                 Request.DescribeFriendsRequest request
-        )
-		{
-			return new DescribeFriendsTask(
+        ) =>
+            new DescribeFriendsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeFriendsResult> DescribeFriendsAsync(
+		public UniTask<Result.DescribeFriendsResult> DescribeFriendsAsync(
                 Request.DescribeFriendsRequest request
-        )
-		{
-            AsyncResult<Result.DescribeFriendsResult> result = null;
-			await DescribeFriends(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeFriendsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeFriendsResult>();
     #else
 		public DescribeFriendsTask DescribeFriendsAsync(
                 Request.DescribeFriendsRequest request
@@ -2629,17 +2297,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.DescribeFriendsResult> DescribeFriendsAsync(
+		public Task<Result.DescribeFriendsResult> DescribeFriendsAsync(
                 Request.DescribeFriendsRequest request
-        )
-		{
-			var task = new DescribeFriendsTask(
+        ) =>
+            new DescribeFriendsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2695,44 +2360,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator DescribeFriendsByUserId(
                 Request.DescribeFriendsByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DescribeFriendsByUserIdResult>> callback
-        )
-		{
-			var task = new DescribeFriendsByUserIdTask(
+        ) =>
+            new DescribeFriendsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeFriendsByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeFriendsByUserIdResult> DescribeFriendsByUserIdFuture(
                 Request.DescribeFriendsByUserIdRequest request
-        )
-		{
-			return new DescribeFriendsByUserIdTask(
+        ) =>
+            new DescribeFriendsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeFriendsByUserIdResult> DescribeFriendsByUserIdAsync(
+		public UniTask<Result.DescribeFriendsByUserIdResult> DescribeFriendsByUserIdAsync(
                 Request.DescribeFriendsByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DescribeFriendsByUserIdResult> result = null;
-			await DescribeFriendsByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeFriendsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeFriendsByUserIdResult>();
     #else
 		public DescribeFriendsByUserIdTask DescribeFriendsByUserIdAsync(
                 Request.DescribeFriendsByUserIdRequest request
@@ -2746,17 +2398,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.DescribeFriendsByUserIdResult> DescribeFriendsByUserIdAsync(
+		public Task<Result.DescribeFriendsByUserIdResult> DescribeFriendsByUserIdAsync(
                 Request.DescribeFriendsByUserIdRequest request
-        )
-		{
-			var task = new DescribeFriendsByUserIdTask(
+        ) =>
+            new DescribeFriendsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2808,44 +2457,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator DescribeBlackList(
                 Request.DescribeBlackListRequest request,
                 UnityAction<AsyncResult<Result.DescribeBlackListResult>> callback
-        )
-		{
-			var task = new DescribeBlackListTask(
+        ) =>
+            new DescribeBlackListTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeBlackListResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeBlackListResult> DescribeBlackListFuture(
                 Request.DescribeBlackListRequest request
-        )
-		{
-			return new DescribeBlackListTask(
+        ) =>
+            new DescribeBlackListTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeBlackListResult> DescribeBlackListAsync(
+		public UniTask<Result.DescribeBlackListResult> DescribeBlackListAsync(
                 Request.DescribeBlackListRequest request
-        )
-		{
-            AsyncResult<Result.DescribeBlackListResult> result = null;
-			await DescribeBlackList(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeBlackListTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeBlackListResult>();
     #else
 		public DescribeBlackListTask DescribeBlackListAsync(
                 Request.DescribeBlackListRequest request
@@ -2859,17 +2495,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.DescribeBlackListResult> DescribeBlackListAsync(
+		public Task<Result.DescribeBlackListResult> DescribeBlackListAsync(
                 Request.DescribeBlackListRequest request
-        )
-		{
-			var task = new DescribeBlackListTask(
+        ) =>
+            new DescribeBlackListTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2922,44 +2555,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator DescribeBlackListByUserId(
                 Request.DescribeBlackListByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DescribeBlackListByUserIdResult>> callback
-        )
-		{
-			var task = new DescribeBlackListByUserIdTask(
+        ) =>
+            new DescribeBlackListByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeBlackListByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeBlackListByUserIdResult> DescribeBlackListByUserIdFuture(
                 Request.DescribeBlackListByUserIdRequest request
-        )
-		{
-			return new DescribeBlackListByUserIdTask(
+        ) =>
+            new DescribeBlackListByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeBlackListByUserIdResult> DescribeBlackListByUserIdAsync(
+		public UniTask<Result.DescribeBlackListByUserIdResult> DescribeBlackListByUserIdAsync(
                 Request.DescribeBlackListByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DescribeBlackListByUserIdResult> result = null;
-			await DescribeBlackListByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeBlackListByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeBlackListByUserIdResult>();
     #else
 		public DescribeBlackListByUserIdTask DescribeBlackListByUserIdAsync(
                 Request.DescribeBlackListByUserIdRequest request
@@ -2973,17 +2593,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.DescribeBlackListByUserIdResult> DescribeBlackListByUserIdAsync(
+		public Task<Result.DescribeBlackListByUserIdResult> DescribeBlackListByUserIdAsync(
                 Request.DescribeBlackListByUserIdRequest request
-        )
-		{
-			var task = new DescribeBlackListByUserIdTask(
+        ) =>
+            new DescribeBlackListByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3047,44 +2664,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator RegisterBlackList(
                 Request.RegisterBlackListRequest request,
                 UnityAction<AsyncResult<Result.RegisterBlackListResult>> callback
-        )
-		{
-			var task = new RegisterBlackListTask(
+        ) =>
+            new RegisterBlackListTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.RegisterBlackListResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.RegisterBlackListResult> RegisterBlackListFuture(
                 Request.RegisterBlackListRequest request
-        )
-		{
-			return new RegisterBlackListTask(
+        ) =>
+            new RegisterBlackListTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.RegisterBlackListResult> RegisterBlackListAsync(
+		public UniTask<Result.RegisterBlackListResult> RegisterBlackListAsync(
                 Request.RegisterBlackListRequest request
-        )
-		{
-            AsyncResult<Result.RegisterBlackListResult> result = null;
-			await RegisterBlackList(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new RegisterBlackListTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.RegisterBlackListResult>();
     #else
 		public RegisterBlackListTask RegisterBlackListAsync(
                 Request.RegisterBlackListRequest request
@@ -3098,17 +2702,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.RegisterBlackListResult> RegisterBlackListAsync(
+		public Task<Result.RegisterBlackListResult> RegisterBlackListAsync(
                 Request.RegisterBlackListRequest request
-        )
-		{
-			var task = new RegisterBlackListTask(
+        ) =>
+            new RegisterBlackListTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3173,44 +2774,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator RegisterBlackListByUserId(
                 Request.RegisterBlackListByUserIdRequest request,
                 UnityAction<AsyncResult<Result.RegisterBlackListByUserIdResult>> callback
-        )
-		{
-			var task = new RegisterBlackListByUserIdTask(
+        ) =>
+            new RegisterBlackListByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.RegisterBlackListByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.RegisterBlackListByUserIdResult> RegisterBlackListByUserIdFuture(
                 Request.RegisterBlackListByUserIdRequest request
-        )
-		{
-			return new RegisterBlackListByUserIdTask(
+        ) =>
+            new RegisterBlackListByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.RegisterBlackListByUserIdResult> RegisterBlackListByUserIdAsync(
+		public UniTask<Result.RegisterBlackListByUserIdResult> RegisterBlackListByUserIdAsync(
                 Request.RegisterBlackListByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.RegisterBlackListByUserIdResult> result = null;
-			await RegisterBlackListByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new RegisterBlackListByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.RegisterBlackListByUserIdResult>();
     #else
 		public RegisterBlackListByUserIdTask RegisterBlackListByUserIdAsync(
                 Request.RegisterBlackListByUserIdRequest request
@@ -3224,17 +2812,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.RegisterBlackListByUserIdResult> RegisterBlackListByUserIdAsync(
+		public Task<Result.RegisterBlackListByUserIdResult> RegisterBlackListByUserIdAsync(
                 Request.RegisterBlackListByUserIdRequest request
-        )
-		{
-			var task = new RegisterBlackListByUserIdTask(
+        ) =>
+            new RegisterBlackListByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3285,44 +2870,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator UnregisterBlackList(
                 Request.UnregisterBlackListRequest request,
                 UnityAction<AsyncResult<Result.UnregisterBlackListResult>> callback
-        )
-		{
-			var task = new UnregisterBlackListTask(
+        ) =>
+            new UnregisterBlackListTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UnregisterBlackListResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UnregisterBlackListResult> UnregisterBlackListFuture(
                 Request.UnregisterBlackListRequest request
-        )
-		{
-			return new UnregisterBlackListTask(
+        ) =>
+            new UnregisterBlackListTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UnregisterBlackListResult> UnregisterBlackListAsync(
+		public UniTask<Result.UnregisterBlackListResult> UnregisterBlackListAsync(
                 Request.UnregisterBlackListRequest request
-        )
-		{
-            AsyncResult<Result.UnregisterBlackListResult> result = null;
-			await UnregisterBlackList(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UnregisterBlackListTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UnregisterBlackListResult>();
     #else
 		public UnregisterBlackListTask UnregisterBlackListAsync(
                 Request.UnregisterBlackListRequest request
@@ -3336,17 +2908,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.UnregisterBlackListResult> UnregisterBlackListAsync(
+		public Task<Result.UnregisterBlackListResult> UnregisterBlackListAsync(
                 Request.UnregisterBlackListRequest request
-        )
-		{
-			var task = new UnregisterBlackListTask(
+        ) =>
+            new UnregisterBlackListTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3398,44 +2967,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator UnregisterBlackListByUserId(
                 Request.UnregisterBlackListByUserIdRequest request,
                 UnityAction<AsyncResult<Result.UnregisterBlackListByUserIdResult>> callback
-        )
-		{
-			var task = new UnregisterBlackListByUserIdTask(
+        ) =>
+            new UnregisterBlackListByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UnregisterBlackListByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UnregisterBlackListByUserIdResult> UnregisterBlackListByUserIdFuture(
                 Request.UnregisterBlackListByUserIdRequest request
-        )
-		{
-			return new UnregisterBlackListByUserIdTask(
+        ) =>
+            new UnregisterBlackListByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UnregisterBlackListByUserIdResult> UnregisterBlackListByUserIdAsync(
+		public UniTask<Result.UnregisterBlackListByUserIdResult> UnregisterBlackListByUserIdAsync(
                 Request.UnregisterBlackListByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.UnregisterBlackListByUserIdResult> result = null;
-			await UnregisterBlackListByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UnregisterBlackListByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UnregisterBlackListByUserIdResult>();
     #else
 		public UnregisterBlackListByUserIdTask UnregisterBlackListByUserIdAsync(
                 Request.UnregisterBlackListByUserIdRequest request
@@ -3449,17 +3005,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.UnregisterBlackListByUserIdResult> UnregisterBlackListByUserIdAsync(
+		public Task<Result.UnregisterBlackListByUserIdResult> UnregisterBlackListByUserIdAsync(
                 Request.UnregisterBlackListByUserIdRequest request
-        )
-		{
-			var task = new UnregisterBlackListByUserIdTask(
+        ) =>
+            new UnregisterBlackListByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3514,44 +3067,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator DescribeFollows(
                 Request.DescribeFollowsRequest request,
                 UnityAction<AsyncResult<Result.DescribeFollowsResult>> callback
-        )
-		{
-			var task = new DescribeFollowsTask(
+        ) =>
+            new DescribeFollowsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeFollowsResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeFollowsResult> DescribeFollowsFuture(
                 Request.DescribeFollowsRequest request
-        )
-		{
-			return new DescribeFollowsTask(
+        ) =>
+            new DescribeFollowsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeFollowsResult> DescribeFollowsAsync(
+		public UniTask<Result.DescribeFollowsResult> DescribeFollowsAsync(
                 Request.DescribeFollowsRequest request
-        )
-		{
-            AsyncResult<Result.DescribeFollowsResult> result = null;
-			await DescribeFollows(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeFollowsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeFollowsResult>();
     #else
 		public DescribeFollowsTask DescribeFollowsAsync(
                 Request.DescribeFollowsRequest request
@@ -3565,17 +3105,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.DescribeFollowsResult> DescribeFollowsAsync(
+		public Task<Result.DescribeFollowsResult> DescribeFollowsAsync(
                 Request.DescribeFollowsRequest request
-        )
-		{
-			var task = new DescribeFollowsTask(
+        ) =>
+            new DescribeFollowsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3631,44 +3168,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator DescribeFollowsByUserId(
                 Request.DescribeFollowsByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DescribeFollowsByUserIdResult>> callback
-        )
-		{
-			var task = new DescribeFollowsByUserIdTask(
+        ) =>
+            new DescribeFollowsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeFollowsByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeFollowsByUserIdResult> DescribeFollowsByUserIdFuture(
                 Request.DescribeFollowsByUserIdRequest request
-        )
-		{
-			return new DescribeFollowsByUserIdTask(
+        ) =>
+            new DescribeFollowsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeFollowsByUserIdResult> DescribeFollowsByUserIdAsync(
+		public UniTask<Result.DescribeFollowsByUserIdResult> DescribeFollowsByUserIdAsync(
                 Request.DescribeFollowsByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DescribeFollowsByUserIdResult> result = null;
-			await DescribeFollowsByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeFollowsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeFollowsByUserIdResult>();
     #else
 		public DescribeFollowsByUserIdTask DescribeFollowsByUserIdAsync(
                 Request.DescribeFollowsByUserIdRequest request
@@ -3682,17 +3206,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.DescribeFollowsByUserIdResult> DescribeFollowsByUserIdAsync(
+		public Task<Result.DescribeFollowsByUserIdResult> DescribeFollowsByUserIdAsync(
                 Request.DescribeFollowsByUserIdRequest request
-        )
-		{
-			var task = new DescribeFollowsByUserIdTask(
+        ) =>
+            new DescribeFollowsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3742,44 +3263,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator GetFollow(
                 Request.GetFollowRequest request,
                 UnityAction<AsyncResult<Result.GetFollowResult>> callback
-        )
-		{
-			var task = new GetFollowTask(
+        ) =>
+            new GetFollowTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetFollowResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetFollowResult> GetFollowFuture(
                 Request.GetFollowRequest request
-        )
-		{
-			return new GetFollowTask(
+        ) =>
+            new GetFollowTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetFollowResult> GetFollowAsync(
+		public UniTask<Result.GetFollowResult> GetFollowAsync(
                 Request.GetFollowRequest request
-        )
-		{
-            AsyncResult<Result.GetFollowResult> result = null;
-			await GetFollow(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetFollowTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetFollowResult>();
     #else
 		public GetFollowTask GetFollowAsync(
                 Request.GetFollowRequest request
@@ -3793,17 +3301,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.GetFollowResult> GetFollowAsync(
+		public Task<Result.GetFollowResult> GetFollowAsync(
                 Request.GetFollowRequest request
-        )
-		{
-			var task = new GetFollowTask(
+        ) =>
+            new GetFollowTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3854,44 +3359,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator GetFollowByUserId(
                 Request.GetFollowByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetFollowByUserIdResult>> callback
-        )
-		{
-			var task = new GetFollowByUserIdTask(
+        ) =>
+            new GetFollowByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetFollowByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetFollowByUserIdResult> GetFollowByUserIdFuture(
                 Request.GetFollowByUserIdRequest request
-        )
-		{
-			return new GetFollowByUserIdTask(
+        ) =>
+            new GetFollowByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetFollowByUserIdResult> GetFollowByUserIdAsync(
+		public UniTask<Result.GetFollowByUserIdResult> GetFollowByUserIdAsync(
                 Request.GetFollowByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.GetFollowByUserIdResult> result = null;
-			await GetFollowByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetFollowByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetFollowByUserIdResult>();
     #else
 		public GetFollowByUserIdTask GetFollowByUserIdAsync(
                 Request.GetFollowByUserIdRequest request
@@ -3905,17 +3397,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.GetFollowByUserIdResult> GetFollowByUserIdAsync(
+		public Task<Result.GetFollowByUserIdResult> GetFollowByUserIdAsync(
                 Request.GetFollowByUserIdRequest request
-        )
-		{
-			var task = new GetFollowByUserIdTask(
+        ) =>
+            new GetFollowByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3979,44 +3468,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator Follow(
                 Request.FollowRequest request,
                 UnityAction<AsyncResult<Result.FollowResult>> callback
-        )
-		{
-			var task = new FollowTask(
+        ) =>
+            new FollowTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.FollowResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.FollowResult> FollowFuture(
                 Request.FollowRequest request
-        )
-		{
-			return new FollowTask(
+        ) =>
+            new FollowTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.FollowResult> FollowAsync(
+		public UniTask<Result.FollowResult> FollowAsync(
                 Request.FollowRequest request
-        )
-		{
-            AsyncResult<Result.FollowResult> result = null;
-			await Follow(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new FollowTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.FollowResult>();
     #else
 		public FollowTask FollowAsync(
                 Request.FollowRequest request
@@ -4030,17 +3506,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.FollowResult> FollowAsync(
+		public Task<Result.FollowResult> FollowAsync(
                 Request.FollowRequest request
-        )
-		{
-			var task = new FollowTask(
+        ) =>
+            new FollowTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4105,44 +3578,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator FollowByUserId(
                 Request.FollowByUserIdRequest request,
                 UnityAction<AsyncResult<Result.FollowByUserIdResult>> callback
-        )
-		{
-			var task = new FollowByUserIdTask(
+        ) =>
+            new FollowByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.FollowByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.FollowByUserIdResult> FollowByUserIdFuture(
                 Request.FollowByUserIdRequest request
-        )
-		{
-			return new FollowByUserIdTask(
+        ) =>
+            new FollowByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.FollowByUserIdResult> FollowByUserIdAsync(
+		public UniTask<Result.FollowByUserIdResult> FollowByUserIdAsync(
                 Request.FollowByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.FollowByUserIdResult> result = null;
-			await FollowByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new FollowByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.FollowByUserIdResult>();
     #else
 		public FollowByUserIdTask FollowByUserIdAsync(
                 Request.FollowByUserIdRequest request
@@ -4156,17 +3616,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.FollowByUserIdResult> FollowByUserIdAsync(
+		public Task<Result.FollowByUserIdResult> FollowByUserIdAsync(
                 Request.FollowByUserIdRequest request
-        )
-		{
-			var task = new FollowByUserIdTask(
+        ) =>
+            new FollowByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4217,44 +3674,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator Unfollow(
                 Request.UnfollowRequest request,
                 UnityAction<AsyncResult<Result.UnfollowResult>> callback
-        )
-		{
-			var task = new UnfollowTask(
+        ) =>
+            new UnfollowTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UnfollowResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UnfollowResult> UnfollowFuture(
                 Request.UnfollowRequest request
-        )
-		{
-			return new UnfollowTask(
+        ) =>
+            new UnfollowTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UnfollowResult> UnfollowAsync(
+		public UniTask<Result.UnfollowResult> UnfollowAsync(
                 Request.UnfollowRequest request
-        )
-		{
-            AsyncResult<Result.UnfollowResult> result = null;
-			await Unfollow(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UnfollowTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UnfollowResult>();
     #else
 		public UnfollowTask UnfollowAsync(
                 Request.UnfollowRequest request
@@ -4268,17 +3712,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.UnfollowResult> UnfollowAsync(
+		public Task<Result.UnfollowResult> UnfollowAsync(
                 Request.UnfollowRequest request
-        )
-		{
-			var task = new UnfollowTask(
+        ) =>
+            new UnfollowTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4330,44 +3771,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator UnfollowByUserId(
                 Request.UnfollowByUserIdRequest request,
                 UnityAction<AsyncResult<Result.UnfollowByUserIdResult>> callback
-        )
-		{
-			var task = new UnfollowByUserIdTask(
+        ) =>
+            new UnfollowByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UnfollowByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UnfollowByUserIdResult> UnfollowByUserIdFuture(
                 Request.UnfollowByUserIdRequest request
-        )
-		{
-			return new UnfollowByUserIdTask(
+        ) =>
+            new UnfollowByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UnfollowByUserIdResult> UnfollowByUserIdAsync(
+		public UniTask<Result.UnfollowByUserIdResult> UnfollowByUserIdAsync(
                 Request.UnfollowByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.UnfollowByUserIdResult> result = null;
-			await UnfollowByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UnfollowByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UnfollowByUserIdResult>();
     #else
 		public UnfollowByUserIdTask UnfollowByUserIdAsync(
                 Request.UnfollowByUserIdRequest request
@@ -4381,17 +3809,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.UnfollowByUserIdResult> UnfollowByUserIdAsync(
+		public Task<Result.UnfollowByUserIdResult> UnfollowByUserIdAsync(
                 Request.UnfollowByUserIdRequest request
-        )
-		{
-			var task = new UnfollowByUserIdTask(
+        ) =>
+            new UnfollowByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4441,44 +3866,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator GetFriend(
                 Request.GetFriendRequest request,
                 UnityAction<AsyncResult<Result.GetFriendResult>> callback
-        )
-		{
-			var task = new GetFriendTask(
+        ) =>
+            new GetFriendTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetFriendResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetFriendResult> GetFriendFuture(
                 Request.GetFriendRequest request
-        )
-		{
-			return new GetFriendTask(
+        ) =>
+            new GetFriendTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetFriendResult> GetFriendAsync(
+		public UniTask<Result.GetFriendResult> GetFriendAsync(
                 Request.GetFriendRequest request
-        )
-		{
-            AsyncResult<Result.GetFriendResult> result = null;
-			await GetFriend(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetFriendTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetFriendResult>();
     #else
 		public GetFriendTask GetFriendAsync(
                 Request.GetFriendRequest request
@@ -4492,17 +3904,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.GetFriendResult> GetFriendAsync(
+		public Task<Result.GetFriendResult> GetFriendAsync(
                 Request.GetFriendRequest request
-        )
-		{
-			var task = new GetFriendTask(
+        ) =>
+            new GetFriendTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4553,44 +3962,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator GetFriendByUserId(
                 Request.GetFriendByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetFriendByUserIdResult>> callback
-        )
-		{
-			var task = new GetFriendByUserIdTask(
+        ) =>
+            new GetFriendByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetFriendByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetFriendByUserIdResult> GetFriendByUserIdFuture(
                 Request.GetFriendByUserIdRequest request
-        )
-		{
-			return new GetFriendByUserIdTask(
+        ) =>
+            new GetFriendByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetFriendByUserIdResult> GetFriendByUserIdAsync(
+		public UniTask<Result.GetFriendByUserIdResult> GetFriendByUserIdAsync(
                 Request.GetFriendByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.GetFriendByUserIdResult> result = null;
-			await GetFriendByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetFriendByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetFriendByUserIdResult>();
     #else
 		public GetFriendByUserIdTask GetFriendByUserIdAsync(
                 Request.GetFriendByUserIdRequest request
@@ -4604,17 +4000,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.GetFriendByUserIdResult> GetFriendByUserIdAsync(
+		public Task<Result.GetFriendByUserIdResult> GetFriendByUserIdAsync(
                 Request.GetFriendByUserIdRequest request
-        )
-		{
-			var task = new GetFriendByUserIdTask(
+        ) =>
+            new GetFriendByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4678,44 +4071,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator AddFriend(
                 Request.AddFriendRequest request,
                 UnityAction<AsyncResult<Result.AddFriendResult>> callback
-        )
-		{
-			var task = new AddFriendTask(
+        ) =>
+            new AddFriendTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.AddFriendResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.AddFriendResult> AddFriendFuture(
                 Request.AddFriendRequest request
-        )
-		{
-			return new AddFriendTask(
+        ) =>
+            new AddFriendTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.AddFriendResult> AddFriendAsync(
+		public UniTask<Result.AddFriendResult> AddFriendAsync(
                 Request.AddFriendRequest request
-        )
-		{
-            AsyncResult<Result.AddFriendResult> result = null;
-			await AddFriend(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new AddFriendTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.AddFriendResult>();
     #else
 		public AddFriendTask AddFriendAsync(
                 Request.AddFriendRequest request
@@ -4729,17 +4109,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.AddFriendResult> AddFriendAsync(
+		public Task<Result.AddFriendResult> AddFriendAsync(
                 Request.AddFriendRequest request
-        )
-		{
-			var task = new AddFriendTask(
+        ) =>
+            new AddFriendTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4804,44 +4181,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator AddFriendByUserId(
                 Request.AddFriendByUserIdRequest request,
                 UnityAction<AsyncResult<Result.AddFriendByUserIdResult>> callback
-        )
-		{
-			var task = new AddFriendByUserIdTask(
+        ) =>
+            new AddFriendByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.AddFriendByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.AddFriendByUserIdResult> AddFriendByUserIdFuture(
                 Request.AddFriendByUserIdRequest request
-        )
-		{
-			return new AddFriendByUserIdTask(
+        ) =>
+            new AddFriendByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.AddFriendByUserIdResult> AddFriendByUserIdAsync(
+		public UniTask<Result.AddFriendByUserIdResult> AddFriendByUserIdAsync(
                 Request.AddFriendByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.AddFriendByUserIdResult> result = null;
-			await AddFriendByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new AddFriendByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.AddFriendByUserIdResult>();
     #else
 		public AddFriendByUserIdTask AddFriendByUserIdAsync(
                 Request.AddFriendByUserIdRequest request
@@ -4855,17 +4219,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.AddFriendByUserIdResult> AddFriendByUserIdAsync(
+		public Task<Result.AddFriendByUserIdResult> AddFriendByUserIdAsync(
                 Request.AddFriendByUserIdRequest request
-        )
-		{
-			var task = new AddFriendByUserIdTask(
+        ) =>
+            new AddFriendByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4916,44 +4277,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator DeleteFriend(
                 Request.DeleteFriendRequest request,
                 UnityAction<AsyncResult<Result.DeleteFriendResult>> callback
-        )
-		{
-			var task = new DeleteFriendTask(
+        ) =>
+            new DeleteFriendTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteFriendResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteFriendResult> DeleteFriendFuture(
                 Request.DeleteFriendRequest request
-        )
-		{
-			return new DeleteFriendTask(
+        ) =>
+            new DeleteFriendTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteFriendResult> DeleteFriendAsync(
+		public UniTask<Result.DeleteFriendResult> DeleteFriendAsync(
                 Request.DeleteFriendRequest request
-        )
-		{
-            AsyncResult<Result.DeleteFriendResult> result = null;
-			await DeleteFriend(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteFriendTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteFriendResult>();
     #else
 		public DeleteFriendTask DeleteFriendAsync(
                 Request.DeleteFriendRequest request
@@ -4967,17 +4315,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.DeleteFriendResult> DeleteFriendAsync(
+		public Task<Result.DeleteFriendResult> DeleteFriendAsync(
                 Request.DeleteFriendRequest request
-        )
-		{
-			var task = new DeleteFriendTask(
+        ) =>
+            new DeleteFriendTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5029,44 +4374,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator DeleteFriendByUserId(
                 Request.DeleteFriendByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DeleteFriendByUserIdResult>> callback
-        )
-		{
-			var task = new DeleteFriendByUserIdTask(
+        ) =>
+            new DeleteFriendByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteFriendByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteFriendByUserIdResult> DeleteFriendByUserIdFuture(
                 Request.DeleteFriendByUserIdRequest request
-        )
-		{
-			return new DeleteFriendByUserIdTask(
+        ) =>
+            new DeleteFriendByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteFriendByUserIdResult> DeleteFriendByUserIdAsync(
+		public UniTask<Result.DeleteFriendByUserIdResult> DeleteFriendByUserIdAsync(
                 Request.DeleteFriendByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DeleteFriendByUserIdResult> result = null;
-			await DeleteFriendByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteFriendByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteFriendByUserIdResult>();
     #else
 		public DeleteFriendByUserIdTask DeleteFriendByUserIdAsync(
                 Request.DeleteFriendByUserIdRequest request
@@ -5080,17 +4412,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.DeleteFriendByUserIdResult> DeleteFriendByUserIdAsync(
+		public Task<Result.DeleteFriendByUserIdResult> DeleteFriendByUserIdAsync(
                 Request.DeleteFriendByUserIdRequest request
-        )
-		{
-			var task = new DeleteFriendByUserIdTask(
+        ) =>
+            new DeleteFriendByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5145,44 +4474,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator DescribeSendRequests(
                 Request.DescribeSendRequestsRequest request,
                 UnityAction<AsyncResult<Result.DescribeSendRequestsResult>> callback
-        )
-		{
-			var task = new DescribeSendRequestsTask(
+        ) =>
+            new DescribeSendRequestsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeSendRequestsResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeSendRequestsResult> DescribeSendRequestsFuture(
                 Request.DescribeSendRequestsRequest request
-        )
-		{
-			return new DescribeSendRequestsTask(
+        ) =>
+            new DescribeSendRequestsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeSendRequestsResult> DescribeSendRequestsAsync(
+		public UniTask<Result.DescribeSendRequestsResult> DescribeSendRequestsAsync(
                 Request.DescribeSendRequestsRequest request
-        )
-		{
-            AsyncResult<Result.DescribeSendRequestsResult> result = null;
-			await DescribeSendRequests(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeSendRequestsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeSendRequestsResult>();
     #else
 		public DescribeSendRequestsTask DescribeSendRequestsAsync(
                 Request.DescribeSendRequestsRequest request
@@ -5196,17 +4512,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.DescribeSendRequestsResult> DescribeSendRequestsAsync(
+		public Task<Result.DescribeSendRequestsResult> DescribeSendRequestsAsync(
                 Request.DescribeSendRequestsRequest request
-        )
-		{
-			var task = new DescribeSendRequestsTask(
+        ) =>
+            new DescribeSendRequestsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5262,44 +4575,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator DescribeSendRequestsByUserId(
                 Request.DescribeSendRequestsByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DescribeSendRequestsByUserIdResult>> callback
-        )
-		{
-			var task = new DescribeSendRequestsByUserIdTask(
+        ) =>
+            new DescribeSendRequestsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeSendRequestsByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeSendRequestsByUserIdResult> DescribeSendRequestsByUserIdFuture(
                 Request.DescribeSendRequestsByUserIdRequest request
-        )
-		{
-			return new DescribeSendRequestsByUserIdTask(
+        ) =>
+            new DescribeSendRequestsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeSendRequestsByUserIdResult> DescribeSendRequestsByUserIdAsync(
+		public UniTask<Result.DescribeSendRequestsByUserIdResult> DescribeSendRequestsByUserIdAsync(
                 Request.DescribeSendRequestsByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DescribeSendRequestsByUserIdResult> result = null;
-			await DescribeSendRequestsByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeSendRequestsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeSendRequestsByUserIdResult>();
     #else
 		public DescribeSendRequestsByUserIdTask DescribeSendRequestsByUserIdAsync(
                 Request.DescribeSendRequestsByUserIdRequest request
@@ -5313,17 +4613,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.DescribeSendRequestsByUserIdResult> DescribeSendRequestsByUserIdAsync(
+		public Task<Result.DescribeSendRequestsByUserIdResult> DescribeSendRequestsByUserIdAsync(
                 Request.DescribeSendRequestsByUserIdRequest request
-        )
-		{
-			var task = new DescribeSendRequestsByUserIdTask(
+        ) =>
+            new DescribeSendRequestsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5373,44 +4670,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator GetSendRequest(
                 Request.GetSendRequestRequest request,
                 UnityAction<AsyncResult<Result.GetSendRequestResult>> callback
-        )
-		{
-			var task = new GetSendRequestTask(
+        ) =>
+            new GetSendRequestTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetSendRequestResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetSendRequestResult> GetSendRequestFuture(
                 Request.GetSendRequestRequest request
-        )
-		{
-			return new GetSendRequestTask(
+        ) =>
+            new GetSendRequestTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetSendRequestResult> GetSendRequestAsync(
+		public UniTask<Result.GetSendRequestResult> GetSendRequestAsync(
                 Request.GetSendRequestRequest request
-        )
-		{
-            AsyncResult<Result.GetSendRequestResult> result = null;
-			await GetSendRequest(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetSendRequestTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetSendRequestResult>();
     #else
 		public GetSendRequestTask GetSendRequestAsync(
                 Request.GetSendRequestRequest request
@@ -5424,17 +4708,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.GetSendRequestResult> GetSendRequestAsync(
+		public Task<Result.GetSendRequestResult> GetSendRequestAsync(
                 Request.GetSendRequestRequest request
-        )
-		{
-			var task = new GetSendRequestTask(
+        ) =>
+            new GetSendRequestTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5485,44 +4766,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator GetSendRequestByUserId(
                 Request.GetSendRequestByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetSendRequestByUserIdResult>> callback
-        )
-		{
-			var task = new GetSendRequestByUserIdTask(
+        ) =>
+            new GetSendRequestByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetSendRequestByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetSendRequestByUserIdResult> GetSendRequestByUserIdFuture(
                 Request.GetSendRequestByUserIdRequest request
-        )
-		{
-			return new GetSendRequestByUserIdTask(
+        ) =>
+            new GetSendRequestByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetSendRequestByUserIdResult> GetSendRequestByUserIdAsync(
+		public UniTask<Result.GetSendRequestByUserIdResult> GetSendRequestByUserIdAsync(
                 Request.GetSendRequestByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.GetSendRequestByUserIdResult> result = null;
-			await GetSendRequestByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetSendRequestByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetSendRequestByUserIdResult>();
     #else
 		public GetSendRequestByUserIdTask GetSendRequestByUserIdAsync(
                 Request.GetSendRequestByUserIdRequest request
@@ -5536,17 +4804,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.GetSendRequestByUserIdResult> GetSendRequestByUserIdAsync(
+		public Task<Result.GetSendRequestByUserIdResult> GetSendRequestByUserIdAsync(
                 Request.GetSendRequestByUserIdRequest request
-        )
-		{
-			var task = new GetSendRequestByUserIdTask(
+        ) =>
+            new GetSendRequestByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5610,44 +4875,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator SendRequest(
                 Request.SendRequestRequest request,
                 UnityAction<AsyncResult<Result.SendRequestResult>> callback
-        )
-		{
-			var task = new SendRequestTask(
+        ) =>
+            new SendRequestTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.SendRequestResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.SendRequestResult> SendRequestFuture(
                 Request.SendRequestRequest request
-        )
-		{
-			return new SendRequestTask(
+        ) =>
+            new SendRequestTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.SendRequestResult> SendRequestAsync(
+		public UniTask<Result.SendRequestResult> SendRequestAsync(
                 Request.SendRequestRequest request
-        )
-		{
-            AsyncResult<Result.SendRequestResult> result = null;
-			await SendRequest(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new SendRequestTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.SendRequestResult>();
     #else
 		public SendRequestTask SendRequestAsync(
                 Request.SendRequestRequest request
@@ -5661,17 +4913,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.SendRequestResult> SendRequestAsync(
+		public Task<Result.SendRequestResult> SendRequestAsync(
                 Request.SendRequestRequest request
-        )
-		{
-			var task = new SendRequestTask(
+        ) =>
+            new SendRequestTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5736,44 +4985,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator SendRequestByUserId(
                 Request.SendRequestByUserIdRequest request,
                 UnityAction<AsyncResult<Result.SendRequestByUserIdResult>> callback
-        )
-		{
-			var task = new SendRequestByUserIdTask(
+        ) =>
+            new SendRequestByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.SendRequestByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.SendRequestByUserIdResult> SendRequestByUserIdFuture(
                 Request.SendRequestByUserIdRequest request
-        )
-		{
-			return new SendRequestByUserIdTask(
+        ) =>
+            new SendRequestByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.SendRequestByUserIdResult> SendRequestByUserIdAsync(
+		public UniTask<Result.SendRequestByUserIdResult> SendRequestByUserIdAsync(
                 Request.SendRequestByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.SendRequestByUserIdResult> result = null;
-			await SendRequestByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new SendRequestByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.SendRequestByUserIdResult>();
     #else
 		public SendRequestByUserIdTask SendRequestByUserIdAsync(
                 Request.SendRequestByUserIdRequest request
@@ -5787,17 +5023,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.SendRequestByUserIdResult> SendRequestByUserIdAsync(
+		public Task<Result.SendRequestByUserIdResult> SendRequestByUserIdAsync(
                 Request.SendRequestByUserIdRequest request
-        )
-		{
-			var task = new SendRequestByUserIdTask(
+        ) =>
+            new SendRequestByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5848,44 +5081,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator DeleteRequest(
                 Request.DeleteRequestRequest request,
                 UnityAction<AsyncResult<Result.DeleteRequestResult>> callback
-        )
-		{
-			var task = new DeleteRequestTask(
+        ) =>
+            new DeleteRequestTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteRequestResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteRequestResult> DeleteRequestFuture(
                 Request.DeleteRequestRequest request
-        )
-		{
-			return new DeleteRequestTask(
+        ) =>
+            new DeleteRequestTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteRequestResult> DeleteRequestAsync(
+		public UniTask<Result.DeleteRequestResult> DeleteRequestAsync(
                 Request.DeleteRequestRequest request
-        )
-		{
-            AsyncResult<Result.DeleteRequestResult> result = null;
-			await DeleteRequest(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteRequestTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteRequestResult>();
     #else
 		public DeleteRequestTask DeleteRequestAsync(
                 Request.DeleteRequestRequest request
@@ -5899,17 +5119,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.DeleteRequestResult> DeleteRequestAsync(
+		public Task<Result.DeleteRequestResult> DeleteRequestAsync(
                 Request.DeleteRequestRequest request
-        )
-		{
-			var task = new DeleteRequestTask(
+        ) =>
+            new DeleteRequestTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5961,44 +5178,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator DeleteRequestByUserId(
                 Request.DeleteRequestByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DeleteRequestByUserIdResult>> callback
-        )
-		{
-			var task = new DeleteRequestByUserIdTask(
+        ) =>
+            new DeleteRequestByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteRequestByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteRequestByUserIdResult> DeleteRequestByUserIdFuture(
                 Request.DeleteRequestByUserIdRequest request
-        )
-		{
-			return new DeleteRequestByUserIdTask(
+        ) =>
+            new DeleteRequestByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteRequestByUserIdResult> DeleteRequestByUserIdAsync(
+		public UniTask<Result.DeleteRequestByUserIdResult> DeleteRequestByUserIdAsync(
                 Request.DeleteRequestByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DeleteRequestByUserIdResult> result = null;
-			await DeleteRequestByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteRequestByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteRequestByUserIdResult>();
     #else
 		public DeleteRequestByUserIdTask DeleteRequestByUserIdAsync(
                 Request.DeleteRequestByUserIdRequest request
@@ -6012,17 +5216,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.DeleteRequestByUserIdResult> DeleteRequestByUserIdAsync(
+		public Task<Result.DeleteRequestByUserIdResult> DeleteRequestByUserIdAsync(
                 Request.DeleteRequestByUserIdRequest request
-        )
-		{
-			var task = new DeleteRequestByUserIdTask(
+        ) =>
+            new DeleteRequestByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6077,44 +5278,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator DescribeReceiveRequests(
                 Request.DescribeReceiveRequestsRequest request,
                 UnityAction<AsyncResult<Result.DescribeReceiveRequestsResult>> callback
-        )
-		{
-			var task = new DescribeReceiveRequestsTask(
+        ) =>
+            new DescribeReceiveRequestsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeReceiveRequestsResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeReceiveRequestsResult> DescribeReceiveRequestsFuture(
                 Request.DescribeReceiveRequestsRequest request
-        )
-		{
-			return new DescribeReceiveRequestsTask(
+        ) =>
+            new DescribeReceiveRequestsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeReceiveRequestsResult> DescribeReceiveRequestsAsync(
+		public UniTask<Result.DescribeReceiveRequestsResult> DescribeReceiveRequestsAsync(
                 Request.DescribeReceiveRequestsRequest request
-        )
-		{
-            AsyncResult<Result.DescribeReceiveRequestsResult> result = null;
-			await DescribeReceiveRequests(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeReceiveRequestsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeReceiveRequestsResult>();
     #else
 		public DescribeReceiveRequestsTask DescribeReceiveRequestsAsync(
                 Request.DescribeReceiveRequestsRequest request
@@ -6128,17 +5316,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.DescribeReceiveRequestsResult> DescribeReceiveRequestsAsync(
+		public Task<Result.DescribeReceiveRequestsResult> DescribeReceiveRequestsAsync(
                 Request.DescribeReceiveRequestsRequest request
-        )
-		{
-			var task = new DescribeReceiveRequestsTask(
+        ) =>
+            new DescribeReceiveRequestsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6194,44 +5379,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator DescribeReceiveRequestsByUserId(
                 Request.DescribeReceiveRequestsByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DescribeReceiveRequestsByUserIdResult>> callback
-        )
-		{
-			var task = new DescribeReceiveRequestsByUserIdTask(
+        ) =>
+            new DescribeReceiveRequestsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeReceiveRequestsByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeReceiveRequestsByUserIdResult> DescribeReceiveRequestsByUserIdFuture(
                 Request.DescribeReceiveRequestsByUserIdRequest request
-        )
-		{
-			return new DescribeReceiveRequestsByUserIdTask(
+        ) =>
+            new DescribeReceiveRequestsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeReceiveRequestsByUserIdResult> DescribeReceiveRequestsByUserIdAsync(
+		public UniTask<Result.DescribeReceiveRequestsByUserIdResult> DescribeReceiveRequestsByUserIdAsync(
                 Request.DescribeReceiveRequestsByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DescribeReceiveRequestsByUserIdResult> result = null;
-			await DescribeReceiveRequestsByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeReceiveRequestsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeReceiveRequestsByUserIdResult>();
     #else
 		public DescribeReceiveRequestsByUserIdTask DescribeReceiveRequestsByUserIdAsync(
                 Request.DescribeReceiveRequestsByUserIdRequest request
@@ -6245,17 +5417,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.DescribeReceiveRequestsByUserIdResult> DescribeReceiveRequestsByUserIdAsync(
+		public Task<Result.DescribeReceiveRequestsByUserIdResult> DescribeReceiveRequestsByUserIdAsync(
                 Request.DescribeReceiveRequestsByUserIdRequest request
-        )
-		{
-			var task = new DescribeReceiveRequestsByUserIdTask(
+        ) =>
+            new DescribeReceiveRequestsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6305,44 +5474,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator GetReceiveRequest(
                 Request.GetReceiveRequestRequest request,
                 UnityAction<AsyncResult<Result.GetReceiveRequestResult>> callback
-        )
-		{
-			var task = new GetReceiveRequestTask(
+        ) =>
+            new GetReceiveRequestTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetReceiveRequestResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetReceiveRequestResult> GetReceiveRequestFuture(
                 Request.GetReceiveRequestRequest request
-        )
-		{
-			return new GetReceiveRequestTask(
+        ) =>
+            new GetReceiveRequestTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetReceiveRequestResult> GetReceiveRequestAsync(
+		public UniTask<Result.GetReceiveRequestResult> GetReceiveRequestAsync(
                 Request.GetReceiveRequestRequest request
-        )
-		{
-            AsyncResult<Result.GetReceiveRequestResult> result = null;
-			await GetReceiveRequest(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetReceiveRequestTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetReceiveRequestResult>();
     #else
 		public GetReceiveRequestTask GetReceiveRequestAsync(
                 Request.GetReceiveRequestRequest request
@@ -6356,17 +5512,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.GetReceiveRequestResult> GetReceiveRequestAsync(
+		public Task<Result.GetReceiveRequestResult> GetReceiveRequestAsync(
                 Request.GetReceiveRequestRequest request
-        )
-		{
-			var task = new GetReceiveRequestTask(
+        ) =>
+            new GetReceiveRequestTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6417,44 +5570,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator GetReceiveRequestByUserId(
                 Request.GetReceiveRequestByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetReceiveRequestByUserIdResult>> callback
-        )
-		{
-			var task = new GetReceiveRequestByUserIdTask(
+        ) =>
+            new GetReceiveRequestByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetReceiveRequestByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetReceiveRequestByUserIdResult> GetReceiveRequestByUserIdFuture(
                 Request.GetReceiveRequestByUserIdRequest request
-        )
-		{
-			return new GetReceiveRequestByUserIdTask(
+        ) =>
+            new GetReceiveRequestByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetReceiveRequestByUserIdResult> GetReceiveRequestByUserIdAsync(
+		public UniTask<Result.GetReceiveRequestByUserIdResult> GetReceiveRequestByUserIdAsync(
                 Request.GetReceiveRequestByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.GetReceiveRequestByUserIdResult> result = null;
-			await GetReceiveRequestByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetReceiveRequestByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetReceiveRequestByUserIdResult>();
     #else
 		public GetReceiveRequestByUserIdTask GetReceiveRequestByUserIdAsync(
                 Request.GetReceiveRequestByUserIdRequest request
@@ -6468,17 +5608,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.GetReceiveRequestByUserIdResult> GetReceiveRequestByUserIdAsync(
+		public Task<Result.GetReceiveRequestByUserIdResult> GetReceiveRequestByUserIdAsync(
                 Request.GetReceiveRequestByUserIdRequest request
-        )
-		{
-			var task = new GetReceiveRequestByUserIdTask(
+        ) =>
+            new GetReceiveRequestByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6542,44 +5679,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator AcceptRequest(
                 Request.AcceptRequestRequest request,
                 UnityAction<AsyncResult<Result.AcceptRequestResult>> callback
-        )
-		{
-			var task = new AcceptRequestTask(
+        ) =>
+            new AcceptRequestTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.AcceptRequestResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.AcceptRequestResult> AcceptRequestFuture(
                 Request.AcceptRequestRequest request
-        )
-		{
-			return new AcceptRequestTask(
+        ) =>
+            new AcceptRequestTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.AcceptRequestResult> AcceptRequestAsync(
+		public UniTask<Result.AcceptRequestResult> AcceptRequestAsync(
                 Request.AcceptRequestRequest request
-        )
-		{
-            AsyncResult<Result.AcceptRequestResult> result = null;
-			await AcceptRequest(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new AcceptRequestTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.AcceptRequestResult>();
     #else
 		public AcceptRequestTask AcceptRequestAsync(
                 Request.AcceptRequestRequest request
@@ -6593,17 +5717,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.AcceptRequestResult> AcceptRequestAsync(
+		public Task<Result.AcceptRequestResult> AcceptRequestAsync(
                 Request.AcceptRequestRequest request
-        )
-		{
-			var task = new AcceptRequestTask(
+        ) =>
+            new AcceptRequestTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6668,44 +5789,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator AcceptRequestByUserId(
                 Request.AcceptRequestByUserIdRequest request,
                 UnityAction<AsyncResult<Result.AcceptRequestByUserIdResult>> callback
-        )
-		{
-			var task = new AcceptRequestByUserIdTask(
+        ) =>
+            new AcceptRequestByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.AcceptRequestByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.AcceptRequestByUserIdResult> AcceptRequestByUserIdFuture(
                 Request.AcceptRequestByUserIdRequest request
-        )
-		{
-			return new AcceptRequestByUserIdTask(
+        ) =>
+            new AcceptRequestByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.AcceptRequestByUserIdResult> AcceptRequestByUserIdAsync(
+		public UniTask<Result.AcceptRequestByUserIdResult> AcceptRequestByUserIdAsync(
                 Request.AcceptRequestByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.AcceptRequestByUserIdResult> result = null;
-			await AcceptRequestByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new AcceptRequestByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.AcceptRequestByUserIdResult>();
     #else
 		public AcceptRequestByUserIdTask AcceptRequestByUserIdAsync(
                 Request.AcceptRequestByUserIdRequest request
@@ -6719,17 +5827,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.AcceptRequestByUserIdResult> AcceptRequestByUserIdAsync(
+		public Task<Result.AcceptRequestByUserIdResult> AcceptRequestByUserIdAsync(
                 Request.AcceptRequestByUserIdRequest request
-        )
-		{
-			var task = new AcceptRequestByUserIdTask(
+        ) =>
+            new AcceptRequestByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6780,44 +5885,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator RejectRequest(
                 Request.RejectRequestRequest request,
                 UnityAction<AsyncResult<Result.RejectRequestResult>> callback
-        )
-		{
-			var task = new RejectRequestTask(
+        ) =>
+            new RejectRequestTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.RejectRequestResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.RejectRequestResult> RejectRequestFuture(
                 Request.RejectRequestRequest request
-        )
-		{
-			return new RejectRequestTask(
+        ) =>
+            new RejectRequestTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.RejectRequestResult> RejectRequestAsync(
+		public UniTask<Result.RejectRequestResult> RejectRequestAsync(
                 Request.RejectRequestRequest request
-        )
-		{
-            AsyncResult<Result.RejectRequestResult> result = null;
-			await RejectRequest(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new RejectRequestTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.RejectRequestResult>();
     #else
 		public RejectRequestTask RejectRequestAsync(
                 Request.RejectRequestRequest request
@@ -6831,17 +5923,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.RejectRequestResult> RejectRequestAsync(
+		public Task<Result.RejectRequestResult> RejectRequestAsync(
                 Request.RejectRequestRequest request
-        )
-		{
-			var task = new RejectRequestTask(
+        ) =>
+            new RejectRequestTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6893,44 +5982,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator RejectRequestByUserId(
                 Request.RejectRequestByUserIdRequest request,
                 UnityAction<AsyncResult<Result.RejectRequestByUserIdResult>> callback
-        )
-		{
-			var task = new RejectRequestByUserIdTask(
+        ) =>
+            new RejectRequestByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.RejectRequestByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.RejectRequestByUserIdResult> RejectRequestByUserIdFuture(
                 Request.RejectRequestByUserIdRequest request
-        )
-		{
-			return new RejectRequestByUserIdTask(
+        ) =>
+            new RejectRequestByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.RejectRequestByUserIdResult> RejectRequestByUserIdAsync(
+		public UniTask<Result.RejectRequestByUserIdResult> RejectRequestByUserIdAsync(
                 Request.RejectRequestByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.RejectRequestByUserIdResult> result = null;
-			await RejectRequestByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new RejectRequestByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.RejectRequestByUserIdResult>();
     #else
 		public RejectRequestByUserIdTask RejectRequestByUserIdAsync(
                 Request.RejectRequestByUserIdRequest request
@@ -6944,17 +6020,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.RejectRequestByUserIdResult> RejectRequestByUserIdAsync(
+		public Task<Result.RejectRequestByUserIdResult> RejectRequestByUserIdAsync(
                 Request.RejectRequestByUserIdRequest request
-        )
-		{
-			var task = new RejectRequestByUserIdTask(
+        ) =>
+            new RejectRequestByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -7001,44 +6074,31 @@ namespace Gs2.Gs2Friend
 		public IEnumerator GetPublicProfile(
                 Request.GetPublicProfileRequest request,
                 UnityAction<AsyncResult<Result.GetPublicProfileResult>> callback
-        )
-		{
-			var task = new GetPublicProfileTask(
+        ) =>
+            new GetPublicProfileTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetPublicProfileResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetPublicProfileResult> GetPublicProfileFuture(
                 Request.GetPublicProfileRequest request
-        )
-		{
-			return new GetPublicProfileTask(
+        ) =>
+            new GetPublicProfileTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetPublicProfileResult> GetPublicProfileAsync(
+		public UniTask<Result.GetPublicProfileResult> GetPublicProfileAsync(
                 Request.GetPublicProfileRequest request
-        )
-		{
-            AsyncResult<Result.GetPublicProfileResult> result = null;
-			await GetPublicProfile(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetPublicProfileTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetPublicProfileResult>();
     #else
 		public GetPublicProfileTask GetPublicProfileAsync(
                 Request.GetPublicProfileRequest request
@@ -7052,17 +6112,14 @@ namespace Gs2.Gs2Friend
         }
     #endif
 #else
-		public async Task<Result.GetPublicProfileResult> GetPublicProfileAsync(
+		public Task<Result.GetPublicProfileResult> GetPublicProfileAsync(
                 Request.GetPublicProfileRequest request
-        )
-		{
-			var task = new GetPublicProfileTask(
+        ) =>
+            new GetPublicProfileTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 	}
 }

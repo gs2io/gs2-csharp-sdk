@@ -25,17 +25,18 @@ using Cysharp.Threading.Tasks;
 #else
 using System.Web;
 using System.Net.Http;
-using System.Threading.Tasks;
 #endif
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Linq;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
+using Gs2.Core.Util;
 using Gs2.Gs2Mission.Request;
 using Gs2.Gs2Mission.Result;
 using Gs2.Util.LitJson;
@@ -113,44 +114,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator DescribeCompletes(
                 Request.DescribeCompletesRequest request,
                 UnityAction<AsyncResult<Result.DescribeCompletesResult>> callback
-        )
-		{
-			var task = new DescribeCompletesTask(
+        ) =>
+            new DescribeCompletesTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeCompletesResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeCompletesResult> DescribeCompletesFuture(
                 Request.DescribeCompletesRequest request
-        )
-		{
-			return new DescribeCompletesTask(
+        ) =>
+            new DescribeCompletesTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeCompletesResult> DescribeCompletesAsync(
+		public UniTask<Result.DescribeCompletesResult> DescribeCompletesAsync(
                 Request.DescribeCompletesRequest request
-        )
-		{
-            AsyncResult<Result.DescribeCompletesResult> result = null;
-			await DescribeCompletes(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeCompletesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeCompletesResult>();
     #else
 		public DescribeCompletesTask DescribeCompletesAsync(
                 Request.DescribeCompletesRequest request
@@ -164,17 +152,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.DescribeCompletesResult> DescribeCompletesAsync(
+		public Task<Result.DescribeCompletesResult> DescribeCompletesAsync(
                 Request.DescribeCompletesRequest request
-        )
-		{
-			var task = new DescribeCompletesTask(
+        ) =>
+            new DescribeCompletesTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -227,44 +212,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator DescribeCompletesByUserId(
                 Request.DescribeCompletesByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DescribeCompletesByUserIdResult>> callback
-        )
-		{
-			var task = new DescribeCompletesByUserIdTask(
+        ) =>
+            new DescribeCompletesByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeCompletesByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeCompletesByUserIdResult> DescribeCompletesByUserIdFuture(
                 Request.DescribeCompletesByUserIdRequest request
-        )
-		{
-			return new DescribeCompletesByUserIdTask(
+        ) =>
+            new DescribeCompletesByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeCompletesByUserIdResult> DescribeCompletesByUserIdAsync(
+		public UniTask<Result.DescribeCompletesByUserIdResult> DescribeCompletesByUserIdAsync(
                 Request.DescribeCompletesByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DescribeCompletesByUserIdResult> result = null;
-			await DescribeCompletesByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeCompletesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeCompletesByUserIdResult>();
     #else
 		public DescribeCompletesByUserIdTask DescribeCompletesByUserIdAsync(
                 Request.DescribeCompletesByUserIdRequest request
@@ -278,17 +250,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.DescribeCompletesByUserIdResult> DescribeCompletesByUserIdAsync(
+		public Task<Result.DescribeCompletesByUserIdResult> DescribeCompletesByUserIdAsync(
                 Request.DescribeCompletesByUserIdRequest request
-        )
-		{
-			var task = new DescribeCompletesByUserIdTask(
+        ) =>
+            new DescribeCompletesByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -367,44 +336,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator Complete(
                 Request.CompleteRequest request,
                 UnityAction<AsyncResult<Result.CompleteResult>> callback
-        )
-		{
-			var task = new CompleteTask(
+        ) =>
+            new CompleteTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CompleteResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CompleteResult> CompleteFuture(
                 Request.CompleteRequest request
-        )
-		{
-			return new CompleteTask(
+        ) =>
+            new CompleteTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CompleteResult> CompleteAsync(
+		public UniTask<Result.CompleteResult> CompleteAsync(
                 Request.CompleteRequest request
-        )
-		{
-            AsyncResult<Result.CompleteResult> result = null;
-			await Complete(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CompleteTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CompleteResult>();
     #else
 		public CompleteTask CompleteAsync(
                 Request.CompleteRequest request
@@ -418,17 +374,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.CompleteResult> CompleteAsync(
+		public Task<Result.CompleteResult> CompleteAsync(
                 Request.CompleteRequest request
-        )
-		{
-			var task = new CompleteTask(
+        ) =>
+            new CompleteTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -508,44 +461,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator CompleteByUserId(
                 Request.CompleteByUserIdRequest request,
                 UnityAction<AsyncResult<Result.CompleteByUserIdResult>> callback
-        )
-		{
-			var task = new CompleteByUserIdTask(
+        ) =>
+            new CompleteByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CompleteByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CompleteByUserIdResult> CompleteByUserIdFuture(
                 Request.CompleteByUserIdRequest request
-        )
-		{
-			return new CompleteByUserIdTask(
+        ) =>
+            new CompleteByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CompleteByUserIdResult> CompleteByUserIdAsync(
+		public UniTask<Result.CompleteByUserIdResult> CompleteByUserIdAsync(
                 Request.CompleteByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.CompleteByUserIdResult> result = null;
-			await CompleteByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CompleteByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CompleteByUserIdResult>();
     #else
 		public CompleteByUserIdTask CompleteByUserIdAsync(
                 Request.CompleteByUserIdRequest request
@@ -559,17 +499,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.CompleteByUserIdResult> CompleteByUserIdAsync(
+		public Task<Result.CompleteByUserIdResult> CompleteByUserIdAsync(
                 Request.CompleteByUserIdRequest request
-        )
-		{
-			var task = new CompleteByUserIdTask(
+        ) =>
+            new CompleteByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -657,44 +594,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator BatchComplete(
                 Request.BatchCompleteRequest request,
                 UnityAction<AsyncResult<Result.BatchCompleteResult>> callback
-        )
-		{
-			var task = new BatchCompleteTask(
+        ) =>
+            new BatchCompleteTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.BatchCompleteResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.BatchCompleteResult> BatchCompleteFuture(
                 Request.BatchCompleteRequest request
-        )
-		{
-			return new BatchCompleteTask(
+        ) =>
+            new BatchCompleteTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.BatchCompleteResult> BatchCompleteAsync(
+		public UniTask<Result.BatchCompleteResult> BatchCompleteAsync(
                 Request.BatchCompleteRequest request
-        )
-		{
-            AsyncResult<Result.BatchCompleteResult> result = null;
-			await BatchComplete(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new BatchCompleteTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.BatchCompleteResult>();
     #else
 		public BatchCompleteTask BatchCompleteAsync(
                 Request.BatchCompleteRequest request
@@ -708,17 +632,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.BatchCompleteResult> BatchCompleteAsync(
+		public Task<Result.BatchCompleteResult> BatchCompleteAsync(
                 Request.BatchCompleteRequest request
-        )
-		{
-			var task = new BatchCompleteTask(
+        ) =>
+            new BatchCompleteTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -807,44 +728,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator BatchCompleteByUserId(
                 Request.BatchCompleteByUserIdRequest request,
                 UnityAction<AsyncResult<Result.BatchCompleteByUserIdResult>> callback
-        )
-		{
-			var task = new BatchCompleteByUserIdTask(
+        ) =>
+            new BatchCompleteByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.BatchCompleteByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.BatchCompleteByUserIdResult> BatchCompleteByUserIdFuture(
                 Request.BatchCompleteByUserIdRequest request
-        )
-		{
-			return new BatchCompleteByUserIdTask(
+        ) =>
+            new BatchCompleteByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.BatchCompleteByUserIdResult> BatchCompleteByUserIdAsync(
+		public UniTask<Result.BatchCompleteByUserIdResult> BatchCompleteByUserIdAsync(
                 Request.BatchCompleteByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.BatchCompleteByUserIdResult> result = null;
-			await BatchCompleteByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new BatchCompleteByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.BatchCompleteByUserIdResult>();
     #else
 		public BatchCompleteByUserIdTask BatchCompleteByUserIdAsync(
                 Request.BatchCompleteByUserIdRequest request
@@ -858,17 +766,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.BatchCompleteByUserIdResult> BatchCompleteByUserIdAsync(
+		public Task<Result.BatchCompleteByUserIdResult> BatchCompleteByUserIdAsync(
                 Request.BatchCompleteByUserIdRequest request
-        )
-		{
-			var task = new BatchCompleteByUserIdTask(
+        ) =>
+            new BatchCompleteByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -934,44 +839,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator ReceiveByUserId(
                 Request.ReceiveByUserIdRequest request,
                 UnityAction<AsyncResult<Result.ReceiveByUserIdResult>> callback
-        )
-		{
-			var task = new ReceiveByUserIdTask(
+        ) =>
+            new ReceiveByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ReceiveByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.ReceiveByUserIdResult> ReceiveByUserIdFuture(
                 Request.ReceiveByUserIdRequest request
-        )
-		{
-			return new ReceiveByUserIdTask(
+        ) =>
+            new ReceiveByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ReceiveByUserIdResult> ReceiveByUserIdAsync(
+		public UniTask<Result.ReceiveByUserIdResult> ReceiveByUserIdAsync(
                 Request.ReceiveByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.ReceiveByUserIdResult> result = null;
-			await ReceiveByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new ReceiveByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.ReceiveByUserIdResult>();
     #else
 		public ReceiveByUserIdTask ReceiveByUserIdAsync(
                 Request.ReceiveByUserIdRequest request
@@ -985,17 +877,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.ReceiveByUserIdResult> ReceiveByUserIdAsync(
+		public Task<Result.ReceiveByUserIdResult> ReceiveByUserIdAsync(
                 Request.ReceiveByUserIdRequest request
-        )
-		{
-			var task = new ReceiveByUserIdTask(
+        ) =>
+            new ReceiveByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1070,44 +959,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator BatchReceiveByUserId(
                 Request.BatchReceiveByUserIdRequest request,
                 UnityAction<AsyncResult<Result.BatchReceiveByUserIdResult>> callback
-        )
-		{
-			var task = new BatchReceiveByUserIdTask(
+        ) =>
+            new BatchReceiveByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.BatchReceiveByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.BatchReceiveByUserIdResult> BatchReceiveByUserIdFuture(
                 Request.BatchReceiveByUserIdRequest request
-        )
-		{
-			return new BatchReceiveByUserIdTask(
+        ) =>
+            new BatchReceiveByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.BatchReceiveByUserIdResult> BatchReceiveByUserIdAsync(
+		public UniTask<Result.BatchReceiveByUserIdResult> BatchReceiveByUserIdAsync(
                 Request.BatchReceiveByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.BatchReceiveByUserIdResult> result = null;
-			await BatchReceiveByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new BatchReceiveByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.BatchReceiveByUserIdResult>();
     #else
 		public BatchReceiveByUserIdTask BatchReceiveByUserIdAsync(
                 Request.BatchReceiveByUserIdRequest request
@@ -1121,17 +997,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.BatchReceiveByUserIdResult> BatchReceiveByUserIdAsync(
+		public Task<Result.BatchReceiveByUserIdResult> BatchReceiveByUserIdAsync(
                 Request.BatchReceiveByUserIdRequest request
-        )
-		{
-			var task = new BatchReceiveByUserIdTask(
+        ) =>
+            new BatchReceiveByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1197,44 +1070,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator RevertReceiveByUserId(
                 Request.RevertReceiveByUserIdRequest request,
                 UnityAction<AsyncResult<Result.RevertReceiveByUserIdResult>> callback
-        )
-		{
-			var task = new RevertReceiveByUserIdTask(
+        ) =>
+            new RevertReceiveByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.RevertReceiveByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.RevertReceiveByUserIdResult> RevertReceiveByUserIdFuture(
                 Request.RevertReceiveByUserIdRequest request
-        )
-		{
-			return new RevertReceiveByUserIdTask(
+        ) =>
+            new RevertReceiveByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.RevertReceiveByUserIdResult> RevertReceiveByUserIdAsync(
+		public UniTask<Result.RevertReceiveByUserIdResult> RevertReceiveByUserIdAsync(
                 Request.RevertReceiveByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.RevertReceiveByUserIdResult> result = null;
-			await RevertReceiveByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new RevertReceiveByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.RevertReceiveByUserIdResult>();
     #else
 		public RevertReceiveByUserIdTask RevertReceiveByUserIdAsync(
                 Request.RevertReceiveByUserIdRequest request
@@ -1248,17 +1108,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.RevertReceiveByUserIdResult> RevertReceiveByUserIdAsync(
+		public Task<Result.RevertReceiveByUserIdResult> RevertReceiveByUserIdAsync(
                 Request.RevertReceiveByUserIdRequest request
-        )
-		{
-			var task = new RevertReceiveByUserIdTask(
+        ) =>
+            new RevertReceiveByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1305,44 +1162,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator GetComplete(
                 Request.GetCompleteRequest request,
                 UnityAction<AsyncResult<Result.GetCompleteResult>> callback
-        )
-		{
-			var task = new GetCompleteTask(
+        ) =>
+            new GetCompleteTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetCompleteResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetCompleteResult> GetCompleteFuture(
                 Request.GetCompleteRequest request
-        )
-		{
-			return new GetCompleteTask(
+        ) =>
+            new GetCompleteTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetCompleteResult> GetCompleteAsync(
+		public UniTask<Result.GetCompleteResult> GetCompleteAsync(
                 Request.GetCompleteRequest request
-        )
-		{
-            AsyncResult<Result.GetCompleteResult> result = null;
-			await GetComplete(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetCompleteTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetCompleteResult>();
     #else
 		public GetCompleteTask GetCompleteAsync(
                 Request.GetCompleteRequest request
@@ -1356,17 +1200,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.GetCompleteResult> GetCompleteAsync(
+		public Task<Result.GetCompleteResult> GetCompleteAsync(
                 Request.GetCompleteRequest request
-        )
-		{
-			var task = new GetCompleteTask(
+        ) =>
+            new GetCompleteTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1414,44 +1255,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator GetCompleteByUserId(
                 Request.GetCompleteByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetCompleteByUserIdResult>> callback
-        )
-		{
-			var task = new GetCompleteByUserIdTask(
+        ) =>
+            new GetCompleteByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetCompleteByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetCompleteByUserIdResult> GetCompleteByUserIdFuture(
                 Request.GetCompleteByUserIdRequest request
-        )
-		{
-			return new GetCompleteByUserIdTask(
+        ) =>
+            new GetCompleteByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetCompleteByUserIdResult> GetCompleteByUserIdAsync(
+		public UniTask<Result.GetCompleteByUserIdResult> GetCompleteByUserIdAsync(
                 Request.GetCompleteByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.GetCompleteByUserIdResult> result = null;
-			await GetCompleteByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetCompleteByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetCompleteByUserIdResult>();
     #else
 		public GetCompleteByUserIdTask GetCompleteByUserIdAsync(
                 Request.GetCompleteByUserIdRequest request
@@ -1465,17 +1293,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.GetCompleteByUserIdResult> GetCompleteByUserIdAsync(
+		public Task<Result.GetCompleteByUserIdResult> GetCompleteByUserIdAsync(
                 Request.GetCompleteByUserIdRequest request
-        )
-		{
-			var task = new GetCompleteByUserIdTask(
+        ) =>
+            new GetCompleteByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1539,44 +1364,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator EvaluateComplete(
                 Request.EvaluateCompleteRequest request,
                 UnityAction<AsyncResult<Result.EvaluateCompleteResult>> callback
-        )
-		{
-			var task = new EvaluateCompleteTask(
+        ) =>
+            new EvaluateCompleteTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.EvaluateCompleteResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.EvaluateCompleteResult> EvaluateCompleteFuture(
                 Request.EvaluateCompleteRequest request
-        )
-		{
-			return new EvaluateCompleteTask(
+        ) =>
+            new EvaluateCompleteTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.EvaluateCompleteResult> EvaluateCompleteAsync(
+		public UniTask<Result.EvaluateCompleteResult> EvaluateCompleteAsync(
                 Request.EvaluateCompleteRequest request
-        )
-		{
-            AsyncResult<Result.EvaluateCompleteResult> result = null;
-			await EvaluateComplete(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new EvaluateCompleteTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.EvaluateCompleteResult>();
     #else
 		public EvaluateCompleteTask EvaluateCompleteAsync(
                 Request.EvaluateCompleteRequest request
@@ -1590,17 +1402,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.EvaluateCompleteResult> EvaluateCompleteAsync(
+		public Task<Result.EvaluateCompleteResult> EvaluateCompleteAsync(
                 Request.EvaluateCompleteRequest request
-        )
-		{
-			var task = new EvaluateCompleteTask(
+        ) =>
+            new EvaluateCompleteTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1665,44 +1474,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator EvaluateCompleteByUserId(
                 Request.EvaluateCompleteByUserIdRequest request,
                 UnityAction<AsyncResult<Result.EvaluateCompleteByUserIdResult>> callback
-        )
-		{
-			var task = new EvaluateCompleteByUserIdTask(
+        ) =>
+            new EvaluateCompleteByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.EvaluateCompleteByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.EvaluateCompleteByUserIdResult> EvaluateCompleteByUserIdFuture(
                 Request.EvaluateCompleteByUserIdRequest request
-        )
-		{
-			return new EvaluateCompleteByUserIdTask(
+        ) =>
+            new EvaluateCompleteByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.EvaluateCompleteByUserIdResult> EvaluateCompleteByUserIdAsync(
+		public UniTask<Result.EvaluateCompleteByUserIdResult> EvaluateCompleteByUserIdAsync(
                 Request.EvaluateCompleteByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.EvaluateCompleteByUserIdResult> result = null;
-			await EvaluateCompleteByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new EvaluateCompleteByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.EvaluateCompleteByUserIdResult>();
     #else
 		public EvaluateCompleteByUserIdTask EvaluateCompleteByUserIdAsync(
                 Request.EvaluateCompleteByUserIdRequest request
@@ -1716,17 +1512,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.EvaluateCompleteByUserIdResult> EvaluateCompleteByUserIdAsync(
+		public Task<Result.EvaluateCompleteByUserIdResult> EvaluateCompleteByUserIdAsync(
                 Request.EvaluateCompleteByUserIdRequest request
-        )
-		{
-			var task = new EvaluateCompleteByUserIdTask(
+        ) =>
+            new EvaluateCompleteByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1778,44 +1571,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator DeleteCompleteByUserId(
                 Request.DeleteCompleteByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DeleteCompleteByUserIdResult>> callback
-        )
-		{
-			var task = new DeleteCompleteByUserIdTask(
+        ) =>
+            new DeleteCompleteByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteCompleteByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteCompleteByUserIdResult> DeleteCompleteByUserIdFuture(
                 Request.DeleteCompleteByUserIdRequest request
-        )
-		{
-			return new DeleteCompleteByUserIdTask(
+        ) =>
+            new DeleteCompleteByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteCompleteByUserIdResult> DeleteCompleteByUserIdAsync(
+		public UniTask<Result.DeleteCompleteByUserIdResult> DeleteCompleteByUserIdAsync(
                 Request.DeleteCompleteByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DeleteCompleteByUserIdResult> result = null;
-			await DeleteCompleteByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteCompleteByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteCompleteByUserIdResult>();
     #else
 		public DeleteCompleteByUserIdTask DeleteCompleteByUserIdAsync(
                 Request.DeleteCompleteByUserIdRequest request
@@ -1829,17 +1609,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.DeleteCompleteByUserIdResult> DeleteCompleteByUserIdAsync(
+		public Task<Result.DeleteCompleteByUserIdResult> DeleteCompleteByUserIdAsync(
                 Request.DeleteCompleteByUserIdRequest request
-        )
-		{
-			var task = new DeleteCompleteByUserIdTask(
+        ) =>
+            new DeleteCompleteByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1906,44 +1683,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator VerifyComplete(
                 Request.VerifyCompleteRequest request,
                 UnityAction<AsyncResult<Result.VerifyCompleteResult>> callback
-        )
-		{
-			var task = new VerifyCompleteTask(
+        ) =>
+            new VerifyCompleteTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifyCompleteResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifyCompleteResult> VerifyCompleteFuture(
                 Request.VerifyCompleteRequest request
-        )
-		{
-			return new VerifyCompleteTask(
+        ) =>
+            new VerifyCompleteTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifyCompleteResult> VerifyCompleteAsync(
+		public UniTask<Result.VerifyCompleteResult> VerifyCompleteAsync(
                 Request.VerifyCompleteRequest request
-        )
-		{
-            AsyncResult<Result.VerifyCompleteResult> result = null;
-			await VerifyComplete(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifyCompleteTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyCompleteResult>();
     #else
 		public VerifyCompleteTask VerifyCompleteAsync(
                 Request.VerifyCompleteRequest request
@@ -1957,17 +1721,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.VerifyCompleteResult> VerifyCompleteAsync(
+		public Task<Result.VerifyCompleteResult> VerifyCompleteAsync(
                 Request.VerifyCompleteRequest request
-        )
-		{
-			var task = new VerifyCompleteTask(
+        ) =>
+            new VerifyCompleteTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2035,44 +1796,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator VerifyCompleteByUserId(
                 Request.VerifyCompleteByUserIdRequest request,
                 UnityAction<AsyncResult<Result.VerifyCompleteByUserIdResult>> callback
-        )
-		{
-			var task = new VerifyCompleteByUserIdTask(
+        ) =>
+            new VerifyCompleteByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifyCompleteByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifyCompleteByUserIdResult> VerifyCompleteByUserIdFuture(
                 Request.VerifyCompleteByUserIdRequest request
-        )
-		{
-			return new VerifyCompleteByUserIdTask(
+        ) =>
+            new VerifyCompleteByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifyCompleteByUserIdResult> VerifyCompleteByUserIdAsync(
+		public UniTask<Result.VerifyCompleteByUserIdResult> VerifyCompleteByUserIdAsync(
                 Request.VerifyCompleteByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.VerifyCompleteByUserIdResult> result = null;
-			await VerifyCompleteByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifyCompleteByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyCompleteByUserIdResult>();
     #else
 		public VerifyCompleteByUserIdTask VerifyCompleteByUserIdAsync(
                 Request.VerifyCompleteByUserIdRequest request
@@ -2086,17 +1834,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.VerifyCompleteByUserIdResult> VerifyCompleteByUserIdAsync(
+		public Task<Result.VerifyCompleteByUserIdResult> VerifyCompleteByUserIdAsync(
                 Request.VerifyCompleteByUserIdRequest request
-        )
-		{
-			var task = new VerifyCompleteByUserIdTask(
+        ) =>
+            new VerifyCompleteByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2159,44 +1904,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator ReceiveByStampTask(
                 Request.ReceiveByStampTaskRequest request,
                 UnityAction<AsyncResult<Result.ReceiveByStampTaskResult>> callback
-        )
-		{
-			var task = new ReceiveByStampTaskTask(
+        ) =>
+            new ReceiveByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ReceiveByStampTaskResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.ReceiveByStampTaskResult> ReceiveByStampTaskFuture(
                 Request.ReceiveByStampTaskRequest request
-        )
-		{
-			return new ReceiveByStampTaskTask(
+        ) =>
+            new ReceiveByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ReceiveByStampTaskResult> ReceiveByStampTaskAsync(
+		public UniTask<Result.ReceiveByStampTaskResult> ReceiveByStampTaskAsync(
                 Request.ReceiveByStampTaskRequest request
-        )
-		{
-            AsyncResult<Result.ReceiveByStampTaskResult> result = null;
-			await ReceiveByStampTask(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new ReceiveByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.ReceiveByStampTaskResult>();
     #else
 		public ReceiveByStampTaskTask ReceiveByStampTaskAsync(
                 Request.ReceiveByStampTaskRequest request
@@ -2210,17 +1942,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.ReceiveByStampTaskResult> ReceiveByStampTaskAsync(
+		public Task<Result.ReceiveByStampTaskResult> ReceiveByStampTaskAsync(
                 Request.ReceiveByStampTaskRequest request
-        )
-		{
-			var task = new ReceiveByStampTaskTask(
+        ) =>
+            new ReceiveByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2283,44 +2012,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator BatchReceiveByStampTask(
                 Request.BatchReceiveByStampTaskRequest request,
                 UnityAction<AsyncResult<Result.BatchReceiveByStampTaskResult>> callback
-        )
-		{
-			var task = new BatchReceiveByStampTaskTask(
+        ) =>
+            new BatchReceiveByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.BatchReceiveByStampTaskResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.BatchReceiveByStampTaskResult> BatchReceiveByStampTaskFuture(
                 Request.BatchReceiveByStampTaskRequest request
-        )
-		{
-			return new BatchReceiveByStampTaskTask(
+        ) =>
+            new BatchReceiveByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.BatchReceiveByStampTaskResult> BatchReceiveByStampTaskAsync(
+		public UniTask<Result.BatchReceiveByStampTaskResult> BatchReceiveByStampTaskAsync(
                 Request.BatchReceiveByStampTaskRequest request
-        )
-		{
-            AsyncResult<Result.BatchReceiveByStampTaskResult> result = null;
-			await BatchReceiveByStampTask(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new BatchReceiveByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.BatchReceiveByStampTaskResult>();
     #else
 		public BatchReceiveByStampTaskTask BatchReceiveByStampTaskAsync(
                 Request.BatchReceiveByStampTaskRequest request
@@ -2334,17 +2050,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.BatchReceiveByStampTaskResult> BatchReceiveByStampTaskAsync(
+		public Task<Result.BatchReceiveByStampTaskResult> BatchReceiveByStampTaskAsync(
                 Request.BatchReceiveByStampTaskRequest request
-        )
-		{
-			var task = new BatchReceiveByStampTaskTask(
+        ) =>
+            new BatchReceiveByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2407,44 +2120,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator RevertReceiveByStampSheet(
                 Request.RevertReceiveByStampSheetRequest request,
                 UnityAction<AsyncResult<Result.RevertReceiveByStampSheetResult>> callback
-        )
-		{
-			var task = new RevertReceiveByStampSheetTask(
+        ) =>
+            new RevertReceiveByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.RevertReceiveByStampSheetResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.RevertReceiveByStampSheetResult> RevertReceiveByStampSheetFuture(
                 Request.RevertReceiveByStampSheetRequest request
-        )
-		{
-			return new RevertReceiveByStampSheetTask(
+        ) =>
+            new RevertReceiveByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.RevertReceiveByStampSheetResult> RevertReceiveByStampSheetAsync(
+		public UniTask<Result.RevertReceiveByStampSheetResult> RevertReceiveByStampSheetAsync(
                 Request.RevertReceiveByStampSheetRequest request
-        )
-		{
-            AsyncResult<Result.RevertReceiveByStampSheetResult> result = null;
-			await RevertReceiveByStampSheet(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new RevertReceiveByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.RevertReceiveByStampSheetResult>();
     #else
 		public RevertReceiveByStampSheetTask RevertReceiveByStampSheetAsync(
                 Request.RevertReceiveByStampSheetRequest request
@@ -2458,17 +2158,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.RevertReceiveByStampSheetResult> RevertReceiveByStampSheetAsync(
+		public Task<Result.RevertReceiveByStampSheetResult> RevertReceiveByStampSheetAsync(
                 Request.RevertReceiveByStampSheetRequest request
-        )
-		{
-			var task = new RevertReceiveByStampSheetTask(
+        ) =>
+            new RevertReceiveByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2531,44 +2228,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator VerifyCompleteByStampTask(
                 Request.VerifyCompleteByStampTaskRequest request,
                 UnityAction<AsyncResult<Result.VerifyCompleteByStampTaskResult>> callback
-        )
-		{
-			var task = new VerifyCompleteByStampTaskTask(
+        ) =>
+            new VerifyCompleteByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifyCompleteByStampTaskResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifyCompleteByStampTaskResult> VerifyCompleteByStampTaskFuture(
                 Request.VerifyCompleteByStampTaskRequest request
-        )
-		{
-			return new VerifyCompleteByStampTaskTask(
+        ) =>
+            new VerifyCompleteByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifyCompleteByStampTaskResult> VerifyCompleteByStampTaskAsync(
+		public UniTask<Result.VerifyCompleteByStampTaskResult> VerifyCompleteByStampTaskAsync(
                 Request.VerifyCompleteByStampTaskRequest request
-        )
-		{
-            AsyncResult<Result.VerifyCompleteByStampTaskResult> result = null;
-			await VerifyCompleteByStampTask(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifyCompleteByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyCompleteByStampTaskResult>();
     #else
 		public VerifyCompleteByStampTaskTask VerifyCompleteByStampTaskAsync(
                 Request.VerifyCompleteByStampTaskRequest request
@@ -2582,17 +2266,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.VerifyCompleteByStampTaskResult> VerifyCompleteByStampTaskAsync(
+		public Task<Result.VerifyCompleteByStampTaskResult> VerifyCompleteByStampTaskAsync(
                 Request.VerifyCompleteByStampTaskRequest request
-        )
-		{
-			var task = new VerifyCompleteByStampTaskTask(
+        ) =>
+            new VerifyCompleteByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2643,44 +2324,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator DescribeCounterModelMasters(
                 Request.DescribeCounterModelMastersRequest request,
                 UnityAction<AsyncResult<Result.DescribeCounterModelMastersResult>> callback
-        )
-		{
-			var task = new DescribeCounterModelMastersTask(
+        ) =>
+            new DescribeCounterModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeCounterModelMastersResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeCounterModelMastersResult> DescribeCounterModelMastersFuture(
                 Request.DescribeCounterModelMastersRequest request
-        )
-		{
-			return new DescribeCounterModelMastersTask(
+        ) =>
+            new DescribeCounterModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeCounterModelMastersResult> DescribeCounterModelMastersAsync(
+		public UniTask<Result.DescribeCounterModelMastersResult> DescribeCounterModelMastersAsync(
                 Request.DescribeCounterModelMastersRequest request
-        )
-		{
-            AsyncResult<Result.DescribeCounterModelMastersResult> result = null;
-			await DescribeCounterModelMasters(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeCounterModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeCounterModelMastersResult>();
     #else
 		public DescribeCounterModelMastersTask DescribeCounterModelMastersAsync(
                 Request.DescribeCounterModelMastersRequest request
@@ -2694,17 +2362,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.DescribeCounterModelMastersResult> DescribeCounterModelMastersAsync(
+		public Task<Result.DescribeCounterModelMastersResult> DescribeCounterModelMastersAsync(
                 Request.DescribeCounterModelMastersRequest request
-        )
-		{
-			var task = new DescribeCounterModelMastersTask(
+        ) =>
+            new DescribeCounterModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2789,44 +2454,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator CreateCounterModelMaster(
                 Request.CreateCounterModelMasterRequest request,
                 UnityAction<AsyncResult<Result.CreateCounterModelMasterResult>> callback
-        )
-		{
-			var task = new CreateCounterModelMasterTask(
+        ) =>
+            new CreateCounterModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateCounterModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CreateCounterModelMasterResult> CreateCounterModelMasterFuture(
                 Request.CreateCounterModelMasterRequest request
-        )
-		{
-			return new CreateCounterModelMasterTask(
+        ) =>
+            new CreateCounterModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateCounterModelMasterResult> CreateCounterModelMasterAsync(
+		public UniTask<Result.CreateCounterModelMasterResult> CreateCounterModelMasterAsync(
                 Request.CreateCounterModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.CreateCounterModelMasterResult> result = null;
-			await CreateCounterModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CreateCounterModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CreateCounterModelMasterResult>();
     #else
 		public CreateCounterModelMasterTask CreateCounterModelMasterAsync(
                 Request.CreateCounterModelMasterRequest request
@@ -2840,17 +2492,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.CreateCounterModelMasterResult> CreateCounterModelMasterAsync(
+		public Task<Result.CreateCounterModelMasterResult> CreateCounterModelMasterAsync(
                 Request.CreateCounterModelMasterRequest request
-        )
-		{
-			var task = new CreateCounterModelMasterTask(
+        ) =>
+            new CreateCounterModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2893,44 +2542,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator GetCounterModelMaster(
                 Request.GetCounterModelMasterRequest request,
                 UnityAction<AsyncResult<Result.GetCounterModelMasterResult>> callback
-        )
-		{
-			var task = new GetCounterModelMasterTask(
+        ) =>
+            new GetCounterModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetCounterModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetCounterModelMasterResult> GetCounterModelMasterFuture(
                 Request.GetCounterModelMasterRequest request
-        )
-		{
-			return new GetCounterModelMasterTask(
+        ) =>
+            new GetCounterModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetCounterModelMasterResult> GetCounterModelMasterAsync(
+		public UniTask<Result.GetCounterModelMasterResult> GetCounterModelMasterAsync(
                 Request.GetCounterModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.GetCounterModelMasterResult> result = null;
-			await GetCounterModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetCounterModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetCounterModelMasterResult>();
     #else
 		public GetCounterModelMasterTask GetCounterModelMasterAsync(
                 Request.GetCounterModelMasterRequest request
@@ -2944,17 +2580,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.GetCounterModelMasterResult> GetCounterModelMasterAsync(
+		public Task<Result.GetCounterModelMasterResult> GetCounterModelMasterAsync(
                 Request.GetCounterModelMasterRequest request
-        )
-		{
-			var task = new GetCounterModelMasterTask(
+        ) =>
+            new GetCounterModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3035,44 +2668,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator UpdateCounterModelMaster(
                 Request.UpdateCounterModelMasterRequest request,
                 UnityAction<AsyncResult<Result.UpdateCounterModelMasterResult>> callback
-        )
-		{
-			var task = new UpdateCounterModelMasterTask(
+        ) =>
+            new UpdateCounterModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateCounterModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UpdateCounterModelMasterResult> UpdateCounterModelMasterFuture(
                 Request.UpdateCounterModelMasterRequest request
-        )
-		{
-			return new UpdateCounterModelMasterTask(
+        ) =>
+            new UpdateCounterModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateCounterModelMasterResult> UpdateCounterModelMasterAsync(
+		public UniTask<Result.UpdateCounterModelMasterResult> UpdateCounterModelMasterAsync(
                 Request.UpdateCounterModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.UpdateCounterModelMasterResult> result = null;
-			await UpdateCounterModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UpdateCounterModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UpdateCounterModelMasterResult>();
     #else
 		public UpdateCounterModelMasterTask UpdateCounterModelMasterAsync(
                 Request.UpdateCounterModelMasterRequest request
@@ -3086,17 +2706,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.UpdateCounterModelMasterResult> UpdateCounterModelMasterAsync(
+		public Task<Result.UpdateCounterModelMasterResult> UpdateCounterModelMasterAsync(
                 Request.UpdateCounterModelMasterRequest request
-        )
-		{
-			var task = new UpdateCounterModelMasterTask(
+        ) =>
+            new UpdateCounterModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3139,44 +2756,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator DeleteCounterModelMaster(
                 Request.DeleteCounterModelMasterRequest request,
                 UnityAction<AsyncResult<Result.DeleteCounterModelMasterResult>> callback
-        )
-		{
-			var task = new DeleteCounterModelMasterTask(
+        ) =>
+            new DeleteCounterModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteCounterModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteCounterModelMasterResult> DeleteCounterModelMasterFuture(
                 Request.DeleteCounterModelMasterRequest request
-        )
-		{
-			return new DeleteCounterModelMasterTask(
+        ) =>
+            new DeleteCounterModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteCounterModelMasterResult> DeleteCounterModelMasterAsync(
+		public UniTask<Result.DeleteCounterModelMasterResult> DeleteCounterModelMasterAsync(
                 Request.DeleteCounterModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.DeleteCounterModelMasterResult> result = null;
-			await DeleteCounterModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteCounterModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteCounterModelMasterResult>();
     #else
 		public DeleteCounterModelMasterTask DeleteCounterModelMasterAsync(
                 Request.DeleteCounterModelMasterRequest request
@@ -3190,17 +2794,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.DeleteCounterModelMasterResult> DeleteCounterModelMasterAsync(
+		public Task<Result.DeleteCounterModelMasterResult> DeleteCounterModelMasterAsync(
                 Request.DeleteCounterModelMasterRequest request
-        )
-		{
-			var task = new DeleteCounterModelMasterTask(
+        ) =>
+            new DeleteCounterModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3251,44 +2852,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator DescribeMissionGroupModelMasters(
                 Request.DescribeMissionGroupModelMastersRequest request,
                 UnityAction<AsyncResult<Result.DescribeMissionGroupModelMastersResult>> callback
-        )
-		{
-			var task = new DescribeMissionGroupModelMastersTask(
+        ) =>
+            new DescribeMissionGroupModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeMissionGroupModelMastersResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeMissionGroupModelMastersResult> DescribeMissionGroupModelMastersFuture(
                 Request.DescribeMissionGroupModelMastersRequest request
-        )
-		{
-			return new DescribeMissionGroupModelMastersTask(
+        ) =>
+            new DescribeMissionGroupModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeMissionGroupModelMastersResult> DescribeMissionGroupModelMastersAsync(
+		public UniTask<Result.DescribeMissionGroupModelMastersResult> DescribeMissionGroupModelMastersAsync(
                 Request.DescribeMissionGroupModelMastersRequest request
-        )
-		{
-            AsyncResult<Result.DescribeMissionGroupModelMastersResult> result = null;
-			await DescribeMissionGroupModelMasters(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeMissionGroupModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeMissionGroupModelMastersResult>();
     #else
 		public DescribeMissionGroupModelMastersTask DescribeMissionGroupModelMastersAsync(
                 Request.DescribeMissionGroupModelMastersRequest request
@@ -3302,17 +2890,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.DescribeMissionGroupModelMastersResult> DescribeMissionGroupModelMastersAsync(
+		public Task<Result.DescribeMissionGroupModelMastersResult> DescribeMissionGroupModelMastersAsync(
                 Request.DescribeMissionGroupModelMastersRequest request
-        )
-		{
-			var task = new DescribeMissionGroupModelMastersTask(
+        ) =>
+            new DescribeMissionGroupModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3417,44 +3002,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator CreateMissionGroupModelMaster(
                 Request.CreateMissionGroupModelMasterRequest request,
                 UnityAction<AsyncResult<Result.CreateMissionGroupModelMasterResult>> callback
-        )
-		{
-			var task = new CreateMissionGroupModelMasterTask(
+        ) =>
+            new CreateMissionGroupModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateMissionGroupModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CreateMissionGroupModelMasterResult> CreateMissionGroupModelMasterFuture(
                 Request.CreateMissionGroupModelMasterRequest request
-        )
-		{
-			return new CreateMissionGroupModelMasterTask(
+        ) =>
+            new CreateMissionGroupModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateMissionGroupModelMasterResult> CreateMissionGroupModelMasterAsync(
+		public UniTask<Result.CreateMissionGroupModelMasterResult> CreateMissionGroupModelMasterAsync(
                 Request.CreateMissionGroupModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.CreateMissionGroupModelMasterResult> result = null;
-			await CreateMissionGroupModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CreateMissionGroupModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CreateMissionGroupModelMasterResult>();
     #else
 		public CreateMissionGroupModelMasterTask CreateMissionGroupModelMasterAsync(
                 Request.CreateMissionGroupModelMasterRequest request
@@ -3468,17 +3040,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.CreateMissionGroupModelMasterResult> CreateMissionGroupModelMasterAsync(
+		public Task<Result.CreateMissionGroupModelMasterResult> CreateMissionGroupModelMasterAsync(
                 Request.CreateMissionGroupModelMasterRequest request
-        )
-		{
-			var task = new CreateMissionGroupModelMasterTask(
+        ) =>
+            new CreateMissionGroupModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3521,44 +3090,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator GetMissionGroupModelMaster(
                 Request.GetMissionGroupModelMasterRequest request,
                 UnityAction<AsyncResult<Result.GetMissionGroupModelMasterResult>> callback
-        )
-		{
-			var task = new GetMissionGroupModelMasterTask(
+        ) =>
+            new GetMissionGroupModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetMissionGroupModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetMissionGroupModelMasterResult> GetMissionGroupModelMasterFuture(
                 Request.GetMissionGroupModelMasterRequest request
-        )
-		{
-			return new GetMissionGroupModelMasterTask(
+        ) =>
+            new GetMissionGroupModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetMissionGroupModelMasterResult> GetMissionGroupModelMasterAsync(
+		public UniTask<Result.GetMissionGroupModelMasterResult> GetMissionGroupModelMasterAsync(
                 Request.GetMissionGroupModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.GetMissionGroupModelMasterResult> result = null;
-			await GetMissionGroupModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetMissionGroupModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetMissionGroupModelMasterResult>();
     #else
 		public GetMissionGroupModelMasterTask GetMissionGroupModelMasterAsync(
                 Request.GetMissionGroupModelMasterRequest request
@@ -3572,17 +3128,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.GetMissionGroupModelMasterResult> GetMissionGroupModelMasterAsync(
+		public Task<Result.GetMissionGroupModelMasterResult> GetMissionGroupModelMasterAsync(
                 Request.GetMissionGroupModelMasterRequest request
-        )
-		{
-			var task = new GetMissionGroupModelMasterTask(
+        ) =>
+            new GetMissionGroupModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3683,44 +3236,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator UpdateMissionGroupModelMaster(
                 Request.UpdateMissionGroupModelMasterRequest request,
                 UnityAction<AsyncResult<Result.UpdateMissionGroupModelMasterResult>> callback
-        )
-		{
-			var task = new UpdateMissionGroupModelMasterTask(
+        ) =>
+            new UpdateMissionGroupModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateMissionGroupModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UpdateMissionGroupModelMasterResult> UpdateMissionGroupModelMasterFuture(
                 Request.UpdateMissionGroupModelMasterRequest request
-        )
-		{
-			return new UpdateMissionGroupModelMasterTask(
+        ) =>
+            new UpdateMissionGroupModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateMissionGroupModelMasterResult> UpdateMissionGroupModelMasterAsync(
+		public UniTask<Result.UpdateMissionGroupModelMasterResult> UpdateMissionGroupModelMasterAsync(
                 Request.UpdateMissionGroupModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.UpdateMissionGroupModelMasterResult> result = null;
-			await UpdateMissionGroupModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UpdateMissionGroupModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UpdateMissionGroupModelMasterResult>();
     #else
 		public UpdateMissionGroupModelMasterTask UpdateMissionGroupModelMasterAsync(
                 Request.UpdateMissionGroupModelMasterRequest request
@@ -3734,17 +3274,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.UpdateMissionGroupModelMasterResult> UpdateMissionGroupModelMasterAsync(
+		public Task<Result.UpdateMissionGroupModelMasterResult> UpdateMissionGroupModelMasterAsync(
                 Request.UpdateMissionGroupModelMasterRequest request
-        )
-		{
-			var task = new UpdateMissionGroupModelMasterTask(
+        ) =>
+            new UpdateMissionGroupModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3787,44 +3324,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator DeleteMissionGroupModelMaster(
                 Request.DeleteMissionGroupModelMasterRequest request,
                 UnityAction<AsyncResult<Result.DeleteMissionGroupModelMasterResult>> callback
-        )
-		{
-			var task = new DeleteMissionGroupModelMasterTask(
+        ) =>
+            new DeleteMissionGroupModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteMissionGroupModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteMissionGroupModelMasterResult> DeleteMissionGroupModelMasterFuture(
                 Request.DeleteMissionGroupModelMasterRequest request
-        )
-		{
-			return new DeleteMissionGroupModelMasterTask(
+        ) =>
+            new DeleteMissionGroupModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteMissionGroupModelMasterResult> DeleteMissionGroupModelMasterAsync(
+		public UniTask<Result.DeleteMissionGroupModelMasterResult> DeleteMissionGroupModelMasterAsync(
                 Request.DeleteMissionGroupModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.DeleteMissionGroupModelMasterResult> result = null;
-			await DeleteMissionGroupModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteMissionGroupModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteMissionGroupModelMasterResult>();
     #else
 		public DeleteMissionGroupModelMasterTask DeleteMissionGroupModelMasterAsync(
                 Request.DeleteMissionGroupModelMasterRequest request
@@ -3838,17 +3362,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.DeleteMissionGroupModelMasterResult> DeleteMissionGroupModelMasterAsync(
+		public Task<Result.DeleteMissionGroupModelMasterResult> DeleteMissionGroupModelMasterAsync(
                 Request.DeleteMissionGroupModelMasterRequest request
-        )
-		{
-			var task = new DeleteMissionGroupModelMasterTask(
+        ) =>
+            new DeleteMissionGroupModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3897,44 +3418,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator DescribeNamespaces(
                 Request.DescribeNamespacesRequest request,
                 UnityAction<AsyncResult<Result.DescribeNamespacesResult>> callback
-        )
-		{
-			var task = new DescribeNamespacesTask(
+        ) =>
+            new DescribeNamespacesTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeNamespacesResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeNamespacesResult> DescribeNamespacesFuture(
                 Request.DescribeNamespacesRequest request
-        )
-		{
-			return new DescribeNamespacesTask(
+        ) =>
+            new DescribeNamespacesTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
+		public UniTask<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
                 Request.DescribeNamespacesRequest request
-        )
-		{
-            AsyncResult<Result.DescribeNamespacesResult> result = null;
-			await DescribeNamespaces(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeNamespacesResult>();
     #else
 		public DescribeNamespacesTask DescribeNamespacesAsync(
                 Request.DescribeNamespacesRequest request
@@ -3948,17 +3456,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
+		public Task<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
                 Request.DescribeNamespacesRequest request
-        )
-		{
-			var task = new DescribeNamespacesTask(
+        ) =>
+            new DescribeNamespacesTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4061,44 +3566,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator CreateNamespace(
                 Request.CreateNamespaceRequest request,
                 UnityAction<AsyncResult<Result.CreateNamespaceResult>> callback
-        )
-		{
-			var task = new CreateNamespaceTask(
+        ) =>
+            new CreateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
                 Request.CreateNamespaceRequest request
-        )
-		{
-			return new CreateNamespaceTask(
+        ) =>
+            new CreateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+		public UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
                 Request.CreateNamespaceRequest request
-        )
-		{
-            AsyncResult<Result.CreateNamespaceResult> result = null;
-			await CreateNamespace(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CreateNamespaceResult>();
     #else
 		public CreateNamespaceTask CreateNamespaceAsync(
                 Request.CreateNamespaceRequest request
@@ -4112,17 +3604,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
+		public Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
                 Request.CreateNamespaceRequest request
-        )
-		{
-			var task = new CreateNamespaceTask(
+        ) =>
+            new CreateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4164,44 +3653,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator GetNamespaceStatus(
                 Request.GetNamespaceStatusRequest request,
                 UnityAction<AsyncResult<Result.GetNamespaceStatusResult>> callback
-        )
-		{
-			var task = new GetNamespaceStatusTask(
+        ) =>
+            new GetNamespaceStatusTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetNamespaceStatusResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetNamespaceStatusResult> GetNamespaceStatusFuture(
                 Request.GetNamespaceStatusRequest request
-        )
-		{
-			return new GetNamespaceStatusTask(
+        ) =>
+            new GetNamespaceStatusTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+		public UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
-        )
-		{
-            AsyncResult<Result.GetNamespaceStatusResult> result = null;
-			await GetNamespaceStatus(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetNamespaceStatusResult>();
     #else
 		public GetNamespaceStatusTask GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
@@ -4215,17 +3691,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+		public Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
-        )
-		{
-			var task = new GetNamespaceStatusTask(
+        ) =>
+            new GetNamespaceStatusTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4267,44 +3740,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator GetNamespace(
                 Request.GetNamespaceRequest request,
                 UnityAction<AsyncResult<Result.GetNamespaceResult>> callback
-        )
-		{
-			var task = new GetNamespaceTask(
+        ) =>
+            new GetNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
                 Request.GetNamespaceRequest request
-        )
-		{
-			return new GetNamespaceTask(
+        ) =>
+            new GetNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+		public UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
                 Request.GetNamespaceRequest request
-        )
-		{
-            AsyncResult<Result.GetNamespaceResult> result = null;
-			await GetNamespace(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetNamespaceResult>();
     #else
 		public GetNamespaceTask GetNamespaceAsync(
                 Request.GetNamespaceRequest request
@@ -4318,17 +3778,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
+		public Task<Result.GetNamespaceResult> GetNamespaceAsync(
                 Request.GetNamespaceRequest request
-        )
-		{
-			var task = new GetNamespaceTask(
+        ) =>
+            new GetNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4428,44 +3885,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator UpdateNamespace(
                 Request.UpdateNamespaceRequest request,
                 UnityAction<AsyncResult<Result.UpdateNamespaceResult>> callback
-        )
-		{
-			var task = new UpdateNamespaceTask(
+        ) =>
+            new UpdateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
                 Request.UpdateNamespaceRequest request
-        )
-		{
-			return new UpdateNamespaceTask(
+        ) =>
+            new UpdateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+		public UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
                 Request.UpdateNamespaceRequest request
-        )
-		{
-            AsyncResult<Result.UpdateNamespaceResult> result = null;
-			await UpdateNamespace(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UpdateNamespaceResult>();
     #else
 		public UpdateNamespaceTask UpdateNamespaceAsync(
                 Request.UpdateNamespaceRequest request
@@ -4479,17 +3923,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+		public Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
                 Request.UpdateNamespaceRequest request
-        )
-		{
-			var task = new UpdateNamespaceTask(
+        ) =>
+            new UpdateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4531,44 +3972,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator DeleteNamespace(
                 Request.DeleteNamespaceRequest request,
                 UnityAction<AsyncResult<Result.DeleteNamespaceResult>> callback
-        )
-		{
-			var task = new DeleteNamespaceTask(
+        ) =>
+            new DeleteNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
                 Request.DeleteNamespaceRequest request
-        )
-		{
-			return new DeleteNamespaceTask(
+        ) =>
+            new DeleteNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+		public UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
                 Request.DeleteNamespaceRequest request
-        )
-		{
-            AsyncResult<Result.DeleteNamespaceResult> result = null;
-			await DeleteNamespace(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteNamespaceResult>();
     #else
 		public DeleteNamespaceTask DeleteNamespaceAsync(
                 Request.DeleteNamespaceRequest request
@@ -4582,17 +4010,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+		public Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
                 Request.DeleteNamespaceRequest request
-        )
-		{
-			var task = new DeleteNamespaceTask(
+        ) =>
+            new DeleteNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4632,44 +4057,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator GetServiceVersion(
                 Request.GetServiceVersionRequest request,
                 UnityAction<AsyncResult<Result.GetServiceVersionResult>> callback
-        )
-		{
-			var task = new GetServiceVersionTask(
+        ) =>
+            new GetServiceVersionTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetServiceVersionResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetServiceVersionResult> GetServiceVersionFuture(
                 Request.GetServiceVersionRequest request
-        )
-		{
-			return new GetServiceVersionTask(
+        ) =>
+            new GetServiceVersionTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetServiceVersionResult> GetServiceVersionAsync(
+		public UniTask<Result.GetServiceVersionResult> GetServiceVersionAsync(
                 Request.GetServiceVersionRequest request
-        )
-		{
-            AsyncResult<Result.GetServiceVersionResult> result = null;
-			await GetServiceVersion(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetServiceVersionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetServiceVersionResult>();
     #else
 		public GetServiceVersionTask GetServiceVersionAsync(
                 Request.GetServiceVersionRequest request
@@ -4683,17 +4095,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.GetServiceVersionResult> GetServiceVersionAsync(
+		public Task<Result.GetServiceVersionResult> GetServiceVersionAsync(
                 Request.GetServiceVersionRequest request
-        )
-		{
-			var task = new GetServiceVersionTask(
+        ) =>
+            new GetServiceVersionTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4752,44 +4161,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator DumpUserDataByUserId(
                 Request.DumpUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DumpUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new DumpUserDataByUserIdTask(
+        ) =>
+            new DumpUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DumpUserDataByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdFuture(
                 Request.DumpUserDataByUserIdRequest request
-        )
-		{
-			return new DumpUserDataByUserIdTask(
+        ) =>
+            new DumpUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdAsync(
+		public UniTask<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdAsync(
                 Request.DumpUserDataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DumpUserDataByUserIdResult> result = null;
-			await DumpUserDataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DumpUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DumpUserDataByUserIdResult>();
     #else
 		public DumpUserDataByUserIdTask DumpUserDataByUserIdAsync(
                 Request.DumpUserDataByUserIdRequest request
@@ -4803,17 +4199,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdAsync(
+		public Task<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdAsync(
                 Request.DumpUserDataByUserIdRequest request
-        )
-		{
-			var task = new DumpUserDataByUserIdTask(
+        ) =>
+            new DumpUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4859,44 +4252,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator CheckDumpUserDataByUserId(
                 Request.CheckDumpUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.CheckDumpUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new CheckDumpUserDataByUserIdTask(
+        ) =>
+            new CheckDumpUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CheckDumpUserDataByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdFuture(
                 Request.CheckDumpUserDataByUserIdRequest request
-        )
-		{
-			return new CheckDumpUserDataByUserIdTask(
+        ) =>
+            new CheckDumpUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdAsync(
+		public UniTask<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdAsync(
                 Request.CheckDumpUserDataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.CheckDumpUserDataByUserIdResult> result = null;
-			await CheckDumpUserDataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CheckDumpUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CheckDumpUserDataByUserIdResult>();
     #else
 		public CheckDumpUserDataByUserIdTask CheckDumpUserDataByUserIdAsync(
                 Request.CheckDumpUserDataByUserIdRequest request
@@ -4910,17 +4290,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdAsync(
+		public Task<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdAsync(
                 Request.CheckDumpUserDataByUserIdRequest request
-        )
-		{
-			var task = new CheckDumpUserDataByUserIdTask(
+        ) =>
+            new CheckDumpUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4979,44 +4356,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator CleanUserDataByUserId(
                 Request.CleanUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.CleanUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new CleanUserDataByUserIdTask(
+        ) =>
+            new CleanUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CleanUserDataByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdFuture(
                 Request.CleanUserDataByUserIdRequest request
-        )
-		{
-			return new CleanUserDataByUserIdTask(
+        ) =>
+            new CleanUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdAsync(
+		public UniTask<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdAsync(
                 Request.CleanUserDataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.CleanUserDataByUserIdResult> result = null;
-			await CleanUserDataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CleanUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CleanUserDataByUserIdResult>();
     #else
 		public CleanUserDataByUserIdTask CleanUserDataByUserIdAsync(
                 Request.CleanUserDataByUserIdRequest request
@@ -5030,17 +4394,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdAsync(
+		public Task<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdAsync(
                 Request.CleanUserDataByUserIdRequest request
-        )
-		{
-			var task = new CleanUserDataByUserIdTask(
+        ) =>
+            new CleanUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5086,44 +4447,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator CheckCleanUserDataByUserId(
                 Request.CheckCleanUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.CheckCleanUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new CheckCleanUserDataByUserIdTask(
+        ) =>
+            new CheckCleanUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CheckCleanUserDataByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdFuture(
                 Request.CheckCleanUserDataByUserIdRequest request
-        )
-		{
-			return new CheckCleanUserDataByUserIdTask(
+        ) =>
+            new CheckCleanUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdAsync(
+		public UniTask<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdAsync(
                 Request.CheckCleanUserDataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.CheckCleanUserDataByUserIdResult> result = null;
-			await CheckCleanUserDataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CheckCleanUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CheckCleanUserDataByUserIdResult>();
     #else
 		public CheckCleanUserDataByUserIdTask CheckCleanUserDataByUserIdAsync(
                 Request.CheckCleanUserDataByUserIdRequest request
@@ -5137,17 +4485,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdAsync(
+		public Task<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdAsync(
                 Request.CheckCleanUserDataByUserIdRequest request
-        )
-		{
-			var task = new CheckCleanUserDataByUserIdTask(
+        ) =>
+            new CheckCleanUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5206,44 +4551,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator PrepareImportUserDataByUserId(
                 Request.PrepareImportUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.PrepareImportUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new PrepareImportUserDataByUserIdTask(
+        ) =>
+            new PrepareImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.PrepareImportUserDataByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdFuture(
                 Request.PrepareImportUserDataByUserIdRequest request
-        )
-		{
-			return new PrepareImportUserDataByUserIdTask(
+        ) =>
+            new PrepareImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdAsync(
+		public UniTask<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdAsync(
                 Request.PrepareImportUserDataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.PrepareImportUserDataByUserIdResult> result = null;
-			await PrepareImportUserDataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new PrepareImportUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.PrepareImportUserDataByUserIdResult>();
     #else
 		public PrepareImportUserDataByUserIdTask PrepareImportUserDataByUserIdAsync(
                 Request.PrepareImportUserDataByUserIdRequest request
@@ -5257,17 +4589,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdAsync(
+		public Task<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdAsync(
                 Request.PrepareImportUserDataByUserIdRequest request
-        )
-		{
-			var task = new PrepareImportUserDataByUserIdTask(
+        ) =>
+            new PrepareImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5331,44 +4660,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator ImportUserDataByUserId(
                 Request.ImportUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.ImportUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new ImportUserDataByUserIdTask(
+        ) =>
+            new ImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ImportUserDataByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdFuture(
                 Request.ImportUserDataByUserIdRequest request
-        )
-		{
-			return new ImportUserDataByUserIdTask(
+        ) =>
+            new ImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdAsync(
+		public UniTask<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdAsync(
                 Request.ImportUserDataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.ImportUserDataByUserIdResult> result = null;
-			await ImportUserDataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new ImportUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.ImportUserDataByUserIdResult>();
     #else
 		public ImportUserDataByUserIdTask ImportUserDataByUserIdAsync(
                 Request.ImportUserDataByUserIdRequest request
@@ -5382,17 +4698,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdAsync(
+		public Task<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdAsync(
                 Request.ImportUserDataByUserIdRequest request
-        )
-		{
-			var task = new ImportUserDataByUserIdTask(
+        ) =>
+            new ImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5439,44 +4752,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator CheckImportUserDataByUserId(
                 Request.CheckImportUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.CheckImportUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new CheckImportUserDataByUserIdTask(
+        ) =>
+            new CheckImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CheckImportUserDataByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdFuture(
                 Request.CheckImportUserDataByUserIdRequest request
-        )
-		{
-			return new CheckImportUserDataByUserIdTask(
+        ) =>
+            new CheckImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdAsync(
+		public UniTask<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdAsync(
                 Request.CheckImportUserDataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.CheckImportUserDataByUserIdResult> result = null;
-			await CheckImportUserDataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CheckImportUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CheckImportUserDataByUserIdResult>();
     #else
 		public CheckImportUserDataByUserIdTask CheckImportUserDataByUserIdAsync(
                 Request.CheckImportUserDataByUserIdRequest request
@@ -5490,17 +4790,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdAsync(
+		public Task<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdAsync(
                 Request.CheckImportUserDataByUserIdRequest request
-        )
-		{
-			var task = new CheckImportUserDataByUserIdTask(
+        ) =>
+            new CheckImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5552,44 +4849,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator DescribeCounters(
                 Request.DescribeCountersRequest request,
                 UnityAction<AsyncResult<Result.DescribeCountersResult>> callback
-        )
-		{
-			var task = new DescribeCountersTask(
+        ) =>
+            new DescribeCountersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeCountersResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeCountersResult> DescribeCountersFuture(
                 Request.DescribeCountersRequest request
-        )
-		{
-			return new DescribeCountersTask(
+        ) =>
+            new DescribeCountersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeCountersResult> DescribeCountersAsync(
+		public UniTask<Result.DescribeCountersResult> DescribeCountersAsync(
                 Request.DescribeCountersRequest request
-        )
-		{
-            AsyncResult<Result.DescribeCountersResult> result = null;
-			await DescribeCounters(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeCountersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeCountersResult>();
     #else
 		public DescribeCountersTask DescribeCountersAsync(
                 Request.DescribeCountersRequest request
@@ -5603,17 +4887,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.DescribeCountersResult> DescribeCountersAsync(
+		public Task<Result.DescribeCountersResult> DescribeCountersAsync(
                 Request.DescribeCountersRequest request
-        )
-		{
-			var task = new DescribeCountersTask(
+        ) =>
+            new DescribeCountersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5666,44 +4947,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator DescribeCountersByUserId(
                 Request.DescribeCountersByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DescribeCountersByUserIdResult>> callback
-        )
-		{
-			var task = new DescribeCountersByUserIdTask(
+        ) =>
+            new DescribeCountersByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeCountersByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeCountersByUserIdResult> DescribeCountersByUserIdFuture(
                 Request.DescribeCountersByUserIdRequest request
-        )
-		{
-			return new DescribeCountersByUserIdTask(
+        ) =>
+            new DescribeCountersByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeCountersByUserIdResult> DescribeCountersByUserIdAsync(
+		public UniTask<Result.DescribeCountersByUserIdResult> DescribeCountersByUserIdAsync(
                 Request.DescribeCountersByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DescribeCountersByUserIdResult> result = null;
-			await DescribeCountersByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeCountersByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeCountersByUserIdResult>();
     #else
 		public DescribeCountersByUserIdTask DescribeCountersByUserIdAsync(
                 Request.DescribeCountersByUserIdRequest request
@@ -5717,17 +4985,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.DescribeCountersByUserIdResult> DescribeCountersByUserIdAsync(
+		public Task<Result.DescribeCountersByUserIdResult> DescribeCountersByUserIdAsync(
                 Request.DescribeCountersByUserIdRequest request
-        )
-		{
-			var task = new DescribeCountersByUserIdTask(
+        ) =>
+            new DescribeCountersByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5807,44 +5072,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator IncreaseCounterByUserId(
                 Request.IncreaseCounterByUserIdRequest request,
                 UnityAction<AsyncResult<Result.IncreaseCounterByUserIdResult>> callback
-        )
-		{
-			var task = new IncreaseCounterByUserIdTask(
+        ) =>
+            new IncreaseCounterByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.IncreaseCounterByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.IncreaseCounterByUserIdResult> IncreaseCounterByUserIdFuture(
                 Request.IncreaseCounterByUserIdRequest request
-        )
-		{
-			return new IncreaseCounterByUserIdTask(
+        ) =>
+            new IncreaseCounterByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.IncreaseCounterByUserIdResult> IncreaseCounterByUserIdAsync(
+		public UniTask<Result.IncreaseCounterByUserIdResult> IncreaseCounterByUserIdAsync(
                 Request.IncreaseCounterByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.IncreaseCounterByUserIdResult> result = null;
-			await IncreaseCounterByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new IncreaseCounterByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.IncreaseCounterByUserIdResult>();
     #else
 		public IncreaseCounterByUserIdTask IncreaseCounterByUserIdAsync(
                 Request.IncreaseCounterByUserIdRequest request
@@ -5858,17 +5110,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.IncreaseCounterByUserIdResult> IncreaseCounterByUserIdAsync(
+		public Task<Result.IncreaseCounterByUserIdResult> IncreaseCounterByUserIdAsync(
                 Request.IncreaseCounterByUserIdRequest request
-        )
-		{
-			var task = new IncreaseCounterByUserIdTask(
+        ) =>
+            new IncreaseCounterByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5953,44 +5202,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator SetCounterByUserId(
                 Request.SetCounterByUserIdRequest request,
                 UnityAction<AsyncResult<Result.SetCounterByUserIdResult>> callback
-        )
-		{
-			var task = new SetCounterByUserIdTask(
+        ) =>
+            new SetCounterByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.SetCounterByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.SetCounterByUserIdResult> SetCounterByUserIdFuture(
                 Request.SetCounterByUserIdRequest request
-        )
-		{
-			return new SetCounterByUserIdTask(
+        ) =>
+            new SetCounterByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.SetCounterByUserIdResult> SetCounterByUserIdAsync(
+		public UniTask<Result.SetCounterByUserIdResult> SetCounterByUserIdAsync(
                 Request.SetCounterByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.SetCounterByUserIdResult> result = null;
-			await SetCounterByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new SetCounterByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.SetCounterByUserIdResult>();
     #else
 		public SetCounterByUserIdTask SetCounterByUserIdAsync(
                 Request.SetCounterByUserIdRequest request
@@ -6004,17 +5240,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.SetCounterByUserIdResult> SetCounterByUserIdAsync(
+		public Task<Result.SetCounterByUserIdResult> SetCounterByUserIdAsync(
                 Request.SetCounterByUserIdRequest request
-        )
-		{
-			var task = new SetCounterByUserIdTask(
+        ) =>
+            new SetCounterByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6093,44 +5326,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator DecreaseCounter(
                 Request.DecreaseCounterRequest request,
                 UnityAction<AsyncResult<Result.DecreaseCounterResult>> callback
-        )
-		{
-			var task = new DecreaseCounterTask(
+        ) =>
+            new DecreaseCounterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DecreaseCounterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DecreaseCounterResult> DecreaseCounterFuture(
                 Request.DecreaseCounterRequest request
-        )
-		{
-			return new DecreaseCounterTask(
+        ) =>
+            new DecreaseCounterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DecreaseCounterResult> DecreaseCounterAsync(
+		public UniTask<Result.DecreaseCounterResult> DecreaseCounterAsync(
                 Request.DecreaseCounterRequest request
-        )
-		{
-            AsyncResult<Result.DecreaseCounterResult> result = null;
-			await DecreaseCounter(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DecreaseCounterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DecreaseCounterResult>();
     #else
 		public DecreaseCounterTask DecreaseCounterAsync(
                 Request.DecreaseCounterRequest request
@@ -6144,17 +5364,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.DecreaseCounterResult> DecreaseCounterAsync(
+		public Task<Result.DecreaseCounterResult> DecreaseCounterAsync(
                 Request.DecreaseCounterRequest request
-        )
-		{
-			var task = new DecreaseCounterTask(
+        ) =>
+            new DecreaseCounterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6234,44 +5451,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator DecreaseCounterByUserId(
                 Request.DecreaseCounterByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DecreaseCounterByUserIdResult>> callback
-        )
-		{
-			var task = new DecreaseCounterByUserIdTask(
+        ) =>
+            new DecreaseCounterByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DecreaseCounterByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DecreaseCounterByUserIdResult> DecreaseCounterByUserIdFuture(
                 Request.DecreaseCounterByUserIdRequest request
-        )
-		{
-			return new DecreaseCounterByUserIdTask(
+        ) =>
+            new DecreaseCounterByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DecreaseCounterByUserIdResult> DecreaseCounterByUserIdAsync(
+		public UniTask<Result.DecreaseCounterByUserIdResult> DecreaseCounterByUserIdAsync(
                 Request.DecreaseCounterByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DecreaseCounterByUserIdResult> result = null;
-			await DecreaseCounterByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DecreaseCounterByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DecreaseCounterByUserIdResult>();
     #else
 		public DecreaseCounterByUserIdTask DecreaseCounterByUserIdAsync(
                 Request.DecreaseCounterByUserIdRequest request
@@ -6285,17 +5489,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.DecreaseCounterByUserIdResult> DecreaseCounterByUserIdAsync(
+		public Task<Result.DecreaseCounterByUserIdResult> DecreaseCounterByUserIdAsync(
                 Request.DecreaseCounterByUserIdRequest request
-        )
-		{
-			var task = new DecreaseCounterByUserIdTask(
+        ) =>
+            new DecreaseCounterByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6342,44 +5543,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator GetCounter(
                 Request.GetCounterRequest request,
                 UnityAction<AsyncResult<Result.GetCounterResult>> callback
-        )
-		{
-			var task = new GetCounterTask(
+        ) =>
+            new GetCounterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetCounterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetCounterResult> GetCounterFuture(
                 Request.GetCounterRequest request
-        )
-		{
-			return new GetCounterTask(
+        ) =>
+            new GetCounterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetCounterResult> GetCounterAsync(
+		public UniTask<Result.GetCounterResult> GetCounterAsync(
                 Request.GetCounterRequest request
-        )
-		{
-            AsyncResult<Result.GetCounterResult> result = null;
-			await GetCounter(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetCounterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetCounterResult>();
     #else
 		public GetCounterTask GetCounterAsync(
                 Request.GetCounterRequest request
@@ -6393,17 +5581,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.GetCounterResult> GetCounterAsync(
+		public Task<Result.GetCounterResult> GetCounterAsync(
                 Request.GetCounterRequest request
-        )
-		{
-			var task = new GetCounterTask(
+        ) =>
+            new GetCounterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6451,44 +5636,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator GetCounterByUserId(
                 Request.GetCounterByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetCounterByUserIdResult>> callback
-        )
-		{
-			var task = new GetCounterByUserIdTask(
+        ) =>
+            new GetCounterByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetCounterByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetCounterByUserIdResult> GetCounterByUserIdFuture(
                 Request.GetCounterByUserIdRequest request
-        )
-		{
-			return new GetCounterByUserIdTask(
+        ) =>
+            new GetCounterByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetCounterByUserIdResult> GetCounterByUserIdAsync(
+		public UniTask<Result.GetCounterByUserIdResult> GetCounterByUserIdAsync(
                 Request.GetCounterByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.GetCounterByUserIdResult> result = null;
-			await GetCounterByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetCounterByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetCounterByUserIdResult>();
     #else
 		public GetCounterByUserIdTask GetCounterByUserIdAsync(
                 Request.GetCounterByUserIdRequest request
@@ -6502,17 +5674,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.GetCounterByUserIdResult> GetCounterByUserIdAsync(
+		public Task<Result.GetCounterByUserIdResult> GetCounterByUserIdAsync(
                 Request.GetCounterByUserIdRequest request
-        )
-		{
-			var task = new GetCounterByUserIdTask(
+        ) =>
+            new GetCounterByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6602,44 +5771,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator VerifyCounterValue(
                 Request.VerifyCounterValueRequest request,
                 UnityAction<AsyncResult<Result.VerifyCounterValueResult>> callback
-        )
-		{
-			var task = new VerifyCounterValueTask(
+        ) =>
+            new VerifyCounterValueTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifyCounterValueResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifyCounterValueResult> VerifyCounterValueFuture(
                 Request.VerifyCounterValueRequest request
-        )
-		{
-			return new VerifyCounterValueTask(
+        ) =>
+            new VerifyCounterValueTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifyCounterValueResult> VerifyCounterValueAsync(
+		public UniTask<Result.VerifyCounterValueResult> VerifyCounterValueAsync(
                 Request.VerifyCounterValueRequest request
-        )
-		{
-            AsyncResult<Result.VerifyCounterValueResult> result = null;
-			await VerifyCounterValue(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifyCounterValueTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyCounterValueResult>();
     #else
 		public VerifyCounterValueTask VerifyCounterValueAsync(
                 Request.VerifyCounterValueRequest request
@@ -6653,17 +5809,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.VerifyCounterValueResult> VerifyCounterValueAsync(
+		public Task<Result.VerifyCounterValueResult> VerifyCounterValueAsync(
                 Request.VerifyCounterValueRequest request
-        )
-		{
-			var task = new VerifyCounterValueTask(
+        ) =>
+            new VerifyCounterValueTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6754,44 +5907,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator VerifyCounterValueByUserId(
                 Request.VerifyCounterValueByUserIdRequest request,
                 UnityAction<AsyncResult<Result.VerifyCounterValueByUserIdResult>> callback
-        )
-		{
-			var task = new VerifyCounterValueByUserIdTask(
+        ) =>
+            new VerifyCounterValueByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifyCounterValueByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifyCounterValueByUserIdResult> VerifyCounterValueByUserIdFuture(
                 Request.VerifyCounterValueByUserIdRequest request
-        )
-		{
-			return new VerifyCounterValueByUserIdTask(
+        ) =>
+            new VerifyCounterValueByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifyCounterValueByUserIdResult> VerifyCounterValueByUserIdAsync(
+		public UniTask<Result.VerifyCounterValueByUserIdResult> VerifyCounterValueByUserIdAsync(
                 Request.VerifyCounterValueByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.VerifyCounterValueByUserIdResult> result = null;
-			await VerifyCounterValueByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifyCounterValueByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyCounterValueByUserIdResult>();
     #else
 		public VerifyCounterValueByUserIdTask VerifyCounterValueByUserIdAsync(
                 Request.VerifyCounterValueByUserIdRequest request
@@ -6805,17 +5945,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.VerifyCounterValueByUserIdResult> VerifyCounterValueByUserIdAsync(
+		public Task<Result.VerifyCounterValueByUserIdResult> VerifyCounterValueByUserIdAsync(
                 Request.VerifyCounterValueByUserIdRequest request
-        )
-		{
-			var task = new VerifyCounterValueByUserIdTask(
+        ) =>
+            new VerifyCounterValueByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6889,44 +6026,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator ResetCounter(
                 Request.ResetCounterRequest request,
                 UnityAction<AsyncResult<Result.ResetCounterResult>> callback
-        )
-		{
-			var task = new ResetCounterTask(
+        ) =>
+            new ResetCounterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ResetCounterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.ResetCounterResult> ResetCounterFuture(
                 Request.ResetCounterRequest request
-        )
-		{
-			return new ResetCounterTask(
+        ) =>
+            new ResetCounterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ResetCounterResult> ResetCounterAsync(
+		public UniTask<Result.ResetCounterResult> ResetCounterAsync(
                 Request.ResetCounterRequest request
-        )
-		{
-            AsyncResult<Result.ResetCounterResult> result = null;
-			await ResetCounter(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new ResetCounterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.ResetCounterResult>();
     #else
 		public ResetCounterTask ResetCounterAsync(
                 Request.ResetCounterRequest request
@@ -6940,17 +6064,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.ResetCounterResult> ResetCounterAsync(
+		public Task<Result.ResetCounterResult> ResetCounterAsync(
                 Request.ResetCounterRequest request
-        )
-		{
-			var task = new ResetCounterTask(
+        ) =>
+            new ResetCounterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -7025,44 +6146,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator ResetCounterByUserId(
                 Request.ResetCounterByUserIdRequest request,
                 UnityAction<AsyncResult<Result.ResetCounterByUserIdResult>> callback
-        )
-		{
-			var task = new ResetCounterByUserIdTask(
+        ) =>
+            new ResetCounterByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ResetCounterByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.ResetCounterByUserIdResult> ResetCounterByUserIdFuture(
                 Request.ResetCounterByUserIdRequest request
-        )
-		{
-			return new ResetCounterByUserIdTask(
+        ) =>
+            new ResetCounterByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ResetCounterByUserIdResult> ResetCounterByUserIdAsync(
+		public UniTask<Result.ResetCounterByUserIdResult> ResetCounterByUserIdAsync(
                 Request.ResetCounterByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.ResetCounterByUserIdResult> result = null;
-			await ResetCounterByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new ResetCounterByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.ResetCounterByUserIdResult>();
     #else
 		public ResetCounterByUserIdTask ResetCounterByUserIdAsync(
                 Request.ResetCounterByUserIdRequest request
@@ -7076,17 +6184,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.ResetCounterByUserIdResult> ResetCounterByUserIdAsync(
+		public Task<Result.ResetCounterByUserIdResult> ResetCounterByUserIdAsync(
                 Request.ResetCounterByUserIdRequest request
-        )
-		{
-			var task = new ResetCounterByUserIdTask(
+        ) =>
+            new ResetCounterByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -7137,44 +6242,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator DeleteCounter(
                 Request.DeleteCounterRequest request,
                 UnityAction<AsyncResult<Result.DeleteCounterResult>> callback
-        )
-		{
-			var task = new DeleteCounterTask(
+        ) =>
+            new DeleteCounterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteCounterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteCounterResult> DeleteCounterFuture(
                 Request.DeleteCounterRequest request
-        )
-		{
-			return new DeleteCounterTask(
+        ) =>
+            new DeleteCounterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteCounterResult> DeleteCounterAsync(
+		public UniTask<Result.DeleteCounterResult> DeleteCounterAsync(
                 Request.DeleteCounterRequest request
-        )
-		{
-            AsyncResult<Result.DeleteCounterResult> result = null;
-			await DeleteCounter(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteCounterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteCounterResult>();
     #else
 		public DeleteCounterTask DeleteCounterAsync(
                 Request.DeleteCounterRequest request
@@ -7188,17 +6280,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.DeleteCounterResult> DeleteCounterAsync(
+		public Task<Result.DeleteCounterResult> DeleteCounterAsync(
                 Request.DeleteCounterRequest request
-        )
-		{
-			var task = new DeleteCounterTask(
+        ) =>
+            new DeleteCounterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -7250,44 +6339,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator DeleteCounterByUserId(
                 Request.DeleteCounterByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DeleteCounterByUserIdResult>> callback
-        )
-		{
-			var task = new DeleteCounterByUserIdTask(
+        ) =>
+            new DeleteCounterByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteCounterByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteCounterByUserIdResult> DeleteCounterByUserIdFuture(
                 Request.DeleteCounterByUserIdRequest request
-        )
-		{
-			return new DeleteCounterByUserIdTask(
+        ) =>
+            new DeleteCounterByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteCounterByUserIdResult> DeleteCounterByUserIdAsync(
+		public UniTask<Result.DeleteCounterByUserIdResult> DeleteCounterByUserIdAsync(
                 Request.DeleteCounterByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DeleteCounterByUserIdResult> result = null;
-			await DeleteCounterByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteCounterByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteCounterByUserIdResult>();
     #else
 		public DeleteCounterByUserIdTask DeleteCounterByUserIdAsync(
                 Request.DeleteCounterByUserIdRequest request
@@ -7301,17 +6377,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.DeleteCounterByUserIdResult> DeleteCounterByUserIdAsync(
+		public Task<Result.DeleteCounterByUserIdResult> DeleteCounterByUserIdAsync(
                 Request.DeleteCounterByUserIdRequest request
-        )
-		{
-			var task = new DeleteCounterByUserIdTask(
+        ) =>
+            new DeleteCounterByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -7374,44 +6447,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator IncreaseByStampSheet(
                 Request.IncreaseByStampSheetRequest request,
                 UnityAction<AsyncResult<Result.IncreaseByStampSheetResult>> callback
-        )
-		{
-			var task = new IncreaseByStampSheetTask(
+        ) =>
+            new IncreaseByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.IncreaseByStampSheetResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.IncreaseByStampSheetResult> IncreaseByStampSheetFuture(
                 Request.IncreaseByStampSheetRequest request
-        )
-		{
-			return new IncreaseByStampSheetTask(
+        ) =>
+            new IncreaseByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.IncreaseByStampSheetResult> IncreaseByStampSheetAsync(
+		public UniTask<Result.IncreaseByStampSheetResult> IncreaseByStampSheetAsync(
                 Request.IncreaseByStampSheetRequest request
-        )
-		{
-            AsyncResult<Result.IncreaseByStampSheetResult> result = null;
-			await IncreaseByStampSheet(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new IncreaseByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.IncreaseByStampSheetResult>();
     #else
 		public IncreaseByStampSheetTask IncreaseByStampSheetAsync(
                 Request.IncreaseByStampSheetRequest request
@@ -7425,17 +6485,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.IncreaseByStampSheetResult> IncreaseByStampSheetAsync(
+		public Task<Result.IncreaseByStampSheetResult> IncreaseByStampSheetAsync(
                 Request.IncreaseByStampSheetRequest request
-        )
-		{
-			var task = new IncreaseByStampSheetTask(
+        ) =>
+            new IncreaseByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -7498,44 +6555,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator SetByStampSheet(
                 Request.SetByStampSheetRequest request,
                 UnityAction<AsyncResult<Result.SetByStampSheetResult>> callback
-        )
-		{
-			var task = new SetByStampSheetTask(
+        ) =>
+            new SetByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.SetByStampSheetResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.SetByStampSheetResult> SetByStampSheetFuture(
                 Request.SetByStampSheetRequest request
-        )
-		{
-			return new SetByStampSheetTask(
+        ) =>
+            new SetByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.SetByStampSheetResult> SetByStampSheetAsync(
+		public UniTask<Result.SetByStampSheetResult> SetByStampSheetAsync(
                 Request.SetByStampSheetRequest request
-        )
-		{
-            AsyncResult<Result.SetByStampSheetResult> result = null;
-			await SetByStampSheet(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new SetByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.SetByStampSheetResult>();
     #else
 		public SetByStampSheetTask SetByStampSheetAsync(
                 Request.SetByStampSheetRequest request
@@ -7549,17 +6593,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.SetByStampSheetResult> SetByStampSheetAsync(
+		public Task<Result.SetByStampSheetResult> SetByStampSheetAsync(
                 Request.SetByStampSheetRequest request
-        )
-		{
-			var task = new SetByStampSheetTask(
+        ) =>
+            new SetByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -7622,44 +6663,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator DecreaseByStampTask(
                 Request.DecreaseByStampTaskRequest request,
                 UnityAction<AsyncResult<Result.DecreaseByStampTaskResult>> callback
-        )
-		{
-			var task = new DecreaseByStampTaskTask(
+        ) =>
+            new DecreaseByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DecreaseByStampTaskResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DecreaseByStampTaskResult> DecreaseByStampTaskFuture(
                 Request.DecreaseByStampTaskRequest request
-        )
-		{
-			return new DecreaseByStampTaskTask(
+        ) =>
+            new DecreaseByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DecreaseByStampTaskResult> DecreaseByStampTaskAsync(
+		public UniTask<Result.DecreaseByStampTaskResult> DecreaseByStampTaskAsync(
                 Request.DecreaseByStampTaskRequest request
-        )
-		{
-            AsyncResult<Result.DecreaseByStampTaskResult> result = null;
-			await DecreaseByStampTask(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DecreaseByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DecreaseByStampTaskResult>();
     #else
 		public DecreaseByStampTaskTask DecreaseByStampTaskAsync(
                 Request.DecreaseByStampTaskRequest request
@@ -7673,17 +6701,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.DecreaseByStampTaskResult> DecreaseByStampTaskAsync(
+		public Task<Result.DecreaseByStampTaskResult> DecreaseByStampTaskAsync(
                 Request.DecreaseByStampTaskRequest request
-        )
-		{
-			var task = new DecreaseByStampTaskTask(
+        ) =>
+            new DecreaseByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -7746,44 +6771,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator ResetByStampTask(
                 Request.ResetByStampTaskRequest request,
                 UnityAction<AsyncResult<Result.ResetByStampTaskResult>> callback
-        )
-		{
-			var task = new ResetByStampTaskTask(
+        ) =>
+            new ResetByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ResetByStampTaskResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.ResetByStampTaskResult> ResetByStampTaskFuture(
                 Request.ResetByStampTaskRequest request
-        )
-		{
-			return new ResetByStampTaskTask(
+        ) =>
+            new ResetByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ResetByStampTaskResult> ResetByStampTaskAsync(
+		public UniTask<Result.ResetByStampTaskResult> ResetByStampTaskAsync(
                 Request.ResetByStampTaskRequest request
-        )
-		{
-            AsyncResult<Result.ResetByStampTaskResult> result = null;
-			await ResetByStampTask(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new ResetByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.ResetByStampTaskResult>();
     #else
 		public ResetByStampTaskTask ResetByStampTaskAsync(
                 Request.ResetByStampTaskRequest request
@@ -7797,17 +6809,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.ResetByStampTaskResult> ResetByStampTaskAsync(
+		public Task<Result.ResetByStampTaskResult> ResetByStampTaskAsync(
                 Request.ResetByStampTaskRequest request
-        )
-		{
-			var task = new ResetByStampTaskTask(
+        ) =>
+            new ResetByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -7870,44 +6879,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator VerifyCounterValueByStampTask(
                 Request.VerifyCounterValueByStampTaskRequest request,
                 UnityAction<AsyncResult<Result.VerifyCounterValueByStampTaskResult>> callback
-        )
-		{
-			var task = new VerifyCounterValueByStampTaskTask(
+        ) =>
+            new VerifyCounterValueByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifyCounterValueByStampTaskResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifyCounterValueByStampTaskResult> VerifyCounterValueByStampTaskFuture(
                 Request.VerifyCounterValueByStampTaskRequest request
-        )
-		{
-			return new VerifyCounterValueByStampTaskTask(
+        ) =>
+            new VerifyCounterValueByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifyCounterValueByStampTaskResult> VerifyCounterValueByStampTaskAsync(
+		public UniTask<Result.VerifyCounterValueByStampTaskResult> VerifyCounterValueByStampTaskAsync(
                 Request.VerifyCounterValueByStampTaskRequest request
-        )
-		{
-            AsyncResult<Result.VerifyCounterValueByStampTaskResult> result = null;
-			await VerifyCounterValueByStampTask(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifyCounterValueByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyCounterValueByStampTaskResult>();
     #else
 		public VerifyCounterValueByStampTaskTask VerifyCounterValueByStampTaskAsync(
                 Request.VerifyCounterValueByStampTaskRequest request
@@ -7921,17 +6917,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.VerifyCounterValueByStampTaskResult> VerifyCounterValueByStampTaskAsync(
+		public Task<Result.VerifyCounterValueByStampTaskResult> VerifyCounterValueByStampTaskAsync(
                 Request.VerifyCounterValueByStampTaskRequest request
-        )
-		{
-			var task = new VerifyCounterValueByStampTaskTask(
+        ) =>
+            new VerifyCounterValueByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -7973,44 +6966,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator ExportMaster(
                 Request.ExportMasterRequest request,
                 UnityAction<AsyncResult<Result.ExportMasterResult>> callback
-        )
-		{
-			var task = new ExportMasterTask(
+        ) =>
+            new ExportMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ExportMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.ExportMasterResult> ExportMasterFuture(
                 Request.ExportMasterRequest request
-        )
-		{
-			return new ExportMasterTask(
+        ) =>
+            new ExportMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ExportMasterResult> ExportMasterAsync(
+		public UniTask<Result.ExportMasterResult> ExportMasterAsync(
                 Request.ExportMasterRequest request
-        )
-		{
-            AsyncResult<Result.ExportMasterResult> result = null;
-			await ExportMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new ExportMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.ExportMasterResult>();
     #else
 		public ExportMasterTask ExportMasterAsync(
                 Request.ExportMasterRequest request
@@ -8024,17 +7004,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.ExportMasterResult> ExportMasterAsync(
+		public Task<Result.ExportMasterResult> ExportMasterAsync(
                 Request.ExportMasterRequest request
-        )
-		{
-			var task = new ExportMasterTask(
+        ) =>
+            new ExportMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -8076,44 +7053,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator GetCurrentMissionMaster(
                 Request.GetCurrentMissionMasterRequest request,
                 UnityAction<AsyncResult<Result.GetCurrentMissionMasterResult>> callback
-        )
-		{
-			var task = new GetCurrentMissionMasterTask(
+        ) =>
+            new GetCurrentMissionMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetCurrentMissionMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetCurrentMissionMasterResult> GetCurrentMissionMasterFuture(
                 Request.GetCurrentMissionMasterRequest request
-        )
-		{
-			return new GetCurrentMissionMasterTask(
+        ) =>
+            new GetCurrentMissionMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetCurrentMissionMasterResult> GetCurrentMissionMasterAsync(
+		public UniTask<Result.GetCurrentMissionMasterResult> GetCurrentMissionMasterAsync(
                 Request.GetCurrentMissionMasterRequest request
-        )
-		{
-            AsyncResult<Result.GetCurrentMissionMasterResult> result = null;
-			await GetCurrentMissionMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetCurrentMissionMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetCurrentMissionMasterResult>();
     #else
 		public GetCurrentMissionMasterTask GetCurrentMissionMasterAsync(
                 Request.GetCurrentMissionMasterRequest request
@@ -8127,17 +7091,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.GetCurrentMissionMasterResult> GetCurrentMissionMasterAsync(
+		public Task<Result.GetCurrentMissionMasterResult> GetCurrentMissionMasterAsync(
                 Request.GetCurrentMissionMasterRequest request
-        )
-		{
-			var task = new GetCurrentMissionMasterTask(
+        ) =>
+            new GetCurrentMissionMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -8192,44 +7153,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator PreUpdateCurrentMissionMaster(
                 Request.PreUpdateCurrentMissionMasterRequest request,
                 UnityAction<AsyncResult<Result.PreUpdateCurrentMissionMasterResult>> callback
-        )
-		{
-			var task = new PreUpdateCurrentMissionMasterTask(
+        ) =>
+            new PreUpdateCurrentMissionMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.PreUpdateCurrentMissionMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.PreUpdateCurrentMissionMasterResult> PreUpdateCurrentMissionMasterFuture(
                 Request.PreUpdateCurrentMissionMasterRequest request
-        )
-		{
-			return new PreUpdateCurrentMissionMasterTask(
+        ) =>
+            new PreUpdateCurrentMissionMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.PreUpdateCurrentMissionMasterResult> PreUpdateCurrentMissionMasterAsync(
+		public UniTask<Result.PreUpdateCurrentMissionMasterResult> PreUpdateCurrentMissionMasterAsync(
                 Request.PreUpdateCurrentMissionMasterRequest request
-        )
-		{
-            AsyncResult<Result.PreUpdateCurrentMissionMasterResult> result = null;
-			await PreUpdateCurrentMissionMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new PreUpdateCurrentMissionMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.PreUpdateCurrentMissionMasterResult>();
     #else
 		public PreUpdateCurrentMissionMasterTask PreUpdateCurrentMissionMasterAsync(
                 Request.PreUpdateCurrentMissionMasterRequest request
@@ -8243,17 +7191,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.PreUpdateCurrentMissionMasterResult> PreUpdateCurrentMissionMasterAsync(
+		public Task<Result.PreUpdateCurrentMissionMasterResult> PreUpdateCurrentMissionMasterAsync(
                 Request.PreUpdateCurrentMissionMasterRequest request
-        )
-		{
-			var task = new PreUpdateCurrentMissionMasterTask(
+        ) =>
+            new PreUpdateCurrentMissionMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -8262,7 +7207,12 @@ namespace Gs2.Gs2Mission
             public UpdateCurrentMissionMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentMissionMasterRequest request) : base(session, factory, request)
             {
             }
-            public override IEnumerator Action() {
+#if GS2_ENABLE_UNITASK
+            protected override async UniTask<UpdateCurrentMissionMasterResult> InvokeImpl()
+#else
+            protected override async Task<UpdateCurrentMissionMasterResult> InvokeImpl()
+#endif
+            {
                 if (Request.Settings != null) {
                     var preTask = new PreUpdateCurrentMissionMasterTask(
                         Session,
@@ -8271,22 +7221,81 @@ namespace Gs2.Gs2Mission
                             .WithContextStack(Request.ContextStack)
                             .WithNamespaceName(Request.NamespaceName)
                     );
-                    yield return preTask;
-                    if (preTask.Error != null) {
-                        OnError(preTask.Error);
-                        yield break;
-                    }
+                    var preTaskResult = await preTask.Invoke();
 #if UNITY_2017_1_OR_NEWER
-                    using var request = UnityEngine.Networking.UnityWebRequest.Put(preTask.Result.UploadUrl, Request.Settings);
-                    request.SetRequestHeader("Content-Type", "application/json");
-                    yield return request.SendWebRequest();
-                    request.Dispose();
+                    using (var request = UnityWebRequest.Put(preTaskResult.UploadUrl, Request.Settings))
+                    {
+                        request.SetRequestHeader("Content-Type", "application/json");
+                        try {
+                            await request.SendWebRequest();
+                        }
+#if GS2_ENABLE_UNITASK
+                        catch (UnityWebRequestException) {}
+#endif
+                        finally {}
+
+                        var restResult = request.result switch
+                        {
+                            UnityWebRequest.Result.Success or UnityWebRequest.Result.ProtocolError =>
+                                new RestResult(
+                                    (int) request.responseCode,
+                                    request.downloadHandler?.text
+                                ),
+                            UnityWebRequest.Result.ConnectionError or UnityWebRequest.Result.DataProcessingError =>
+                                new RestResult(
+                                    (int) request.responseCode,
+                                    null,
+                                    (int) request.result,
+                                    request.error
+                                ),
+                            _ =>
+                                throw new InvalidOperationException(),
+                        };
+
+                        if (restResult.Error != null) throw restResult.Error;
+                    }
+#else
+                    {
+                        using var httpRequestMessage = new HttpRequestMessage(System.Net.Http.HttpMethod.Put, preTaskResult.UploadUrl);
+                        httpRequestMessage.Content = new ByteArrayContent(System.Text.Encoding.UTF8.GetBytes(Request.Settings));
+                        httpRequestMessage.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+    
+                        RestResult restResult;
+    
+                        try
+                        {
+                            using var httpClient = new HttpClient();
+                            using var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
+    
+                            restResult = new RestResult((int) httpResponseMessage.StatusCode, "");
+                        }
+                        catch (OperationCanceledException e)
+                        {
+                            restResult = new RestResult(
+                                0, // NoInternetConnectionException
+                                "",
+                                0,
+                                e.Message
+                            );
+                        }
+                        catch (System.Net.Http.HttpRequestException e)
+                        {
+                            restResult = new RestResult(
+                                0, // NoInternetConnectionException
+                                "",
+                                0,
+                                e.Message
+                            );
+                        }
+    
+                        if (restResult.Error != null) throw restResult.Error;
+                    }
 #endif
                     Request.Mode = "preUpload";
-                    Request.UploadToken = preTask.Result.UploadToken;
+                    Request.UploadToken = preTaskResult.UploadToken;
                     Request.Settings = null;
                 }
-                yield return base.Action();
+                return await base.InvokeImpl();
             }
 
             protected override IGs2SessionRequest CreateRequest(UpdateCurrentMissionMasterRequest request)
@@ -8349,44 +7358,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator UpdateCurrentMissionMaster(
                 Request.UpdateCurrentMissionMasterRequest request,
                 UnityAction<AsyncResult<Result.UpdateCurrentMissionMasterResult>> callback
-        )
-		{
-			var task = new UpdateCurrentMissionMasterTask(
+        ) =>
+            new UpdateCurrentMissionMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateCurrentMissionMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UpdateCurrentMissionMasterResult> UpdateCurrentMissionMasterFuture(
                 Request.UpdateCurrentMissionMasterRequest request
-        )
-		{
-			return new UpdateCurrentMissionMasterTask(
+        ) =>
+            new UpdateCurrentMissionMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateCurrentMissionMasterResult> UpdateCurrentMissionMasterAsync(
+		public UniTask<Result.UpdateCurrentMissionMasterResult> UpdateCurrentMissionMasterAsync(
                 Request.UpdateCurrentMissionMasterRequest request
-        )
-		{
-            AsyncResult<Result.UpdateCurrentMissionMasterResult> result = null;
-			await UpdateCurrentMissionMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UpdateCurrentMissionMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UpdateCurrentMissionMasterResult>();
     #else
 		public UpdateCurrentMissionMasterTask UpdateCurrentMissionMasterAsync(
                 Request.UpdateCurrentMissionMasterRequest request
@@ -8400,35 +7396,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.UpdateCurrentMissionMasterResult> UpdateCurrentMissionMasterAsync(
+		public Task<Result.UpdateCurrentMissionMasterResult> UpdateCurrentMissionMasterAsync(
                 Request.UpdateCurrentMissionMasterRequest request
-        )
-		{
-            if (request.Settings != null) {
-                var res = await PreUpdateCurrentMissionMasterAsync(
-                    new PreUpdateCurrentMissionMasterRequest()
-                        .WithContextStack(request.ContextStack)
-                        .WithNamespaceName(request.NamespaceName)
-                );
-                var req = new HttpRequestMessage(
-                    System.Net.Http.HttpMethod.Put,
-                    res.UploadUrl
-                );
-                req.Content = new ByteArrayContent(System.Text.Encoding.UTF8.GetBytes(request.Settings));
-                req.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
-                await new HttpClient().SendAsync(req);
-
-                request.Mode = "preUpload";
-                request.UploadToken = res.UploadToken;
-                request.Settings = null;
-            }
-			var task = new UpdateCurrentMissionMasterTask(
+        ) =>
+            new UpdateCurrentMissionMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -8488,44 +7463,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator UpdateCurrentMissionMasterFromGitHub(
                 Request.UpdateCurrentMissionMasterFromGitHubRequest request,
                 UnityAction<AsyncResult<Result.UpdateCurrentMissionMasterFromGitHubResult>> callback
-        )
-		{
-			var task = new UpdateCurrentMissionMasterFromGitHubTask(
+        ) =>
+            new UpdateCurrentMissionMasterFromGitHubTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateCurrentMissionMasterFromGitHubResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UpdateCurrentMissionMasterFromGitHubResult> UpdateCurrentMissionMasterFromGitHubFuture(
                 Request.UpdateCurrentMissionMasterFromGitHubRequest request
-        )
-		{
-			return new UpdateCurrentMissionMasterFromGitHubTask(
+        ) =>
+            new UpdateCurrentMissionMasterFromGitHubTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateCurrentMissionMasterFromGitHubResult> UpdateCurrentMissionMasterFromGitHubAsync(
+		public UniTask<Result.UpdateCurrentMissionMasterFromGitHubResult> UpdateCurrentMissionMasterFromGitHubAsync(
                 Request.UpdateCurrentMissionMasterFromGitHubRequest request
-        )
-		{
-            AsyncResult<Result.UpdateCurrentMissionMasterFromGitHubResult> result = null;
-			await UpdateCurrentMissionMasterFromGitHub(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UpdateCurrentMissionMasterFromGitHubTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UpdateCurrentMissionMasterFromGitHubResult>();
     #else
 		public UpdateCurrentMissionMasterFromGitHubTask UpdateCurrentMissionMasterFromGitHubAsync(
                 Request.UpdateCurrentMissionMasterFromGitHubRequest request
@@ -8539,17 +7501,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.UpdateCurrentMissionMasterFromGitHubResult> UpdateCurrentMissionMasterFromGitHubAsync(
+		public Task<Result.UpdateCurrentMissionMasterFromGitHubResult> UpdateCurrentMissionMasterFromGitHubAsync(
                 Request.UpdateCurrentMissionMasterFromGitHubRequest request
-        )
-		{
-			var task = new UpdateCurrentMissionMasterFromGitHubTask(
+        ) =>
+            new UpdateCurrentMissionMasterFromGitHubTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -8591,44 +7550,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator DescribeCounterModels(
                 Request.DescribeCounterModelsRequest request,
                 UnityAction<AsyncResult<Result.DescribeCounterModelsResult>> callback
-        )
-		{
-			var task = new DescribeCounterModelsTask(
+        ) =>
+            new DescribeCounterModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeCounterModelsResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeCounterModelsResult> DescribeCounterModelsFuture(
                 Request.DescribeCounterModelsRequest request
-        )
-		{
-			return new DescribeCounterModelsTask(
+        ) =>
+            new DescribeCounterModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeCounterModelsResult> DescribeCounterModelsAsync(
+		public UniTask<Result.DescribeCounterModelsResult> DescribeCounterModelsAsync(
                 Request.DescribeCounterModelsRequest request
-        )
-		{
-            AsyncResult<Result.DescribeCounterModelsResult> result = null;
-			await DescribeCounterModels(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeCounterModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeCounterModelsResult>();
     #else
 		public DescribeCounterModelsTask DescribeCounterModelsAsync(
                 Request.DescribeCounterModelsRequest request
@@ -8642,17 +7588,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.DescribeCounterModelsResult> DescribeCounterModelsAsync(
+		public Task<Result.DescribeCounterModelsResult> DescribeCounterModelsAsync(
                 Request.DescribeCounterModelsRequest request
-        )
-		{
-			var task = new DescribeCounterModelsTask(
+        ) =>
+            new DescribeCounterModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -8695,44 +7638,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator GetCounterModel(
                 Request.GetCounterModelRequest request,
                 UnityAction<AsyncResult<Result.GetCounterModelResult>> callback
-        )
-		{
-			var task = new GetCounterModelTask(
+        ) =>
+            new GetCounterModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetCounterModelResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetCounterModelResult> GetCounterModelFuture(
                 Request.GetCounterModelRequest request
-        )
-		{
-			return new GetCounterModelTask(
+        ) =>
+            new GetCounterModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetCounterModelResult> GetCounterModelAsync(
+		public UniTask<Result.GetCounterModelResult> GetCounterModelAsync(
                 Request.GetCounterModelRequest request
-        )
-		{
-            AsyncResult<Result.GetCounterModelResult> result = null;
-			await GetCounterModel(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetCounterModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetCounterModelResult>();
     #else
 		public GetCounterModelTask GetCounterModelAsync(
                 Request.GetCounterModelRequest request
@@ -8746,17 +7676,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.GetCounterModelResult> GetCounterModelAsync(
+		public Task<Result.GetCounterModelResult> GetCounterModelAsync(
                 Request.GetCounterModelRequest request
-        )
-		{
-			var task = new GetCounterModelTask(
+        ) =>
+            new GetCounterModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -8798,44 +7725,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator DescribeMissionGroupModels(
                 Request.DescribeMissionGroupModelsRequest request,
                 UnityAction<AsyncResult<Result.DescribeMissionGroupModelsResult>> callback
-        )
-		{
-			var task = new DescribeMissionGroupModelsTask(
+        ) =>
+            new DescribeMissionGroupModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeMissionGroupModelsResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeMissionGroupModelsResult> DescribeMissionGroupModelsFuture(
                 Request.DescribeMissionGroupModelsRequest request
-        )
-		{
-			return new DescribeMissionGroupModelsTask(
+        ) =>
+            new DescribeMissionGroupModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeMissionGroupModelsResult> DescribeMissionGroupModelsAsync(
+		public UniTask<Result.DescribeMissionGroupModelsResult> DescribeMissionGroupModelsAsync(
                 Request.DescribeMissionGroupModelsRequest request
-        )
-		{
-            AsyncResult<Result.DescribeMissionGroupModelsResult> result = null;
-			await DescribeMissionGroupModels(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeMissionGroupModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeMissionGroupModelsResult>();
     #else
 		public DescribeMissionGroupModelsTask DescribeMissionGroupModelsAsync(
                 Request.DescribeMissionGroupModelsRequest request
@@ -8849,17 +7763,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.DescribeMissionGroupModelsResult> DescribeMissionGroupModelsAsync(
+		public Task<Result.DescribeMissionGroupModelsResult> DescribeMissionGroupModelsAsync(
                 Request.DescribeMissionGroupModelsRequest request
-        )
-		{
-			var task = new DescribeMissionGroupModelsTask(
+        ) =>
+            new DescribeMissionGroupModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -8902,44 +7813,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator GetMissionGroupModel(
                 Request.GetMissionGroupModelRequest request,
                 UnityAction<AsyncResult<Result.GetMissionGroupModelResult>> callback
-        )
-		{
-			var task = new GetMissionGroupModelTask(
+        ) =>
+            new GetMissionGroupModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetMissionGroupModelResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetMissionGroupModelResult> GetMissionGroupModelFuture(
                 Request.GetMissionGroupModelRequest request
-        )
-		{
-			return new GetMissionGroupModelTask(
+        ) =>
+            new GetMissionGroupModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetMissionGroupModelResult> GetMissionGroupModelAsync(
+		public UniTask<Result.GetMissionGroupModelResult> GetMissionGroupModelAsync(
                 Request.GetMissionGroupModelRequest request
-        )
-		{
-            AsyncResult<Result.GetMissionGroupModelResult> result = null;
-			await GetMissionGroupModel(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetMissionGroupModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetMissionGroupModelResult>();
     #else
 		public GetMissionGroupModelTask GetMissionGroupModelAsync(
                 Request.GetMissionGroupModelRequest request
@@ -8953,17 +7851,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.GetMissionGroupModelResult> GetMissionGroupModelAsync(
+		public Task<Result.GetMissionGroupModelResult> GetMissionGroupModelAsync(
                 Request.GetMissionGroupModelRequest request
-        )
-		{
-			var task = new GetMissionGroupModelTask(
+        ) =>
+            new GetMissionGroupModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -9006,44 +7901,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator DescribeMissionTaskModels(
                 Request.DescribeMissionTaskModelsRequest request,
                 UnityAction<AsyncResult<Result.DescribeMissionTaskModelsResult>> callback
-        )
-		{
-			var task = new DescribeMissionTaskModelsTask(
+        ) =>
+            new DescribeMissionTaskModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeMissionTaskModelsResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeMissionTaskModelsResult> DescribeMissionTaskModelsFuture(
                 Request.DescribeMissionTaskModelsRequest request
-        )
-		{
-			return new DescribeMissionTaskModelsTask(
+        ) =>
+            new DescribeMissionTaskModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeMissionTaskModelsResult> DescribeMissionTaskModelsAsync(
+		public UniTask<Result.DescribeMissionTaskModelsResult> DescribeMissionTaskModelsAsync(
                 Request.DescribeMissionTaskModelsRequest request
-        )
-		{
-            AsyncResult<Result.DescribeMissionTaskModelsResult> result = null;
-			await DescribeMissionTaskModels(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeMissionTaskModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeMissionTaskModelsResult>();
     #else
 		public DescribeMissionTaskModelsTask DescribeMissionTaskModelsAsync(
                 Request.DescribeMissionTaskModelsRequest request
@@ -9057,17 +7939,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.DescribeMissionTaskModelsResult> DescribeMissionTaskModelsAsync(
+		public Task<Result.DescribeMissionTaskModelsResult> DescribeMissionTaskModelsAsync(
                 Request.DescribeMissionTaskModelsRequest request
-        )
-		{
-			var task = new DescribeMissionTaskModelsTask(
+        ) =>
+            new DescribeMissionTaskModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -9111,44 +7990,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator GetMissionTaskModel(
                 Request.GetMissionTaskModelRequest request,
                 UnityAction<AsyncResult<Result.GetMissionTaskModelResult>> callback
-        )
-		{
-			var task = new GetMissionTaskModelTask(
+        ) =>
+            new GetMissionTaskModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetMissionTaskModelResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetMissionTaskModelResult> GetMissionTaskModelFuture(
                 Request.GetMissionTaskModelRequest request
-        )
-		{
-			return new GetMissionTaskModelTask(
+        ) =>
+            new GetMissionTaskModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetMissionTaskModelResult> GetMissionTaskModelAsync(
+		public UniTask<Result.GetMissionTaskModelResult> GetMissionTaskModelAsync(
                 Request.GetMissionTaskModelRequest request
-        )
-		{
-            AsyncResult<Result.GetMissionTaskModelResult> result = null;
-			await GetMissionTaskModel(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetMissionTaskModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetMissionTaskModelResult>();
     #else
 		public GetMissionTaskModelTask GetMissionTaskModelAsync(
                 Request.GetMissionTaskModelRequest request
@@ -9162,17 +8028,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.GetMissionTaskModelResult> GetMissionTaskModelAsync(
+		public Task<Result.GetMissionTaskModelResult> GetMissionTaskModelAsync(
                 Request.GetMissionTaskModelRequest request
-        )
-		{
-			var task = new GetMissionTaskModelTask(
+        ) =>
+            new GetMissionTaskModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -9224,44 +8087,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator DescribeMissionTaskModelMasters(
                 Request.DescribeMissionTaskModelMastersRequest request,
                 UnityAction<AsyncResult<Result.DescribeMissionTaskModelMastersResult>> callback
-        )
-		{
-			var task = new DescribeMissionTaskModelMastersTask(
+        ) =>
+            new DescribeMissionTaskModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeMissionTaskModelMastersResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeMissionTaskModelMastersResult> DescribeMissionTaskModelMastersFuture(
                 Request.DescribeMissionTaskModelMastersRequest request
-        )
-		{
-			return new DescribeMissionTaskModelMastersTask(
+        ) =>
+            new DescribeMissionTaskModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeMissionTaskModelMastersResult> DescribeMissionTaskModelMastersAsync(
+		public UniTask<Result.DescribeMissionTaskModelMastersResult> DescribeMissionTaskModelMastersAsync(
                 Request.DescribeMissionTaskModelMastersRequest request
-        )
-		{
-            AsyncResult<Result.DescribeMissionTaskModelMastersResult> result = null;
-			await DescribeMissionTaskModelMasters(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeMissionTaskModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeMissionTaskModelMastersResult>();
     #else
 		public DescribeMissionTaskModelMastersTask DescribeMissionTaskModelMastersAsync(
                 Request.DescribeMissionTaskModelMastersRequest request
@@ -9275,17 +8125,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.DescribeMissionTaskModelMastersResult> DescribeMissionTaskModelMastersAsync(
+		public Task<Result.DescribeMissionTaskModelMastersResult> DescribeMissionTaskModelMastersAsync(
                 Request.DescribeMissionTaskModelMastersRequest request
-        )
-		{
-			var task = new DescribeMissionTaskModelMastersTask(
+        ) =>
+            new DescribeMissionTaskModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -9411,44 +8258,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator CreateMissionTaskModelMaster(
                 Request.CreateMissionTaskModelMasterRequest request,
                 UnityAction<AsyncResult<Result.CreateMissionTaskModelMasterResult>> callback
-        )
-		{
-			var task = new CreateMissionTaskModelMasterTask(
+        ) =>
+            new CreateMissionTaskModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateMissionTaskModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CreateMissionTaskModelMasterResult> CreateMissionTaskModelMasterFuture(
                 Request.CreateMissionTaskModelMasterRequest request
-        )
-		{
-			return new CreateMissionTaskModelMasterTask(
+        ) =>
+            new CreateMissionTaskModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateMissionTaskModelMasterResult> CreateMissionTaskModelMasterAsync(
+		public UniTask<Result.CreateMissionTaskModelMasterResult> CreateMissionTaskModelMasterAsync(
                 Request.CreateMissionTaskModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.CreateMissionTaskModelMasterResult> result = null;
-			await CreateMissionTaskModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CreateMissionTaskModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CreateMissionTaskModelMasterResult>();
     #else
 		public CreateMissionTaskModelMasterTask CreateMissionTaskModelMasterAsync(
                 Request.CreateMissionTaskModelMasterRequest request
@@ -9462,17 +8296,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.CreateMissionTaskModelMasterResult> CreateMissionTaskModelMasterAsync(
+		public Task<Result.CreateMissionTaskModelMasterResult> CreateMissionTaskModelMasterAsync(
                 Request.CreateMissionTaskModelMasterRequest request
-        )
-		{
-			var task = new CreateMissionTaskModelMasterTask(
+        ) =>
+            new CreateMissionTaskModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -9516,44 +8347,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator GetMissionTaskModelMaster(
                 Request.GetMissionTaskModelMasterRequest request,
                 UnityAction<AsyncResult<Result.GetMissionTaskModelMasterResult>> callback
-        )
-		{
-			var task = new GetMissionTaskModelMasterTask(
+        ) =>
+            new GetMissionTaskModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetMissionTaskModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetMissionTaskModelMasterResult> GetMissionTaskModelMasterFuture(
                 Request.GetMissionTaskModelMasterRequest request
-        )
-		{
-			return new GetMissionTaskModelMasterTask(
+        ) =>
+            new GetMissionTaskModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetMissionTaskModelMasterResult> GetMissionTaskModelMasterAsync(
+		public UniTask<Result.GetMissionTaskModelMasterResult> GetMissionTaskModelMasterAsync(
                 Request.GetMissionTaskModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.GetMissionTaskModelMasterResult> result = null;
-			await GetMissionTaskModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetMissionTaskModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetMissionTaskModelMasterResult>();
     #else
 		public GetMissionTaskModelMasterTask GetMissionTaskModelMasterAsync(
                 Request.GetMissionTaskModelMasterRequest request
@@ -9567,17 +8385,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.GetMissionTaskModelMasterResult> GetMissionTaskModelMasterAsync(
+		public Task<Result.GetMissionTaskModelMasterResult> GetMissionTaskModelMasterAsync(
                 Request.GetMissionTaskModelMasterRequest request
-        )
-		{
-			var task = new GetMissionTaskModelMasterTask(
+        ) =>
+            new GetMissionTaskModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -9699,44 +8514,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator UpdateMissionTaskModelMaster(
                 Request.UpdateMissionTaskModelMasterRequest request,
                 UnityAction<AsyncResult<Result.UpdateMissionTaskModelMasterResult>> callback
-        )
-		{
-			var task = new UpdateMissionTaskModelMasterTask(
+        ) =>
+            new UpdateMissionTaskModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateMissionTaskModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UpdateMissionTaskModelMasterResult> UpdateMissionTaskModelMasterFuture(
                 Request.UpdateMissionTaskModelMasterRequest request
-        )
-		{
-			return new UpdateMissionTaskModelMasterTask(
+        ) =>
+            new UpdateMissionTaskModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateMissionTaskModelMasterResult> UpdateMissionTaskModelMasterAsync(
+		public UniTask<Result.UpdateMissionTaskModelMasterResult> UpdateMissionTaskModelMasterAsync(
                 Request.UpdateMissionTaskModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.UpdateMissionTaskModelMasterResult> result = null;
-			await UpdateMissionTaskModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UpdateMissionTaskModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UpdateMissionTaskModelMasterResult>();
     #else
 		public UpdateMissionTaskModelMasterTask UpdateMissionTaskModelMasterAsync(
                 Request.UpdateMissionTaskModelMasterRequest request
@@ -9750,17 +8552,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.UpdateMissionTaskModelMasterResult> UpdateMissionTaskModelMasterAsync(
+		public Task<Result.UpdateMissionTaskModelMasterResult> UpdateMissionTaskModelMasterAsync(
                 Request.UpdateMissionTaskModelMasterRequest request
-        )
-		{
-			var task = new UpdateMissionTaskModelMasterTask(
+        ) =>
+            new UpdateMissionTaskModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -9804,44 +8603,31 @@ namespace Gs2.Gs2Mission
 		public IEnumerator DeleteMissionTaskModelMaster(
                 Request.DeleteMissionTaskModelMasterRequest request,
                 UnityAction<AsyncResult<Result.DeleteMissionTaskModelMasterResult>> callback
-        )
-		{
-			var task = new DeleteMissionTaskModelMasterTask(
+        ) =>
+            new DeleteMissionTaskModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteMissionTaskModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteMissionTaskModelMasterResult> DeleteMissionTaskModelMasterFuture(
                 Request.DeleteMissionTaskModelMasterRequest request
-        )
-		{
-			return new DeleteMissionTaskModelMasterTask(
+        ) =>
+            new DeleteMissionTaskModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteMissionTaskModelMasterResult> DeleteMissionTaskModelMasterAsync(
+		public UniTask<Result.DeleteMissionTaskModelMasterResult> DeleteMissionTaskModelMasterAsync(
                 Request.DeleteMissionTaskModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.DeleteMissionTaskModelMasterResult> result = null;
-			await DeleteMissionTaskModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteMissionTaskModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteMissionTaskModelMasterResult>();
     #else
 		public DeleteMissionTaskModelMasterTask DeleteMissionTaskModelMasterAsync(
                 Request.DeleteMissionTaskModelMasterRequest request
@@ -9855,17 +8641,14 @@ namespace Gs2.Gs2Mission
         }
     #endif
 #else
-		public async Task<Result.DeleteMissionTaskModelMasterResult> DeleteMissionTaskModelMasterAsync(
+		public Task<Result.DeleteMissionTaskModelMasterResult> DeleteMissionTaskModelMasterAsync(
                 Request.DeleteMissionTaskModelMasterRequest request
-        )
-		{
-			var task = new DeleteMissionTaskModelMasterTask(
+        ) =>
+            new DeleteMissionTaskModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 	}
 }

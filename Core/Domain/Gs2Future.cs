@@ -12,11 +12,11 @@ namespace Gs2.Core.Domain
 
     public abstract class Gs2Future<TResult> : IFuture<TResult> 
     {
-        public TResult Result { get; set; }
-        public Gs2Exception Error { get; set; }
+        public TResult Result { get; private set; }
+        public Gs2Exception Error { get; private set; }
         private IEnumerator InflightAction { get; set; }
 
-        public abstract IEnumerator Action();
+        protected abstract IEnumerator Action();
 
         public bool IsComplete()
         {
@@ -79,7 +79,7 @@ namespace Gs2.Core.Domain
             _func = func;
         }
         
-        public override IEnumerator Action()
+        protected override IEnumerator Action()
         {
             return _func.Invoke(this);
         }
@@ -96,7 +96,7 @@ namespace Gs2.Core.Domain
             _func = func;
         }
         
-        public override IEnumerator Action()
+        protected override IEnumerator Action()
         {
             return _func.Invoke(this);
         }

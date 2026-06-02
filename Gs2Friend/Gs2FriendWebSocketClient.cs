@@ -23,6 +23,7 @@ using System.Linq;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
+using Gs2.Core.Util;
 using Gs2.Util.LitJson;
 
 #if UNITY_2017_1_OR_NEWER
@@ -54,9 +55,9 @@ namespace Gs2.Gs2Friend
 
         public class GetNamespaceStatusTask : Gs2WebSocketSessionTask<Request.GetNamespaceStatusRequest, Result.GetNamespaceStatusResult>
         {
-	        public GetNamespaceStatusTask(IGs2Session session, Request.GetNamespaceStatusRequest request) : base(session, request)
-	        {
-	        }
+            public GetNamespaceStatusTask(IGs2Session session, Request.GetNamespaceStatusRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetNamespaceStatusRequest request)
             {
@@ -96,70 +97,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetNamespaceStatus(
+        public IEnumerator GetNamespaceStatus(
                 Request.GetNamespaceStatusRequest request,
                 UnityAction<AsyncResult<Result.GetNamespaceStatusResult>> callback
-        )
-		{
-			var task = new GetNamespaceStatusTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetNamespaceStatusResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetNamespaceStatusTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetNamespaceStatusResult> GetNamespaceStatusFuture(
+        public IFuture<Result.GetNamespaceStatusResult> GetNamespaceStatusFuture(
                 Request.GetNamespaceStatusRequest request
-        )
-		{
-			return new GetNamespaceStatusTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetNamespaceStatusTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+        public UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
             Request.GetNamespaceStatusRequest request
-        )
-		{
-		    var task = new GetNamespaceStatusTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetNamespaceStatusTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetNamespaceStatusResult>();
     #else
-		public GetNamespaceStatusTask GetNamespaceStatusAsync(
+        public GetNamespaceStatusTask GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
         )
-		{
-			return new GetNamespaceStatusTask(
+        {
+            return new GetNamespaceStatusTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+        public Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
             Request.GetNamespaceStatusRequest request
-        )
-		{
-		    var task = new GetNamespaceStatusTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetNamespaceStatusTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class GetServiceVersionTask : Gs2WebSocketSessionTask<Request.GetServiceVersionRequest, Result.GetServiceVersionResult>
         {
-	        public GetServiceVersionTask(IGs2Session session, Request.GetServiceVersionRequest request) : base(session, request)
-	        {
-	        }
+            public GetServiceVersionTask(IGs2Session session, Request.GetServiceVersionRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetServiceVersionRequest request)
             {
@@ -194,70 +183,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetServiceVersion(
+        public IEnumerator GetServiceVersion(
                 Request.GetServiceVersionRequest request,
                 UnityAction<AsyncResult<Result.GetServiceVersionResult>> callback
-        )
-		{
-			var task = new GetServiceVersionTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetServiceVersionResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetServiceVersionTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetServiceVersionResult> GetServiceVersionFuture(
+        public IFuture<Result.GetServiceVersionResult> GetServiceVersionFuture(
                 Request.GetServiceVersionRequest request
-        )
-		{
-			return new GetServiceVersionTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetServiceVersionTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetServiceVersionResult> GetServiceVersionAsync(
+        public UniTask<Result.GetServiceVersionResult> GetServiceVersionAsync(
             Request.GetServiceVersionRequest request
-        )
-		{
-		    var task = new GetServiceVersionTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetServiceVersionTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetServiceVersionResult>();
     #else
-		public GetServiceVersionTask GetServiceVersionAsync(
+        public GetServiceVersionTask GetServiceVersionAsync(
                 Request.GetServiceVersionRequest request
         )
-		{
-			return new GetServiceVersionTask(
+        {
+            return new GetServiceVersionTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetServiceVersionResult> GetServiceVersionAsync(
+        public Task<Result.GetServiceVersionResult> GetServiceVersionAsync(
             Request.GetServiceVersionRequest request
-        )
-		{
-		    var task = new GetServiceVersionTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetServiceVersionTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class DumpUserDataByUserIdTask : Gs2WebSocketSessionTask<Request.DumpUserDataByUserIdRequest, Result.DumpUserDataByUserIdResult>
         {
-	        public DumpUserDataByUserIdTask(IGs2Session session, Request.DumpUserDataByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public DumpUserDataByUserIdTask(IGs2Session session, Request.DumpUserDataByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.DumpUserDataByUserIdRequest request)
             {
@@ -302,70 +279,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator DumpUserDataByUserId(
+        public IEnumerator DumpUserDataByUserId(
                 Request.DumpUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DumpUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new DumpUserDataByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DumpUserDataByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new DumpUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdFuture(
+        public IFuture<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdFuture(
                 Request.DumpUserDataByUserIdRequest request
-        )
-		{
-			return new DumpUserDataByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new DumpUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdAsync(
+        public UniTask<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdAsync(
             Request.DumpUserDataByUserIdRequest request
-        )
-		{
-		    var task = new DumpUserDataByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new DumpUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.DumpUserDataByUserIdResult>();
     #else
-		public DumpUserDataByUserIdTask DumpUserDataByUserIdAsync(
+        public DumpUserDataByUserIdTask DumpUserDataByUserIdAsync(
                 Request.DumpUserDataByUserIdRequest request
         )
-		{
-			return new DumpUserDataByUserIdTask(
+        {
+            return new DumpUserDataByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdAsync(
+        public Task<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdAsync(
             Request.DumpUserDataByUserIdRequest request
-        )
-		{
-		    var task = new DumpUserDataByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new DumpUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class CheckDumpUserDataByUserIdTask : Gs2WebSocketSessionTask<Request.CheckDumpUserDataByUserIdRequest, Result.CheckDumpUserDataByUserIdResult>
         {
-	        public CheckDumpUserDataByUserIdTask(IGs2Session session, Request.CheckDumpUserDataByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public CheckDumpUserDataByUserIdTask(IGs2Session session, Request.CheckDumpUserDataByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.CheckDumpUserDataByUserIdRequest request)
             {
@@ -410,70 +375,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator CheckDumpUserDataByUserId(
+        public IEnumerator CheckDumpUserDataByUserId(
                 Request.CheckDumpUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.CheckDumpUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new CheckDumpUserDataByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CheckDumpUserDataByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new CheckDumpUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdFuture(
+        public IFuture<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdFuture(
                 Request.CheckDumpUserDataByUserIdRequest request
-        )
-		{
-			return new CheckDumpUserDataByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new CheckDumpUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdAsync(
+        public UniTask<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdAsync(
             Request.CheckDumpUserDataByUserIdRequest request
-        )
-		{
-		    var task = new CheckDumpUserDataByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new CheckDumpUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.CheckDumpUserDataByUserIdResult>();
     #else
-		public CheckDumpUserDataByUserIdTask CheckDumpUserDataByUserIdAsync(
+        public CheckDumpUserDataByUserIdTask CheckDumpUserDataByUserIdAsync(
                 Request.CheckDumpUserDataByUserIdRequest request
         )
-		{
-			return new CheckDumpUserDataByUserIdTask(
+        {
+            return new CheckDumpUserDataByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdAsync(
+        public Task<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdAsync(
             Request.CheckDumpUserDataByUserIdRequest request
-        )
-		{
-		    var task = new CheckDumpUserDataByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new CheckDumpUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class CleanUserDataByUserIdTask : Gs2WebSocketSessionTask<Request.CleanUserDataByUserIdRequest, Result.CleanUserDataByUserIdResult>
         {
-	        public CleanUserDataByUserIdTask(IGs2Session session, Request.CleanUserDataByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public CleanUserDataByUserIdTask(IGs2Session session, Request.CleanUserDataByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.CleanUserDataByUserIdRequest request)
             {
@@ -518,70 +471,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator CleanUserDataByUserId(
+        public IEnumerator CleanUserDataByUserId(
                 Request.CleanUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.CleanUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new CleanUserDataByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CleanUserDataByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new CleanUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdFuture(
+        public IFuture<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdFuture(
                 Request.CleanUserDataByUserIdRequest request
-        )
-		{
-			return new CleanUserDataByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new CleanUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdAsync(
+        public UniTask<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdAsync(
             Request.CleanUserDataByUserIdRequest request
-        )
-		{
-		    var task = new CleanUserDataByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new CleanUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.CleanUserDataByUserIdResult>();
     #else
-		public CleanUserDataByUserIdTask CleanUserDataByUserIdAsync(
+        public CleanUserDataByUserIdTask CleanUserDataByUserIdAsync(
                 Request.CleanUserDataByUserIdRequest request
         )
-		{
-			return new CleanUserDataByUserIdTask(
+        {
+            return new CleanUserDataByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdAsync(
+        public Task<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdAsync(
             Request.CleanUserDataByUserIdRequest request
-        )
-		{
-		    var task = new CleanUserDataByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new CleanUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class CheckCleanUserDataByUserIdTask : Gs2WebSocketSessionTask<Request.CheckCleanUserDataByUserIdRequest, Result.CheckCleanUserDataByUserIdResult>
         {
-	        public CheckCleanUserDataByUserIdTask(IGs2Session session, Request.CheckCleanUserDataByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public CheckCleanUserDataByUserIdTask(IGs2Session session, Request.CheckCleanUserDataByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.CheckCleanUserDataByUserIdRequest request)
             {
@@ -626,70 +567,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator CheckCleanUserDataByUserId(
+        public IEnumerator CheckCleanUserDataByUserId(
                 Request.CheckCleanUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.CheckCleanUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new CheckCleanUserDataByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CheckCleanUserDataByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new CheckCleanUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdFuture(
+        public IFuture<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdFuture(
                 Request.CheckCleanUserDataByUserIdRequest request
-        )
-		{
-			return new CheckCleanUserDataByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new CheckCleanUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdAsync(
+        public UniTask<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdAsync(
             Request.CheckCleanUserDataByUserIdRequest request
-        )
-		{
-		    var task = new CheckCleanUserDataByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new CheckCleanUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.CheckCleanUserDataByUserIdResult>();
     #else
-		public CheckCleanUserDataByUserIdTask CheckCleanUserDataByUserIdAsync(
+        public CheckCleanUserDataByUserIdTask CheckCleanUserDataByUserIdAsync(
                 Request.CheckCleanUserDataByUserIdRequest request
         )
-		{
-			return new CheckCleanUserDataByUserIdTask(
+        {
+            return new CheckCleanUserDataByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdAsync(
+        public Task<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdAsync(
             Request.CheckCleanUserDataByUserIdRequest request
-        )
-		{
-		    var task = new CheckCleanUserDataByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new CheckCleanUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class PrepareImportUserDataByUserIdTask : Gs2WebSocketSessionTask<Request.PrepareImportUserDataByUserIdRequest, Result.PrepareImportUserDataByUserIdResult>
         {
-	        public PrepareImportUserDataByUserIdTask(IGs2Session session, Request.PrepareImportUserDataByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public PrepareImportUserDataByUserIdTask(IGs2Session session, Request.PrepareImportUserDataByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.PrepareImportUserDataByUserIdRequest request)
             {
@@ -734,70 +663,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator PrepareImportUserDataByUserId(
+        public IEnumerator PrepareImportUserDataByUserId(
                 Request.PrepareImportUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.PrepareImportUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new PrepareImportUserDataByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.PrepareImportUserDataByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new PrepareImportUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdFuture(
+        public IFuture<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdFuture(
                 Request.PrepareImportUserDataByUserIdRequest request
-        )
-		{
-			return new PrepareImportUserDataByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new PrepareImportUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdAsync(
+        public UniTask<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdAsync(
             Request.PrepareImportUserDataByUserIdRequest request
-        )
-		{
-		    var task = new PrepareImportUserDataByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new PrepareImportUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.PrepareImportUserDataByUserIdResult>();
     #else
-		public PrepareImportUserDataByUserIdTask PrepareImportUserDataByUserIdAsync(
+        public PrepareImportUserDataByUserIdTask PrepareImportUserDataByUserIdAsync(
                 Request.PrepareImportUserDataByUserIdRequest request
         )
-		{
-			return new PrepareImportUserDataByUserIdTask(
+        {
+            return new PrepareImportUserDataByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdAsync(
+        public Task<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdAsync(
             Request.PrepareImportUserDataByUserIdRequest request
-        )
-		{
-		    var task = new PrepareImportUserDataByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new PrepareImportUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class ImportUserDataByUserIdTask : Gs2WebSocketSessionTask<Request.ImportUserDataByUserIdRequest, Result.ImportUserDataByUserIdResult>
         {
-	        public ImportUserDataByUserIdTask(IGs2Session session, Request.ImportUserDataByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public ImportUserDataByUserIdTask(IGs2Session session, Request.ImportUserDataByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.ImportUserDataByUserIdRequest request)
             {
@@ -847,70 +764,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator ImportUserDataByUserId(
+        public IEnumerator ImportUserDataByUserId(
                 Request.ImportUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.ImportUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new ImportUserDataByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ImportUserDataByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new ImportUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdFuture(
+        public IFuture<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdFuture(
                 Request.ImportUserDataByUserIdRequest request
-        )
-		{
-			return new ImportUserDataByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new ImportUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdAsync(
+        public UniTask<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdAsync(
             Request.ImportUserDataByUserIdRequest request
-        )
-		{
-		    var task = new ImportUserDataByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new ImportUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.ImportUserDataByUserIdResult>();
     #else
-		public ImportUserDataByUserIdTask ImportUserDataByUserIdAsync(
+        public ImportUserDataByUserIdTask ImportUserDataByUserIdAsync(
                 Request.ImportUserDataByUserIdRequest request
         )
-		{
-			return new ImportUserDataByUserIdTask(
+        {
+            return new ImportUserDataByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdAsync(
+        public Task<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdAsync(
             Request.ImportUserDataByUserIdRequest request
-        )
-		{
-		    var task = new ImportUserDataByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new ImportUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class CheckImportUserDataByUserIdTask : Gs2WebSocketSessionTask<Request.CheckImportUserDataByUserIdRequest, Result.CheckImportUserDataByUserIdResult>
         {
-	        public CheckImportUserDataByUserIdTask(IGs2Session session, Request.CheckImportUserDataByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public CheckImportUserDataByUserIdTask(IGs2Session session, Request.CheckImportUserDataByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.CheckImportUserDataByUserIdRequest request)
             {
@@ -960,70 +865,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator CheckImportUserDataByUserId(
+        public IEnumerator CheckImportUserDataByUserId(
                 Request.CheckImportUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.CheckImportUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new CheckImportUserDataByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CheckImportUserDataByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new CheckImportUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdFuture(
+        public IFuture<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdFuture(
                 Request.CheckImportUserDataByUserIdRequest request
-        )
-		{
-			return new CheckImportUserDataByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new CheckImportUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdAsync(
+        public UniTask<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdAsync(
             Request.CheckImportUserDataByUserIdRequest request
-        )
-		{
-		    var task = new CheckImportUserDataByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new CheckImportUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.CheckImportUserDataByUserIdResult>();
     #else
-		public CheckImportUserDataByUserIdTask CheckImportUserDataByUserIdAsync(
+        public CheckImportUserDataByUserIdTask CheckImportUserDataByUserIdAsync(
                 Request.CheckImportUserDataByUserIdRequest request
         )
-		{
-			return new CheckImportUserDataByUserIdTask(
+        {
+            return new CheckImportUserDataByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdAsync(
+        public Task<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdAsync(
             Request.CheckImportUserDataByUserIdRequest request
-        )
-		{
-		    var task = new CheckImportUserDataByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new CheckImportUserDataByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class GetProfileTask : Gs2WebSocketSessionTask<Request.GetProfileRequest, Result.GetProfileResult>
         {
-	        public GetProfileTask(IGs2Session session, Request.GetProfileRequest request) : base(session, request)
-	        {
-	        }
+            public GetProfileTask(IGs2Session session, Request.GetProfileRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetProfileRequest request)
             {
@@ -1073,70 +966,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetProfile(
+        public IEnumerator GetProfile(
                 Request.GetProfileRequest request,
                 UnityAction<AsyncResult<Result.GetProfileResult>> callback
-        )
-		{
-			var task = new GetProfileTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetProfileResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetProfileTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetProfileResult> GetProfileFuture(
+        public IFuture<Result.GetProfileResult> GetProfileFuture(
                 Request.GetProfileRequest request
-        )
-		{
-			return new GetProfileTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetProfileTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetProfileResult> GetProfileAsync(
+        public UniTask<Result.GetProfileResult> GetProfileAsync(
             Request.GetProfileRequest request
-        )
-		{
-		    var task = new GetProfileTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetProfileTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetProfileResult>();
     #else
-		public GetProfileTask GetProfileAsync(
+        public GetProfileTask GetProfileAsync(
                 Request.GetProfileRequest request
         )
-		{
-			return new GetProfileTask(
+        {
+            return new GetProfileTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetProfileResult> GetProfileAsync(
+        public Task<Result.GetProfileResult> GetProfileAsync(
             Request.GetProfileRequest request
-        )
-		{
-		    var task = new GetProfileTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetProfileTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class GetProfileByUserIdTask : Gs2WebSocketSessionTask<Request.GetProfileByUserIdRequest, Result.GetProfileByUserIdResult>
         {
-	        public GetProfileByUserIdTask(IGs2Session session, Request.GetProfileByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public GetProfileByUserIdTask(IGs2Session session, Request.GetProfileByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetProfileByUserIdRequest request)
             {
@@ -1186,70 +1067,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetProfileByUserId(
+        public IEnumerator GetProfileByUserId(
                 Request.GetProfileByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetProfileByUserIdResult>> callback
-        )
-		{
-			var task = new GetProfileByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetProfileByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetProfileByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetProfileByUserIdResult> GetProfileByUserIdFuture(
+        public IFuture<Result.GetProfileByUserIdResult> GetProfileByUserIdFuture(
                 Request.GetProfileByUserIdRequest request
-        )
-		{
-			return new GetProfileByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetProfileByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetProfileByUserIdResult> GetProfileByUserIdAsync(
+        public UniTask<Result.GetProfileByUserIdResult> GetProfileByUserIdAsync(
             Request.GetProfileByUserIdRequest request
-        )
-		{
-		    var task = new GetProfileByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetProfileByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetProfileByUserIdResult>();
     #else
-		public GetProfileByUserIdTask GetProfileByUserIdAsync(
+        public GetProfileByUserIdTask GetProfileByUserIdAsync(
                 Request.GetProfileByUserIdRequest request
         )
-		{
-			return new GetProfileByUserIdTask(
+        {
+            return new GetProfileByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetProfileByUserIdResult> GetProfileByUserIdAsync(
+        public Task<Result.GetProfileByUserIdResult> GetProfileByUserIdAsync(
             Request.GetProfileByUserIdRequest request
-        )
-		{
-		    var task = new GetProfileByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetProfileByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class UpdateProfileTask : Gs2WebSocketSessionTask<Request.UpdateProfileRequest, Result.UpdateProfileResult>
         {
-	        public UpdateProfileTask(IGs2Session session, Request.UpdateProfileRequest request) : base(session, request)
-	        {
-	        }
+            public UpdateProfileTask(IGs2Session session, Request.UpdateProfileRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.UpdateProfileRequest request)
             {
@@ -1319,70 +1188,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator UpdateProfile(
+        public IEnumerator UpdateProfile(
                 Request.UpdateProfileRequest request,
                 UnityAction<AsyncResult<Result.UpdateProfileResult>> callback
-        )
-		{
-			var task = new UpdateProfileTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateProfileResult>(task.Result, task.Error));
-        }
+        ) =>
+            new UpdateProfileTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.UpdateProfileResult> UpdateProfileFuture(
+        public IFuture<Result.UpdateProfileResult> UpdateProfileFuture(
                 Request.UpdateProfileRequest request
-        )
-		{
-			return new UpdateProfileTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new UpdateProfileTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateProfileResult> UpdateProfileAsync(
+        public UniTask<Result.UpdateProfileResult> UpdateProfileAsync(
             Request.UpdateProfileRequest request
-        )
-		{
-		    var task = new UpdateProfileTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new UpdateProfileTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.UpdateProfileResult>();
     #else
-		public UpdateProfileTask UpdateProfileAsync(
+        public UpdateProfileTask UpdateProfileAsync(
                 Request.UpdateProfileRequest request
         )
-		{
-			return new UpdateProfileTask(
+        {
+            return new UpdateProfileTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.UpdateProfileResult> UpdateProfileAsync(
+        public Task<Result.UpdateProfileResult> UpdateProfileAsync(
             Request.UpdateProfileRequest request
-        )
-		{
-		    var task = new UpdateProfileTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new UpdateProfileTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class UpdateProfileByUserIdTask : Gs2WebSocketSessionTask<Request.UpdateProfileByUserIdRequest, Result.UpdateProfileByUserIdResult>
         {
-	        public UpdateProfileByUserIdTask(IGs2Session session, Request.UpdateProfileByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public UpdateProfileByUserIdTask(IGs2Session session, Request.UpdateProfileByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.UpdateProfileByUserIdRequest request)
             {
@@ -1452,70 +1309,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator UpdateProfileByUserId(
+        public IEnumerator UpdateProfileByUserId(
                 Request.UpdateProfileByUserIdRequest request,
                 UnityAction<AsyncResult<Result.UpdateProfileByUserIdResult>> callback
-        )
-		{
-			var task = new UpdateProfileByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateProfileByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new UpdateProfileByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.UpdateProfileByUserIdResult> UpdateProfileByUserIdFuture(
+        public IFuture<Result.UpdateProfileByUserIdResult> UpdateProfileByUserIdFuture(
                 Request.UpdateProfileByUserIdRequest request
-        )
-		{
-			return new UpdateProfileByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new UpdateProfileByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateProfileByUserIdResult> UpdateProfileByUserIdAsync(
+        public UniTask<Result.UpdateProfileByUserIdResult> UpdateProfileByUserIdAsync(
             Request.UpdateProfileByUserIdRequest request
-        )
-		{
-		    var task = new UpdateProfileByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new UpdateProfileByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.UpdateProfileByUserIdResult>();
     #else
-		public UpdateProfileByUserIdTask UpdateProfileByUserIdAsync(
+        public UpdateProfileByUserIdTask UpdateProfileByUserIdAsync(
                 Request.UpdateProfileByUserIdRequest request
         )
-		{
-			return new UpdateProfileByUserIdTask(
+        {
+            return new UpdateProfileByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.UpdateProfileByUserIdResult> UpdateProfileByUserIdAsync(
+        public Task<Result.UpdateProfileByUserIdResult> UpdateProfileByUserIdAsync(
             Request.UpdateProfileByUserIdRequest request
-        )
-		{
-		    var task = new UpdateProfileByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new UpdateProfileByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class DeleteProfileByUserIdTask : Gs2WebSocketSessionTask<Request.DeleteProfileByUserIdRequest, Result.DeleteProfileByUserIdResult>
         {
-	        public DeleteProfileByUserIdTask(IGs2Session session, Request.DeleteProfileByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public DeleteProfileByUserIdTask(IGs2Session session, Request.DeleteProfileByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.DeleteProfileByUserIdRequest request)
             {
@@ -1570,70 +1415,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator DeleteProfileByUserId(
+        public IEnumerator DeleteProfileByUserId(
                 Request.DeleteProfileByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DeleteProfileByUserIdResult>> callback
-        )
-		{
-			var task = new DeleteProfileByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteProfileByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new DeleteProfileByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.DeleteProfileByUserIdResult> DeleteProfileByUserIdFuture(
+        public IFuture<Result.DeleteProfileByUserIdResult> DeleteProfileByUserIdFuture(
                 Request.DeleteProfileByUserIdRequest request
-        )
-		{
-			return new DeleteProfileByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new DeleteProfileByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteProfileByUserIdResult> DeleteProfileByUserIdAsync(
+        public UniTask<Result.DeleteProfileByUserIdResult> DeleteProfileByUserIdAsync(
             Request.DeleteProfileByUserIdRequest request
-        )
-		{
-		    var task = new DeleteProfileByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new DeleteProfileByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.DeleteProfileByUserIdResult>();
     #else
-		public DeleteProfileByUserIdTask DeleteProfileByUserIdAsync(
+        public DeleteProfileByUserIdTask DeleteProfileByUserIdAsync(
                 Request.DeleteProfileByUserIdRequest request
         )
-		{
-			return new DeleteProfileByUserIdTask(
+        {
+            return new DeleteProfileByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.DeleteProfileByUserIdResult> DeleteProfileByUserIdAsync(
+        public Task<Result.DeleteProfileByUserIdResult> DeleteProfileByUserIdAsync(
             Request.DeleteProfileByUserIdRequest request
-        )
-		{
-		    var task = new DeleteProfileByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new DeleteProfileByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class UpdateProfileByStampSheetTask : Gs2WebSocketSessionTask<Request.UpdateProfileByStampSheetRequest, Result.UpdateProfileByStampSheetResult>
         {
-	        public UpdateProfileByStampSheetTask(IGs2Session session, Request.UpdateProfileByStampSheetRequest request) : base(session, request)
-	        {
-	        }
+            public UpdateProfileByStampSheetTask(IGs2Session session, Request.UpdateProfileByStampSheetRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.UpdateProfileByStampSheetRequest request)
             {
@@ -1678,70 +1511,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator UpdateProfileByStampSheet(
+        public IEnumerator UpdateProfileByStampSheet(
                 Request.UpdateProfileByStampSheetRequest request,
                 UnityAction<AsyncResult<Result.UpdateProfileByStampSheetResult>> callback
-        )
-		{
-			var task = new UpdateProfileByStampSheetTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateProfileByStampSheetResult>(task.Result, task.Error));
-        }
+        ) =>
+            new UpdateProfileByStampSheetTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.UpdateProfileByStampSheetResult> UpdateProfileByStampSheetFuture(
+        public IFuture<Result.UpdateProfileByStampSheetResult> UpdateProfileByStampSheetFuture(
                 Request.UpdateProfileByStampSheetRequest request
-        )
-		{
-			return new UpdateProfileByStampSheetTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new UpdateProfileByStampSheetTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateProfileByStampSheetResult> UpdateProfileByStampSheetAsync(
+        public UniTask<Result.UpdateProfileByStampSheetResult> UpdateProfileByStampSheetAsync(
             Request.UpdateProfileByStampSheetRequest request
-        )
-		{
-		    var task = new UpdateProfileByStampSheetTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new UpdateProfileByStampSheetTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.UpdateProfileByStampSheetResult>();
     #else
-		public UpdateProfileByStampSheetTask UpdateProfileByStampSheetAsync(
+        public UpdateProfileByStampSheetTask UpdateProfileByStampSheetAsync(
                 Request.UpdateProfileByStampSheetRequest request
         )
-		{
-			return new UpdateProfileByStampSheetTask(
+        {
+            return new UpdateProfileByStampSheetTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.UpdateProfileByStampSheetResult> UpdateProfileByStampSheetAsync(
+        public Task<Result.UpdateProfileByStampSheetResult> UpdateProfileByStampSheetAsync(
             Request.UpdateProfileByStampSheetRequest request
-        )
-		{
-		    var task = new UpdateProfileByStampSheetTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new UpdateProfileByStampSheetTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class GetFollowTask : Gs2WebSocketSessionTask<Request.GetFollowRequest, Result.GetFollowResult>
         {
-	        public GetFollowTask(IGs2Session session, Request.GetFollowRequest request) : base(session, request)
-	        {
-	        }
+            public GetFollowTask(IGs2Session session, Request.GetFollowRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetFollowRequest request)
             {
@@ -1801,70 +1622,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetFollow(
+        public IEnumerator GetFollow(
                 Request.GetFollowRequest request,
                 UnityAction<AsyncResult<Result.GetFollowResult>> callback
-        )
-		{
-			var task = new GetFollowTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetFollowResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetFollowTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetFollowResult> GetFollowFuture(
+        public IFuture<Result.GetFollowResult> GetFollowFuture(
                 Request.GetFollowRequest request
-        )
-		{
-			return new GetFollowTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetFollowTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetFollowResult> GetFollowAsync(
+        public UniTask<Result.GetFollowResult> GetFollowAsync(
             Request.GetFollowRequest request
-        )
-		{
-		    var task = new GetFollowTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetFollowTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetFollowResult>();
     #else
-		public GetFollowTask GetFollowAsync(
+        public GetFollowTask GetFollowAsync(
                 Request.GetFollowRequest request
         )
-		{
-			return new GetFollowTask(
+        {
+            return new GetFollowTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetFollowResult> GetFollowAsync(
+        public Task<Result.GetFollowResult> GetFollowAsync(
             Request.GetFollowRequest request
-        )
-		{
-		    var task = new GetFollowTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetFollowTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class GetFollowByUserIdTask : Gs2WebSocketSessionTask<Request.GetFollowByUserIdRequest, Result.GetFollowByUserIdResult>
         {
-	        public GetFollowByUserIdTask(IGs2Session session, Request.GetFollowByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public GetFollowByUserIdTask(IGs2Session session, Request.GetFollowByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetFollowByUserIdRequest request)
             {
@@ -1924,70 +1733,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetFollowByUserId(
+        public IEnumerator GetFollowByUserId(
                 Request.GetFollowByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetFollowByUserIdResult>> callback
-        )
-		{
-			var task = new GetFollowByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetFollowByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetFollowByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetFollowByUserIdResult> GetFollowByUserIdFuture(
+        public IFuture<Result.GetFollowByUserIdResult> GetFollowByUserIdFuture(
                 Request.GetFollowByUserIdRequest request
-        )
-		{
-			return new GetFollowByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetFollowByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetFollowByUserIdResult> GetFollowByUserIdAsync(
+        public UniTask<Result.GetFollowByUserIdResult> GetFollowByUserIdAsync(
             Request.GetFollowByUserIdRequest request
-        )
-		{
-		    var task = new GetFollowByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetFollowByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetFollowByUserIdResult>();
     #else
-		public GetFollowByUserIdTask GetFollowByUserIdAsync(
+        public GetFollowByUserIdTask GetFollowByUserIdAsync(
                 Request.GetFollowByUserIdRequest request
         )
-		{
-			return new GetFollowByUserIdTask(
+        {
+            return new GetFollowByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetFollowByUserIdResult> GetFollowByUserIdAsync(
+        public Task<Result.GetFollowByUserIdResult> GetFollowByUserIdAsync(
             Request.GetFollowByUserIdRequest request
-        )
-		{
-		    var task = new GetFollowByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetFollowByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class FollowTask : Gs2WebSocketSessionTask<Request.FollowRequest, Result.FollowResult>
         {
-	        public FollowTask(IGs2Session session, Request.FollowRequest request) : base(session, request)
-	        {
-	        }
+            public FollowTask(IGs2Session session, Request.FollowRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.FollowRequest request)
             {
@@ -2047,70 +1844,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator Follow(
+        public IEnumerator Follow(
                 Request.FollowRequest request,
                 UnityAction<AsyncResult<Result.FollowResult>> callback
-        )
-		{
-			var task = new FollowTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.FollowResult>(task.Result, task.Error));
-        }
+        ) =>
+            new FollowTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.FollowResult> FollowFuture(
+        public IFuture<Result.FollowResult> FollowFuture(
                 Request.FollowRequest request
-        )
-		{
-			return new FollowTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new FollowTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.FollowResult> FollowAsync(
+        public UniTask<Result.FollowResult> FollowAsync(
             Request.FollowRequest request
-        )
-		{
-		    var task = new FollowTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new FollowTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.FollowResult>();
     #else
-		public FollowTask FollowAsync(
+        public FollowTask FollowAsync(
                 Request.FollowRequest request
         )
-		{
-			return new FollowTask(
+        {
+            return new FollowTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.FollowResult> FollowAsync(
+        public Task<Result.FollowResult> FollowAsync(
             Request.FollowRequest request
-        )
-		{
-		    var task = new FollowTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new FollowTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class FollowByUserIdTask : Gs2WebSocketSessionTask<Request.FollowByUserIdRequest, Result.FollowByUserIdResult>
         {
-	        public FollowByUserIdTask(IGs2Session session, Request.FollowByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public FollowByUserIdTask(IGs2Session session, Request.FollowByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.FollowByUserIdRequest request)
             {
@@ -2170,70 +1955,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator FollowByUserId(
+        public IEnumerator FollowByUserId(
                 Request.FollowByUserIdRequest request,
                 UnityAction<AsyncResult<Result.FollowByUserIdResult>> callback
-        )
-		{
-			var task = new FollowByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.FollowByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new FollowByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.FollowByUserIdResult> FollowByUserIdFuture(
+        public IFuture<Result.FollowByUserIdResult> FollowByUserIdFuture(
                 Request.FollowByUserIdRequest request
-        )
-		{
-			return new FollowByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new FollowByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.FollowByUserIdResult> FollowByUserIdAsync(
+        public UniTask<Result.FollowByUserIdResult> FollowByUserIdAsync(
             Request.FollowByUserIdRequest request
-        )
-		{
-		    var task = new FollowByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new FollowByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.FollowByUserIdResult>();
     #else
-		public FollowByUserIdTask FollowByUserIdAsync(
+        public FollowByUserIdTask FollowByUserIdAsync(
                 Request.FollowByUserIdRequest request
         )
-		{
-			return new FollowByUserIdTask(
+        {
+            return new FollowByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.FollowByUserIdResult> FollowByUserIdAsync(
+        public Task<Result.FollowByUserIdResult> FollowByUserIdAsync(
             Request.FollowByUserIdRequest request
-        )
-		{
-		    var task = new FollowByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new FollowByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class UnfollowTask : Gs2WebSocketSessionTask<Request.UnfollowRequest, Result.UnfollowResult>
         {
-	        public UnfollowTask(IGs2Session session, Request.UnfollowRequest request) : base(session, request)
-	        {
-	        }
+            public UnfollowTask(IGs2Session session, Request.UnfollowRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.UnfollowRequest request)
             {
@@ -2293,70 +2066,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator Unfollow(
+        public IEnumerator Unfollow(
                 Request.UnfollowRequest request,
                 UnityAction<AsyncResult<Result.UnfollowResult>> callback
-        )
-		{
-			var task = new UnfollowTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UnfollowResult>(task.Result, task.Error));
-        }
+        ) =>
+            new UnfollowTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.UnfollowResult> UnfollowFuture(
+        public IFuture<Result.UnfollowResult> UnfollowFuture(
                 Request.UnfollowRequest request
-        )
-		{
-			return new UnfollowTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new UnfollowTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UnfollowResult> UnfollowAsync(
+        public UniTask<Result.UnfollowResult> UnfollowAsync(
             Request.UnfollowRequest request
-        )
-		{
-		    var task = new UnfollowTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new UnfollowTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.UnfollowResult>();
     #else
-		public UnfollowTask UnfollowAsync(
+        public UnfollowTask UnfollowAsync(
                 Request.UnfollowRequest request
         )
-		{
-			return new UnfollowTask(
+        {
+            return new UnfollowTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.UnfollowResult> UnfollowAsync(
+        public Task<Result.UnfollowResult> UnfollowAsync(
             Request.UnfollowRequest request
-        )
-		{
-		    var task = new UnfollowTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new UnfollowTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class UnfollowByUserIdTask : Gs2WebSocketSessionTask<Request.UnfollowByUserIdRequest, Result.UnfollowByUserIdResult>
         {
-	        public UnfollowByUserIdTask(IGs2Session session, Request.UnfollowByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public UnfollowByUserIdTask(IGs2Session session, Request.UnfollowByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.UnfollowByUserIdRequest request)
             {
@@ -2416,70 +2177,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator UnfollowByUserId(
+        public IEnumerator UnfollowByUserId(
                 Request.UnfollowByUserIdRequest request,
                 UnityAction<AsyncResult<Result.UnfollowByUserIdResult>> callback
-        )
-		{
-			var task = new UnfollowByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UnfollowByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new UnfollowByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.UnfollowByUserIdResult> UnfollowByUserIdFuture(
+        public IFuture<Result.UnfollowByUserIdResult> UnfollowByUserIdFuture(
                 Request.UnfollowByUserIdRequest request
-        )
-		{
-			return new UnfollowByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new UnfollowByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UnfollowByUserIdResult> UnfollowByUserIdAsync(
+        public UniTask<Result.UnfollowByUserIdResult> UnfollowByUserIdAsync(
             Request.UnfollowByUserIdRequest request
-        )
-		{
-		    var task = new UnfollowByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new UnfollowByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.UnfollowByUserIdResult>();
     #else
-		public UnfollowByUserIdTask UnfollowByUserIdAsync(
+        public UnfollowByUserIdTask UnfollowByUserIdAsync(
                 Request.UnfollowByUserIdRequest request
         )
-		{
-			return new UnfollowByUserIdTask(
+        {
+            return new UnfollowByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.UnfollowByUserIdResult> UnfollowByUserIdAsync(
+        public Task<Result.UnfollowByUserIdResult> UnfollowByUserIdAsync(
             Request.UnfollowByUserIdRequest request
-        )
-		{
-		    var task = new UnfollowByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new UnfollowByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class GetFriendTask : Gs2WebSocketSessionTask<Request.GetFriendRequest, Result.GetFriendResult>
         {
-	        public GetFriendTask(IGs2Session session, Request.GetFriendRequest request) : base(session, request)
-	        {
-	        }
+            public GetFriendTask(IGs2Session session, Request.GetFriendRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetFriendRequest request)
             {
@@ -2539,70 +2288,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetFriend(
+        public IEnumerator GetFriend(
                 Request.GetFriendRequest request,
                 UnityAction<AsyncResult<Result.GetFriendResult>> callback
-        )
-		{
-			var task = new GetFriendTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetFriendResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetFriendTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetFriendResult> GetFriendFuture(
+        public IFuture<Result.GetFriendResult> GetFriendFuture(
                 Request.GetFriendRequest request
-        )
-		{
-			return new GetFriendTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetFriendTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetFriendResult> GetFriendAsync(
+        public UniTask<Result.GetFriendResult> GetFriendAsync(
             Request.GetFriendRequest request
-        )
-		{
-		    var task = new GetFriendTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetFriendTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetFriendResult>();
     #else
-		public GetFriendTask GetFriendAsync(
+        public GetFriendTask GetFriendAsync(
                 Request.GetFriendRequest request
         )
-		{
-			return new GetFriendTask(
+        {
+            return new GetFriendTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetFriendResult> GetFriendAsync(
+        public Task<Result.GetFriendResult> GetFriendAsync(
             Request.GetFriendRequest request
-        )
-		{
-		    var task = new GetFriendTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetFriendTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class GetFriendByUserIdTask : Gs2WebSocketSessionTask<Request.GetFriendByUserIdRequest, Result.GetFriendByUserIdResult>
         {
-	        public GetFriendByUserIdTask(IGs2Session session, Request.GetFriendByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public GetFriendByUserIdTask(IGs2Session session, Request.GetFriendByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetFriendByUserIdRequest request)
             {
@@ -2662,70 +2399,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetFriendByUserId(
+        public IEnumerator GetFriendByUserId(
                 Request.GetFriendByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetFriendByUserIdResult>> callback
-        )
-		{
-			var task = new GetFriendByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetFriendByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetFriendByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetFriendByUserIdResult> GetFriendByUserIdFuture(
+        public IFuture<Result.GetFriendByUserIdResult> GetFriendByUserIdFuture(
                 Request.GetFriendByUserIdRequest request
-        )
-		{
-			return new GetFriendByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetFriendByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetFriendByUserIdResult> GetFriendByUserIdAsync(
+        public UniTask<Result.GetFriendByUserIdResult> GetFriendByUserIdAsync(
             Request.GetFriendByUserIdRequest request
-        )
-		{
-		    var task = new GetFriendByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetFriendByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetFriendByUserIdResult>();
     #else
-		public GetFriendByUserIdTask GetFriendByUserIdAsync(
+        public GetFriendByUserIdTask GetFriendByUserIdAsync(
                 Request.GetFriendByUserIdRequest request
         )
-		{
-			return new GetFriendByUserIdTask(
+        {
+            return new GetFriendByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetFriendByUserIdResult> GetFriendByUserIdAsync(
+        public Task<Result.GetFriendByUserIdResult> GetFriendByUserIdAsync(
             Request.GetFriendByUserIdRequest request
-        )
-		{
-		    var task = new GetFriendByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetFriendByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class AddFriendTask : Gs2WebSocketSessionTask<Request.AddFriendRequest, Result.AddFriendResult>
         {
-	        public AddFriendTask(IGs2Session session, Request.AddFriendRequest request) : base(session, request)
-	        {
-	        }
+            public AddFriendTask(IGs2Session session, Request.AddFriendRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.AddFriendRequest request)
             {
@@ -2785,70 +2510,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator AddFriend(
+        public IEnumerator AddFriend(
                 Request.AddFriendRequest request,
                 UnityAction<AsyncResult<Result.AddFriendResult>> callback
-        )
-		{
-			var task = new AddFriendTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.AddFriendResult>(task.Result, task.Error));
-        }
+        ) =>
+            new AddFriendTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.AddFriendResult> AddFriendFuture(
+        public IFuture<Result.AddFriendResult> AddFriendFuture(
                 Request.AddFriendRequest request
-        )
-		{
-			return new AddFriendTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new AddFriendTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.AddFriendResult> AddFriendAsync(
+        public UniTask<Result.AddFriendResult> AddFriendAsync(
             Request.AddFriendRequest request
-        )
-		{
-		    var task = new AddFriendTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new AddFriendTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.AddFriendResult>();
     #else
-		public AddFriendTask AddFriendAsync(
+        public AddFriendTask AddFriendAsync(
                 Request.AddFriendRequest request
         )
-		{
-			return new AddFriendTask(
+        {
+            return new AddFriendTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.AddFriendResult> AddFriendAsync(
+        public Task<Result.AddFriendResult> AddFriendAsync(
             Request.AddFriendRequest request
-        )
-		{
-		    var task = new AddFriendTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new AddFriendTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class AddFriendByUserIdTask : Gs2WebSocketSessionTask<Request.AddFriendByUserIdRequest, Result.AddFriendByUserIdResult>
         {
-	        public AddFriendByUserIdTask(IGs2Session session, Request.AddFriendByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public AddFriendByUserIdTask(IGs2Session session, Request.AddFriendByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.AddFriendByUserIdRequest request)
             {
@@ -2908,70 +2621,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator AddFriendByUserId(
+        public IEnumerator AddFriendByUserId(
                 Request.AddFriendByUserIdRequest request,
                 UnityAction<AsyncResult<Result.AddFriendByUserIdResult>> callback
-        )
-		{
-			var task = new AddFriendByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.AddFriendByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new AddFriendByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.AddFriendByUserIdResult> AddFriendByUserIdFuture(
+        public IFuture<Result.AddFriendByUserIdResult> AddFriendByUserIdFuture(
                 Request.AddFriendByUserIdRequest request
-        )
-		{
-			return new AddFriendByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new AddFriendByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.AddFriendByUserIdResult> AddFriendByUserIdAsync(
+        public UniTask<Result.AddFriendByUserIdResult> AddFriendByUserIdAsync(
             Request.AddFriendByUserIdRequest request
-        )
-		{
-		    var task = new AddFriendByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new AddFriendByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.AddFriendByUserIdResult>();
     #else
-		public AddFriendByUserIdTask AddFriendByUserIdAsync(
+        public AddFriendByUserIdTask AddFriendByUserIdAsync(
                 Request.AddFriendByUserIdRequest request
         )
-		{
-			return new AddFriendByUserIdTask(
+        {
+            return new AddFriendByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.AddFriendByUserIdResult> AddFriendByUserIdAsync(
+        public Task<Result.AddFriendByUserIdResult> AddFriendByUserIdAsync(
             Request.AddFriendByUserIdRequest request
-        )
-		{
-		    var task = new AddFriendByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new AddFriendByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class DeleteFriendTask : Gs2WebSocketSessionTask<Request.DeleteFriendRequest, Result.DeleteFriendResult>
         {
-	        public DeleteFriendTask(IGs2Session session, Request.DeleteFriendRequest request) : base(session, request)
-	        {
-	        }
+            public DeleteFriendTask(IGs2Session session, Request.DeleteFriendRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.DeleteFriendRequest request)
             {
@@ -3031,70 +2732,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator DeleteFriend(
+        public IEnumerator DeleteFriend(
                 Request.DeleteFriendRequest request,
                 UnityAction<AsyncResult<Result.DeleteFriendResult>> callback
-        )
-		{
-			var task = new DeleteFriendTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteFriendResult>(task.Result, task.Error));
-        }
+        ) =>
+            new DeleteFriendTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.DeleteFriendResult> DeleteFriendFuture(
+        public IFuture<Result.DeleteFriendResult> DeleteFriendFuture(
                 Request.DeleteFriendRequest request
-        )
-		{
-			return new DeleteFriendTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new DeleteFriendTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteFriendResult> DeleteFriendAsync(
+        public UniTask<Result.DeleteFriendResult> DeleteFriendAsync(
             Request.DeleteFriendRequest request
-        )
-		{
-		    var task = new DeleteFriendTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new DeleteFriendTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.DeleteFriendResult>();
     #else
-		public DeleteFriendTask DeleteFriendAsync(
+        public DeleteFriendTask DeleteFriendAsync(
                 Request.DeleteFriendRequest request
         )
-		{
-			return new DeleteFriendTask(
+        {
+            return new DeleteFriendTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.DeleteFriendResult> DeleteFriendAsync(
+        public Task<Result.DeleteFriendResult> DeleteFriendAsync(
             Request.DeleteFriendRequest request
-        )
-		{
-		    var task = new DeleteFriendTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new DeleteFriendTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class DeleteFriendByUserIdTask : Gs2WebSocketSessionTask<Request.DeleteFriendByUserIdRequest, Result.DeleteFriendByUserIdResult>
         {
-	        public DeleteFriendByUserIdTask(IGs2Session session, Request.DeleteFriendByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public DeleteFriendByUserIdTask(IGs2Session session, Request.DeleteFriendByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.DeleteFriendByUserIdRequest request)
             {
@@ -3154,70 +2843,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator DeleteFriendByUserId(
+        public IEnumerator DeleteFriendByUserId(
                 Request.DeleteFriendByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DeleteFriendByUserIdResult>> callback
-        )
-		{
-			var task = new DeleteFriendByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteFriendByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new DeleteFriendByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.DeleteFriendByUserIdResult> DeleteFriendByUserIdFuture(
+        public IFuture<Result.DeleteFriendByUserIdResult> DeleteFriendByUserIdFuture(
                 Request.DeleteFriendByUserIdRequest request
-        )
-		{
-			return new DeleteFriendByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new DeleteFriendByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteFriendByUserIdResult> DeleteFriendByUserIdAsync(
+        public UniTask<Result.DeleteFriendByUserIdResult> DeleteFriendByUserIdAsync(
             Request.DeleteFriendByUserIdRequest request
-        )
-		{
-		    var task = new DeleteFriendByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new DeleteFriendByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.DeleteFriendByUserIdResult>();
     #else
-		public DeleteFriendByUserIdTask DeleteFriendByUserIdAsync(
+        public DeleteFriendByUserIdTask DeleteFriendByUserIdAsync(
                 Request.DeleteFriendByUserIdRequest request
         )
-		{
-			return new DeleteFriendByUserIdTask(
+        {
+            return new DeleteFriendByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.DeleteFriendByUserIdResult> DeleteFriendByUserIdAsync(
+        public Task<Result.DeleteFriendByUserIdResult> DeleteFriendByUserIdAsync(
             Request.DeleteFriendByUserIdRequest request
-        )
-		{
-		    var task = new DeleteFriendByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new DeleteFriendByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class GetSendRequestTask : Gs2WebSocketSessionTask<Request.GetSendRequestRequest, Result.GetSendRequestResult>
         {
-	        public GetSendRequestTask(IGs2Session session, Request.GetSendRequestRequest request) : base(session, request)
-	        {
-	        }
+            public GetSendRequestTask(IGs2Session session, Request.GetSendRequestRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetSendRequestRequest request)
             {
@@ -3277,70 +2954,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetSendRequest(
+        public IEnumerator GetSendRequest(
                 Request.GetSendRequestRequest request,
                 UnityAction<AsyncResult<Result.GetSendRequestResult>> callback
-        )
-		{
-			var task = new GetSendRequestTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetSendRequestResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetSendRequestTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetSendRequestResult> GetSendRequestFuture(
+        public IFuture<Result.GetSendRequestResult> GetSendRequestFuture(
                 Request.GetSendRequestRequest request
-        )
-		{
-			return new GetSendRequestTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetSendRequestTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetSendRequestResult> GetSendRequestAsync(
+        public UniTask<Result.GetSendRequestResult> GetSendRequestAsync(
             Request.GetSendRequestRequest request
-        )
-		{
-		    var task = new GetSendRequestTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetSendRequestTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetSendRequestResult>();
     #else
-		public GetSendRequestTask GetSendRequestAsync(
+        public GetSendRequestTask GetSendRequestAsync(
                 Request.GetSendRequestRequest request
         )
-		{
-			return new GetSendRequestTask(
+        {
+            return new GetSendRequestTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetSendRequestResult> GetSendRequestAsync(
+        public Task<Result.GetSendRequestResult> GetSendRequestAsync(
             Request.GetSendRequestRequest request
-        )
-		{
-		    var task = new GetSendRequestTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetSendRequestTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class GetSendRequestByUserIdTask : Gs2WebSocketSessionTask<Request.GetSendRequestByUserIdRequest, Result.GetSendRequestByUserIdResult>
         {
-	        public GetSendRequestByUserIdTask(IGs2Session session, Request.GetSendRequestByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public GetSendRequestByUserIdTask(IGs2Session session, Request.GetSendRequestByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetSendRequestByUserIdRequest request)
             {
@@ -3400,70 +3065,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetSendRequestByUserId(
+        public IEnumerator GetSendRequestByUserId(
                 Request.GetSendRequestByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetSendRequestByUserIdResult>> callback
-        )
-		{
-			var task = new GetSendRequestByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetSendRequestByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetSendRequestByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetSendRequestByUserIdResult> GetSendRequestByUserIdFuture(
+        public IFuture<Result.GetSendRequestByUserIdResult> GetSendRequestByUserIdFuture(
                 Request.GetSendRequestByUserIdRequest request
-        )
-		{
-			return new GetSendRequestByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetSendRequestByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetSendRequestByUserIdResult> GetSendRequestByUserIdAsync(
+        public UniTask<Result.GetSendRequestByUserIdResult> GetSendRequestByUserIdAsync(
             Request.GetSendRequestByUserIdRequest request
-        )
-		{
-		    var task = new GetSendRequestByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetSendRequestByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetSendRequestByUserIdResult>();
     #else
-		public GetSendRequestByUserIdTask GetSendRequestByUserIdAsync(
+        public GetSendRequestByUserIdTask GetSendRequestByUserIdAsync(
                 Request.GetSendRequestByUserIdRequest request
         )
-		{
-			return new GetSendRequestByUserIdTask(
+        {
+            return new GetSendRequestByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetSendRequestByUserIdResult> GetSendRequestByUserIdAsync(
+        public Task<Result.GetSendRequestByUserIdResult> GetSendRequestByUserIdAsync(
             Request.GetSendRequestByUserIdRequest request
-        )
-		{
-		    var task = new GetSendRequestByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetSendRequestByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class SendRequestTask : Gs2WebSocketSessionTask<Request.SendRequestRequest, Result.SendRequestResult>
         {
-	        public SendRequestTask(IGs2Session session, Request.SendRequestRequest request) : base(session, request)
-	        {
-	        }
+            public SendRequestTask(IGs2Session session, Request.SendRequestRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.SendRequestRequest request)
             {
@@ -3528,70 +3181,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator SendRequest(
+        public IEnumerator SendRequest(
                 Request.SendRequestRequest request,
                 UnityAction<AsyncResult<Result.SendRequestResult>> callback
-        )
-		{
-			var task = new SendRequestTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.SendRequestResult>(task.Result, task.Error));
-        }
+        ) =>
+            new SendRequestTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.SendRequestResult> SendRequestFuture(
+        public IFuture<Result.SendRequestResult> SendRequestFuture(
                 Request.SendRequestRequest request
-        )
-		{
-			return new SendRequestTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new SendRequestTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.SendRequestResult> SendRequestAsync(
+        public UniTask<Result.SendRequestResult> SendRequestAsync(
             Request.SendRequestRequest request
-        )
-		{
-		    var task = new SendRequestTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new SendRequestTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.SendRequestResult>();
     #else
-		public SendRequestTask SendRequestAsync(
+        public SendRequestTask SendRequestAsync(
                 Request.SendRequestRequest request
         )
-		{
-			return new SendRequestTask(
+        {
+            return new SendRequestTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.SendRequestResult> SendRequestAsync(
+        public Task<Result.SendRequestResult> SendRequestAsync(
             Request.SendRequestRequest request
-        )
-		{
-		    var task = new SendRequestTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new SendRequestTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class SendRequestByUserIdTask : Gs2WebSocketSessionTask<Request.SendRequestByUserIdRequest, Result.SendRequestByUserIdResult>
         {
-	        public SendRequestByUserIdTask(IGs2Session session, Request.SendRequestByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public SendRequestByUserIdTask(IGs2Session session, Request.SendRequestByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.SendRequestByUserIdRequest request)
             {
@@ -3656,70 +3297,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator SendRequestByUserId(
+        public IEnumerator SendRequestByUserId(
                 Request.SendRequestByUserIdRequest request,
                 UnityAction<AsyncResult<Result.SendRequestByUserIdResult>> callback
-        )
-		{
-			var task = new SendRequestByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.SendRequestByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new SendRequestByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.SendRequestByUserIdResult> SendRequestByUserIdFuture(
+        public IFuture<Result.SendRequestByUserIdResult> SendRequestByUserIdFuture(
                 Request.SendRequestByUserIdRequest request
-        )
-		{
-			return new SendRequestByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new SendRequestByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.SendRequestByUserIdResult> SendRequestByUserIdAsync(
+        public UniTask<Result.SendRequestByUserIdResult> SendRequestByUserIdAsync(
             Request.SendRequestByUserIdRequest request
-        )
-		{
-		    var task = new SendRequestByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new SendRequestByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.SendRequestByUserIdResult>();
     #else
-		public SendRequestByUserIdTask SendRequestByUserIdAsync(
+        public SendRequestByUserIdTask SendRequestByUserIdAsync(
                 Request.SendRequestByUserIdRequest request
         )
-		{
-			return new SendRequestByUserIdTask(
+        {
+            return new SendRequestByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.SendRequestByUserIdResult> SendRequestByUserIdAsync(
+        public Task<Result.SendRequestByUserIdResult> SendRequestByUserIdAsync(
             Request.SendRequestByUserIdRequest request
-        )
-		{
-		    var task = new SendRequestByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new SendRequestByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class DeleteRequestTask : Gs2WebSocketSessionTask<Request.DeleteRequestRequest, Result.DeleteRequestResult>
         {
-	        public DeleteRequestTask(IGs2Session session, Request.DeleteRequestRequest request) : base(session, request)
-	        {
-	        }
+            public DeleteRequestTask(IGs2Session session, Request.DeleteRequestRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.DeleteRequestRequest request)
             {
@@ -3779,70 +3408,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator DeleteRequest(
+        public IEnumerator DeleteRequest(
                 Request.DeleteRequestRequest request,
                 UnityAction<AsyncResult<Result.DeleteRequestResult>> callback
-        )
-		{
-			var task = new DeleteRequestTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteRequestResult>(task.Result, task.Error));
-        }
+        ) =>
+            new DeleteRequestTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.DeleteRequestResult> DeleteRequestFuture(
+        public IFuture<Result.DeleteRequestResult> DeleteRequestFuture(
                 Request.DeleteRequestRequest request
-        )
-		{
-			return new DeleteRequestTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new DeleteRequestTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteRequestResult> DeleteRequestAsync(
+        public UniTask<Result.DeleteRequestResult> DeleteRequestAsync(
             Request.DeleteRequestRequest request
-        )
-		{
-		    var task = new DeleteRequestTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new DeleteRequestTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.DeleteRequestResult>();
     #else
-		public DeleteRequestTask DeleteRequestAsync(
+        public DeleteRequestTask DeleteRequestAsync(
                 Request.DeleteRequestRequest request
         )
-		{
-			return new DeleteRequestTask(
+        {
+            return new DeleteRequestTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.DeleteRequestResult> DeleteRequestAsync(
+        public Task<Result.DeleteRequestResult> DeleteRequestAsync(
             Request.DeleteRequestRequest request
-        )
-		{
-		    var task = new DeleteRequestTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new DeleteRequestTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class DeleteRequestByUserIdTask : Gs2WebSocketSessionTask<Request.DeleteRequestByUserIdRequest, Result.DeleteRequestByUserIdResult>
         {
-	        public DeleteRequestByUserIdTask(IGs2Session session, Request.DeleteRequestByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public DeleteRequestByUserIdTask(IGs2Session session, Request.DeleteRequestByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.DeleteRequestByUserIdRequest request)
             {
@@ -3902,70 +3519,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator DeleteRequestByUserId(
+        public IEnumerator DeleteRequestByUserId(
                 Request.DeleteRequestByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DeleteRequestByUserIdResult>> callback
-        )
-		{
-			var task = new DeleteRequestByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteRequestByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new DeleteRequestByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.DeleteRequestByUserIdResult> DeleteRequestByUserIdFuture(
+        public IFuture<Result.DeleteRequestByUserIdResult> DeleteRequestByUserIdFuture(
                 Request.DeleteRequestByUserIdRequest request
-        )
-		{
-			return new DeleteRequestByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new DeleteRequestByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteRequestByUserIdResult> DeleteRequestByUserIdAsync(
+        public UniTask<Result.DeleteRequestByUserIdResult> DeleteRequestByUserIdAsync(
             Request.DeleteRequestByUserIdRequest request
-        )
-		{
-		    var task = new DeleteRequestByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new DeleteRequestByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.DeleteRequestByUserIdResult>();
     #else
-		public DeleteRequestByUserIdTask DeleteRequestByUserIdAsync(
+        public DeleteRequestByUserIdTask DeleteRequestByUserIdAsync(
                 Request.DeleteRequestByUserIdRequest request
         )
-		{
-			return new DeleteRequestByUserIdTask(
+        {
+            return new DeleteRequestByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.DeleteRequestByUserIdResult> DeleteRequestByUserIdAsync(
+        public Task<Result.DeleteRequestByUserIdResult> DeleteRequestByUserIdAsync(
             Request.DeleteRequestByUserIdRequest request
-        )
-		{
-		    var task = new DeleteRequestByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new DeleteRequestByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class GetReceiveRequestTask : Gs2WebSocketSessionTask<Request.GetReceiveRequestRequest, Result.GetReceiveRequestResult>
         {
-	        public GetReceiveRequestTask(IGs2Session session, Request.GetReceiveRequestRequest request) : base(session, request)
-	        {
-	        }
+            public GetReceiveRequestTask(IGs2Session session, Request.GetReceiveRequestRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetReceiveRequestRequest request)
             {
@@ -4025,70 +3630,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetReceiveRequest(
+        public IEnumerator GetReceiveRequest(
                 Request.GetReceiveRequestRequest request,
                 UnityAction<AsyncResult<Result.GetReceiveRequestResult>> callback
-        )
-		{
-			var task = new GetReceiveRequestTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetReceiveRequestResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetReceiveRequestTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetReceiveRequestResult> GetReceiveRequestFuture(
+        public IFuture<Result.GetReceiveRequestResult> GetReceiveRequestFuture(
                 Request.GetReceiveRequestRequest request
-        )
-		{
-			return new GetReceiveRequestTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetReceiveRequestTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetReceiveRequestResult> GetReceiveRequestAsync(
+        public UniTask<Result.GetReceiveRequestResult> GetReceiveRequestAsync(
             Request.GetReceiveRequestRequest request
-        )
-		{
-		    var task = new GetReceiveRequestTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetReceiveRequestTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetReceiveRequestResult>();
     #else
-		public GetReceiveRequestTask GetReceiveRequestAsync(
+        public GetReceiveRequestTask GetReceiveRequestAsync(
                 Request.GetReceiveRequestRequest request
         )
-		{
-			return new GetReceiveRequestTask(
+        {
+            return new GetReceiveRequestTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetReceiveRequestResult> GetReceiveRequestAsync(
+        public Task<Result.GetReceiveRequestResult> GetReceiveRequestAsync(
             Request.GetReceiveRequestRequest request
-        )
-		{
-		    var task = new GetReceiveRequestTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetReceiveRequestTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class GetReceiveRequestByUserIdTask : Gs2WebSocketSessionTask<Request.GetReceiveRequestByUserIdRequest, Result.GetReceiveRequestByUserIdResult>
         {
-	        public GetReceiveRequestByUserIdTask(IGs2Session session, Request.GetReceiveRequestByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public GetReceiveRequestByUserIdTask(IGs2Session session, Request.GetReceiveRequestByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetReceiveRequestByUserIdRequest request)
             {
@@ -4148,70 +3741,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetReceiveRequestByUserId(
+        public IEnumerator GetReceiveRequestByUserId(
                 Request.GetReceiveRequestByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetReceiveRequestByUserIdResult>> callback
-        )
-		{
-			var task = new GetReceiveRequestByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetReceiveRequestByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetReceiveRequestByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetReceiveRequestByUserIdResult> GetReceiveRequestByUserIdFuture(
+        public IFuture<Result.GetReceiveRequestByUserIdResult> GetReceiveRequestByUserIdFuture(
                 Request.GetReceiveRequestByUserIdRequest request
-        )
-		{
-			return new GetReceiveRequestByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetReceiveRequestByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetReceiveRequestByUserIdResult> GetReceiveRequestByUserIdAsync(
+        public UniTask<Result.GetReceiveRequestByUserIdResult> GetReceiveRequestByUserIdAsync(
             Request.GetReceiveRequestByUserIdRequest request
-        )
-		{
-		    var task = new GetReceiveRequestByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetReceiveRequestByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetReceiveRequestByUserIdResult>();
     #else
-		public GetReceiveRequestByUserIdTask GetReceiveRequestByUserIdAsync(
+        public GetReceiveRequestByUserIdTask GetReceiveRequestByUserIdAsync(
                 Request.GetReceiveRequestByUserIdRequest request
         )
-		{
-			return new GetReceiveRequestByUserIdTask(
+        {
+            return new GetReceiveRequestByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetReceiveRequestByUserIdResult> GetReceiveRequestByUserIdAsync(
+        public Task<Result.GetReceiveRequestByUserIdResult> GetReceiveRequestByUserIdAsync(
             Request.GetReceiveRequestByUserIdRequest request
-        )
-		{
-		    var task = new GetReceiveRequestByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetReceiveRequestByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class AcceptRequestTask : Gs2WebSocketSessionTask<Request.AcceptRequestRequest, Result.AcceptRequestResult>
         {
-	        public AcceptRequestTask(IGs2Session session, Request.AcceptRequestRequest request) : base(session, request)
-	        {
-	        }
+            public AcceptRequestTask(IGs2Session session, Request.AcceptRequestRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.AcceptRequestRequest request)
             {
@@ -4271,70 +3852,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator AcceptRequest(
+        public IEnumerator AcceptRequest(
                 Request.AcceptRequestRequest request,
                 UnityAction<AsyncResult<Result.AcceptRequestResult>> callback
-        )
-		{
-			var task = new AcceptRequestTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.AcceptRequestResult>(task.Result, task.Error));
-        }
+        ) =>
+            new AcceptRequestTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.AcceptRequestResult> AcceptRequestFuture(
+        public IFuture<Result.AcceptRequestResult> AcceptRequestFuture(
                 Request.AcceptRequestRequest request
-        )
-		{
-			return new AcceptRequestTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new AcceptRequestTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.AcceptRequestResult> AcceptRequestAsync(
+        public UniTask<Result.AcceptRequestResult> AcceptRequestAsync(
             Request.AcceptRequestRequest request
-        )
-		{
-		    var task = new AcceptRequestTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new AcceptRequestTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.AcceptRequestResult>();
     #else
-		public AcceptRequestTask AcceptRequestAsync(
+        public AcceptRequestTask AcceptRequestAsync(
                 Request.AcceptRequestRequest request
         )
-		{
-			return new AcceptRequestTask(
+        {
+            return new AcceptRequestTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.AcceptRequestResult> AcceptRequestAsync(
+        public Task<Result.AcceptRequestResult> AcceptRequestAsync(
             Request.AcceptRequestRequest request
-        )
-		{
-		    var task = new AcceptRequestTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new AcceptRequestTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class AcceptRequestByUserIdTask : Gs2WebSocketSessionTask<Request.AcceptRequestByUserIdRequest, Result.AcceptRequestByUserIdResult>
         {
-	        public AcceptRequestByUserIdTask(IGs2Session session, Request.AcceptRequestByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public AcceptRequestByUserIdTask(IGs2Session session, Request.AcceptRequestByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.AcceptRequestByUserIdRequest request)
             {
@@ -4394,70 +3963,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator AcceptRequestByUserId(
+        public IEnumerator AcceptRequestByUserId(
                 Request.AcceptRequestByUserIdRequest request,
                 UnityAction<AsyncResult<Result.AcceptRequestByUserIdResult>> callback
-        )
-		{
-			var task = new AcceptRequestByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.AcceptRequestByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new AcceptRequestByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.AcceptRequestByUserIdResult> AcceptRequestByUserIdFuture(
+        public IFuture<Result.AcceptRequestByUserIdResult> AcceptRequestByUserIdFuture(
                 Request.AcceptRequestByUserIdRequest request
-        )
-		{
-			return new AcceptRequestByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new AcceptRequestByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.AcceptRequestByUserIdResult> AcceptRequestByUserIdAsync(
+        public UniTask<Result.AcceptRequestByUserIdResult> AcceptRequestByUserIdAsync(
             Request.AcceptRequestByUserIdRequest request
-        )
-		{
-		    var task = new AcceptRequestByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new AcceptRequestByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.AcceptRequestByUserIdResult>();
     #else
-		public AcceptRequestByUserIdTask AcceptRequestByUserIdAsync(
+        public AcceptRequestByUserIdTask AcceptRequestByUserIdAsync(
                 Request.AcceptRequestByUserIdRequest request
         )
-		{
-			return new AcceptRequestByUserIdTask(
+        {
+            return new AcceptRequestByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.AcceptRequestByUserIdResult> AcceptRequestByUserIdAsync(
+        public Task<Result.AcceptRequestByUserIdResult> AcceptRequestByUserIdAsync(
             Request.AcceptRequestByUserIdRequest request
-        )
-		{
-		    var task = new AcceptRequestByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new AcceptRequestByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class RejectRequestTask : Gs2WebSocketSessionTask<Request.RejectRequestRequest, Result.RejectRequestResult>
         {
-	        public RejectRequestTask(IGs2Session session, Request.RejectRequestRequest request) : base(session, request)
-	        {
-	        }
+            public RejectRequestTask(IGs2Session session, Request.RejectRequestRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.RejectRequestRequest request)
             {
@@ -4517,70 +4074,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator RejectRequest(
+        public IEnumerator RejectRequest(
                 Request.RejectRequestRequest request,
                 UnityAction<AsyncResult<Result.RejectRequestResult>> callback
-        )
-		{
-			var task = new RejectRequestTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.RejectRequestResult>(task.Result, task.Error));
-        }
+        ) =>
+            new RejectRequestTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.RejectRequestResult> RejectRequestFuture(
+        public IFuture<Result.RejectRequestResult> RejectRequestFuture(
                 Request.RejectRequestRequest request
-        )
-		{
-			return new RejectRequestTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new RejectRequestTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.RejectRequestResult> RejectRequestAsync(
+        public UniTask<Result.RejectRequestResult> RejectRequestAsync(
             Request.RejectRequestRequest request
-        )
-		{
-		    var task = new RejectRequestTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new RejectRequestTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.RejectRequestResult>();
     #else
-		public RejectRequestTask RejectRequestAsync(
+        public RejectRequestTask RejectRequestAsync(
                 Request.RejectRequestRequest request
         )
-		{
-			return new RejectRequestTask(
+        {
+            return new RejectRequestTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.RejectRequestResult> RejectRequestAsync(
+        public Task<Result.RejectRequestResult> RejectRequestAsync(
             Request.RejectRequestRequest request
-        )
-		{
-		    var task = new RejectRequestTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new RejectRequestTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class RejectRequestByUserIdTask : Gs2WebSocketSessionTask<Request.RejectRequestByUserIdRequest, Result.RejectRequestByUserIdResult>
         {
-	        public RejectRequestByUserIdTask(IGs2Session session, Request.RejectRequestByUserIdRequest request) : base(session, request)
-	        {
-	        }
+            public RejectRequestByUserIdTask(IGs2Session session, Request.RejectRequestByUserIdRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.RejectRequestByUserIdRequest request)
             {
@@ -4640,70 +4185,58 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator RejectRequestByUserId(
+        public IEnumerator RejectRequestByUserId(
                 Request.RejectRequestByUserIdRequest request,
                 UnityAction<AsyncResult<Result.RejectRequestByUserIdResult>> callback
-        )
-		{
-			var task = new RejectRequestByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.RejectRequestByUserIdResult>(task.Result, task.Error));
-        }
+        ) =>
+            new RejectRequestByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.RejectRequestByUserIdResult> RejectRequestByUserIdFuture(
+        public IFuture<Result.RejectRequestByUserIdResult> RejectRequestByUserIdFuture(
                 Request.RejectRequestByUserIdRequest request
-        )
-		{
-			return new RejectRequestByUserIdTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new RejectRequestByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.RejectRequestByUserIdResult> RejectRequestByUserIdAsync(
+        public UniTask<Result.RejectRequestByUserIdResult> RejectRequestByUserIdAsync(
             Request.RejectRequestByUserIdRequest request
-        )
-		{
-		    var task = new RejectRequestByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new RejectRequestByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.RejectRequestByUserIdResult>();
     #else
-		public RejectRequestByUserIdTask RejectRequestByUserIdAsync(
+        public RejectRequestByUserIdTask RejectRequestByUserIdAsync(
                 Request.RejectRequestByUserIdRequest request
         )
-		{
-			return new RejectRequestByUserIdTask(
+        {
+            return new RejectRequestByUserIdTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.RejectRequestByUserIdResult> RejectRequestByUserIdAsync(
+        public Task<Result.RejectRequestByUserIdResult> RejectRequestByUserIdAsync(
             Request.RejectRequestByUserIdRequest request
-        )
-		{
-		    var task = new RejectRequestByUserIdTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new RejectRequestByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 
 
         public class GetPublicProfileTask : Gs2WebSocketSessionTask<Request.GetPublicProfileRequest, Result.GetPublicProfileResult>
         {
-	        public GetPublicProfileTask(IGs2Session session, Request.GetPublicProfileRequest request) : base(session, request)
-	        {
-	        }
+            public GetPublicProfileTask(IGs2Session session, Request.GetPublicProfileRequest request) : base(session, request)
+            {
+            }
 
             protected override IGs2SessionRequest CreateRequest(Request.GetPublicProfileRequest request)
             {
@@ -4753,62 +4286,50 @@ namespace Gs2.Gs2Friend
         }
 
 #if UNITY_2017_1_OR_NEWER
-		public IEnumerator GetPublicProfile(
+        public IEnumerator GetPublicProfile(
                 Request.GetPublicProfileRequest request,
                 UnityAction<AsyncResult<Result.GetPublicProfileResult>> callback
-        )
-		{
-			var task = new GetPublicProfileTask(
-			    Gs2WebSocketSession,
-			    request
-            );
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetPublicProfileResult>(task.Result, task.Error));
-        }
+        ) =>
+            new GetPublicProfileTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
 
-		public IFuture<Result.GetPublicProfileResult> GetPublicProfileFuture(
+        public IFuture<Result.GetPublicProfileResult> GetPublicProfileFuture(
                 Request.GetPublicProfileRequest request
-        )
-		{
-			return new GetPublicProfileTask(
-			    Gs2WebSocketSession,
-			    request
-			);
-        }
+        ) =>
+            new GetPublicProfileTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetPublicProfileResult> GetPublicProfileAsync(
+        public UniTask<Result.GetPublicProfileResult> GetPublicProfileAsync(
             Request.GetPublicProfileRequest request
-        )
-		{
-		    var task = new GetPublicProfileTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetPublicProfileTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.GetPublicProfileResult>();
     #else
-		public GetPublicProfileTask GetPublicProfileAsync(
+        public GetPublicProfileTask GetPublicProfileAsync(
                 Request.GetPublicProfileRequest request
         )
-		{
-			return new GetPublicProfileTask(
+        {
+            return new GetPublicProfileTask(
                 Gs2WebSocketSession,
-			    request
+                request
             );
         }
     #endif
 #else
-		public async Task<Result.GetPublicProfileResult> GetPublicProfileAsync(
+        public Task<Result.GetPublicProfileResult> GetPublicProfileAsync(
             Request.GetPublicProfileRequest request
-        )
-		{
-		    var task = new GetPublicProfileTask(
-		        Gs2WebSocketSession,
-		        request
-            );
-			return await task.Invoke();
-        }
+        ) =>
+            new GetPublicProfileTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
 #endif
 	}
 }

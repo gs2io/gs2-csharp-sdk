@@ -1,14 +1,20 @@
 using System;
+using System.Collections;
+using System.Threading;
 using System.Threading.Tasks;
+using Gs2.Core.Domain;
+using Gs2.Core.Exception;
 #if UNITY_2018_3_OR_NEWER
+using UnityEngine.Events;
     #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
     #else // GS2_ENABLE_UNITASK
 using System.Collections.Concurrent;
-using System.Threading;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.LowLevel;
+using UnityEngine.Networking;
 using UnityEngine.PlayerLoop;
         #if UNITY_EDITOR
 using UnityEditor;
@@ -128,5 +134,201 @@ namespace Gs2.Core.Util
         #endif // UNITY_EDITOR
     #endif // GS2_ENABLE_UNITASK
 #endif // UNITY_2018_3_OR_NEWER
+
+        /// <summary>
+        /// 待機されたときに現在のコンテキストへ非同期的に処理を譲る、待機可能タスクを生成します。
+        /// </summary>
+        /// <returns>待機可能タスク</returns>
+        /// <remarks>ターゲットやプリプロセッサディレクティブの値によって返り値の型が異なることに注意してください。</remarks>
+#if UNITY_2018_3_OR_NEWER && GS2_ENABLE_UNITASK
+        public static Cysharp.Threading.Tasks.YieldAwaitable Yield() => UniTask.Yield();
+#else // UNITY_2018_3_OR_NEWER && GS2_ENABLE_UNITASK
+        public static System.Runtime.CompilerServices.YieldAwaitable Yield() => Task.Yield();
+#endif // UNITY_2018_3_OR_NEWER && GS2_ENABLE_UNITASK
+
+#if UNITY_2018_3_OR_NEWER && UNITY_WEBGL && !UNITY_EDITOR
+        private static async Task WaitAsync(SemaphoreSlim semaphore)
+        {
+            // ReSharper disable once MethodHasAsyncOverload
+            while (!semaphore.Wait(0)) await Task.Yield();
+        }
+#else // UNITY_2018_3_OR_NEWER && UNITY_WEBGL && !UNITY_EDITOR
+        public static Task WaitAsync(SemaphoreSlim semaphore) => semaphore.WaitAsync();
+#endif // UNITY_2018_3_OR_NEWER && UNITY_WEBGL && !UNITY_EDITOR
+
+        public static IEnumerator ToCoroutine(this Task task, Action callback)
+        {
+            var awaiter = task.GetAwaiter();
+            while (!awaiter.IsCompleted) yield return null;
+            callback?.Invoke();
+        }
+
+        public static IEnumerator ToCoroutine<T>(this Task<T> task, Action<AsyncResult<T>> callback)
+        {
+            var awaiter = task.GetAwaiter();
+            while (!awaiter.IsCompleted) yield return null;
+            var exception = task.Exception?.GetBaseException();
+            callback?.Invoke(exception == null
+                ? new AsyncResult<T>(task.Result, null)
+                : new AsyncResult<T>(default, exception as Gs2Exception ?? new UnknownException(exception.Message))
+            );
+        }
+
+#if UNITY_2018_3_OR_NEWER
+        public static IEnumerator ToCoroutine(this Task task, UnityAction callback) =>
+            ToCoroutine(task, (Action)(() => callback?.Invoke()));
+
+        public static IEnumerator ToCoroutine<T>(this Task<T> task, UnityAction<AsyncResult<T>> callback) =>
+            ToCoroutine(task, (Action<AsyncResult<T>>)(result => callback?.Invoke(result)));
+
+#if GS2_ENABLE_UNITASK
+        public static IEnumerator ToCoroutine(this UniTask task, Action callback)
+        {
+            var awaiter = task.GetAwaiter();
+            while (!awaiter.IsCompleted) yield return null;
+            callback?.Invoke();
+        }
+
+        public static IEnumerator ToCoroutine<T>(this UniTask<T> task, Action<AsyncResult<T>> callback)
+        {
+            var awaiter = task.GetAwaiter();
+            while (!awaiter.IsCompleted) yield return null;
+            try
+            {
+                callback?.Invoke(new AsyncResult<T>(awaiter.GetResult(), null));
+            }
+            catch (System.Exception exception)
+            {
+                callback?.Invoke(new AsyncResult<T>(default, exception as Gs2Exception ?? new UnknownException(exception.Message)));
+            }
+        }
+
+        public static IEnumerator ToCoroutine(this UniTask task, UnityAction callback) =>
+            ToCoroutine(task, (Action)(() => callback?.Invoke()));
+
+        public static IEnumerator ToCoroutine<T>(this UniTask<T> task, UnityAction<AsyncResult<T>> callback) =>
+            ToCoroutine(task, (Action<AsyncResult<T>>)(result => callback?.Invoke(result)));
+#endif // GS2_ENABLE_UNITASK
+#endif // UNITY_2018_3_OR_NEWER
+
+        public static Gs2Future ToGs2Future(this Task task)
+        {
+            IEnumerator Impl(Gs2Future future)
+            {
+                var awaiter = task.GetAwaiter();
+                while (!awaiter.IsCompleted) yield return null;
+                var exception = task.Exception?.GetBaseException();
+                if (exception != null)
+                {
+                    future.OnError(exception as Gs2Exception ?? new UnknownException(exception.Message));
+                }
+                else
+                {
+                    future.OnComplete(null);
+                }
+            }
+
+            return new Gs2InlineFuture(Impl);
+        }
+
+        public static Gs2Future<T> ToGs2Future<T>(this Task<T> task)
+        {
+            IEnumerator Impl(Gs2Future<T> future)
+            {
+                var awaiter = task.GetAwaiter();
+                while (!awaiter.IsCompleted) yield return null;
+                var exception = task.Exception?.GetBaseException();
+                if (exception != null)
+                {
+                    future.OnError(exception as Gs2Exception ?? new UnknownException(exception.Message));
+                }
+                else
+                {
+                    future.OnComplete(task.Result);
+                }
+            }
+
+            return new Gs2InlineFuture<T>(Impl);
+        }
+
+#if UNITY_2018_3_OR_NEWER && GS2_ENABLE_UNITASK
+        public static Gs2Future ToGs2Future(this UniTask task)
+        {
+            IEnumerator Impl(Gs2Future future)
+            {
+                var awaiter = task.GetAwaiter();
+                while (!awaiter.IsCompleted) yield return null;
+                try
+                {
+                    awaiter.GetResult();
+                    future.OnComplete(null);
+                }
+                catch (System.Exception exception)
+                {
+                    future.OnError(exception as Gs2Exception ?? new UnknownException(exception.Message));
+                }
+            }
+
+            return new Gs2InlineFuture(Impl);
+        }
+
+        public static Gs2Future<T> ToGs2Future<T>(this UniTask<T> task)
+        {
+            IEnumerator Impl(Gs2Future<T> future)
+            {
+                var awaiter = task.GetAwaiter();
+                while (!awaiter.IsCompleted) yield return null;
+                try
+                {
+                    future.OnComplete(awaiter.GetResult());
+                }
+                catch (System.Exception exception)
+                {
+                    future.OnError(exception as Gs2Exception ?? new UnknownException(exception.Message));
+                }
+            }
+
+            return new Gs2InlineFuture<T>(Impl);
+        }
+#endif // UNITY_2018_3_OR_NEWER && GS2_ENABLE_UNITASK
+
+#if UNITY_2018_3_OR_NEWER && GS2_ENABLE_UNITASK
+        public static UniTask AsUniTask(this UniTask task) => task;
+        public static UniTask<T> AsUniTask<T>(this UniTask<T> task) => task;
+#endif // UNITY_2018_3_OR_NEWER && GS2_ENABLE_UNITASK
+
+        public static Task AsTask(this Task task) => task;
+        public static Task<T> AsTask<T>(this Task<T> task) => task;
+
+#if UNITY_2018_3_OR_NEWER && !GS2_ENABLE_UNITASK
+        public struct UnityWebRequestAsyncOperationAwaiter : ICriticalNotifyCompletion
+        {
+            internal UnityWebRequestAsyncOperation AsyncOperation;
+            private Action _completeCallback;
+
+            public bool IsCompleted => AsyncOperation.isDone;
+            public void OnCompleted(Action callback) => UnsafeOnCompleted(callback);
+            public void UnsafeOnCompleted(Action callback)
+            {
+                _completeCallback = callback;
+                AsyncOperation.completed += HandleCompletion;
+            }
+
+            // UniTask と異なり、 UnityWebRequest がエラー状態でも例外は投げない
+            public UnityWebRequest GetResult()
+            {
+                var webRequest = AsyncOperation.webRequest;
+                AsyncOperation.completed -= HandleCompletion;
+                AsyncOperation = null;
+                _completeCallback = null;
+                return webRequest;
+            }
+            
+            private void HandleCompletion(AsyncOperation _) => _completeCallback?.Invoke();
+        }
+
+        public static UnityWebRequestAsyncOperationAwaiter GetAwaiter(this UnityWebRequestAsyncOperation asyncOperation) =>
+            new() { AsyncOperation = asyncOperation };
+#endif // UNITY_2018_3_OR_NEWER && !GS2_ENABLE_UNITASK
     }
 }

@@ -48,33 +48,18 @@ namespace Gs2.Core.Net.Chaos
         
         // Send
         
-        public override IEnumerator Send(IGs2SessionRequest request) {
-            var chaos = this._random.NextDouble();
-            if (chaos < this._chaos) {
-                ThrowNeedRetryException(request);
-                yield break;
-            }
-            yield return base.Send(request);
-        }
-        
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
-        public override UniTask SendAsync(IGs2SessionRequest request)
-    #else
-        public override Task SendAsync(IGs2SessionRequest request)
-    #endif
+#if GS2_ENABLE_UNITASK
+        protected override async UniTask SendImplAsync(IGs2SessionRequest request)
+#else
+        protected override async Task SendImplAsync(IGs2SessionRequest request)
+#endif
         {
             if (this._random.NextDouble() < this._chaos) {
                 ThrowNeedRetryException(request);
-    #if UNITY_2017_1_OR_NEWER
-                return UniTask.CompletedTask;
-    #else
-                return Task.CompletedTask;
-    #endif
+                return;
             }
-            return base.SendAsync(request);
+            await base.SendImplAsync(request);
         }
-#endif
 
     }
 }

@@ -3,48 +3,66 @@ using System.Collections;
 using System.Threading.Tasks;
 using Gs2.Core.Exception;
 using Gs2.Core.Model;
+using Gs2.Core.Util;
 #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
 #endif
 
 namespace Gs2.Core.Net
 {
-    public abstract class TaskFuture<TRequest, TResult> : ITaskFuture<TRequest, TResult>
-        where TRequest : IRequest
+    public abstract class TaskFuture<TResult> : ITaskFuture<TResult>
         where TResult : IResult
     {
-        public Gs2SessionTaskId TaskId { get; set; }
-        public TRequest Request { get; set; }
-        public TResult Result { get; set; }
-        public Gs2Exception Error { get; set; }
-        
-        private readonly IEnumerator _inflightAction;
+        public TResult Result { get; private set; }
+        public Gs2Exception Error { get; private set; }
 
-        protected TaskFuture()
-        {
-            // ReSharper disable once VirtualMemberCallInConstructor
-            this._inflightAction = Action();
-        }
+        private bool _isInvoked;
+        private bool _isOnProgress;
 
-        public abstract IEnumerator Action();
+        public IEnumerator Action() => Invoke().ToCoroutine((Action<AsyncResult<TResult>>)null);
 
 #if GS2_ENABLE_UNITASK
-        public abstract UniTask<TResult> Invoke();
+        public async UniTask<TResult> Invoke()
 #else
-        public abstract Task<TResult> Invoke();
+        public async Task<TResult> Invoke()
+#endif
+        {
+            try
+            {
+                _isInvoked = true;
+                _isOnProgress = true;
+                OnComplete(await InvokeImpl());
+                return Result;
+            }
+            catch (Gs2Exception gs2Exception)
+            {
+                OnError(gs2Exception);
+                throw Error;
+            }
+            finally
+            {
+                _isOnProgress = false;
+            }
+        }
+
+#if GS2_ENABLE_UNITASK
+        protected abstract UniTask<TResult> InvokeImpl();
+#else
+        protected abstract Task<TResult> InvokeImpl();
 #endif
 
         public bool MoveNext()
         {
-            return this._inflightAction?.MoveNext() ?? false;
+            if (!_isInvoked) Invoke().Forget();
+            return _isOnProgress;
         }
 
         public void Reset()
         {
-            this._inflightAction?.Reset();
+            throw new InvalidOperationException();
         }
 
-        public object Current => this._inflightAction?.Current;
+        public object Current => null;
 
         public bool IsComplete()
         {

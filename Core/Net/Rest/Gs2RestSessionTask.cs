@@ -1,10 +1,11 @@
-﻿using Gs2.Core.Model;
+﻿using Gs2.Core.Control;
+using Gs2.Core.Model;
 
 namespace Gs2.Core.Net
 {
     public abstract class Gs2RestSessionTask<TRequest, TResult> : 
         Gs2SessionTask<TRequest, TResult>
-        where TRequest : IRequest
+        where TRequest : Gs2Request<TRequest>
         where TResult : IResult
     {
         protected RestSessionRequestFactory Factory;

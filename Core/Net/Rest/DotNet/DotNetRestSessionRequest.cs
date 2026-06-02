@@ -31,7 +31,7 @@ namespace Gs2.Core.Net
         }
     }
     
-    public class DotNetRestSessionRequest : RestSessionRequestFuture
+    public class DotNetRestSessionRequest : RestSessionRequest
     {
         private static byte[] Compress(byte[] data)
         {
@@ -117,41 +117,29 @@ namespace Gs2.Core.Net
                     responseBody = await response.Content.ReadAsStringAsync();
                 }
 
-                var result = new RestResult(
+                return new RestResult(
                     (int) response.StatusCode,
                     responseBody
                 );
-                OnComplete(result);
-                return Result;
-
             }
             catch (OperationCanceledException e)
             {
-                var result = new RestResult(
+                return new RestResult(
                     0, // NoInternetConnectionException
                     "",
                     0,
                     e.Message
                 );
-                OnComplete(result);
-                return Result;
             }
             catch (System.Net.Http.HttpRequestException e)
             {
-                var result = new RestResult(
+                return new RestResult(
                     0, // NoInternetConnectionException
                     "",
                     0,
                     e.Message
                 );
-                OnComplete(result);
-                return Result;
             }
-        }
-
-        public override IEnumerator Action()
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -15,8 +15,11 @@
  */
 using System;
 using System.Collections.Generic;
+using Gs2.Core.Control;
 using Gs2.Core.Model;
+using Gs2.Core.Net;
 using Gs2.Gs2Identifier.Model;
+using Gs2.Util.LitJson;
 
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine.Scripting;
@@ -27,9 +30,12 @@ namespace Gs2.Core.Model.Internal
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class LoginRequest : IRequest
+	public class LoginRequest : Gs2Request<LoginRequest>
 	{
 		public string ClientId;
 		public string ClientSecret;
+
+		public override JsonData ToJson() => throw new NotImplementedException();
+		public override string UniqueKey() => throw new NotImplementedException();
 	}
 }

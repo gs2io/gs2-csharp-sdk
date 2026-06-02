@@ -6,13 +6,9 @@ using Cysharp.Threading.Tasks;
 
 namespace Gs2.Core.Net
 {
-    public interface ITask<TRequest, TResult> 
-        where TRequest : IRequest
+    public interface ITask<TResult> 
         where TResult : IResult
     {
-        Gs2SessionTaskId TaskId { set; get; }
-        TRequest Request { set; get; }
-
 #if GS2_ENABLE_UNITASK
         UniTask<TResult> Invoke();
 #else
@@ -20,8 +16,7 @@ namespace Gs2.Core.Net
 #endif
     }
 
-    public interface ITaskFuture<TRequest, TResult> : ITask<TRequest, TResult>, IFuture<TResult>
-        where TRequest : IRequest
+    public interface ITaskFuture<TResult> : ITask<TResult>, IFuture<TResult>
         where TResult : IResult
     {
         

@@ -37,6 +37,7 @@ namespace Gs2.Gs2Key.Model
         public string ApiKeyId { set; get; }
         public string Name { set; get; }
         public string Description { set; get; }
+        public string ApiKey { set; get; }
         public string EncryptionKeyName { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
@@ -51,6 +52,10 @@ namespace Gs2.Gs2Key.Model
         }
         public GitHubApiKey WithDescription(string description) {
             this.Description = description;
+            return this;
+        }
+        public GitHubApiKey WithApiKey(string apiKey) {
+            this.ApiKey = apiKey;
             return this;
         }
         public GitHubApiKey WithEncryptionKeyName(string encryptionKeyName) {
@@ -150,6 +155,7 @@ namespace Gs2.Gs2Key.Model
                 .WithApiKeyId(!data.Keys.Contains("apiKeyId") || data["apiKeyId"] == null ? null : data["apiKeyId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
+                .WithApiKey(!data.Keys.Contains("apiKey") || data["apiKey"] == null ? null : data["apiKey"].ToString())
                 .WithEncryptionKeyName(!data.Keys.Contains("encryptionKeyName") || data["encryptionKeyName"] == null ? null : data["encryptionKeyName"].ToString())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
@@ -162,6 +168,7 @@ namespace Gs2.Gs2Key.Model
                 ["apiKeyId"] = ApiKeyId,
                 ["name"] = Name,
                 ["description"] = Description,
+                ["apiKey"] = ApiKey,
                 ["encryptionKeyName"] = EncryptionKeyName,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -183,6 +190,10 @@ namespace Gs2.Gs2Key.Model
             if (Description != null) {
                 writer.WritePropertyName("description");
                 writer.Write(Description.ToString());
+            }
+            if (ApiKey != null) {
+                writer.WritePropertyName("apiKey");
+                writer.Write(ApiKey.ToString());
             }
             if (EncryptionKeyName != null) {
                 writer.WritePropertyName("encryptionKeyName");
@@ -230,6 +241,14 @@ namespace Gs2.Gs2Key.Model
             else
             {
                 diff += Description.CompareTo(other.Description);
+            }
+            if (ApiKey == null && ApiKey == other.ApiKey)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += ApiKey.CompareTo(other.ApiKey);
             }
             if (EncryptionKeyName == null && EncryptionKeyName == other.EncryptionKeyName)
             {
@@ -289,6 +308,13 @@ namespace Gs2.Gs2Key.Model
                 }
             }
             {
+                if (ApiKey.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("gitHubApiKey", "key.gitHubApiKey.apiKey.error.tooLong"),
+                    });
+                }
+            }
+            {
                 if (EncryptionKeyName.Length > 128) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("gitHubApiKey", "key.gitHubApiKey.encryptionKeyName.error.tooLong"),
@@ -338,6 +364,7 @@ namespace Gs2.Gs2Key.Model
                 ApiKeyId = ApiKeyId,
                 Name = Name,
                 Description = Description,
+                ApiKey = ApiKey,
                 EncryptionKeyName = EncryptionKeyName,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,

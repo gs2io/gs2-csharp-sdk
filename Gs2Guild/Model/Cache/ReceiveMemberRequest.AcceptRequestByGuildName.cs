@@ -56,6 +56,14 @@ namespace Gs2.Gs2Guild.Model.Cache
                 request.FromUserId,
                 timeOffset
             );
+            (null as SendMemberRequest).DeleteCache(
+                cache,
+                request.NamespaceName,
+                self.Item.UserId,
+                request.GuildModelName,
+                request.GuildName,
+                timeOffset
+            );
             self.Guild.DeleteCache(
                 cache,
                 request.NamespaceName,

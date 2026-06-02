@@ -25,17 +25,18 @@ using Cysharp.Threading.Tasks;
 #else
 using System.Web;
 using System.Net.Http;
-using System.Threading.Tasks;
 #endif
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Linq;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
+using Gs2.Core.Util;
 using Gs2.Gs2Key.Request;
 using Gs2.Gs2Key.Result;
 using Gs2.Util.LitJson;
@@ -110,44 +111,31 @@ namespace Gs2.Gs2Key
 		public IEnumerator DescribeNamespaces(
                 Request.DescribeNamespacesRequest request,
                 UnityAction<AsyncResult<Result.DescribeNamespacesResult>> callback
-        )
-		{
-			var task = new DescribeNamespacesTask(
+        ) =>
+            new DescribeNamespacesTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeNamespacesResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeNamespacesResult> DescribeNamespacesFuture(
                 Request.DescribeNamespacesRequest request
-        )
-		{
-			return new DescribeNamespacesTask(
+        ) =>
+            new DescribeNamespacesTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
+		public UniTask<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
                 Request.DescribeNamespacesRequest request
-        )
-		{
-            AsyncResult<Result.DescribeNamespacesResult> result = null;
-			await DescribeNamespaces(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeNamespacesResult>();
     #else
 		public DescribeNamespacesTask DescribeNamespacesAsync(
                 Request.DescribeNamespacesRequest request
@@ -161,17 +149,14 @@ namespace Gs2.Gs2Key
         }
     #endif
 #else
-		public async Task<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
+		public Task<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
                 Request.DescribeNamespacesRequest request
-        )
-		{
-			var task = new DescribeNamespacesTask(
+        ) =>
+            new DescribeNamespacesTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -239,44 +224,31 @@ namespace Gs2.Gs2Key
 		public IEnumerator CreateNamespace(
                 Request.CreateNamespaceRequest request,
                 UnityAction<AsyncResult<Result.CreateNamespaceResult>> callback
-        )
-		{
-			var task = new CreateNamespaceTask(
+        ) =>
+            new CreateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
                 Request.CreateNamespaceRequest request
-        )
-		{
-			return new CreateNamespaceTask(
+        ) =>
+            new CreateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+		public UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
                 Request.CreateNamespaceRequest request
-        )
-		{
-            AsyncResult<Result.CreateNamespaceResult> result = null;
-			await CreateNamespace(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CreateNamespaceResult>();
     #else
 		public CreateNamespaceTask CreateNamespaceAsync(
                 Request.CreateNamespaceRequest request
@@ -290,17 +262,14 @@ namespace Gs2.Gs2Key
         }
     #endif
 #else
-		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
+		public Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
                 Request.CreateNamespaceRequest request
-        )
-		{
-			var task = new CreateNamespaceTask(
+        ) =>
+            new CreateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -342,44 +311,31 @@ namespace Gs2.Gs2Key
 		public IEnumerator GetNamespaceStatus(
                 Request.GetNamespaceStatusRequest request,
                 UnityAction<AsyncResult<Result.GetNamespaceStatusResult>> callback
-        )
-		{
-			var task = new GetNamespaceStatusTask(
+        ) =>
+            new GetNamespaceStatusTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetNamespaceStatusResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetNamespaceStatusResult> GetNamespaceStatusFuture(
                 Request.GetNamespaceStatusRequest request
-        )
-		{
-			return new GetNamespaceStatusTask(
+        ) =>
+            new GetNamespaceStatusTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+		public UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
-        )
-		{
-            AsyncResult<Result.GetNamespaceStatusResult> result = null;
-			await GetNamespaceStatus(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetNamespaceStatusResult>();
     #else
 		public GetNamespaceStatusTask GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
@@ -393,17 +349,14 @@ namespace Gs2.Gs2Key
         }
     #endif
 #else
-		public async Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+		public Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
-        )
-		{
-			var task = new GetNamespaceStatusTask(
+        ) =>
+            new GetNamespaceStatusTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -445,44 +398,31 @@ namespace Gs2.Gs2Key
 		public IEnumerator GetNamespace(
                 Request.GetNamespaceRequest request,
                 UnityAction<AsyncResult<Result.GetNamespaceResult>> callback
-        )
-		{
-			var task = new GetNamespaceTask(
+        ) =>
+            new GetNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
                 Request.GetNamespaceRequest request
-        )
-		{
-			return new GetNamespaceTask(
+        ) =>
+            new GetNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+		public UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
                 Request.GetNamespaceRequest request
-        )
-		{
-            AsyncResult<Result.GetNamespaceResult> result = null;
-			await GetNamespace(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetNamespaceResult>();
     #else
 		public GetNamespaceTask GetNamespaceAsync(
                 Request.GetNamespaceRequest request
@@ -496,17 +436,14 @@ namespace Gs2.Gs2Key
         }
     #endif
 #else
-		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
+		public Task<Result.GetNamespaceResult> GetNamespaceAsync(
                 Request.GetNamespaceRequest request
-        )
-		{
-			var task = new GetNamespaceTask(
+        ) =>
+            new GetNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -571,44 +508,31 @@ namespace Gs2.Gs2Key
 		public IEnumerator UpdateNamespace(
                 Request.UpdateNamespaceRequest request,
                 UnityAction<AsyncResult<Result.UpdateNamespaceResult>> callback
-        )
-		{
-			var task = new UpdateNamespaceTask(
+        ) =>
+            new UpdateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
                 Request.UpdateNamespaceRequest request
-        )
-		{
-			return new UpdateNamespaceTask(
+        ) =>
+            new UpdateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+		public UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
                 Request.UpdateNamespaceRequest request
-        )
-		{
-            AsyncResult<Result.UpdateNamespaceResult> result = null;
-			await UpdateNamespace(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UpdateNamespaceResult>();
     #else
 		public UpdateNamespaceTask UpdateNamespaceAsync(
                 Request.UpdateNamespaceRequest request
@@ -622,17 +546,14 @@ namespace Gs2.Gs2Key
         }
     #endif
 #else
-		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+		public Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
                 Request.UpdateNamespaceRequest request
-        )
-		{
-			var task = new UpdateNamespaceTask(
+        ) =>
+            new UpdateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -674,44 +595,31 @@ namespace Gs2.Gs2Key
 		public IEnumerator DeleteNamespace(
                 Request.DeleteNamespaceRequest request,
                 UnityAction<AsyncResult<Result.DeleteNamespaceResult>> callback
-        )
-		{
-			var task = new DeleteNamespaceTask(
+        ) =>
+            new DeleteNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
                 Request.DeleteNamespaceRequest request
-        )
-		{
-			return new DeleteNamespaceTask(
+        ) =>
+            new DeleteNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+		public UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
                 Request.DeleteNamespaceRequest request
-        )
-		{
-            AsyncResult<Result.DeleteNamespaceResult> result = null;
-			await DeleteNamespace(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteNamespaceResult>();
     #else
 		public DeleteNamespaceTask DeleteNamespaceAsync(
                 Request.DeleteNamespaceRequest request
@@ -725,17 +633,14 @@ namespace Gs2.Gs2Key
         }
     #endif
 #else
-		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+		public Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
                 Request.DeleteNamespaceRequest request
-        )
-		{
-			var task = new DeleteNamespaceTask(
+        ) =>
+            new DeleteNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -775,44 +680,31 @@ namespace Gs2.Gs2Key
 		public IEnumerator GetServiceVersion(
                 Request.GetServiceVersionRequest request,
                 UnityAction<AsyncResult<Result.GetServiceVersionResult>> callback
-        )
-		{
-			var task = new GetServiceVersionTask(
+        ) =>
+            new GetServiceVersionTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetServiceVersionResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetServiceVersionResult> GetServiceVersionFuture(
                 Request.GetServiceVersionRequest request
-        )
-		{
-			return new GetServiceVersionTask(
+        ) =>
+            new GetServiceVersionTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetServiceVersionResult> GetServiceVersionAsync(
+		public UniTask<Result.GetServiceVersionResult> GetServiceVersionAsync(
                 Request.GetServiceVersionRequest request
-        )
-		{
-            AsyncResult<Result.GetServiceVersionResult> result = null;
-			await GetServiceVersion(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetServiceVersionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetServiceVersionResult>();
     #else
 		public GetServiceVersionTask GetServiceVersionAsync(
                 Request.GetServiceVersionRequest request
@@ -826,17 +718,14 @@ namespace Gs2.Gs2Key
         }
     #endif
 #else
-		public async Task<Result.GetServiceVersionResult> GetServiceVersionAsync(
+		public Task<Result.GetServiceVersionResult> GetServiceVersionAsync(
                 Request.GetServiceVersionRequest request
-        )
-		{
-			var task = new GetServiceVersionTask(
+        ) =>
+            new GetServiceVersionTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -887,44 +776,31 @@ namespace Gs2.Gs2Key
 		public IEnumerator DescribeKeys(
                 Request.DescribeKeysRequest request,
                 UnityAction<AsyncResult<Result.DescribeKeysResult>> callback
-        )
-		{
-			var task = new DescribeKeysTask(
+        ) =>
+            new DescribeKeysTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeKeysResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeKeysResult> DescribeKeysFuture(
                 Request.DescribeKeysRequest request
-        )
-		{
-			return new DescribeKeysTask(
+        ) =>
+            new DescribeKeysTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeKeysResult> DescribeKeysAsync(
+		public UniTask<Result.DescribeKeysResult> DescribeKeysAsync(
                 Request.DescribeKeysRequest request
-        )
-		{
-            AsyncResult<Result.DescribeKeysResult> result = null;
-			await DescribeKeys(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeKeysTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeKeysResult>();
     #else
 		public DescribeKeysTask DescribeKeysAsync(
                 Request.DescribeKeysRequest request
@@ -938,17 +814,14 @@ namespace Gs2.Gs2Key
         }
     #endif
 #else
-		public async Task<Result.DescribeKeysResult> DescribeKeysAsync(
+		public Task<Result.DescribeKeysResult> DescribeKeysAsync(
                 Request.DescribeKeysRequest request
-        )
-		{
-			var task = new DescribeKeysTask(
+        ) =>
+            new DescribeKeysTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1013,44 +886,31 @@ namespace Gs2.Gs2Key
 		public IEnumerator CreateKey(
                 Request.CreateKeyRequest request,
                 UnityAction<AsyncResult<Result.CreateKeyResult>> callback
-        )
-		{
-			var task = new CreateKeyTask(
+        ) =>
+            new CreateKeyTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateKeyResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CreateKeyResult> CreateKeyFuture(
                 Request.CreateKeyRequest request
-        )
-		{
-			return new CreateKeyTask(
+        ) =>
+            new CreateKeyTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateKeyResult> CreateKeyAsync(
+		public UniTask<Result.CreateKeyResult> CreateKeyAsync(
                 Request.CreateKeyRequest request
-        )
-		{
-            AsyncResult<Result.CreateKeyResult> result = null;
-			await CreateKey(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CreateKeyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CreateKeyResult>();
     #else
 		public CreateKeyTask CreateKeyAsync(
                 Request.CreateKeyRequest request
@@ -1064,17 +924,14 @@ namespace Gs2.Gs2Key
         }
     #endif
 #else
-		public async Task<Result.CreateKeyResult> CreateKeyAsync(
+		public Task<Result.CreateKeyResult> CreateKeyAsync(
                 Request.CreateKeyRequest request
-        )
-		{
-			var task = new CreateKeyTask(
+        ) =>
+            new CreateKeyTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1135,44 +992,31 @@ namespace Gs2.Gs2Key
 		public IEnumerator UpdateKey(
                 Request.UpdateKeyRequest request,
                 UnityAction<AsyncResult<Result.UpdateKeyResult>> callback
-        )
-		{
-			var task = new UpdateKeyTask(
+        ) =>
+            new UpdateKeyTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateKeyResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UpdateKeyResult> UpdateKeyFuture(
                 Request.UpdateKeyRequest request
-        )
-		{
-			return new UpdateKeyTask(
+        ) =>
+            new UpdateKeyTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateKeyResult> UpdateKeyAsync(
+		public UniTask<Result.UpdateKeyResult> UpdateKeyAsync(
                 Request.UpdateKeyRequest request
-        )
-		{
-            AsyncResult<Result.UpdateKeyResult> result = null;
-			await UpdateKey(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UpdateKeyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UpdateKeyResult>();
     #else
 		public UpdateKeyTask UpdateKeyAsync(
                 Request.UpdateKeyRequest request
@@ -1186,17 +1030,14 @@ namespace Gs2.Gs2Key
         }
     #endif
 #else
-		public async Task<Result.UpdateKeyResult> UpdateKeyAsync(
+		public Task<Result.UpdateKeyResult> UpdateKeyAsync(
                 Request.UpdateKeyRequest request
-        )
-		{
-			var task = new UpdateKeyTask(
+        ) =>
+            new UpdateKeyTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1239,44 +1080,31 @@ namespace Gs2.Gs2Key
 		public IEnumerator GetKey(
                 Request.GetKeyRequest request,
                 UnityAction<AsyncResult<Result.GetKeyResult>> callback
-        )
-		{
-			var task = new GetKeyTask(
+        ) =>
+            new GetKeyTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetKeyResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetKeyResult> GetKeyFuture(
                 Request.GetKeyRequest request
-        )
-		{
-			return new GetKeyTask(
+        ) =>
+            new GetKeyTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetKeyResult> GetKeyAsync(
+		public UniTask<Result.GetKeyResult> GetKeyAsync(
                 Request.GetKeyRequest request
-        )
-		{
-            AsyncResult<Result.GetKeyResult> result = null;
-			await GetKey(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetKeyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetKeyResult>();
     #else
 		public GetKeyTask GetKeyAsync(
                 Request.GetKeyRequest request
@@ -1290,17 +1118,14 @@ namespace Gs2.Gs2Key
         }
     #endif
 #else
-		public async Task<Result.GetKeyResult> GetKeyAsync(
+		public Task<Result.GetKeyResult> GetKeyAsync(
                 Request.GetKeyRequest request
-        )
-		{
-			var task = new GetKeyTask(
+        ) =>
+            new GetKeyTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1343,44 +1168,31 @@ namespace Gs2.Gs2Key
 		public IEnumerator DeleteKey(
                 Request.DeleteKeyRequest request,
                 UnityAction<AsyncResult<Result.DeleteKeyResult>> callback
-        )
-		{
-			var task = new DeleteKeyTask(
+        ) =>
+            new DeleteKeyTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteKeyResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteKeyResult> DeleteKeyFuture(
                 Request.DeleteKeyRequest request
-        )
-		{
-			return new DeleteKeyTask(
+        ) =>
+            new DeleteKeyTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteKeyResult> DeleteKeyAsync(
+		public UniTask<Result.DeleteKeyResult> DeleteKeyAsync(
                 Request.DeleteKeyRequest request
-        )
-		{
-            AsyncResult<Result.DeleteKeyResult> result = null;
-			await DeleteKey(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteKeyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteKeyResult>();
     #else
 		public DeleteKeyTask DeleteKeyAsync(
                 Request.DeleteKeyRequest request
@@ -1394,17 +1206,14 @@ namespace Gs2.Gs2Key
         }
     #endif
 #else
-		public async Task<Result.DeleteKeyResult> DeleteKeyAsync(
+		public Task<Result.DeleteKeyResult> DeleteKeyAsync(
                 Request.DeleteKeyRequest request
-        )
-		{
-			var task = new DeleteKeyTask(
+        ) =>
+            new DeleteKeyTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1465,44 +1274,31 @@ namespace Gs2.Gs2Key
 		public IEnumerator Encrypt(
                 Request.EncryptRequest request,
                 UnityAction<AsyncResult<Result.EncryptResult>> callback
-        )
-		{
-			var task = new EncryptTask(
+        ) =>
+            new EncryptTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.EncryptResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.EncryptResult> EncryptFuture(
                 Request.EncryptRequest request
-        )
-		{
-			return new EncryptTask(
+        ) =>
+            new EncryptTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.EncryptResult> EncryptAsync(
+		public UniTask<Result.EncryptResult> EncryptAsync(
                 Request.EncryptRequest request
-        )
-		{
-            AsyncResult<Result.EncryptResult> result = null;
-			await Encrypt(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new EncryptTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.EncryptResult>();
     #else
 		public EncryptTask EncryptAsync(
                 Request.EncryptRequest request
@@ -1516,17 +1312,14 @@ namespace Gs2.Gs2Key
         }
     #endif
 #else
-		public async Task<Result.EncryptResult> EncryptAsync(
+		public Task<Result.EncryptResult> EncryptAsync(
                 Request.EncryptRequest request
-        )
-		{
-			var task = new EncryptTask(
+        ) =>
+            new EncryptTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1587,44 +1380,31 @@ namespace Gs2.Gs2Key
 		public IEnumerator Decrypt(
                 Request.DecryptRequest request,
                 UnityAction<AsyncResult<Result.DecryptResult>> callback
-        )
-		{
-			var task = new DecryptTask(
+        ) =>
+            new DecryptTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DecryptResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DecryptResult> DecryptFuture(
                 Request.DecryptRequest request
-        )
-		{
-			return new DecryptTask(
+        ) =>
+            new DecryptTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DecryptResult> DecryptAsync(
+		public UniTask<Result.DecryptResult> DecryptAsync(
                 Request.DecryptRequest request
-        )
-		{
-            AsyncResult<Result.DecryptResult> result = null;
-			await Decrypt(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DecryptTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DecryptResult>();
     #else
 		public DecryptTask DecryptAsync(
                 Request.DecryptRequest request
@@ -1638,17 +1418,14 @@ namespace Gs2.Gs2Key
         }
     #endif
 #else
-		public async Task<Result.DecryptResult> DecryptAsync(
+		public Task<Result.DecryptResult> DecryptAsync(
                 Request.DecryptRequest request
-        )
-		{
-			var task = new DecryptTask(
+        ) =>
+            new DecryptTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1696,44 +1473,31 @@ namespace Gs2.Gs2Key
 		public IEnumerator DescribeGitHubApiKeys(
                 Request.DescribeGitHubApiKeysRequest request,
                 UnityAction<AsyncResult<Result.DescribeGitHubApiKeysResult>> callback
-        )
-		{
-			var task = new DescribeGitHubApiKeysTask(
+        ) =>
+            new DescribeGitHubApiKeysTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeGitHubApiKeysResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeGitHubApiKeysResult> DescribeGitHubApiKeysFuture(
                 Request.DescribeGitHubApiKeysRequest request
-        )
-		{
-			return new DescribeGitHubApiKeysTask(
+        ) =>
+            new DescribeGitHubApiKeysTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeGitHubApiKeysResult> DescribeGitHubApiKeysAsync(
+		public UniTask<Result.DescribeGitHubApiKeysResult> DescribeGitHubApiKeysAsync(
                 Request.DescribeGitHubApiKeysRequest request
-        )
-		{
-            AsyncResult<Result.DescribeGitHubApiKeysResult> result = null;
-			await DescribeGitHubApiKeys(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeGitHubApiKeysTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeGitHubApiKeysResult>();
     #else
 		public DescribeGitHubApiKeysTask DescribeGitHubApiKeysAsync(
                 Request.DescribeGitHubApiKeysRequest request
@@ -1747,17 +1511,14 @@ namespace Gs2.Gs2Key
         }
     #endif
 #else
-		public async Task<Result.DescribeGitHubApiKeysResult> DescribeGitHubApiKeysAsync(
+		public Task<Result.DescribeGitHubApiKeysResult> DescribeGitHubApiKeysAsync(
                 Request.DescribeGitHubApiKeysRequest request
-        )
-		{
-			var task = new DescribeGitHubApiKeysTask(
+        ) =>
+            new DescribeGitHubApiKeysTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1832,44 +1593,31 @@ namespace Gs2.Gs2Key
 		public IEnumerator CreateGitHubApiKey(
                 Request.CreateGitHubApiKeyRequest request,
                 UnityAction<AsyncResult<Result.CreateGitHubApiKeyResult>> callback
-        )
-		{
-			var task = new CreateGitHubApiKeyTask(
+        ) =>
+            new CreateGitHubApiKeyTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateGitHubApiKeyResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CreateGitHubApiKeyResult> CreateGitHubApiKeyFuture(
                 Request.CreateGitHubApiKeyRequest request
-        )
-		{
-			return new CreateGitHubApiKeyTask(
+        ) =>
+            new CreateGitHubApiKeyTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateGitHubApiKeyResult> CreateGitHubApiKeyAsync(
+		public UniTask<Result.CreateGitHubApiKeyResult> CreateGitHubApiKeyAsync(
                 Request.CreateGitHubApiKeyRequest request
-        )
-		{
-            AsyncResult<Result.CreateGitHubApiKeyResult> result = null;
-			await CreateGitHubApiKey(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CreateGitHubApiKeyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CreateGitHubApiKeyResult>();
     #else
 		public CreateGitHubApiKeyTask CreateGitHubApiKeyAsync(
                 Request.CreateGitHubApiKeyRequest request
@@ -1883,17 +1631,14 @@ namespace Gs2.Gs2Key
         }
     #endif
 #else
-		public async Task<Result.CreateGitHubApiKeyResult> CreateGitHubApiKeyAsync(
+		public Task<Result.CreateGitHubApiKeyResult> CreateGitHubApiKeyAsync(
                 Request.CreateGitHubApiKeyRequest request
-        )
-		{
-			var task = new CreateGitHubApiKeyTask(
+        ) =>
+            new CreateGitHubApiKeyTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1964,44 +1709,31 @@ namespace Gs2.Gs2Key
 		public IEnumerator UpdateGitHubApiKey(
                 Request.UpdateGitHubApiKeyRequest request,
                 UnityAction<AsyncResult<Result.UpdateGitHubApiKeyResult>> callback
-        )
-		{
-			var task = new UpdateGitHubApiKeyTask(
+        ) =>
+            new UpdateGitHubApiKeyTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateGitHubApiKeyResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UpdateGitHubApiKeyResult> UpdateGitHubApiKeyFuture(
                 Request.UpdateGitHubApiKeyRequest request
-        )
-		{
-			return new UpdateGitHubApiKeyTask(
+        ) =>
+            new UpdateGitHubApiKeyTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateGitHubApiKeyResult> UpdateGitHubApiKeyAsync(
+		public UniTask<Result.UpdateGitHubApiKeyResult> UpdateGitHubApiKeyAsync(
                 Request.UpdateGitHubApiKeyRequest request
-        )
-		{
-            AsyncResult<Result.UpdateGitHubApiKeyResult> result = null;
-			await UpdateGitHubApiKey(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UpdateGitHubApiKeyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UpdateGitHubApiKeyResult>();
     #else
 		public UpdateGitHubApiKeyTask UpdateGitHubApiKeyAsync(
                 Request.UpdateGitHubApiKeyRequest request
@@ -2015,17 +1747,14 @@ namespace Gs2.Gs2Key
         }
     #endif
 #else
-		public async Task<Result.UpdateGitHubApiKeyResult> UpdateGitHubApiKeyAsync(
+		public Task<Result.UpdateGitHubApiKeyResult> UpdateGitHubApiKeyAsync(
                 Request.UpdateGitHubApiKeyRequest request
-        )
-		{
-			var task = new UpdateGitHubApiKeyTask(
+        ) =>
+            new UpdateGitHubApiKeyTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2068,44 +1797,31 @@ namespace Gs2.Gs2Key
 		public IEnumerator GetGitHubApiKey(
                 Request.GetGitHubApiKeyRequest request,
                 UnityAction<AsyncResult<Result.GetGitHubApiKeyResult>> callback
-        )
-		{
-			var task = new GetGitHubApiKeyTask(
+        ) =>
+            new GetGitHubApiKeyTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetGitHubApiKeyResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetGitHubApiKeyResult> GetGitHubApiKeyFuture(
                 Request.GetGitHubApiKeyRequest request
-        )
-		{
-			return new GetGitHubApiKeyTask(
+        ) =>
+            new GetGitHubApiKeyTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetGitHubApiKeyResult> GetGitHubApiKeyAsync(
+		public UniTask<Result.GetGitHubApiKeyResult> GetGitHubApiKeyAsync(
                 Request.GetGitHubApiKeyRequest request
-        )
-		{
-            AsyncResult<Result.GetGitHubApiKeyResult> result = null;
-			await GetGitHubApiKey(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetGitHubApiKeyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetGitHubApiKeyResult>();
     #else
 		public GetGitHubApiKeyTask GetGitHubApiKeyAsync(
                 Request.GetGitHubApiKeyRequest request
@@ -2119,17 +1835,14 @@ namespace Gs2.Gs2Key
         }
     #endif
 #else
-		public async Task<Result.GetGitHubApiKeyResult> GetGitHubApiKeyAsync(
+		public Task<Result.GetGitHubApiKeyResult> GetGitHubApiKeyAsync(
                 Request.GetGitHubApiKeyRequest request
-        )
-		{
-			var task = new GetGitHubApiKeyTask(
+        ) =>
+            new GetGitHubApiKeyTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2172,44 +1885,31 @@ namespace Gs2.Gs2Key
 		public IEnumerator DeleteGitHubApiKey(
                 Request.DeleteGitHubApiKeyRequest request,
                 UnityAction<AsyncResult<Result.DeleteGitHubApiKeyResult>> callback
-        )
-		{
-			var task = new DeleteGitHubApiKeyTask(
+        ) =>
+            new DeleteGitHubApiKeyTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteGitHubApiKeyResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteGitHubApiKeyResult> DeleteGitHubApiKeyFuture(
                 Request.DeleteGitHubApiKeyRequest request
-        )
-		{
-			return new DeleteGitHubApiKeyTask(
+        ) =>
+            new DeleteGitHubApiKeyTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteGitHubApiKeyResult> DeleteGitHubApiKeyAsync(
+		public UniTask<Result.DeleteGitHubApiKeyResult> DeleteGitHubApiKeyAsync(
                 Request.DeleteGitHubApiKeyRequest request
-        )
-		{
-            AsyncResult<Result.DeleteGitHubApiKeyResult> result = null;
-			await DeleteGitHubApiKey(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteGitHubApiKeyTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteGitHubApiKeyResult>();
     #else
 		public DeleteGitHubApiKeyTask DeleteGitHubApiKeyAsync(
                 Request.DeleteGitHubApiKeyRequest request
@@ -2223,17 +1923,14 @@ namespace Gs2.Gs2Key
         }
     #endif
 #else
-		public async Task<Result.DeleteGitHubApiKeyResult> DeleteGitHubApiKeyAsync(
+		public Task<Result.DeleteGitHubApiKeyResult> DeleteGitHubApiKeyAsync(
                 Request.DeleteGitHubApiKeyRequest request
-        )
-		{
-			var task = new DeleteGitHubApiKeyTask(
+        ) =>
+            new DeleteGitHubApiKeyTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 	}
 }

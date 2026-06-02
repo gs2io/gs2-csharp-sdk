@@ -25,17 +25,18 @@ using Cysharp.Threading.Tasks;
 #else
 using System.Web;
 using System.Net.Http;
-using System.Threading.Tasks;
 #endif
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Linq;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
+using Gs2.Core.Util;
 using Gs2.Gs2Inventory.Request;
 using Gs2.Gs2Inventory.Result;
 using Gs2.Util.LitJson;
@@ -110,44 +111,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DescribeNamespaces(
                 Request.DescribeNamespacesRequest request,
                 UnityAction<AsyncResult<Result.DescribeNamespacesResult>> callback
-        )
-		{
-			var task = new DescribeNamespacesTask(
+        ) =>
+            new DescribeNamespacesTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeNamespacesResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeNamespacesResult> DescribeNamespacesFuture(
                 Request.DescribeNamespacesRequest request
-        )
-		{
-			return new DescribeNamespacesTask(
+        ) =>
+            new DescribeNamespacesTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
+		public UniTask<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
                 Request.DescribeNamespacesRequest request
-        )
-		{
-            AsyncResult<Result.DescribeNamespacesResult> result = null;
-			await DescribeNamespaces(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeNamespacesResult>();
     #else
 		public DescribeNamespacesTask DescribeNamespacesAsync(
                 Request.DescribeNamespacesRequest request
@@ -161,17 +149,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
+		public Task<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
                 Request.DescribeNamespacesRequest request
-        )
-		{
-			var task = new DescribeNamespacesTask(
+        ) =>
+            new DescribeNamespacesTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -279,44 +264,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator CreateNamespace(
                 Request.CreateNamespaceRequest request,
                 UnityAction<AsyncResult<Result.CreateNamespaceResult>> callback
-        )
-		{
-			var task = new CreateNamespaceTask(
+        ) =>
+            new CreateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
                 Request.CreateNamespaceRequest request
-        )
-		{
-			return new CreateNamespaceTask(
+        ) =>
+            new CreateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+		public UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
                 Request.CreateNamespaceRequest request
-        )
-		{
-            AsyncResult<Result.CreateNamespaceResult> result = null;
-			await CreateNamespace(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CreateNamespaceResult>();
     #else
 		public CreateNamespaceTask CreateNamespaceAsync(
                 Request.CreateNamespaceRequest request
@@ -330,17 +302,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
+		public Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
                 Request.CreateNamespaceRequest request
-        )
-		{
-			var task = new CreateNamespaceTask(
+        ) =>
+            new CreateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -382,44 +351,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetNamespaceStatus(
                 Request.GetNamespaceStatusRequest request,
                 UnityAction<AsyncResult<Result.GetNamespaceStatusResult>> callback
-        )
-		{
-			var task = new GetNamespaceStatusTask(
+        ) =>
+            new GetNamespaceStatusTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetNamespaceStatusResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetNamespaceStatusResult> GetNamespaceStatusFuture(
                 Request.GetNamespaceStatusRequest request
-        )
-		{
-			return new GetNamespaceStatusTask(
+        ) =>
+            new GetNamespaceStatusTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+		public UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
-        )
-		{
-            AsyncResult<Result.GetNamespaceStatusResult> result = null;
-			await GetNamespaceStatus(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetNamespaceStatusResult>();
     #else
 		public GetNamespaceStatusTask GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
@@ -433,17 +389,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+		public Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
-        )
-		{
-			var task = new GetNamespaceStatusTask(
+        ) =>
+            new GetNamespaceStatusTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -485,44 +438,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetNamespace(
                 Request.GetNamespaceRequest request,
                 UnityAction<AsyncResult<Result.GetNamespaceResult>> callback
-        )
-		{
-			var task = new GetNamespaceTask(
+        ) =>
+            new GetNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
                 Request.GetNamespaceRequest request
-        )
-		{
-			return new GetNamespaceTask(
+        ) =>
+            new GetNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+		public UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
                 Request.GetNamespaceRequest request
-        )
-		{
-            AsyncResult<Result.GetNamespaceResult> result = null;
-			await GetNamespace(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetNamespaceResult>();
     #else
 		public GetNamespaceTask GetNamespaceAsync(
                 Request.GetNamespaceRequest request
@@ -536,17 +476,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
+		public Task<Result.GetNamespaceResult> GetNamespaceAsync(
                 Request.GetNamespaceRequest request
-        )
-		{
-			var task = new GetNamespaceTask(
+        ) =>
+            new GetNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -651,44 +588,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator UpdateNamespace(
                 Request.UpdateNamespaceRequest request,
                 UnityAction<AsyncResult<Result.UpdateNamespaceResult>> callback
-        )
-		{
-			var task = new UpdateNamespaceTask(
+        ) =>
+            new UpdateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
                 Request.UpdateNamespaceRequest request
-        )
-		{
-			return new UpdateNamespaceTask(
+        ) =>
+            new UpdateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+		public UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
                 Request.UpdateNamespaceRequest request
-        )
-		{
-            AsyncResult<Result.UpdateNamespaceResult> result = null;
-			await UpdateNamespace(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UpdateNamespaceResult>();
     #else
 		public UpdateNamespaceTask UpdateNamespaceAsync(
                 Request.UpdateNamespaceRequest request
@@ -702,17 +626,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+		public Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
                 Request.UpdateNamespaceRequest request
-        )
-		{
-			var task = new UpdateNamespaceTask(
+        ) =>
+            new UpdateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -754,44 +675,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DeleteNamespace(
                 Request.DeleteNamespaceRequest request,
                 UnityAction<AsyncResult<Result.DeleteNamespaceResult>> callback
-        )
-		{
-			var task = new DeleteNamespaceTask(
+        ) =>
+            new DeleteNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
                 Request.DeleteNamespaceRequest request
-        )
-		{
-			return new DeleteNamespaceTask(
+        ) =>
+            new DeleteNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+		public UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
                 Request.DeleteNamespaceRequest request
-        )
-		{
-            AsyncResult<Result.DeleteNamespaceResult> result = null;
-			await DeleteNamespace(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteNamespaceResult>();
     #else
 		public DeleteNamespaceTask DeleteNamespaceAsync(
                 Request.DeleteNamespaceRequest request
@@ -805,17 +713,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+		public Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
                 Request.DeleteNamespaceRequest request
-        )
-		{
-			var task = new DeleteNamespaceTask(
+        ) =>
+            new DeleteNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -855,44 +760,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetServiceVersion(
                 Request.GetServiceVersionRequest request,
                 UnityAction<AsyncResult<Result.GetServiceVersionResult>> callback
-        )
-		{
-			var task = new GetServiceVersionTask(
+        ) =>
+            new GetServiceVersionTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetServiceVersionResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetServiceVersionResult> GetServiceVersionFuture(
                 Request.GetServiceVersionRequest request
-        )
-		{
-			return new GetServiceVersionTask(
+        ) =>
+            new GetServiceVersionTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetServiceVersionResult> GetServiceVersionAsync(
+		public UniTask<Result.GetServiceVersionResult> GetServiceVersionAsync(
                 Request.GetServiceVersionRequest request
-        )
-		{
-            AsyncResult<Result.GetServiceVersionResult> result = null;
-			await GetServiceVersion(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetServiceVersionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetServiceVersionResult>();
     #else
 		public GetServiceVersionTask GetServiceVersionAsync(
                 Request.GetServiceVersionRequest request
@@ -906,17 +798,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetServiceVersionResult> GetServiceVersionAsync(
+		public Task<Result.GetServiceVersionResult> GetServiceVersionAsync(
                 Request.GetServiceVersionRequest request
-        )
-		{
-			var task = new GetServiceVersionTask(
+        ) =>
+            new GetServiceVersionTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -975,44 +864,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DumpUserDataByUserId(
                 Request.DumpUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DumpUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new DumpUserDataByUserIdTask(
+        ) =>
+            new DumpUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DumpUserDataByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdFuture(
                 Request.DumpUserDataByUserIdRequest request
-        )
-		{
-			return new DumpUserDataByUserIdTask(
+        ) =>
+            new DumpUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdAsync(
+		public UniTask<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdAsync(
                 Request.DumpUserDataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DumpUserDataByUserIdResult> result = null;
-			await DumpUserDataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DumpUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DumpUserDataByUserIdResult>();
     #else
 		public DumpUserDataByUserIdTask DumpUserDataByUserIdAsync(
                 Request.DumpUserDataByUserIdRequest request
@@ -1026,17 +902,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdAsync(
+		public Task<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdAsync(
                 Request.DumpUserDataByUserIdRequest request
-        )
-		{
-			var task = new DumpUserDataByUserIdTask(
+        ) =>
+            new DumpUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1082,44 +955,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator CheckDumpUserDataByUserId(
                 Request.CheckDumpUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.CheckDumpUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new CheckDumpUserDataByUserIdTask(
+        ) =>
+            new CheckDumpUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CheckDumpUserDataByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdFuture(
                 Request.CheckDumpUserDataByUserIdRequest request
-        )
-		{
-			return new CheckDumpUserDataByUserIdTask(
+        ) =>
+            new CheckDumpUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdAsync(
+		public UniTask<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdAsync(
                 Request.CheckDumpUserDataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.CheckDumpUserDataByUserIdResult> result = null;
-			await CheckDumpUserDataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CheckDumpUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CheckDumpUserDataByUserIdResult>();
     #else
 		public CheckDumpUserDataByUserIdTask CheckDumpUserDataByUserIdAsync(
                 Request.CheckDumpUserDataByUserIdRequest request
@@ -1133,17 +993,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdAsync(
+		public Task<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdAsync(
                 Request.CheckDumpUserDataByUserIdRequest request
-        )
-		{
-			var task = new CheckDumpUserDataByUserIdTask(
+        ) =>
+            new CheckDumpUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1202,44 +1059,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator CleanUserDataByUserId(
                 Request.CleanUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.CleanUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new CleanUserDataByUserIdTask(
+        ) =>
+            new CleanUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CleanUserDataByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdFuture(
                 Request.CleanUserDataByUserIdRequest request
-        )
-		{
-			return new CleanUserDataByUserIdTask(
+        ) =>
+            new CleanUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdAsync(
+		public UniTask<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdAsync(
                 Request.CleanUserDataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.CleanUserDataByUserIdResult> result = null;
-			await CleanUserDataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CleanUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CleanUserDataByUserIdResult>();
     #else
 		public CleanUserDataByUserIdTask CleanUserDataByUserIdAsync(
                 Request.CleanUserDataByUserIdRequest request
@@ -1253,17 +1097,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdAsync(
+		public Task<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdAsync(
                 Request.CleanUserDataByUserIdRequest request
-        )
-		{
-			var task = new CleanUserDataByUserIdTask(
+        ) =>
+            new CleanUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1309,44 +1150,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator CheckCleanUserDataByUserId(
                 Request.CheckCleanUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.CheckCleanUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new CheckCleanUserDataByUserIdTask(
+        ) =>
+            new CheckCleanUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CheckCleanUserDataByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdFuture(
                 Request.CheckCleanUserDataByUserIdRequest request
-        )
-		{
-			return new CheckCleanUserDataByUserIdTask(
+        ) =>
+            new CheckCleanUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdAsync(
+		public UniTask<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdAsync(
                 Request.CheckCleanUserDataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.CheckCleanUserDataByUserIdResult> result = null;
-			await CheckCleanUserDataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CheckCleanUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CheckCleanUserDataByUserIdResult>();
     #else
 		public CheckCleanUserDataByUserIdTask CheckCleanUserDataByUserIdAsync(
                 Request.CheckCleanUserDataByUserIdRequest request
@@ -1360,17 +1188,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdAsync(
+		public Task<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdAsync(
                 Request.CheckCleanUserDataByUserIdRequest request
-        )
-		{
-			var task = new CheckCleanUserDataByUserIdTask(
+        ) =>
+            new CheckCleanUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1429,44 +1254,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator PrepareImportUserDataByUserId(
                 Request.PrepareImportUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.PrepareImportUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new PrepareImportUserDataByUserIdTask(
+        ) =>
+            new PrepareImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.PrepareImportUserDataByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdFuture(
                 Request.PrepareImportUserDataByUserIdRequest request
-        )
-		{
-			return new PrepareImportUserDataByUserIdTask(
+        ) =>
+            new PrepareImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdAsync(
+		public UniTask<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdAsync(
                 Request.PrepareImportUserDataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.PrepareImportUserDataByUserIdResult> result = null;
-			await PrepareImportUserDataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new PrepareImportUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.PrepareImportUserDataByUserIdResult>();
     #else
 		public PrepareImportUserDataByUserIdTask PrepareImportUserDataByUserIdAsync(
                 Request.PrepareImportUserDataByUserIdRequest request
@@ -1480,17 +1292,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdAsync(
+		public Task<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdAsync(
                 Request.PrepareImportUserDataByUserIdRequest request
-        )
-		{
-			var task = new PrepareImportUserDataByUserIdTask(
+        ) =>
+            new PrepareImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1554,44 +1363,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator ImportUserDataByUserId(
                 Request.ImportUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.ImportUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new ImportUserDataByUserIdTask(
+        ) =>
+            new ImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ImportUserDataByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdFuture(
                 Request.ImportUserDataByUserIdRequest request
-        )
-		{
-			return new ImportUserDataByUserIdTask(
+        ) =>
+            new ImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdAsync(
+		public UniTask<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdAsync(
                 Request.ImportUserDataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.ImportUserDataByUserIdResult> result = null;
-			await ImportUserDataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new ImportUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.ImportUserDataByUserIdResult>();
     #else
 		public ImportUserDataByUserIdTask ImportUserDataByUserIdAsync(
                 Request.ImportUserDataByUserIdRequest request
@@ -1605,17 +1401,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdAsync(
+		public Task<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdAsync(
                 Request.ImportUserDataByUserIdRequest request
-        )
-		{
-			var task = new ImportUserDataByUserIdTask(
+        ) =>
+            new ImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1662,44 +1455,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator CheckImportUserDataByUserId(
                 Request.CheckImportUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.CheckImportUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new CheckImportUserDataByUserIdTask(
+        ) =>
+            new CheckImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CheckImportUserDataByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdFuture(
                 Request.CheckImportUserDataByUserIdRequest request
-        )
-		{
-			return new CheckImportUserDataByUserIdTask(
+        ) =>
+            new CheckImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdAsync(
+		public UniTask<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdAsync(
                 Request.CheckImportUserDataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.CheckImportUserDataByUserIdResult> result = null;
-			await CheckImportUserDataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CheckImportUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CheckImportUserDataByUserIdResult>();
     #else
 		public CheckImportUserDataByUserIdTask CheckImportUserDataByUserIdAsync(
                 Request.CheckImportUserDataByUserIdRequest request
@@ -1713,17 +1493,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdAsync(
+		public Task<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdAsync(
                 Request.CheckImportUserDataByUserIdRequest request
-        )
-		{
-			var task = new CheckImportUserDataByUserIdTask(
+        ) =>
+            new CheckImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1774,44 +1551,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DescribeInventoryModelMasters(
                 Request.DescribeInventoryModelMastersRequest request,
                 UnityAction<AsyncResult<Result.DescribeInventoryModelMastersResult>> callback
-        )
-		{
-			var task = new DescribeInventoryModelMastersTask(
+        ) =>
+            new DescribeInventoryModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeInventoryModelMastersResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeInventoryModelMastersResult> DescribeInventoryModelMastersFuture(
                 Request.DescribeInventoryModelMastersRequest request
-        )
-		{
-			return new DescribeInventoryModelMastersTask(
+        ) =>
+            new DescribeInventoryModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeInventoryModelMastersResult> DescribeInventoryModelMastersAsync(
+		public UniTask<Result.DescribeInventoryModelMastersResult> DescribeInventoryModelMastersAsync(
                 Request.DescribeInventoryModelMastersRequest request
-        )
-		{
-            AsyncResult<Result.DescribeInventoryModelMastersResult> result = null;
-			await DescribeInventoryModelMasters(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeInventoryModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeInventoryModelMastersResult>();
     #else
 		public DescribeInventoryModelMastersTask DescribeInventoryModelMastersAsync(
                 Request.DescribeInventoryModelMastersRequest request
@@ -1825,17 +1589,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DescribeInventoryModelMastersResult> DescribeInventoryModelMastersAsync(
+		public Task<Result.DescribeInventoryModelMastersResult> DescribeInventoryModelMastersAsync(
                 Request.DescribeInventoryModelMastersRequest request
-        )
-		{
-			var task = new DescribeInventoryModelMastersTask(
+        ) =>
+            new DescribeInventoryModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1920,44 +1681,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator CreateInventoryModelMaster(
                 Request.CreateInventoryModelMasterRequest request,
                 UnityAction<AsyncResult<Result.CreateInventoryModelMasterResult>> callback
-        )
-		{
-			var task = new CreateInventoryModelMasterTask(
+        ) =>
+            new CreateInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateInventoryModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CreateInventoryModelMasterResult> CreateInventoryModelMasterFuture(
                 Request.CreateInventoryModelMasterRequest request
-        )
-		{
-			return new CreateInventoryModelMasterTask(
+        ) =>
+            new CreateInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateInventoryModelMasterResult> CreateInventoryModelMasterAsync(
+		public UniTask<Result.CreateInventoryModelMasterResult> CreateInventoryModelMasterAsync(
                 Request.CreateInventoryModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.CreateInventoryModelMasterResult> result = null;
-			await CreateInventoryModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CreateInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CreateInventoryModelMasterResult>();
     #else
 		public CreateInventoryModelMasterTask CreateInventoryModelMasterAsync(
                 Request.CreateInventoryModelMasterRequest request
@@ -1971,17 +1719,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.CreateInventoryModelMasterResult> CreateInventoryModelMasterAsync(
+		public Task<Result.CreateInventoryModelMasterResult> CreateInventoryModelMasterAsync(
                 Request.CreateInventoryModelMasterRequest request
-        )
-		{
-			var task = new CreateInventoryModelMasterTask(
+        ) =>
+            new CreateInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2024,44 +1769,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetInventoryModelMaster(
                 Request.GetInventoryModelMasterRequest request,
                 UnityAction<AsyncResult<Result.GetInventoryModelMasterResult>> callback
-        )
-		{
-			var task = new GetInventoryModelMasterTask(
+        ) =>
+            new GetInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetInventoryModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetInventoryModelMasterResult> GetInventoryModelMasterFuture(
                 Request.GetInventoryModelMasterRequest request
-        )
-		{
-			return new GetInventoryModelMasterTask(
+        ) =>
+            new GetInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetInventoryModelMasterResult> GetInventoryModelMasterAsync(
+		public UniTask<Result.GetInventoryModelMasterResult> GetInventoryModelMasterAsync(
                 Request.GetInventoryModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.GetInventoryModelMasterResult> result = null;
-			await GetInventoryModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetInventoryModelMasterResult>();
     #else
 		public GetInventoryModelMasterTask GetInventoryModelMasterAsync(
                 Request.GetInventoryModelMasterRequest request
@@ -2075,17 +1807,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetInventoryModelMasterResult> GetInventoryModelMasterAsync(
+		public Task<Result.GetInventoryModelMasterResult> GetInventoryModelMasterAsync(
                 Request.GetInventoryModelMasterRequest request
-        )
-		{
-			var task = new GetInventoryModelMasterTask(
+        ) =>
+            new GetInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2166,44 +1895,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator UpdateInventoryModelMaster(
                 Request.UpdateInventoryModelMasterRequest request,
                 UnityAction<AsyncResult<Result.UpdateInventoryModelMasterResult>> callback
-        )
-		{
-			var task = new UpdateInventoryModelMasterTask(
+        ) =>
+            new UpdateInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateInventoryModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UpdateInventoryModelMasterResult> UpdateInventoryModelMasterFuture(
                 Request.UpdateInventoryModelMasterRequest request
-        )
-		{
-			return new UpdateInventoryModelMasterTask(
+        ) =>
+            new UpdateInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateInventoryModelMasterResult> UpdateInventoryModelMasterAsync(
+		public UniTask<Result.UpdateInventoryModelMasterResult> UpdateInventoryModelMasterAsync(
                 Request.UpdateInventoryModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.UpdateInventoryModelMasterResult> result = null;
-			await UpdateInventoryModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UpdateInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UpdateInventoryModelMasterResult>();
     #else
 		public UpdateInventoryModelMasterTask UpdateInventoryModelMasterAsync(
                 Request.UpdateInventoryModelMasterRequest request
@@ -2217,17 +1933,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.UpdateInventoryModelMasterResult> UpdateInventoryModelMasterAsync(
+		public Task<Result.UpdateInventoryModelMasterResult> UpdateInventoryModelMasterAsync(
                 Request.UpdateInventoryModelMasterRequest request
-        )
-		{
-			var task = new UpdateInventoryModelMasterTask(
+        ) =>
+            new UpdateInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2270,44 +1983,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DeleteInventoryModelMaster(
                 Request.DeleteInventoryModelMasterRequest request,
                 UnityAction<AsyncResult<Result.DeleteInventoryModelMasterResult>> callback
-        )
-		{
-			var task = new DeleteInventoryModelMasterTask(
+        ) =>
+            new DeleteInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteInventoryModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteInventoryModelMasterResult> DeleteInventoryModelMasterFuture(
                 Request.DeleteInventoryModelMasterRequest request
-        )
-		{
-			return new DeleteInventoryModelMasterTask(
+        ) =>
+            new DeleteInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteInventoryModelMasterResult> DeleteInventoryModelMasterAsync(
+		public UniTask<Result.DeleteInventoryModelMasterResult> DeleteInventoryModelMasterAsync(
                 Request.DeleteInventoryModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.DeleteInventoryModelMasterResult> result = null;
-			await DeleteInventoryModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteInventoryModelMasterResult>();
     #else
 		public DeleteInventoryModelMasterTask DeleteInventoryModelMasterAsync(
                 Request.DeleteInventoryModelMasterRequest request
@@ -2321,17 +2021,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DeleteInventoryModelMasterResult> DeleteInventoryModelMasterAsync(
+		public Task<Result.DeleteInventoryModelMasterResult> DeleteInventoryModelMasterAsync(
                 Request.DeleteInventoryModelMasterRequest request
-        )
-		{
-			var task = new DeleteInventoryModelMasterTask(
+        ) =>
+            new DeleteInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2373,44 +2070,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DescribeInventoryModels(
                 Request.DescribeInventoryModelsRequest request,
                 UnityAction<AsyncResult<Result.DescribeInventoryModelsResult>> callback
-        )
-		{
-			var task = new DescribeInventoryModelsTask(
+        ) =>
+            new DescribeInventoryModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeInventoryModelsResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeInventoryModelsResult> DescribeInventoryModelsFuture(
                 Request.DescribeInventoryModelsRequest request
-        )
-		{
-			return new DescribeInventoryModelsTask(
+        ) =>
+            new DescribeInventoryModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeInventoryModelsResult> DescribeInventoryModelsAsync(
+		public UniTask<Result.DescribeInventoryModelsResult> DescribeInventoryModelsAsync(
                 Request.DescribeInventoryModelsRequest request
-        )
-		{
-            AsyncResult<Result.DescribeInventoryModelsResult> result = null;
-			await DescribeInventoryModels(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeInventoryModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeInventoryModelsResult>();
     #else
 		public DescribeInventoryModelsTask DescribeInventoryModelsAsync(
                 Request.DescribeInventoryModelsRequest request
@@ -2424,17 +2108,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DescribeInventoryModelsResult> DescribeInventoryModelsAsync(
+		public Task<Result.DescribeInventoryModelsResult> DescribeInventoryModelsAsync(
                 Request.DescribeInventoryModelsRequest request
-        )
-		{
-			var task = new DescribeInventoryModelsTask(
+        ) =>
+            new DescribeInventoryModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2477,44 +2158,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetInventoryModel(
                 Request.GetInventoryModelRequest request,
                 UnityAction<AsyncResult<Result.GetInventoryModelResult>> callback
-        )
-		{
-			var task = new GetInventoryModelTask(
+        ) =>
+            new GetInventoryModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetInventoryModelResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetInventoryModelResult> GetInventoryModelFuture(
                 Request.GetInventoryModelRequest request
-        )
-		{
-			return new GetInventoryModelTask(
+        ) =>
+            new GetInventoryModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetInventoryModelResult> GetInventoryModelAsync(
+		public UniTask<Result.GetInventoryModelResult> GetInventoryModelAsync(
                 Request.GetInventoryModelRequest request
-        )
-		{
-            AsyncResult<Result.GetInventoryModelResult> result = null;
-			await GetInventoryModel(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetInventoryModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetInventoryModelResult>();
     #else
 		public GetInventoryModelTask GetInventoryModelAsync(
                 Request.GetInventoryModelRequest request
@@ -2528,17 +2196,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetInventoryModelResult> GetInventoryModelAsync(
+		public Task<Result.GetInventoryModelResult> GetInventoryModelAsync(
                 Request.GetInventoryModelRequest request
-        )
-		{
-			var task = new GetInventoryModelTask(
+        ) =>
+            new GetInventoryModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2587,44 +2252,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DescribeItemModelMasters(
                 Request.DescribeItemModelMastersRequest request,
                 UnityAction<AsyncResult<Result.DescribeItemModelMastersResult>> callback
-        )
-		{
-			var task = new DescribeItemModelMastersTask(
+        ) =>
+            new DescribeItemModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeItemModelMastersResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeItemModelMastersResult> DescribeItemModelMastersFuture(
                 Request.DescribeItemModelMastersRequest request
-        )
-		{
-			return new DescribeItemModelMastersTask(
+        ) =>
+            new DescribeItemModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeItemModelMastersResult> DescribeItemModelMastersAsync(
+		public UniTask<Result.DescribeItemModelMastersResult> DescribeItemModelMastersAsync(
                 Request.DescribeItemModelMastersRequest request
-        )
-		{
-            AsyncResult<Result.DescribeItemModelMastersResult> result = null;
-			await DescribeItemModelMasters(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeItemModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeItemModelMastersResult>();
     #else
 		public DescribeItemModelMastersTask DescribeItemModelMastersAsync(
                 Request.DescribeItemModelMastersRequest request
@@ -2638,17 +2290,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DescribeItemModelMastersResult> DescribeItemModelMastersAsync(
+		public Task<Result.DescribeItemModelMastersResult> DescribeItemModelMastersAsync(
                 Request.DescribeItemModelMastersRequest request
-        )
-		{
-			var task = new DescribeItemModelMastersTask(
+        ) =>
+            new DescribeItemModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2734,44 +2383,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator CreateItemModelMaster(
                 Request.CreateItemModelMasterRequest request,
                 UnityAction<AsyncResult<Result.CreateItemModelMasterResult>> callback
-        )
-		{
-			var task = new CreateItemModelMasterTask(
+        ) =>
+            new CreateItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateItemModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CreateItemModelMasterResult> CreateItemModelMasterFuture(
                 Request.CreateItemModelMasterRequest request
-        )
-		{
-			return new CreateItemModelMasterTask(
+        ) =>
+            new CreateItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateItemModelMasterResult> CreateItemModelMasterAsync(
+		public UniTask<Result.CreateItemModelMasterResult> CreateItemModelMasterAsync(
                 Request.CreateItemModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.CreateItemModelMasterResult> result = null;
-			await CreateItemModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CreateItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CreateItemModelMasterResult>();
     #else
 		public CreateItemModelMasterTask CreateItemModelMasterAsync(
                 Request.CreateItemModelMasterRequest request
@@ -2785,17 +2421,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.CreateItemModelMasterResult> CreateItemModelMasterAsync(
+		public Task<Result.CreateItemModelMasterResult> CreateItemModelMasterAsync(
                 Request.CreateItemModelMasterRequest request
-        )
-		{
-			var task = new CreateItemModelMasterTask(
+        ) =>
+            new CreateItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2839,44 +2472,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetItemModelMaster(
                 Request.GetItemModelMasterRequest request,
                 UnityAction<AsyncResult<Result.GetItemModelMasterResult>> callback
-        )
-		{
-			var task = new GetItemModelMasterTask(
+        ) =>
+            new GetItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetItemModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetItemModelMasterResult> GetItemModelMasterFuture(
                 Request.GetItemModelMasterRequest request
-        )
-		{
-			return new GetItemModelMasterTask(
+        ) =>
+            new GetItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetItemModelMasterResult> GetItemModelMasterAsync(
+		public UniTask<Result.GetItemModelMasterResult> GetItemModelMasterAsync(
                 Request.GetItemModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.GetItemModelMasterResult> result = null;
-			await GetItemModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetItemModelMasterResult>();
     #else
 		public GetItemModelMasterTask GetItemModelMasterAsync(
                 Request.GetItemModelMasterRequest request
@@ -2890,17 +2510,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetItemModelMasterResult> GetItemModelMasterAsync(
+		public Task<Result.GetItemModelMasterResult> GetItemModelMasterAsync(
                 Request.GetItemModelMasterRequest request
-        )
-		{
-			var task = new GetItemModelMasterTask(
+        ) =>
+            new GetItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2982,44 +2599,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator UpdateItemModelMaster(
                 Request.UpdateItemModelMasterRequest request,
                 UnityAction<AsyncResult<Result.UpdateItemModelMasterResult>> callback
-        )
-		{
-			var task = new UpdateItemModelMasterTask(
+        ) =>
+            new UpdateItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateItemModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UpdateItemModelMasterResult> UpdateItemModelMasterFuture(
                 Request.UpdateItemModelMasterRequest request
-        )
-		{
-			return new UpdateItemModelMasterTask(
+        ) =>
+            new UpdateItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateItemModelMasterResult> UpdateItemModelMasterAsync(
+		public UniTask<Result.UpdateItemModelMasterResult> UpdateItemModelMasterAsync(
                 Request.UpdateItemModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.UpdateItemModelMasterResult> result = null;
-			await UpdateItemModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UpdateItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UpdateItemModelMasterResult>();
     #else
 		public UpdateItemModelMasterTask UpdateItemModelMasterAsync(
                 Request.UpdateItemModelMasterRequest request
@@ -3033,17 +2637,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.UpdateItemModelMasterResult> UpdateItemModelMasterAsync(
+		public Task<Result.UpdateItemModelMasterResult> UpdateItemModelMasterAsync(
                 Request.UpdateItemModelMasterRequest request
-        )
-		{
-			var task = new UpdateItemModelMasterTask(
+        ) =>
+            new UpdateItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3087,44 +2688,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DeleteItemModelMaster(
                 Request.DeleteItemModelMasterRequest request,
                 UnityAction<AsyncResult<Result.DeleteItemModelMasterResult>> callback
-        )
-		{
-			var task = new DeleteItemModelMasterTask(
+        ) =>
+            new DeleteItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteItemModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteItemModelMasterResult> DeleteItemModelMasterFuture(
                 Request.DeleteItemModelMasterRequest request
-        )
-		{
-			return new DeleteItemModelMasterTask(
+        ) =>
+            new DeleteItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteItemModelMasterResult> DeleteItemModelMasterAsync(
+		public UniTask<Result.DeleteItemModelMasterResult> DeleteItemModelMasterAsync(
                 Request.DeleteItemModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.DeleteItemModelMasterResult> result = null;
-			await DeleteItemModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteItemModelMasterResult>();
     #else
 		public DeleteItemModelMasterTask DeleteItemModelMasterAsync(
                 Request.DeleteItemModelMasterRequest request
@@ -3138,17 +2726,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DeleteItemModelMasterResult> DeleteItemModelMasterAsync(
+		public Task<Result.DeleteItemModelMasterResult> DeleteItemModelMasterAsync(
                 Request.DeleteItemModelMasterRequest request
-        )
-		{
-			var task = new DeleteItemModelMasterTask(
+        ) =>
+            new DeleteItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3191,44 +2776,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DescribeItemModels(
                 Request.DescribeItemModelsRequest request,
                 UnityAction<AsyncResult<Result.DescribeItemModelsResult>> callback
-        )
-		{
-			var task = new DescribeItemModelsTask(
+        ) =>
+            new DescribeItemModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeItemModelsResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeItemModelsResult> DescribeItemModelsFuture(
                 Request.DescribeItemModelsRequest request
-        )
-		{
-			return new DescribeItemModelsTask(
+        ) =>
+            new DescribeItemModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeItemModelsResult> DescribeItemModelsAsync(
+		public UniTask<Result.DescribeItemModelsResult> DescribeItemModelsAsync(
                 Request.DescribeItemModelsRequest request
-        )
-		{
-            AsyncResult<Result.DescribeItemModelsResult> result = null;
-			await DescribeItemModels(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeItemModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeItemModelsResult>();
     #else
 		public DescribeItemModelsTask DescribeItemModelsAsync(
                 Request.DescribeItemModelsRequest request
@@ -3242,17 +2814,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DescribeItemModelsResult> DescribeItemModelsAsync(
+		public Task<Result.DescribeItemModelsResult> DescribeItemModelsAsync(
                 Request.DescribeItemModelsRequest request
-        )
-		{
-			var task = new DescribeItemModelsTask(
+        ) =>
+            new DescribeItemModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3296,44 +2865,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetItemModel(
                 Request.GetItemModelRequest request,
                 UnityAction<AsyncResult<Result.GetItemModelResult>> callback
-        )
-		{
-			var task = new GetItemModelTask(
+        ) =>
+            new GetItemModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetItemModelResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetItemModelResult> GetItemModelFuture(
                 Request.GetItemModelRequest request
-        )
-		{
-			return new GetItemModelTask(
+        ) =>
+            new GetItemModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetItemModelResult> GetItemModelAsync(
+		public UniTask<Result.GetItemModelResult> GetItemModelAsync(
                 Request.GetItemModelRequest request
-        )
-		{
-            AsyncResult<Result.GetItemModelResult> result = null;
-			await GetItemModel(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetItemModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetItemModelResult>();
     #else
 		public GetItemModelTask GetItemModelAsync(
                 Request.GetItemModelRequest request
@@ -3347,17 +2903,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetItemModelResult> GetItemModelAsync(
+		public Task<Result.GetItemModelResult> GetItemModelAsync(
                 Request.GetItemModelRequest request
-        )
-		{
-			var task = new GetItemModelTask(
+        ) =>
+            new GetItemModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3408,44 +2961,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DescribeSimpleInventoryModelMasters(
                 Request.DescribeSimpleInventoryModelMastersRequest request,
                 UnityAction<AsyncResult<Result.DescribeSimpleInventoryModelMastersResult>> callback
-        )
-		{
-			var task = new DescribeSimpleInventoryModelMastersTask(
+        ) =>
+            new DescribeSimpleInventoryModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeSimpleInventoryModelMastersResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeSimpleInventoryModelMastersResult> DescribeSimpleInventoryModelMastersFuture(
                 Request.DescribeSimpleInventoryModelMastersRequest request
-        )
-		{
-			return new DescribeSimpleInventoryModelMastersTask(
+        ) =>
+            new DescribeSimpleInventoryModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeSimpleInventoryModelMastersResult> DescribeSimpleInventoryModelMastersAsync(
+		public UniTask<Result.DescribeSimpleInventoryModelMastersResult> DescribeSimpleInventoryModelMastersAsync(
                 Request.DescribeSimpleInventoryModelMastersRequest request
-        )
-		{
-            AsyncResult<Result.DescribeSimpleInventoryModelMastersResult> result = null;
-			await DescribeSimpleInventoryModelMasters(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeSimpleInventoryModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeSimpleInventoryModelMastersResult>();
     #else
 		public DescribeSimpleInventoryModelMastersTask DescribeSimpleInventoryModelMastersAsync(
                 Request.DescribeSimpleInventoryModelMastersRequest request
@@ -3459,17 +2999,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DescribeSimpleInventoryModelMastersResult> DescribeSimpleInventoryModelMastersAsync(
+		public Task<Result.DescribeSimpleInventoryModelMastersResult> DescribeSimpleInventoryModelMastersAsync(
                 Request.DescribeSimpleInventoryModelMastersRequest request
-        )
-		{
-			var task = new DescribeSimpleInventoryModelMastersTask(
+        ) =>
+            new DescribeSimpleInventoryModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3539,44 +3076,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator CreateSimpleInventoryModelMaster(
                 Request.CreateSimpleInventoryModelMasterRequest request,
                 UnityAction<AsyncResult<Result.CreateSimpleInventoryModelMasterResult>> callback
-        )
-		{
-			var task = new CreateSimpleInventoryModelMasterTask(
+        ) =>
+            new CreateSimpleInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateSimpleInventoryModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CreateSimpleInventoryModelMasterResult> CreateSimpleInventoryModelMasterFuture(
                 Request.CreateSimpleInventoryModelMasterRequest request
-        )
-		{
-			return new CreateSimpleInventoryModelMasterTask(
+        ) =>
+            new CreateSimpleInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateSimpleInventoryModelMasterResult> CreateSimpleInventoryModelMasterAsync(
+		public UniTask<Result.CreateSimpleInventoryModelMasterResult> CreateSimpleInventoryModelMasterAsync(
                 Request.CreateSimpleInventoryModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.CreateSimpleInventoryModelMasterResult> result = null;
-			await CreateSimpleInventoryModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CreateSimpleInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CreateSimpleInventoryModelMasterResult>();
     #else
 		public CreateSimpleInventoryModelMasterTask CreateSimpleInventoryModelMasterAsync(
                 Request.CreateSimpleInventoryModelMasterRequest request
@@ -3590,17 +3114,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.CreateSimpleInventoryModelMasterResult> CreateSimpleInventoryModelMasterAsync(
+		public Task<Result.CreateSimpleInventoryModelMasterResult> CreateSimpleInventoryModelMasterAsync(
                 Request.CreateSimpleInventoryModelMasterRequest request
-        )
-		{
-			var task = new CreateSimpleInventoryModelMasterTask(
+        ) =>
+            new CreateSimpleInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3643,44 +3164,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetSimpleInventoryModelMaster(
                 Request.GetSimpleInventoryModelMasterRequest request,
                 UnityAction<AsyncResult<Result.GetSimpleInventoryModelMasterResult>> callback
-        )
-		{
-			var task = new GetSimpleInventoryModelMasterTask(
+        ) =>
+            new GetSimpleInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetSimpleInventoryModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetSimpleInventoryModelMasterResult> GetSimpleInventoryModelMasterFuture(
                 Request.GetSimpleInventoryModelMasterRequest request
-        )
-		{
-			return new GetSimpleInventoryModelMasterTask(
+        ) =>
+            new GetSimpleInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetSimpleInventoryModelMasterResult> GetSimpleInventoryModelMasterAsync(
+		public UniTask<Result.GetSimpleInventoryModelMasterResult> GetSimpleInventoryModelMasterAsync(
                 Request.GetSimpleInventoryModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.GetSimpleInventoryModelMasterResult> result = null;
-			await GetSimpleInventoryModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetSimpleInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetSimpleInventoryModelMasterResult>();
     #else
 		public GetSimpleInventoryModelMasterTask GetSimpleInventoryModelMasterAsync(
                 Request.GetSimpleInventoryModelMasterRequest request
@@ -3694,17 +3202,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetSimpleInventoryModelMasterResult> GetSimpleInventoryModelMasterAsync(
+		public Task<Result.GetSimpleInventoryModelMasterResult> GetSimpleInventoryModelMasterAsync(
                 Request.GetSimpleInventoryModelMasterRequest request
-        )
-		{
-			var task = new GetSimpleInventoryModelMasterTask(
+        ) =>
+            new GetSimpleInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3770,44 +3275,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator UpdateSimpleInventoryModelMaster(
                 Request.UpdateSimpleInventoryModelMasterRequest request,
                 UnityAction<AsyncResult<Result.UpdateSimpleInventoryModelMasterResult>> callback
-        )
-		{
-			var task = new UpdateSimpleInventoryModelMasterTask(
+        ) =>
+            new UpdateSimpleInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateSimpleInventoryModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UpdateSimpleInventoryModelMasterResult> UpdateSimpleInventoryModelMasterFuture(
                 Request.UpdateSimpleInventoryModelMasterRequest request
-        )
-		{
-			return new UpdateSimpleInventoryModelMasterTask(
+        ) =>
+            new UpdateSimpleInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateSimpleInventoryModelMasterResult> UpdateSimpleInventoryModelMasterAsync(
+		public UniTask<Result.UpdateSimpleInventoryModelMasterResult> UpdateSimpleInventoryModelMasterAsync(
                 Request.UpdateSimpleInventoryModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.UpdateSimpleInventoryModelMasterResult> result = null;
-			await UpdateSimpleInventoryModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UpdateSimpleInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UpdateSimpleInventoryModelMasterResult>();
     #else
 		public UpdateSimpleInventoryModelMasterTask UpdateSimpleInventoryModelMasterAsync(
                 Request.UpdateSimpleInventoryModelMasterRequest request
@@ -3821,17 +3313,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.UpdateSimpleInventoryModelMasterResult> UpdateSimpleInventoryModelMasterAsync(
+		public Task<Result.UpdateSimpleInventoryModelMasterResult> UpdateSimpleInventoryModelMasterAsync(
                 Request.UpdateSimpleInventoryModelMasterRequest request
-        )
-		{
-			var task = new UpdateSimpleInventoryModelMasterTask(
+        ) =>
+            new UpdateSimpleInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3874,44 +3363,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DeleteSimpleInventoryModelMaster(
                 Request.DeleteSimpleInventoryModelMasterRequest request,
                 UnityAction<AsyncResult<Result.DeleteSimpleInventoryModelMasterResult>> callback
-        )
-		{
-			var task = new DeleteSimpleInventoryModelMasterTask(
+        ) =>
+            new DeleteSimpleInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteSimpleInventoryModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteSimpleInventoryModelMasterResult> DeleteSimpleInventoryModelMasterFuture(
                 Request.DeleteSimpleInventoryModelMasterRequest request
-        )
-		{
-			return new DeleteSimpleInventoryModelMasterTask(
+        ) =>
+            new DeleteSimpleInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteSimpleInventoryModelMasterResult> DeleteSimpleInventoryModelMasterAsync(
+		public UniTask<Result.DeleteSimpleInventoryModelMasterResult> DeleteSimpleInventoryModelMasterAsync(
                 Request.DeleteSimpleInventoryModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.DeleteSimpleInventoryModelMasterResult> result = null;
-			await DeleteSimpleInventoryModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteSimpleInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteSimpleInventoryModelMasterResult>();
     #else
 		public DeleteSimpleInventoryModelMasterTask DeleteSimpleInventoryModelMasterAsync(
                 Request.DeleteSimpleInventoryModelMasterRequest request
@@ -3925,17 +3401,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DeleteSimpleInventoryModelMasterResult> DeleteSimpleInventoryModelMasterAsync(
+		public Task<Result.DeleteSimpleInventoryModelMasterResult> DeleteSimpleInventoryModelMasterAsync(
                 Request.DeleteSimpleInventoryModelMasterRequest request
-        )
-		{
-			var task = new DeleteSimpleInventoryModelMasterTask(
+        ) =>
+            new DeleteSimpleInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3977,44 +3450,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DescribeSimpleInventoryModels(
                 Request.DescribeSimpleInventoryModelsRequest request,
                 UnityAction<AsyncResult<Result.DescribeSimpleInventoryModelsResult>> callback
-        )
-		{
-			var task = new DescribeSimpleInventoryModelsTask(
+        ) =>
+            new DescribeSimpleInventoryModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeSimpleInventoryModelsResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeSimpleInventoryModelsResult> DescribeSimpleInventoryModelsFuture(
                 Request.DescribeSimpleInventoryModelsRequest request
-        )
-		{
-			return new DescribeSimpleInventoryModelsTask(
+        ) =>
+            new DescribeSimpleInventoryModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeSimpleInventoryModelsResult> DescribeSimpleInventoryModelsAsync(
+		public UniTask<Result.DescribeSimpleInventoryModelsResult> DescribeSimpleInventoryModelsAsync(
                 Request.DescribeSimpleInventoryModelsRequest request
-        )
-		{
-            AsyncResult<Result.DescribeSimpleInventoryModelsResult> result = null;
-			await DescribeSimpleInventoryModels(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeSimpleInventoryModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeSimpleInventoryModelsResult>();
     #else
 		public DescribeSimpleInventoryModelsTask DescribeSimpleInventoryModelsAsync(
                 Request.DescribeSimpleInventoryModelsRequest request
@@ -4028,17 +3488,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DescribeSimpleInventoryModelsResult> DescribeSimpleInventoryModelsAsync(
+		public Task<Result.DescribeSimpleInventoryModelsResult> DescribeSimpleInventoryModelsAsync(
                 Request.DescribeSimpleInventoryModelsRequest request
-        )
-		{
-			var task = new DescribeSimpleInventoryModelsTask(
+        ) =>
+            new DescribeSimpleInventoryModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4081,44 +3538,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetSimpleInventoryModel(
                 Request.GetSimpleInventoryModelRequest request,
                 UnityAction<AsyncResult<Result.GetSimpleInventoryModelResult>> callback
-        )
-		{
-			var task = new GetSimpleInventoryModelTask(
+        ) =>
+            new GetSimpleInventoryModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetSimpleInventoryModelResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetSimpleInventoryModelResult> GetSimpleInventoryModelFuture(
                 Request.GetSimpleInventoryModelRequest request
-        )
-		{
-			return new GetSimpleInventoryModelTask(
+        ) =>
+            new GetSimpleInventoryModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetSimpleInventoryModelResult> GetSimpleInventoryModelAsync(
+		public UniTask<Result.GetSimpleInventoryModelResult> GetSimpleInventoryModelAsync(
                 Request.GetSimpleInventoryModelRequest request
-        )
-		{
-            AsyncResult<Result.GetSimpleInventoryModelResult> result = null;
-			await GetSimpleInventoryModel(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetSimpleInventoryModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetSimpleInventoryModelResult>();
     #else
 		public GetSimpleInventoryModelTask GetSimpleInventoryModelAsync(
                 Request.GetSimpleInventoryModelRequest request
@@ -4132,17 +3576,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetSimpleInventoryModelResult> GetSimpleInventoryModelAsync(
+		public Task<Result.GetSimpleInventoryModelResult> GetSimpleInventoryModelAsync(
                 Request.GetSimpleInventoryModelRequest request
-        )
-		{
-			var task = new GetSimpleInventoryModelTask(
+        ) =>
+            new GetSimpleInventoryModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4194,44 +3635,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DescribeSimpleItemModelMasters(
                 Request.DescribeSimpleItemModelMastersRequest request,
                 UnityAction<AsyncResult<Result.DescribeSimpleItemModelMastersResult>> callback
-        )
-		{
-			var task = new DescribeSimpleItemModelMastersTask(
+        ) =>
+            new DescribeSimpleItemModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeSimpleItemModelMastersResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeSimpleItemModelMastersResult> DescribeSimpleItemModelMastersFuture(
                 Request.DescribeSimpleItemModelMastersRequest request
-        )
-		{
-			return new DescribeSimpleItemModelMastersTask(
+        ) =>
+            new DescribeSimpleItemModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeSimpleItemModelMastersResult> DescribeSimpleItemModelMastersAsync(
+		public UniTask<Result.DescribeSimpleItemModelMastersResult> DescribeSimpleItemModelMastersAsync(
                 Request.DescribeSimpleItemModelMastersRequest request
-        )
-		{
-            AsyncResult<Result.DescribeSimpleItemModelMastersResult> result = null;
-			await DescribeSimpleItemModelMasters(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeSimpleItemModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeSimpleItemModelMastersResult>();
     #else
 		public DescribeSimpleItemModelMastersTask DescribeSimpleItemModelMastersAsync(
                 Request.DescribeSimpleItemModelMastersRequest request
@@ -4245,17 +3673,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DescribeSimpleItemModelMastersResult> DescribeSimpleItemModelMastersAsync(
+		public Task<Result.DescribeSimpleItemModelMastersResult> DescribeSimpleItemModelMastersAsync(
                 Request.DescribeSimpleItemModelMastersRequest request
-        )
-		{
-			var task = new DescribeSimpleItemModelMastersTask(
+        ) =>
+            new DescribeSimpleItemModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4326,44 +3751,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator CreateSimpleItemModelMaster(
                 Request.CreateSimpleItemModelMasterRequest request,
                 UnityAction<AsyncResult<Result.CreateSimpleItemModelMasterResult>> callback
-        )
-		{
-			var task = new CreateSimpleItemModelMasterTask(
+        ) =>
+            new CreateSimpleItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateSimpleItemModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CreateSimpleItemModelMasterResult> CreateSimpleItemModelMasterFuture(
                 Request.CreateSimpleItemModelMasterRequest request
-        )
-		{
-			return new CreateSimpleItemModelMasterTask(
+        ) =>
+            new CreateSimpleItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateSimpleItemModelMasterResult> CreateSimpleItemModelMasterAsync(
+		public UniTask<Result.CreateSimpleItemModelMasterResult> CreateSimpleItemModelMasterAsync(
                 Request.CreateSimpleItemModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.CreateSimpleItemModelMasterResult> result = null;
-			await CreateSimpleItemModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CreateSimpleItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CreateSimpleItemModelMasterResult>();
     #else
 		public CreateSimpleItemModelMasterTask CreateSimpleItemModelMasterAsync(
                 Request.CreateSimpleItemModelMasterRequest request
@@ -4377,17 +3789,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.CreateSimpleItemModelMasterResult> CreateSimpleItemModelMasterAsync(
+		public Task<Result.CreateSimpleItemModelMasterResult> CreateSimpleItemModelMasterAsync(
                 Request.CreateSimpleItemModelMasterRequest request
-        )
-		{
-			var task = new CreateSimpleItemModelMasterTask(
+        ) =>
+            new CreateSimpleItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4431,44 +3840,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetSimpleItemModelMaster(
                 Request.GetSimpleItemModelMasterRequest request,
                 UnityAction<AsyncResult<Result.GetSimpleItemModelMasterResult>> callback
-        )
-		{
-			var task = new GetSimpleItemModelMasterTask(
+        ) =>
+            new GetSimpleItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetSimpleItemModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetSimpleItemModelMasterResult> GetSimpleItemModelMasterFuture(
                 Request.GetSimpleItemModelMasterRequest request
-        )
-		{
-			return new GetSimpleItemModelMasterTask(
+        ) =>
+            new GetSimpleItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetSimpleItemModelMasterResult> GetSimpleItemModelMasterAsync(
+		public UniTask<Result.GetSimpleItemModelMasterResult> GetSimpleItemModelMasterAsync(
                 Request.GetSimpleItemModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.GetSimpleItemModelMasterResult> result = null;
-			await GetSimpleItemModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetSimpleItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetSimpleItemModelMasterResult>();
     #else
 		public GetSimpleItemModelMasterTask GetSimpleItemModelMasterAsync(
                 Request.GetSimpleItemModelMasterRequest request
@@ -4482,17 +3878,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetSimpleItemModelMasterResult> GetSimpleItemModelMasterAsync(
+		public Task<Result.GetSimpleItemModelMasterResult> GetSimpleItemModelMasterAsync(
                 Request.GetSimpleItemModelMasterRequest request
-        )
-		{
-			var task = new GetSimpleItemModelMasterTask(
+        ) =>
+            new GetSimpleItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4559,44 +3952,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator UpdateSimpleItemModelMaster(
                 Request.UpdateSimpleItemModelMasterRequest request,
                 UnityAction<AsyncResult<Result.UpdateSimpleItemModelMasterResult>> callback
-        )
-		{
-			var task = new UpdateSimpleItemModelMasterTask(
+        ) =>
+            new UpdateSimpleItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateSimpleItemModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UpdateSimpleItemModelMasterResult> UpdateSimpleItemModelMasterFuture(
                 Request.UpdateSimpleItemModelMasterRequest request
-        )
-		{
-			return new UpdateSimpleItemModelMasterTask(
+        ) =>
+            new UpdateSimpleItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateSimpleItemModelMasterResult> UpdateSimpleItemModelMasterAsync(
+		public UniTask<Result.UpdateSimpleItemModelMasterResult> UpdateSimpleItemModelMasterAsync(
                 Request.UpdateSimpleItemModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.UpdateSimpleItemModelMasterResult> result = null;
-			await UpdateSimpleItemModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UpdateSimpleItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UpdateSimpleItemModelMasterResult>();
     #else
 		public UpdateSimpleItemModelMasterTask UpdateSimpleItemModelMasterAsync(
                 Request.UpdateSimpleItemModelMasterRequest request
@@ -4610,17 +3990,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.UpdateSimpleItemModelMasterResult> UpdateSimpleItemModelMasterAsync(
+		public Task<Result.UpdateSimpleItemModelMasterResult> UpdateSimpleItemModelMasterAsync(
                 Request.UpdateSimpleItemModelMasterRequest request
-        )
-		{
-			var task = new UpdateSimpleItemModelMasterTask(
+        ) =>
+            new UpdateSimpleItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4664,44 +4041,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DeleteSimpleItemModelMaster(
                 Request.DeleteSimpleItemModelMasterRequest request,
                 UnityAction<AsyncResult<Result.DeleteSimpleItemModelMasterResult>> callback
-        )
-		{
-			var task = new DeleteSimpleItemModelMasterTask(
+        ) =>
+            new DeleteSimpleItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteSimpleItemModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteSimpleItemModelMasterResult> DeleteSimpleItemModelMasterFuture(
                 Request.DeleteSimpleItemModelMasterRequest request
-        )
-		{
-			return new DeleteSimpleItemModelMasterTask(
+        ) =>
+            new DeleteSimpleItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteSimpleItemModelMasterResult> DeleteSimpleItemModelMasterAsync(
+		public UniTask<Result.DeleteSimpleItemModelMasterResult> DeleteSimpleItemModelMasterAsync(
                 Request.DeleteSimpleItemModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.DeleteSimpleItemModelMasterResult> result = null;
-			await DeleteSimpleItemModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteSimpleItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteSimpleItemModelMasterResult>();
     #else
 		public DeleteSimpleItemModelMasterTask DeleteSimpleItemModelMasterAsync(
                 Request.DeleteSimpleItemModelMasterRequest request
@@ -4715,17 +4079,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DeleteSimpleItemModelMasterResult> DeleteSimpleItemModelMasterAsync(
+		public Task<Result.DeleteSimpleItemModelMasterResult> DeleteSimpleItemModelMasterAsync(
                 Request.DeleteSimpleItemModelMasterRequest request
-        )
-		{
-			var task = new DeleteSimpleItemModelMasterTask(
+        ) =>
+            new DeleteSimpleItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4768,44 +4129,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DescribeSimpleItemModels(
                 Request.DescribeSimpleItemModelsRequest request,
                 UnityAction<AsyncResult<Result.DescribeSimpleItemModelsResult>> callback
-        )
-		{
-			var task = new DescribeSimpleItemModelsTask(
+        ) =>
+            new DescribeSimpleItemModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeSimpleItemModelsResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeSimpleItemModelsResult> DescribeSimpleItemModelsFuture(
                 Request.DescribeSimpleItemModelsRequest request
-        )
-		{
-			return new DescribeSimpleItemModelsTask(
+        ) =>
+            new DescribeSimpleItemModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeSimpleItemModelsResult> DescribeSimpleItemModelsAsync(
+		public UniTask<Result.DescribeSimpleItemModelsResult> DescribeSimpleItemModelsAsync(
                 Request.DescribeSimpleItemModelsRequest request
-        )
-		{
-            AsyncResult<Result.DescribeSimpleItemModelsResult> result = null;
-			await DescribeSimpleItemModels(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeSimpleItemModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeSimpleItemModelsResult>();
     #else
 		public DescribeSimpleItemModelsTask DescribeSimpleItemModelsAsync(
                 Request.DescribeSimpleItemModelsRequest request
@@ -4819,17 +4167,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DescribeSimpleItemModelsResult> DescribeSimpleItemModelsAsync(
+		public Task<Result.DescribeSimpleItemModelsResult> DescribeSimpleItemModelsAsync(
                 Request.DescribeSimpleItemModelsRequest request
-        )
-		{
-			var task = new DescribeSimpleItemModelsTask(
+        ) =>
+            new DescribeSimpleItemModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4873,44 +4218,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetSimpleItemModel(
                 Request.GetSimpleItemModelRequest request,
                 UnityAction<AsyncResult<Result.GetSimpleItemModelResult>> callback
-        )
-		{
-			var task = new GetSimpleItemModelTask(
+        ) =>
+            new GetSimpleItemModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetSimpleItemModelResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetSimpleItemModelResult> GetSimpleItemModelFuture(
                 Request.GetSimpleItemModelRequest request
-        )
-		{
-			return new GetSimpleItemModelTask(
+        ) =>
+            new GetSimpleItemModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetSimpleItemModelResult> GetSimpleItemModelAsync(
+		public UniTask<Result.GetSimpleItemModelResult> GetSimpleItemModelAsync(
                 Request.GetSimpleItemModelRequest request
-        )
-		{
-            AsyncResult<Result.GetSimpleItemModelResult> result = null;
-			await GetSimpleItemModel(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetSimpleItemModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetSimpleItemModelResult>();
     #else
 		public GetSimpleItemModelTask GetSimpleItemModelAsync(
                 Request.GetSimpleItemModelRequest request
@@ -4924,17 +4256,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetSimpleItemModelResult> GetSimpleItemModelAsync(
+		public Task<Result.GetSimpleItemModelResult> GetSimpleItemModelAsync(
                 Request.GetSimpleItemModelRequest request
-        )
-		{
-			var task = new GetSimpleItemModelTask(
+        ) =>
+            new GetSimpleItemModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4985,44 +4314,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DescribeBigInventoryModelMasters(
                 Request.DescribeBigInventoryModelMastersRequest request,
                 UnityAction<AsyncResult<Result.DescribeBigInventoryModelMastersResult>> callback
-        )
-		{
-			var task = new DescribeBigInventoryModelMastersTask(
+        ) =>
+            new DescribeBigInventoryModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeBigInventoryModelMastersResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeBigInventoryModelMastersResult> DescribeBigInventoryModelMastersFuture(
                 Request.DescribeBigInventoryModelMastersRequest request
-        )
-		{
-			return new DescribeBigInventoryModelMastersTask(
+        ) =>
+            new DescribeBigInventoryModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeBigInventoryModelMastersResult> DescribeBigInventoryModelMastersAsync(
+		public UniTask<Result.DescribeBigInventoryModelMastersResult> DescribeBigInventoryModelMastersAsync(
                 Request.DescribeBigInventoryModelMastersRequest request
-        )
-		{
-            AsyncResult<Result.DescribeBigInventoryModelMastersResult> result = null;
-			await DescribeBigInventoryModelMasters(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeBigInventoryModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeBigInventoryModelMastersResult>();
     #else
 		public DescribeBigInventoryModelMastersTask DescribeBigInventoryModelMastersAsync(
                 Request.DescribeBigInventoryModelMastersRequest request
@@ -5036,17 +4352,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DescribeBigInventoryModelMastersResult> DescribeBigInventoryModelMastersAsync(
+		public Task<Result.DescribeBigInventoryModelMastersResult> DescribeBigInventoryModelMastersAsync(
                 Request.DescribeBigInventoryModelMastersRequest request
-        )
-		{
-			var task = new DescribeBigInventoryModelMastersTask(
+        ) =>
+            new DescribeBigInventoryModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5116,44 +4429,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator CreateBigInventoryModelMaster(
                 Request.CreateBigInventoryModelMasterRequest request,
                 UnityAction<AsyncResult<Result.CreateBigInventoryModelMasterResult>> callback
-        )
-		{
-			var task = new CreateBigInventoryModelMasterTask(
+        ) =>
+            new CreateBigInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateBigInventoryModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CreateBigInventoryModelMasterResult> CreateBigInventoryModelMasterFuture(
                 Request.CreateBigInventoryModelMasterRequest request
-        )
-		{
-			return new CreateBigInventoryModelMasterTask(
+        ) =>
+            new CreateBigInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateBigInventoryModelMasterResult> CreateBigInventoryModelMasterAsync(
+		public UniTask<Result.CreateBigInventoryModelMasterResult> CreateBigInventoryModelMasterAsync(
                 Request.CreateBigInventoryModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.CreateBigInventoryModelMasterResult> result = null;
-			await CreateBigInventoryModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CreateBigInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CreateBigInventoryModelMasterResult>();
     #else
 		public CreateBigInventoryModelMasterTask CreateBigInventoryModelMasterAsync(
                 Request.CreateBigInventoryModelMasterRequest request
@@ -5167,17 +4467,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.CreateBigInventoryModelMasterResult> CreateBigInventoryModelMasterAsync(
+		public Task<Result.CreateBigInventoryModelMasterResult> CreateBigInventoryModelMasterAsync(
                 Request.CreateBigInventoryModelMasterRequest request
-        )
-		{
-			var task = new CreateBigInventoryModelMasterTask(
+        ) =>
+            new CreateBigInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5220,44 +4517,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetBigInventoryModelMaster(
                 Request.GetBigInventoryModelMasterRequest request,
                 UnityAction<AsyncResult<Result.GetBigInventoryModelMasterResult>> callback
-        )
-		{
-			var task = new GetBigInventoryModelMasterTask(
+        ) =>
+            new GetBigInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetBigInventoryModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetBigInventoryModelMasterResult> GetBigInventoryModelMasterFuture(
                 Request.GetBigInventoryModelMasterRequest request
-        )
-		{
-			return new GetBigInventoryModelMasterTask(
+        ) =>
+            new GetBigInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetBigInventoryModelMasterResult> GetBigInventoryModelMasterAsync(
+		public UniTask<Result.GetBigInventoryModelMasterResult> GetBigInventoryModelMasterAsync(
                 Request.GetBigInventoryModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.GetBigInventoryModelMasterResult> result = null;
-			await GetBigInventoryModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetBigInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetBigInventoryModelMasterResult>();
     #else
 		public GetBigInventoryModelMasterTask GetBigInventoryModelMasterAsync(
                 Request.GetBigInventoryModelMasterRequest request
@@ -5271,17 +4555,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetBigInventoryModelMasterResult> GetBigInventoryModelMasterAsync(
+		public Task<Result.GetBigInventoryModelMasterResult> GetBigInventoryModelMasterAsync(
                 Request.GetBigInventoryModelMasterRequest request
-        )
-		{
-			var task = new GetBigInventoryModelMasterTask(
+        ) =>
+            new GetBigInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5347,44 +4628,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator UpdateBigInventoryModelMaster(
                 Request.UpdateBigInventoryModelMasterRequest request,
                 UnityAction<AsyncResult<Result.UpdateBigInventoryModelMasterResult>> callback
-        )
-		{
-			var task = new UpdateBigInventoryModelMasterTask(
+        ) =>
+            new UpdateBigInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateBigInventoryModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UpdateBigInventoryModelMasterResult> UpdateBigInventoryModelMasterFuture(
                 Request.UpdateBigInventoryModelMasterRequest request
-        )
-		{
-			return new UpdateBigInventoryModelMasterTask(
+        ) =>
+            new UpdateBigInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateBigInventoryModelMasterResult> UpdateBigInventoryModelMasterAsync(
+		public UniTask<Result.UpdateBigInventoryModelMasterResult> UpdateBigInventoryModelMasterAsync(
                 Request.UpdateBigInventoryModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.UpdateBigInventoryModelMasterResult> result = null;
-			await UpdateBigInventoryModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UpdateBigInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UpdateBigInventoryModelMasterResult>();
     #else
 		public UpdateBigInventoryModelMasterTask UpdateBigInventoryModelMasterAsync(
                 Request.UpdateBigInventoryModelMasterRequest request
@@ -5398,17 +4666,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.UpdateBigInventoryModelMasterResult> UpdateBigInventoryModelMasterAsync(
+		public Task<Result.UpdateBigInventoryModelMasterResult> UpdateBigInventoryModelMasterAsync(
                 Request.UpdateBigInventoryModelMasterRequest request
-        )
-		{
-			var task = new UpdateBigInventoryModelMasterTask(
+        ) =>
+            new UpdateBigInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5451,44 +4716,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DeleteBigInventoryModelMaster(
                 Request.DeleteBigInventoryModelMasterRequest request,
                 UnityAction<AsyncResult<Result.DeleteBigInventoryModelMasterResult>> callback
-        )
-		{
-			var task = new DeleteBigInventoryModelMasterTask(
+        ) =>
+            new DeleteBigInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteBigInventoryModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteBigInventoryModelMasterResult> DeleteBigInventoryModelMasterFuture(
                 Request.DeleteBigInventoryModelMasterRequest request
-        )
-		{
-			return new DeleteBigInventoryModelMasterTask(
+        ) =>
+            new DeleteBigInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteBigInventoryModelMasterResult> DeleteBigInventoryModelMasterAsync(
+		public UniTask<Result.DeleteBigInventoryModelMasterResult> DeleteBigInventoryModelMasterAsync(
                 Request.DeleteBigInventoryModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.DeleteBigInventoryModelMasterResult> result = null;
-			await DeleteBigInventoryModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteBigInventoryModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteBigInventoryModelMasterResult>();
     #else
 		public DeleteBigInventoryModelMasterTask DeleteBigInventoryModelMasterAsync(
                 Request.DeleteBigInventoryModelMasterRequest request
@@ -5502,17 +4754,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DeleteBigInventoryModelMasterResult> DeleteBigInventoryModelMasterAsync(
+		public Task<Result.DeleteBigInventoryModelMasterResult> DeleteBigInventoryModelMasterAsync(
                 Request.DeleteBigInventoryModelMasterRequest request
-        )
-		{
-			var task = new DeleteBigInventoryModelMasterTask(
+        ) =>
+            new DeleteBigInventoryModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5554,44 +4803,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DescribeBigInventoryModels(
                 Request.DescribeBigInventoryModelsRequest request,
                 UnityAction<AsyncResult<Result.DescribeBigInventoryModelsResult>> callback
-        )
-		{
-			var task = new DescribeBigInventoryModelsTask(
+        ) =>
+            new DescribeBigInventoryModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeBigInventoryModelsResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeBigInventoryModelsResult> DescribeBigInventoryModelsFuture(
                 Request.DescribeBigInventoryModelsRequest request
-        )
-		{
-			return new DescribeBigInventoryModelsTask(
+        ) =>
+            new DescribeBigInventoryModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeBigInventoryModelsResult> DescribeBigInventoryModelsAsync(
+		public UniTask<Result.DescribeBigInventoryModelsResult> DescribeBigInventoryModelsAsync(
                 Request.DescribeBigInventoryModelsRequest request
-        )
-		{
-            AsyncResult<Result.DescribeBigInventoryModelsResult> result = null;
-			await DescribeBigInventoryModels(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeBigInventoryModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeBigInventoryModelsResult>();
     #else
 		public DescribeBigInventoryModelsTask DescribeBigInventoryModelsAsync(
                 Request.DescribeBigInventoryModelsRequest request
@@ -5605,17 +4841,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DescribeBigInventoryModelsResult> DescribeBigInventoryModelsAsync(
+		public Task<Result.DescribeBigInventoryModelsResult> DescribeBigInventoryModelsAsync(
                 Request.DescribeBigInventoryModelsRequest request
-        )
-		{
-			var task = new DescribeBigInventoryModelsTask(
+        ) =>
+            new DescribeBigInventoryModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5658,44 +4891,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetBigInventoryModel(
                 Request.GetBigInventoryModelRequest request,
                 UnityAction<AsyncResult<Result.GetBigInventoryModelResult>> callback
-        )
-		{
-			var task = new GetBigInventoryModelTask(
+        ) =>
+            new GetBigInventoryModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetBigInventoryModelResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetBigInventoryModelResult> GetBigInventoryModelFuture(
                 Request.GetBigInventoryModelRequest request
-        )
-		{
-			return new GetBigInventoryModelTask(
+        ) =>
+            new GetBigInventoryModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetBigInventoryModelResult> GetBigInventoryModelAsync(
+		public UniTask<Result.GetBigInventoryModelResult> GetBigInventoryModelAsync(
                 Request.GetBigInventoryModelRequest request
-        )
-		{
-            AsyncResult<Result.GetBigInventoryModelResult> result = null;
-			await GetBigInventoryModel(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetBigInventoryModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetBigInventoryModelResult>();
     #else
 		public GetBigInventoryModelTask GetBigInventoryModelAsync(
                 Request.GetBigInventoryModelRequest request
@@ -5709,17 +4929,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetBigInventoryModelResult> GetBigInventoryModelAsync(
+		public Task<Result.GetBigInventoryModelResult> GetBigInventoryModelAsync(
                 Request.GetBigInventoryModelRequest request
-        )
-		{
-			var task = new GetBigInventoryModelTask(
+        ) =>
+            new GetBigInventoryModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5771,44 +4988,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DescribeBigItemModelMasters(
                 Request.DescribeBigItemModelMastersRequest request,
                 UnityAction<AsyncResult<Result.DescribeBigItemModelMastersResult>> callback
-        )
-		{
-			var task = new DescribeBigItemModelMastersTask(
+        ) =>
+            new DescribeBigItemModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeBigItemModelMastersResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeBigItemModelMastersResult> DescribeBigItemModelMastersFuture(
                 Request.DescribeBigItemModelMastersRequest request
-        )
-		{
-			return new DescribeBigItemModelMastersTask(
+        ) =>
+            new DescribeBigItemModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeBigItemModelMastersResult> DescribeBigItemModelMastersAsync(
+		public UniTask<Result.DescribeBigItemModelMastersResult> DescribeBigItemModelMastersAsync(
                 Request.DescribeBigItemModelMastersRequest request
-        )
-		{
-            AsyncResult<Result.DescribeBigItemModelMastersResult> result = null;
-			await DescribeBigItemModelMasters(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeBigItemModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeBigItemModelMastersResult>();
     #else
 		public DescribeBigItemModelMastersTask DescribeBigItemModelMastersAsync(
                 Request.DescribeBigItemModelMastersRequest request
@@ -5822,17 +5026,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DescribeBigItemModelMastersResult> DescribeBigItemModelMastersAsync(
+		public Task<Result.DescribeBigItemModelMastersResult> DescribeBigItemModelMastersAsync(
                 Request.DescribeBigItemModelMastersRequest request
-        )
-		{
-			var task = new DescribeBigItemModelMastersTask(
+        ) =>
+            new DescribeBigItemModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5903,44 +5104,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator CreateBigItemModelMaster(
                 Request.CreateBigItemModelMasterRequest request,
                 UnityAction<AsyncResult<Result.CreateBigItemModelMasterResult>> callback
-        )
-		{
-			var task = new CreateBigItemModelMasterTask(
+        ) =>
+            new CreateBigItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateBigItemModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CreateBigItemModelMasterResult> CreateBigItemModelMasterFuture(
                 Request.CreateBigItemModelMasterRequest request
-        )
-		{
-			return new CreateBigItemModelMasterTask(
+        ) =>
+            new CreateBigItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateBigItemModelMasterResult> CreateBigItemModelMasterAsync(
+		public UniTask<Result.CreateBigItemModelMasterResult> CreateBigItemModelMasterAsync(
                 Request.CreateBigItemModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.CreateBigItemModelMasterResult> result = null;
-			await CreateBigItemModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CreateBigItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CreateBigItemModelMasterResult>();
     #else
 		public CreateBigItemModelMasterTask CreateBigItemModelMasterAsync(
                 Request.CreateBigItemModelMasterRequest request
@@ -5954,17 +5142,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.CreateBigItemModelMasterResult> CreateBigItemModelMasterAsync(
+		public Task<Result.CreateBigItemModelMasterResult> CreateBigItemModelMasterAsync(
                 Request.CreateBigItemModelMasterRequest request
-        )
-		{
-			var task = new CreateBigItemModelMasterTask(
+        ) =>
+            new CreateBigItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6008,44 +5193,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetBigItemModelMaster(
                 Request.GetBigItemModelMasterRequest request,
                 UnityAction<AsyncResult<Result.GetBigItemModelMasterResult>> callback
-        )
-		{
-			var task = new GetBigItemModelMasterTask(
+        ) =>
+            new GetBigItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetBigItemModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetBigItemModelMasterResult> GetBigItemModelMasterFuture(
                 Request.GetBigItemModelMasterRequest request
-        )
-		{
-			return new GetBigItemModelMasterTask(
+        ) =>
+            new GetBigItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetBigItemModelMasterResult> GetBigItemModelMasterAsync(
+		public UniTask<Result.GetBigItemModelMasterResult> GetBigItemModelMasterAsync(
                 Request.GetBigItemModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.GetBigItemModelMasterResult> result = null;
-			await GetBigItemModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetBigItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetBigItemModelMasterResult>();
     #else
 		public GetBigItemModelMasterTask GetBigItemModelMasterAsync(
                 Request.GetBigItemModelMasterRequest request
@@ -6059,17 +5231,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetBigItemModelMasterResult> GetBigItemModelMasterAsync(
+		public Task<Result.GetBigItemModelMasterResult> GetBigItemModelMasterAsync(
                 Request.GetBigItemModelMasterRequest request
-        )
-		{
-			var task = new GetBigItemModelMasterTask(
+        ) =>
+            new GetBigItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6136,44 +5305,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator UpdateBigItemModelMaster(
                 Request.UpdateBigItemModelMasterRequest request,
                 UnityAction<AsyncResult<Result.UpdateBigItemModelMasterResult>> callback
-        )
-		{
-			var task = new UpdateBigItemModelMasterTask(
+        ) =>
+            new UpdateBigItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateBigItemModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UpdateBigItemModelMasterResult> UpdateBigItemModelMasterFuture(
                 Request.UpdateBigItemModelMasterRequest request
-        )
-		{
-			return new UpdateBigItemModelMasterTask(
+        ) =>
+            new UpdateBigItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateBigItemModelMasterResult> UpdateBigItemModelMasterAsync(
+		public UniTask<Result.UpdateBigItemModelMasterResult> UpdateBigItemModelMasterAsync(
                 Request.UpdateBigItemModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.UpdateBigItemModelMasterResult> result = null;
-			await UpdateBigItemModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UpdateBigItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UpdateBigItemModelMasterResult>();
     #else
 		public UpdateBigItemModelMasterTask UpdateBigItemModelMasterAsync(
                 Request.UpdateBigItemModelMasterRequest request
@@ -6187,17 +5343,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.UpdateBigItemModelMasterResult> UpdateBigItemModelMasterAsync(
+		public Task<Result.UpdateBigItemModelMasterResult> UpdateBigItemModelMasterAsync(
                 Request.UpdateBigItemModelMasterRequest request
-        )
-		{
-			var task = new UpdateBigItemModelMasterTask(
+        ) =>
+            new UpdateBigItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6241,44 +5394,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DeleteBigItemModelMaster(
                 Request.DeleteBigItemModelMasterRequest request,
                 UnityAction<AsyncResult<Result.DeleteBigItemModelMasterResult>> callback
-        )
-		{
-			var task = new DeleteBigItemModelMasterTask(
+        ) =>
+            new DeleteBigItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteBigItemModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteBigItemModelMasterResult> DeleteBigItemModelMasterFuture(
                 Request.DeleteBigItemModelMasterRequest request
-        )
-		{
-			return new DeleteBigItemModelMasterTask(
+        ) =>
+            new DeleteBigItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteBigItemModelMasterResult> DeleteBigItemModelMasterAsync(
+		public UniTask<Result.DeleteBigItemModelMasterResult> DeleteBigItemModelMasterAsync(
                 Request.DeleteBigItemModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.DeleteBigItemModelMasterResult> result = null;
-			await DeleteBigItemModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteBigItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteBigItemModelMasterResult>();
     #else
 		public DeleteBigItemModelMasterTask DeleteBigItemModelMasterAsync(
                 Request.DeleteBigItemModelMasterRequest request
@@ -6292,17 +5432,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DeleteBigItemModelMasterResult> DeleteBigItemModelMasterAsync(
+		public Task<Result.DeleteBigItemModelMasterResult> DeleteBigItemModelMasterAsync(
                 Request.DeleteBigItemModelMasterRequest request
-        )
-		{
-			var task = new DeleteBigItemModelMasterTask(
+        ) =>
+            new DeleteBigItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6345,44 +5482,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DescribeBigItemModels(
                 Request.DescribeBigItemModelsRequest request,
                 UnityAction<AsyncResult<Result.DescribeBigItemModelsResult>> callback
-        )
-		{
-			var task = new DescribeBigItemModelsTask(
+        ) =>
+            new DescribeBigItemModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeBigItemModelsResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeBigItemModelsResult> DescribeBigItemModelsFuture(
                 Request.DescribeBigItemModelsRequest request
-        )
-		{
-			return new DescribeBigItemModelsTask(
+        ) =>
+            new DescribeBigItemModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeBigItemModelsResult> DescribeBigItemModelsAsync(
+		public UniTask<Result.DescribeBigItemModelsResult> DescribeBigItemModelsAsync(
                 Request.DescribeBigItemModelsRequest request
-        )
-		{
-            AsyncResult<Result.DescribeBigItemModelsResult> result = null;
-			await DescribeBigItemModels(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeBigItemModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeBigItemModelsResult>();
     #else
 		public DescribeBigItemModelsTask DescribeBigItemModelsAsync(
                 Request.DescribeBigItemModelsRequest request
@@ -6396,17 +5520,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DescribeBigItemModelsResult> DescribeBigItemModelsAsync(
+		public Task<Result.DescribeBigItemModelsResult> DescribeBigItemModelsAsync(
                 Request.DescribeBigItemModelsRequest request
-        )
-		{
-			var task = new DescribeBigItemModelsTask(
+        ) =>
+            new DescribeBigItemModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6450,44 +5571,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetBigItemModel(
                 Request.GetBigItemModelRequest request,
                 UnityAction<AsyncResult<Result.GetBigItemModelResult>> callback
-        )
-		{
-			var task = new GetBigItemModelTask(
+        ) =>
+            new GetBigItemModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetBigItemModelResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetBigItemModelResult> GetBigItemModelFuture(
                 Request.GetBigItemModelRequest request
-        )
-		{
-			return new GetBigItemModelTask(
+        ) =>
+            new GetBigItemModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetBigItemModelResult> GetBigItemModelAsync(
+		public UniTask<Result.GetBigItemModelResult> GetBigItemModelAsync(
                 Request.GetBigItemModelRequest request
-        )
-		{
-            AsyncResult<Result.GetBigItemModelResult> result = null;
-			await GetBigItemModel(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetBigItemModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetBigItemModelResult>();
     #else
 		public GetBigItemModelTask GetBigItemModelAsync(
                 Request.GetBigItemModelRequest request
@@ -6501,17 +5609,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetBigItemModelResult> GetBigItemModelAsync(
+		public Task<Result.GetBigItemModelResult> GetBigItemModelAsync(
                 Request.GetBigItemModelRequest request
-        )
-		{
-			var task = new GetBigItemModelTask(
+        ) =>
+            new GetBigItemModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6553,44 +5658,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator ExportMaster(
                 Request.ExportMasterRequest request,
                 UnityAction<AsyncResult<Result.ExportMasterResult>> callback
-        )
-		{
-			var task = new ExportMasterTask(
+        ) =>
+            new ExportMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ExportMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.ExportMasterResult> ExportMasterFuture(
                 Request.ExportMasterRequest request
-        )
-		{
-			return new ExportMasterTask(
+        ) =>
+            new ExportMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ExportMasterResult> ExportMasterAsync(
+		public UniTask<Result.ExportMasterResult> ExportMasterAsync(
                 Request.ExportMasterRequest request
-        )
-		{
-            AsyncResult<Result.ExportMasterResult> result = null;
-			await ExportMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new ExportMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.ExportMasterResult>();
     #else
 		public ExportMasterTask ExportMasterAsync(
                 Request.ExportMasterRequest request
@@ -6604,17 +5696,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.ExportMasterResult> ExportMasterAsync(
+		public Task<Result.ExportMasterResult> ExportMasterAsync(
                 Request.ExportMasterRequest request
-        )
-		{
-			var task = new ExportMasterTask(
+        ) =>
+            new ExportMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6656,44 +5745,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetCurrentItemModelMaster(
                 Request.GetCurrentItemModelMasterRequest request,
                 UnityAction<AsyncResult<Result.GetCurrentItemModelMasterResult>> callback
-        )
-		{
-			var task = new GetCurrentItemModelMasterTask(
+        ) =>
+            new GetCurrentItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetCurrentItemModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetCurrentItemModelMasterResult> GetCurrentItemModelMasterFuture(
                 Request.GetCurrentItemModelMasterRequest request
-        )
-		{
-			return new GetCurrentItemModelMasterTask(
+        ) =>
+            new GetCurrentItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetCurrentItemModelMasterResult> GetCurrentItemModelMasterAsync(
+		public UniTask<Result.GetCurrentItemModelMasterResult> GetCurrentItemModelMasterAsync(
                 Request.GetCurrentItemModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.GetCurrentItemModelMasterResult> result = null;
-			await GetCurrentItemModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetCurrentItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetCurrentItemModelMasterResult>();
     #else
 		public GetCurrentItemModelMasterTask GetCurrentItemModelMasterAsync(
                 Request.GetCurrentItemModelMasterRequest request
@@ -6707,17 +5783,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetCurrentItemModelMasterResult> GetCurrentItemModelMasterAsync(
+		public Task<Result.GetCurrentItemModelMasterResult> GetCurrentItemModelMasterAsync(
                 Request.GetCurrentItemModelMasterRequest request
-        )
-		{
-			var task = new GetCurrentItemModelMasterTask(
+        ) =>
+            new GetCurrentItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6772,44 +5845,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator PreUpdateCurrentItemModelMaster(
                 Request.PreUpdateCurrentItemModelMasterRequest request,
                 UnityAction<AsyncResult<Result.PreUpdateCurrentItemModelMasterResult>> callback
-        )
-		{
-			var task = new PreUpdateCurrentItemModelMasterTask(
+        ) =>
+            new PreUpdateCurrentItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.PreUpdateCurrentItemModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.PreUpdateCurrentItemModelMasterResult> PreUpdateCurrentItemModelMasterFuture(
                 Request.PreUpdateCurrentItemModelMasterRequest request
-        )
-		{
-			return new PreUpdateCurrentItemModelMasterTask(
+        ) =>
+            new PreUpdateCurrentItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.PreUpdateCurrentItemModelMasterResult> PreUpdateCurrentItemModelMasterAsync(
+		public UniTask<Result.PreUpdateCurrentItemModelMasterResult> PreUpdateCurrentItemModelMasterAsync(
                 Request.PreUpdateCurrentItemModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.PreUpdateCurrentItemModelMasterResult> result = null;
-			await PreUpdateCurrentItemModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new PreUpdateCurrentItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.PreUpdateCurrentItemModelMasterResult>();
     #else
 		public PreUpdateCurrentItemModelMasterTask PreUpdateCurrentItemModelMasterAsync(
                 Request.PreUpdateCurrentItemModelMasterRequest request
@@ -6823,17 +5883,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.PreUpdateCurrentItemModelMasterResult> PreUpdateCurrentItemModelMasterAsync(
+		public Task<Result.PreUpdateCurrentItemModelMasterResult> PreUpdateCurrentItemModelMasterAsync(
                 Request.PreUpdateCurrentItemModelMasterRequest request
-        )
-		{
-			var task = new PreUpdateCurrentItemModelMasterTask(
+        ) =>
+            new PreUpdateCurrentItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6842,7 +5899,12 @@ namespace Gs2.Gs2Inventory
             public UpdateCurrentItemModelMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentItemModelMasterRequest request) : base(session, factory, request)
             {
             }
-            public override IEnumerator Action() {
+#if GS2_ENABLE_UNITASK
+            protected override async UniTask<UpdateCurrentItemModelMasterResult> InvokeImpl()
+#else
+            protected override async Task<UpdateCurrentItemModelMasterResult> InvokeImpl()
+#endif
+            {
                 if (Request.Settings != null) {
                     var preTask = new PreUpdateCurrentItemModelMasterTask(
                         Session,
@@ -6851,22 +5913,81 @@ namespace Gs2.Gs2Inventory
                             .WithContextStack(Request.ContextStack)
                             .WithNamespaceName(Request.NamespaceName)
                     );
-                    yield return preTask;
-                    if (preTask.Error != null) {
-                        OnError(preTask.Error);
-                        yield break;
-                    }
+                    var preTaskResult = await preTask.Invoke();
 #if UNITY_2017_1_OR_NEWER
-                    using var request = UnityEngine.Networking.UnityWebRequest.Put(preTask.Result.UploadUrl, Request.Settings);
-                    request.SetRequestHeader("Content-Type", "application/json");
-                    yield return request.SendWebRequest();
-                    request.Dispose();
+                    using (var request = UnityWebRequest.Put(preTaskResult.UploadUrl, Request.Settings))
+                    {
+                        request.SetRequestHeader("Content-Type", "application/json");
+                        try {
+                            await request.SendWebRequest();
+                        }
+#if GS2_ENABLE_UNITASK
+                        catch (UnityWebRequestException) {}
+#endif
+                        finally {}
+
+                        var restResult = request.result switch
+                        {
+                            UnityWebRequest.Result.Success or UnityWebRequest.Result.ProtocolError =>
+                                new RestResult(
+                                    (int) request.responseCode,
+                                    request.downloadHandler?.text
+                                ),
+                            UnityWebRequest.Result.ConnectionError or UnityWebRequest.Result.DataProcessingError =>
+                                new RestResult(
+                                    (int) request.responseCode,
+                                    null,
+                                    (int) request.result,
+                                    request.error
+                                ),
+                            _ =>
+                                throw new InvalidOperationException(),
+                        };
+
+                        if (restResult.Error != null) throw restResult.Error;
+                    }
+#else
+                    {
+                        using var httpRequestMessage = new HttpRequestMessage(System.Net.Http.HttpMethod.Put, preTaskResult.UploadUrl);
+                        httpRequestMessage.Content = new ByteArrayContent(System.Text.Encoding.UTF8.GetBytes(Request.Settings));
+                        httpRequestMessage.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+    
+                        RestResult restResult;
+    
+                        try
+                        {
+                            using var httpClient = new HttpClient();
+                            using var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
+    
+                            restResult = new RestResult((int) httpResponseMessage.StatusCode, "");
+                        }
+                        catch (OperationCanceledException e)
+                        {
+                            restResult = new RestResult(
+                                0, // NoInternetConnectionException
+                                "",
+                                0,
+                                e.Message
+                            );
+                        }
+                        catch (System.Net.Http.HttpRequestException e)
+                        {
+                            restResult = new RestResult(
+                                0, // NoInternetConnectionException
+                                "",
+                                0,
+                                e.Message
+                            );
+                        }
+    
+                        if (restResult.Error != null) throw restResult.Error;
+                    }
 #endif
                     Request.Mode = "preUpload";
-                    Request.UploadToken = preTask.Result.UploadToken;
+                    Request.UploadToken = preTaskResult.UploadToken;
                     Request.Settings = null;
                 }
-                yield return base.Action();
+                return await base.InvokeImpl();
             }
 
             protected override IGs2SessionRequest CreateRequest(UpdateCurrentItemModelMasterRequest request)
@@ -6929,44 +6050,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator UpdateCurrentItemModelMaster(
                 Request.UpdateCurrentItemModelMasterRequest request,
                 UnityAction<AsyncResult<Result.UpdateCurrentItemModelMasterResult>> callback
-        )
-		{
-			var task = new UpdateCurrentItemModelMasterTask(
+        ) =>
+            new UpdateCurrentItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateCurrentItemModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UpdateCurrentItemModelMasterResult> UpdateCurrentItemModelMasterFuture(
                 Request.UpdateCurrentItemModelMasterRequest request
-        )
-		{
-			return new UpdateCurrentItemModelMasterTask(
+        ) =>
+            new UpdateCurrentItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateCurrentItemModelMasterResult> UpdateCurrentItemModelMasterAsync(
+		public UniTask<Result.UpdateCurrentItemModelMasterResult> UpdateCurrentItemModelMasterAsync(
                 Request.UpdateCurrentItemModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.UpdateCurrentItemModelMasterResult> result = null;
-			await UpdateCurrentItemModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UpdateCurrentItemModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UpdateCurrentItemModelMasterResult>();
     #else
 		public UpdateCurrentItemModelMasterTask UpdateCurrentItemModelMasterAsync(
                 Request.UpdateCurrentItemModelMasterRequest request
@@ -6980,35 +6088,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.UpdateCurrentItemModelMasterResult> UpdateCurrentItemModelMasterAsync(
+		public Task<Result.UpdateCurrentItemModelMasterResult> UpdateCurrentItemModelMasterAsync(
                 Request.UpdateCurrentItemModelMasterRequest request
-        )
-		{
-            if (request.Settings != null) {
-                var res = await PreUpdateCurrentItemModelMasterAsync(
-                    new PreUpdateCurrentItemModelMasterRequest()
-                        .WithContextStack(request.ContextStack)
-                        .WithNamespaceName(request.NamespaceName)
-                );
-                var req = new HttpRequestMessage(
-                    System.Net.Http.HttpMethod.Put,
-                    res.UploadUrl
-                );
-                req.Content = new ByteArrayContent(System.Text.Encoding.UTF8.GetBytes(request.Settings));
-                req.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
-                await new HttpClient().SendAsync(req);
-
-                request.Mode = "preUpload";
-                request.UploadToken = res.UploadToken;
-                request.Settings = null;
-            }
-			var task = new UpdateCurrentItemModelMasterTask(
+        ) =>
+            new UpdateCurrentItemModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -7068,44 +6155,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator UpdateCurrentItemModelMasterFromGitHub(
                 Request.UpdateCurrentItemModelMasterFromGitHubRequest request,
                 UnityAction<AsyncResult<Result.UpdateCurrentItemModelMasterFromGitHubResult>> callback
-        )
-		{
-			var task = new UpdateCurrentItemModelMasterFromGitHubTask(
+        ) =>
+            new UpdateCurrentItemModelMasterFromGitHubTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateCurrentItemModelMasterFromGitHubResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UpdateCurrentItemModelMasterFromGitHubResult> UpdateCurrentItemModelMasterFromGitHubFuture(
                 Request.UpdateCurrentItemModelMasterFromGitHubRequest request
-        )
-		{
-			return new UpdateCurrentItemModelMasterFromGitHubTask(
+        ) =>
+            new UpdateCurrentItemModelMasterFromGitHubTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateCurrentItemModelMasterFromGitHubResult> UpdateCurrentItemModelMasterFromGitHubAsync(
+		public UniTask<Result.UpdateCurrentItemModelMasterFromGitHubResult> UpdateCurrentItemModelMasterFromGitHubAsync(
                 Request.UpdateCurrentItemModelMasterFromGitHubRequest request
-        )
-		{
-            AsyncResult<Result.UpdateCurrentItemModelMasterFromGitHubResult> result = null;
-			await UpdateCurrentItemModelMasterFromGitHub(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UpdateCurrentItemModelMasterFromGitHubTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UpdateCurrentItemModelMasterFromGitHubResult>();
     #else
 		public UpdateCurrentItemModelMasterFromGitHubTask UpdateCurrentItemModelMasterFromGitHubAsync(
                 Request.UpdateCurrentItemModelMasterFromGitHubRequest request
@@ -7119,17 +6193,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.UpdateCurrentItemModelMasterFromGitHubResult> UpdateCurrentItemModelMasterFromGitHubAsync(
+		public Task<Result.UpdateCurrentItemModelMasterFromGitHubResult> UpdateCurrentItemModelMasterFromGitHubAsync(
                 Request.UpdateCurrentItemModelMasterFromGitHubRequest request
-        )
-		{
-			var task = new UpdateCurrentItemModelMasterFromGitHubTask(
+        ) =>
+            new UpdateCurrentItemModelMasterFromGitHubTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -7181,44 +6252,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DescribeInventories(
                 Request.DescribeInventoriesRequest request,
                 UnityAction<AsyncResult<Result.DescribeInventoriesResult>> callback
-        )
-		{
-			var task = new DescribeInventoriesTask(
+        ) =>
+            new DescribeInventoriesTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeInventoriesResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeInventoriesResult> DescribeInventoriesFuture(
                 Request.DescribeInventoriesRequest request
-        )
-		{
-			return new DescribeInventoriesTask(
+        ) =>
+            new DescribeInventoriesTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeInventoriesResult> DescribeInventoriesAsync(
+		public UniTask<Result.DescribeInventoriesResult> DescribeInventoriesAsync(
                 Request.DescribeInventoriesRequest request
-        )
-		{
-            AsyncResult<Result.DescribeInventoriesResult> result = null;
-			await DescribeInventories(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeInventoriesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeInventoriesResult>();
     #else
 		public DescribeInventoriesTask DescribeInventoriesAsync(
                 Request.DescribeInventoriesRequest request
@@ -7232,17 +6290,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DescribeInventoriesResult> DescribeInventoriesAsync(
+		public Task<Result.DescribeInventoriesResult> DescribeInventoriesAsync(
                 Request.DescribeInventoriesRequest request
-        )
-		{
-			var task = new DescribeInventoriesTask(
+        ) =>
+            new DescribeInventoriesTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -7295,44 +6350,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DescribeInventoriesByUserId(
                 Request.DescribeInventoriesByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DescribeInventoriesByUserIdResult>> callback
-        )
-		{
-			var task = new DescribeInventoriesByUserIdTask(
+        ) =>
+            new DescribeInventoriesByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeInventoriesByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeInventoriesByUserIdResult> DescribeInventoriesByUserIdFuture(
                 Request.DescribeInventoriesByUserIdRequest request
-        )
-		{
-			return new DescribeInventoriesByUserIdTask(
+        ) =>
+            new DescribeInventoriesByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeInventoriesByUserIdResult> DescribeInventoriesByUserIdAsync(
+		public UniTask<Result.DescribeInventoriesByUserIdResult> DescribeInventoriesByUserIdAsync(
                 Request.DescribeInventoriesByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DescribeInventoriesByUserIdResult> result = null;
-			await DescribeInventoriesByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeInventoriesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeInventoriesByUserIdResult>();
     #else
 		public DescribeInventoriesByUserIdTask DescribeInventoriesByUserIdAsync(
                 Request.DescribeInventoriesByUserIdRequest request
@@ -7346,17 +6388,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DescribeInventoriesByUserIdResult> DescribeInventoriesByUserIdAsync(
+		public Task<Result.DescribeInventoriesByUserIdResult> DescribeInventoriesByUserIdAsync(
                 Request.DescribeInventoriesByUserIdRequest request
-        )
-		{
-			var task = new DescribeInventoriesByUserIdTask(
+        ) =>
+            new DescribeInventoriesByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -7403,44 +6442,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetInventory(
                 Request.GetInventoryRequest request,
                 UnityAction<AsyncResult<Result.GetInventoryResult>> callback
-        )
-		{
-			var task = new GetInventoryTask(
+        ) =>
+            new GetInventoryTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetInventoryResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetInventoryResult> GetInventoryFuture(
                 Request.GetInventoryRequest request
-        )
-		{
-			return new GetInventoryTask(
+        ) =>
+            new GetInventoryTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetInventoryResult> GetInventoryAsync(
+		public UniTask<Result.GetInventoryResult> GetInventoryAsync(
                 Request.GetInventoryRequest request
-        )
-		{
-            AsyncResult<Result.GetInventoryResult> result = null;
-			await GetInventory(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetInventoryTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetInventoryResult>();
     #else
 		public GetInventoryTask GetInventoryAsync(
                 Request.GetInventoryRequest request
@@ -7454,17 +6480,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetInventoryResult> GetInventoryAsync(
+		public Task<Result.GetInventoryResult> GetInventoryAsync(
                 Request.GetInventoryRequest request
-        )
-		{
-			var task = new GetInventoryTask(
+        ) =>
+            new GetInventoryTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -7512,44 +6535,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetInventoryByUserId(
                 Request.GetInventoryByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetInventoryByUserIdResult>> callback
-        )
-		{
-			var task = new GetInventoryByUserIdTask(
+        ) =>
+            new GetInventoryByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetInventoryByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetInventoryByUserIdResult> GetInventoryByUserIdFuture(
                 Request.GetInventoryByUserIdRequest request
-        )
-		{
-			return new GetInventoryByUserIdTask(
+        ) =>
+            new GetInventoryByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetInventoryByUserIdResult> GetInventoryByUserIdAsync(
+		public UniTask<Result.GetInventoryByUserIdResult> GetInventoryByUserIdAsync(
                 Request.GetInventoryByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.GetInventoryByUserIdResult> result = null;
-			await GetInventoryByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetInventoryByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetInventoryByUserIdResult>();
     #else
 		public GetInventoryByUserIdTask GetInventoryByUserIdAsync(
                 Request.GetInventoryByUserIdRequest request
@@ -7563,17 +6573,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetInventoryByUserIdResult> GetInventoryByUserIdAsync(
+		public Task<Result.GetInventoryByUserIdResult> GetInventoryByUserIdAsync(
                 Request.GetInventoryByUserIdRequest request
-        )
-		{
-			var task = new GetInventoryByUserIdTask(
+        ) =>
+            new GetInventoryByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -7643,44 +6650,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator AddCapacityByUserId(
                 Request.AddCapacityByUserIdRequest request,
                 UnityAction<AsyncResult<Result.AddCapacityByUserIdResult>> callback
-        )
-		{
-			var task = new AddCapacityByUserIdTask(
+        ) =>
+            new AddCapacityByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.AddCapacityByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.AddCapacityByUserIdResult> AddCapacityByUserIdFuture(
                 Request.AddCapacityByUserIdRequest request
-        )
-		{
-			return new AddCapacityByUserIdTask(
+        ) =>
+            new AddCapacityByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.AddCapacityByUserIdResult> AddCapacityByUserIdAsync(
+		public UniTask<Result.AddCapacityByUserIdResult> AddCapacityByUserIdAsync(
                 Request.AddCapacityByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.AddCapacityByUserIdResult> result = null;
-			await AddCapacityByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new AddCapacityByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.AddCapacityByUserIdResult>();
     #else
 		public AddCapacityByUserIdTask AddCapacityByUserIdAsync(
                 Request.AddCapacityByUserIdRequest request
@@ -7694,17 +6688,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.AddCapacityByUserIdResult> AddCapacityByUserIdAsync(
+		public Task<Result.AddCapacityByUserIdResult> AddCapacityByUserIdAsync(
                 Request.AddCapacityByUserIdRequest request
-        )
-		{
-			var task = new AddCapacityByUserIdTask(
+        ) =>
+            new AddCapacityByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -7774,44 +6765,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator SetCapacityByUserId(
                 Request.SetCapacityByUserIdRequest request,
                 UnityAction<AsyncResult<Result.SetCapacityByUserIdResult>> callback
-        )
-		{
-			var task = new SetCapacityByUserIdTask(
+        ) =>
+            new SetCapacityByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.SetCapacityByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.SetCapacityByUserIdResult> SetCapacityByUserIdFuture(
                 Request.SetCapacityByUserIdRequest request
-        )
-		{
-			return new SetCapacityByUserIdTask(
+        ) =>
+            new SetCapacityByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.SetCapacityByUserIdResult> SetCapacityByUserIdAsync(
+		public UniTask<Result.SetCapacityByUserIdResult> SetCapacityByUserIdAsync(
                 Request.SetCapacityByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.SetCapacityByUserIdResult> result = null;
-			await SetCapacityByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new SetCapacityByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.SetCapacityByUserIdResult>();
     #else
 		public SetCapacityByUserIdTask SetCapacityByUserIdAsync(
                 Request.SetCapacityByUserIdRequest request
@@ -7825,17 +6803,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.SetCapacityByUserIdResult> SetCapacityByUserIdAsync(
+		public Task<Result.SetCapacityByUserIdResult> SetCapacityByUserIdAsync(
                 Request.SetCapacityByUserIdRequest request
-        )
-		{
-			var task = new SetCapacityByUserIdTask(
+        ) =>
+            new SetCapacityByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -7887,44 +6862,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DeleteInventoryByUserId(
                 Request.DeleteInventoryByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DeleteInventoryByUserIdResult>> callback
-        )
-		{
-			var task = new DeleteInventoryByUserIdTask(
+        ) =>
+            new DeleteInventoryByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteInventoryByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteInventoryByUserIdResult> DeleteInventoryByUserIdFuture(
                 Request.DeleteInventoryByUserIdRequest request
-        )
-		{
-			return new DeleteInventoryByUserIdTask(
+        ) =>
+            new DeleteInventoryByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteInventoryByUserIdResult> DeleteInventoryByUserIdAsync(
+		public UniTask<Result.DeleteInventoryByUserIdResult> DeleteInventoryByUserIdAsync(
                 Request.DeleteInventoryByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DeleteInventoryByUserIdResult> result = null;
-			await DeleteInventoryByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteInventoryByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteInventoryByUserIdResult>();
     #else
 		public DeleteInventoryByUserIdTask DeleteInventoryByUserIdAsync(
                 Request.DeleteInventoryByUserIdRequest request
@@ -7938,17 +6900,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DeleteInventoryByUserIdResult> DeleteInventoryByUserIdAsync(
+		public Task<Result.DeleteInventoryByUserIdResult> DeleteInventoryByUserIdAsync(
                 Request.DeleteInventoryByUserIdRequest request
-        )
-		{
-			var task = new DeleteInventoryByUserIdTask(
+        ) =>
+            new DeleteInventoryByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -8023,44 +6982,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator VerifyInventoryCurrentMaxCapacity(
                 Request.VerifyInventoryCurrentMaxCapacityRequest request,
                 UnityAction<AsyncResult<Result.VerifyInventoryCurrentMaxCapacityResult>> callback
-        )
-		{
-			var task = new VerifyInventoryCurrentMaxCapacityTask(
+        ) =>
+            new VerifyInventoryCurrentMaxCapacityTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifyInventoryCurrentMaxCapacityResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifyInventoryCurrentMaxCapacityResult> VerifyInventoryCurrentMaxCapacityFuture(
                 Request.VerifyInventoryCurrentMaxCapacityRequest request
-        )
-		{
-			return new VerifyInventoryCurrentMaxCapacityTask(
+        ) =>
+            new VerifyInventoryCurrentMaxCapacityTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifyInventoryCurrentMaxCapacityResult> VerifyInventoryCurrentMaxCapacityAsync(
+		public UniTask<Result.VerifyInventoryCurrentMaxCapacityResult> VerifyInventoryCurrentMaxCapacityAsync(
                 Request.VerifyInventoryCurrentMaxCapacityRequest request
-        )
-		{
-            AsyncResult<Result.VerifyInventoryCurrentMaxCapacityResult> result = null;
-			await VerifyInventoryCurrentMaxCapacity(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifyInventoryCurrentMaxCapacityTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyInventoryCurrentMaxCapacityResult>();
     #else
 		public VerifyInventoryCurrentMaxCapacityTask VerifyInventoryCurrentMaxCapacityAsync(
                 Request.VerifyInventoryCurrentMaxCapacityRequest request
@@ -8074,17 +7020,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.VerifyInventoryCurrentMaxCapacityResult> VerifyInventoryCurrentMaxCapacityAsync(
+		public Task<Result.VerifyInventoryCurrentMaxCapacityResult> VerifyInventoryCurrentMaxCapacityAsync(
                 Request.VerifyInventoryCurrentMaxCapacityRequest request
-        )
-		{
-			var task = new VerifyInventoryCurrentMaxCapacityTask(
+        ) =>
+            new VerifyInventoryCurrentMaxCapacityTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -8160,44 +7103,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator VerifyInventoryCurrentMaxCapacityByUserId(
                 Request.VerifyInventoryCurrentMaxCapacityByUserIdRequest request,
                 UnityAction<AsyncResult<Result.VerifyInventoryCurrentMaxCapacityByUserIdResult>> callback
-        )
-		{
-			var task = new VerifyInventoryCurrentMaxCapacityByUserIdTask(
+        ) =>
+            new VerifyInventoryCurrentMaxCapacityByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifyInventoryCurrentMaxCapacityByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifyInventoryCurrentMaxCapacityByUserIdResult> VerifyInventoryCurrentMaxCapacityByUserIdFuture(
                 Request.VerifyInventoryCurrentMaxCapacityByUserIdRequest request
-        )
-		{
-			return new VerifyInventoryCurrentMaxCapacityByUserIdTask(
+        ) =>
+            new VerifyInventoryCurrentMaxCapacityByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifyInventoryCurrentMaxCapacityByUserIdResult> VerifyInventoryCurrentMaxCapacityByUserIdAsync(
+		public UniTask<Result.VerifyInventoryCurrentMaxCapacityByUserIdResult> VerifyInventoryCurrentMaxCapacityByUserIdAsync(
                 Request.VerifyInventoryCurrentMaxCapacityByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.VerifyInventoryCurrentMaxCapacityByUserIdResult> result = null;
-			await VerifyInventoryCurrentMaxCapacityByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifyInventoryCurrentMaxCapacityByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyInventoryCurrentMaxCapacityByUserIdResult>();
     #else
 		public VerifyInventoryCurrentMaxCapacityByUserIdTask VerifyInventoryCurrentMaxCapacityByUserIdAsync(
                 Request.VerifyInventoryCurrentMaxCapacityByUserIdRequest request
@@ -8211,17 +7141,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.VerifyInventoryCurrentMaxCapacityByUserIdResult> VerifyInventoryCurrentMaxCapacityByUserIdAsync(
+		public Task<Result.VerifyInventoryCurrentMaxCapacityByUserIdResult> VerifyInventoryCurrentMaxCapacityByUserIdAsync(
                 Request.VerifyInventoryCurrentMaxCapacityByUserIdRequest request
-        )
-		{
-			var task = new VerifyInventoryCurrentMaxCapacityByUserIdTask(
+        ) =>
+            new VerifyInventoryCurrentMaxCapacityByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -8284,44 +7211,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator VerifyInventoryCurrentMaxCapacityByStampTask(
                 Request.VerifyInventoryCurrentMaxCapacityByStampTaskRequest request,
                 UnityAction<AsyncResult<Result.VerifyInventoryCurrentMaxCapacityByStampTaskResult>> callback
-        )
-		{
-			var task = new VerifyInventoryCurrentMaxCapacityByStampTaskTask(
+        ) =>
+            new VerifyInventoryCurrentMaxCapacityByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifyInventoryCurrentMaxCapacityByStampTaskResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifyInventoryCurrentMaxCapacityByStampTaskResult> VerifyInventoryCurrentMaxCapacityByStampTaskFuture(
                 Request.VerifyInventoryCurrentMaxCapacityByStampTaskRequest request
-        )
-		{
-			return new VerifyInventoryCurrentMaxCapacityByStampTaskTask(
+        ) =>
+            new VerifyInventoryCurrentMaxCapacityByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifyInventoryCurrentMaxCapacityByStampTaskResult> VerifyInventoryCurrentMaxCapacityByStampTaskAsync(
+		public UniTask<Result.VerifyInventoryCurrentMaxCapacityByStampTaskResult> VerifyInventoryCurrentMaxCapacityByStampTaskAsync(
                 Request.VerifyInventoryCurrentMaxCapacityByStampTaskRequest request
-        )
-		{
-            AsyncResult<Result.VerifyInventoryCurrentMaxCapacityByStampTaskResult> result = null;
-			await VerifyInventoryCurrentMaxCapacityByStampTask(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifyInventoryCurrentMaxCapacityByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyInventoryCurrentMaxCapacityByStampTaskResult>();
     #else
 		public VerifyInventoryCurrentMaxCapacityByStampTaskTask VerifyInventoryCurrentMaxCapacityByStampTaskAsync(
                 Request.VerifyInventoryCurrentMaxCapacityByStampTaskRequest request
@@ -8335,17 +7249,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.VerifyInventoryCurrentMaxCapacityByStampTaskResult> VerifyInventoryCurrentMaxCapacityByStampTaskAsync(
+		public Task<Result.VerifyInventoryCurrentMaxCapacityByStampTaskResult> VerifyInventoryCurrentMaxCapacityByStampTaskAsync(
                 Request.VerifyInventoryCurrentMaxCapacityByStampTaskRequest request
-        )
-		{
-			var task = new VerifyInventoryCurrentMaxCapacityByStampTaskTask(
+        ) =>
+            new VerifyInventoryCurrentMaxCapacityByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -8408,44 +7319,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator AddCapacityByStampSheet(
                 Request.AddCapacityByStampSheetRequest request,
                 UnityAction<AsyncResult<Result.AddCapacityByStampSheetResult>> callback
-        )
-		{
-			var task = new AddCapacityByStampSheetTask(
+        ) =>
+            new AddCapacityByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.AddCapacityByStampSheetResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.AddCapacityByStampSheetResult> AddCapacityByStampSheetFuture(
                 Request.AddCapacityByStampSheetRequest request
-        )
-		{
-			return new AddCapacityByStampSheetTask(
+        ) =>
+            new AddCapacityByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.AddCapacityByStampSheetResult> AddCapacityByStampSheetAsync(
+		public UniTask<Result.AddCapacityByStampSheetResult> AddCapacityByStampSheetAsync(
                 Request.AddCapacityByStampSheetRequest request
-        )
-		{
-            AsyncResult<Result.AddCapacityByStampSheetResult> result = null;
-			await AddCapacityByStampSheet(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new AddCapacityByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.AddCapacityByStampSheetResult>();
     #else
 		public AddCapacityByStampSheetTask AddCapacityByStampSheetAsync(
                 Request.AddCapacityByStampSheetRequest request
@@ -8459,17 +7357,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.AddCapacityByStampSheetResult> AddCapacityByStampSheetAsync(
+		public Task<Result.AddCapacityByStampSheetResult> AddCapacityByStampSheetAsync(
                 Request.AddCapacityByStampSheetRequest request
-        )
-		{
-			var task = new AddCapacityByStampSheetTask(
+        ) =>
+            new AddCapacityByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -8532,44 +7427,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator SetCapacityByStampSheet(
                 Request.SetCapacityByStampSheetRequest request,
                 UnityAction<AsyncResult<Result.SetCapacityByStampSheetResult>> callback
-        )
-		{
-			var task = new SetCapacityByStampSheetTask(
+        ) =>
+            new SetCapacityByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.SetCapacityByStampSheetResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.SetCapacityByStampSheetResult> SetCapacityByStampSheetFuture(
                 Request.SetCapacityByStampSheetRequest request
-        )
-		{
-			return new SetCapacityByStampSheetTask(
+        ) =>
+            new SetCapacityByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.SetCapacityByStampSheetResult> SetCapacityByStampSheetAsync(
+		public UniTask<Result.SetCapacityByStampSheetResult> SetCapacityByStampSheetAsync(
                 Request.SetCapacityByStampSheetRequest request
-        )
-		{
-            AsyncResult<Result.SetCapacityByStampSheetResult> result = null;
-			await SetCapacityByStampSheet(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new SetCapacityByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.SetCapacityByStampSheetResult>();
     #else
 		public SetCapacityByStampSheetTask SetCapacityByStampSheetAsync(
                 Request.SetCapacityByStampSheetRequest request
@@ -8583,17 +7465,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.SetCapacityByStampSheetResult> SetCapacityByStampSheetAsync(
+		public Task<Result.SetCapacityByStampSheetResult> SetCapacityByStampSheetAsync(
                 Request.SetCapacityByStampSheetRequest request
-        )
-		{
-			var task = new SetCapacityByStampSheetTask(
+        ) =>
+            new SetCapacityByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -8646,44 +7525,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DescribeItemSets(
                 Request.DescribeItemSetsRequest request,
                 UnityAction<AsyncResult<Result.DescribeItemSetsResult>> callback
-        )
-		{
-			var task = new DescribeItemSetsTask(
+        ) =>
+            new DescribeItemSetsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeItemSetsResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeItemSetsResult> DescribeItemSetsFuture(
                 Request.DescribeItemSetsRequest request
-        )
-		{
-			return new DescribeItemSetsTask(
+        ) =>
+            new DescribeItemSetsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeItemSetsResult> DescribeItemSetsAsync(
+		public UniTask<Result.DescribeItemSetsResult> DescribeItemSetsAsync(
                 Request.DescribeItemSetsRequest request
-        )
-		{
-            AsyncResult<Result.DescribeItemSetsResult> result = null;
-			await DescribeItemSets(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeItemSetsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeItemSetsResult>();
     #else
 		public DescribeItemSetsTask DescribeItemSetsAsync(
                 Request.DescribeItemSetsRequest request
@@ -8697,17 +7563,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DescribeItemSetsResult> DescribeItemSetsAsync(
+		public Task<Result.DescribeItemSetsResult> DescribeItemSetsAsync(
                 Request.DescribeItemSetsRequest request
-        )
-		{
-			var task = new DescribeItemSetsTask(
+        ) =>
+            new DescribeItemSetsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -8761,44 +7624,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DescribeItemSetsByUserId(
                 Request.DescribeItemSetsByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DescribeItemSetsByUserIdResult>> callback
-        )
-		{
-			var task = new DescribeItemSetsByUserIdTask(
+        ) =>
+            new DescribeItemSetsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeItemSetsByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeItemSetsByUserIdResult> DescribeItemSetsByUserIdFuture(
                 Request.DescribeItemSetsByUserIdRequest request
-        )
-		{
-			return new DescribeItemSetsByUserIdTask(
+        ) =>
+            new DescribeItemSetsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeItemSetsByUserIdResult> DescribeItemSetsByUserIdAsync(
+		public UniTask<Result.DescribeItemSetsByUserIdResult> DescribeItemSetsByUserIdAsync(
                 Request.DescribeItemSetsByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DescribeItemSetsByUserIdResult> result = null;
-			await DescribeItemSetsByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeItemSetsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeItemSetsByUserIdResult>();
     #else
 		public DescribeItemSetsByUserIdTask DescribeItemSetsByUserIdAsync(
                 Request.DescribeItemSetsByUserIdRequest request
@@ -8812,17 +7662,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DescribeItemSetsByUserIdResult> DescribeItemSetsByUserIdAsync(
+		public Task<Result.DescribeItemSetsByUserIdResult> DescribeItemSetsByUserIdAsync(
                 Request.DescribeItemSetsByUserIdRequest request
-        )
-		{
-			var task = new DescribeItemSetsByUserIdTask(
+        ) =>
+            new DescribeItemSetsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -8873,44 +7720,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetItemSet(
                 Request.GetItemSetRequest request,
                 UnityAction<AsyncResult<Result.GetItemSetResult>> callback
-        )
-		{
-			var task = new GetItemSetTask(
+        ) =>
+            new GetItemSetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetItemSetResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetItemSetResult> GetItemSetFuture(
                 Request.GetItemSetRequest request
-        )
-		{
-			return new GetItemSetTask(
+        ) =>
+            new GetItemSetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetItemSetResult> GetItemSetAsync(
+		public UniTask<Result.GetItemSetResult> GetItemSetAsync(
                 Request.GetItemSetRequest request
-        )
-		{
-            AsyncResult<Result.GetItemSetResult> result = null;
-			await GetItemSet(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetItemSetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetItemSetResult>();
     #else
 		public GetItemSetTask GetItemSetAsync(
                 Request.GetItemSetRequest request
@@ -8924,17 +7758,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetItemSetResult> GetItemSetAsync(
+		public Task<Result.GetItemSetResult> GetItemSetAsync(
                 Request.GetItemSetRequest request
-        )
-		{
-			var task = new GetItemSetTask(
+        ) =>
+            new GetItemSetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -8986,44 +7817,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetItemSetByUserId(
                 Request.GetItemSetByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetItemSetByUserIdResult>> callback
-        )
-		{
-			var task = new GetItemSetByUserIdTask(
+        ) =>
+            new GetItemSetByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetItemSetByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetItemSetByUserIdResult> GetItemSetByUserIdFuture(
                 Request.GetItemSetByUserIdRequest request
-        )
-		{
-			return new GetItemSetByUserIdTask(
+        ) =>
+            new GetItemSetByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetItemSetByUserIdResult> GetItemSetByUserIdAsync(
+		public UniTask<Result.GetItemSetByUserIdResult> GetItemSetByUserIdAsync(
                 Request.GetItemSetByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.GetItemSetByUserIdResult> result = null;
-			await GetItemSetByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetItemSetByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetItemSetByUserIdResult>();
     #else
 		public GetItemSetByUserIdTask GetItemSetByUserIdAsync(
                 Request.GetItemSetByUserIdRequest request
@@ -9037,17 +7855,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetItemSetByUserIdResult> GetItemSetByUserIdAsync(
+		public Task<Result.GetItemSetByUserIdResult> GetItemSetByUserIdAsync(
                 Request.GetItemSetByUserIdRequest request
-        )
-		{
-			var task = new GetItemSetByUserIdTask(
+        ) =>
+            new GetItemSetByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -9101,44 +7916,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetItemWithSignature(
                 Request.GetItemWithSignatureRequest request,
                 UnityAction<AsyncResult<Result.GetItemWithSignatureResult>> callback
-        )
-		{
-			var task = new GetItemWithSignatureTask(
+        ) =>
+            new GetItemWithSignatureTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetItemWithSignatureResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetItemWithSignatureResult> GetItemWithSignatureFuture(
                 Request.GetItemWithSignatureRequest request
-        )
-		{
-			return new GetItemWithSignatureTask(
+        ) =>
+            new GetItemWithSignatureTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetItemWithSignatureResult> GetItemWithSignatureAsync(
+		public UniTask<Result.GetItemWithSignatureResult> GetItemWithSignatureAsync(
                 Request.GetItemWithSignatureRequest request
-        )
-		{
-            AsyncResult<Result.GetItemWithSignatureResult> result = null;
-			await GetItemWithSignature(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetItemWithSignatureTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetItemWithSignatureResult>();
     #else
 		public GetItemWithSignatureTask GetItemWithSignatureAsync(
                 Request.GetItemWithSignatureRequest request
@@ -9152,17 +7954,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetItemWithSignatureResult> GetItemWithSignatureAsync(
+		public Task<Result.GetItemWithSignatureResult> GetItemWithSignatureAsync(
                 Request.GetItemWithSignatureRequest request
-        )
-		{
-			var task = new GetItemWithSignatureTask(
+        ) =>
+            new GetItemWithSignatureTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -9217,44 +8016,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetItemWithSignatureByUserId(
                 Request.GetItemWithSignatureByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetItemWithSignatureByUserIdResult>> callback
-        )
-		{
-			var task = new GetItemWithSignatureByUserIdTask(
+        ) =>
+            new GetItemWithSignatureByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetItemWithSignatureByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetItemWithSignatureByUserIdResult> GetItemWithSignatureByUserIdFuture(
                 Request.GetItemWithSignatureByUserIdRequest request
-        )
-		{
-			return new GetItemWithSignatureByUserIdTask(
+        ) =>
+            new GetItemWithSignatureByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetItemWithSignatureByUserIdResult> GetItemWithSignatureByUserIdAsync(
+		public UniTask<Result.GetItemWithSignatureByUserIdResult> GetItemWithSignatureByUserIdAsync(
                 Request.GetItemWithSignatureByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.GetItemWithSignatureByUserIdResult> result = null;
-			await GetItemWithSignatureByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetItemWithSignatureByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetItemWithSignatureByUserIdResult>();
     #else
 		public GetItemWithSignatureByUserIdTask GetItemWithSignatureByUserIdAsync(
                 Request.GetItemWithSignatureByUserIdRequest request
@@ -9268,17 +8054,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetItemWithSignatureByUserIdResult> GetItemWithSignatureByUserIdAsync(
+		public Task<Result.GetItemWithSignatureByUserIdResult> GetItemWithSignatureByUserIdAsync(
                 Request.GetItemWithSignatureByUserIdRequest request
-        )
-		{
-			var task = new GetItemWithSignatureByUserIdTask(
+        ) =>
+            new GetItemWithSignatureByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -9374,44 +8157,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator AcquireItemSetByUserId(
                 Request.AcquireItemSetByUserIdRequest request,
                 UnityAction<AsyncResult<Result.AcquireItemSetByUserIdResult>> callback
-        )
-		{
-			var task = new AcquireItemSetByUserIdTask(
+        ) =>
+            new AcquireItemSetByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.AcquireItemSetByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.AcquireItemSetByUserIdResult> AcquireItemSetByUserIdFuture(
                 Request.AcquireItemSetByUserIdRequest request
-        )
-		{
-			return new AcquireItemSetByUserIdTask(
+        ) =>
+            new AcquireItemSetByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.AcquireItemSetByUserIdResult> AcquireItemSetByUserIdAsync(
+		public UniTask<Result.AcquireItemSetByUserIdResult> AcquireItemSetByUserIdAsync(
                 Request.AcquireItemSetByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.AcquireItemSetByUserIdResult> result = null;
-			await AcquireItemSetByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new AcquireItemSetByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.AcquireItemSetByUserIdResult>();
     #else
 		public AcquireItemSetByUserIdTask AcquireItemSetByUserIdAsync(
                 Request.AcquireItemSetByUserIdRequest request
@@ -9425,17 +8195,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.AcquireItemSetByUserIdResult> AcquireItemSetByUserIdAsync(
+		public Task<Result.AcquireItemSetByUserIdResult> AcquireItemSetByUserIdAsync(
                 Request.AcquireItemSetByUserIdRequest request
-        )
-		{
-			var task = new AcquireItemSetByUserIdTask(
+        ) =>
+            new AcquireItemSetByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -9521,44 +8288,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator AcquireItemSetWithGradeByUserId(
                 Request.AcquireItemSetWithGradeByUserIdRequest request,
                 UnityAction<AsyncResult<Result.AcquireItemSetWithGradeByUserIdResult>> callback
-        )
-		{
-			var task = new AcquireItemSetWithGradeByUserIdTask(
+        ) =>
+            new AcquireItemSetWithGradeByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.AcquireItemSetWithGradeByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.AcquireItemSetWithGradeByUserIdResult> AcquireItemSetWithGradeByUserIdFuture(
                 Request.AcquireItemSetWithGradeByUserIdRequest request
-        )
-		{
-			return new AcquireItemSetWithGradeByUserIdTask(
+        ) =>
+            new AcquireItemSetWithGradeByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.AcquireItemSetWithGradeByUserIdResult> AcquireItemSetWithGradeByUserIdAsync(
+		public UniTask<Result.AcquireItemSetWithGradeByUserIdResult> AcquireItemSetWithGradeByUserIdAsync(
                 Request.AcquireItemSetWithGradeByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.AcquireItemSetWithGradeByUserIdResult> result = null;
-			await AcquireItemSetWithGradeByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new AcquireItemSetWithGradeByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.AcquireItemSetWithGradeByUserIdResult>();
     #else
 		public AcquireItemSetWithGradeByUserIdTask AcquireItemSetWithGradeByUserIdAsync(
                 Request.AcquireItemSetWithGradeByUserIdRequest request
@@ -9572,17 +8326,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.AcquireItemSetWithGradeByUserIdResult> AcquireItemSetWithGradeByUserIdAsync(
+		public Task<Result.AcquireItemSetWithGradeByUserIdResult> AcquireItemSetWithGradeByUserIdAsync(
                 Request.AcquireItemSetWithGradeByUserIdRequest request
-        )
-		{
-			var task = new AcquireItemSetWithGradeByUserIdTask(
+        ) =>
+            new AcquireItemSetWithGradeByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -9670,44 +8421,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator ConsumeItemSet(
                 Request.ConsumeItemSetRequest request,
                 UnityAction<AsyncResult<Result.ConsumeItemSetResult>> callback
-        )
-		{
-			var task = new ConsumeItemSetTask(
+        ) =>
+            new ConsumeItemSetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ConsumeItemSetResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.ConsumeItemSetResult> ConsumeItemSetFuture(
                 Request.ConsumeItemSetRequest request
-        )
-		{
-			return new ConsumeItemSetTask(
+        ) =>
+            new ConsumeItemSetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ConsumeItemSetResult> ConsumeItemSetAsync(
+		public UniTask<Result.ConsumeItemSetResult> ConsumeItemSetAsync(
                 Request.ConsumeItemSetRequest request
-        )
-		{
-            AsyncResult<Result.ConsumeItemSetResult> result = null;
-			await ConsumeItemSet(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new ConsumeItemSetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.ConsumeItemSetResult>();
     #else
 		public ConsumeItemSetTask ConsumeItemSetAsync(
                 Request.ConsumeItemSetRequest request
@@ -9721,17 +8459,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.ConsumeItemSetResult> ConsumeItemSetAsync(
+		public Task<Result.ConsumeItemSetResult> ConsumeItemSetAsync(
                 Request.ConsumeItemSetRequest request
-        )
-		{
-			var task = new ConsumeItemSetTask(
+        ) =>
+            new ConsumeItemSetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -9820,44 +8555,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator ConsumeItemSetByUserId(
                 Request.ConsumeItemSetByUserIdRequest request,
                 UnityAction<AsyncResult<Result.ConsumeItemSetByUserIdResult>> callback
-        )
-		{
-			var task = new ConsumeItemSetByUserIdTask(
+        ) =>
+            new ConsumeItemSetByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ConsumeItemSetByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.ConsumeItemSetByUserIdResult> ConsumeItemSetByUserIdFuture(
                 Request.ConsumeItemSetByUserIdRequest request
-        )
-		{
-			return new ConsumeItemSetByUserIdTask(
+        ) =>
+            new ConsumeItemSetByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ConsumeItemSetByUserIdResult> ConsumeItemSetByUserIdAsync(
+		public UniTask<Result.ConsumeItemSetByUserIdResult> ConsumeItemSetByUserIdAsync(
                 Request.ConsumeItemSetByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.ConsumeItemSetByUserIdResult> result = null;
-			await ConsumeItemSetByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new ConsumeItemSetByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.ConsumeItemSetByUserIdResult>();
     #else
 		public ConsumeItemSetByUserIdTask ConsumeItemSetByUserIdAsync(
                 Request.ConsumeItemSetByUserIdRequest request
@@ -9871,17 +8593,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.ConsumeItemSetByUserIdResult> ConsumeItemSetByUserIdAsync(
+		public Task<Result.ConsumeItemSetByUserIdResult> ConsumeItemSetByUserIdAsync(
                 Request.ConsumeItemSetByUserIdRequest request
-        )
-		{
-			var task = new ConsumeItemSetByUserIdTask(
+        ) =>
+            new ConsumeItemSetByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -9937,44 +8656,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DeleteItemSetByUserId(
                 Request.DeleteItemSetByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DeleteItemSetByUserIdResult>> callback
-        )
-		{
-			var task = new DeleteItemSetByUserIdTask(
+        ) =>
+            new DeleteItemSetByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteItemSetByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteItemSetByUserIdResult> DeleteItemSetByUserIdFuture(
                 Request.DeleteItemSetByUserIdRequest request
-        )
-		{
-			return new DeleteItemSetByUserIdTask(
+        ) =>
+            new DeleteItemSetByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteItemSetByUserIdResult> DeleteItemSetByUserIdAsync(
+		public UniTask<Result.DeleteItemSetByUserIdResult> DeleteItemSetByUserIdAsync(
                 Request.DeleteItemSetByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DeleteItemSetByUserIdResult> result = null;
-			await DeleteItemSetByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteItemSetByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteItemSetByUserIdResult>();
     #else
 		public DeleteItemSetByUserIdTask DeleteItemSetByUserIdAsync(
                 Request.DeleteItemSetByUserIdRequest request
@@ -9988,17 +8694,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DeleteItemSetByUserIdResult> DeleteItemSetByUserIdAsync(
+		public Task<Result.DeleteItemSetByUserIdResult> DeleteItemSetByUserIdAsync(
                 Request.DeleteItemSetByUserIdRequest request
-        )
-		{
-			var task = new DeleteItemSetByUserIdTask(
+        ) =>
+            new DeleteItemSetByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -10079,44 +8782,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator VerifyItemSet(
                 Request.VerifyItemSetRequest request,
                 UnityAction<AsyncResult<Result.VerifyItemSetResult>> callback
-        )
-		{
-			var task = new VerifyItemSetTask(
+        ) =>
+            new VerifyItemSetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifyItemSetResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifyItemSetResult> VerifyItemSetFuture(
                 Request.VerifyItemSetRequest request
-        )
-		{
-			return new VerifyItemSetTask(
+        ) =>
+            new VerifyItemSetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifyItemSetResult> VerifyItemSetAsync(
+		public UniTask<Result.VerifyItemSetResult> VerifyItemSetAsync(
                 Request.VerifyItemSetRequest request
-        )
-		{
-            AsyncResult<Result.VerifyItemSetResult> result = null;
-			await VerifyItemSet(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifyItemSetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyItemSetResult>();
     #else
 		public VerifyItemSetTask VerifyItemSetAsync(
                 Request.VerifyItemSetRequest request
@@ -10130,17 +8820,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.VerifyItemSetResult> VerifyItemSetAsync(
+		public Task<Result.VerifyItemSetResult> VerifyItemSetAsync(
                 Request.VerifyItemSetRequest request
-        )
-		{
-			var task = new VerifyItemSetTask(
+        ) =>
+            new VerifyItemSetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -10222,44 +8909,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator VerifyItemSetByUserId(
                 Request.VerifyItemSetByUserIdRequest request,
                 UnityAction<AsyncResult<Result.VerifyItemSetByUserIdResult>> callback
-        )
-		{
-			var task = new VerifyItemSetByUserIdTask(
+        ) =>
+            new VerifyItemSetByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifyItemSetByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifyItemSetByUserIdResult> VerifyItemSetByUserIdFuture(
                 Request.VerifyItemSetByUserIdRequest request
-        )
-		{
-			return new VerifyItemSetByUserIdTask(
+        ) =>
+            new VerifyItemSetByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifyItemSetByUserIdResult> VerifyItemSetByUserIdAsync(
+		public UniTask<Result.VerifyItemSetByUserIdResult> VerifyItemSetByUserIdAsync(
                 Request.VerifyItemSetByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.VerifyItemSetByUserIdResult> result = null;
-			await VerifyItemSetByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifyItemSetByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyItemSetByUserIdResult>();
     #else
 		public VerifyItemSetByUserIdTask VerifyItemSetByUserIdAsync(
                 Request.VerifyItemSetByUserIdRequest request
@@ -10273,17 +8947,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.VerifyItemSetByUserIdResult> VerifyItemSetByUserIdAsync(
+		public Task<Result.VerifyItemSetByUserIdResult> VerifyItemSetByUserIdAsync(
                 Request.VerifyItemSetByUserIdRequest request
-        )
-		{
-			var task = new VerifyItemSetByUserIdTask(
+        ) =>
+            new VerifyItemSetByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -10346,44 +9017,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator AcquireItemSetByStampSheet(
                 Request.AcquireItemSetByStampSheetRequest request,
                 UnityAction<AsyncResult<Result.AcquireItemSetByStampSheetResult>> callback
-        )
-		{
-			var task = new AcquireItemSetByStampSheetTask(
+        ) =>
+            new AcquireItemSetByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.AcquireItemSetByStampSheetResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.AcquireItemSetByStampSheetResult> AcquireItemSetByStampSheetFuture(
                 Request.AcquireItemSetByStampSheetRequest request
-        )
-		{
-			return new AcquireItemSetByStampSheetTask(
+        ) =>
+            new AcquireItemSetByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.AcquireItemSetByStampSheetResult> AcquireItemSetByStampSheetAsync(
+		public UniTask<Result.AcquireItemSetByStampSheetResult> AcquireItemSetByStampSheetAsync(
                 Request.AcquireItemSetByStampSheetRequest request
-        )
-		{
-            AsyncResult<Result.AcquireItemSetByStampSheetResult> result = null;
-			await AcquireItemSetByStampSheet(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new AcquireItemSetByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.AcquireItemSetByStampSheetResult>();
     #else
 		public AcquireItemSetByStampSheetTask AcquireItemSetByStampSheetAsync(
                 Request.AcquireItemSetByStampSheetRequest request
@@ -10397,17 +9055,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.AcquireItemSetByStampSheetResult> AcquireItemSetByStampSheetAsync(
+		public Task<Result.AcquireItemSetByStampSheetResult> AcquireItemSetByStampSheetAsync(
                 Request.AcquireItemSetByStampSheetRequest request
-        )
-		{
-			var task = new AcquireItemSetByStampSheetTask(
+        ) =>
+            new AcquireItemSetByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -10470,44 +9125,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator AcquireItemSetWithGradeByStampSheet(
                 Request.AcquireItemSetWithGradeByStampSheetRequest request,
                 UnityAction<AsyncResult<Result.AcquireItemSetWithGradeByStampSheetResult>> callback
-        )
-		{
-			var task = new AcquireItemSetWithGradeByStampSheetTask(
+        ) =>
+            new AcquireItemSetWithGradeByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.AcquireItemSetWithGradeByStampSheetResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.AcquireItemSetWithGradeByStampSheetResult> AcquireItemSetWithGradeByStampSheetFuture(
                 Request.AcquireItemSetWithGradeByStampSheetRequest request
-        )
-		{
-			return new AcquireItemSetWithGradeByStampSheetTask(
+        ) =>
+            new AcquireItemSetWithGradeByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.AcquireItemSetWithGradeByStampSheetResult> AcquireItemSetWithGradeByStampSheetAsync(
+		public UniTask<Result.AcquireItemSetWithGradeByStampSheetResult> AcquireItemSetWithGradeByStampSheetAsync(
                 Request.AcquireItemSetWithGradeByStampSheetRequest request
-        )
-		{
-            AsyncResult<Result.AcquireItemSetWithGradeByStampSheetResult> result = null;
-			await AcquireItemSetWithGradeByStampSheet(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new AcquireItemSetWithGradeByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.AcquireItemSetWithGradeByStampSheetResult>();
     #else
 		public AcquireItemSetWithGradeByStampSheetTask AcquireItemSetWithGradeByStampSheetAsync(
                 Request.AcquireItemSetWithGradeByStampSheetRequest request
@@ -10521,17 +9163,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.AcquireItemSetWithGradeByStampSheetResult> AcquireItemSetWithGradeByStampSheetAsync(
+		public Task<Result.AcquireItemSetWithGradeByStampSheetResult> AcquireItemSetWithGradeByStampSheetAsync(
                 Request.AcquireItemSetWithGradeByStampSheetRequest request
-        )
-		{
-			var task = new AcquireItemSetWithGradeByStampSheetTask(
+        ) =>
+            new AcquireItemSetWithGradeByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -10594,44 +9233,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator ConsumeItemSetByStampTask(
                 Request.ConsumeItemSetByStampTaskRequest request,
                 UnityAction<AsyncResult<Result.ConsumeItemSetByStampTaskResult>> callback
-        )
-		{
-			var task = new ConsumeItemSetByStampTaskTask(
+        ) =>
+            new ConsumeItemSetByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ConsumeItemSetByStampTaskResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.ConsumeItemSetByStampTaskResult> ConsumeItemSetByStampTaskFuture(
                 Request.ConsumeItemSetByStampTaskRequest request
-        )
-		{
-			return new ConsumeItemSetByStampTaskTask(
+        ) =>
+            new ConsumeItemSetByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ConsumeItemSetByStampTaskResult> ConsumeItemSetByStampTaskAsync(
+		public UniTask<Result.ConsumeItemSetByStampTaskResult> ConsumeItemSetByStampTaskAsync(
                 Request.ConsumeItemSetByStampTaskRequest request
-        )
-		{
-            AsyncResult<Result.ConsumeItemSetByStampTaskResult> result = null;
-			await ConsumeItemSetByStampTask(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new ConsumeItemSetByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.ConsumeItemSetByStampTaskResult>();
     #else
 		public ConsumeItemSetByStampTaskTask ConsumeItemSetByStampTaskAsync(
                 Request.ConsumeItemSetByStampTaskRequest request
@@ -10645,17 +9271,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.ConsumeItemSetByStampTaskResult> ConsumeItemSetByStampTaskAsync(
+		public Task<Result.ConsumeItemSetByStampTaskResult> ConsumeItemSetByStampTaskAsync(
                 Request.ConsumeItemSetByStampTaskRequest request
-        )
-		{
-			var task = new ConsumeItemSetByStampTaskTask(
+        ) =>
+            new ConsumeItemSetByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -10718,44 +9341,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator VerifyItemSetByStampTask(
                 Request.VerifyItemSetByStampTaskRequest request,
                 UnityAction<AsyncResult<Result.VerifyItemSetByStampTaskResult>> callback
-        )
-		{
-			var task = new VerifyItemSetByStampTaskTask(
+        ) =>
+            new VerifyItemSetByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifyItemSetByStampTaskResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifyItemSetByStampTaskResult> VerifyItemSetByStampTaskFuture(
                 Request.VerifyItemSetByStampTaskRequest request
-        )
-		{
-			return new VerifyItemSetByStampTaskTask(
+        ) =>
+            new VerifyItemSetByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifyItemSetByStampTaskResult> VerifyItemSetByStampTaskAsync(
+		public UniTask<Result.VerifyItemSetByStampTaskResult> VerifyItemSetByStampTaskAsync(
                 Request.VerifyItemSetByStampTaskRequest request
-        )
-		{
-            AsyncResult<Result.VerifyItemSetByStampTaskResult> result = null;
-			await VerifyItemSetByStampTask(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifyItemSetByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyItemSetByStampTaskResult>();
     #else
 		public VerifyItemSetByStampTaskTask VerifyItemSetByStampTaskAsync(
                 Request.VerifyItemSetByStampTaskRequest request
@@ -10769,17 +9379,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.VerifyItemSetByStampTaskResult> VerifyItemSetByStampTaskAsync(
+		public Task<Result.VerifyItemSetByStampTaskResult> VerifyItemSetByStampTaskAsync(
                 Request.VerifyItemSetByStampTaskRequest request
-        )
-		{
-			var task = new VerifyItemSetByStampTaskTask(
+        ) =>
+            new VerifyItemSetByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -10828,44 +9435,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DescribeReferenceOf(
                 Request.DescribeReferenceOfRequest request,
                 UnityAction<AsyncResult<Result.DescribeReferenceOfResult>> callback
-        )
-		{
-			var task = new DescribeReferenceOfTask(
+        ) =>
+            new DescribeReferenceOfTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeReferenceOfResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeReferenceOfResult> DescribeReferenceOfFuture(
                 Request.DescribeReferenceOfRequest request
-        )
-		{
-			return new DescribeReferenceOfTask(
+        ) =>
+            new DescribeReferenceOfTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeReferenceOfResult> DescribeReferenceOfAsync(
+		public UniTask<Result.DescribeReferenceOfResult> DescribeReferenceOfAsync(
                 Request.DescribeReferenceOfRequest request
-        )
-		{
-            AsyncResult<Result.DescribeReferenceOfResult> result = null;
-			await DescribeReferenceOf(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeReferenceOfTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeReferenceOfResult>();
     #else
 		public DescribeReferenceOfTask DescribeReferenceOfAsync(
                 Request.DescribeReferenceOfRequest request
@@ -10879,17 +9473,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DescribeReferenceOfResult> DescribeReferenceOfAsync(
+		public Task<Result.DescribeReferenceOfResult> DescribeReferenceOfAsync(
                 Request.DescribeReferenceOfRequest request
-        )
-		{
-			var task = new DescribeReferenceOfTask(
+        ) =>
+            new DescribeReferenceOfTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -10939,44 +9530,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DescribeReferenceOfByUserId(
                 Request.DescribeReferenceOfByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DescribeReferenceOfByUserIdResult>> callback
-        )
-		{
-			var task = new DescribeReferenceOfByUserIdTask(
+        ) =>
+            new DescribeReferenceOfByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeReferenceOfByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeReferenceOfByUserIdResult> DescribeReferenceOfByUserIdFuture(
                 Request.DescribeReferenceOfByUserIdRequest request
-        )
-		{
-			return new DescribeReferenceOfByUserIdTask(
+        ) =>
+            new DescribeReferenceOfByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeReferenceOfByUserIdResult> DescribeReferenceOfByUserIdAsync(
+		public UniTask<Result.DescribeReferenceOfByUserIdResult> DescribeReferenceOfByUserIdAsync(
                 Request.DescribeReferenceOfByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DescribeReferenceOfByUserIdResult> result = null;
-			await DescribeReferenceOfByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeReferenceOfByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeReferenceOfByUserIdResult>();
     #else
 		public DescribeReferenceOfByUserIdTask DescribeReferenceOfByUserIdAsync(
                 Request.DescribeReferenceOfByUserIdRequest request
@@ -10990,17 +9568,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DescribeReferenceOfByUserIdResult> DescribeReferenceOfByUserIdAsync(
+		public Task<Result.DescribeReferenceOfByUserIdResult> DescribeReferenceOfByUserIdAsync(
                 Request.DescribeReferenceOfByUserIdRequest request
-        )
-		{
-			var task = new DescribeReferenceOfByUserIdTask(
+        ) =>
+            new DescribeReferenceOfByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -11050,44 +9625,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetReferenceOf(
                 Request.GetReferenceOfRequest request,
                 UnityAction<AsyncResult<Result.GetReferenceOfResult>> callback
-        )
-		{
-			var task = new GetReferenceOfTask(
+        ) =>
+            new GetReferenceOfTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetReferenceOfResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetReferenceOfResult> GetReferenceOfFuture(
                 Request.GetReferenceOfRequest request
-        )
-		{
-			return new GetReferenceOfTask(
+        ) =>
+            new GetReferenceOfTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetReferenceOfResult> GetReferenceOfAsync(
+		public UniTask<Result.GetReferenceOfResult> GetReferenceOfAsync(
                 Request.GetReferenceOfRequest request
-        )
-		{
-            AsyncResult<Result.GetReferenceOfResult> result = null;
-			await GetReferenceOf(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetReferenceOfTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetReferenceOfResult>();
     #else
 		public GetReferenceOfTask GetReferenceOfAsync(
                 Request.GetReferenceOfRequest request
@@ -11101,17 +9663,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetReferenceOfResult> GetReferenceOfAsync(
+		public Task<Result.GetReferenceOfResult> GetReferenceOfAsync(
                 Request.GetReferenceOfRequest request
-        )
-		{
-			var task = new GetReferenceOfTask(
+        ) =>
+            new GetReferenceOfTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -11162,44 +9721,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetReferenceOfByUserId(
                 Request.GetReferenceOfByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetReferenceOfByUserIdResult>> callback
-        )
-		{
-			var task = new GetReferenceOfByUserIdTask(
+        ) =>
+            new GetReferenceOfByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetReferenceOfByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetReferenceOfByUserIdResult> GetReferenceOfByUserIdFuture(
                 Request.GetReferenceOfByUserIdRequest request
-        )
-		{
-			return new GetReferenceOfByUserIdTask(
+        ) =>
+            new GetReferenceOfByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetReferenceOfByUserIdResult> GetReferenceOfByUserIdAsync(
+		public UniTask<Result.GetReferenceOfByUserIdResult> GetReferenceOfByUserIdAsync(
                 Request.GetReferenceOfByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.GetReferenceOfByUserIdResult> result = null;
-			await GetReferenceOfByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetReferenceOfByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetReferenceOfByUserIdResult>();
     #else
 		public GetReferenceOfByUserIdTask GetReferenceOfByUserIdAsync(
                 Request.GetReferenceOfByUserIdRequest request
@@ -11213,17 +9759,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetReferenceOfByUserIdResult> GetReferenceOfByUserIdAsync(
+		public Task<Result.GetReferenceOfByUserIdResult> GetReferenceOfByUserIdAsync(
                 Request.GetReferenceOfByUserIdRequest request
-        )
-		{
-			var task = new GetReferenceOfByUserIdTask(
+        ) =>
+            new GetReferenceOfByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -11291,44 +9834,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator VerifyReferenceOf(
                 Request.VerifyReferenceOfRequest request,
                 UnityAction<AsyncResult<Result.VerifyReferenceOfResult>> callback
-        )
-		{
-			var task = new VerifyReferenceOfTask(
+        ) =>
+            new VerifyReferenceOfTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifyReferenceOfResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifyReferenceOfResult> VerifyReferenceOfFuture(
                 Request.VerifyReferenceOfRequest request
-        )
-		{
-			return new VerifyReferenceOfTask(
+        ) =>
+            new VerifyReferenceOfTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifyReferenceOfResult> VerifyReferenceOfAsync(
+		public UniTask<Result.VerifyReferenceOfResult> VerifyReferenceOfAsync(
                 Request.VerifyReferenceOfRequest request
-        )
-		{
-            AsyncResult<Result.VerifyReferenceOfResult> result = null;
-			await VerifyReferenceOf(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifyReferenceOfTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyReferenceOfResult>();
     #else
 		public VerifyReferenceOfTask VerifyReferenceOfAsync(
                 Request.VerifyReferenceOfRequest request
@@ -11342,17 +9872,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.VerifyReferenceOfResult> VerifyReferenceOfAsync(
+		public Task<Result.VerifyReferenceOfResult> VerifyReferenceOfAsync(
                 Request.VerifyReferenceOfRequest request
-        )
-		{
-			var task = new VerifyReferenceOfTask(
+        ) =>
+            new VerifyReferenceOfTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -11421,44 +9948,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator VerifyReferenceOfByUserId(
                 Request.VerifyReferenceOfByUserIdRequest request,
                 UnityAction<AsyncResult<Result.VerifyReferenceOfByUserIdResult>> callback
-        )
-		{
-			var task = new VerifyReferenceOfByUserIdTask(
+        ) =>
+            new VerifyReferenceOfByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifyReferenceOfByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifyReferenceOfByUserIdResult> VerifyReferenceOfByUserIdFuture(
                 Request.VerifyReferenceOfByUserIdRequest request
-        )
-		{
-			return new VerifyReferenceOfByUserIdTask(
+        ) =>
+            new VerifyReferenceOfByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifyReferenceOfByUserIdResult> VerifyReferenceOfByUserIdAsync(
+		public UniTask<Result.VerifyReferenceOfByUserIdResult> VerifyReferenceOfByUserIdAsync(
                 Request.VerifyReferenceOfByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.VerifyReferenceOfByUserIdResult> result = null;
-			await VerifyReferenceOfByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifyReferenceOfByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyReferenceOfByUserIdResult>();
     #else
 		public VerifyReferenceOfByUserIdTask VerifyReferenceOfByUserIdAsync(
                 Request.VerifyReferenceOfByUserIdRequest request
@@ -11472,17 +9986,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.VerifyReferenceOfByUserIdResult> VerifyReferenceOfByUserIdAsync(
+		public Task<Result.VerifyReferenceOfByUserIdResult> VerifyReferenceOfByUserIdAsync(
                 Request.VerifyReferenceOfByUserIdRequest request
-        )
-		{
-			var task = new VerifyReferenceOfByUserIdTask(
+        ) =>
+            new VerifyReferenceOfByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -11553,44 +10064,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator AddReferenceOf(
                 Request.AddReferenceOfRequest request,
                 UnityAction<AsyncResult<Result.AddReferenceOfResult>> callback
-        )
-		{
-			var task = new AddReferenceOfTask(
+        ) =>
+            new AddReferenceOfTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.AddReferenceOfResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.AddReferenceOfResult> AddReferenceOfFuture(
                 Request.AddReferenceOfRequest request
-        )
-		{
-			return new AddReferenceOfTask(
+        ) =>
+            new AddReferenceOfTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.AddReferenceOfResult> AddReferenceOfAsync(
+		public UniTask<Result.AddReferenceOfResult> AddReferenceOfAsync(
                 Request.AddReferenceOfRequest request
-        )
-		{
-            AsyncResult<Result.AddReferenceOfResult> result = null;
-			await AddReferenceOf(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new AddReferenceOfTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.AddReferenceOfResult>();
     #else
 		public AddReferenceOfTask AddReferenceOfAsync(
                 Request.AddReferenceOfRequest request
@@ -11604,17 +10102,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.AddReferenceOfResult> AddReferenceOfAsync(
+		public Task<Result.AddReferenceOfResult> AddReferenceOfAsync(
                 Request.AddReferenceOfRequest request
-        )
-		{
-			var task = new AddReferenceOfTask(
+        ) =>
+            new AddReferenceOfTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -11686,44 +10181,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator AddReferenceOfByUserId(
                 Request.AddReferenceOfByUserIdRequest request,
                 UnityAction<AsyncResult<Result.AddReferenceOfByUserIdResult>> callback
-        )
-		{
-			var task = new AddReferenceOfByUserIdTask(
+        ) =>
+            new AddReferenceOfByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.AddReferenceOfByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.AddReferenceOfByUserIdResult> AddReferenceOfByUserIdFuture(
                 Request.AddReferenceOfByUserIdRequest request
-        )
-		{
-			return new AddReferenceOfByUserIdTask(
+        ) =>
+            new AddReferenceOfByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.AddReferenceOfByUserIdResult> AddReferenceOfByUserIdAsync(
+		public UniTask<Result.AddReferenceOfByUserIdResult> AddReferenceOfByUserIdAsync(
                 Request.AddReferenceOfByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.AddReferenceOfByUserIdResult> result = null;
-			await AddReferenceOfByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new AddReferenceOfByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.AddReferenceOfByUserIdResult>();
     #else
 		public AddReferenceOfByUserIdTask AddReferenceOfByUserIdAsync(
                 Request.AddReferenceOfByUserIdRequest request
@@ -11737,17 +10219,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.AddReferenceOfByUserIdResult> AddReferenceOfByUserIdAsync(
+		public Task<Result.AddReferenceOfByUserIdResult> AddReferenceOfByUserIdAsync(
                 Request.AddReferenceOfByUserIdRequest request
-        )
-		{
-			var task = new AddReferenceOfByUserIdTask(
+        ) =>
+            new AddReferenceOfByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -11801,44 +10280,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DeleteReferenceOf(
                 Request.DeleteReferenceOfRequest request,
                 UnityAction<AsyncResult<Result.DeleteReferenceOfResult>> callback
-        )
-		{
-			var task = new DeleteReferenceOfTask(
+        ) =>
+            new DeleteReferenceOfTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteReferenceOfResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteReferenceOfResult> DeleteReferenceOfFuture(
                 Request.DeleteReferenceOfRequest request
-        )
-		{
-			return new DeleteReferenceOfTask(
+        ) =>
+            new DeleteReferenceOfTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteReferenceOfResult> DeleteReferenceOfAsync(
+		public UniTask<Result.DeleteReferenceOfResult> DeleteReferenceOfAsync(
                 Request.DeleteReferenceOfRequest request
-        )
-		{
-            AsyncResult<Result.DeleteReferenceOfResult> result = null;
-			await DeleteReferenceOf(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteReferenceOfTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteReferenceOfResult>();
     #else
 		public DeleteReferenceOfTask DeleteReferenceOfAsync(
                 Request.DeleteReferenceOfRequest request
@@ -11852,17 +10318,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DeleteReferenceOfResult> DeleteReferenceOfAsync(
+		public Task<Result.DeleteReferenceOfResult> DeleteReferenceOfAsync(
                 Request.DeleteReferenceOfRequest request
-        )
-		{
-			var task = new DeleteReferenceOfTask(
+        ) =>
+            new DeleteReferenceOfTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -11917,44 +10380,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DeleteReferenceOfByUserId(
                 Request.DeleteReferenceOfByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DeleteReferenceOfByUserIdResult>> callback
-        )
-		{
-			var task = new DeleteReferenceOfByUserIdTask(
+        ) =>
+            new DeleteReferenceOfByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteReferenceOfByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteReferenceOfByUserIdResult> DeleteReferenceOfByUserIdFuture(
                 Request.DeleteReferenceOfByUserIdRequest request
-        )
-		{
-			return new DeleteReferenceOfByUserIdTask(
+        ) =>
+            new DeleteReferenceOfByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteReferenceOfByUserIdResult> DeleteReferenceOfByUserIdAsync(
+		public UniTask<Result.DeleteReferenceOfByUserIdResult> DeleteReferenceOfByUserIdAsync(
                 Request.DeleteReferenceOfByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DeleteReferenceOfByUserIdResult> result = null;
-			await DeleteReferenceOfByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteReferenceOfByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteReferenceOfByUserIdResult>();
     #else
 		public DeleteReferenceOfByUserIdTask DeleteReferenceOfByUserIdAsync(
                 Request.DeleteReferenceOfByUserIdRequest request
@@ -11968,17 +10418,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DeleteReferenceOfByUserIdResult> DeleteReferenceOfByUserIdAsync(
+		public Task<Result.DeleteReferenceOfByUserIdResult> DeleteReferenceOfByUserIdAsync(
                 Request.DeleteReferenceOfByUserIdRequest request
-        )
-		{
-			var task = new DeleteReferenceOfByUserIdTask(
+        ) =>
+            new DeleteReferenceOfByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -12041,44 +10488,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator AddReferenceOfItemSetByStampSheet(
                 Request.AddReferenceOfItemSetByStampSheetRequest request,
                 UnityAction<AsyncResult<Result.AddReferenceOfItemSetByStampSheetResult>> callback
-        )
-		{
-			var task = new AddReferenceOfItemSetByStampSheetTask(
+        ) =>
+            new AddReferenceOfItemSetByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.AddReferenceOfItemSetByStampSheetResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.AddReferenceOfItemSetByStampSheetResult> AddReferenceOfItemSetByStampSheetFuture(
                 Request.AddReferenceOfItemSetByStampSheetRequest request
-        )
-		{
-			return new AddReferenceOfItemSetByStampSheetTask(
+        ) =>
+            new AddReferenceOfItemSetByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.AddReferenceOfItemSetByStampSheetResult> AddReferenceOfItemSetByStampSheetAsync(
+		public UniTask<Result.AddReferenceOfItemSetByStampSheetResult> AddReferenceOfItemSetByStampSheetAsync(
                 Request.AddReferenceOfItemSetByStampSheetRequest request
-        )
-		{
-            AsyncResult<Result.AddReferenceOfItemSetByStampSheetResult> result = null;
-			await AddReferenceOfItemSetByStampSheet(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new AddReferenceOfItemSetByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.AddReferenceOfItemSetByStampSheetResult>();
     #else
 		public AddReferenceOfItemSetByStampSheetTask AddReferenceOfItemSetByStampSheetAsync(
                 Request.AddReferenceOfItemSetByStampSheetRequest request
@@ -12092,17 +10526,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.AddReferenceOfItemSetByStampSheetResult> AddReferenceOfItemSetByStampSheetAsync(
+		public Task<Result.AddReferenceOfItemSetByStampSheetResult> AddReferenceOfItemSetByStampSheetAsync(
                 Request.AddReferenceOfItemSetByStampSheetRequest request
-        )
-		{
-			var task = new AddReferenceOfItemSetByStampSheetTask(
+        ) =>
+            new AddReferenceOfItemSetByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -12165,44 +10596,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DeleteReferenceOfItemSetByStampSheet(
                 Request.DeleteReferenceOfItemSetByStampSheetRequest request,
                 UnityAction<AsyncResult<Result.DeleteReferenceOfItemSetByStampSheetResult>> callback
-        )
-		{
-			var task = new DeleteReferenceOfItemSetByStampSheetTask(
+        ) =>
+            new DeleteReferenceOfItemSetByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteReferenceOfItemSetByStampSheetResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteReferenceOfItemSetByStampSheetResult> DeleteReferenceOfItemSetByStampSheetFuture(
                 Request.DeleteReferenceOfItemSetByStampSheetRequest request
-        )
-		{
-			return new DeleteReferenceOfItemSetByStampSheetTask(
+        ) =>
+            new DeleteReferenceOfItemSetByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteReferenceOfItemSetByStampSheetResult> DeleteReferenceOfItemSetByStampSheetAsync(
+		public UniTask<Result.DeleteReferenceOfItemSetByStampSheetResult> DeleteReferenceOfItemSetByStampSheetAsync(
                 Request.DeleteReferenceOfItemSetByStampSheetRequest request
-        )
-		{
-            AsyncResult<Result.DeleteReferenceOfItemSetByStampSheetResult> result = null;
-			await DeleteReferenceOfItemSetByStampSheet(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteReferenceOfItemSetByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteReferenceOfItemSetByStampSheetResult>();
     #else
 		public DeleteReferenceOfItemSetByStampSheetTask DeleteReferenceOfItemSetByStampSheetAsync(
                 Request.DeleteReferenceOfItemSetByStampSheetRequest request
@@ -12216,17 +10634,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DeleteReferenceOfItemSetByStampSheetResult> DeleteReferenceOfItemSetByStampSheetAsync(
+		public Task<Result.DeleteReferenceOfItemSetByStampSheetResult> DeleteReferenceOfItemSetByStampSheetAsync(
                 Request.DeleteReferenceOfItemSetByStampSheetRequest request
-        )
-		{
-			var task = new DeleteReferenceOfItemSetByStampSheetTask(
+        ) =>
+            new DeleteReferenceOfItemSetByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -12289,44 +10704,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator VerifyReferenceOfByStampTask(
                 Request.VerifyReferenceOfByStampTaskRequest request,
                 UnityAction<AsyncResult<Result.VerifyReferenceOfByStampTaskResult>> callback
-        )
-		{
-			var task = new VerifyReferenceOfByStampTaskTask(
+        ) =>
+            new VerifyReferenceOfByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifyReferenceOfByStampTaskResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifyReferenceOfByStampTaskResult> VerifyReferenceOfByStampTaskFuture(
                 Request.VerifyReferenceOfByStampTaskRequest request
-        )
-		{
-			return new VerifyReferenceOfByStampTaskTask(
+        ) =>
+            new VerifyReferenceOfByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifyReferenceOfByStampTaskResult> VerifyReferenceOfByStampTaskAsync(
+		public UniTask<Result.VerifyReferenceOfByStampTaskResult> VerifyReferenceOfByStampTaskAsync(
                 Request.VerifyReferenceOfByStampTaskRequest request
-        )
-		{
-            AsyncResult<Result.VerifyReferenceOfByStampTaskResult> result = null;
-			await VerifyReferenceOfByStampTask(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifyReferenceOfByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyReferenceOfByStampTaskResult>();
     #else
 		public VerifyReferenceOfByStampTaskTask VerifyReferenceOfByStampTaskAsync(
                 Request.VerifyReferenceOfByStampTaskRequest request
@@ -12340,17 +10742,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.VerifyReferenceOfByStampTaskResult> VerifyReferenceOfByStampTaskAsync(
+		public Task<Result.VerifyReferenceOfByStampTaskResult> VerifyReferenceOfByStampTaskAsync(
                 Request.VerifyReferenceOfByStampTaskRequest request
-        )
-		{
-			var task = new VerifyReferenceOfByStampTaskTask(
+        ) =>
+            new VerifyReferenceOfByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -12403,44 +10802,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DescribeSimpleItems(
                 Request.DescribeSimpleItemsRequest request,
                 UnityAction<AsyncResult<Result.DescribeSimpleItemsResult>> callback
-        )
-		{
-			var task = new DescribeSimpleItemsTask(
+        ) =>
+            new DescribeSimpleItemsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeSimpleItemsResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeSimpleItemsResult> DescribeSimpleItemsFuture(
                 Request.DescribeSimpleItemsRequest request
-        )
-		{
-			return new DescribeSimpleItemsTask(
+        ) =>
+            new DescribeSimpleItemsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeSimpleItemsResult> DescribeSimpleItemsAsync(
+		public UniTask<Result.DescribeSimpleItemsResult> DescribeSimpleItemsAsync(
                 Request.DescribeSimpleItemsRequest request
-        )
-		{
-            AsyncResult<Result.DescribeSimpleItemsResult> result = null;
-			await DescribeSimpleItems(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeSimpleItemsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeSimpleItemsResult>();
     #else
 		public DescribeSimpleItemsTask DescribeSimpleItemsAsync(
                 Request.DescribeSimpleItemsRequest request
@@ -12454,17 +10840,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DescribeSimpleItemsResult> DescribeSimpleItemsAsync(
+		public Task<Result.DescribeSimpleItemsResult> DescribeSimpleItemsAsync(
                 Request.DescribeSimpleItemsRequest request
-        )
-		{
-			var task = new DescribeSimpleItemsTask(
+        ) =>
+            new DescribeSimpleItemsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -12518,44 +10901,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DescribeSimpleItemsByUserId(
                 Request.DescribeSimpleItemsByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DescribeSimpleItemsByUserIdResult>> callback
-        )
-		{
-			var task = new DescribeSimpleItemsByUserIdTask(
+        ) =>
+            new DescribeSimpleItemsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeSimpleItemsByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeSimpleItemsByUserIdResult> DescribeSimpleItemsByUserIdFuture(
                 Request.DescribeSimpleItemsByUserIdRequest request
-        )
-		{
-			return new DescribeSimpleItemsByUserIdTask(
+        ) =>
+            new DescribeSimpleItemsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeSimpleItemsByUserIdResult> DescribeSimpleItemsByUserIdAsync(
+		public UniTask<Result.DescribeSimpleItemsByUserIdResult> DescribeSimpleItemsByUserIdAsync(
                 Request.DescribeSimpleItemsByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DescribeSimpleItemsByUserIdResult> result = null;
-			await DescribeSimpleItemsByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeSimpleItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeSimpleItemsByUserIdResult>();
     #else
 		public DescribeSimpleItemsByUserIdTask DescribeSimpleItemsByUserIdAsync(
                 Request.DescribeSimpleItemsByUserIdRequest request
@@ -12569,17 +10939,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DescribeSimpleItemsByUserIdResult> DescribeSimpleItemsByUserIdAsync(
+		public Task<Result.DescribeSimpleItemsByUserIdResult> DescribeSimpleItemsByUserIdAsync(
                 Request.DescribeSimpleItemsByUserIdRequest request
-        )
-		{
-			var task = new DescribeSimpleItemsByUserIdTask(
+        ) =>
+            new DescribeSimpleItemsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -12627,44 +10994,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetSimpleItem(
                 Request.GetSimpleItemRequest request,
                 UnityAction<AsyncResult<Result.GetSimpleItemResult>> callback
-        )
-		{
-			var task = new GetSimpleItemTask(
+        ) =>
+            new GetSimpleItemTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetSimpleItemResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetSimpleItemResult> GetSimpleItemFuture(
                 Request.GetSimpleItemRequest request
-        )
-		{
-			return new GetSimpleItemTask(
+        ) =>
+            new GetSimpleItemTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetSimpleItemResult> GetSimpleItemAsync(
+		public UniTask<Result.GetSimpleItemResult> GetSimpleItemAsync(
                 Request.GetSimpleItemRequest request
-        )
-		{
-            AsyncResult<Result.GetSimpleItemResult> result = null;
-			await GetSimpleItem(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetSimpleItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetSimpleItemResult>();
     #else
 		public GetSimpleItemTask GetSimpleItemAsync(
                 Request.GetSimpleItemRequest request
@@ -12678,17 +11032,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetSimpleItemResult> GetSimpleItemAsync(
+		public Task<Result.GetSimpleItemResult> GetSimpleItemAsync(
                 Request.GetSimpleItemRequest request
-        )
-		{
-			var task = new GetSimpleItemTask(
+        ) =>
+            new GetSimpleItemTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -12737,44 +11088,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetSimpleItemByUserId(
                 Request.GetSimpleItemByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetSimpleItemByUserIdResult>> callback
-        )
-		{
-			var task = new GetSimpleItemByUserIdTask(
+        ) =>
+            new GetSimpleItemByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetSimpleItemByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetSimpleItemByUserIdResult> GetSimpleItemByUserIdFuture(
                 Request.GetSimpleItemByUserIdRequest request
-        )
-		{
-			return new GetSimpleItemByUserIdTask(
+        ) =>
+            new GetSimpleItemByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetSimpleItemByUserIdResult> GetSimpleItemByUserIdAsync(
+		public UniTask<Result.GetSimpleItemByUserIdResult> GetSimpleItemByUserIdAsync(
                 Request.GetSimpleItemByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.GetSimpleItemByUserIdResult> result = null;
-			await GetSimpleItemByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetSimpleItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetSimpleItemByUserIdResult>();
     #else
 		public GetSimpleItemByUserIdTask GetSimpleItemByUserIdAsync(
                 Request.GetSimpleItemByUserIdRequest request
@@ -12788,17 +11126,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetSimpleItemByUserIdResult> GetSimpleItemByUserIdAsync(
+		public Task<Result.GetSimpleItemByUserIdResult> GetSimpleItemByUserIdAsync(
                 Request.GetSimpleItemByUserIdRequest request
-        )
-		{
-			var task = new GetSimpleItemByUserIdTask(
+        ) =>
+            new GetSimpleItemByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -12849,44 +11184,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetSimpleItemWithSignature(
                 Request.GetSimpleItemWithSignatureRequest request,
                 UnityAction<AsyncResult<Result.GetSimpleItemWithSignatureResult>> callback
-        )
-		{
-			var task = new GetSimpleItemWithSignatureTask(
+        ) =>
+            new GetSimpleItemWithSignatureTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetSimpleItemWithSignatureResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetSimpleItemWithSignatureResult> GetSimpleItemWithSignatureFuture(
                 Request.GetSimpleItemWithSignatureRequest request
-        )
-		{
-			return new GetSimpleItemWithSignatureTask(
+        ) =>
+            new GetSimpleItemWithSignatureTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetSimpleItemWithSignatureResult> GetSimpleItemWithSignatureAsync(
+		public UniTask<Result.GetSimpleItemWithSignatureResult> GetSimpleItemWithSignatureAsync(
                 Request.GetSimpleItemWithSignatureRequest request
-        )
-		{
-            AsyncResult<Result.GetSimpleItemWithSignatureResult> result = null;
-			await GetSimpleItemWithSignature(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetSimpleItemWithSignatureTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetSimpleItemWithSignatureResult>();
     #else
 		public GetSimpleItemWithSignatureTask GetSimpleItemWithSignatureAsync(
                 Request.GetSimpleItemWithSignatureRequest request
@@ -12900,17 +11222,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetSimpleItemWithSignatureResult> GetSimpleItemWithSignatureAsync(
+		public Task<Result.GetSimpleItemWithSignatureResult> GetSimpleItemWithSignatureAsync(
                 Request.GetSimpleItemWithSignatureRequest request
-        )
-		{
-			var task = new GetSimpleItemWithSignatureTask(
+        ) =>
+            new GetSimpleItemWithSignatureTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -12962,44 +11281,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetSimpleItemWithSignatureByUserId(
                 Request.GetSimpleItemWithSignatureByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetSimpleItemWithSignatureByUserIdResult>> callback
-        )
-		{
-			var task = new GetSimpleItemWithSignatureByUserIdTask(
+        ) =>
+            new GetSimpleItemWithSignatureByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetSimpleItemWithSignatureByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetSimpleItemWithSignatureByUserIdResult> GetSimpleItemWithSignatureByUserIdFuture(
                 Request.GetSimpleItemWithSignatureByUserIdRequest request
-        )
-		{
-			return new GetSimpleItemWithSignatureByUserIdTask(
+        ) =>
+            new GetSimpleItemWithSignatureByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetSimpleItemWithSignatureByUserIdResult> GetSimpleItemWithSignatureByUserIdAsync(
+		public UniTask<Result.GetSimpleItemWithSignatureByUserIdResult> GetSimpleItemWithSignatureByUserIdAsync(
                 Request.GetSimpleItemWithSignatureByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.GetSimpleItemWithSignatureByUserIdResult> result = null;
-			await GetSimpleItemWithSignatureByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetSimpleItemWithSignatureByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetSimpleItemWithSignatureByUserIdResult>();
     #else
 		public GetSimpleItemWithSignatureByUserIdTask GetSimpleItemWithSignatureByUserIdAsync(
                 Request.GetSimpleItemWithSignatureByUserIdRequest request
@@ -13013,17 +11319,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetSimpleItemWithSignatureByUserIdResult> GetSimpleItemWithSignatureByUserIdAsync(
+		public Task<Result.GetSimpleItemWithSignatureByUserIdResult> GetSimpleItemWithSignatureByUserIdAsync(
                 Request.GetSimpleItemWithSignatureByUserIdRequest request
-        )
-		{
-			var task = new GetSimpleItemWithSignatureByUserIdTask(
+        ) =>
+            new GetSimpleItemWithSignatureByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -13108,44 +11411,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator AcquireSimpleItemsByUserId(
                 Request.AcquireSimpleItemsByUserIdRequest request,
                 UnityAction<AsyncResult<Result.AcquireSimpleItemsByUserIdResult>> callback
-        )
-		{
-			var task = new AcquireSimpleItemsByUserIdTask(
+        ) =>
+            new AcquireSimpleItemsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.AcquireSimpleItemsByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.AcquireSimpleItemsByUserIdResult> AcquireSimpleItemsByUserIdFuture(
                 Request.AcquireSimpleItemsByUserIdRequest request
-        )
-		{
-			return new AcquireSimpleItemsByUserIdTask(
+        ) =>
+            new AcquireSimpleItemsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.AcquireSimpleItemsByUserIdResult> AcquireSimpleItemsByUserIdAsync(
+		public UniTask<Result.AcquireSimpleItemsByUserIdResult> AcquireSimpleItemsByUserIdAsync(
                 Request.AcquireSimpleItemsByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.AcquireSimpleItemsByUserIdResult> result = null;
-			await AcquireSimpleItemsByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new AcquireSimpleItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.AcquireSimpleItemsByUserIdResult>();
     #else
 		public AcquireSimpleItemsByUserIdTask AcquireSimpleItemsByUserIdAsync(
                 Request.AcquireSimpleItemsByUserIdRequest request
@@ -13159,17 +11449,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.AcquireSimpleItemsByUserIdResult> AcquireSimpleItemsByUserIdAsync(
+		public Task<Result.AcquireSimpleItemsByUserIdResult> AcquireSimpleItemsByUserIdAsync(
                 Request.AcquireSimpleItemsByUserIdRequest request
-        )
-		{
-			var task = new AcquireSimpleItemsByUserIdTask(
+        ) =>
+            new AcquireSimpleItemsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -13256,44 +11543,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator ConsumeSimpleItems(
                 Request.ConsumeSimpleItemsRequest request,
                 UnityAction<AsyncResult<Result.ConsumeSimpleItemsResult>> callback
-        )
-		{
-			var task = new ConsumeSimpleItemsTask(
+        ) =>
+            new ConsumeSimpleItemsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ConsumeSimpleItemsResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.ConsumeSimpleItemsResult> ConsumeSimpleItemsFuture(
                 Request.ConsumeSimpleItemsRequest request
-        )
-		{
-			return new ConsumeSimpleItemsTask(
+        ) =>
+            new ConsumeSimpleItemsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ConsumeSimpleItemsResult> ConsumeSimpleItemsAsync(
+		public UniTask<Result.ConsumeSimpleItemsResult> ConsumeSimpleItemsAsync(
                 Request.ConsumeSimpleItemsRequest request
-        )
-		{
-            AsyncResult<Result.ConsumeSimpleItemsResult> result = null;
-			await ConsumeSimpleItems(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new ConsumeSimpleItemsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.ConsumeSimpleItemsResult>();
     #else
 		public ConsumeSimpleItemsTask ConsumeSimpleItemsAsync(
                 Request.ConsumeSimpleItemsRequest request
@@ -13307,17 +11581,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.ConsumeSimpleItemsResult> ConsumeSimpleItemsAsync(
+		public Task<Result.ConsumeSimpleItemsResult> ConsumeSimpleItemsAsync(
                 Request.ConsumeSimpleItemsRequest request
-        )
-		{
-			var task = new ConsumeSimpleItemsTask(
+        ) =>
+            new ConsumeSimpleItemsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -13405,44 +11676,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator ConsumeSimpleItemsByUserId(
                 Request.ConsumeSimpleItemsByUserIdRequest request,
                 UnityAction<AsyncResult<Result.ConsumeSimpleItemsByUserIdResult>> callback
-        )
-		{
-			var task = new ConsumeSimpleItemsByUserIdTask(
+        ) =>
+            new ConsumeSimpleItemsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ConsumeSimpleItemsByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.ConsumeSimpleItemsByUserIdResult> ConsumeSimpleItemsByUserIdFuture(
                 Request.ConsumeSimpleItemsByUserIdRequest request
-        )
-		{
-			return new ConsumeSimpleItemsByUserIdTask(
+        ) =>
+            new ConsumeSimpleItemsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ConsumeSimpleItemsByUserIdResult> ConsumeSimpleItemsByUserIdAsync(
+		public UniTask<Result.ConsumeSimpleItemsByUserIdResult> ConsumeSimpleItemsByUserIdAsync(
                 Request.ConsumeSimpleItemsByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.ConsumeSimpleItemsByUserIdResult> result = null;
-			await ConsumeSimpleItemsByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new ConsumeSimpleItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.ConsumeSimpleItemsByUserIdResult>();
     #else
 		public ConsumeSimpleItemsByUserIdTask ConsumeSimpleItemsByUserIdAsync(
                 Request.ConsumeSimpleItemsByUserIdRequest request
@@ -13456,17 +11714,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.ConsumeSimpleItemsByUserIdResult> ConsumeSimpleItemsByUserIdAsync(
+		public Task<Result.ConsumeSimpleItemsByUserIdResult> ConsumeSimpleItemsByUserIdAsync(
                 Request.ConsumeSimpleItemsByUserIdRequest request
-        )
-		{
-			var task = new ConsumeSimpleItemsByUserIdTask(
+        ) =>
+            new ConsumeSimpleItemsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -13551,44 +11806,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator SetSimpleItemsByUserId(
                 Request.SetSimpleItemsByUserIdRequest request,
                 UnityAction<AsyncResult<Result.SetSimpleItemsByUserIdResult>> callback
-        )
-		{
-			var task = new SetSimpleItemsByUserIdTask(
+        ) =>
+            new SetSimpleItemsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.SetSimpleItemsByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.SetSimpleItemsByUserIdResult> SetSimpleItemsByUserIdFuture(
                 Request.SetSimpleItemsByUserIdRequest request
-        )
-		{
-			return new SetSimpleItemsByUserIdTask(
+        ) =>
+            new SetSimpleItemsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.SetSimpleItemsByUserIdResult> SetSimpleItemsByUserIdAsync(
+		public UniTask<Result.SetSimpleItemsByUserIdResult> SetSimpleItemsByUserIdAsync(
                 Request.SetSimpleItemsByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.SetSimpleItemsByUserIdResult> result = null;
-			await SetSimpleItemsByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new SetSimpleItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.SetSimpleItemsByUserIdResult>();
     #else
 		public SetSimpleItemsByUserIdTask SetSimpleItemsByUserIdAsync(
                 Request.SetSimpleItemsByUserIdRequest request
@@ -13602,17 +11844,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.SetSimpleItemsByUserIdResult> SetSimpleItemsByUserIdAsync(
+		public Task<Result.SetSimpleItemsByUserIdResult> SetSimpleItemsByUserIdAsync(
                 Request.SetSimpleItemsByUserIdRequest request
-        )
-		{
-			var task = new SetSimpleItemsByUserIdTask(
+        ) =>
+            new SetSimpleItemsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -13664,44 +11903,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DeleteSimpleItemsByUserId(
                 Request.DeleteSimpleItemsByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DeleteSimpleItemsByUserIdResult>> callback
-        )
-		{
-			var task = new DeleteSimpleItemsByUserIdTask(
+        ) =>
+            new DeleteSimpleItemsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteSimpleItemsByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteSimpleItemsByUserIdResult> DeleteSimpleItemsByUserIdFuture(
                 Request.DeleteSimpleItemsByUserIdRequest request
-        )
-		{
-			return new DeleteSimpleItemsByUserIdTask(
+        ) =>
+            new DeleteSimpleItemsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteSimpleItemsByUserIdResult> DeleteSimpleItemsByUserIdAsync(
+		public UniTask<Result.DeleteSimpleItemsByUserIdResult> DeleteSimpleItemsByUserIdAsync(
                 Request.DeleteSimpleItemsByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DeleteSimpleItemsByUserIdResult> result = null;
-			await DeleteSimpleItemsByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteSimpleItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteSimpleItemsByUserIdResult>();
     #else
 		public DeleteSimpleItemsByUserIdTask DeleteSimpleItemsByUserIdAsync(
                 Request.DeleteSimpleItemsByUserIdRequest request
@@ -13715,17 +11941,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DeleteSimpleItemsByUserIdResult> DeleteSimpleItemsByUserIdAsync(
+		public Task<Result.DeleteSimpleItemsByUserIdResult> DeleteSimpleItemsByUserIdAsync(
                 Request.DeleteSimpleItemsByUserIdRequest request
-        )
-		{
-			var task = new DeleteSimpleItemsByUserIdTask(
+        ) =>
+            new DeleteSimpleItemsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -13801,44 +12024,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator VerifySimpleItem(
                 Request.VerifySimpleItemRequest request,
                 UnityAction<AsyncResult<Result.VerifySimpleItemResult>> callback
-        )
-		{
-			var task = new VerifySimpleItemTask(
+        ) =>
+            new VerifySimpleItemTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifySimpleItemResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifySimpleItemResult> VerifySimpleItemFuture(
                 Request.VerifySimpleItemRequest request
-        )
-		{
-			return new VerifySimpleItemTask(
+        ) =>
+            new VerifySimpleItemTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifySimpleItemResult> VerifySimpleItemAsync(
+		public UniTask<Result.VerifySimpleItemResult> VerifySimpleItemAsync(
                 Request.VerifySimpleItemRequest request
-        )
-		{
-            AsyncResult<Result.VerifySimpleItemResult> result = null;
-			await VerifySimpleItem(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifySimpleItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifySimpleItemResult>();
     #else
 		public VerifySimpleItemTask VerifySimpleItemAsync(
                 Request.VerifySimpleItemRequest request
@@ -13852,17 +12062,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.VerifySimpleItemResult> VerifySimpleItemAsync(
+		public Task<Result.VerifySimpleItemResult> VerifySimpleItemAsync(
                 Request.VerifySimpleItemRequest request
-        )
-		{
-			var task = new VerifySimpleItemTask(
+        ) =>
+            new VerifySimpleItemTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -13939,44 +12146,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator VerifySimpleItemByUserId(
                 Request.VerifySimpleItemByUserIdRequest request,
                 UnityAction<AsyncResult<Result.VerifySimpleItemByUserIdResult>> callback
-        )
-		{
-			var task = new VerifySimpleItemByUserIdTask(
+        ) =>
+            new VerifySimpleItemByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifySimpleItemByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifySimpleItemByUserIdResult> VerifySimpleItemByUserIdFuture(
                 Request.VerifySimpleItemByUserIdRequest request
-        )
-		{
-			return new VerifySimpleItemByUserIdTask(
+        ) =>
+            new VerifySimpleItemByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifySimpleItemByUserIdResult> VerifySimpleItemByUserIdAsync(
+		public UniTask<Result.VerifySimpleItemByUserIdResult> VerifySimpleItemByUserIdAsync(
                 Request.VerifySimpleItemByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.VerifySimpleItemByUserIdResult> result = null;
-			await VerifySimpleItemByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifySimpleItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifySimpleItemByUserIdResult>();
     #else
 		public VerifySimpleItemByUserIdTask VerifySimpleItemByUserIdAsync(
                 Request.VerifySimpleItemByUserIdRequest request
@@ -13990,17 +12184,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.VerifySimpleItemByUserIdResult> VerifySimpleItemByUserIdAsync(
+		public Task<Result.VerifySimpleItemByUserIdResult> VerifySimpleItemByUserIdAsync(
                 Request.VerifySimpleItemByUserIdRequest request
-        )
-		{
-			var task = new VerifySimpleItemByUserIdTask(
+        ) =>
+            new VerifySimpleItemByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -14063,44 +12254,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator AcquireSimpleItemsByStampSheet(
                 Request.AcquireSimpleItemsByStampSheetRequest request,
                 UnityAction<AsyncResult<Result.AcquireSimpleItemsByStampSheetResult>> callback
-        )
-		{
-			var task = new AcquireSimpleItemsByStampSheetTask(
+        ) =>
+            new AcquireSimpleItemsByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.AcquireSimpleItemsByStampSheetResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.AcquireSimpleItemsByStampSheetResult> AcquireSimpleItemsByStampSheetFuture(
                 Request.AcquireSimpleItemsByStampSheetRequest request
-        )
-		{
-			return new AcquireSimpleItemsByStampSheetTask(
+        ) =>
+            new AcquireSimpleItemsByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.AcquireSimpleItemsByStampSheetResult> AcquireSimpleItemsByStampSheetAsync(
+		public UniTask<Result.AcquireSimpleItemsByStampSheetResult> AcquireSimpleItemsByStampSheetAsync(
                 Request.AcquireSimpleItemsByStampSheetRequest request
-        )
-		{
-            AsyncResult<Result.AcquireSimpleItemsByStampSheetResult> result = null;
-			await AcquireSimpleItemsByStampSheet(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new AcquireSimpleItemsByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.AcquireSimpleItemsByStampSheetResult>();
     #else
 		public AcquireSimpleItemsByStampSheetTask AcquireSimpleItemsByStampSheetAsync(
                 Request.AcquireSimpleItemsByStampSheetRequest request
@@ -14114,17 +12292,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.AcquireSimpleItemsByStampSheetResult> AcquireSimpleItemsByStampSheetAsync(
+		public Task<Result.AcquireSimpleItemsByStampSheetResult> AcquireSimpleItemsByStampSheetAsync(
                 Request.AcquireSimpleItemsByStampSheetRequest request
-        )
-		{
-			var task = new AcquireSimpleItemsByStampSheetTask(
+        ) =>
+            new AcquireSimpleItemsByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -14187,44 +12362,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator ConsumeSimpleItemsByStampTask(
                 Request.ConsumeSimpleItemsByStampTaskRequest request,
                 UnityAction<AsyncResult<Result.ConsumeSimpleItemsByStampTaskResult>> callback
-        )
-		{
-			var task = new ConsumeSimpleItemsByStampTaskTask(
+        ) =>
+            new ConsumeSimpleItemsByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ConsumeSimpleItemsByStampTaskResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.ConsumeSimpleItemsByStampTaskResult> ConsumeSimpleItemsByStampTaskFuture(
                 Request.ConsumeSimpleItemsByStampTaskRequest request
-        )
-		{
-			return new ConsumeSimpleItemsByStampTaskTask(
+        ) =>
+            new ConsumeSimpleItemsByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ConsumeSimpleItemsByStampTaskResult> ConsumeSimpleItemsByStampTaskAsync(
+		public UniTask<Result.ConsumeSimpleItemsByStampTaskResult> ConsumeSimpleItemsByStampTaskAsync(
                 Request.ConsumeSimpleItemsByStampTaskRequest request
-        )
-		{
-            AsyncResult<Result.ConsumeSimpleItemsByStampTaskResult> result = null;
-			await ConsumeSimpleItemsByStampTask(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new ConsumeSimpleItemsByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.ConsumeSimpleItemsByStampTaskResult>();
     #else
 		public ConsumeSimpleItemsByStampTaskTask ConsumeSimpleItemsByStampTaskAsync(
                 Request.ConsumeSimpleItemsByStampTaskRequest request
@@ -14238,17 +12400,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.ConsumeSimpleItemsByStampTaskResult> ConsumeSimpleItemsByStampTaskAsync(
+		public Task<Result.ConsumeSimpleItemsByStampTaskResult> ConsumeSimpleItemsByStampTaskAsync(
                 Request.ConsumeSimpleItemsByStampTaskRequest request
-        )
-		{
-			var task = new ConsumeSimpleItemsByStampTaskTask(
+        ) =>
+            new ConsumeSimpleItemsByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -14311,44 +12470,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator SetSimpleItemsByStampSheet(
                 Request.SetSimpleItemsByStampSheetRequest request,
                 UnityAction<AsyncResult<Result.SetSimpleItemsByStampSheetResult>> callback
-        )
-		{
-			var task = new SetSimpleItemsByStampSheetTask(
+        ) =>
+            new SetSimpleItemsByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.SetSimpleItemsByStampSheetResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.SetSimpleItemsByStampSheetResult> SetSimpleItemsByStampSheetFuture(
                 Request.SetSimpleItemsByStampSheetRequest request
-        )
-		{
-			return new SetSimpleItemsByStampSheetTask(
+        ) =>
+            new SetSimpleItemsByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.SetSimpleItemsByStampSheetResult> SetSimpleItemsByStampSheetAsync(
+		public UniTask<Result.SetSimpleItemsByStampSheetResult> SetSimpleItemsByStampSheetAsync(
                 Request.SetSimpleItemsByStampSheetRequest request
-        )
-		{
-            AsyncResult<Result.SetSimpleItemsByStampSheetResult> result = null;
-			await SetSimpleItemsByStampSheet(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new SetSimpleItemsByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.SetSimpleItemsByStampSheetResult>();
     #else
 		public SetSimpleItemsByStampSheetTask SetSimpleItemsByStampSheetAsync(
                 Request.SetSimpleItemsByStampSheetRequest request
@@ -14362,17 +12508,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.SetSimpleItemsByStampSheetResult> SetSimpleItemsByStampSheetAsync(
+		public Task<Result.SetSimpleItemsByStampSheetResult> SetSimpleItemsByStampSheetAsync(
                 Request.SetSimpleItemsByStampSheetRequest request
-        )
-		{
-			var task = new SetSimpleItemsByStampSheetTask(
+        ) =>
+            new SetSimpleItemsByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -14435,44 +12578,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator VerifySimpleItemByStampTask(
                 Request.VerifySimpleItemByStampTaskRequest request,
                 UnityAction<AsyncResult<Result.VerifySimpleItemByStampTaskResult>> callback
-        )
-		{
-			var task = new VerifySimpleItemByStampTaskTask(
+        ) =>
+            new VerifySimpleItemByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifySimpleItemByStampTaskResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifySimpleItemByStampTaskResult> VerifySimpleItemByStampTaskFuture(
                 Request.VerifySimpleItemByStampTaskRequest request
-        )
-		{
-			return new VerifySimpleItemByStampTaskTask(
+        ) =>
+            new VerifySimpleItemByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifySimpleItemByStampTaskResult> VerifySimpleItemByStampTaskAsync(
+		public UniTask<Result.VerifySimpleItemByStampTaskResult> VerifySimpleItemByStampTaskAsync(
                 Request.VerifySimpleItemByStampTaskRequest request
-        )
-		{
-            AsyncResult<Result.VerifySimpleItemByStampTaskResult> result = null;
-			await VerifySimpleItemByStampTask(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifySimpleItemByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifySimpleItemByStampTaskResult>();
     #else
 		public VerifySimpleItemByStampTaskTask VerifySimpleItemByStampTaskAsync(
                 Request.VerifySimpleItemByStampTaskRequest request
@@ -14486,17 +12616,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.VerifySimpleItemByStampTaskResult> VerifySimpleItemByStampTaskAsync(
+		public Task<Result.VerifySimpleItemByStampTaskResult> VerifySimpleItemByStampTaskAsync(
                 Request.VerifySimpleItemByStampTaskRequest request
-        )
-		{
-			var task = new VerifySimpleItemByStampTaskTask(
+        ) =>
+            new VerifySimpleItemByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -14549,44 +12676,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DescribeBigItems(
                 Request.DescribeBigItemsRequest request,
                 UnityAction<AsyncResult<Result.DescribeBigItemsResult>> callback
-        )
-		{
-			var task = new DescribeBigItemsTask(
+        ) =>
+            new DescribeBigItemsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeBigItemsResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeBigItemsResult> DescribeBigItemsFuture(
                 Request.DescribeBigItemsRequest request
-        )
-		{
-			return new DescribeBigItemsTask(
+        ) =>
+            new DescribeBigItemsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeBigItemsResult> DescribeBigItemsAsync(
+		public UniTask<Result.DescribeBigItemsResult> DescribeBigItemsAsync(
                 Request.DescribeBigItemsRequest request
-        )
-		{
-            AsyncResult<Result.DescribeBigItemsResult> result = null;
-			await DescribeBigItems(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeBigItemsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeBigItemsResult>();
     #else
 		public DescribeBigItemsTask DescribeBigItemsAsync(
                 Request.DescribeBigItemsRequest request
@@ -14600,17 +12714,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DescribeBigItemsResult> DescribeBigItemsAsync(
+		public Task<Result.DescribeBigItemsResult> DescribeBigItemsAsync(
                 Request.DescribeBigItemsRequest request
-        )
-		{
-			var task = new DescribeBigItemsTask(
+        ) =>
+            new DescribeBigItemsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -14664,44 +12775,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DescribeBigItemsByUserId(
                 Request.DescribeBigItemsByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DescribeBigItemsByUserIdResult>> callback
-        )
-		{
-			var task = new DescribeBigItemsByUserIdTask(
+        ) =>
+            new DescribeBigItemsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeBigItemsByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeBigItemsByUserIdResult> DescribeBigItemsByUserIdFuture(
                 Request.DescribeBigItemsByUserIdRequest request
-        )
-		{
-			return new DescribeBigItemsByUserIdTask(
+        ) =>
+            new DescribeBigItemsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeBigItemsByUserIdResult> DescribeBigItemsByUserIdAsync(
+		public UniTask<Result.DescribeBigItemsByUserIdResult> DescribeBigItemsByUserIdAsync(
                 Request.DescribeBigItemsByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DescribeBigItemsByUserIdResult> result = null;
-			await DescribeBigItemsByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeBigItemsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeBigItemsByUserIdResult>();
     #else
 		public DescribeBigItemsByUserIdTask DescribeBigItemsByUserIdAsync(
                 Request.DescribeBigItemsByUserIdRequest request
@@ -14715,17 +12813,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DescribeBigItemsByUserIdResult> DescribeBigItemsByUserIdAsync(
+		public Task<Result.DescribeBigItemsByUserIdResult> DescribeBigItemsByUserIdAsync(
                 Request.DescribeBigItemsByUserIdRequest request
-        )
-		{
-			var task = new DescribeBigItemsByUserIdTask(
+        ) =>
+            new DescribeBigItemsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -14773,44 +12868,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetBigItem(
                 Request.GetBigItemRequest request,
                 UnityAction<AsyncResult<Result.GetBigItemResult>> callback
-        )
-		{
-			var task = new GetBigItemTask(
+        ) =>
+            new GetBigItemTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetBigItemResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetBigItemResult> GetBigItemFuture(
                 Request.GetBigItemRequest request
-        )
-		{
-			return new GetBigItemTask(
+        ) =>
+            new GetBigItemTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetBigItemResult> GetBigItemAsync(
+		public UniTask<Result.GetBigItemResult> GetBigItemAsync(
                 Request.GetBigItemRequest request
-        )
-		{
-            AsyncResult<Result.GetBigItemResult> result = null;
-			await GetBigItem(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetBigItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetBigItemResult>();
     #else
 		public GetBigItemTask GetBigItemAsync(
                 Request.GetBigItemRequest request
@@ -14824,17 +12906,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetBigItemResult> GetBigItemAsync(
+		public Task<Result.GetBigItemResult> GetBigItemAsync(
                 Request.GetBigItemRequest request
-        )
-		{
-			var task = new GetBigItemTask(
+        ) =>
+            new GetBigItemTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -14883,44 +12962,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator GetBigItemByUserId(
                 Request.GetBigItemByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetBigItemByUserIdResult>> callback
-        )
-		{
-			var task = new GetBigItemByUserIdTask(
+        ) =>
+            new GetBigItemByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetBigItemByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetBigItemByUserIdResult> GetBigItemByUserIdFuture(
                 Request.GetBigItemByUserIdRequest request
-        )
-		{
-			return new GetBigItemByUserIdTask(
+        ) =>
+            new GetBigItemByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetBigItemByUserIdResult> GetBigItemByUserIdAsync(
+		public UniTask<Result.GetBigItemByUserIdResult> GetBigItemByUserIdAsync(
                 Request.GetBigItemByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.GetBigItemByUserIdResult> result = null;
-			await GetBigItemByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetBigItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetBigItemByUserIdResult>();
     #else
 		public GetBigItemByUserIdTask GetBigItemByUserIdAsync(
                 Request.GetBigItemByUserIdRequest request
@@ -14934,17 +13000,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.GetBigItemByUserIdResult> GetBigItemByUserIdAsync(
+		public Task<Result.GetBigItemByUserIdResult> GetBigItemByUserIdAsync(
                 Request.GetBigItemByUserIdRequest request
-        )
-		{
-			var task = new GetBigItemByUserIdTask(
+        ) =>
+            new GetBigItemByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -15025,44 +13088,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator AcquireBigItemByUserId(
                 Request.AcquireBigItemByUserIdRequest request,
                 UnityAction<AsyncResult<Result.AcquireBigItemByUserIdResult>> callback
-        )
-		{
-			var task = new AcquireBigItemByUserIdTask(
+        ) =>
+            new AcquireBigItemByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.AcquireBigItemByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.AcquireBigItemByUserIdResult> AcquireBigItemByUserIdFuture(
                 Request.AcquireBigItemByUserIdRequest request
-        )
-		{
-			return new AcquireBigItemByUserIdTask(
+        ) =>
+            new AcquireBigItemByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.AcquireBigItemByUserIdResult> AcquireBigItemByUserIdAsync(
+		public UniTask<Result.AcquireBigItemByUserIdResult> AcquireBigItemByUserIdAsync(
                 Request.AcquireBigItemByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.AcquireBigItemByUserIdResult> result = null;
-			await AcquireBigItemByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new AcquireBigItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.AcquireBigItemByUserIdResult>();
     #else
 		public AcquireBigItemByUserIdTask AcquireBigItemByUserIdAsync(
                 Request.AcquireBigItemByUserIdRequest request
@@ -15076,17 +13126,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.AcquireBigItemByUserIdResult> AcquireBigItemByUserIdAsync(
+		public Task<Result.AcquireBigItemByUserIdResult> AcquireBigItemByUserIdAsync(
                 Request.AcquireBigItemByUserIdRequest request
-        )
-		{
-			var task = new AcquireBigItemByUserIdTask(
+        ) =>
+            new AcquireBigItemByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -15169,44 +13216,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator ConsumeBigItem(
                 Request.ConsumeBigItemRequest request,
                 UnityAction<AsyncResult<Result.ConsumeBigItemResult>> callback
-        )
-		{
-			var task = new ConsumeBigItemTask(
+        ) =>
+            new ConsumeBigItemTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ConsumeBigItemResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.ConsumeBigItemResult> ConsumeBigItemFuture(
                 Request.ConsumeBigItemRequest request
-        )
-		{
-			return new ConsumeBigItemTask(
+        ) =>
+            new ConsumeBigItemTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ConsumeBigItemResult> ConsumeBigItemAsync(
+		public UniTask<Result.ConsumeBigItemResult> ConsumeBigItemAsync(
                 Request.ConsumeBigItemRequest request
-        )
-		{
-            AsyncResult<Result.ConsumeBigItemResult> result = null;
-			await ConsumeBigItem(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new ConsumeBigItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.ConsumeBigItemResult>();
     #else
 		public ConsumeBigItemTask ConsumeBigItemAsync(
                 Request.ConsumeBigItemRequest request
@@ -15220,17 +13254,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.ConsumeBigItemResult> ConsumeBigItemAsync(
+		public Task<Result.ConsumeBigItemResult> ConsumeBigItemAsync(
                 Request.ConsumeBigItemRequest request
-        )
-		{
-			var task = new ConsumeBigItemTask(
+        ) =>
+            new ConsumeBigItemTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -15314,44 +13345,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator ConsumeBigItemByUserId(
                 Request.ConsumeBigItemByUserIdRequest request,
                 UnityAction<AsyncResult<Result.ConsumeBigItemByUserIdResult>> callback
-        )
-		{
-			var task = new ConsumeBigItemByUserIdTask(
+        ) =>
+            new ConsumeBigItemByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ConsumeBigItemByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.ConsumeBigItemByUserIdResult> ConsumeBigItemByUserIdFuture(
                 Request.ConsumeBigItemByUserIdRequest request
-        )
-		{
-			return new ConsumeBigItemByUserIdTask(
+        ) =>
+            new ConsumeBigItemByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ConsumeBigItemByUserIdResult> ConsumeBigItemByUserIdAsync(
+		public UniTask<Result.ConsumeBigItemByUserIdResult> ConsumeBigItemByUserIdAsync(
                 Request.ConsumeBigItemByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.ConsumeBigItemByUserIdResult> result = null;
-			await ConsumeBigItemByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new ConsumeBigItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.ConsumeBigItemByUserIdResult>();
     #else
 		public ConsumeBigItemByUserIdTask ConsumeBigItemByUserIdAsync(
                 Request.ConsumeBigItemByUserIdRequest request
@@ -15365,17 +13383,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.ConsumeBigItemByUserIdResult> ConsumeBigItemByUserIdAsync(
+		public Task<Result.ConsumeBigItemByUserIdResult> ConsumeBigItemByUserIdAsync(
                 Request.ConsumeBigItemByUserIdRequest request
-        )
-		{
-			var task = new ConsumeBigItemByUserIdTask(
+        ) =>
+            new ConsumeBigItemByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -15456,44 +13471,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator SetBigItemByUserId(
                 Request.SetBigItemByUserIdRequest request,
                 UnityAction<AsyncResult<Result.SetBigItemByUserIdResult>> callback
-        )
-		{
-			var task = new SetBigItemByUserIdTask(
+        ) =>
+            new SetBigItemByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.SetBigItemByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.SetBigItemByUserIdResult> SetBigItemByUserIdFuture(
                 Request.SetBigItemByUserIdRequest request
-        )
-		{
-			return new SetBigItemByUserIdTask(
+        ) =>
+            new SetBigItemByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.SetBigItemByUserIdResult> SetBigItemByUserIdAsync(
+		public UniTask<Result.SetBigItemByUserIdResult> SetBigItemByUserIdAsync(
                 Request.SetBigItemByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.SetBigItemByUserIdResult> result = null;
-			await SetBigItemByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new SetBigItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.SetBigItemByUserIdResult>();
     #else
 		public SetBigItemByUserIdTask SetBigItemByUserIdAsync(
                 Request.SetBigItemByUserIdRequest request
@@ -15507,17 +13509,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.SetBigItemByUserIdResult> SetBigItemByUserIdAsync(
+		public Task<Result.SetBigItemByUserIdResult> SetBigItemByUserIdAsync(
                 Request.SetBigItemByUserIdRequest request
-        )
-		{
-			var task = new SetBigItemByUserIdTask(
+        ) =>
+            new SetBigItemByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -15570,44 +13569,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator DeleteBigItemByUserId(
                 Request.DeleteBigItemByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DeleteBigItemByUserIdResult>> callback
-        )
-		{
-			var task = new DeleteBigItemByUserIdTask(
+        ) =>
+            new DeleteBigItemByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteBigItemByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteBigItemByUserIdResult> DeleteBigItemByUserIdFuture(
                 Request.DeleteBigItemByUserIdRequest request
-        )
-		{
-			return new DeleteBigItemByUserIdTask(
+        ) =>
+            new DeleteBigItemByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteBigItemByUserIdResult> DeleteBigItemByUserIdAsync(
+		public UniTask<Result.DeleteBigItemByUserIdResult> DeleteBigItemByUserIdAsync(
                 Request.DeleteBigItemByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DeleteBigItemByUserIdResult> result = null;
-			await DeleteBigItemByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteBigItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteBigItemByUserIdResult>();
     #else
 		public DeleteBigItemByUserIdTask DeleteBigItemByUserIdAsync(
                 Request.DeleteBigItemByUserIdRequest request
@@ -15621,17 +13607,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.DeleteBigItemByUserIdResult> DeleteBigItemByUserIdAsync(
+		public Task<Result.DeleteBigItemByUserIdResult> DeleteBigItemByUserIdAsync(
                 Request.DeleteBigItemByUserIdRequest request
-        )
-		{
-			var task = new DeleteBigItemByUserIdTask(
+        ) =>
+            new DeleteBigItemByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -15707,44 +13690,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator VerifyBigItem(
                 Request.VerifyBigItemRequest request,
                 UnityAction<AsyncResult<Result.VerifyBigItemResult>> callback
-        )
-		{
-			var task = new VerifyBigItemTask(
+        ) =>
+            new VerifyBigItemTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifyBigItemResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifyBigItemResult> VerifyBigItemFuture(
                 Request.VerifyBigItemRequest request
-        )
-		{
-			return new VerifyBigItemTask(
+        ) =>
+            new VerifyBigItemTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifyBigItemResult> VerifyBigItemAsync(
+		public UniTask<Result.VerifyBigItemResult> VerifyBigItemAsync(
                 Request.VerifyBigItemRequest request
-        )
-		{
-            AsyncResult<Result.VerifyBigItemResult> result = null;
-			await VerifyBigItem(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifyBigItemTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyBigItemResult>();
     #else
 		public VerifyBigItemTask VerifyBigItemAsync(
                 Request.VerifyBigItemRequest request
@@ -15758,17 +13728,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.VerifyBigItemResult> VerifyBigItemAsync(
+		public Task<Result.VerifyBigItemResult> VerifyBigItemAsync(
                 Request.VerifyBigItemRequest request
-        )
-		{
-			var task = new VerifyBigItemTask(
+        ) =>
+            new VerifyBigItemTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -15845,44 +13812,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator VerifyBigItemByUserId(
                 Request.VerifyBigItemByUserIdRequest request,
                 UnityAction<AsyncResult<Result.VerifyBigItemByUserIdResult>> callback
-        )
-		{
-			var task = new VerifyBigItemByUserIdTask(
+        ) =>
+            new VerifyBigItemByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifyBigItemByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifyBigItemByUserIdResult> VerifyBigItemByUserIdFuture(
                 Request.VerifyBigItemByUserIdRequest request
-        )
-		{
-			return new VerifyBigItemByUserIdTask(
+        ) =>
+            new VerifyBigItemByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifyBigItemByUserIdResult> VerifyBigItemByUserIdAsync(
+		public UniTask<Result.VerifyBigItemByUserIdResult> VerifyBigItemByUserIdAsync(
                 Request.VerifyBigItemByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.VerifyBigItemByUserIdResult> result = null;
-			await VerifyBigItemByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifyBigItemByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyBigItemByUserIdResult>();
     #else
 		public VerifyBigItemByUserIdTask VerifyBigItemByUserIdAsync(
                 Request.VerifyBigItemByUserIdRequest request
@@ -15896,17 +13850,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.VerifyBigItemByUserIdResult> VerifyBigItemByUserIdAsync(
+		public Task<Result.VerifyBigItemByUserIdResult> VerifyBigItemByUserIdAsync(
                 Request.VerifyBigItemByUserIdRequest request
-        )
-		{
-			var task = new VerifyBigItemByUserIdTask(
+        ) =>
+            new VerifyBigItemByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -15969,44 +13920,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator AcquireBigItemByStampSheet(
                 Request.AcquireBigItemByStampSheetRequest request,
                 UnityAction<AsyncResult<Result.AcquireBigItemByStampSheetResult>> callback
-        )
-		{
-			var task = new AcquireBigItemByStampSheetTask(
+        ) =>
+            new AcquireBigItemByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.AcquireBigItemByStampSheetResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.AcquireBigItemByStampSheetResult> AcquireBigItemByStampSheetFuture(
                 Request.AcquireBigItemByStampSheetRequest request
-        )
-		{
-			return new AcquireBigItemByStampSheetTask(
+        ) =>
+            new AcquireBigItemByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.AcquireBigItemByStampSheetResult> AcquireBigItemByStampSheetAsync(
+		public UniTask<Result.AcquireBigItemByStampSheetResult> AcquireBigItemByStampSheetAsync(
                 Request.AcquireBigItemByStampSheetRequest request
-        )
-		{
-            AsyncResult<Result.AcquireBigItemByStampSheetResult> result = null;
-			await AcquireBigItemByStampSheet(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new AcquireBigItemByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.AcquireBigItemByStampSheetResult>();
     #else
 		public AcquireBigItemByStampSheetTask AcquireBigItemByStampSheetAsync(
                 Request.AcquireBigItemByStampSheetRequest request
@@ -16020,17 +13958,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.AcquireBigItemByStampSheetResult> AcquireBigItemByStampSheetAsync(
+		public Task<Result.AcquireBigItemByStampSheetResult> AcquireBigItemByStampSheetAsync(
                 Request.AcquireBigItemByStampSheetRequest request
-        )
-		{
-			var task = new AcquireBigItemByStampSheetTask(
+        ) =>
+            new AcquireBigItemByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -16093,44 +14028,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator ConsumeBigItemByStampTask(
                 Request.ConsumeBigItemByStampTaskRequest request,
                 UnityAction<AsyncResult<Result.ConsumeBigItemByStampTaskResult>> callback
-        )
-		{
-			var task = new ConsumeBigItemByStampTaskTask(
+        ) =>
+            new ConsumeBigItemByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ConsumeBigItemByStampTaskResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.ConsumeBigItemByStampTaskResult> ConsumeBigItemByStampTaskFuture(
                 Request.ConsumeBigItemByStampTaskRequest request
-        )
-		{
-			return new ConsumeBigItemByStampTaskTask(
+        ) =>
+            new ConsumeBigItemByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ConsumeBigItemByStampTaskResult> ConsumeBigItemByStampTaskAsync(
+		public UniTask<Result.ConsumeBigItemByStampTaskResult> ConsumeBigItemByStampTaskAsync(
                 Request.ConsumeBigItemByStampTaskRequest request
-        )
-		{
-            AsyncResult<Result.ConsumeBigItemByStampTaskResult> result = null;
-			await ConsumeBigItemByStampTask(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new ConsumeBigItemByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.ConsumeBigItemByStampTaskResult>();
     #else
 		public ConsumeBigItemByStampTaskTask ConsumeBigItemByStampTaskAsync(
                 Request.ConsumeBigItemByStampTaskRequest request
@@ -16144,17 +14066,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.ConsumeBigItemByStampTaskResult> ConsumeBigItemByStampTaskAsync(
+		public Task<Result.ConsumeBigItemByStampTaskResult> ConsumeBigItemByStampTaskAsync(
                 Request.ConsumeBigItemByStampTaskRequest request
-        )
-		{
-			var task = new ConsumeBigItemByStampTaskTask(
+        ) =>
+            new ConsumeBigItemByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -16217,44 +14136,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator SetBigItemByStampSheet(
                 Request.SetBigItemByStampSheetRequest request,
                 UnityAction<AsyncResult<Result.SetBigItemByStampSheetResult>> callback
-        )
-		{
-			var task = new SetBigItemByStampSheetTask(
+        ) =>
+            new SetBigItemByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.SetBigItemByStampSheetResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.SetBigItemByStampSheetResult> SetBigItemByStampSheetFuture(
                 Request.SetBigItemByStampSheetRequest request
-        )
-		{
-			return new SetBigItemByStampSheetTask(
+        ) =>
+            new SetBigItemByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.SetBigItemByStampSheetResult> SetBigItemByStampSheetAsync(
+		public UniTask<Result.SetBigItemByStampSheetResult> SetBigItemByStampSheetAsync(
                 Request.SetBigItemByStampSheetRequest request
-        )
-		{
-            AsyncResult<Result.SetBigItemByStampSheetResult> result = null;
-			await SetBigItemByStampSheet(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new SetBigItemByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.SetBigItemByStampSheetResult>();
     #else
 		public SetBigItemByStampSheetTask SetBigItemByStampSheetAsync(
                 Request.SetBigItemByStampSheetRequest request
@@ -16268,17 +14174,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.SetBigItemByStampSheetResult> SetBigItemByStampSheetAsync(
+		public Task<Result.SetBigItemByStampSheetResult> SetBigItemByStampSheetAsync(
                 Request.SetBigItemByStampSheetRequest request
-        )
-		{
-			var task = new SetBigItemByStampSheetTask(
+        ) =>
+            new SetBigItemByStampSheetTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -16341,44 +14244,31 @@ namespace Gs2.Gs2Inventory
 		public IEnumerator VerifyBigItemByStampTask(
                 Request.VerifyBigItemByStampTaskRequest request,
                 UnityAction<AsyncResult<Result.VerifyBigItemByStampTaskResult>> callback
-        )
-		{
-			var task = new VerifyBigItemByStampTaskTask(
+        ) =>
+            new VerifyBigItemByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifyBigItemByStampTaskResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifyBigItemByStampTaskResult> VerifyBigItemByStampTaskFuture(
                 Request.VerifyBigItemByStampTaskRequest request
-        )
-		{
-			return new VerifyBigItemByStampTaskTask(
+        ) =>
+            new VerifyBigItemByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifyBigItemByStampTaskResult> VerifyBigItemByStampTaskAsync(
+		public UniTask<Result.VerifyBigItemByStampTaskResult> VerifyBigItemByStampTaskAsync(
                 Request.VerifyBigItemByStampTaskRequest request
-        )
-		{
-            AsyncResult<Result.VerifyBigItemByStampTaskResult> result = null;
-			await VerifyBigItemByStampTask(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifyBigItemByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyBigItemByStampTaskResult>();
     #else
 		public VerifyBigItemByStampTaskTask VerifyBigItemByStampTaskAsync(
                 Request.VerifyBigItemByStampTaskRequest request
@@ -16392,17 +14282,14 @@ namespace Gs2.Gs2Inventory
         }
     #endif
 #else
-		public async Task<Result.VerifyBigItemByStampTaskResult> VerifyBigItemByStampTaskAsync(
+		public Task<Result.VerifyBigItemByStampTaskResult> VerifyBigItemByStampTaskAsync(
                 Request.VerifyBigItemByStampTaskRequest request
-        )
-		{
-			var task = new VerifyBigItemByStampTaskTask(
+        ) =>
+            new VerifyBigItemByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 	}
 }

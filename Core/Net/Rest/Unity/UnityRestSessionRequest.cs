@@ -6,6 +6,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Gs2.Core.Util;
 using UnityEngine.Networking;
 #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
@@ -36,7 +37,7 @@ namespace Gs2.Core.Net
         }
     }
     
-    public class UnityRestSessionRequest : RestSessionRequestFuture
+    public class UnityRestSessionRequest : RestSessionRequest
     {
         private readonly CertificateHandler _certificateHandler;
         private readonly bool _checkCertificateRevocation;
@@ -68,7 +69,7 @@ namespace Gs2.Core.Net
 
         public override async Task<RestResult> Invoke()
         {
-#if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+#if UNITY_2017_1_OR_NEWER
             var uri = QueryStrings.Count == 0 ?
                 Url :
                 Url + '?' + string.Join("&", QueryStrings.Select(
@@ -105,13 +106,13 @@ namespace Gs2.Core.Net
             else if (!this._checkCertificateRevocation)
                 request.certificateHandler = new DisabledCertificateHandler();
 
-#pragma warning disable 0168
             try {
                 await request.SendWebRequest();
             }
-            catch (UnityWebRequestException e) {
-            }
-#pragma warning restore 0168
+#if GS2_ENABLE_UNITASK
+            catch (UnityWebRequestException) {}
+#endif
+            finally {}
 
             RestResult result = null;
             switch (request.result)
@@ -122,7 +123,6 @@ namespace Gs2.Core.Net
                         (int) request.responseCode,
                         request.downloadHandler?.text
                     );
-                    OnComplete(result);
                     break;
 
                 case UnityWebRequest.Result.ConnectionError:
@@ -133,7 +133,6 @@ namespace Gs2.Core.Net
                         (int) request.result,
                         request.error
                     );
-                    OnComplete(result);
                     break;
             }
 
@@ -144,71 +143,6 @@ namespace Gs2.Core.Net
 #else
             throw new NotImplementedException();
 #endif
-        }
-
-        public override IEnumerator Action() {
-
-            var uri = QueryStrings.Count == 0 ?
-                Url :
-                Url + '?' + string.Join("&", QueryStrings.Select(
-                    item => $"{item.Key}={UnityWebRequest.EscapeURL(item.Value)}").ToArray());
-            using var request = new UnityWebRequest(
-                uri,
-                Method.TransformUnity()
-            );
-            request.downloadHandler = new DownloadHandlerBuffer();
-            foreach (var item in Headers.Where(item => (Method != HttpMethod.Post && Method != HttpMethod.Put) || item.Key.ToLower() != "content-type")) {
-                request.SetRequestHeader(item.Key, item.Value);
-            }
-
-            request.SetRequestHeader("Content-Type", "application/json");
-
-            if (EnableResponseDecompression)
-            {
-                request.SetRequestHeader("Accept-Encoding", "gzip");
-            }
-
-            if (Method == HttpMethod.Post || Method == HttpMethod.Put)
-            {
-                var bodyBytes = Encoding.UTF8.GetBytes(Body);
-                if (EnableRequestCompression)
-                {
-                    bodyBytes = Compress(bodyBytes);
-                    request.SetRequestHeader("Content-Encoding", "gzip");
-                }
-                request.uploadHandler = new UploadHandlerRaw(bodyBytes);
-            }
-
-            if (this._certificateHandler != null)
-                request.certificateHandler = this._certificateHandler;
-            else if (!this._checkCertificateRevocation)
-                request.certificateHandler = new DisabledCertificateHandler();
-
-            yield return request.SendWebRequest();
-
-            switch (request.result)
-            {
-                case UnityWebRequest.Result.Success:
-                case UnityWebRequest.Result.ProtocolError:
-                    OnComplete(new RestResult(
-                        (int) request.responseCode,
-                        request.downloadHandler?.text
-                    ));
-                    break;
-
-                case UnityWebRequest.Result.ConnectionError:
-                case UnityWebRequest.Result.DataProcessingError:
-                    OnComplete(new RestResult(
-                        (int) request.responseCode,
-                        null,
-                        (int) request.result,
-                        request.error
-                    ));
-                    break;
-            }
-
-            // ReSharper disable once DisposeOnUsingVariable
-            request.Dispose();
         }
     }
 }

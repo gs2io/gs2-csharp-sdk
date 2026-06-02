@@ -484,7 +484,7 @@ namespace Gs2.Gs2Distributor.Domain
                     }
                 }
 
-                foreach (var completedStampSheet in copiedCompletedStampSheets) {
+                foreach (var completedStampSheet in copiedCompletedStampSheets ?? Array.Empty<AutoRunStampSheetNotification>()) {
                     if (completedStampSheet == null) continue;
                     {
                         for (var i = 0; i < 3; i++) {

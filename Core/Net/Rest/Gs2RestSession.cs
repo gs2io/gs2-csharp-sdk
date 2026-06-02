@@ -11,6 +11,7 @@ using Gs2.Core.Exception;
 using Gs2.Core.Model;
 using Gs2.Core.Model.Internal;
 using Gs2.Core.Result;
+using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
@@ -83,194 +84,80 @@ namespace Gs2.Core.Net
 #endif
 
         // Open
-        
-#if UNITY_2017_1_OR_NEWER
-        public IEnumerator Open(UnityAction<AsyncResult<OpenResult>> callback)
+
+#if GS2_ENABLE_UNITASK
+        private async UniTask<OpenResult> OpenImplAsync()
 #else
-        public IEnumerator Open(Action<AsyncResult<OpenResult>> callback)
+        private async Task<OpenResult> OpenImplAsync()
 #endif
         {
-            var future = OpenFuture();
-            yield return future;
-            callback.Invoke(new AsyncResult<OpenResult>(
-                future.Result,
-                future.Error
-            ));
-        }
-        
-        public Gs2Future<OpenResult> OpenFuture()
-        {
-            IEnumerator Impl(Gs2Future<OpenResult> result) {
-                while (!this._semaphore.Wait(0)) {
-                    yield return null;
-                }
-                try {
-                    if (this.State == State.Available) {
-                        result.OnComplete(new OpenResult());
-                        yield break;
-                    }
-
-                    if (this.State != State.Idle && this.State != State.Closed) {
-                        throw new InvalidOperationException("invalid state: " + this.State);
-                    }
-
-                    this._result.Clear();
-                    this._inflightRequest.Clear();
-                    this.State = State.Opening;
-                    if (Credential is ProjectTokenGs2Credential) {
-                        OwnerId = Credential.ClientId;
-                    } else {
-                        var task = new RestOpenTask(
-                            this,
-                            CreateRestSessionRequestFactory(),
-                            new LoginRequest {
-                                ClientId = Credential.ClientId,
-                                ClientSecret = Credential.ClientSecret,
-                            }
-                        );
-                        yield return task;
-
-                        if (task.Error != null) {
-                            this.State = State.Closed;
-                            result.OnError(task.Error);
-                            yield break;
-                        }
-
-                        Credential.ProjectToken = task.Result.AccessToken;
-                        OwnerId = task.Result.OwnerId;
-                    }
-                    this.State = State.Available;
-
-                    result.OnComplete(new OpenResult());
-#if !UNITY_2017_1_OR_NEWER
-                    yield break;
-#endif
-                }
-                finally {
-                    this._semaphore.Release();
-                }
-            }
-
-            return new Gs2InlineFuture<OpenResult>(Impl);
-        }
-        
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
-        public async UniTask<OpenResult> OpenAsync()
-    #else
-        public async Task<OpenResult> OpenAsync()
-    #endif
-        {
-            // ReSharper disable once MethodHasAsyncOverload
-            while (!this._semaphore.Wait(0)) {
-    #if UNITY_2017_1_OR_NEWER
-                await UniTask.Yield();
-    #else
-                await Task.Yield();
-    #endif
-            }
+            await TaskUtilities.WaitAsync(this._semaphore);
             try {
                 if (this.State == State.Available) {
                     return new OpenResult();
                 }
 
                 if (this.State != State.Idle && this.State != State.Closed) {
-                    throw new InvalidOperationException("invalid state");
+                    throw new InvalidOperationException("invalid state: " + this.State);
                 }
 
                 this._result.Clear();
                 this._inflightRequest.Clear();
                 this.State = State.Opening;
-                var task = new RestOpenTask(
-                    this,
-                    CreateRestSessionRequestFactory(),
-                    new LoginRequest {
-                        ClientId = Credential.ClientId,
-                        ClientSecret = Credential.ClientSecret,
+                if (Credential is ProjectTokenGs2Credential) {
+                    OwnerId = Credential.ClientId;
+                } else {
+                    try
+                    {
+                        var result = await new RestOpenTask(
+                            this,
+                            CreateRestSessionRequestFactory(),
+                            new LoginRequest {
+                                ClientId = Credential.ClientId,
+                                ClientSecret = Credential.ClientSecret,
+                            }
+                        ).Invoke();
+
+                        Credential.ProjectToken = result.AccessToken;
+                        OwnerId = result.OwnerId;
                     }
-                );
-                try {
-                    var result = await task.Invoke();
-
-                    Credential.ProjectToken = result.AccessToken;
-                    OwnerId = result.OwnerId;
-                    this.State = State.Available;
-
-                    return new OpenResult();
+                    catch
+                    {
+                        this.State = State.Closed;
+                        throw;
+                    }
                 }
-                catch (System.Exception) {
-                    this.State = State.Closed;
-                    throw;
-                }
+                this.State = State.Available;
+
+                return new OpenResult();
             }
             finally {
                 this._semaphore.Release();
             }
         }
+        
+#if UNITY_2017_1_OR_NEWER
+        public IEnumerator Open(UnityAction<AsyncResult<OpenResult>> callback) => OpenImplAsync().ToCoroutine(callback);
+#else
+        public IEnumerator Open(Action<AsyncResult<OpenResult>> callback) => OpenImplAsync().ToCoroutine(callback);
+#endif
+        
+        public Gs2Future<OpenResult> OpenFuture() => OpenImplAsync().ToGs2Future();
+        
+#if GS2_ENABLE_UNITASK
+        public UniTask<OpenResult> OpenAsync() => OpenImplAsync().AsUniTask<OpenResult>();
+#else
+        public Task<OpenResult> OpenAsync() => OpenImplAsync().AsTask();
 #endif
         
         // ReOpen
         
         
-#if UNITY_2017_1_OR_NEWER
-        public IEnumerator ReOpen(UnityAction<AsyncResult<OpenResult>> callback)
+#if GS2_ENABLE_UNITASK
+        private async UniTask<OpenResult> ReOpenImplAsync()
 #else
-        public IEnumerator ReOpen(Action<AsyncResult<OpenResult>> callback)
+        private async Task<OpenResult> ReOpenImplAsync()
 #endif
-        {
-            var future = ReOpenFuture();
-            yield return future;
-            callback.Invoke(
-                new AsyncResult<OpenResult>(
-                    future.Result,
-                    future.Error
-                )
-            );
-        }
-        
-        // ReSharper disable once MemberCanBePrivate.Global
-        public Gs2Future<OpenResult> ReOpenFuture()
-        {
-            IEnumerator Impl(Gs2Future<OpenResult> result) {
-                if (this.State == State.Opening || this.State == State.LoggingIn) {
-                    var begin = DateTime.Now;
-                    while (this.State != State.Available) {
-                        if ((DateTime.Now - begin).Seconds > OpenTimeoutSec) {
-                            result.OnError(
-                                new RequestTimeoutException(Array.Empty<RequestError>())
-                            );
-                            yield break;
-                        }
-
-#if UNITY_2017_1_OR_NEWER
-                        yield return new WaitForSeconds(0.05f);
-#endif
-                    }
-                }
-
-                var future = OpenFuture();
-                yield return future;
-                if (future.Error != null) {
-                    result.OnError(future.Error);
-                    yield break;
-                }
-                future.OnComplete(future.Result);
-                
-#if !UNITY_2017_1_OR_NEWER
-                yield break;
-#endif
-            }
-
-            return new Gs2InlineFuture<OpenResult>(Impl);
-        }
-        
-        // ReSharper disable once MemberCanBePrivate.Global
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
-        public async UniTask<OpenResult> ReOpenAsync()
-    #else
-        public async Task<OpenResult> ReOpenAsync()
-    #endif
         {
             if (this.State == State.Opening || this.State == State.LoggingIn) {
                 var begin = DateTime.Now;
@@ -279,73 +166,39 @@ namespace Gs2.Core.Net
                         throw new RequestTimeoutException(Array.Empty<RequestError>());
                     }
 
-    #if UNITY_2017_1_OR_NEWER
-                    await UniTask.Delay(TimeSpan.FromMilliseconds(50));
-    #else
-                    await Task.Delay(TimeSpan.FromMilliseconds(50));
-    #endif
+                    await TaskUtilities.Yield();
                 }
             }
 
             return await OpenAsync();
         }
+
+#if UNITY_2017_1_OR_NEWER
+        public IEnumerator ReOpen(UnityAction<AsyncResult<OpenResult>> callback) => ReOpenImplAsync().ToCoroutine(callback);
+#else
+        public IEnumerator ReOpen(Action<AsyncResult<OpenResult>> callback) => ReOpenImplAsync().ToCoroutine(callback);
+#endif
+        
+        // ReSharper disable once MemberCanBePrivate.Global
+        public Gs2Future<OpenResult> ReOpenFuture() => ReOpenImplAsync().ToGs2Future();
+        
+        // ReSharper disable once MemberCanBePrivate.Global
+#if GS2_ENABLE_UNITASK
+    #if UNITY_2017_1_OR_NEWER
+        public UniTask<OpenResult> ReOpenAsync() => ReOpenImplAsync().AsUniTask<OpenResult>();
+    #else
+        public Task<OpenResult> ReOpenAsync() => ReOpenImplAsync().AsTask();
+    #endif
+#elif !UNITY_2017_1_OR_NEWER
+        public Task<OpenResult> ReOpenAsync() => ReOpenImplAsync();
 #endif
         
         // Close
         
-        
-#if UNITY_2017_1_OR_NEWER
-        public IEnumerator Close(UnityAction callback)
+#if GS2_ENABLE_UNITASK
+        private async UniTask CloseImplAsync()
 #else
-        public IEnumerator Close(Action callback)
-#endif
-        {
-            var future = CloseFuture();
-            yield return future;
-            callback.Invoke();
-        }
-        
-        public Gs2Future CloseFuture()
-        {
-            IEnumerator Impl(Gs2Future result) {
-                if (this.State == State.Idle) {
-                    this.State = State.Closed;
-                }
-                else {
-                    this.State = State.CancellingTasks;
-
-                    {
-                        var begin = DateTime.Now;
-                        while (this._inflightRequest.Count > 0) {
-                            if ((DateTime.Now - begin).Seconds > CloseTimeoutSec) {
-                                this._inflightRequest.Clear();
-                                break;
-                            }
-
-#if UNITY_2017_1_OR_NEWER
-                            yield return new WaitForSeconds(0.01f);
-#endif
-                        }
-                    }
-
-                    this.State = State.Closing;
-
-                    this.State = State.Closed;
-                }
-                result.OnComplete(null);
-
-#if !UNITY_2017_1_OR_NEWER
-                yield break;
-#endif
-            }
-
-            return new Gs2InlineFuture(Impl);
-        }
-        
-#if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
-        public async UniTask CloseAsync()
-#else
-        public async Task CloseAsync()
+        private async Task CloseImplAsync()
 #endif
         {
             if (this.State == State.Idle) {
@@ -362,11 +215,7 @@ namespace Gs2.Core.Net
                             break;
                         }
 
-#if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
-                        await UniTask.Delay(TimeSpan.FromMilliseconds(50));
-#else
-                        await Task.Delay(TimeSpan.FromMilliseconds(50));
-#endif
+                        await TaskUtilities.Yield();
                     }
                 }
 
@@ -376,50 +225,41 @@ namespace Gs2.Core.Net
             }
         }
         
+#if UNITY_2017_1_OR_NEWER
+        public IEnumerator Close(UnityAction callback) => CloseImplAsync().ToCoroutine(callback);
+#else
+        public IEnumerator Close(Action callback) => CloseImplAsync().ToCoroutine(callback);
+#endif
+        
+        public Gs2Future CloseFuture() => CloseImplAsync().ToGs2Future();
+        
+#if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public UniTask CloseAsync() => CloseImplAsync().AsUniTask();
+#else
+        public Task CloseAsync() => CloseImplAsync().AsTask();
+#endif
+        
         // Send
         
-        public virtual IEnumerator Send(IGs2SessionRequest request) {
-            if (request is RestSessionRequestFuture sessionRequest) {
-                this._inflightRequest[sessionRequest.TaskId] = sessionRequest;
-
-                yield return sessionRequest;
-
-                if (sessionRequest.Error != null) {
-#if UNITY_2017_1_OR_NEWER
-                    this._inflightRequest.Remove(sessionRequest.TaskId);
+#if GS2_ENABLE_UNITASK
+        protected virtual async UniTask SendImplAsync(IGs2SessionRequest request)
 #else
-                    this._inflightRequest.Remove(sessionRequest.TaskId, out var value);
+        protected virtual async Task SendImplAsync(IGs2SessionRequest request)
 #endif
-                }
-
-                this._result[sessionRequest.TaskId] = sessionRequest.Result;
-            }
-            yield return null;
-        }
-        
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
-        public virtual async UniTask SendAsync(IGs2SessionRequest request)
-    #else
-        public virtual async Task SendAsync(IGs2SessionRequest request)
-    #endif
         {
-            if (request is RestSessionRequestFuture sessionRequest) {
+            if (request is RestSessionRequest sessionRequest) {
                 this._inflightRequest[sessionRequest.TaskId] = sessionRequest;
 
-                await sessionRequest.Invoke();
-
-                if (sessionRequest.Error != null || sessionRequest.Result.Error != null) {
-#if UNITY_2017_1_OR_NEWER
-                    this._inflightRequest.Remove(sessionRequest.TaskId);
-#else
-                    this._inflightRequest.Remove(sessionRequest.TaskId, out var value);
-#endif
-                }
-
-                this._result[sessionRequest.TaskId] = sessionRequest.Result;
+                this._result[sessionRequest.TaskId] = await sessionRequest.Invoke();
             }
         }
+
+        public IEnumerator Send(IGs2SessionRequest request) => SendImplAsync(request).ToCoroutine((Action)null);
+        
+#if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        public UniTask SendAsync(IGs2SessionRequest request) => SendImplAsync(request).AsUniTask();
+#else
+        public Task SendAsync(IGs2SessionRequest request) => SendImplAsync(request).AsTask();
 #endif
 
         public bool Ping()

@@ -25,17 +25,18 @@ using Cysharp.Threading.Tasks;
 #else
 using System.Web;
 using System.Net.Http;
-using System.Threading.Tasks;
 #endif
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Linq;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Net;
+using Gs2.Core.Util;
 using Gs2.Gs2Ranking2.Request;
 using Gs2.Gs2Ranking2.Result;
 using Gs2.Util.LitJson;
@@ -110,44 +111,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DescribeNamespaces(
                 Request.DescribeNamespacesRequest request,
                 UnityAction<AsyncResult<Result.DescribeNamespacesResult>> callback
-        )
-		{
-			var task = new DescribeNamespacesTask(
+        ) =>
+            new DescribeNamespacesTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeNamespacesResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeNamespacesResult> DescribeNamespacesFuture(
                 Request.DescribeNamespacesRequest request
-        )
-		{
-			return new DescribeNamespacesTask(
+        ) =>
+            new DescribeNamespacesTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
+		public UniTask<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
                 Request.DescribeNamespacesRequest request
-        )
-		{
-            AsyncResult<Result.DescribeNamespacesResult> result = null;
-			await DescribeNamespaces(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeNamespacesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeNamespacesResult>();
     #else
 		public DescribeNamespacesTask DescribeNamespacesAsync(
                 Request.DescribeNamespacesRequest request
@@ -161,17 +149,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
+		public Task<Result.DescribeNamespacesResult> DescribeNamespacesAsync(
                 Request.DescribeNamespacesRequest request
-        )
-		{
-			var task = new DescribeNamespacesTask(
+        ) =>
+            new DescribeNamespacesTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -244,44 +229,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator CreateNamespace(
                 Request.CreateNamespaceRequest request,
                 UnityAction<AsyncResult<Result.CreateNamespaceResult>> callback
-        )
-		{
-			var task = new CreateNamespaceTask(
+        ) =>
+            new CreateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateNamespaceResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
                 Request.CreateNamespaceRequest request
-        )
-		{
-			return new CreateNamespaceTask(
+        ) =>
+            new CreateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
+		public UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
                 Request.CreateNamespaceRequest request
-        )
-		{
-            AsyncResult<Result.CreateNamespaceResult> result = null;
-			await CreateNamespace(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CreateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CreateNamespaceResult>();
     #else
 		public CreateNamespaceTask CreateNamespaceAsync(
                 Request.CreateNamespaceRequest request
@@ -295,17 +267,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
+		public Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
                 Request.CreateNamespaceRequest request
-        )
-		{
-			var task = new CreateNamespaceTask(
+        ) =>
+            new CreateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -347,44 +316,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator GetNamespaceStatus(
                 Request.GetNamespaceStatusRequest request,
                 UnityAction<AsyncResult<Result.GetNamespaceStatusResult>> callback
-        )
-		{
-			var task = new GetNamespaceStatusTask(
+        ) =>
+            new GetNamespaceStatusTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetNamespaceStatusResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetNamespaceStatusResult> GetNamespaceStatusFuture(
                 Request.GetNamespaceStatusRequest request
-        )
-		{
-			return new GetNamespaceStatusTask(
+        ) =>
+            new GetNamespaceStatusTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+		public UniTask<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
-        )
-		{
-            AsyncResult<Result.GetNamespaceStatusResult> result = null;
-			await GetNamespaceStatus(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetNamespaceStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetNamespaceStatusResult>();
     #else
 		public GetNamespaceStatusTask GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
@@ -398,17 +354,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
+		public Task<Result.GetNamespaceStatusResult> GetNamespaceStatusAsync(
                 Request.GetNamespaceStatusRequest request
-        )
-		{
-			var task = new GetNamespaceStatusTask(
+        ) =>
+            new GetNamespaceStatusTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -450,44 +403,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator GetNamespace(
                 Request.GetNamespaceRequest request,
                 UnityAction<AsyncResult<Result.GetNamespaceResult>> callback
-        )
-		{
-			var task = new GetNamespaceTask(
+        ) =>
+            new GetNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetNamespaceResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
                 Request.GetNamespaceRequest request
-        )
-		{
-			return new GetNamespaceTask(
+        ) =>
+            new GetNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
+		public UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
                 Request.GetNamespaceRequest request
-        )
-		{
-            AsyncResult<Result.GetNamespaceResult> result = null;
-			await GetNamespace(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetNamespaceResult>();
     #else
 		public GetNamespaceTask GetNamespaceAsync(
                 Request.GetNamespaceRequest request
@@ -501,17 +441,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.GetNamespaceResult> GetNamespaceAsync(
+		public Task<Result.GetNamespaceResult> GetNamespaceAsync(
                 Request.GetNamespaceRequest request
-        )
-		{
-			var task = new GetNamespaceTask(
+        ) =>
+            new GetNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -581,44 +518,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator UpdateNamespace(
                 Request.UpdateNamespaceRequest request,
                 UnityAction<AsyncResult<Result.UpdateNamespaceResult>> callback
-        )
-		{
-			var task = new UpdateNamespaceTask(
+        ) =>
+            new UpdateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateNamespaceResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
                 Request.UpdateNamespaceRequest request
-        )
-		{
-			return new UpdateNamespaceTask(
+        ) =>
+            new UpdateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+		public UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
                 Request.UpdateNamespaceRequest request
-        )
-		{
-            AsyncResult<Result.UpdateNamespaceResult> result = null;
-			await UpdateNamespace(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UpdateNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UpdateNamespaceResult>();
     #else
 		public UpdateNamespaceTask UpdateNamespaceAsync(
                 Request.UpdateNamespaceRequest request
@@ -632,17 +556,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
+		public Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
                 Request.UpdateNamespaceRequest request
-        )
-		{
-			var task = new UpdateNamespaceTask(
+        ) =>
+            new UpdateNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -684,44 +605,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DeleteNamespace(
                 Request.DeleteNamespaceRequest request,
                 UnityAction<AsyncResult<Result.DeleteNamespaceResult>> callback
-        )
-		{
-			var task = new DeleteNamespaceTask(
+        ) =>
+            new DeleteNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteNamespaceResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
                 Request.DeleteNamespaceRequest request
-        )
-		{
-			return new DeleteNamespaceTask(
+        ) =>
+            new DeleteNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+		public UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
                 Request.DeleteNamespaceRequest request
-        )
-		{
-            AsyncResult<Result.DeleteNamespaceResult> result = null;
-			await DeleteNamespace(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteNamespaceTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteNamespaceResult>();
     #else
 		public DeleteNamespaceTask DeleteNamespaceAsync(
                 Request.DeleteNamespaceRequest request
@@ -735,17 +643,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
+		public Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
                 Request.DeleteNamespaceRequest request
-        )
-		{
-			var task = new DeleteNamespaceTask(
+        ) =>
+            new DeleteNamespaceTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -785,44 +690,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator GetServiceVersion(
                 Request.GetServiceVersionRequest request,
                 UnityAction<AsyncResult<Result.GetServiceVersionResult>> callback
-        )
-		{
-			var task = new GetServiceVersionTask(
+        ) =>
+            new GetServiceVersionTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetServiceVersionResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetServiceVersionResult> GetServiceVersionFuture(
                 Request.GetServiceVersionRequest request
-        )
-		{
-			return new GetServiceVersionTask(
+        ) =>
+            new GetServiceVersionTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetServiceVersionResult> GetServiceVersionAsync(
+		public UniTask<Result.GetServiceVersionResult> GetServiceVersionAsync(
                 Request.GetServiceVersionRequest request
-        )
-		{
-            AsyncResult<Result.GetServiceVersionResult> result = null;
-			await GetServiceVersion(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetServiceVersionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetServiceVersionResult>();
     #else
 		public GetServiceVersionTask GetServiceVersionAsync(
                 Request.GetServiceVersionRequest request
@@ -836,17 +728,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.GetServiceVersionResult> GetServiceVersionAsync(
+		public Task<Result.GetServiceVersionResult> GetServiceVersionAsync(
                 Request.GetServiceVersionRequest request
-        )
-		{
-			var task = new GetServiceVersionTask(
+        ) =>
+            new GetServiceVersionTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -905,44 +794,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DumpUserDataByUserId(
                 Request.DumpUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DumpUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new DumpUserDataByUserIdTask(
+        ) =>
+            new DumpUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DumpUserDataByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdFuture(
                 Request.DumpUserDataByUserIdRequest request
-        )
-		{
-			return new DumpUserDataByUserIdTask(
+        ) =>
+            new DumpUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdAsync(
+		public UniTask<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdAsync(
                 Request.DumpUserDataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DumpUserDataByUserIdResult> result = null;
-			await DumpUserDataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DumpUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DumpUserDataByUserIdResult>();
     #else
 		public DumpUserDataByUserIdTask DumpUserDataByUserIdAsync(
                 Request.DumpUserDataByUserIdRequest request
@@ -956,17 +832,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdAsync(
+		public Task<Result.DumpUserDataByUserIdResult> DumpUserDataByUserIdAsync(
                 Request.DumpUserDataByUserIdRequest request
-        )
-		{
-			var task = new DumpUserDataByUserIdTask(
+        ) =>
+            new DumpUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1012,44 +885,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator CheckDumpUserDataByUserId(
                 Request.CheckDumpUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.CheckDumpUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new CheckDumpUserDataByUserIdTask(
+        ) =>
+            new CheckDumpUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CheckDumpUserDataByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdFuture(
                 Request.CheckDumpUserDataByUserIdRequest request
-        )
-		{
-			return new CheckDumpUserDataByUserIdTask(
+        ) =>
+            new CheckDumpUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdAsync(
+		public UniTask<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdAsync(
                 Request.CheckDumpUserDataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.CheckDumpUserDataByUserIdResult> result = null;
-			await CheckDumpUserDataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CheckDumpUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CheckDumpUserDataByUserIdResult>();
     #else
 		public CheckDumpUserDataByUserIdTask CheckDumpUserDataByUserIdAsync(
                 Request.CheckDumpUserDataByUserIdRequest request
@@ -1063,17 +923,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdAsync(
+		public Task<Result.CheckDumpUserDataByUserIdResult> CheckDumpUserDataByUserIdAsync(
                 Request.CheckDumpUserDataByUserIdRequest request
-        )
-		{
-			var task = new CheckDumpUserDataByUserIdTask(
+        ) =>
+            new CheckDumpUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1132,44 +989,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator CleanUserDataByUserId(
                 Request.CleanUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.CleanUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new CleanUserDataByUserIdTask(
+        ) =>
+            new CleanUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CleanUserDataByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdFuture(
                 Request.CleanUserDataByUserIdRequest request
-        )
-		{
-			return new CleanUserDataByUserIdTask(
+        ) =>
+            new CleanUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdAsync(
+		public UniTask<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdAsync(
                 Request.CleanUserDataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.CleanUserDataByUserIdResult> result = null;
-			await CleanUserDataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CleanUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CleanUserDataByUserIdResult>();
     #else
 		public CleanUserDataByUserIdTask CleanUserDataByUserIdAsync(
                 Request.CleanUserDataByUserIdRequest request
@@ -1183,17 +1027,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdAsync(
+		public Task<Result.CleanUserDataByUserIdResult> CleanUserDataByUserIdAsync(
                 Request.CleanUserDataByUserIdRequest request
-        )
-		{
-			var task = new CleanUserDataByUserIdTask(
+        ) =>
+            new CleanUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1239,44 +1080,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator CheckCleanUserDataByUserId(
                 Request.CheckCleanUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.CheckCleanUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new CheckCleanUserDataByUserIdTask(
+        ) =>
+            new CheckCleanUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CheckCleanUserDataByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdFuture(
                 Request.CheckCleanUserDataByUserIdRequest request
-        )
-		{
-			return new CheckCleanUserDataByUserIdTask(
+        ) =>
+            new CheckCleanUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdAsync(
+		public UniTask<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdAsync(
                 Request.CheckCleanUserDataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.CheckCleanUserDataByUserIdResult> result = null;
-			await CheckCleanUserDataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CheckCleanUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CheckCleanUserDataByUserIdResult>();
     #else
 		public CheckCleanUserDataByUserIdTask CheckCleanUserDataByUserIdAsync(
                 Request.CheckCleanUserDataByUserIdRequest request
@@ -1290,17 +1118,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdAsync(
+		public Task<Result.CheckCleanUserDataByUserIdResult> CheckCleanUserDataByUserIdAsync(
                 Request.CheckCleanUserDataByUserIdRequest request
-        )
-		{
-			var task = new CheckCleanUserDataByUserIdTask(
+        ) =>
+            new CheckCleanUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1359,44 +1184,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator PrepareImportUserDataByUserId(
                 Request.PrepareImportUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.PrepareImportUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new PrepareImportUserDataByUserIdTask(
+        ) =>
+            new PrepareImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.PrepareImportUserDataByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdFuture(
                 Request.PrepareImportUserDataByUserIdRequest request
-        )
-		{
-			return new PrepareImportUserDataByUserIdTask(
+        ) =>
+            new PrepareImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdAsync(
+		public UniTask<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdAsync(
                 Request.PrepareImportUserDataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.PrepareImportUserDataByUserIdResult> result = null;
-			await PrepareImportUserDataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new PrepareImportUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.PrepareImportUserDataByUserIdResult>();
     #else
 		public PrepareImportUserDataByUserIdTask PrepareImportUserDataByUserIdAsync(
                 Request.PrepareImportUserDataByUserIdRequest request
@@ -1410,17 +1222,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdAsync(
+		public Task<Result.PrepareImportUserDataByUserIdResult> PrepareImportUserDataByUserIdAsync(
                 Request.PrepareImportUserDataByUserIdRequest request
-        )
-		{
-			var task = new PrepareImportUserDataByUserIdTask(
+        ) =>
+            new PrepareImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1484,44 +1293,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator ImportUserDataByUserId(
                 Request.ImportUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.ImportUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new ImportUserDataByUserIdTask(
+        ) =>
+            new ImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ImportUserDataByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdFuture(
                 Request.ImportUserDataByUserIdRequest request
-        )
-		{
-			return new ImportUserDataByUserIdTask(
+        ) =>
+            new ImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdAsync(
+		public UniTask<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdAsync(
                 Request.ImportUserDataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.ImportUserDataByUserIdResult> result = null;
-			await ImportUserDataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new ImportUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.ImportUserDataByUserIdResult>();
     #else
 		public ImportUserDataByUserIdTask ImportUserDataByUserIdAsync(
                 Request.ImportUserDataByUserIdRequest request
@@ -1535,17 +1331,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdAsync(
+		public Task<Result.ImportUserDataByUserIdResult> ImportUserDataByUserIdAsync(
                 Request.ImportUserDataByUserIdRequest request
-        )
-		{
-			var task = new ImportUserDataByUserIdTask(
+        ) =>
+            new ImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1592,44 +1385,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator CheckImportUserDataByUserId(
                 Request.CheckImportUserDataByUserIdRequest request,
                 UnityAction<AsyncResult<Result.CheckImportUserDataByUserIdResult>> callback
-        )
-		{
-			var task = new CheckImportUserDataByUserIdTask(
+        ) =>
+            new CheckImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CheckImportUserDataByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdFuture(
                 Request.CheckImportUserDataByUserIdRequest request
-        )
-		{
-			return new CheckImportUserDataByUserIdTask(
+        ) =>
+            new CheckImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdAsync(
+		public UniTask<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdAsync(
                 Request.CheckImportUserDataByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.CheckImportUserDataByUserIdResult> result = null;
-			await CheckImportUserDataByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CheckImportUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CheckImportUserDataByUserIdResult>();
     #else
 		public CheckImportUserDataByUserIdTask CheckImportUserDataByUserIdAsync(
                 Request.CheckImportUserDataByUserIdRequest request
@@ -1643,17 +1423,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdAsync(
+		public Task<Result.CheckImportUserDataByUserIdResult> CheckImportUserDataByUserIdAsync(
                 Request.CheckImportUserDataByUserIdRequest request
-        )
-		{
-			var task = new CheckImportUserDataByUserIdTask(
+        ) =>
+            new CheckImportUserDataByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1695,44 +1472,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DescribeGlobalRankingModels(
                 Request.DescribeGlobalRankingModelsRequest request,
                 UnityAction<AsyncResult<Result.DescribeGlobalRankingModelsResult>> callback
-        )
-		{
-			var task = new DescribeGlobalRankingModelsTask(
+        ) =>
+            new DescribeGlobalRankingModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeGlobalRankingModelsResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeGlobalRankingModelsResult> DescribeGlobalRankingModelsFuture(
                 Request.DescribeGlobalRankingModelsRequest request
-        )
-		{
-			return new DescribeGlobalRankingModelsTask(
+        ) =>
+            new DescribeGlobalRankingModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeGlobalRankingModelsResult> DescribeGlobalRankingModelsAsync(
+		public UniTask<Result.DescribeGlobalRankingModelsResult> DescribeGlobalRankingModelsAsync(
                 Request.DescribeGlobalRankingModelsRequest request
-        )
-		{
-            AsyncResult<Result.DescribeGlobalRankingModelsResult> result = null;
-			await DescribeGlobalRankingModels(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeGlobalRankingModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeGlobalRankingModelsResult>();
     #else
 		public DescribeGlobalRankingModelsTask DescribeGlobalRankingModelsAsync(
                 Request.DescribeGlobalRankingModelsRequest request
@@ -1746,17 +1510,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DescribeGlobalRankingModelsResult> DescribeGlobalRankingModelsAsync(
+		public Task<Result.DescribeGlobalRankingModelsResult> DescribeGlobalRankingModelsAsync(
                 Request.DescribeGlobalRankingModelsRequest request
-        )
-		{
-			var task = new DescribeGlobalRankingModelsTask(
+        ) =>
+            new DescribeGlobalRankingModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1799,44 +1560,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator GetGlobalRankingModel(
                 Request.GetGlobalRankingModelRequest request,
                 UnityAction<AsyncResult<Result.GetGlobalRankingModelResult>> callback
-        )
-		{
-			var task = new GetGlobalRankingModelTask(
+        ) =>
+            new GetGlobalRankingModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetGlobalRankingModelResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetGlobalRankingModelResult> GetGlobalRankingModelFuture(
                 Request.GetGlobalRankingModelRequest request
-        )
-		{
-			return new GetGlobalRankingModelTask(
+        ) =>
+            new GetGlobalRankingModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetGlobalRankingModelResult> GetGlobalRankingModelAsync(
+		public UniTask<Result.GetGlobalRankingModelResult> GetGlobalRankingModelAsync(
                 Request.GetGlobalRankingModelRequest request
-        )
-		{
-            AsyncResult<Result.GetGlobalRankingModelResult> result = null;
-			await GetGlobalRankingModel(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetGlobalRankingModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetGlobalRankingModelResult>();
     #else
 		public GetGlobalRankingModelTask GetGlobalRankingModelAsync(
                 Request.GetGlobalRankingModelRequest request
@@ -1850,17 +1598,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.GetGlobalRankingModelResult> GetGlobalRankingModelAsync(
+		public Task<Result.GetGlobalRankingModelResult> GetGlobalRankingModelAsync(
                 Request.GetGlobalRankingModelRequest request
-        )
-		{
-			var task = new GetGlobalRankingModelTask(
+        ) =>
+            new GetGlobalRankingModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -1911,44 +1656,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DescribeGlobalRankingModelMasters(
                 Request.DescribeGlobalRankingModelMastersRequest request,
                 UnityAction<AsyncResult<Result.DescribeGlobalRankingModelMastersResult>> callback
-        )
-		{
-			var task = new DescribeGlobalRankingModelMastersTask(
+        ) =>
+            new DescribeGlobalRankingModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeGlobalRankingModelMastersResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeGlobalRankingModelMastersResult> DescribeGlobalRankingModelMastersFuture(
                 Request.DescribeGlobalRankingModelMastersRequest request
-        )
-		{
-			return new DescribeGlobalRankingModelMastersTask(
+        ) =>
+            new DescribeGlobalRankingModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeGlobalRankingModelMastersResult> DescribeGlobalRankingModelMastersAsync(
+		public UniTask<Result.DescribeGlobalRankingModelMastersResult> DescribeGlobalRankingModelMastersAsync(
                 Request.DescribeGlobalRankingModelMastersRequest request
-        )
-		{
-            AsyncResult<Result.DescribeGlobalRankingModelMastersResult> result = null;
-			await DescribeGlobalRankingModelMasters(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeGlobalRankingModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeGlobalRankingModelMastersResult>();
     #else
 		public DescribeGlobalRankingModelMastersTask DescribeGlobalRankingModelMastersAsync(
                 Request.DescribeGlobalRankingModelMastersRequest request
@@ -1962,17 +1694,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DescribeGlobalRankingModelMastersResult> DescribeGlobalRankingModelMastersAsync(
+		public Task<Result.DescribeGlobalRankingModelMastersResult> DescribeGlobalRankingModelMastersAsync(
                 Request.DescribeGlobalRankingModelMastersRequest request
-        )
-		{
-			var task = new DescribeGlobalRankingModelMastersTask(
+        ) =>
+            new DescribeGlobalRankingModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2087,44 +1816,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator CreateGlobalRankingModelMaster(
                 Request.CreateGlobalRankingModelMasterRequest request,
                 UnityAction<AsyncResult<Result.CreateGlobalRankingModelMasterResult>> callback
-        )
-		{
-			var task = new CreateGlobalRankingModelMasterTask(
+        ) =>
+            new CreateGlobalRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateGlobalRankingModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CreateGlobalRankingModelMasterResult> CreateGlobalRankingModelMasterFuture(
                 Request.CreateGlobalRankingModelMasterRequest request
-        )
-		{
-			return new CreateGlobalRankingModelMasterTask(
+        ) =>
+            new CreateGlobalRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateGlobalRankingModelMasterResult> CreateGlobalRankingModelMasterAsync(
+		public UniTask<Result.CreateGlobalRankingModelMasterResult> CreateGlobalRankingModelMasterAsync(
                 Request.CreateGlobalRankingModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.CreateGlobalRankingModelMasterResult> result = null;
-			await CreateGlobalRankingModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CreateGlobalRankingModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CreateGlobalRankingModelMasterResult>();
     #else
 		public CreateGlobalRankingModelMasterTask CreateGlobalRankingModelMasterAsync(
                 Request.CreateGlobalRankingModelMasterRequest request
@@ -2138,17 +1854,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.CreateGlobalRankingModelMasterResult> CreateGlobalRankingModelMasterAsync(
+		public Task<Result.CreateGlobalRankingModelMasterResult> CreateGlobalRankingModelMasterAsync(
                 Request.CreateGlobalRankingModelMasterRequest request
-        )
-		{
-			var task = new CreateGlobalRankingModelMasterTask(
+        ) =>
+            new CreateGlobalRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2191,44 +1904,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator GetGlobalRankingModelMaster(
                 Request.GetGlobalRankingModelMasterRequest request,
                 UnityAction<AsyncResult<Result.GetGlobalRankingModelMasterResult>> callback
-        )
-		{
-			var task = new GetGlobalRankingModelMasterTask(
+        ) =>
+            new GetGlobalRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetGlobalRankingModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetGlobalRankingModelMasterResult> GetGlobalRankingModelMasterFuture(
                 Request.GetGlobalRankingModelMasterRequest request
-        )
-		{
-			return new GetGlobalRankingModelMasterTask(
+        ) =>
+            new GetGlobalRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetGlobalRankingModelMasterResult> GetGlobalRankingModelMasterAsync(
+		public UniTask<Result.GetGlobalRankingModelMasterResult> GetGlobalRankingModelMasterAsync(
                 Request.GetGlobalRankingModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.GetGlobalRankingModelMasterResult> result = null;
-			await GetGlobalRankingModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetGlobalRankingModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetGlobalRankingModelMasterResult>();
     #else
 		public GetGlobalRankingModelMasterTask GetGlobalRankingModelMasterAsync(
                 Request.GetGlobalRankingModelMasterRequest request
@@ -2242,17 +1942,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.GetGlobalRankingModelMasterResult> GetGlobalRankingModelMasterAsync(
+		public Task<Result.GetGlobalRankingModelMasterResult> GetGlobalRankingModelMasterAsync(
                 Request.GetGlobalRankingModelMasterRequest request
-        )
-		{
-			var task = new GetGlobalRankingModelMasterTask(
+        ) =>
+            new GetGlobalRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2363,44 +2060,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator UpdateGlobalRankingModelMaster(
                 Request.UpdateGlobalRankingModelMasterRequest request,
                 UnityAction<AsyncResult<Result.UpdateGlobalRankingModelMasterResult>> callback
-        )
-		{
-			var task = new UpdateGlobalRankingModelMasterTask(
+        ) =>
+            new UpdateGlobalRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateGlobalRankingModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UpdateGlobalRankingModelMasterResult> UpdateGlobalRankingModelMasterFuture(
                 Request.UpdateGlobalRankingModelMasterRequest request
-        )
-		{
-			return new UpdateGlobalRankingModelMasterTask(
+        ) =>
+            new UpdateGlobalRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateGlobalRankingModelMasterResult> UpdateGlobalRankingModelMasterAsync(
+		public UniTask<Result.UpdateGlobalRankingModelMasterResult> UpdateGlobalRankingModelMasterAsync(
                 Request.UpdateGlobalRankingModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.UpdateGlobalRankingModelMasterResult> result = null;
-			await UpdateGlobalRankingModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UpdateGlobalRankingModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UpdateGlobalRankingModelMasterResult>();
     #else
 		public UpdateGlobalRankingModelMasterTask UpdateGlobalRankingModelMasterAsync(
                 Request.UpdateGlobalRankingModelMasterRequest request
@@ -2414,17 +2098,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.UpdateGlobalRankingModelMasterResult> UpdateGlobalRankingModelMasterAsync(
+		public Task<Result.UpdateGlobalRankingModelMasterResult> UpdateGlobalRankingModelMasterAsync(
                 Request.UpdateGlobalRankingModelMasterRequest request
-        )
-		{
-			var task = new UpdateGlobalRankingModelMasterTask(
+        ) =>
+            new UpdateGlobalRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2467,44 +2148,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DeleteGlobalRankingModelMaster(
                 Request.DeleteGlobalRankingModelMasterRequest request,
                 UnityAction<AsyncResult<Result.DeleteGlobalRankingModelMasterResult>> callback
-        )
-		{
-			var task = new DeleteGlobalRankingModelMasterTask(
+        ) =>
+            new DeleteGlobalRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteGlobalRankingModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteGlobalRankingModelMasterResult> DeleteGlobalRankingModelMasterFuture(
                 Request.DeleteGlobalRankingModelMasterRequest request
-        )
-		{
-			return new DeleteGlobalRankingModelMasterTask(
+        ) =>
+            new DeleteGlobalRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteGlobalRankingModelMasterResult> DeleteGlobalRankingModelMasterAsync(
+		public UniTask<Result.DeleteGlobalRankingModelMasterResult> DeleteGlobalRankingModelMasterAsync(
                 Request.DeleteGlobalRankingModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.DeleteGlobalRankingModelMasterResult> result = null;
-			await DeleteGlobalRankingModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteGlobalRankingModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteGlobalRankingModelMasterResult>();
     #else
 		public DeleteGlobalRankingModelMasterTask DeleteGlobalRankingModelMasterAsync(
                 Request.DeleteGlobalRankingModelMasterRequest request
@@ -2518,17 +2186,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DeleteGlobalRankingModelMasterResult> DeleteGlobalRankingModelMasterAsync(
+		public Task<Result.DeleteGlobalRankingModelMasterResult> DeleteGlobalRankingModelMasterAsync(
                 Request.DeleteGlobalRankingModelMasterRequest request
-        )
-		{
-			var task = new DeleteGlobalRankingModelMasterTask(
+        ) =>
+            new DeleteGlobalRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2583,44 +2248,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DescribeGlobalRankingScores(
                 Request.DescribeGlobalRankingScoresRequest request,
                 UnityAction<AsyncResult<Result.DescribeGlobalRankingScoresResult>> callback
-        )
-		{
-			var task = new DescribeGlobalRankingScoresTask(
+        ) =>
+            new DescribeGlobalRankingScoresTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeGlobalRankingScoresResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeGlobalRankingScoresResult> DescribeGlobalRankingScoresFuture(
                 Request.DescribeGlobalRankingScoresRequest request
-        )
-		{
-			return new DescribeGlobalRankingScoresTask(
+        ) =>
+            new DescribeGlobalRankingScoresTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeGlobalRankingScoresResult> DescribeGlobalRankingScoresAsync(
+		public UniTask<Result.DescribeGlobalRankingScoresResult> DescribeGlobalRankingScoresAsync(
                 Request.DescribeGlobalRankingScoresRequest request
-        )
-		{
-            AsyncResult<Result.DescribeGlobalRankingScoresResult> result = null;
-			await DescribeGlobalRankingScores(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeGlobalRankingScoresTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeGlobalRankingScoresResult>();
     #else
 		public DescribeGlobalRankingScoresTask DescribeGlobalRankingScoresAsync(
                 Request.DescribeGlobalRankingScoresRequest request
@@ -2634,17 +2286,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DescribeGlobalRankingScoresResult> DescribeGlobalRankingScoresAsync(
+		public Task<Result.DescribeGlobalRankingScoresResult> DescribeGlobalRankingScoresAsync(
                 Request.DescribeGlobalRankingScoresRequest request
-        )
-		{
-			var task = new DescribeGlobalRankingScoresTask(
+        ) =>
+            new DescribeGlobalRankingScoresTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2700,44 +2349,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DescribeGlobalRankingScoresByUserId(
                 Request.DescribeGlobalRankingScoresByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DescribeGlobalRankingScoresByUserIdResult>> callback
-        )
-		{
-			var task = new DescribeGlobalRankingScoresByUserIdTask(
+        ) =>
+            new DescribeGlobalRankingScoresByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeGlobalRankingScoresByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeGlobalRankingScoresByUserIdResult> DescribeGlobalRankingScoresByUserIdFuture(
                 Request.DescribeGlobalRankingScoresByUserIdRequest request
-        )
-		{
-			return new DescribeGlobalRankingScoresByUserIdTask(
+        ) =>
+            new DescribeGlobalRankingScoresByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeGlobalRankingScoresByUserIdResult> DescribeGlobalRankingScoresByUserIdAsync(
+		public UniTask<Result.DescribeGlobalRankingScoresByUserIdResult> DescribeGlobalRankingScoresByUserIdAsync(
                 Request.DescribeGlobalRankingScoresByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DescribeGlobalRankingScoresByUserIdResult> result = null;
-			await DescribeGlobalRankingScoresByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeGlobalRankingScoresByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeGlobalRankingScoresByUserIdResult>();
     #else
 		public DescribeGlobalRankingScoresByUserIdTask DescribeGlobalRankingScoresByUserIdAsync(
                 Request.DescribeGlobalRankingScoresByUserIdRequest request
@@ -2751,17 +2387,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DescribeGlobalRankingScoresByUserIdResult> DescribeGlobalRankingScoresByUserIdAsync(
+		public Task<Result.DescribeGlobalRankingScoresByUserIdResult> DescribeGlobalRankingScoresByUserIdAsync(
                 Request.DescribeGlobalRankingScoresByUserIdRequest request
-        )
-		{
-			var task = new DescribeGlobalRankingScoresByUserIdTask(
+        ) =>
+            new DescribeGlobalRankingScoresByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2835,44 +2468,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator PutGlobalRankingScore(
                 Request.PutGlobalRankingScoreRequest request,
                 UnityAction<AsyncResult<Result.PutGlobalRankingScoreResult>> callback
-        )
-		{
-			var task = new PutGlobalRankingScoreTask(
+        ) =>
+            new PutGlobalRankingScoreTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.PutGlobalRankingScoreResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.PutGlobalRankingScoreResult> PutGlobalRankingScoreFuture(
                 Request.PutGlobalRankingScoreRequest request
-        )
-		{
-			return new PutGlobalRankingScoreTask(
+        ) =>
+            new PutGlobalRankingScoreTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.PutGlobalRankingScoreResult> PutGlobalRankingScoreAsync(
+		public UniTask<Result.PutGlobalRankingScoreResult> PutGlobalRankingScoreAsync(
                 Request.PutGlobalRankingScoreRequest request
-        )
-		{
-            AsyncResult<Result.PutGlobalRankingScoreResult> result = null;
-			await PutGlobalRankingScore(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new PutGlobalRankingScoreTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.PutGlobalRankingScoreResult>();
     #else
 		public PutGlobalRankingScoreTask PutGlobalRankingScoreAsync(
                 Request.PutGlobalRankingScoreRequest request
@@ -2886,17 +2506,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.PutGlobalRankingScoreResult> PutGlobalRankingScoreAsync(
+		public Task<Result.PutGlobalRankingScoreResult> PutGlobalRankingScoreAsync(
                 Request.PutGlobalRankingScoreRequest request
-        )
-		{
-			var task = new PutGlobalRankingScoreTask(
+        ) =>
+            new PutGlobalRankingScoreTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -2971,44 +2588,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator PutGlobalRankingScoreByUserId(
                 Request.PutGlobalRankingScoreByUserIdRequest request,
                 UnityAction<AsyncResult<Result.PutGlobalRankingScoreByUserIdResult>> callback
-        )
-		{
-			var task = new PutGlobalRankingScoreByUserIdTask(
+        ) =>
+            new PutGlobalRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.PutGlobalRankingScoreByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.PutGlobalRankingScoreByUserIdResult> PutGlobalRankingScoreByUserIdFuture(
                 Request.PutGlobalRankingScoreByUserIdRequest request
-        )
-		{
-			return new PutGlobalRankingScoreByUserIdTask(
+        ) =>
+            new PutGlobalRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.PutGlobalRankingScoreByUserIdResult> PutGlobalRankingScoreByUserIdAsync(
+		public UniTask<Result.PutGlobalRankingScoreByUserIdResult> PutGlobalRankingScoreByUserIdAsync(
                 Request.PutGlobalRankingScoreByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.PutGlobalRankingScoreByUserIdResult> result = null;
-			await PutGlobalRankingScoreByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new PutGlobalRankingScoreByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.PutGlobalRankingScoreByUserIdResult>();
     #else
 		public PutGlobalRankingScoreByUserIdTask PutGlobalRankingScoreByUserIdAsync(
                 Request.PutGlobalRankingScoreByUserIdRequest request
@@ -3022,17 +2626,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.PutGlobalRankingScoreByUserIdResult> PutGlobalRankingScoreByUserIdAsync(
+		public Task<Result.PutGlobalRankingScoreByUserIdResult> PutGlobalRankingScoreByUserIdAsync(
                 Request.PutGlobalRankingScoreByUserIdRequest request
-        )
-		{
-			var task = new PutGlobalRankingScoreByUserIdTask(
+        ) =>
+            new PutGlobalRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3082,44 +2683,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator GetGlobalRankingScore(
                 Request.GetGlobalRankingScoreRequest request,
                 UnityAction<AsyncResult<Result.GetGlobalRankingScoreResult>> callback
-        )
-		{
-			var task = new GetGlobalRankingScoreTask(
+        ) =>
+            new GetGlobalRankingScoreTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetGlobalRankingScoreResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetGlobalRankingScoreResult> GetGlobalRankingScoreFuture(
                 Request.GetGlobalRankingScoreRequest request
-        )
-		{
-			return new GetGlobalRankingScoreTask(
+        ) =>
+            new GetGlobalRankingScoreTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetGlobalRankingScoreResult> GetGlobalRankingScoreAsync(
+		public UniTask<Result.GetGlobalRankingScoreResult> GetGlobalRankingScoreAsync(
                 Request.GetGlobalRankingScoreRequest request
-        )
-		{
-            AsyncResult<Result.GetGlobalRankingScoreResult> result = null;
-			await GetGlobalRankingScore(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetGlobalRankingScoreTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetGlobalRankingScoreResult>();
     #else
 		public GetGlobalRankingScoreTask GetGlobalRankingScoreAsync(
                 Request.GetGlobalRankingScoreRequest request
@@ -3133,17 +2721,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.GetGlobalRankingScoreResult> GetGlobalRankingScoreAsync(
+		public Task<Result.GetGlobalRankingScoreResult> GetGlobalRankingScoreAsync(
                 Request.GetGlobalRankingScoreRequest request
-        )
-		{
-			var task = new GetGlobalRankingScoreTask(
+        ) =>
+            new GetGlobalRankingScoreTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3194,44 +2779,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator GetGlobalRankingScoreByUserId(
                 Request.GetGlobalRankingScoreByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetGlobalRankingScoreByUserIdResult>> callback
-        )
-		{
-			var task = new GetGlobalRankingScoreByUserIdTask(
+        ) =>
+            new GetGlobalRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetGlobalRankingScoreByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetGlobalRankingScoreByUserIdResult> GetGlobalRankingScoreByUserIdFuture(
                 Request.GetGlobalRankingScoreByUserIdRequest request
-        )
-		{
-			return new GetGlobalRankingScoreByUserIdTask(
+        ) =>
+            new GetGlobalRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetGlobalRankingScoreByUserIdResult> GetGlobalRankingScoreByUserIdAsync(
+		public UniTask<Result.GetGlobalRankingScoreByUserIdResult> GetGlobalRankingScoreByUserIdAsync(
                 Request.GetGlobalRankingScoreByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.GetGlobalRankingScoreByUserIdResult> result = null;
-			await GetGlobalRankingScoreByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetGlobalRankingScoreByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetGlobalRankingScoreByUserIdResult>();
     #else
 		public GetGlobalRankingScoreByUserIdTask GetGlobalRankingScoreByUserIdAsync(
                 Request.GetGlobalRankingScoreByUserIdRequest request
@@ -3245,17 +2817,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.GetGlobalRankingScoreByUserIdResult> GetGlobalRankingScoreByUserIdAsync(
+		public Task<Result.GetGlobalRankingScoreByUserIdResult> GetGlobalRankingScoreByUserIdAsync(
                 Request.GetGlobalRankingScoreByUserIdRequest request
-        )
-		{
-			var task = new GetGlobalRankingScoreByUserIdTask(
+        ) =>
+            new GetGlobalRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3310,44 +2879,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DeleteGlobalRankingScoreByUserId(
                 Request.DeleteGlobalRankingScoreByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DeleteGlobalRankingScoreByUserIdResult>> callback
-        )
-		{
-			var task = new DeleteGlobalRankingScoreByUserIdTask(
+        ) =>
+            new DeleteGlobalRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteGlobalRankingScoreByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteGlobalRankingScoreByUserIdResult> DeleteGlobalRankingScoreByUserIdFuture(
                 Request.DeleteGlobalRankingScoreByUserIdRequest request
-        )
-		{
-			return new DeleteGlobalRankingScoreByUserIdTask(
+        ) =>
+            new DeleteGlobalRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteGlobalRankingScoreByUserIdResult> DeleteGlobalRankingScoreByUserIdAsync(
+		public UniTask<Result.DeleteGlobalRankingScoreByUserIdResult> DeleteGlobalRankingScoreByUserIdAsync(
                 Request.DeleteGlobalRankingScoreByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DeleteGlobalRankingScoreByUserIdResult> result = null;
-			await DeleteGlobalRankingScoreByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteGlobalRankingScoreByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteGlobalRankingScoreByUserIdResult>();
     #else
 		public DeleteGlobalRankingScoreByUserIdTask DeleteGlobalRankingScoreByUserIdAsync(
                 Request.DeleteGlobalRankingScoreByUserIdRequest request
@@ -3361,17 +2917,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DeleteGlobalRankingScoreByUserIdResult> DeleteGlobalRankingScoreByUserIdAsync(
+		public Task<Result.DeleteGlobalRankingScoreByUserIdResult> DeleteGlobalRankingScoreByUserIdAsync(
                 Request.DeleteGlobalRankingScoreByUserIdRequest request
-        )
-		{
-			var task = new DeleteGlobalRankingScoreByUserIdTask(
+        ) =>
+            new DeleteGlobalRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3451,44 +3004,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator VerifyGlobalRankingScore(
                 Request.VerifyGlobalRankingScoreRequest request,
                 UnityAction<AsyncResult<Result.VerifyGlobalRankingScoreResult>> callback
-        )
-		{
-			var task = new VerifyGlobalRankingScoreTask(
+        ) =>
+            new VerifyGlobalRankingScoreTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifyGlobalRankingScoreResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifyGlobalRankingScoreResult> VerifyGlobalRankingScoreFuture(
                 Request.VerifyGlobalRankingScoreRequest request
-        )
-		{
-			return new VerifyGlobalRankingScoreTask(
+        ) =>
+            new VerifyGlobalRankingScoreTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifyGlobalRankingScoreResult> VerifyGlobalRankingScoreAsync(
+		public UniTask<Result.VerifyGlobalRankingScoreResult> VerifyGlobalRankingScoreAsync(
                 Request.VerifyGlobalRankingScoreRequest request
-        )
-		{
-            AsyncResult<Result.VerifyGlobalRankingScoreResult> result = null;
-			await VerifyGlobalRankingScore(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifyGlobalRankingScoreTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyGlobalRankingScoreResult>();
     #else
 		public VerifyGlobalRankingScoreTask VerifyGlobalRankingScoreAsync(
                 Request.VerifyGlobalRankingScoreRequest request
@@ -3502,17 +3042,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.VerifyGlobalRankingScoreResult> VerifyGlobalRankingScoreAsync(
+		public Task<Result.VerifyGlobalRankingScoreResult> VerifyGlobalRankingScoreAsync(
                 Request.VerifyGlobalRankingScoreRequest request
-        )
-		{
-			var task = new VerifyGlobalRankingScoreTask(
+        ) =>
+            new VerifyGlobalRankingScoreTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3593,44 +3130,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator VerifyGlobalRankingScoreByUserId(
                 Request.VerifyGlobalRankingScoreByUserIdRequest request,
                 UnityAction<AsyncResult<Result.VerifyGlobalRankingScoreByUserIdResult>> callback
-        )
-		{
-			var task = new VerifyGlobalRankingScoreByUserIdTask(
+        ) =>
+            new VerifyGlobalRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifyGlobalRankingScoreByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifyGlobalRankingScoreByUserIdResult> VerifyGlobalRankingScoreByUserIdFuture(
                 Request.VerifyGlobalRankingScoreByUserIdRequest request
-        )
-		{
-			return new VerifyGlobalRankingScoreByUserIdTask(
+        ) =>
+            new VerifyGlobalRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifyGlobalRankingScoreByUserIdResult> VerifyGlobalRankingScoreByUserIdAsync(
+		public UniTask<Result.VerifyGlobalRankingScoreByUserIdResult> VerifyGlobalRankingScoreByUserIdAsync(
                 Request.VerifyGlobalRankingScoreByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.VerifyGlobalRankingScoreByUserIdResult> result = null;
-			await VerifyGlobalRankingScoreByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifyGlobalRankingScoreByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyGlobalRankingScoreByUserIdResult>();
     #else
 		public VerifyGlobalRankingScoreByUserIdTask VerifyGlobalRankingScoreByUserIdAsync(
                 Request.VerifyGlobalRankingScoreByUserIdRequest request
@@ -3644,17 +3168,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.VerifyGlobalRankingScoreByUserIdResult> VerifyGlobalRankingScoreByUserIdAsync(
+		public Task<Result.VerifyGlobalRankingScoreByUserIdResult> VerifyGlobalRankingScoreByUserIdAsync(
                 Request.VerifyGlobalRankingScoreByUserIdRequest request
-        )
-		{
-			var task = new VerifyGlobalRankingScoreByUserIdTask(
+        ) =>
+            new VerifyGlobalRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3717,44 +3238,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator VerifyGlobalRankingScoreByStampTask(
                 Request.VerifyGlobalRankingScoreByStampTaskRequest request,
                 UnityAction<AsyncResult<Result.VerifyGlobalRankingScoreByStampTaskResult>> callback
-        )
-		{
-			var task = new VerifyGlobalRankingScoreByStampTaskTask(
+        ) =>
+            new VerifyGlobalRankingScoreByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifyGlobalRankingScoreByStampTaskResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifyGlobalRankingScoreByStampTaskResult> VerifyGlobalRankingScoreByStampTaskFuture(
                 Request.VerifyGlobalRankingScoreByStampTaskRequest request
-        )
-		{
-			return new VerifyGlobalRankingScoreByStampTaskTask(
+        ) =>
+            new VerifyGlobalRankingScoreByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifyGlobalRankingScoreByStampTaskResult> VerifyGlobalRankingScoreByStampTaskAsync(
+		public UniTask<Result.VerifyGlobalRankingScoreByStampTaskResult> VerifyGlobalRankingScoreByStampTaskAsync(
                 Request.VerifyGlobalRankingScoreByStampTaskRequest request
-        )
-		{
-            AsyncResult<Result.VerifyGlobalRankingScoreByStampTaskResult> result = null;
-			await VerifyGlobalRankingScoreByStampTask(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifyGlobalRankingScoreByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyGlobalRankingScoreByStampTaskResult>();
     #else
 		public VerifyGlobalRankingScoreByStampTaskTask VerifyGlobalRankingScoreByStampTaskAsync(
                 Request.VerifyGlobalRankingScoreByStampTaskRequest request
@@ -3768,17 +3276,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.VerifyGlobalRankingScoreByStampTaskResult> VerifyGlobalRankingScoreByStampTaskAsync(
+		public Task<Result.VerifyGlobalRankingScoreByStampTaskResult> VerifyGlobalRankingScoreByStampTaskAsync(
                 Request.VerifyGlobalRankingScoreByStampTaskRequest request
-        )
-		{
-			var task = new VerifyGlobalRankingScoreByStampTaskTask(
+        ) =>
+            new VerifyGlobalRankingScoreByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3836,44 +3341,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DescribeGlobalRankingReceivedRewards(
                 Request.DescribeGlobalRankingReceivedRewardsRequest request,
                 UnityAction<AsyncResult<Result.DescribeGlobalRankingReceivedRewardsResult>> callback
-        )
-		{
-			var task = new DescribeGlobalRankingReceivedRewardsTask(
+        ) =>
+            new DescribeGlobalRankingReceivedRewardsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeGlobalRankingReceivedRewardsResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeGlobalRankingReceivedRewardsResult> DescribeGlobalRankingReceivedRewardsFuture(
                 Request.DescribeGlobalRankingReceivedRewardsRequest request
-        )
-		{
-			return new DescribeGlobalRankingReceivedRewardsTask(
+        ) =>
+            new DescribeGlobalRankingReceivedRewardsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeGlobalRankingReceivedRewardsResult> DescribeGlobalRankingReceivedRewardsAsync(
+		public UniTask<Result.DescribeGlobalRankingReceivedRewardsResult> DescribeGlobalRankingReceivedRewardsAsync(
                 Request.DescribeGlobalRankingReceivedRewardsRequest request
-        )
-		{
-            AsyncResult<Result.DescribeGlobalRankingReceivedRewardsResult> result = null;
-			await DescribeGlobalRankingReceivedRewards(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeGlobalRankingReceivedRewardsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeGlobalRankingReceivedRewardsResult>();
     #else
 		public DescribeGlobalRankingReceivedRewardsTask DescribeGlobalRankingReceivedRewardsAsync(
                 Request.DescribeGlobalRankingReceivedRewardsRequest request
@@ -3887,17 +3379,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DescribeGlobalRankingReceivedRewardsResult> DescribeGlobalRankingReceivedRewardsAsync(
+		public Task<Result.DescribeGlobalRankingReceivedRewardsResult> DescribeGlobalRankingReceivedRewardsAsync(
                 Request.DescribeGlobalRankingReceivedRewardsRequest request
-        )
-		{
-			var task = new DescribeGlobalRankingReceivedRewardsTask(
+        ) =>
+            new DescribeGlobalRankingReceivedRewardsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -3956,44 +3445,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DescribeGlobalRankingReceivedRewardsByUserId(
                 Request.DescribeGlobalRankingReceivedRewardsByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DescribeGlobalRankingReceivedRewardsByUserIdResult>> callback
-        )
-		{
-			var task = new DescribeGlobalRankingReceivedRewardsByUserIdTask(
+        ) =>
+            new DescribeGlobalRankingReceivedRewardsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeGlobalRankingReceivedRewardsByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeGlobalRankingReceivedRewardsByUserIdResult> DescribeGlobalRankingReceivedRewardsByUserIdFuture(
                 Request.DescribeGlobalRankingReceivedRewardsByUserIdRequest request
-        )
-		{
-			return new DescribeGlobalRankingReceivedRewardsByUserIdTask(
+        ) =>
+            new DescribeGlobalRankingReceivedRewardsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeGlobalRankingReceivedRewardsByUserIdResult> DescribeGlobalRankingReceivedRewardsByUserIdAsync(
+		public UniTask<Result.DescribeGlobalRankingReceivedRewardsByUserIdResult> DescribeGlobalRankingReceivedRewardsByUserIdAsync(
                 Request.DescribeGlobalRankingReceivedRewardsByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DescribeGlobalRankingReceivedRewardsByUserIdResult> result = null;
-			await DescribeGlobalRankingReceivedRewardsByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeGlobalRankingReceivedRewardsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeGlobalRankingReceivedRewardsByUserIdResult>();
     #else
 		public DescribeGlobalRankingReceivedRewardsByUserIdTask DescribeGlobalRankingReceivedRewardsByUserIdAsync(
                 Request.DescribeGlobalRankingReceivedRewardsByUserIdRequest request
@@ -4007,17 +3483,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DescribeGlobalRankingReceivedRewardsByUserIdResult> DescribeGlobalRankingReceivedRewardsByUserIdAsync(
+		public Task<Result.DescribeGlobalRankingReceivedRewardsByUserIdResult> DescribeGlobalRankingReceivedRewardsByUserIdAsync(
                 Request.DescribeGlobalRankingReceivedRewardsByUserIdRequest request
-        )
-		{
-			var task = new DescribeGlobalRankingReceivedRewardsByUserIdTask(
+        ) =>
+            new DescribeGlobalRankingReceivedRewardsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4086,44 +3559,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator CreateGlobalRankingReceivedReward(
                 Request.CreateGlobalRankingReceivedRewardRequest request,
                 UnityAction<AsyncResult<Result.CreateGlobalRankingReceivedRewardResult>> callback
-        )
-		{
-			var task = new CreateGlobalRankingReceivedRewardTask(
+        ) =>
+            new CreateGlobalRankingReceivedRewardTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateGlobalRankingReceivedRewardResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CreateGlobalRankingReceivedRewardResult> CreateGlobalRankingReceivedRewardFuture(
                 Request.CreateGlobalRankingReceivedRewardRequest request
-        )
-		{
-			return new CreateGlobalRankingReceivedRewardTask(
+        ) =>
+            new CreateGlobalRankingReceivedRewardTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateGlobalRankingReceivedRewardResult> CreateGlobalRankingReceivedRewardAsync(
+		public UniTask<Result.CreateGlobalRankingReceivedRewardResult> CreateGlobalRankingReceivedRewardAsync(
                 Request.CreateGlobalRankingReceivedRewardRequest request
-        )
-		{
-            AsyncResult<Result.CreateGlobalRankingReceivedRewardResult> result = null;
-			await CreateGlobalRankingReceivedReward(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CreateGlobalRankingReceivedRewardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CreateGlobalRankingReceivedRewardResult>();
     #else
 		public CreateGlobalRankingReceivedRewardTask CreateGlobalRankingReceivedRewardAsync(
                 Request.CreateGlobalRankingReceivedRewardRequest request
@@ -4137,17 +3597,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.CreateGlobalRankingReceivedRewardResult> CreateGlobalRankingReceivedRewardAsync(
+		public Task<Result.CreateGlobalRankingReceivedRewardResult> CreateGlobalRankingReceivedRewardAsync(
                 Request.CreateGlobalRankingReceivedRewardRequest request
-        )
-		{
-			var task = new CreateGlobalRankingReceivedRewardTask(
+        ) =>
+            new CreateGlobalRankingReceivedRewardTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4217,44 +3674,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator CreateGlobalRankingReceivedRewardByUserId(
                 Request.CreateGlobalRankingReceivedRewardByUserIdRequest request,
                 UnityAction<AsyncResult<Result.CreateGlobalRankingReceivedRewardByUserIdResult>> callback
-        )
-		{
-			var task = new CreateGlobalRankingReceivedRewardByUserIdTask(
+        ) =>
+            new CreateGlobalRankingReceivedRewardByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateGlobalRankingReceivedRewardByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CreateGlobalRankingReceivedRewardByUserIdResult> CreateGlobalRankingReceivedRewardByUserIdFuture(
                 Request.CreateGlobalRankingReceivedRewardByUserIdRequest request
-        )
-		{
-			return new CreateGlobalRankingReceivedRewardByUserIdTask(
+        ) =>
+            new CreateGlobalRankingReceivedRewardByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateGlobalRankingReceivedRewardByUserIdResult> CreateGlobalRankingReceivedRewardByUserIdAsync(
+		public UniTask<Result.CreateGlobalRankingReceivedRewardByUserIdResult> CreateGlobalRankingReceivedRewardByUserIdAsync(
                 Request.CreateGlobalRankingReceivedRewardByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.CreateGlobalRankingReceivedRewardByUserIdResult> result = null;
-			await CreateGlobalRankingReceivedRewardByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CreateGlobalRankingReceivedRewardByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CreateGlobalRankingReceivedRewardByUserIdResult>();
     #else
 		public CreateGlobalRankingReceivedRewardByUserIdTask CreateGlobalRankingReceivedRewardByUserIdAsync(
                 Request.CreateGlobalRankingReceivedRewardByUserIdRequest request
@@ -4268,17 +3712,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.CreateGlobalRankingReceivedRewardByUserIdResult> CreateGlobalRankingReceivedRewardByUserIdAsync(
+		public Task<Result.CreateGlobalRankingReceivedRewardByUserIdResult> CreateGlobalRankingReceivedRewardByUserIdAsync(
                 Request.CreateGlobalRankingReceivedRewardByUserIdRequest request
-        )
-		{
-			var task = new CreateGlobalRankingReceivedRewardByUserIdTask(
+        ) =>
+            new CreateGlobalRankingReceivedRewardByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4353,44 +3794,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator ReceiveGlobalRankingReceivedReward(
                 Request.ReceiveGlobalRankingReceivedRewardRequest request,
                 UnityAction<AsyncResult<Result.ReceiveGlobalRankingReceivedRewardResult>> callback
-        )
-		{
-			var task = new ReceiveGlobalRankingReceivedRewardTask(
+        ) =>
+            new ReceiveGlobalRankingReceivedRewardTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ReceiveGlobalRankingReceivedRewardResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.ReceiveGlobalRankingReceivedRewardResult> ReceiveGlobalRankingReceivedRewardFuture(
                 Request.ReceiveGlobalRankingReceivedRewardRequest request
-        )
-		{
-			return new ReceiveGlobalRankingReceivedRewardTask(
+        ) =>
+            new ReceiveGlobalRankingReceivedRewardTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ReceiveGlobalRankingReceivedRewardResult> ReceiveGlobalRankingReceivedRewardAsync(
+		public UniTask<Result.ReceiveGlobalRankingReceivedRewardResult> ReceiveGlobalRankingReceivedRewardAsync(
                 Request.ReceiveGlobalRankingReceivedRewardRequest request
-        )
-		{
-            AsyncResult<Result.ReceiveGlobalRankingReceivedRewardResult> result = null;
-			await ReceiveGlobalRankingReceivedReward(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new ReceiveGlobalRankingReceivedRewardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.ReceiveGlobalRankingReceivedRewardResult>();
     #else
 		public ReceiveGlobalRankingReceivedRewardTask ReceiveGlobalRankingReceivedRewardAsync(
                 Request.ReceiveGlobalRankingReceivedRewardRequest request
@@ -4404,17 +3832,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.ReceiveGlobalRankingReceivedRewardResult> ReceiveGlobalRankingReceivedRewardAsync(
+		public Task<Result.ReceiveGlobalRankingReceivedRewardResult> ReceiveGlobalRankingReceivedRewardAsync(
                 Request.ReceiveGlobalRankingReceivedRewardRequest request
-        )
-		{
-			var task = new ReceiveGlobalRankingReceivedRewardTask(
+        ) =>
+            new ReceiveGlobalRankingReceivedRewardTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4490,44 +3915,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator ReceiveGlobalRankingReceivedRewardByUserId(
                 Request.ReceiveGlobalRankingReceivedRewardByUserIdRequest request,
                 UnityAction<AsyncResult<Result.ReceiveGlobalRankingReceivedRewardByUserIdResult>> callback
-        )
-		{
-			var task = new ReceiveGlobalRankingReceivedRewardByUserIdTask(
+        ) =>
+            new ReceiveGlobalRankingReceivedRewardByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ReceiveGlobalRankingReceivedRewardByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.ReceiveGlobalRankingReceivedRewardByUserIdResult> ReceiveGlobalRankingReceivedRewardByUserIdFuture(
                 Request.ReceiveGlobalRankingReceivedRewardByUserIdRequest request
-        )
-		{
-			return new ReceiveGlobalRankingReceivedRewardByUserIdTask(
+        ) =>
+            new ReceiveGlobalRankingReceivedRewardByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ReceiveGlobalRankingReceivedRewardByUserIdResult> ReceiveGlobalRankingReceivedRewardByUserIdAsync(
+		public UniTask<Result.ReceiveGlobalRankingReceivedRewardByUserIdResult> ReceiveGlobalRankingReceivedRewardByUserIdAsync(
                 Request.ReceiveGlobalRankingReceivedRewardByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.ReceiveGlobalRankingReceivedRewardByUserIdResult> result = null;
-			await ReceiveGlobalRankingReceivedRewardByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new ReceiveGlobalRankingReceivedRewardByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.ReceiveGlobalRankingReceivedRewardByUserIdResult>();
     #else
 		public ReceiveGlobalRankingReceivedRewardByUserIdTask ReceiveGlobalRankingReceivedRewardByUserIdAsync(
                 Request.ReceiveGlobalRankingReceivedRewardByUserIdRequest request
@@ -4541,17 +3953,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.ReceiveGlobalRankingReceivedRewardByUserIdResult> ReceiveGlobalRankingReceivedRewardByUserIdAsync(
+		public Task<Result.ReceiveGlobalRankingReceivedRewardByUserIdResult> ReceiveGlobalRankingReceivedRewardByUserIdAsync(
                 Request.ReceiveGlobalRankingReceivedRewardByUserIdRequest request
-        )
-		{
-			var task = new ReceiveGlobalRankingReceivedRewardByUserIdTask(
+        ) =>
+            new ReceiveGlobalRankingReceivedRewardByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4601,44 +4010,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator GetGlobalRankingReceivedReward(
                 Request.GetGlobalRankingReceivedRewardRequest request,
                 UnityAction<AsyncResult<Result.GetGlobalRankingReceivedRewardResult>> callback
-        )
-		{
-			var task = new GetGlobalRankingReceivedRewardTask(
+        ) =>
+            new GetGlobalRankingReceivedRewardTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetGlobalRankingReceivedRewardResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetGlobalRankingReceivedRewardResult> GetGlobalRankingReceivedRewardFuture(
                 Request.GetGlobalRankingReceivedRewardRequest request
-        )
-		{
-			return new GetGlobalRankingReceivedRewardTask(
+        ) =>
+            new GetGlobalRankingReceivedRewardTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetGlobalRankingReceivedRewardResult> GetGlobalRankingReceivedRewardAsync(
+		public UniTask<Result.GetGlobalRankingReceivedRewardResult> GetGlobalRankingReceivedRewardAsync(
                 Request.GetGlobalRankingReceivedRewardRequest request
-        )
-		{
-            AsyncResult<Result.GetGlobalRankingReceivedRewardResult> result = null;
-			await GetGlobalRankingReceivedReward(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetGlobalRankingReceivedRewardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetGlobalRankingReceivedRewardResult>();
     #else
 		public GetGlobalRankingReceivedRewardTask GetGlobalRankingReceivedRewardAsync(
                 Request.GetGlobalRankingReceivedRewardRequest request
@@ -4652,17 +4048,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.GetGlobalRankingReceivedRewardResult> GetGlobalRankingReceivedRewardAsync(
+		public Task<Result.GetGlobalRankingReceivedRewardResult> GetGlobalRankingReceivedRewardAsync(
                 Request.GetGlobalRankingReceivedRewardRequest request
-        )
-		{
-			var task = new GetGlobalRankingReceivedRewardTask(
+        ) =>
+            new GetGlobalRankingReceivedRewardTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4713,44 +4106,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator GetGlobalRankingReceivedRewardByUserId(
                 Request.GetGlobalRankingReceivedRewardByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetGlobalRankingReceivedRewardByUserIdResult>> callback
-        )
-		{
-			var task = new GetGlobalRankingReceivedRewardByUserIdTask(
+        ) =>
+            new GetGlobalRankingReceivedRewardByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetGlobalRankingReceivedRewardByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetGlobalRankingReceivedRewardByUserIdResult> GetGlobalRankingReceivedRewardByUserIdFuture(
                 Request.GetGlobalRankingReceivedRewardByUserIdRequest request
-        )
-		{
-			return new GetGlobalRankingReceivedRewardByUserIdTask(
+        ) =>
+            new GetGlobalRankingReceivedRewardByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetGlobalRankingReceivedRewardByUserIdResult> GetGlobalRankingReceivedRewardByUserIdAsync(
+		public UniTask<Result.GetGlobalRankingReceivedRewardByUserIdResult> GetGlobalRankingReceivedRewardByUserIdAsync(
                 Request.GetGlobalRankingReceivedRewardByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.GetGlobalRankingReceivedRewardByUserIdResult> result = null;
-			await GetGlobalRankingReceivedRewardByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetGlobalRankingReceivedRewardByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetGlobalRankingReceivedRewardByUserIdResult>();
     #else
 		public GetGlobalRankingReceivedRewardByUserIdTask GetGlobalRankingReceivedRewardByUserIdAsync(
                 Request.GetGlobalRankingReceivedRewardByUserIdRequest request
@@ -4764,17 +4144,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.GetGlobalRankingReceivedRewardByUserIdResult> GetGlobalRankingReceivedRewardByUserIdAsync(
+		public Task<Result.GetGlobalRankingReceivedRewardByUserIdResult> GetGlobalRankingReceivedRewardByUserIdAsync(
                 Request.GetGlobalRankingReceivedRewardByUserIdRequest request
-        )
-		{
-			var task = new GetGlobalRankingReceivedRewardByUserIdTask(
+        ) =>
+            new GetGlobalRankingReceivedRewardByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4829,44 +4206,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DeleteGlobalRankingReceivedRewardByUserId(
                 Request.DeleteGlobalRankingReceivedRewardByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DeleteGlobalRankingReceivedRewardByUserIdResult>> callback
-        )
-		{
-			var task = new DeleteGlobalRankingReceivedRewardByUserIdTask(
+        ) =>
+            new DeleteGlobalRankingReceivedRewardByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteGlobalRankingReceivedRewardByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteGlobalRankingReceivedRewardByUserIdResult> DeleteGlobalRankingReceivedRewardByUserIdFuture(
                 Request.DeleteGlobalRankingReceivedRewardByUserIdRequest request
-        )
-		{
-			return new DeleteGlobalRankingReceivedRewardByUserIdTask(
+        ) =>
+            new DeleteGlobalRankingReceivedRewardByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteGlobalRankingReceivedRewardByUserIdResult> DeleteGlobalRankingReceivedRewardByUserIdAsync(
+		public UniTask<Result.DeleteGlobalRankingReceivedRewardByUserIdResult> DeleteGlobalRankingReceivedRewardByUserIdAsync(
                 Request.DeleteGlobalRankingReceivedRewardByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DeleteGlobalRankingReceivedRewardByUserIdResult> result = null;
-			await DeleteGlobalRankingReceivedRewardByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteGlobalRankingReceivedRewardByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteGlobalRankingReceivedRewardByUserIdResult>();
     #else
 		public DeleteGlobalRankingReceivedRewardByUserIdTask DeleteGlobalRankingReceivedRewardByUserIdAsync(
                 Request.DeleteGlobalRankingReceivedRewardByUserIdRequest request
@@ -4880,17 +4244,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DeleteGlobalRankingReceivedRewardByUserIdResult> DeleteGlobalRankingReceivedRewardByUserIdAsync(
+		public Task<Result.DeleteGlobalRankingReceivedRewardByUserIdResult> DeleteGlobalRankingReceivedRewardByUserIdAsync(
                 Request.DeleteGlobalRankingReceivedRewardByUserIdRequest request
-        )
-		{
-			var task = new DeleteGlobalRankingReceivedRewardByUserIdTask(
+        ) =>
+            new DeleteGlobalRankingReceivedRewardByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -4953,44 +4314,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator CreateGlobalRankingReceivedRewardByStampTask(
                 Request.CreateGlobalRankingReceivedRewardByStampTaskRequest request,
                 UnityAction<AsyncResult<Result.CreateGlobalRankingReceivedRewardByStampTaskResult>> callback
-        )
-		{
-			var task = new CreateGlobalRankingReceivedRewardByStampTaskTask(
+        ) =>
+            new CreateGlobalRankingReceivedRewardByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateGlobalRankingReceivedRewardByStampTaskResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CreateGlobalRankingReceivedRewardByStampTaskResult> CreateGlobalRankingReceivedRewardByStampTaskFuture(
                 Request.CreateGlobalRankingReceivedRewardByStampTaskRequest request
-        )
-		{
-			return new CreateGlobalRankingReceivedRewardByStampTaskTask(
+        ) =>
+            new CreateGlobalRankingReceivedRewardByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateGlobalRankingReceivedRewardByStampTaskResult> CreateGlobalRankingReceivedRewardByStampTaskAsync(
+		public UniTask<Result.CreateGlobalRankingReceivedRewardByStampTaskResult> CreateGlobalRankingReceivedRewardByStampTaskAsync(
                 Request.CreateGlobalRankingReceivedRewardByStampTaskRequest request
-        )
-		{
-            AsyncResult<Result.CreateGlobalRankingReceivedRewardByStampTaskResult> result = null;
-			await CreateGlobalRankingReceivedRewardByStampTask(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CreateGlobalRankingReceivedRewardByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CreateGlobalRankingReceivedRewardByStampTaskResult>();
     #else
 		public CreateGlobalRankingReceivedRewardByStampTaskTask CreateGlobalRankingReceivedRewardByStampTaskAsync(
                 Request.CreateGlobalRankingReceivedRewardByStampTaskRequest request
@@ -5004,17 +4352,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.CreateGlobalRankingReceivedRewardByStampTaskResult> CreateGlobalRankingReceivedRewardByStampTaskAsync(
+		public Task<Result.CreateGlobalRankingReceivedRewardByStampTaskResult> CreateGlobalRankingReceivedRewardByStampTaskAsync(
                 Request.CreateGlobalRankingReceivedRewardByStampTaskRequest request
-        )
-		{
-			var task = new CreateGlobalRankingReceivedRewardByStampTaskTask(
+        ) =>
+            new CreateGlobalRankingReceivedRewardByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5070,44 +4415,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DescribeGlobalRankings(
                 Request.DescribeGlobalRankingsRequest request,
                 UnityAction<AsyncResult<Result.DescribeGlobalRankingsResult>> callback
-        )
-		{
-			var task = new DescribeGlobalRankingsTask(
+        ) =>
+            new DescribeGlobalRankingsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeGlobalRankingsResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeGlobalRankingsResult> DescribeGlobalRankingsFuture(
                 Request.DescribeGlobalRankingsRequest request
-        )
-		{
-			return new DescribeGlobalRankingsTask(
+        ) =>
+            new DescribeGlobalRankingsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeGlobalRankingsResult> DescribeGlobalRankingsAsync(
+		public UniTask<Result.DescribeGlobalRankingsResult> DescribeGlobalRankingsAsync(
                 Request.DescribeGlobalRankingsRequest request
-        )
-		{
-            AsyncResult<Result.DescribeGlobalRankingsResult> result = null;
-			await DescribeGlobalRankings(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeGlobalRankingsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeGlobalRankingsResult>();
     #else
 		public DescribeGlobalRankingsTask DescribeGlobalRankingsAsync(
                 Request.DescribeGlobalRankingsRequest request
@@ -5121,17 +4453,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DescribeGlobalRankingsResult> DescribeGlobalRankingsAsync(
+		public Task<Result.DescribeGlobalRankingsResult> DescribeGlobalRankingsAsync(
                 Request.DescribeGlobalRankingsRequest request
-        )
-		{
-			var task = new DescribeGlobalRankingsTask(
+        ) =>
+            new DescribeGlobalRankingsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5188,44 +4517,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DescribeGlobalRankingsByUserId(
                 Request.DescribeGlobalRankingsByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DescribeGlobalRankingsByUserIdResult>> callback
-        )
-		{
-			var task = new DescribeGlobalRankingsByUserIdTask(
+        ) =>
+            new DescribeGlobalRankingsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeGlobalRankingsByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeGlobalRankingsByUserIdResult> DescribeGlobalRankingsByUserIdFuture(
                 Request.DescribeGlobalRankingsByUserIdRequest request
-        )
-		{
-			return new DescribeGlobalRankingsByUserIdTask(
+        ) =>
+            new DescribeGlobalRankingsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeGlobalRankingsByUserIdResult> DescribeGlobalRankingsByUserIdAsync(
+		public UniTask<Result.DescribeGlobalRankingsByUserIdResult> DescribeGlobalRankingsByUserIdAsync(
                 Request.DescribeGlobalRankingsByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DescribeGlobalRankingsByUserIdResult> result = null;
-			await DescribeGlobalRankingsByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeGlobalRankingsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeGlobalRankingsByUserIdResult>();
     #else
 		public DescribeGlobalRankingsByUserIdTask DescribeGlobalRankingsByUserIdAsync(
                 Request.DescribeGlobalRankingsByUserIdRequest request
@@ -5239,17 +4555,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DescribeGlobalRankingsByUserIdResult> DescribeGlobalRankingsByUserIdAsync(
+		public Task<Result.DescribeGlobalRankingsByUserIdResult> DescribeGlobalRankingsByUserIdAsync(
                 Request.DescribeGlobalRankingsByUserIdRequest request
-        )
-		{
-			var task = new DescribeGlobalRankingsByUserIdTask(
+        ) =>
+            new DescribeGlobalRankingsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5299,44 +4612,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator GetGlobalRanking(
                 Request.GetGlobalRankingRequest request,
                 UnityAction<AsyncResult<Result.GetGlobalRankingResult>> callback
-        )
-		{
-			var task = new GetGlobalRankingTask(
+        ) =>
+            new GetGlobalRankingTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetGlobalRankingResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetGlobalRankingResult> GetGlobalRankingFuture(
                 Request.GetGlobalRankingRequest request
-        )
-		{
-			return new GetGlobalRankingTask(
+        ) =>
+            new GetGlobalRankingTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetGlobalRankingResult> GetGlobalRankingAsync(
+		public UniTask<Result.GetGlobalRankingResult> GetGlobalRankingAsync(
                 Request.GetGlobalRankingRequest request
-        )
-		{
-            AsyncResult<Result.GetGlobalRankingResult> result = null;
-			await GetGlobalRanking(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetGlobalRankingTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetGlobalRankingResult>();
     #else
 		public GetGlobalRankingTask GetGlobalRankingAsync(
                 Request.GetGlobalRankingRequest request
@@ -5350,17 +4650,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.GetGlobalRankingResult> GetGlobalRankingAsync(
+		public Task<Result.GetGlobalRankingResult> GetGlobalRankingAsync(
                 Request.GetGlobalRankingRequest request
-        )
-		{
-			var task = new GetGlobalRankingTask(
+        ) =>
+            new GetGlobalRankingTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5411,44 +4708,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator GetGlobalRankingByUserId(
                 Request.GetGlobalRankingByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetGlobalRankingByUserIdResult>> callback
-        )
-		{
-			var task = new GetGlobalRankingByUserIdTask(
+        ) =>
+            new GetGlobalRankingByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetGlobalRankingByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetGlobalRankingByUserIdResult> GetGlobalRankingByUserIdFuture(
                 Request.GetGlobalRankingByUserIdRequest request
-        )
-		{
-			return new GetGlobalRankingByUserIdTask(
+        ) =>
+            new GetGlobalRankingByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetGlobalRankingByUserIdResult> GetGlobalRankingByUserIdAsync(
+		public UniTask<Result.GetGlobalRankingByUserIdResult> GetGlobalRankingByUserIdAsync(
                 Request.GetGlobalRankingByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.GetGlobalRankingByUserIdResult> result = null;
-			await GetGlobalRankingByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetGlobalRankingByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetGlobalRankingByUserIdResult>();
     #else
 		public GetGlobalRankingByUserIdTask GetGlobalRankingByUserIdAsync(
                 Request.GetGlobalRankingByUserIdRequest request
@@ -5462,17 +4746,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.GetGlobalRankingByUserIdResult> GetGlobalRankingByUserIdAsync(
+		public Task<Result.GetGlobalRankingByUserIdResult> GetGlobalRankingByUserIdAsync(
                 Request.GetGlobalRankingByUserIdRequest request
-        )
-		{
-			var task = new GetGlobalRankingByUserIdTask(
+        ) =>
+            new GetGlobalRankingByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5514,44 +4795,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DescribeClusterRankingModels(
                 Request.DescribeClusterRankingModelsRequest request,
                 UnityAction<AsyncResult<Result.DescribeClusterRankingModelsResult>> callback
-        )
-		{
-			var task = new DescribeClusterRankingModelsTask(
+        ) =>
+            new DescribeClusterRankingModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeClusterRankingModelsResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeClusterRankingModelsResult> DescribeClusterRankingModelsFuture(
                 Request.DescribeClusterRankingModelsRequest request
-        )
-		{
-			return new DescribeClusterRankingModelsTask(
+        ) =>
+            new DescribeClusterRankingModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeClusterRankingModelsResult> DescribeClusterRankingModelsAsync(
+		public UniTask<Result.DescribeClusterRankingModelsResult> DescribeClusterRankingModelsAsync(
                 Request.DescribeClusterRankingModelsRequest request
-        )
-		{
-            AsyncResult<Result.DescribeClusterRankingModelsResult> result = null;
-			await DescribeClusterRankingModels(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeClusterRankingModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeClusterRankingModelsResult>();
     #else
 		public DescribeClusterRankingModelsTask DescribeClusterRankingModelsAsync(
                 Request.DescribeClusterRankingModelsRequest request
@@ -5565,17 +4833,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DescribeClusterRankingModelsResult> DescribeClusterRankingModelsAsync(
+		public Task<Result.DescribeClusterRankingModelsResult> DescribeClusterRankingModelsAsync(
                 Request.DescribeClusterRankingModelsRequest request
-        )
-		{
-			var task = new DescribeClusterRankingModelsTask(
+        ) =>
+            new DescribeClusterRankingModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5618,44 +4883,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator GetClusterRankingModel(
                 Request.GetClusterRankingModelRequest request,
                 UnityAction<AsyncResult<Result.GetClusterRankingModelResult>> callback
-        )
-		{
-			var task = new GetClusterRankingModelTask(
+        ) =>
+            new GetClusterRankingModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetClusterRankingModelResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetClusterRankingModelResult> GetClusterRankingModelFuture(
                 Request.GetClusterRankingModelRequest request
-        )
-		{
-			return new GetClusterRankingModelTask(
+        ) =>
+            new GetClusterRankingModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetClusterRankingModelResult> GetClusterRankingModelAsync(
+		public UniTask<Result.GetClusterRankingModelResult> GetClusterRankingModelAsync(
                 Request.GetClusterRankingModelRequest request
-        )
-		{
-            AsyncResult<Result.GetClusterRankingModelResult> result = null;
-			await GetClusterRankingModel(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetClusterRankingModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetClusterRankingModelResult>();
     #else
 		public GetClusterRankingModelTask GetClusterRankingModelAsync(
                 Request.GetClusterRankingModelRequest request
@@ -5669,17 +4921,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.GetClusterRankingModelResult> GetClusterRankingModelAsync(
+		public Task<Result.GetClusterRankingModelResult> GetClusterRankingModelAsync(
                 Request.GetClusterRankingModelRequest request
-        )
-		{
-			var task = new GetClusterRankingModelTask(
+        ) =>
+            new GetClusterRankingModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5730,44 +4979,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DescribeClusterRankingModelMasters(
                 Request.DescribeClusterRankingModelMastersRequest request,
                 UnityAction<AsyncResult<Result.DescribeClusterRankingModelMastersResult>> callback
-        )
-		{
-			var task = new DescribeClusterRankingModelMastersTask(
+        ) =>
+            new DescribeClusterRankingModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeClusterRankingModelMastersResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeClusterRankingModelMastersResult> DescribeClusterRankingModelMastersFuture(
                 Request.DescribeClusterRankingModelMastersRequest request
-        )
-		{
-			return new DescribeClusterRankingModelMastersTask(
+        ) =>
+            new DescribeClusterRankingModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeClusterRankingModelMastersResult> DescribeClusterRankingModelMastersAsync(
+		public UniTask<Result.DescribeClusterRankingModelMastersResult> DescribeClusterRankingModelMastersAsync(
                 Request.DescribeClusterRankingModelMastersRequest request
-        )
-		{
-            AsyncResult<Result.DescribeClusterRankingModelMastersResult> result = null;
-			await DescribeClusterRankingModelMasters(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeClusterRankingModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeClusterRankingModelMastersResult>();
     #else
 		public DescribeClusterRankingModelMastersTask DescribeClusterRankingModelMastersAsync(
                 Request.DescribeClusterRankingModelMastersRequest request
@@ -5781,17 +5017,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DescribeClusterRankingModelMastersResult> DescribeClusterRankingModelMastersAsync(
+		public Task<Result.DescribeClusterRankingModelMastersResult> DescribeClusterRankingModelMastersAsync(
                 Request.DescribeClusterRankingModelMastersRequest request
-        )
-		{
-			var task = new DescribeClusterRankingModelMastersTask(
+        ) =>
+            new DescribeClusterRankingModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -5911,44 +5144,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator CreateClusterRankingModelMaster(
                 Request.CreateClusterRankingModelMasterRequest request,
                 UnityAction<AsyncResult<Result.CreateClusterRankingModelMasterResult>> callback
-        )
-		{
-			var task = new CreateClusterRankingModelMasterTask(
+        ) =>
+            new CreateClusterRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateClusterRankingModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CreateClusterRankingModelMasterResult> CreateClusterRankingModelMasterFuture(
                 Request.CreateClusterRankingModelMasterRequest request
-        )
-		{
-			return new CreateClusterRankingModelMasterTask(
+        ) =>
+            new CreateClusterRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateClusterRankingModelMasterResult> CreateClusterRankingModelMasterAsync(
+		public UniTask<Result.CreateClusterRankingModelMasterResult> CreateClusterRankingModelMasterAsync(
                 Request.CreateClusterRankingModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.CreateClusterRankingModelMasterResult> result = null;
-			await CreateClusterRankingModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CreateClusterRankingModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CreateClusterRankingModelMasterResult>();
     #else
 		public CreateClusterRankingModelMasterTask CreateClusterRankingModelMasterAsync(
                 Request.CreateClusterRankingModelMasterRequest request
@@ -5962,17 +5182,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.CreateClusterRankingModelMasterResult> CreateClusterRankingModelMasterAsync(
+		public Task<Result.CreateClusterRankingModelMasterResult> CreateClusterRankingModelMasterAsync(
                 Request.CreateClusterRankingModelMasterRequest request
-        )
-		{
-			var task = new CreateClusterRankingModelMasterTask(
+        ) =>
+            new CreateClusterRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6015,44 +5232,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator GetClusterRankingModelMaster(
                 Request.GetClusterRankingModelMasterRequest request,
                 UnityAction<AsyncResult<Result.GetClusterRankingModelMasterResult>> callback
-        )
-		{
-			var task = new GetClusterRankingModelMasterTask(
+        ) =>
+            new GetClusterRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetClusterRankingModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetClusterRankingModelMasterResult> GetClusterRankingModelMasterFuture(
                 Request.GetClusterRankingModelMasterRequest request
-        )
-		{
-			return new GetClusterRankingModelMasterTask(
+        ) =>
+            new GetClusterRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetClusterRankingModelMasterResult> GetClusterRankingModelMasterAsync(
+		public UniTask<Result.GetClusterRankingModelMasterResult> GetClusterRankingModelMasterAsync(
                 Request.GetClusterRankingModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.GetClusterRankingModelMasterResult> result = null;
-			await GetClusterRankingModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetClusterRankingModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetClusterRankingModelMasterResult>();
     #else
 		public GetClusterRankingModelMasterTask GetClusterRankingModelMasterAsync(
                 Request.GetClusterRankingModelMasterRequest request
@@ -6066,17 +5270,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.GetClusterRankingModelMasterResult> GetClusterRankingModelMasterAsync(
+		public Task<Result.GetClusterRankingModelMasterResult> GetClusterRankingModelMasterAsync(
                 Request.GetClusterRankingModelMasterRequest request
-        )
-		{
-			var task = new GetClusterRankingModelMasterTask(
+        ) =>
+            new GetClusterRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6192,44 +5393,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator UpdateClusterRankingModelMaster(
                 Request.UpdateClusterRankingModelMasterRequest request,
                 UnityAction<AsyncResult<Result.UpdateClusterRankingModelMasterResult>> callback
-        )
-		{
-			var task = new UpdateClusterRankingModelMasterTask(
+        ) =>
+            new UpdateClusterRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateClusterRankingModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UpdateClusterRankingModelMasterResult> UpdateClusterRankingModelMasterFuture(
                 Request.UpdateClusterRankingModelMasterRequest request
-        )
-		{
-			return new UpdateClusterRankingModelMasterTask(
+        ) =>
+            new UpdateClusterRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateClusterRankingModelMasterResult> UpdateClusterRankingModelMasterAsync(
+		public UniTask<Result.UpdateClusterRankingModelMasterResult> UpdateClusterRankingModelMasterAsync(
                 Request.UpdateClusterRankingModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.UpdateClusterRankingModelMasterResult> result = null;
-			await UpdateClusterRankingModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UpdateClusterRankingModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UpdateClusterRankingModelMasterResult>();
     #else
 		public UpdateClusterRankingModelMasterTask UpdateClusterRankingModelMasterAsync(
                 Request.UpdateClusterRankingModelMasterRequest request
@@ -6243,17 +5431,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.UpdateClusterRankingModelMasterResult> UpdateClusterRankingModelMasterAsync(
+		public Task<Result.UpdateClusterRankingModelMasterResult> UpdateClusterRankingModelMasterAsync(
                 Request.UpdateClusterRankingModelMasterRequest request
-        )
-		{
-			var task = new UpdateClusterRankingModelMasterTask(
+        ) =>
+            new UpdateClusterRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6296,44 +5481,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DeleteClusterRankingModelMaster(
                 Request.DeleteClusterRankingModelMasterRequest request,
                 UnityAction<AsyncResult<Result.DeleteClusterRankingModelMasterResult>> callback
-        )
-		{
-			var task = new DeleteClusterRankingModelMasterTask(
+        ) =>
+            new DeleteClusterRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteClusterRankingModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteClusterRankingModelMasterResult> DeleteClusterRankingModelMasterFuture(
                 Request.DeleteClusterRankingModelMasterRequest request
-        )
-		{
-			return new DeleteClusterRankingModelMasterTask(
+        ) =>
+            new DeleteClusterRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteClusterRankingModelMasterResult> DeleteClusterRankingModelMasterAsync(
+		public UniTask<Result.DeleteClusterRankingModelMasterResult> DeleteClusterRankingModelMasterAsync(
                 Request.DeleteClusterRankingModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.DeleteClusterRankingModelMasterResult> result = null;
-			await DeleteClusterRankingModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteClusterRankingModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteClusterRankingModelMasterResult>();
     #else
 		public DeleteClusterRankingModelMasterTask DeleteClusterRankingModelMasterAsync(
                 Request.DeleteClusterRankingModelMasterRequest request
@@ -6347,17 +5519,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DeleteClusterRankingModelMasterResult> DeleteClusterRankingModelMasterAsync(
+		public Task<Result.DeleteClusterRankingModelMasterResult> DeleteClusterRankingModelMasterAsync(
                 Request.DeleteClusterRankingModelMasterRequest request
-        )
-		{
-			var task = new DeleteClusterRankingModelMasterTask(
+        ) =>
+            new DeleteClusterRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6418,44 +5587,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DescribeClusterRankingScores(
                 Request.DescribeClusterRankingScoresRequest request,
                 UnityAction<AsyncResult<Result.DescribeClusterRankingScoresResult>> callback
-        )
-		{
-			var task = new DescribeClusterRankingScoresTask(
+        ) =>
+            new DescribeClusterRankingScoresTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeClusterRankingScoresResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeClusterRankingScoresResult> DescribeClusterRankingScoresFuture(
                 Request.DescribeClusterRankingScoresRequest request
-        )
-		{
-			return new DescribeClusterRankingScoresTask(
+        ) =>
+            new DescribeClusterRankingScoresTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeClusterRankingScoresResult> DescribeClusterRankingScoresAsync(
+		public UniTask<Result.DescribeClusterRankingScoresResult> DescribeClusterRankingScoresAsync(
                 Request.DescribeClusterRankingScoresRequest request
-        )
-		{
-            AsyncResult<Result.DescribeClusterRankingScoresResult> result = null;
-			await DescribeClusterRankingScores(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeClusterRankingScoresTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeClusterRankingScoresResult>();
     #else
 		public DescribeClusterRankingScoresTask DescribeClusterRankingScoresAsync(
                 Request.DescribeClusterRankingScoresRequest request
@@ -6469,17 +5625,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DescribeClusterRankingScoresResult> DescribeClusterRankingScoresAsync(
+		public Task<Result.DescribeClusterRankingScoresResult> DescribeClusterRankingScoresAsync(
                 Request.DescribeClusterRankingScoresRequest request
-        )
-		{
-			var task = new DescribeClusterRankingScoresTask(
+        ) =>
+            new DescribeClusterRankingScoresTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6541,44 +5694,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DescribeClusterRankingScoresByUserId(
                 Request.DescribeClusterRankingScoresByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DescribeClusterRankingScoresByUserIdResult>> callback
-        )
-		{
-			var task = new DescribeClusterRankingScoresByUserIdTask(
+        ) =>
+            new DescribeClusterRankingScoresByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeClusterRankingScoresByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeClusterRankingScoresByUserIdResult> DescribeClusterRankingScoresByUserIdFuture(
                 Request.DescribeClusterRankingScoresByUserIdRequest request
-        )
-		{
-			return new DescribeClusterRankingScoresByUserIdTask(
+        ) =>
+            new DescribeClusterRankingScoresByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeClusterRankingScoresByUserIdResult> DescribeClusterRankingScoresByUserIdAsync(
+		public UniTask<Result.DescribeClusterRankingScoresByUserIdResult> DescribeClusterRankingScoresByUserIdAsync(
                 Request.DescribeClusterRankingScoresByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DescribeClusterRankingScoresByUserIdResult> result = null;
-			await DescribeClusterRankingScoresByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeClusterRankingScoresByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeClusterRankingScoresByUserIdResult>();
     #else
 		public DescribeClusterRankingScoresByUserIdTask DescribeClusterRankingScoresByUserIdAsync(
                 Request.DescribeClusterRankingScoresByUserIdRequest request
@@ -6592,17 +5732,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DescribeClusterRankingScoresByUserIdResult> DescribeClusterRankingScoresByUserIdAsync(
+		public Task<Result.DescribeClusterRankingScoresByUserIdResult> DescribeClusterRankingScoresByUserIdAsync(
                 Request.DescribeClusterRankingScoresByUserIdRequest request
-        )
-		{
-			var task = new DescribeClusterRankingScoresByUserIdTask(
+        ) =>
+            new DescribeClusterRankingScoresByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6677,44 +5814,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator PutClusterRankingScore(
                 Request.PutClusterRankingScoreRequest request,
                 UnityAction<AsyncResult<Result.PutClusterRankingScoreResult>> callback
-        )
-		{
-			var task = new PutClusterRankingScoreTask(
+        ) =>
+            new PutClusterRankingScoreTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.PutClusterRankingScoreResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.PutClusterRankingScoreResult> PutClusterRankingScoreFuture(
                 Request.PutClusterRankingScoreRequest request
-        )
-		{
-			return new PutClusterRankingScoreTask(
+        ) =>
+            new PutClusterRankingScoreTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.PutClusterRankingScoreResult> PutClusterRankingScoreAsync(
+		public UniTask<Result.PutClusterRankingScoreResult> PutClusterRankingScoreAsync(
                 Request.PutClusterRankingScoreRequest request
-        )
-		{
-            AsyncResult<Result.PutClusterRankingScoreResult> result = null;
-			await PutClusterRankingScore(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new PutClusterRankingScoreTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.PutClusterRankingScoreResult>();
     #else
 		public PutClusterRankingScoreTask PutClusterRankingScoreAsync(
                 Request.PutClusterRankingScoreRequest request
@@ -6728,17 +5852,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.PutClusterRankingScoreResult> PutClusterRankingScoreAsync(
+		public Task<Result.PutClusterRankingScoreResult> PutClusterRankingScoreAsync(
                 Request.PutClusterRankingScoreRequest request
-        )
-		{
-			var task = new PutClusterRankingScoreTask(
+        ) =>
+            new PutClusterRankingScoreTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6814,44 +5935,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator PutClusterRankingScoreByUserId(
                 Request.PutClusterRankingScoreByUserIdRequest request,
                 UnityAction<AsyncResult<Result.PutClusterRankingScoreByUserIdResult>> callback
-        )
-		{
-			var task = new PutClusterRankingScoreByUserIdTask(
+        ) =>
+            new PutClusterRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.PutClusterRankingScoreByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.PutClusterRankingScoreByUserIdResult> PutClusterRankingScoreByUserIdFuture(
                 Request.PutClusterRankingScoreByUserIdRequest request
-        )
-		{
-			return new PutClusterRankingScoreByUserIdTask(
+        ) =>
+            new PutClusterRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.PutClusterRankingScoreByUserIdResult> PutClusterRankingScoreByUserIdAsync(
+		public UniTask<Result.PutClusterRankingScoreByUserIdResult> PutClusterRankingScoreByUserIdAsync(
                 Request.PutClusterRankingScoreByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.PutClusterRankingScoreByUserIdResult> result = null;
-			await PutClusterRankingScoreByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new PutClusterRankingScoreByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.PutClusterRankingScoreByUserIdResult>();
     #else
 		public PutClusterRankingScoreByUserIdTask PutClusterRankingScoreByUserIdAsync(
                 Request.PutClusterRankingScoreByUserIdRequest request
@@ -6865,17 +5973,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.PutClusterRankingScoreByUserIdResult> PutClusterRankingScoreByUserIdAsync(
+		public Task<Result.PutClusterRankingScoreByUserIdResult> PutClusterRankingScoreByUserIdAsync(
                 Request.PutClusterRankingScoreByUserIdRequest request
-        )
-		{
-			var task = new PutClusterRankingScoreByUserIdTask(
+        ) =>
+            new PutClusterRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -6926,44 +6031,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator GetClusterRankingScore(
                 Request.GetClusterRankingScoreRequest request,
                 UnityAction<AsyncResult<Result.GetClusterRankingScoreResult>> callback
-        )
-		{
-			var task = new GetClusterRankingScoreTask(
+        ) =>
+            new GetClusterRankingScoreTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetClusterRankingScoreResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetClusterRankingScoreResult> GetClusterRankingScoreFuture(
                 Request.GetClusterRankingScoreRequest request
-        )
-		{
-			return new GetClusterRankingScoreTask(
+        ) =>
+            new GetClusterRankingScoreTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetClusterRankingScoreResult> GetClusterRankingScoreAsync(
+		public UniTask<Result.GetClusterRankingScoreResult> GetClusterRankingScoreAsync(
                 Request.GetClusterRankingScoreRequest request
-        )
-		{
-            AsyncResult<Result.GetClusterRankingScoreResult> result = null;
-			await GetClusterRankingScore(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetClusterRankingScoreTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetClusterRankingScoreResult>();
     #else
 		public GetClusterRankingScoreTask GetClusterRankingScoreAsync(
                 Request.GetClusterRankingScoreRequest request
@@ -6977,17 +6069,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.GetClusterRankingScoreResult> GetClusterRankingScoreAsync(
+		public Task<Result.GetClusterRankingScoreResult> GetClusterRankingScoreAsync(
                 Request.GetClusterRankingScoreRequest request
-        )
-		{
-			var task = new GetClusterRankingScoreTask(
+        ) =>
+            new GetClusterRankingScoreTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -7039,44 +6128,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator GetClusterRankingScoreByUserId(
                 Request.GetClusterRankingScoreByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetClusterRankingScoreByUserIdResult>> callback
-        )
-		{
-			var task = new GetClusterRankingScoreByUserIdTask(
+        ) =>
+            new GetClusterRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetClusterRankingScoreByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetClusterRankingScoreByUserIdResult> GetClusterRankingScoreByUserIdFuture(
                 Request.GetClusterRankingScoreByUserIdRequest request
-        )
-		{
-			return new GetClusterRankingScoreByUserIdTask(
+        ) =>
+            new GetClusterRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetClusterRankingScoreByUserIdResult> GetClusterRankingScoreByUserIdAsync(
+		public UniTask<Result.GetClusterRankingScoreByUserIdResult> GetClusterRankingScoreByUserIdAsync(
                 Request.GetClusterRankingScoreByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.GetClusterRankingScoreByUserIdResult> result = null;
-			await GetClusterRankingScoreByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetClusterRankingScoreByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetClusterRankingScoreByUserIdResult>();
     #else
 		public GetClusterRankingScoreByUserIdTask GetClusterRankingScoreByUserIdAsync(
                 Request.GetClusterRankingScoreByUserIdRequest request
@@ -7090,17 +6166,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.GetClusterRankingScoreByUserIdResult> GetClusterRankingScoreByUserIdAsync(
+		public Task<Result.GetClusterRankingScoreByUserIdResult> GetClusterRankingScoreByUserIdAsync(
                 Request.GetClusterRankingScoreByUserIdRequest request
-        )
-		{
-			var task = new GetClusterRankingScoreByUserIdTask(
+        ) =>
+            new GetClusterRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -7156,44 +6229,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DeleteClusterRankingScoreByUserId(
                 Request.DeleteClusterRankingScoreByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DeleteClusterRankingScoreByUserIdResult>> callback
-        )
-		{
-			var task = new DeleteClusterRankingScoreByUserIdTask(
+        ) =>
+            new DeleteClusterRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteClusterRankingScoreByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteClusterRankingScoreByUserIdResult> DeleteClusterRankingScoreByUserIdFuture(
                 Request.DeleteClusterRankingScoreByUserIdRequest request
-        )
-		{
-			return new DeleteClusterRankingScoreByUserIdTask(
+        ) =>
+            new DeleteClusterRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteClusterRankingScoreByUserIdResult> DeleteClusterRankingScoreByUserIdAsync(
+		public UniTask<Result.DeleteClusterRankingScoreByUserIdResult> DeleteClusterRankingScoreByUserIdAsync(
                 Request.DeleteClusterRankingScoreByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DeleteClusterRankingScoreByUserIdResult> result = null;
-			await DeleteClusterRankingScoreByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteClusterRankingScoreByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteClusterRankingScoreByUserIdResult>();
     #else
 		public DeleteClusterRankingScoreByUserIdTask DeleteClusterRankingScoreByUserIdAsync(
                 Request.DeleteClusterRankingScoreByUserIdRequest request
@@ -7207,17 +6267,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DeleteClusterRankingScoreByUserIdResult> DeleteClusterRankingScoreByUserIdAsync(
+		public Task<Result.DeleteClusterRankingScoreByUserIdResult> DeleteClusterRankingScoreByUserIdAsync(
                 Request.DeleteClusterRankingScoreByUserIdRequest request
-        )
-		{
-			var task = new DeleteClusterRankingScoreByUserIdTask(
+        ) =>
+            new DeleteClusterRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -7298,44 +6355,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator VerifyClusterRankingScore(
                 Request.VerifyClusterRankingScoreRequest request,
                 UnityAction<AsyncResult<Result.VerifyClusterRankingScoreResult>> callback
-        )
-		{
-			var task = new VerifyClusterRankingScoreTask(
+        ) =>
+            new VerifyClusterRankingScoreTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifyClusterRankingScoreResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifyClusterRankingScoreResult> VerifyClusterRankingScoreFuture(
                 Request.VerifyClusterRankingScoreRequest request
-        )
-		{
-			return new VerifyClusterRankingScoreTask(
+        ) =>
+            new VerifyClusterRankingScoreTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifyClusterRankingScoreResult> VerifyClusterRankingScoreAsync(
+		public UniTask<Result.VerifyClusterRankingScoreResult> VerifyClusterRankingScoreAsync(
                 Request.VerifyClusterRankingScoreRequest request
-        )
-		{
-            AsyncResult<Result.VerifyClusterRankingScoreResult> result = null;
-			await VerifyClusterRankingScore(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifyClusterRankingScoreTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyClusterRankingScoreResult>();
     #else
 		public VerifyClusterRankingScoreTask VerifyClusterRankingScoreAsync(
                 Request.VerifyClusterRankingScoreRequest request
@@ -7349,17 +6393,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.VerifyClusterRankingScoreResult> VerifyClusterRankingScoreAsync(
+		public Task<Result.VerifyClusterRankingScoreResult> VerifyClusterRankingScoreAsync(
                 Request.VerifyClusterRankingScoreRequest request
-        )
-		{
-			var task = new VerifyClusterRankingScoreTask(
+        ) =>
+            new VerifyClusterRankingScoreTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -7441,44 +6482,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator VerifyClusterRankingScoreByUserId(
                 Request.VerifyClusterRankingScoreByUserIdRequest request,
                 UnityAction<AsyncResult<Result.VerifyClusterRankingScoreByUserIdResult>> callback
-        )
-		{
-			var task = new VerifyClusterRankingScoreByUserIdTask(
+        ) =>
+            new VerifyClusterRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifyClusterRankingScoreByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifyClusterRankingScoreByUserIdResult> VerifyClusterRankingScoreByUserIdFuture(
                 Request.VerifyClusterRankingScoreByUserIdRequest request
-        )
-		{
-			return new VerifyClusterRankingScoreByUserIdTask(
+        ) =>
+            new VerifyClusterRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifyClusterRankingScoreByUserIdResult> VerifyClusterRankingScoreByUserIdAsync(
+		public UniTask<Result.VerifyClusterRankingScoreByUserIdResult> VerifyClusterRankingScoreByUserIdAsync(
                 Request.VerifyClusterRankingScoreByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.VerifyClusterRankingScoreByUserIdResult> result = null;
-			await VerifyClusterRankingScoreByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifyClusterRankingScoreByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyClusterRankingScoreByUserIdResult>();
     #else
 		public VerifyClusterRankingScoreByUserIdTask VerifyClusterRankingScoreByUserIdAsync(
                 Request.VerifyClusterRankingScoreByUserIdRequest request
@@ -7492,17 +6520,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.VerifyClusterRankingScoreByUserIdResult> VerifyClusterRankingScoreByUserIdAsync(
+		public Task<Result.VerifyClusterRankingScoreByUserIdResult> VerifyClusterRankingScoreByUserIdAsync(
                 Request.VerifyClusterRankingScoreByUserIdRequest request
-        )
-		{
-			var task = new VerifyClusterRankingScoreByUserIdTask(
+        ) =>
+            new VerifyClusterRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -7565,44 +6590,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator VerifyClusterRankingScoreByStampTask(
                 Request.VerifyClusterRankingScoreByStampTaskRequest request,
                 UnityAction<AsyncResult<Result.VerifyClusterRankingScoreByStampTaskResult>> callback
-        )
-		{
-			var task = new VerifyClusterRankingScoreByStampTaskTask(
+        ) =>
+            new VerifyClusterRankingScoreByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifyClusterRankingScoreByStampTaskResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifyClusterRankingScoreByStampTaskResult> VerifyClusterRankingScoreByStampTaskFuture(
                 Request.VerifyClusterRankingScoreByStampTaskRequest request
-        )
-		{
-			return new VerifyClusterRankingScoreByStampTaskTask(
+        ) =>
+            new VerifyClusterRankingScoreByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifyClusterRankingScoreByStampTaskResult> VerifyClusterRankingScoreByStampTaskAsync(
+		public UniTask<Result.VerifyClusterRankingScoreByStampTaskResult> VerifyClusterRankingScoreByStampTaskAsync(
                 Request.VerifyClusterRankingScoreByStampTaskRequest request
-        )
-		{
-            AsyncResult<Result.VerifyClusterRankingScoreByStampTaskResult> result = null;
-			await VerifyClusterRankingScoreByStampTask(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifyClusterRankingScoreByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyClusterRankingScoreByStampTaskResult>();
     #else
 		public VerifyClusterRankingScoreByStampTaskTask VerifyClusterRankingScoreByStampTaskAsync(
                 Request.VerifyClusterRankingScoreByStampTaskRequest request
@@ -7616,17 +6628,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.VerifyClusterRankingScoreByStampTaskResult> VerifyClusterRankingScoreByStampTaskAsync(
+		public Task<Result.VerifyClusterRankingScoreByStampTaskResult> VerifyClusterRankingScoreByStampTaskAsync(
                 Request.VerifyClusterRankingScoreByStampTaskRequest request
-        )
-		{
-			var task = new VerifyClusterRankingScoreByStampTaskTask(
+        ) =>
+            new VerifyClusterRankingScoreByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -7687,44 +6696,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DescribeClusterRankingReceivedRewards(
                 Request.DescribeClusterRankingReceivedRewardsRequest request,
                 UnityAction<AsyncResult<Result.DescribeClusterRankingReceivedRewardsResult>> callback
-        )
-		{
-			var task = new DescribeClusterRankingReceivedRewardsTask(
+        ) =>
+            new DescribeClusterRankingReceivedRewardsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeClusterRankingReceivedRewardsResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeClusterRankingReceivedRewardsResult> DescribeClusterRankingReceivedRewardsFuture(
                 Request.DescribeClusterRankingReceivedRewardsRequest request
-        )
-		{
-			return new DescribeClusterRankingReceivedRewardsTask(
+        ) =>
+            new DescribeClusterRankingReceivedRewardsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeClusterRankingReceivedRewardsResult> DescribeClusterRankingReceivedRewardsAsync(
+		public UniTask<Result.DescribeClusterRankingReceivedRewardsResult> DescribeClusterRankingReceivedRewardsAsync(
                 Request.DescribeClusterRankingReceivedRewardsRequest request
-        )
-		{
-            AsyncResult<Result.DescribeClusterRankingReceivedRewardsResult> result = null;
-			await DescribeClusterRankingReceivedRewards(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeClusterRankingReceivedRewardsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeClusterRankingReceivedRewardsResult>();
     #else
 		public DescribeClusterRankingReceivedRewardsTask DescribeClusterRankingReceivedRewardsAsync(
                 Request.DescribeClusterRankingReceivedRewardsRequest request
@@ -7738,17 +6734,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DescribeClusterRankingReceivedRewardsResult> DescribeClusterRankingReceivedRewardsAsync(
+		public Task<Result.DescribeClusterRankingReceivedRewardsResult> DescribeClusterRankingReceivedRewardsAsync(
                 Request.DescribeClusterRankingReceivedRewardsRequest request
-        )
-		{
-			var task = new DescribeClusterRankingReceivedRewardsTask(
+        ) =>
+            new DescribeClusterRankingReceivedRewardsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -7810,44 +6803,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DescribeClusterRankingReceivedRewardsByUserId(
                 Request.DescribeClusterRankingReceivedRewardsByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DescribeClusterRankingReceivedRewardsByUserIdResult>> callback
-        )
-		{
-			var task = new DescribeClusterRankingReceivedRewardsByUserIdTask(
+        ) =>
+            new DescribeClusterRankingReceivedRewardsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeClusterRankingReceivedRewardsByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeClusterRankingReceivedRewardsByUserIdResult> DescribeClusterRankingReceivedRewardsByUserIdFuture(
                 Request.DescribeClusterRankingReceivedRewardsByUserIdRequest request
-        )
-		{
-			return new DescribeClusterRankingReceivedRewardsByUserIdTask(
+        ) =>
+            new DescribeClusterRankingReceivedRewardsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeClusterRankingReceivedRewardsByUserIdResult> DescribeClusterRankingReceivedRewardsByUserIdAsync(
+		public UniTask<Result.DescribeClusterRankingReceivedRewardsByUserIdResult> DescribeClusterRankingReceivedRewardsByUserIdAsync(
                 Request.DescribeClusterRankingReceivedRewardsByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DescribeClusterRankingReceivedRewardsByUserIdResult> result = null;
-			await DescribeClusterRankingReceivedRewardsByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeClusterRankingReceivedRewardsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeClusterRankingReceivedRewardsByUserIdResult>();
     #else
 		public DescribeClusterRankingReceivedRewardsByUserIdTask DescribeClusterRankingReceivedRewardsByUserIdAsync(
                 Request.DescribeClusterRankingReceivedRewardsByUserIdRequest request
@@ -7861,17 +6841,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DescribeClusterRankingReceivedRewardsByUserIdResult> DescribeClusterRankingReceivedRewardsByUserIdAsync(
+		public Task<Result.DescribeClusterRankingReceivedRewardsByUserIdResult> DescribeClusterRankingReceivedRewardsByUserIdAsync(
                 Request.DescribeClusterRankingReceivedRewardsByUserIdRequest request
-        )
-		{
-			var task = new DescribeClusterRankingReceivedRewardsByUserIdTask(
+        ) =>
+            new DescribeClusterRankingReceivedRewardsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -7941,44 +6918,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator CreateClusterRankingReceivedReward(
                 Request.CreateClusterRankingReceivedRewardRequest request,
                 UnityAction<AsyncResult<Result.CreateClusterRankingReceivedRewardResult>> callback
-        )
-		{
-			var task = new CreateClusterRankingReceivedRewardTask(
+        ) =>
+            new CreateClusterRankingReceivedRewardTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateClusterRankingReceivedRewardResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CreateClusterRankingReceivedRewardResult> CreateClusterRankingReceivedRewardFuture(
                 Request.CreateClusterRankingReceivedRewardRequest request
-        )
-		{
-			return new CreateClusterRankingReceivedRewardTask(
+        ) =>
+            new CreateClusterRankingReceivedRewardTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateClusterRankingReceivedRewardResult> CreateClusterRankingReceivedRewardAsync(
+		public UniTask<Result.CreateClusterRankingReceivedRewardResult> CreateClusterRankingReceivedRewardAsync(
                 Request.CreateClusterRankingReceivedRewardRequest request
-        )
-		{
-            AsyncResult<Result.CreateClusterRankingReceivedRewardResult> result = null;
-			await CreateClusterRankingReceivedReward(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CreateClusterRankingReceivedRewardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CreateClusterRankingReceivedRewardResult>();
     #else
 		public CreateClusterRankingReceivedRewardTask CreateClusterRankingReceivedRewardAsync(
                 Request.CreateClusterRankingReceivedRewardRequest request
@@ -7992,17 +6956,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.CreateClusterRankingReceivedRewardResult> CreateClusterRankingReceivedRewardAsync(
+		public Task<Result.CreateClusterRankingReceivedRewardResult> CreateClusterRankingReceivedRewardAsync(
                 Request.CreateClusterRankingReceivedRewardRequest request
-        )
-		{
-			var task = new CreateClusterRankingReceivedRewardTask(
+        ) =>
+            new CreateClusterRankingReceivedRewardTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -8073,44 +7034,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator CreateClusterRankingReceivedRewardByUserId(
                 Request.CreateClusterRankingReceivedRewardByUserIdRequest request,
                 UnityAction<AsyncResult<Result.CreateClusterRankingReceivedRewardByUserIdResult>> callback
-        )
-		{
-			var task = new CreateClusterRankingReceivedRewardByUserIdTask(
+        ) =>
+            new CreateClusterRankingReceivedRewardByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateClusterRankingReceivedRewardByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CreateClusterRankingReceivedRewardByUserIdResult> CreateClusterRankingReceivedRewardByUserIdFuture(
                 Request.CreateClusterRankingReceivedRewardByUserIdRequest request
-        )
-		{
-			return new CreateClusterRankingReceivedRewardByUserIdTask(
+        ) =>
+            new CreateClusterRankingReceivedRewardByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateClusterRankingReceivedRewardByUserIdResult> CreateClusterRankingReceivedRewardByUserIdAsync(
+		public UniTask<Result.CreateClusterRankingReceivedRewardByUserIdResult> CreateClusterRankingReceivedRewardByUserIdAsync(
                 Request.CreateClusterRankingReceivedRewardByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.CreateClusterRankingReceivedRewardByUserIdResult> result = null;
-			await CreateClusterRankingReceivedRewardByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CreateClusterRankingReceivedRewardByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CreateClusterRankingReceivedRewardByUserIdResult>();
     #else
 		public CreateClusterRankingReceivedRewardByUserIdTask CreateClusterRankingReceivedRewardByUserIdAsync(
                 Request.CreateClusterRankingReceivedRewardByUserIdRequest request
@@ -8124,17 +7072,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.CreateClusterRankingReceivedRewardByUserIdResult> CreateClusterRankingReceivedRewardByUserIdAsync(
+		public Task<Result.CreateClusterRankingReceivedRewardByUserIdResult> CreateClusterRankingReceivedRewardByUserIdAsync(
                 Request.CreateClusterRankingReceivedRewardByUserIdRequest request
-        )
-		{
-			var task = new CreateClusterRankingReceivedRewardByUserIdTask(
+        ) =>
+            new CreateClusterRankingReceivedRewardByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -8210,44 +7155,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator ReceiveClusterRankingReceivedReward(
                 Request.ReceiveClusterRankingReceivedRewardRequest request,
                 UnityAction<AsyncResult<Result.ReceiveClusterRankingReceivedRewardResult>> callback
-        )
-		{
-			var task = new ReceiveClusterRankingReceivedRewardTask(
+        ) =>
+            new ReceiveClusterRankingReceivedRewardTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ReceiveClusterRankingReceivedRewardResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.ReceiveClusterRankingReceivedRewardResult> ReceiveClusterRankingReceivedRewardFuture(
                 Request.ReceiveClusterRankingReceivedRewardRequest request
-        )
-		{
-			return new ReceiveClusterRankingReceivedRewardTask(
+        ) =>
+            new ReceiveClusterRankingReceivedRewardTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ReceiveClusterRankingReceivedRewardResult> ReceiveClusterRankingReceivedRewardAsync(
+		public UniTask<Result.ReceiveClusterRankingReceivedRewardResult> ReceiveClusterRankingReceivedRewardAsync(
                 Request.ReceiveClusterRankingReceivedRewardRequest request
-        )
-		{
-            AsyncResult<Result.ReceiveClusterRankingReceivedRewardResult> result = null;
-			await ReceiveClusterRankingReceivedReward(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new ReceiveClusterRankingReceivedRewardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.ReceiveClusterRankingReceivedRewardResult>();
     #else
 		public ReceiveClusterRankingReceivedRewardTask ReceiveClusterRankingReceivedRewardAsync(
                 Request.ReceiveClusterRankingReceivedRewardRequest request
@@ -8261,17 +7193,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.ReceiveClusterRankingReceivedRewardResult> ReceiveClusterRankingReceivedRewardAsync(
+		public Task<Result.ReceiveClusterRankingReceivedRewardResult> ReceiveClusterRankingReceivedRewardAsync(
                 Request.ReceiveClusterRankingReceivedRewardRequest request
-        )
-		{
-			var task = new ReceiveClusterRankingReceivedRewardTask(
+        ) =>
+            new ReceiveClusterRankingReceivedRewardTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -8348,44 +7277,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator ReceiveClusterRankingReceivedRewardByUserId(
                 Request.ReceiveClusterRankingReceivedRewardByUserIdRequest request,
                 UnityAction<AsyncResult<Result.ReceiveClusterRankingReceivedRewardByUserIdResult>> callback
-        )
-		{
-			var task = new ReceiveClusterRankingReceivedRewardByUserIdTask(
+        ) =>
+            new ReceiveClusterRankingReceivedRewardByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ReceiveClusterRankingReceivedRewardByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.ReceiveClusterRankingReceivedRewardByUserIdResult> ReceiveClusterRankingReceivedRewardByUserIdFuture(
                 Request.ReceiveClusterRankingReceivedRewardByUserIdRequest request
-        )
-		{
-			return new ReceiveClusterRankingReceivedRewardByUserIdTask(
+        ) =>
+            new ReceiveClusterRankingReceivedRewardByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ReceiveClusterRankingReceivedRewardByUserIdResult> ReceiveClusterRankingReceivedRewardByUserIdAsync(
+		public UniTask<Result.ReceiveClusterRankingReceivedRewardByUserIdResult> ReceiveClusterRankingReceivedRewardByUserIdAsync(
                 Request.ReceiveClusterRankingReceivedRewardByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.ReceiveClusterRankingReceivedRewardByUserIdResult> result = null;
-			await ReceiveClusterRankingReceivedRewardByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new ReceiveClusterRankingReceivedRewardByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.ReceiveClusterRankingReceivedRewardByUserIdResult>();
     #else
 		public ReceiveClusterRankingReceivedRewardByUserIdTask ReceiveClusterRankingReceivedRewardByUserIdAsync(
                 Request.ReceiveClusterRankingReceivedRewardByUserIdRequest request
@@ -8399,17 +7315,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.ReceiveClusterRankingReceivedRewardByUserIdResult> ReceiveClusterRankingReceivedRewardByUserIdAsync(
+		public Task<Result.ReceiveClusterRankingReceivedRewardByUserIdResult> ReceiveClusterRankingReceivedRewardByUserIdAsync(
                 Request.ReceiveClusterRankingReceivedRewardByUserIdRequest request
-        )
-		{
-			var task = new ReceiveClusterRankingReceivedRewardByUserIdTask(
+        ) =>
+            new ReceiveClusterRankingReceivedRewardByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -8460,44 +7373,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator GetClusterRankingReceivedReward(
                 Request.GetClusterRankingReceivedRewardRequest request,
                 UnityAction<AsyncResult<Result.GetClusterRankingReceivedRewardResult>> callback
-        )
-		{
-			var task = new GetClusterRankingReceivedRewardTask(
+        ) =>
+            new GetClusterRankingReceivedRewardTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetClusterRankingReceivedRewardResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetClusterRankingReceivedRewardResult> GetClusterRankingReceivedRewardFuture(
                 Request.GetClusterRankingReceivedRewardRequest request
-        )
-		{
-			return new GetClusterRankingReceivedRewardTask(
+        ) =>
+            new GetClusterRankingReceivedRewardTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetClusterRankingReceivedRewardResult> GetClusterRankingReceivedRewardAsync(
+		public UniTask<Result.GetClusterRankingReceivedRewardResult> GetClusterRankingReceivedRewardAsync(
                 Request.GetClusterRankingReceivedRewardRequest request
-        )
-		{
-            AsyncResult<Result.GetClusterRankingReceivedRewardResult> result = null;
-			await GetClusterRankingReceivedReward(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetClusterRankingReceivedRewardTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetClusterRankingReceivedRewardResult>();
     #else
 		public GetClusterRankingReceivedRewardTask GetClusterRankingReceivedRewardAsync(
                 Request.GetClusterRankingReceivedRewardRequest request
@@ -8511,17 +7411,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.GetClusterRankingReceivedRewardResult> GetClusterRankingReceivedRewardAsync(
+		public Task<Result.GetClusterRankingReceivedRewardResult> GetClusterRankingReceivedRewardAsync(
                 Request.GetClusterRankingReceivedRewardRequest request
-        )
-		{
-			var task = new GetClusterRankingReceivedRewardTask(
+        ) =>
+            new GetClusterRankingReceivedRewardTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -8573,44 +7470,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator GetClusterRankingReceivedRewardByUserId(
                 Request.GetClusterRankingReceivedRewardByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetClusterRankingReceivedRewardByUserIdResult>> callback
-        )
-		{
-			var task = new GetClusterRankingReceivedRewardByUserIdTask(
+        ) =>
+            new GetClusterRankingReceivedRewardByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetClusterRankingReceivedRewardByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetClusterRankingReceivedRewardByUserIdResult> GetClusterRankingReceivedRewardByUserIdFuture(
                 Request.GetClusterRankingReceivedRewardByUserIdRequest request
-        )
-		{
-			return new GetClusterRankingReceivedRewardByUserIdTask(
+        ) =>
+            new GetClusterRankingReceivedRewardByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetClusterRankingReceivedRewardByUserIdResult> GetClusterRankingReceivedRewardByUserIdAsync(
+		public UniTask<Result.GetClusterRankingReceivedRewardByUserIdResult> GetClusterRankingReceivedRewardByUserIdAsync(
                 Request.GetClusterRankingReceivedRewardByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.GetClusterRankingReceivedRewardByUserIdResult> result = null;
-			await GetClusterRankingReceivedRewardByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetClusterRankingReceivedRewardByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetClusterRankingReceivedRewardByUserIdResult>();
     #else
 		public GetClusterRankingReceivedRewardByUserIdTask GetClusterRankingReceivedRewardByUserIdAsync(
                 Request.GetClusterRankingReceivedRewardByUserIdRequest request
@@ -8624,17 +7508,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.GetClusterRankingReceivedRewardByUserIdResult> GetClusterRankingReceivedRewardByUserIdAsync(
+		public Task<Result.GetClusterRankingReceivedRewardByUserIdResult> GetClusterRankingReceivedRewardByUserIdAsync(
                 Request.GetClusterRankingReceivedRewardByUserIdRequest request
-        )
-		{
-			var task = new GetClusterRankingReceivedRewardByUserIdTask(
+        ) =>
+            new GetClusterRankingReceivedRewardByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -8690,44 +7571,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DeleteClusterRankingReceivedRewardByUserId(
                 Request.DeleteClusterRankingReceivedRewardByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DeleteClusterRankingReceivedRewardByUserIdResult>> callback
-        )
-		{
-			var task = new DeleteClusterRankingReceivedRewardByUserIdTask(
+        ) =>
+            new DeleteClusterRankingReceivedRewardByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteClusterRankingReceivedRewardByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteClusterRankingReceivedRewardByUserIdResult> DeleteClusterRankingReceivedRewardByUserIdFuture(
                 Request.DeleteClusterRankingReceivedRewardByUserIdRequest request
-        )
-		{
-			return new DeleteClusterRankingReceivedRewardByUserIdTask(
+        ) =>
+            new DeleteClusterRankingReceivedRewardByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteClusterRankingReceivedRewardByUserIdResult> DeleteClusterRankingReceivedRewardByUserIdAsync(
+		public UniTask<Result.DeleteClusterRankingReceivedRewardByUserIdResult> DeleteClusterRankingReceivedRewardByUserIdAsync(
                 Request.DeleteClusterRankingReceivedRewardByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DeleteClusterRankingReceivedRewardByUserIdResult> result = null;
-			await DeleteClusterRankingReceivedRewardByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteClusterRankingReceivedRewardByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteClusterRankingReceivedRewardByUserIdResult>();
     #else
 		public DeleteClusterRankingReceivedRewardByUserIdTask DeleteClusterRankingReceivedRewardByUserIdAsync(
                 Request.DeleteClusterRankingReceivedRewardByUserIdRequest request
@@ -8741,17 +7609,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DeleteClusterRankingReceivedRewardByUserIdResult> DeleteClusterRankingReceivedRewardByUserIdAsync(
+		public Task<Result.DeleteClusterRankingReceivedRewardByUserIdResult> DeleteClusterRankingReceivedRewardByUserIdAsync(
                 Request.DeleteClusterRankingReceivedRewardByUserIdRequest request
-        )
-		{
-			var task = new DeleteClusterRankingReceivedRewardByUserIdTask(
+        ) =>
+            new DeleteClusterRankingReceivedRewardByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -8814,44 +7679,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator CreateClusterRankingReceivedRewardByStampTask(
                 Request.CreateClusterRankingReceivedRewardByStampTaskRequest request,
                 UnityAction<AsyncResult<Result.CreateClusterRankingReceivedRewardByStampTaskResult>> callback
-        )
-		{
-			var task = new CreateClusterRankingReceivedRewardByStampTaskTask(
+        ) =>
+            new CreateClusterRankingReceivedRewardByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateClusterRankingReceivedRewardByStampTaskResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CreateClusterRankingReceivedRewardByStampTaskResult> CreateClusterRankingReceivedRewardByStampTaskFuture(
                 Request.CreateClusterRankingReceivedRewardByStampTaskRequest request
-        )
-		{
-			return new CreateClusterRankingReceivedRewardByStampTaskTask(
+        ) =>
+            new CreateClusterRankingReceivedRewardByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateClusterRankingReceivedRewardByStampTaskResult> CreateClusterRankingReceivedRewardByStampTaskAsync(
+		public UniTask<Result.CreateClusterRankingReceivedRewardByStampTaskResult> CreateClusterRankingReceivedRewardByStampTaskAsync(
                 Request.CreateClusterRankingReceivedRewardByStampTaskRequest request
-        )
-		{
-            AsyncResult<Result.CreateClusterRankingReceivedRewardByStampTaskResult> result = null;
-			await CreateClusterRankingReceivedRewardByStampTask(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CreateClusterRankingReceivedRewardByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CreateClusterRankingReceivedRewardByStampTaskResult>();
     #else
 		public CreateClusterRankingReceivedRewardByStampTaskTask CreateClusterRankingReceivedRewardByStampTaskAsync(
                 Request.CreateClusterRankingReceivedRewardByStampTaskRequest request
@@ -8865,17 +7717,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.CreateClusterRankingReceivedRewardByStampTaskResult> CreateClusterRankingReceivedRewardByStampTaskAsync(
+		public Task<Result.CreateClusterRankingReceivedRewardByStampTaskResult> CreateClusterRankingReceivedRewardByStampTaskAsync(
                 Request.CreateClusterRankingReceivedRewardByStampTaskRequest request
-        )
-		{
-			var task = new CreateClusterRankingReceivedRewardByStampTaskTask(
+        ) =>
+            new CreateClusterRankingReceivedRewardByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -8932,44 +7781,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DescribeClusterRankings(
                 Request.DescribeClusterRankingsRequest request,
                 UnityAction<AsyncResult<Result.DescribeClusterRankingsResult>> callback
-        )
-		{
-			var task = new DescribeClusterRankingsTask(
+        ) =>
+            new DescribeClusterRankingsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeClusterRankingsResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeClusterRankingsResult> DescribeClusterRankingsFuture(
                 Request.DescribeClusterRankingsRequest request
-        )
-		{
-			return new DescribeClusterRankingsTask(
+        ) =>
+            new DescribeClusterRankingsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeClusterRankingsResult> DescribeClusterRankingsAsync(
+		public UniTask<Result.DescribeClusterRankingsResult> DescribeClusterRankingsAsync(
                 Request.DescribeClusterRankingsRequest request
-        )
-		{
-            AsyncResult<Result.DescribeClusterRankingsResult> result = null;
-			await DescribeClusterRankings(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeClusterRankingsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeClusterRankingsResult>();
     #else
 		public DescribeClusterRankingsTask DescribeClusterRankingsAsync(
                 Request.DescribeClusterRankingsRequest request
@@ -8983,17 +7819,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DescribeClusterRankingsResult> DescribeClusterRankingsAsync(
+		public Task<Result.DescribeClusterRankingsResult> DescribeClusterRankingsAsync(
                 Request.DescribeClusterRankingsRequest request
-        )
-		{
-			var task = new DescribeClusterRankingsTask(
+        ) =>
+            new DescribeClusterRankingsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -9051,44 +7884,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DescribeClusterRankingsByUserId(
                 Request.DescribeClusterRankingsByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DescribeClusterRankingsByUserIdResult>> callback
-        )
-		{
-			var task = new DescribeClusterRankingsByUserIdTask(
+        ) =>
+            new DescribeClusterRankingsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeClusterRankingsByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeClusterRankingsByUserIdResult> DescribeClusterRankingsByUserIdFuture(
                 Request.DescribeClusterRankingsByUserIdRequest request
-        )
-		{
-			return new DescribeClusterRankingsByUserIdTask(
+        ) =>
+            new DescribeClusterRankingsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeClusterRankingsByUserIdResult> DescribeClusterRankingsByUserIdAsync(
+		public UniTask<Result.DescribeClusterRankingsByUserIdResult> DescribeClusterRankingsByUserIdAsync(
                 Request.DescribeClusterRankingsByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DescribeClusterRankingsByUserIdResult> result = null;
-			await DescribeClusterRankingsByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeClusterRankingsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeClusterRankingsByUserIdResult>();
     #else
 		public DescribeClusterRankingsByUserIdTask DescribeClusterRankingsByUserIdAsync(
                 Request.DescribeClusterRankingsByUserIdRequest request
@@ -9102,17 +7922,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DescribeClusterRankingsByUserIdResult> DescribeClusterRankingsByUserIdAsync(
+		public Task<Result.DescribeClusterRankingsByUserIdResult> DescribeClusterRankingsByUserIdAsync(
                 Request.DescribeClusterRankingsByUserIdRequest request
-        )
-		{
-			var task = new DescribeClusterRankingsByUserIdTask(
+        ) =>
+            new DescribeClusterRankingsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -9163,44 +7980,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator GetClusterRanking(
                 Request.GetClusterRankingRequest request,
                 UnityAction<AsyncResult<Result.GetClusterRankingResult>> callback
-        )
-		{
-			var task = new GetClusterRankingTask(
+        ) =>
+            new GetClusterRankingTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetClusterRankingResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetClusterRankingResult> GetClusterRankingFuture(
                 Request.GetClusterRankingRequest request
-        )
-		{
-			return new GetClusterRankingTask(
+        ) =>
+            new GetClusterRankingTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetClusterRankingResult> GetClusterRankingAsync(
+		public UniTask<Result.GetClusterRankingResult> GetClusterRankingAsync(
                 Request.GetClusterRankingRequest request
-        )
-		{
-            AsyncResult<Result.GetClusterRankingResult> result = null;
-			await GetClusterRanking(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetClusterRankingTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetClusterRankingResult>();
     #else
 		public GetClusterRankingTask GetClusterRankingAsync(
                 Request.GetClusterRankingRequest request
@@ -9214,17 +8018,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.GetClusterRankingResult> GetClusterRankingAsync(
+		public Task<Result.GetClusterRankingResult> GetClusterRankingAsync(
                 Request.GetClusterRankingRequest request
-        )
-		{
-			var task = new GetClusterRankingTask(
+        ) =>
+            new GetClusterRankingTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -9276,44 +8077,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator GetClusterRankingByUserId(
                 Request.GetClusterRankingByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetClusterRankingByUserIdResult>> callback
-        )
-		{
-			var task = new GetClusterRankingByUserIdTask(
+        ) =>
+            new GetClusterRankingByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetClusterRankingByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetClusterRankingByUserIdResult> GetClusterRankingByUserIdFuture(
                 Request.GetClusterRankingByUserIdRequest request
-        )
-		{
-			return new GetClusterRankingByUserIdTask(
+        ) =>
+            new GetClusterRankingByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetClusterRankingByUserIdResult> GetClusterRankingByUserIdAsync(
+		public UniTask<Result.GetClusterRankingByUserIdResult> GetClusterRankingByUserIdAsync(
                 Request.GetClusterRankingByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.GetClusterRankingByUserIdResult> result = null;
-			await GetClusterRankingByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetClusterRankingByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetClusterRankingByUserIdResult>();
     #else
 		public GetClusterRankingByUserIdTask GetClusterRankingByUserIdAsync(
                 Request.GetClusterRankingByUserIdRequest request
@@ -9327,17 +8115,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.GetClusterRankingByUserIdResult> GetClusterRankingByUserIdAsync(
+		public Task<Result.GetClusterRankingByUserIdResult> GetClusterRankingByUserIdAsync(
                 Request.GetClusterRankingByUserIdRequest request
-        )
-		{
-			var task = new GetClusterRankingByUserIdTask(
+        ) =>
+            new GetClusterRankingByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -9379,44 +8164,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DescribeSubscribeRankingModels(
                 Request.DescribeSubscribeRankingModelsRequest request,
                 UnityAction<AsyncResult<Result.DescribeSubscribeRankingModelsResult>> callback
-        )
-		{
-			var task = new DescribeSubscribeRankingModelsTask(
+        ) =>
+            new DescribeSubscribeRankingModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeSubscribeRankingModelsResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeSubscribeRankingModelsResult> DescribeSubscribeRankingModelsFuture(
                 Request.DescribeSubscribeRankingModelsRequest request
-        )
-		{
-			return new DescribeSubscribeRankingModelsTask(
+        ) =>
+            new DescribeSubscribeRankingModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeSubscribeRankingModelsResult> DescribeSubscribeRankingModelsAsync(
+		public UniTask<Result.DescribeSubscribeRankingModelsResult> DescribeSubscribeRankingModelsAsync(
                 Request.DescribeSubscribeRankingModelsRequest request
-        )
-		{
-            AsyncResult<Result.DescribeSubscribeRankingModelsResult> result = null;
-			await DescribeSubscribeRankingModels(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeSubscribeRankingModelsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeSubscribeRankingModelsResult>();
     #else
 		public DescribeSubscribeRankingModelsTask DescribeSubscribeRankingModelsAsync(
                 Request.DescribeSubscribeRankingModelsRequest request
@@ -9430,17 +8202,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DescribeSubscribeRankingModelsResult> DescribeSubscribeRankingModelsAsync(
+		public Task<Result.DescribeSubscribeRankingModelsResult> DescribeSubscribeRankingModelsAsync(
                 Request.DescribeSubscribeRankingModelsRequest request
-        )
-		{
-			var task = new DescribeSubscribeRankingModelsTask(
+        ) =>
+            new DescribeSubscribeRankingModelsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -9483,44 +8252,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator GetSubscribeRankingModel(
                 Request.GetSubscribeRankingModelRequest request,
                 UnityAction<AsyncResult<Result.GetSubscribeRankingModelResult>> callback
-        )
-		{
-			var task = new GetSubscribeRankingModelTask(
+        ) =>
+            new GetSubscribeRankingModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetSubscribeRankingModelResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetSubscribeRankingModelResult> GetSubscribeRankingModelFuture(
                 Request.GetSubscribeRankingModelRequest request
-        )
-		{
-			return new GetSubscribeRankingModelTask(
+        ) =>
+            new GetSubscribeRankingModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetSubscribeRankingModelResult> GetSubscribeRankingModelAsync(
+		public UniTask<Result.GetSubscribeRankingModelResult> GetSubscribeRankingModelAsync(
                 Request.GetSubscribeRankingModelRequest request
-        )
-		{
-            AsyncResult<Result.GetSubscribeRankingModelResult> result = null;
-			await GetSubscribeRankingModel(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetSubscribeRankingModelTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetSubscribeRankingModelResult>();
     #else
 		public GetSubscribeRankingModelTask GetSubscribeRankingModelAsync(
                 Request.GetSubscribeRankingModelRequest request
@@ -9534,17 +8290,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.GetSubscribeRankingModelResult> GetSubscribeRankingModelAsync(
+		public Task<Result.GetSubscribeRankingModelResult> GetSubscribeRankingModelAsync(
                 Request.GetSubscribeRankingModelRequest request
-        )
-		{
-			var task = new GetSubscribeRankingModelTask(
+        ) =>
+            new GetSubscribeRankingModelTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -9595,44 +8348,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DescribeSubscribeRankingModelMasters(
                 Request.DescribeSubscribeRankingModelMastersRequest request,
                 UnityAction<AsyncResult<Result.DescribeSubscribeRankingModelMastersResult>> callback
-        )
-		{
-			var task = new DescribeSubscribeRankingModelMastersTask(
+        ) =>
+            new DescribeSubscribeRankingModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeSubscribeRankingModelMastersResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeSubscribeRankingModelMastersResult> DescribeSubscribeRankingModelMastersFuture(
                 Request.DescribeSubscribeRankingModelMastersRequest request
-        )
-		{
-			return new DescribeSubscribeRankingModelMastersTask(
+        ) =>
+            new DescribeSubscribeRankingModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeSubscribeRankingModelMastersResult> DescribeSubscribeRankingModelMastersAsync(
+		public UniTask<Result.DescribeSubscribeRankingModelMastersResult> DescribeSubscribeRankingModelMastersAsync(
                 Request.DescribeSubscribeRankingModelMastersRequest request
-        )
-		{
-            AsyncResult<Result.DescribeSubscribeRankingModelMastersResult> result = null;
-			await DescribeSubscribeRankingModelMasters(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeSubscribeRankingModelMastersTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeSubscribeRankingModelMastersResult>();
     #else
 		public DescribeSubscribeRankingModelMastersTask DescribeSubscribeRankingModelMastersAsync(
                 Request.DescribeSubscribeRankingModelMastersRequest request
@@ -9646,17 +8386,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DescribeSubscribeRankingModelMastersResult> DescribeSubscribeRankingModelMastersAsync(
+		public Task<Result.DescribeSubscribeRankingModelMastersResult> DescribeSubscribeRankingModelMastersAsync(
                 Request.DescribeSubscribeRankingModelMastersRequest request
-        )
-		{
-			var task = new DescribeSubscribeRankingModelMastersTask(
+        ) =>
+            new DescribeSubscribeRankingModelMastersTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -9756,44 +8493,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator CreateSubscribeRankingModelMaster(
                 Request.CreateSubscribeRankingModelMasterRequest request,
                 UnityAction<AsyncResult<Result.CreateSubscribeRankingModelMasterResult>> callback
-        )
-		{
-			var task = new CreateSubscribeRankingModelMasterTask(
+        ) =>
+            new CreateSubscribeRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.CreateSubscribeRankingModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.CreateSubscribeRankingModelMasterResult> CreateSubscribeRankingModelMasterFuture(
                 Request.CreateSubscribeRankingModelMasterRequest request
-        )
-		{
-			return new CreateSubscribeRankingModelMasterTask(
+        ) =>
+            new CreateSubscribeRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.CreateSubscribeRankingModelMasterResult> CreateSubscribeRankingModelMasterAsync(
+		public UniTask<Result.CreateSubscribeRankingModelMasterResult> CreateSubscribeRankingModelMasterAsync(
                 Request.CreateSubscribeRankingModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.CreateSubscribeRankingModelMasterResult> result = null;
-			await CreateSubscribeRankingModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new CreateSubscribeRankingModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CreateSubscribeRankingModelMasterResult>();
     #else
 		public CreateSubscribeRankingModelMasterTask CreateSubscribeRankingModelMasterAsync(
                 Request.CreateSubscribeRankingModelMasterRequest request
@@ -9807,17 +8531,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.CreateSubscribeRankingModelMasterResult> CreateSubscribeRankingModelMasterAsync(
+		public Task<Result.CreateSubscribeRankingModelMasterResult> CreateSubscribeRankingModelMasterAsync(
                 Request.CreateSubscribeRankingModelMasterRequest request
-        )
-		{
-			var task = new CreateSubscribeRankingModelMasterTask(
+        ) =>
+            new CreateSubscribeRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -9860,44 +8581,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator GetSubscribeRankingModelMaster(
                 Request.GetSubscribeRankingModelMasterRequest request,
                 UnityAction<AsyncResult<Result.GetSubscribeRankingModelMasterResult>> callback
-        )
-		{
-			var task = new GetSubscribeRankingModelMasterTask(
+        ) =>
+            new GetSubscribeRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetSubscribeRankingModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetSubscribeRankingModelMasterResult> GetSubscribeRankingModelMasterFuture(
                 Request.GetSubscribeRankingModelMasterRequest request
-        )
-		{
-			return new GetSubscribeRankingModelMasterTask(
+        ) =>
+            new GetSubscribeRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetSubscribeRankingModelMasterResult> GetSubscribeRankingModelMasterAsync(
+		public UniTask<Result.GetSubscribeRankingModelMasterResult> GetSubscribeRankingModelMasterAsync(
                 Request.GetSubscribeRankingModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.GetSubscribeRankingModelMasterResult> result = null;
-			await GetSubscribeRankingModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetSubscribeRankingModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetSubscribeRankingModelMasterResult>();
     #else
 		public GetSubscribeRankingModelMasterTask GetSubscribeRankingModelMasterAsync(
                 Request.GetSubscribeRankingModelMasterRequest request
@@ -9911,17 +8619,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.GetSubscribeRankingModelMasterResult> GetSubscribeRankingModelMasterAsync(
+		public Task<Result.GetSubscribeRankingModelMasterResult> GetSubscribeRankingModelMasterAsync(
                 Request.GetSubscribeRankingModelMasterRequest request
-        )
-		{
-			var task = new GetSubscribeRankingModelMasterTask(
+        ) =>
+            new GetSubscribeRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -10017,44 +8722,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator UpdateSubscribeRankingModelMaster(
                 Request.UpdateSubscribeRankingModelMasterRequest request,
                 UnityAction<AsyncResult<Result.UpdateSubscribeRankingModelMasterResult>> callback
-        )
-		{
-			var task = new UpdateSubscribeRankingModelMasterTask(
+        ) =>
+            new UpdateSubscribeRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateSubscribeRankingModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UpdateSubscribeRankingModelMasterResult> UpdateSubscribeRankingModelMasterFuture(
                 Request.UpdateSubscribeRankingModelMasterRequest request
-        )
-		{
-			return new UpdateSubscribeRankingModelMasterTask(
+        ) =>
+            new UpdateSubscribeRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateSubscribeRankingModelMasterResult> UpdateSubscribeRankingModelMasterAsync(
+		public UniTask<Result.UpdateSubscribeRankingModelMasterResult> UpdateSubscribeRankingModelMasterAsync(
                 Request.UpdateSubscribeRankingModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.UpdateSubscribeRankingModelMasterResult> result = null;
-			await UpdateSubscribeRankingModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UpdateSubscribeRankingModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UpdateSubscribeRankingModelMasterResult>();
     #else
 		public UpdateSubscribeRankingModelMasterTask UpdateSubscribeRankingModelMasterAsync(
                 Request.UpdateSubscribeRankingModelMasterRequest request
@@ -10068,17 +8760,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.UpdateSubscribeRankingModelMasterResult> UpdateSubscribeRankingModelMasterAsync(
+		public Task<Result.UpdateSubscribeRankingModelMasterResult> UpdateSubscribeRankingModelMasterAsync(
                 Request.UpdateSubscribeRankingModelMasterRequest request
-        )
-		{
-			var task = new UpdateSubscribeRankingModelMasterTask(
+        ) =>
+            new UpdateSubscribeRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -10121,44 +8810,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DeleteSubscribeRankingModelMaster(
                 Request.DeleteSubscribeRankingModelMasterRequest request,
                 UnityAction<AsyncResult<Result.DeleteSubscribeRankingModelMasterResult>> callback
-        )
-		{
-			var task = new DeleteSubscribeRankingModelMasterTask(
+        ) =>
+            new DeleteSubscribeRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteSubscribeRankingModelMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteSubscribeRankingModelMasterResult> DeleteSubscribeRankingModelMasterFuture(
                 Request.DeleteSubscribeRankingModelMasterRequest request
-        )
-		{
-			return new DeleteSubscribeRankingModelMasterTask(
+        ) =>
+            new DeleteSubscribeRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteSubscribeRankingModelMasterResult> DeleteSubscribeRankingModelMasterAsync(
+		public UniTask<Result.DeleteSubscribeRankingModelMasterResult> DeleteSubscribeRankingModelMasterAsync(
                 Request.DeleteSubscribeRankingModelMasterRequest request
-        )
-		{
-            AsyncResult<Result.DeleteSubscribeRankingModelMasterResult> result = null;
-			await DeleteSubscribeRankingModelMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteSubscribeRankingModelMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteSubscribeRankingModelMasterResult>();
     #else
 		public DeleteSubscribeRankingModelMasterTask DeleteSubscribeRankingModelMasterAsync(
                 Request.DeleteSubscribeRankingModelMasterRequest request
@@ -10172,17 +8848,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DeleteSubscribeRankingModelMasterResult> DeleteSubscribeRankingModelMasterAsync(
+		public Task<Result.DeleteSubscribeRankingModelMasterResult> DeleteSubscribeRankingModelMasterAsync(
                 Request.DeleteSubscribeRankingModelMasterRequest request
-        )
-		{
-			var task = new DeleteSubscribeRankingModelMasterTask(
+        ) =>
+            new DeleteSubscribeRankingModelMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -10237,44 +8910,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DescribeSubscribes(
                 Request.DescribeSubscribesRequest request,
                 UnityAction<AsyncResult<Result.DescribeSubscribesResult>> callback
-        )
-		{
-			var task = new DescribeSubscribesTask(
+        ) =>
+            new DescribeSubscribesTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeSubscribesResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeSubscribesResult> DescribeSubscribesFuture(
                 Request.DescribeSubscribesRequest request
-        )
-		{
-			return new DescribeSubscribesTask(
+        ) =>
+            new DescribeSubscribesTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeSubscribesResult> DescribeSubscribesAsync(
+		public UniTask<Result.DescribeSubscribesResult> DescribeSubscribesAsync(
                 Request.DescribeSubscribesRequest request
-        )
-		{
-            AsyncResult<Result.DescribeSubscribesResult> result = null;
-			await DescribeSubscribes(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeSubscribesTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeSubscribesResult>();
     #else
 		public DescribeSubscribesTask DescribeSubscribesAsync(
                 Request.DescribeSubscribesRequest request
@@ -10288,17 +8948,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DescribeSubscribesResult> DescribeSubscribesAsync(
+		public Task<Result.DescribeSubscribesResult> DescribeSubscribesAsync(
                 Request.DescribeSubscribesRequest request
-        )
-		{
-			var task = new DescribeSubscribesTask(
+        ) =>
+            new DescribeSubscribesTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -10354,44 +9011,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DescribeSubscribesByUserId(
                 Request.DescribeSubscribesByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DescribeSubscribesByUserIdResult>> callback
-        )
-		{
-			var task = new DescribeSubscribesByUserIdTask(
+        ) =>
+            new DescribeSubscribesByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeSubscribesByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeSubscribesByUserIdResult> DescribeSubscribesByUserIdFuture(
                 Request.DescribeSubscribesByUserIdRequest request
-        )
-		{
-			return new DescribeSubscribesByUserIdTask(
+        ) =>
+            new DescribeSubscribesByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeSubscribesByUserIdResult> DescribeSubscribesByUserIdAsync(
+		public UniTask<Result.DescribeSubscribesByUserIdResult> DescribeSubscribesByUserIdAsync(
                 Request.DescribeSubscribesByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DescribeSubscribesByUserIdResult> result = null;
-			await DescribeSubscribesByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeSubscribesByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeSubscribesByUserIdResult>();
     #else
 		public DescribeSubscribesByUserIdTask DescribeSubscribesByUserIdAsync(
                 Request.DescribeSubscribesByUserIdRequest request
@@ -10405,17 +9049,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DescribeSubscribesByUserIdResult> DescribeSubscribesByUserIdAsync(
+		public Task<Result.DescribeSubscribesByUserIdResult> DescribeSubscribesByUserIdAsync(
                 Request.DescribeSubscribesByUserIdRequest request
-        )
-		{
-			var task = new DescribeSubscribesByUserIdTask(
+        ) =>
+            new DescribeSubscribesByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -10480,44 +9121,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator AddSubscribe(
                 Request.AddSubscribeRequest request,
                 UnityAction<AsyncResult<Result.AddSubscribeResult>> callback
-        )
-		{
-			var task = new AddSubscribeTask(
+        ) =>
+            new AddSubscribeTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.AddSubscribeResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.AddSubscribeResult> AddSubscribeFuture(
                 Request.AddSubscribeRequest request
-        )
-		{
-			return new AddSubscribeTask(
+        ) =>
+            new AddSubscribeTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.AddSubscribeResult> AddSubscribeAsync(
+		public UniTask<Result.AddSubscribeResult> AddSubscribeAsync(
                 Request.AddSubscribeRequest request
-        )
-		{
-            AsyncResult<Result.AddSubscribeResult> result = null;
-			await AddSubscribe(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new AddSubscribeTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.AddSubscribeResult>();
     #else
 		public AddSubscribeTask AddSubscribeAsync(
                 Request.AddSubscribeRequest request
@@ -10531,17 +9159,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.AddSubscribeResult> AddSubscribeAsync(
+		public Task<Result.AddSubscribeResult> AddSubscribeAsync(
                 Request.AddSubscribeRequest request
-        )
-		{
-			var task = new AddSubscribeTask(
+        ) =>
+            new AddSubscribeTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -10607,44 +9232,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator AddSubscribeByUserId(
                 Request.AddSubscribeByUserIdRequest request,
                 UnityAction<AsyncResult<Result.AddSubscribeByUserIdResult>> callback
-        )
-		{
-			var task = new AddSubscribeByUserIdTask(
+        ) =>
+            new AddSubscribeByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.AddSubscribeByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.AddSubscribeByUserIdResult> AddSubscribeByUserIdFuture(
                 Request.AddSubscribeByUserIdRequest request
-        )
-		{
-			return new AddSubscribeByUserIdTask(
+        ) =>
+            new AddSubscribeByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.AddSubscribeByUserIdResult> AddSubscribeByUserIdAsync(
+		public UniTask<Result.AddSubscribeByUserIdResult> AddSubscribeByUserIdAsync(
                 Request.AddSubscribeByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.AddSubscribeByUserIdResult> result = null;
-			await AddSubscribeByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new AddSubscribeByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.AddSubscribeByUserIdResult>();
     #else
 		public AddSubscribeByUserIdTask AddSubscribeByUserIdAsync(
                 Request.AddSubscribeByUserIdRequest request
@@ -10658,17 +9270,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.AddSubscribeByUserIdResult> AddSubscribeByUserIdAsync(
+		public Task<Result.AddSubscribeByUserIdResult> AddSubscribeByUserIdAsync(
                 Request.AddSubscribeByUserIdRequest request
-        )
-		{
-			var task = new AddSubscribeByUserIdTask(
+        ) =>
+            new AddSubscribeByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -10723,44 +9332,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DescribeSubscribeRankingScores(
                 Request.DescribeSubscribeRankingScoresRequest request,
                 UnityAction<AsyncResult<Result.DescribeSubscribeRankingScoresResult>> callback
-        )
-		{
-			var task = new DescribeSubscribeRankingScoresTask(
+        ) =>
+            new DescribeSubscribeRankingScoresTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeSubscribeRankingScoresResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeSubscribeRankingScoresResult> DescribeSubscribeRankingScoresFuture(
                 Request.DescribeSubscribeRankingScoresRequest request
-        )
-		{
-			return new DescribeSubscribeRankingScoresTask(
+        ) =>
+            new DescribeSubscribeRankingScoresTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeSubscribeRankingScoresResult> DescribeSubscribeRankingScoresAsync(
+		public UniTask<Result.DescribeSubscribeRankingScoresResult> DescribeSubscribeRankingScoresAsync(
                 Request.DescribeSubscribeRankingScoresRequest request
-        )
-		{
-            AsyncResult<Result.DescribeSubscribeRankingScoresResult> result = null;
-			await DescribeSubscribeRankingScores(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeSubscribeRankingScoresTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeSubscribeRankingScoresResult>();
     #else
 		public DescribeSubscribeRankingScoresTask DescribeSubscribeRankingScoresAsync(
                 Request.DescribeSubscribeRankingScoresRequest request
@@ -10774,17 +9370,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DescribeSubscribeRankingScoresResult> DescribeSubscribeRankingScoresAsync(
+		public Task<Result.DescribeSubscribeRankingScoresResult> DescribeSubscribeRankingScoresAsync(
                 Request.DescribeSubscribeRankingScoresRequest request
-        )
-		{
-			var task = new DescribeSubscribeRankingScoresTask(
+        ) =>
+            new DescribeSubscribeRankingScoresTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -10840,44 +9433,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DescribeSubscribeRankingScoresByUserId(
                 Request.DescribeSubscribeRankingScoresByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DescribeSubscribeRankingScoresByUserIdResult>> callback
-        )
-		{
-			var task = new DescribeSubscribeRankingScoresByUserIdTask(
+        ) =>
+            new DescribeSubscribeRankingScoresByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeSubscribeRankingScoresByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeSubscribeRankingScoresByUserIdResult> DescribeSubscribeRankingScoresByUserIdFuture(
                 Request.DescribeSubscribeRankingScoresByUserIdRequest request
-        )
-		{
-			return new DescribeSubscribeRankingScoresByUserIdTask(
+        ) =>
+            new DescribeSubscribeRankingScoresByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeSubscribeRankingScoresByUserIdResult> DescribeSubscribeRankingScoresByUserIdAsync(
+		public UniTask<Result.DescribeSubscribeRankingScoresByUserIdResult> DescribeSubscribeRankingScoresByUserIdAsync(
                 Request.DescribeSubscribeRankingScoresByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DescribeSubscribeRankingScoresByUserIdResult> result = null;
-			await DescribeSubscribeRankingScoresByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeSubscribeRankingScoresByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeSubscribeRankingScoresByUserIdResult>();
     #else
 		public DescribeSubscribeRankingScoresByUserIdTask DescribeSubscribeRankingScoresByUserIdAsync(
                 Request.DescribeSubscribeRankingScoresByUserIdRequest request
@@ -10891,17 +9471,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DescribeSubscribeRankingScoresByUserIdResult> DescribeSubscribeRankingScoresByUserIdAsync(
+		public Task<Result.DescribeSubscribeRankingScoresByUserIdResult> DescribeSubscribeRankingScoresByUserIdAsync(
                 Request.DescribeSubscribeRankingScoresByUserIdRequest request
-        )
-		{
-			var task = new DescribeSubscribeRankingScoresByUserIdTask(
+        ) =>
+            new DescribeSubscribeRankingScoresByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -10975,44 +9552,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator PutSubscribeRankingScore(
                 Request.PutSubscribeRankingScoreRequest request,
                 UnityAction<AsyncResult<Result.PutSubscribeRankingScoreResult>> callback
-        )
-		{
-			var task = new PutSubscribeRankingScoreTask(
+        ) =>
+            new PutSubscribeRankingScoreTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.PutSubscribeRankingScoreResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.PutSubscribeRankingScoreResult> PutSubscribeRankingScoreFuture(
                 Request.PutSubscribeRankingScoreRequest request
-        )
-		{
-			return new PutSubscribeRankingScoreTask(
+        ) =>
+            new PutSubscribeRankingScoreTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.PutSubscribeRankingScoreResult> PutSubscribeRankingScoreAsync(
+		public UniTask<Result.PutSubscribeRankingScoreResult> PutSubscribeRankingScoreAsync(
                 Request.PutSubscribeRankingScoreRequest request
-        )
-		{
-            AsyncResult<Result.PutSubscribeRankingScoreResult> result = null;
-			await PutSubscribeRankingScore(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new PutSubscribeRankingScoreTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.PutSubscribeRankingScoreResult>();
     #else
 		public PutSubscribeRankingScoreTask PutSubscribeRankingScoreAsync(
                 Request.PutSubscribeRankingScoreRequest request
@@ -11026,17 +9590,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.PutSubscribeRankingScoreResult> PutSubscribeRankingScoreAsync(
+		public Task<Result.PutSubscribeRankingScoreResult> PutSubscribeRankingScoreAsync(
                 Request.PutSubscribeRankingScoreRequest request
-        )
-		{
-			var task = new PutSubscribeRankingScoreTask(
+        ) =>
+            new PutSubscribeRankingScoreTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -11111,44 +9672,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator PutSubscribeRankingScoreByUserId(
                 Request.PutSubscribeRankingScoreByUserIdRequest request,
                 UnityAction<AsyncResult<Result.PutSubscribeRankingScoreByUserIdResult>> callback
-        )
-		{
-			var task = new PutSubscribeRankingScoreByUserIdTask(
+        ) =>
+            new PutSubscribeRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.PutSubscribeRankingScoreByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.PutSubscribeRankingScoreByUserIdResult> PutSubscribeRankingScoreByUserIdFuture(
                 Request.PutSubscribeRankingScoreByUserIdRequest request
-        )
-		{
-			return new PutSubscribeRankingScoreByUserIdTask(
+        ) =>
+            new PutSubscribeRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.PutSubscribeRankingScoreByUserIdResult> PutSubscribeRankingScoreByUserIdAsync(
+		public UniTask<Result.PutSubscribeRankingScoreByUserIdResult> PutSubscribeRankingScoreByUserIdAsync(
                 Request.PutSubscribeRankingScoreByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.PutSubscribeRankingScoreByUserIdResult> result = null;
-			await PutSubscribeRankingScoreByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new PutSubscribeRankingScoreByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.PutSubscribeRankingScoreByUserIdResult>();
     #else
 		public PutSubscribeRankingScoreByUserIdTask PutSubscribeRankingScoreByUserIdAsync(
                 Request.PutSubscribeRankingScoreByUserIdRequest request
@@ -11162,17 +9710,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.PutSubscribeRankingScoreByUserIdResult> PutSubscribeRankingScoreByUserIdAsync(
+		public Task<Result.PutSubscribeRankingScoreByUserIdResult> PutSubscribeRankingScoreByUserIdAsync(
                 Request.PutSubscribeRankingScoreByUserIdRequest request
-        )
-		{
-			var task = new PutSubscribeRankingScoreByUserIdTask(
+        ) =>
+            new PutSubscribeRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -11222,44 +9767,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator GetSubscribeRankingScore(
                 Request.GetSubscribeRankingScoreRequest request,
                 UnityAction<AsyncResult<Result.GetSubscribeRankingScoreResult>> callback
-        )
-		{
-			var task = new GetSubscribeRankingScoreTask(
+        ) =>
+            new GetSubscribeRankingScoreTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetSubscribeRankingScoreResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetSubscribeRankingScoreResult> GetSubscribeRankingScoreFuture(
                 Request.GetSubscribeRankingScoreRequest request
-        )
-		{
-			return new GetSubscribeRankingScoreTask(
+        ) =>
+            new GetSubscribeRankingScoreTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetSubscribeRankingScoreResult> GetSubscribeRankingScoreAsync(
+		public UniTask<Result.GetSubscribeRankingScoreResult> GetSubscribeRankingScoreAsync(
                 Request.GetSubscribeRankingScoreRequest request
-        )
-		{
-            AsyncResult<Result.GetSubscribeRankingScoreResult> result = null;
-			await GetSubscribeRankingScore(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetSubscribeRankingScoreTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetSubscribeRankingScoreResult>();
     #else
 		public GetSubscribeRankingScoreTask GetSubscribeRankingScoreAsync(
                 Request.GetSubscribeRankingScoreRequest request
@@ -11273,17 +9805,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.GetSubscribeRankingScoreResult> GetSubscribeRankingScoreAsync(
+		public Task<Result.GetSubscribeRankingScoreResult> GetSubscribeRankingScoreAsync(
                 Request.GetSubscribeRankingScoreRequest request
-        )
-		{
-			var task = new GetSubscribeRankingScoreTask(
+        ) =>
+            new GetSubscribeRankingScoreTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -11334,44 +9863,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator GetSubscribeRankingScoreByUserId(
                 Request.GetSubscribeRankingScoreByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetSubscribeRankingScoreByUserIdResult>> callback
-        )
-		{
-			var task = new GetSubscribeRankingScoreByUserIdTask(
+        ) =>
+            new GetSubscribeRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetSubscribeRankingScoreByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetSubscribeRankingScoreByUserIdResult> GetSubscribeRankingScoreByUserIdFuture(
                 Request.GetSubscribeRankingScoreByUserIdRequest request
-        )
-		{
-			return new GetSubscribeRankingScoreByUserIdTask(
+        ) =>
+            new GetSubscribeRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetSubscribeRankingScoreByUserIdResult> GetSubscribeRankingScoreByUserIdAsync(
+		public UniTask<Result.GetSubscribeRankingScoreByUserIdResult> GetSubscribeRankingScoreByUserIdAsync(
                 Request.GetSubscribeRankingScoreByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.GetSubscribeRankingScoreByUserIdResult> result = null;
-			await GetSubscribeRankingScoreByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetSubscribeRankingScoreByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetSubscribeRankingScoreByUserIdResult>();
     #else
 		public GetSubscribeRankingScoreByUserIdTask GetSubscribeRankingScoreByUserIdAsync(
                 Request.GetSubscribeRankingScoreByUserIdRequest request
@@ -11385,17 +9901,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.GetSubscribeRankingScoreByUserIdResult> GetSubscribeRankingScoreByUserIdAsync(
+		public Task<Result.GetSubscribeRankingScoreByUserIdResult> GetSubscribeRankingScoreByUserIdAsync(
                 Request.GetSubscribeRankingScoreByUserIdRequest request
-        )
-		{
-			var task = new GetSubscribeRankingScoreByUserIdTask(
+        ) =>
+            new GetSubscribeRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -11450,44 +9963,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DeleteSubscribeRankingScoreByUserId(
                 Request.DeleteSubscribeRankingScoreByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DeleteSubscribeRankingScoreByUserIdResult>> callback
-        )
-		{
-			var task = new DeleteSubscribeRankingScoreByUserIdTask(
+        ) =>
+            new DeleteSubscribeRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteSubscribeRankingScoreByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteSubscribeRankingScoreByUserIdResult> DeleteSubscribeRankingScoreByUserIdFuture(
                 Request.DeleteSubscribeRankingScoreByUserIdRequest request
-        )
-		{
-			return new DeleteSubscribeRankingScoreByUserIdTask(
+        ) =>
+            new DeleteSubscribeRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteSubscribeRankingScoreByUserIdResult> DeleteSubscribeRankingScoreByUserIdAsync(
+		public UniTask<Result.DeleteSubscribeRankingScoreByUserIdResult> DeleteSubscribeRankingScoreByUserIdAsync(
                 Request.DeleteSubscribeRankingScoreByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DeleteSubscribeRankingScoreByUserIdResult> result = null;
-			await DeleteSubscribeRankingScoreByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteSubscribeRankingScoreByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteSubscribeRankingScoreByUserIdResult>();
     #else
 		public DeleteSubscribeRankingScoreByUserIdTask DeleteSubscribeRankingScoreByUserIdAsync(
                 Request.DeleteSubscribeRankingScoreByUserIdRequest request
@@ -11501,17 +10001,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DeleteSubscribeRankingScoreByUserIdResult> DeleteSubscribeRankingScoreByUserIdAsync(
+		public Task<Result.DeleteSubscribeRankingScoreByUserIdResult> DeleteSubscribeRankingScoreByUserIdAsync(
                 Request.DeleteSubscribeRankingScoreByUserIdRequest request
-        )
-		{
-			var task = new DeleteSubscribeRankingScoreByUserIdTask(
+        ) =>
+            new DeleteSubscribeRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -11591,44 +10088,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator VerifySubscribeRankingScore(
                 Request.VerifySubscribeRankingScoreRequest request,
                 UnityAction<AsyncResult<Result.VerifySubscribeRankingScoreResult>> callback
-        )
-		{
-			var task = new VerifySubscribeRankingScoreTask(
+        ) =>
+            new VerifySubscribeRankingScoreTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifySubscribeRankingScoreResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifySubscribeRankingScoreResult> VerifySubscribeRankingScoreFuture(
                 Request.VerifySubscribeRankingScoreRequest request
-        )
-		{
-			return new VerifySubscribeRankingScoreTask(
+        ) =>
+            new VerifySubscribeRankingScoreTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifySubscribeRankingScoreResult> VerifySubscribeRankingScoreAsync(
+		public UniTask<Result.VerifySubscribeRankingScoreResult> VerifySubscribeRankingScoreAsync(
                 Request.VerifySubscribeRankingScoreRequest request
-        )
-		{
-            AsyncResult<Result.VerifySubscribeRankingScoreResult> result = null;
-			await VerifySubscribeRankingScore(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifySubscribeRankingScoreTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifySubscribeRankingScoreResult>();
     #else
 		public VerifySubscribeRankingScoreTask VerifySubscribeRankingScoreAsync(
                 Request.VerifySubscribeRankingScoreRequest request
@@ -11642,17 +10126,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.VerifySubscribeRankingScoreResult> VerifySubscribeRankingScoreAsync(
+		public Task<Result.VerifySubscribeRankingScoreResult> VerifySubscribeRankingScoreAsync(
                 Request.VerifySubscribeRankingScoreRequest request
-        )
-		{
-			var task = new VerifySubscribeRankingScoreTask(
+        ) =>
+            new VerifySubscribeRankingScoreTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -11733,44 +10214,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator VerifySubscribeRankingScoreByUserId(
                 Request.VerifySubscribeRankingScoreByUserIdRequest request,
                 UnityAction<AsyncResult<Result.VerifySubscribeRankingScoreByUserIdResult>> callback
-        )
-		{
-			var task = new VerifySubscribeRankingScoreByUserIdTask(
+        ) =>
+            new VerifySubscribeRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifySubscribeRankingScoreByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifySubscribeRankingScoreByUserIdResult> VerifySubscribeRankingScoreByUserIdFuture(
                 Request.VerifySubscribeRankingScoreByUserIdRequest request
-        )
-		{
-			return new VerifySubscribeRankingScoreByUserIdTask(
+        ) =>
+            new VerifySubscribeRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifySubscribeRankingScoreByUserIdResult> VerifySubscribeRankingScoreByUserIdAsync(
+		public UniTask<Result.VerifySubscribeRankingScoreByUserIdResult> VerifySubscribeRankingScoreByUserIdAsync(
                 Request.VerifySubscribeRankingScoreByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.VerifySubscribeRankingScoreByUserIdResult> result = null;
-			await VerifySubscribeRankingScoreByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifySubscribeRankingScoreByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifySubscribeRankingScoreByUserIdResult>();
     #else
 		public VerifySubscribeRankingScoreByUserIdTask VerifySubscribeRankingScoreByUserIdAsync(
                 Request.VerifySubscribeRankingScoreByUserIdRequest request
@@ -11784,17 +10252,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.VerifySubscribeRankingScoreByUserIdResult> VerifySubscribeRankingScoreByUserIdAsync(
+		public Task<Result.VerifySubscribeRankingScoreByUserIdResult> VerifySubscribeRankingScoreByUserIdAsync(
                 Request.VerifySubscribeRankingScoreByUserIdRequest request
-        )
-		{
-			var task = new VerifySubscribeRankingScoreByUserIdTask(
+        ) =>
+            new VerifySubscribeRankingScoreByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -11857,44 +10322,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator VerifySubscribeRankingScoreByStampTask(
                 Request.VerifySubscribeRankingScoreByStampTaskRequest request,
                 UnityAction<AsyncResult<Result.VerifySubscribeRankingScoreByStampTaskResult>> callback
-        )
-		{
-			var task = new VerifySubscribeRankingScoreByStampTaskTask(
+        ) =>
+            new VerifySubscribeRankingScoreByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.VerifySubscribeRankingScoreByStampTaskResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.VerifySubscribeRankingScoreByStampTaskResult> VerifySubscribeRankingScoreByStampTaskFuture(
                 Request.VerifySubscribeRankingScoreByStampTaskRequest request
-        )
-		{
-			return new VerifySubscribeRankingScoreByStampTaskTask(
+        ) =>
+            new VerifySubscribeRankingScoreByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.VerifySubscribeRankingScoreByStampTaskResult> VerifySubscribeRankingScoreByStampTaskAsync(
+		public UniTask<Result.VerifySubscribeRankingScoreByStampTaskResult> VerifySubscribeRankingScoreByStampTaskAsync(
                 Request.VerifySubscribeRankingScoreByStampTaskRequest request
-        )
-		{
-            AsyncResult<Result.VerifySubscribeRankingScoreByStampTaskResult> result = null;
-			await VerifySubscribeRankingScoreByStampTask(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new VerifySubscribeRankingScoreByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifySubscribeRankingScoreByStampTaskResult>();
     #else
 		public VerifySubscribeRankingScoreByStampTaskTask VerifySubscribeRankingScoreByStampTaskAsync(
                 Request.VerifySubscribeRankingScoreByStampTaskRequest request
@@ -11908,17 +10360,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.VerifySubscribeRankingScoreByStampTaskResult> VerifySubscribeRankingScoreByStampTaskAsync(
+		public Task<Result.VerifySubscribeRankingScoreByStampTaskResult> VerifySubscribeRankingScoreByStampTaskAsync(
                 Request.VerifySubscribeRankingScoreByStampTaskRequest request
-        )
-		{
-			var task = new VerifySubscribeRankingScoreByStampTaskTask(
+        ) =>
+            new VerifySubscribeRankingScoreByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -11974,44 +10423,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DescribeSubscribeRankings(
                 Request.DescribeSubscribeRankingsRequest request,
                 UnityAction<AsyncResult<Result.DescribeSubscribeRankingsResult>> callback
-        )
-		{
-			var task = new DescribeSubscribeRankingsTask(
+        ) =>
+            new DescribeSubscribeRankingsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeSubscribeRankingsResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeSubscribeRankingsResult> DescribeSubscribeRankingsFuture(
                 Request.DescribeSubscribeRankingsRequest request
-        )
-		{
-			return new DescribeSubscribeRankingsTask(
+        ) =>
+            new DescribeSubscribeRankingsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeSubscribeRankingsResult> DescribeSubscribeRankingsAsync(
+		public UniTask<Result.DescribeSubscribeRankingsResult> DescribeSubscribeRankingsAsync(
                 Request.DescribeSubscribeRankingsRequest request
-        )
-		{
-            AsyncResult<Result.DescribeSubscribeRankingsResult> result = null;
-			await DescribeSubscribeRankings(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeSubscribeRankingsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeSubscribeRankingsResult>();
     #else
 		public DescribeSubscribeRankingsTask DescribeSubscribeRankingsAsync(
                 Request.DescribeSubscribeRankingsRequest request
@@ -12025,17 +10461,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DescribeSubscribeRankingsResult> DescribeSubscribeRankingsAsync(
+		public Task<Result.DescribeSubscribeRankingsResult> DescribeSubscribeRankingsAsync(
                 Request.DescribeSubscribeRankingsRequest request
-        )
-		{
-			var task = new DescribeSubscribeRankingsTask(
+        ) =>
+            new DescribeSubscribeRankingsTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -12092,44 +10525,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DescribeSubscribeRankingsByUserId(
                 Request.DescribeSubscribeRankingsByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DescribeSubscribeRankingsByUserIdResult>> callback
-        )
-		{
-			var task = new DescribeSubscribeRankingsByUserIdTask(
+        ) =>
+            new DescribeSubscribeRankingsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DescribeSubscribeRankingsByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DescribeSubscribeRankingsByUserIdResult> DescribeSubscribeRankingsByUserIdFuture(
                 Request.DescribeSubscribeRankingsByUserIdRequest request
-        )
-		{
-			return new DescribeSubscribeRankingsByUserIdTask(
+        ) =>
+            new DescribeSubscribeRankingsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DescribeSubscribeRankingsByUserIdResult> DescribeSubscribeRankingsByUserIdAsync(
+		public UniTask<Result.DescribeSubscribeRankingsByUserIdResult> DescribeSubscribeRankingsByUserIdAsync(
                 Request.DescribeSubscribeRankingsByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DescribeSubscribeRankingsByUserIdResult> result = null;
-			await DescribeSubscribeRankingsByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DescribeSubscribeRankingsByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeSubscribeRankingsByUserIdResult>();
     #else
 		public DescribeSubscribeRankingsByUserIdTask DescribeSubscribeRankingsByUserIdAsync(
                 Request.DescribeSubscribeRankingsByUserIdRequest request
@@ -12143,17 +10563,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DescribeSubscribeRankingsByUserIdResult> DescribeSubscribeRankingsByUserIdAsync(
+		public Task<Result.DescribeSubscribeRankingsByUserIdResult> DescribeSubscribeRankingsByUserIdAsync(
                 Request.DescribeSubscribeRankingsByUserIdRequest request
-        )
-		{
-			var task = new DescribeSubscribeRankingsByUserIdTask(
+        ) =>
+            new DescribeSubscribeRankingsByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -12206,44 +10623,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator GetSubscribeRanking(
                 Request.GetSubscribeRankingRequest request,
                 UnityAction<AsyncResult<Result.GetSubscribeRankingResult>> callback
-        )
-		{
-			var task = new GetSubscribeRankingTask(
+        ) =>
+            new GetSubscribeRankingTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetSubscribeRankingResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetSubscribeRankingResult> GetSubscribeRankingFuture(
                 Request.GetSubscribeRankingRequest request
-        )
-		{
-			return new GetSubscribeRankingTask(
+        ) =>
+            new GetSubscribeRankingTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetSubscribeRankingResult> GetSubscribeRankingAsync(
+		public UniTask<Result.GetSubscribeRankingResult> GetSubscribeRankingAsync(
                 Request.GetSubscribeRankingRequest request
-        )
-		{
-            AsyncResult<Result.GetSubscribeRankingResult> result = null;
-			await GetSubscribeRanking(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetSubscribeRankingTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetSubscribeRankingResult>();
     #else
 		public GetSubscribeRankingTask GetSubscribeRankingAsync(
                 Request.GetSubscribeRankingRequest request
@@ -12257,17 +10661,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.GetSubscribeRankingResult> GetSubscribeRankingAsync(
+		public Task<Result.GetSubscribeRankingResult> GetSubscribeRankingAsync(
                 Request.GetSubscribeRankingRequest request
-        )
-		{
-			var task = new GetSubscribeRankingTask(
+        ) =>
+            new GetSubscribeRankingTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -12321,44 +10722,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator GetSubscribeRankingByUserId(
                 Request.GetSubscribeRankingByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetSubscribeRankingByUserIdResult>> callback
-        )
-		{
-			var task = new GetSubscribeRankingByUserIdTask(
+        ) =>
+            new GetSubscribeRankingByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetSubscribeRankingByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetSubscribeRankingByUserIdResult> GetSubscribeRankingByUserIdFuture(
                 Request.GetSubscribeRankingByUserIdRequest request
-        )
-		{
-			return new GetSubscribeRankingByUserIdTask(
+        ) =>
+            new GetSubscribeRankingByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetSubscribeRankingByUserIdResult> GetSubscribeRankingByUserIdAsync(
+		public UniTask<Result.GetSubscribeRankingByUserIdResult> GetSubscribeRankingByUserIdAsync(
                 Request.GetSubscribeRankingByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.GetSubscribeRankingByUserIdResult> result = null;
-			await GetSubscribeRankingByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetSubscribeRankingByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetSubscribeRankingByUserIdResult>();
     #else
 		public GetSubscribeRankingByUserIdTask GetSubscribeRankingByUserIdAsync(
                 Request.GetSubscribeRankingByUserIdRequest request
@@ -12372,17 +10760,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.GetSubscribeRankingByUserIdResult> GetSubscribeRankingByUserIdAsync(
+		public Task<Result.GetSubscribeRankingByUserIdResult> GetSubscribeRankingByUserIdAsync(
                 Request.GetSubscribeRankingByUserIdRequest request
-        )
-		{
-			var task = new GetSubscribeRankingByUserIdTask(
+        ) =>
+            new GetSubscribeRankingByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -12424,44 +10809,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator ExportMaster(
                 Request.ExportMasterRequest request,
                 UnityAction<AsyncResult<Result.ExportMasterResult>> callback
-        )
-		{
-			var task = new ExportMasterTask(
+        ) =>
+            new ExportMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.ExportMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.ExportMasterResult> ExportMasterFuture(
                 Request.ExportMasterRequest request
-        )
-		{
-			return new ExportMasterTask(
+        ) =>
+            new ExportMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.ExportMasterResult> ExportMasterAsync(
+		public UniTask<Result.ExportMasterResult> ExportMasterAsync(
                 Request.ExportMasterRequest request
-        )
-		{
-            AsyncResult<Result.ExportMasterResult> result = null;
-			await ExportMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new ExportMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.ExportMasterResult>();
     #else
 		public ExportMasterTask ExportMasterAsync(
                 Request.ExportMasterRequest request
@@ -12475,17 +10847,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.ExportMasterResult> ExportMasterAsync(
+		public Task<Result.ExportMasterResult> ExportMasterAsync(
                 Request.ExportMasterRequest request
-        )
-		{
-			var task = new ExportMasterTask(
+        ) =>
+            new ExportMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -12527,44 +10896,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator GetCurrentRankingMaster(
                 Request.GetCurrentRankingMasterRequest request,
                 UnityAction<AsyncResult<Result.GetCurrentRankingMasterResult>> callback
-        )
-		{
-			var task = new GetCurrentRankingMasterTask(
+        ) =>
+            new GetCurrentRankingMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetCurrentRankingMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetCurrentRankingMasterResult> GetCurrentRankingMasterFuture(
                 Request.GetCurrentRankingMasterRequest request
-        )
-		{
-			return new GetCurrentRankingMasterTask(
+        ) =>
+            new GetCurrentRankingMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetCurrentRankingMasterResult> GetCurrentRankingMasterAsync(
+		public UniTask<Result.GetCurrentRankingMasterResult> GetCurrentRankingMasterAsync(
                 Request.GetCurrentRankingMasterRequest request
-        )
-		{
-            AsyncResult<Result.GetCurrentRankingMasterResult> result = null;
-			await GetCurrentRankingMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetCurrentRankingMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetCurrentRankingMasterResult>();
     #else
 		public GetCurrentRankingMasterTask GetCurrentRankingMasterAsync(
                 Request.GetCurrentRankingMasterRequest request
@@ -12578,17 +10934,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.GetCurrentRankingMasterResult> GetCurrentRankingMasterAsync(
+		public Task<Result.GetCurrentRankingMasterResult> GetCurrentRankingMasterAsync(
                 Request.GetCurrentRankingMasterRequest request
-        )
-		{
-			var task = new GetCurrentRankingMasterTask(
+        ) =>
+            new GetCurrentRankingMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -12643,44 +10996,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator PreUpdateCurrentRankingMaster(
                 Request.PreUpdateCurrentRankingMasterRequest request,
                 UnityAction<AsyncResult<Result.PreUpdateCurrentRankingMasterResult>> callback
-        )
-		{
-			var task = new PreUpdateCurrentRankingMasterTask(
+        ) =>
+            new PreUpdateCurrentRankingMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.PreUpdateCurrentRankingMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.PreUpdateCurrentRankingMasterResult> PreUpdateCurrentRankingMasterFuture(
                 Request.PreUpdateCurrentRankingMasterRequest request
-        )
-		{
-			return new PreUpdateCurrentRankingMasterTask(
+        ) =>
+            new PreUpdateCurrentRankingMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.PreUpdateCurrentRankingMasterResult> PreUpdateCurrentRankingMasterAsync(
+		public UniTask<Result.PreUpdateCurrentRankingMasterResult> PreUpdateCurrentRankingMasterAsync(
                 Request.PreUpdateCurrentRankingMasterRequest request
-        )
-		{
-            AsyncResult<Result.PreUpdateCurrentRankingMasterResult> result = null;
-			await PreUpdateCurrentRankingMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new PreUpdateCurrentRankingMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.PreUpdateCurrentRankingMasterResult>();
     #else
 		public PreUpdateCurrentRankingMasterTask PreUpdateCurrentRankingMasterAsync(
                 Request.PreUpdateCurrentRankingMasterRequest request
@@ -12694,17 +11034,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.PreUpdateCurrentRankingMasterResult> PreUpdateCurrentRankingMasterAsync(
+		public Task<Result.PreUpdateCurrentRankingMasterResult> PreUpdateCurrentRankingMasterAsync(
                 Request.PreUpdateCurrentRankingMasterRequest request
-        )
-		{
-			var task = new PreUpdateCurrentRankingMasterTask(
+        ) =>
+            new PreUpdateCurrentRankingMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -12713,7 +11050,12 @@ namespace Gs2.Gs2Ranking2
             public UpdateCurrentRankingMasterTask(IGs2Session session, RestSessionRequestFactory factory, UpdateCurrentRankingMasterRequest request) : base(session, factory, request)
             {
             }
-            public override IEnumerator Action() {
+#if GS2_ENABLE_UNITASK
+            protected override async UniTask<UpdateCurrentRankingMasterResult> InvokeImpl()
+#else
+            protected override async Task<UpdateCurrentRankingMasterResult> InvokeImpl()
+#endif
+            {
                 if (Request.Settings != null) {
                     var preTask = new PreUpdateCurrentRankingMasterTask(
                         Session,
@@ -12722,22 +11064,81 @@ namespace Gs2.Gs2Ranking2
                             .WithContextStack(Request.ContextStack)
                             .WithNamespaceName(Request.NamespaceName)
                     );
-                    yield return preTask;
-                    if (preTask.Error != null) {
-                        OnError(preTask.Error);
-                        yield break;
-                    }
+                    var preTaskResult = await preTask.Invoke();
 #if UNITY_2017_1_OR_NEWER
-                    using var request = UnityEngine.Networking.UnityWebRequest.Put(preTask.Result.UploadUrl, Request.Settings);
-                    request.SetRequestHeader("Content-Type", "application/json");
-                    yield return request.SendWebRequest();
-                    request.Dispose();
+                    using (var request = UnityWebRequest.Put(preTaskResult.UploadUrl, Request.Settings))
+                    {
+                        request.SetRequestHeader("Content-Type", "application/json");
+                        try {
+                            await request.SendWebRequest();
+                        }
+#if GS2_ENABLE_UNITASK
+                        catch (UnityWebRequestException) {}
+#endif
+                        finally {}
+
+                        var restResult = request.result switch
+                        {
+                            UnityWebRequest.Result.Success or UnityWebRequest.Result.ProtocolError =>
+                                new RestResult(
+                                    (int) request.responseCode,
+                                    request.downloadHandler?.text
+                                ),
+                            UnityWebRequest.Result.ConnectionError or UnityWebRequest.Result.DataProcessingError =>
+                                new RestResult(
+                                    (int) request.responseCode,
+                                    null,
+                                    (int) request.result,
+                                    request.error
+                                ),
+                            _ =>
+                                throw new InvalidOperationException(),
+                        };
+
+                        if (restResult.Error != null) throw restResult.Error;
+                    }
+#else
+                    {
+                        using var httpRequestMessage = new HttpRequestMessage(System.Net.Http.HttpMethod.Put, preTaskResult.UploadUrl);
+                        httpRequestMessage.Content = new ByteArrayContent(System.Text.Encoding.UTF8.GetBytes(Request.Settings));
+                        httpRequestMessage.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+    
+                        RestResult restResult;
+    
+                        try
+                        {
+                            using var httpClient = new HttpClient();
+                            using var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
+    
+                            restResult = new RestResult((int) httpResponseMessage.StatusCode, "");
+                        }
+                        catch (OperationCanceledException e)
+                        {
+                            restResult = new RestResult(
+                                0, // NoInternetConnectionException
+                                "",
+                                0,
+                                e.Message
+                            );
+                        }
+                        catch (System.Net.Http.HttpRequestException e)
+                        {
+                            restResult = new RestResult(
+                                0, // NoInternetConnectionException
+                                "",
+                                0,
+                                e.Message
+                            );
+                        }
+    
+                        if (restResult.Error != null) throw restResult.Error;
+                    }
 #endif
                     Request.Mode = "preUpload";
-                    Request.UploadToken = preTask.Result.UploadToken;
+                    Request.UploadToken = preTaskResult.UploadToken;
                     Request.Settings = null;
                 }
-                yield return base.Action();
+                return await base.InvokeImpl();
             }
 
             protected override IGs2SessionRequest CreateRequest(UpdateCurrentRankingMasterRequest request)
@@ -12800,44 +11201,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator UpdateCurrentRankingMaster(
                 Request.UpdateCurrentRankingMasterRequest request,
                 UnityAction<AsyncResult<Result.UpdateCurrentRankingMasterResult>> callback
-        )
-		{
-			var task = new UpdateCurrentRankingMasterTask(
+        ) =>
+            new UpdateCurrentRankingMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateCurrentRankingMasterResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UpdateCurrentRankingMasterResult> UpdateCurrentRankingMasterFuture(
                 Request.UpdateCurrentRankingMasterRequest request
-        )
-		{
-			return new UpdateCurrentRankingMasterTask(
+        ) =>
+            new UpdateCurrentRankingMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateCurrentRankingMasterResult> UpdateCurrentRankingMasterAsync(
+		public UniTask<Result.UpdateCurrentRankingMasterResult> UpdateCurrentRankingMasterAsync(
                 Request.UpdateCurrentRankingMasterRequest request
-        )
-		{
-            AsyncResult<Result.UpdateCurrentRankingMasterResult> result = null;
-			await UpdateCurrentRankingMaster(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UpdateCurrentRankingMasterTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UpdateCurrentRankingMasterResult>();
     #else
 		public UpdateCurrentRankingMasterTask UpdateCurrentRankingMasterAsync(
                 Request.UpdateCurrentRankingMasterRequest request
@@ -12851,35 +11239,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.UpdateCurrentRankingMasterResult> UpdateCurrentRankingMasterAsync(
+		public Task<Result.UpdateCurrentRankingMasterResult> UpdateCurrentRankingMasterAsync(
                 Request.UpdateCurrentRankingMasterRequest request
-        )
-		{
-            if (request.Settings != null) {
-                var res = await PreUpdateCurrentRankingMasterAsync(
-                    new PreUpdateCurrentRankingMasterRequest()
-                        .WithContextStack(request.ContextStack)
-                        .WithNamespaceName(request.NamespaceName)
-                );
-                var req = new HttpRequestMessage(
-                    System.Net.Http.HttpMethod.Put,
-                    res.UploadUrl
-                );
-                req.Content = new ByteArrayContent(System.Text.Encoding.UTF8.GetBytes(request.Settings));
-                req.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
-                await new HttpClient().SendAsync(req);
-
-                request.Mode = "preUpload";
-                request.UploadToken = res.UploadToken;
-                request.Settings = null;
-            }
-			var task = new UpdateCurrentRankingMasterTask(
+        ) =>
+            new UpdateCurrentRankingMasterTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -12939,44 +11306,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator UpdateCurrentRankingMasterFromGitHub(
                 Request.UpdateCurrentRankingMasterFromGitHubRequest request,
                 UnityAction<AsyncResult<Result.UpdateCurrentRankingMasterFromGitHubResult>> callback
-        )
-		{
-			var task = new UpdateCurrentRankingMasterFromGitHubTask(
+        ) =>
+            new UpdateCurrentRankingMasterFromGitHubTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.UpdateCurrentRankingMasterFromGitHubResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.UpdateCurrentRankingMasterFromGitHubResult> UpdateCurrentRankingMasterFromGitHubFuture(
                 Request.UpdateCurrentRankingMasterFromGitHubRequest request
-        )
-		{
-			return new UpdateCurrentRankingMasterFromGitHubTask(
+        ) =>
+            new UpdateCurrentRankingMasterFromGitHubTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.UpdateCurrentRankingMasterFromGitHubResult> UpdateCurrentRankingMasterFromGitHubAsync(
+		public UniTask<Result.UpdateCurrentRankingMasterFromGitHubResult> UpdateCurrentRankingMasterFromGitHubAsync(
                 Request.UpdateCurrentRankingMasterFromGitHubRequest request
-        )
-		{
-            AsyncResult<Result.UpdateCurrentRankingMasterFromGitHubResult> result = null;
-			await UpdateCurrentRankingMasterFromGitHub(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new UpdateCurrentRankingMasterFromGitHubTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.UpdateCurrentRankingMasterFromGitHubResult>();
     #else
 		public UpdateCurrentRankingMasterFromGitHubTask UpdateCurrentRankingMasterFromGitHubAsync(
                 Request.UpdateCurrentRankingMasterFromGitHubRequest request
@@ -12990,17 +11344,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.UpdateCurrentRankingMasterFromGitHubResult> UpdateCurrentRankingMasterFromGitHubAsync(
+		public Task<Result.UpdateCurrentRankingMasterFromGitHubResult> UpdateCurrentRankingMasterFromGitHubAsync(
                 Request.UpdateCurrentRankingMasterFromGitHubRequest request
-        )
-		{
-			var task = new UpdateCurrentRankingMasterFromGitHubTask(
+        ) =>
+            new UpdateCurrentRankingMasterFromGitHubTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -13048,44 +11399,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator GetSubscribe(
                 Request.GetSubscribeRequest request,
                 UnityAction<AsyncResult<Result.GetSubscribeResult>> callback
-        )
-		{
-			var task = new GetSubscribeTask(
+        ) =>
+            new GetSubscribeTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetSubscribeResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetSubscribeResult> GetSubscribeFuture(
                 Request.GetSubscribeRequest request
-        )
-		{
-			return new GetSubscribeTask(
+        ) =>
+            new GetSubscribeTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetSubscribeResult> GetSubscribeAsync(
+		public UniTask<Result.GetSubscribeResult> GetSubscribeAsync(
                 Request.GetSubscribeRequest request
-        )
-		{
-            AsyncResult<Result.GetSubscribeResult> result = null;
-			await GetSubscribe(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetSubscribeTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetSubscribeResult>();
     #else
 		public GetSubscribeTask GetSubscribeAsync(
                 Request.GetSubscribeRequest request
@@ -13099,17 +11437,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.GetSubscribeResult> GetSubscribeAsync(
+		public Task<Result.GetSubscribeResult> GetSubscribeAsync(
                 Request.GetSubscribeRequest request
-        )
-		{
-			var task = new GetSubscribeTask(
+        ) =>
+            new GetSubscribeTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -13158,44 +11493,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator GetSubscribeByUserId(
                 Request.GetSubscribeByUserIdRequest request,
                 UnityAction<AsyncResult<Result.GetSubscribeByUserIdResult>> callback
-        )
-		{
-			var task = new GetSubscribeByUserIdTask(
+        ) =>
+            new GetSubscribeByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.GetSubscribeByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.GetSubscribeByUserIdResult> GetSubscribeByUserIdFuture(
                 Request.GetSubscribeByUserIdRequest request
-        )
-		{
-			return new GetSubscribeByUserIdTask(
+        ) =>
+            new GetSubscribeByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.GetSubscribeByUserIdResult> GetSubscribeByUserIdAsync(
+		public UniTask<Result.GetSubscribeByUserIdResult> GetSubscribeByUserIdAsync(
                 Request.GetSubscribeByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.GetSubscribeByUserIdResult> result = null;
-			await GetSubscribeByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new GetSubscribeByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetSubscribeByUserIdResult>();
     #else
 		public GetSubscribeByUserIdTask GetSubscribeByUserIdAsync(
                 Request.GetSubscribeByUserIdRequest request
@@ -13209,17 +11531,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.GetSubscribeByUserIdResult> GetSubscribeByUserIdAsync(
+		public Task<Result.GetSubscribeByUserIdResult> GetSubscribeByUserIdAsync(
                 Request.GetSubscribeByUserIdRequest request
-        )
-		{
-			var task = new GetSubscribeByUserIdTask(
+        ) =>
+            new GetSubscribeByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -13271,44 +11590,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DeleteSubscribe(
                 Request.DeleteSubscribeRequest request,
                 UnityAction<AsyncResult<Result.DeleteSubscribeResult>> callback
-        )
-		{
-			var task = new DeleteSubscribeTask(
+        ) =>
+            new DeleteSubscribeTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteSubscribeResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteSubscribeResult> DeleteSubscribeFuture(
                 Request.DeleteSubscribeRequest request
-        )
-		{
-			return new DeleteSubscribeTask(
+        ) =>
+            new DeleteSubscribeTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteSubscribeResult> DeleteSubscribeAsync(
+		public UniTask<Result.DeleteSubscribeResult> DeleteSubscribeAsync(
                 Request.DeleteSubscribeRequest request
-        )
-		{
-            AsyncResult<Result.DeleteSubscribeResult> result = null;
-			await DeleteSubscribe(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteSubscribeTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteSubscribeResult>();
     #else
 		public DeleteSubscribeTask DeleteSubscribeAsync(
                 Request.DeleteSubscribeRequest request
@@ -13322,17 +11628,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DeleteSubscribeResult> DeleteSubscribeAsync(
+		public Task<Result.DeleteSubscribeResult> DeleteSubscribeAsync(
                 Request.DeleteSubscribeRequest request
-        )
-		{
-			var task = new DeleteSubscribeTask(
+        ) =>
+            new DeleteSubscribeTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 
 
@@ -13385,44 +11688,31 @@ namespace Gs2.Gs2Ranking2
 		public IEnumerator DeleteSubscribeByUserId(
                 Request.DeleteSubscribeByUserIdRequest request,
                 UnityAction<AsyncResult<Result.DeleteSubscribeByUserIdResult>> callback
-        )
-		{
-			var task = new DeleteSubscribeByUserIdTask(
+        ) =>
+            new DeleteSubscribeByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-            yield return task;
-            callback.Invoke(new AsyncResult<Result.DeleteSubscribeByUserIdResult>(task.Result, task.Error));
-        }
+            ).Invoke().ToCoroutine(callback);
 
 		public IFuture<Result.DeleteSubscribeByUserIdResult> DeleteSubscribeByUserIdFuture(
                 Request.DeleteSubscribeByUserIdRequest request
-        )
-		{
-			return new DeleteSubscribeByUserIdTask(
+        ) =>
+            new DeleteSubscribeByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
                 request
-			);
-        }
+            ).Invoke().ToGs2Future();
 
     #if GS2_ENABLE_UNITASK
-		public async UniTask<Result.DeleteSubscribeByUserIdResult> DeleteSubscribeByUserIdAsync(
+		public UniTask<Result.DeleteSubscribeByUserIdResult> DeleteSubscribeByUserIdAsync(
                 Request.DeleteSubscribeByUserIdRequest request
-        )
-		{
-            AsyncResult<Result.DeleteSubscribeByUserIdResult> result = null;
-			await DeleteSubscribeByUserId(
-                request,
-                r => result = r
-            );
-            if (result.Error != null)
-            {
-                throw result.Error;
-            }
-            return result.Result;
-        }
+        ) =>
+            new DeleteSubscribeByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DeleteSubscribeByUserIdResult>();
     #else
 		public DeleteSubscribeByUserIdTask DeleteSubscribeByUserIdAsync(
                 Request.DeleteSubscribeByUserIdRequest request
@@ -13436,17 +11726,14 @@ namespace Gs2.Gs2Ranking2
         }
     #endif
 #else
-		public async Task<Result.DeleteSubscribeByUserIdResult> DeleteSubscribeByUserIdAsync(
+		public Task<Result.DeleteSubscribeByUserIdResult> DeleteSubscribeByUserIdAsync(
                 Request.DeleteSubscribeByUserIdRequest request
-        )
-		{
-			var task = new DeleteSubscribeByUserIdTask(
+        ) =>
+            new DeleteSubscribeByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
-			    request
-            );
-			return await task.Invoke();
-        }
+                request
+            ).Invoke().AsTask();
 #endif
 	}
 }
