@@ -104,11 +104,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.AreaModelName
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

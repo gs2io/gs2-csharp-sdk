@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Friend.Domain.Iterator
 {
 
+    public class DescribeFollowsIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeFollowsIterator : Gs2Iterator<Gs2.Gs2Friend.Model.FollowUser> {
+        Gs2Iterator<Gs2.Gs2Friend.Model.FollowUser>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.FollowUser>
+        #endif
     #else
-    public class DescribeFollowsIterator : IAsyncEnumerable<Gs2.Gs2Friend.Model.FollowUser> {
+        IAsyncEnumerable<Gs2.Gs2Friend.Model.FollowUser>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2FriendRestClient _client;
         public string NamespaceName { get; }
@@ -223,7 +228,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.FollowUser> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Friend.Model.FollowUser> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -302,7 +307,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

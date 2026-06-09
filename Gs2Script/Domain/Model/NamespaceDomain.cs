@@ -116,11 +116,7 @@ namespace Gs2.Gs2Script.Domain.Model
                 this._client,
                 this.NamespaceName,
                 namePrefix
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

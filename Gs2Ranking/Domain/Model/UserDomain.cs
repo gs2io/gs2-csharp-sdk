@@ -130,11 +130,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 this.UserId,
                 scorerUserId,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

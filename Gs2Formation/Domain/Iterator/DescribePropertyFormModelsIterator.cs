@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Formation.Domain.Iterator
 {
 
+    public class DescribePropertyFormModelsIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribePropertyFormModelsIterator : Gs2Iterator<Gs2.Gs2Formation.Model.PropertyFormModel> {
+        Gs2Iterator<Gs2.Gs2Formation.Model.PropertyFormModel>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Formation.Model.PropertyFormModel>
+        #endif
     #else
-    public class DescribePropertyFormModelsIterator : IAsyncEnumerable<Gs2.Gs2Formation.Model.PropertyFormModel> {
+        IAsyncEnumerable<Gs2.Gs2Formation.Model.PropertyFormModel>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2FormationRestClient _client;
         public string NamespaceName { get; }
@@ -204,7 +209,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Formation.Model.PropertyFormModel> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Formation.Model.PropertyFormModel> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -281,7 +286,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

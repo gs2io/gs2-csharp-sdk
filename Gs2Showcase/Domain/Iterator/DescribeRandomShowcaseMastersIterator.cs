@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Showcase.Domain.Iterator
 {
 
+    public class DescribeRandomShowcaseMastersIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeRandomShowcaseMastersIterator : Gs2Iterator<Gs2.Gs2Showcase.Model.RandomShowcaseMaster> {
+        Gs2Iterator<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>
+        #endif
     #else
-    public class DescribeRandomShowcaseMastersIterator : IAsyncEnumerable<Gs2.Gs2Showcase.Model.RandomShowcaseMaster> {
+        IAsyncEnumerable<Gs2.Gs2Showcase.Model.RandomShowcaseMaster>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ShowcaseRestClient _client;
         public string NamespaceName { get; }
@@ -215,7 +220,7 @@ namespace Gs2.Gs2Showcase.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Showcase.Model.RandomShowcaseMaster> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Showcase.Model.RandomShowcaseMaster> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -292,7 +297,7 @@ namespace Gs2.Gs2Showcase.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

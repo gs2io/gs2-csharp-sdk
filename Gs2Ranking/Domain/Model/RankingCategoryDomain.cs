@@ -129,11 +129,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 this.CategoryName,
                 this.UserId,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -260,11 +256,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 this.UserId,
                 this.AdditionalScopeName,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -376,11 +368,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 this.CategoryName,
                 score,
                 this.AdditionalScopeName
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

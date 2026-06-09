@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Key.Domain.Iterator
 {
 
+    public class DescribeGitHubApiKeysIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeGitHubApiKeysIterator : Gs2Iterator<Gs2.Gs2Key.Model.GitHubApiKey> {
+        Gs2Iterator<Gs2.Gs2Key.Model.GitHubApiKey>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Key.Model.GitHubApiKey>
+        #endif
     #else
-    public class DescribeGitHubApiKeysIterator : IAsyncEnumerable<Gs2.Gs2Key.Model.GitHubApiKey> {
+        IAsyncEnumerable<Gs2.Gs2Key.Model.GitHubApiKey>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2KeyRestClient _client;
         public string NamespaceName { get; }
@@ -210,7 +215,7 @@ namespace Gs2.Gs2Key.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Key.Model.GitHubApiKey> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Key.Model.GitHubApiKey> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -287,7 +292,7 @@ namespace Gs2.Gs2Key.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

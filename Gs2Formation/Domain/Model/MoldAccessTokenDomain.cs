@@ -279,11 +279,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 this.NamespaceName,
                 this.MoldModelName,
                 this.AccessToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

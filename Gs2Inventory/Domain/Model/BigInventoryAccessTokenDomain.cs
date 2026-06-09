@@ -111,11 +111,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 this.NamespaceName,
                 this.InventoryName,
                 this.AccessToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

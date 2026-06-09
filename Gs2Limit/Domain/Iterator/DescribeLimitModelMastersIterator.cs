@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Limit.Domain.Iterator
 {
 
+    public class DescribeLimitModelMastersIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeLimitModelMastersIterator : Gs2Iterator<Gs2.Gs2Limit.Model.LimitModelMaster> {
+        Gs2Iterator<Gs2.Gs2Limit.Model.LimitModelMaster>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Limit.Model.LimitModelMaster>
+        #endif
     #else
-    public class DescribeLimitModelMastersIterator : IAsyncEnumerable<Gs2.Gs2Limit.Model.LimitModelMaster> {
+        IAsyncEnumerable<Gs2.Gs2Limit.Model.LimitModelMaster>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LimitRestClient _client;
         public string NamespaceName { get; }
@@ -215,7 +220,7 @@ namespace Gs2.Gs2Limit.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Limit.Model.LimitModelMaster> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Limit.Model.LimitModelMaster> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -292,7 +297,7 @@ namespace Gs2.Gs2Limit.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

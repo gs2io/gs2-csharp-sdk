@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2SkillTree.Domain.Iterator
 {
 
+    public class DescribeNodeModelsIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeNodeModelsIterator : Gs2Iterator<Gs2.Gs2SkillTree.Model.NodeModel> {
+        Gs2Iterator<Gs2.Gs2SkillTree.Model.NodeModel>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2SkillTree.Model.NodeModel>
+        #endif
     #else
-    public class DescribeNodeModelsIterator : IAsyncEnumerable<Gs2.Gs2SkillTree.Model.NodeModel> {
+        IAsyncEnumerable<Gs2.Gs2SkillTree.Model.NodeModel>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2SkillTreeRestClient _client;
         public string NamespaceName { get; }
@@ -204,7 +209,7 @@ namespace Gs2.Gs2SkillTree.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2SkillTree.Model.NodeModel> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2SkillTree.Model.NodeModel> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -281,7 +286,7 @@ namespace Gs2.Gs2SkillTree.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

@@ -63,11 +63,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Log.Domain.Iterator
 {
 
+    public class QueryTimeseriesIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class QueryTimeseriesIterator : Gs2Iterator<Gs2.Gs2Log.Model.TimeseriesPoint> {
+        Gs2Iterator<Gs2.Gs2Log.Model.TimeseriesPoint>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.TimeseriesPoint>
+        #endif
     #else
-    public class QueryTimeseriesIterator : IAsyncEnumerable<Gs2.Gs2Log.Model.TimeseriesPoint> {
+        IAsyncEnumerable<Gs2.Gs2Log.Model.TimeseriesPoint>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LogRestClient _client;
         public string NamespaceName { get; }
@@ -240,7 +245,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.TimeseriesPoint> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Log.Model.TimeseriesPoint> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -316,7 +321,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

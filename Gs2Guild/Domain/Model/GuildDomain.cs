@@ -111,11 +111,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 this.NamespaceName,
                 this.GuildModelName,
                 this.GuildName
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -231,11 +227,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 this.NamespaceName,
                 this.GuildModelName,
                 this.GuildName
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

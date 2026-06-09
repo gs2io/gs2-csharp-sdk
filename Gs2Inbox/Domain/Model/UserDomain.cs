@@ -113,11 +113,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 this.UserId,
                 isRead,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

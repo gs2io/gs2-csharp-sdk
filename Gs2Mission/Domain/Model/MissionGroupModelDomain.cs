@@ -104,11 +104,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.MissionGroupName
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

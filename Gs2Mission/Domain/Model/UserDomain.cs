@@ -110,11 +110,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -229,11 +225,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

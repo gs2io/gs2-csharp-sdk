@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Stamina.Domain.Iterator
 {
 
+    public class DescribeMaxStaminaTableMastersIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeMaxStaminaTableMastersIterator : Gs2Iterator<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster> {
+        Gs2Iterator<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>
+        #endif
     #else
-    public class DescribeMaxStaminaTableMastersIterator : IAsyncEnumerable<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster> {
+        IAsyncEnumerable<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2StaminaRestClient _client;
         public string NamespaceName { get; }
@@ -210,7 +215,7 @@ namespace Gs2.Gs2Stamina.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -287,7 +292,7 @@ namespace Gs2.Gs2Stamina.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

@@ -360,11 +360,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 this.RoomName,
                 this.Password,
                 category
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -482,11 +478,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 this.RoomName,
                 this.Password,
                 category
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

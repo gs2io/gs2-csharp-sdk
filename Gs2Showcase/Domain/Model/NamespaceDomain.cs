@@ -116,11 +116,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 this._client,
                 this.NamespaceName,
                 namePrefix
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -236,11 +232,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 this._client,
                 this.NamespaceName,
                 namePrefix
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -376,11 +368,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 this._client,
                 this.NamespaceName,
                 namePrefix
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -496,11 +484,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 this._client,
                 this.NamespaceName,
                 namePrefix
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

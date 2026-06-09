@@ -127,11 +127,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 this.UserId,
                 guildModelName,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -262,11 +258,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 this.UserId,
                 guildModelName,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -431,11 +423,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 joinPolicies,
                 includeFullMembersGuild,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
         

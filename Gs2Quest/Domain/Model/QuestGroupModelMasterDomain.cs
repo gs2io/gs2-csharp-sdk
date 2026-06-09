@@ -109,11 +109,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                 this.NamespaceName,
                 this.QuestGroupName,
                 namePrefix
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

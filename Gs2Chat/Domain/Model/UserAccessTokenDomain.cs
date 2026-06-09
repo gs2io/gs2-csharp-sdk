@@ -189,11 +189,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 this.NamespaceName,
                 this.AccessToken,
                 roomNamePrefix
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

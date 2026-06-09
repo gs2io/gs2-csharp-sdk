@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Formation.Domain.Iterator
 {
 
+    public class DescribeFormModelMastersIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeFormModelMastersIterator : Gs2Iterator<Gs2.Gs2Formation.Model.FormModelMaster> {
+        Gs2Iterator<Gs2.Gs2Formation.Model.FormModelMaster>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Formation.Model.FormModelMaster>
+        #endif
     #else
-    public class DescribeFormModelMastersIterator : IAsyncEnumerable<Gs2.Gs2Formation.Model.FormModelMaster> {
+        IAsyncEnumerable<Gs2.Gs2Formation.Model.FormModelMaster>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2FormationRestClient _client;
         public string NamespaceName { get; }
@@ -215,7 +220,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Formation.Model.FormModelMaster> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Formation.Model.FormModelMaster> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -292,7 +297,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

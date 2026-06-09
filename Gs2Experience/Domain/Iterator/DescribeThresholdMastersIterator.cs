@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Experience.Domain.Iterator
 {
 
+    public class DescribeThresholdMastersIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeThresholdMastersIterator : Gs2Iterator<Gs2.Gs2Experience.Model.ThresholdMaster> {
+        Gs2Iterator<Gs2.Gs2Experience.Model.ThresholdMaster>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Experience.Model.ThresholdMaster>
+        #endif
     #else
-    public class DescribeThresholdMastersIterator : IAsyncEnumerable<Gs2.Gs2Experience.Model.ThresholdMaster> {
+        IAsyncEnumerable<Gs2.Gs2Experience.Model.ThresholdMaster>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ExperienceRestClient _client;
         public string NamespaceName { get; }
@@ -215,7 +220,7 @@ namespace Gs2.Gs2Experience.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Experience.Model.ThresholdMaster> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Experience.Model.ThresholdMaster> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -292,7 +297,7 @@ namespace Gs2.Gs2Experience.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

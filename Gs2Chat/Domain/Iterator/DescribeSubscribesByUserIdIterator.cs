@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Chat.Domain.Iterator
 {
 
+    public class DescribeSubscribesByUserIdIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeSubscribesByUserIdIterator : Gs2Iterator<Gs2.Gs2Chat.Model.Subscribe> {
+        Gs2Iterator<Gs2.Gs2Chat.Model.Subscribe>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Chat.Model.Subscribe>
+        #endif
     #else
-    public class DescribeSubscribesByUserIdIterator : IAsyncEnumerable<Gs2.Gs2Chat.Model.Subscribe> {
+        IAsyncEnumerable<Gs2.Gs2Chat.Model.Subscribe>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ChatRestClient _client;
         public string NamespaceName { get; }
@@ -224,7 +229,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Chat.Model.Subscribe> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Chat.Model.Subscribe> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -302,7 +307,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

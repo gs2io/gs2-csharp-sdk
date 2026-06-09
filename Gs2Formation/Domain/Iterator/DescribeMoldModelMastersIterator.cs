@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Formation.Domain.Iterator
 {
 
+    public class DescribeMoldModelMastersIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeMoldModelMastersIterator : Gs2Iterator<Gs2.Gs2Formation.Model.MoldModelMaster> {
+        Gs2Iterator<Gs2.Gs2Formation.Model.MoldModelMaster>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Formation.Model.MoldModelMaster>
+        #endif
     #else
-    public class DescribeMoldModelMastersIterator : IAsyncEnumerable<Gs2.Gs2Formation.Model.MoldModelMaster> {
+        IAsyncEnumerable<Gs2.Gs2Formation.Model.MoldModelMaster>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2FormationRestClient _client;
         public string NamespaceName { get; }
@@ -215,7 +220,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Formation.Model.MoldModelMaster> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Formation.Model.MoldModelMaster> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -292,7 +297,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

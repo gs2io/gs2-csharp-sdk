@@ -114,11 +114,7 @@ namespace Gs2.Gs2Grade.Domain.Model
                 this.UserId,
                 gradeName,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

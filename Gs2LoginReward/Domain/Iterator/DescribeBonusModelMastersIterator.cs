@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2LoginReward.Domain.Iterator
 {
 
+    public class DescribeBonusModelMastersIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeBonusModelMastersIterator : Gs2Iterator<Gs2.Gs2LoginReward.Model.BonusModelMaster> {
+        Gs2Iterator<Gs2.Gs2LoginReward.Model.BonusModelMaster>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2LoginReward.Model.BonusModelMaster>
+        #endif
     #else
-    public class DescribeBonusModelMastersIterator : IAsyncEnumerable<Gs2.Gs2LoginReward.Model.BonusModelMaster> {
+        IAsyncEnumerable<Gs2.Gs2LoginReward.Model.BonusModelMaster>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LoginRewardRestClient _client;
         public string NamespaceName { get; }
@@ -215,7 +220,7 @@ namespace Gs2.Gs2LoginReward.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2LoginReward.Model.BonusModelMaster> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2LoginReward.Model.BonusModelMaster> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -292,7 +297,7 @@ namespace Gs2.Gs2LoginReward.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

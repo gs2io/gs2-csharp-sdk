@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Enchant.Domain.Iterator
 {
 
+    public class DescribeBalanceParameterModelsIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeBalanceParameterModelsIterator : Gs2Iterator<Gs2.Gs2Enchant.Model.BalanceParameterModel> {
+        Gs2Iterator<Gs2.Gs2Enchant.Model.BalanceParameterModel>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Enchant.Model.BalanceParameterModel>
+        #endif
     #else
-    public class DescribeBalanceParameterModelsIterator : IAsyncEnumerable<Gs2.Gs2Enchant.Model.BalanceParameterModel> {
+        IAsyncEnumerable<Gs2.Gs2Enchant.Model.BalanceParameterModel>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2EnchantRestClient _client;
         public string NamespaceName { get; }
@@ -204,7 +209,7 @@ namespace Gs2.Gs2Enchant.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Enchant.Model.BalanceParameterModel> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Enchant.Model.BalanceParameterModel> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -281,7 +286,7 @@ namespace Gs2.Gs2Enchant.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Guild.Domain.Iterator
 {
 
+    public class DescribeJoinedGuildsIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeJoinedGuildsIterator : Gs2Iterator<Gs2.Gs2Guild.Model.JoinedGuild> {
+        Gs2Iterator<Gs2.Gs2Guild.Model.JoinedGuild>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Guild.Model.JoinedGuild>
+        #endif
     #else
-    public class DescribeJoinedGuildsIterator : IAsyncEnumerable<Gs2.Gs2Guild.Model.JoinedGuild> {
+        IAsyncEnumerable<Gs2.Gs2Guild.Model.JoinedGuild>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2GuildRestClient _client;
         public string NamespaceName { get; }
@@ -222,7 +227,7 @@ namespace Gs2.Gs2Guild.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Guild.Model.JoinedGuild> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Guild.Model.JoinedGuild> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -300,7 +305,7 @@ namespace Gs2.Gs2Guild.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

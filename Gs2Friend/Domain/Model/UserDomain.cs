@@ -129,11 +129,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -190,11 +186,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this.UserId,
                 withProfile,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -319,11 +311,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -438,11 +426,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

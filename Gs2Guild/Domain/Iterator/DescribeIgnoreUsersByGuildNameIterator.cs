@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Guild.Domain.Iterator
 {
 
+    public class DescribeIgnoreUsersByGuildNameIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeIgnoreUsersByGuildNameIterator : Gs2Iterator<Gs2.Gs2Guild.Model.IgnoreUser> {
+        Gs2Iterator<Gs2.Gs2Guild.Model.IgnoreUser>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Guild.Model.IgnoreUser>
+        #endif
     #else
-    public class DescribeIgnoreUsersByGuildNameIterator : IAsyncEnumerable<Gs2.Gs2Guild.Model.IgnoreUser> {
+        IAsyncEnumerable<Gs2.Gs2Guild.Model.IgnoreUser>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2GuildRestClient _client;
         public string NamespaceName { get; }
@@ -222,7 +227,7 @@ namespace Gs2.Gs2Guild.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Guild.Model.IgnoreUser> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Guild.Model.IgnoreUser> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -301,7 +306,7 @@ namespace Gs2.Gs2Guild.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

@@ -147,7 +147,7 @@ namespace Gs2.Core.Util
 #endif // UNITY_2018_3_OR_NEWER && GS2_ENABLE_UNITASK
 
 #if UNITY_2018_3_OR_NEWER && UNITY_WEBGL && !UNITY_EDITOR
-        private static async Task WaitAsync(SemaphoreSlim semaphore)
+        public static async Task WaitAsync(SemaphoreSlim semaphore)
         {
             // ReSharper disable once MethodHasAsyncOverload
             while (!semaphore.Wait(0)) await Task.Yield();

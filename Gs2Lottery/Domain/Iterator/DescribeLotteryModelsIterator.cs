@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Lottery.Domain.Iterator
 {
 
+    public class DescribeLotteryModelsIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeLotteryModelsIterator : Gs2Iterator<Gs2.Gs2Lottery.Model.LotteryModel> {
+        Gs2Iterator<Gs2.Gs2Lottery.Model.LotteryModel>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.LotteryModel>
+        #endif
     #else
-    public class DescribeLotteryModelsIterator : IAsyncEnumerable<Gs2.Gs2Lottery.Model.LotteryModel> {
+        IAsyncEnumerable<Gs2.Gs2Lottery.Model.LotteryModel>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LotteryRestClient _client;
         public string NamespaceName { get; }
@@ -204,7 +209,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.LotteryModel> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Lottery.Model.LotteryModel> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -281,7 +286,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

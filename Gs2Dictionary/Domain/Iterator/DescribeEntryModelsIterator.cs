@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Dictionary.Domain.Iterator
 {
 
+    public class DescribeEntryModelsIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeEntryModelsIterator : Gs2Iterator<Gs2.Gs2Dictionary.Model.EntryModel> {
+        Gs2Iterator<Gs2.Gs2Dictionary.Model.EntryModel>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Dictionary.Model.EntryModel>
+        #endif
     #else
-    public class DescribeEntryModelsIterator : IAsyncEnumerable<Gs2.Gs2Dictionary.Model.EntryModel> {
+        IAsyncEnumerable<Gs2.Gs2Dictionary.Model.EntryModel>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DictionaryRestClient _client;
         public string NamespaceName { get; }
@@ -204,7 +209,7 @@ namespace Gs2.Gs2Dictionary.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Dictionary.Model.EntryModel> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Dictionary.Model.EntryModel> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -281,7 +286,7 @@ namespace Gs2.Gs2Dictionary.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

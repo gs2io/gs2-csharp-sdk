@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Money2.Domain.Iterator
 {
 
+    public class DescribeStoreSubscriptionContentModelMastersIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeStoreSubscriptionContentModelMastersIterator : Gs2Iterator<Gs2.Gs2Money2.Model.StoreSubscriptionContentModelMaster> {
+        Gs2Iterator<Gs2.Gs2Money2.Model.StoreSubscriptionContentModelMaster>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Money2.Model.StoreSubscriptionContentModelMaster>
+        #endif
     #else
-    public class DescribeStoreSubscriptionContentModelMastersIterator : IAsyncEnumerable<Gs2.Gs2Money2.Model.StoreSubscriptionContentModelMaster> {
+        IAsyncEnumerable<Gs2.Gs2Money2.Model.StoreSubscriptionContentModelMaster>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2Money2RestClient _client;
         public string NamespaceName { get; }
@@ -215,7 +220,7 @@ namespace Gs2.Gs2Money2.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Money2.Model.StoreSubscriptionContentModelMaster> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Money2.Model.StoreSubscriptionContentModelMaster> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -292,7 +297,7 @@ namespace Gs2.Gs2Money2.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

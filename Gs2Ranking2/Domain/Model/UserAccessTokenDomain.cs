@@ -110,11 +110,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 this.NamespaceName,
                 this.AccessToken,
                 rankingName
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

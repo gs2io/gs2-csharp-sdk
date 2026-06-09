@@ -111,11 +111,7 @@ namespace Gs2.Gs2Grade.Domain.Model
                 this.NamespaceName,
                 this.AccessToken,
                 gradeName
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

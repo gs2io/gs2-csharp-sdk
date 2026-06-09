@@ -127,11 +127,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 categoryName,
                 this.AccessToken,
                 scorerUserId
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

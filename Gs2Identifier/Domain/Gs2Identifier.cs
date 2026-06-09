@@ -196,11 +196,7 @@ namespace Gs2.Gs2Identifier.Domain
             return new DescribeUsersIterator(
                 this._gs2,
                 this._client
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -299,11 +295,7 @@ namespace Gs2.Gs2Identifier.Domain
             return new DescribeSecurityPoliciesIterator(
                 this._gs2,
                 this._client
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -393,11 +385,7 @@ namespace Gs2.Gs2Identifier.Domain
             return new DescribeCommonSecurityPoliciesIterator(
                 this._gs2,
                 this._client
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

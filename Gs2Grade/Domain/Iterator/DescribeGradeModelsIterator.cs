@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Grade.Domain.Iterator
 {
 
+    public class DescribeGradeModelsIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeGradeModelsIterator : Gs2Iterator<Gs2.Gs2Grade.Model.GradeModel> {
+        Gs2Iterator<Gs2.Gs2Grade.Model.GradeModel>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Grade.Model.GradeModel>
+        #endif
     #else
-    public class DescribeGradeModelsIterator : IAsyncEnumerable<Gs2.Gs2Grade.Model.GradeModel> {
+        IAsyncEnumerable<Gs2.Gs2Grade.Model.GradeModel>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2GradeRestClient _client;
         public string NamespaceName { get; }
@@ -204,7 +209,7 @@ namespace Gs2.Gs2Grade.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Grade.Model.GradeModel> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Grade.Model.GradeModel> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -281,7 +286,7 @@ namespace Gs2.Gs2Grade.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

@@ -63,11 +63,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Log.Domain.Iterator
 {
 
+    public class QueryAccessLogWithTelemetryIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class QueryAccessLogWithTelemetryIterator : Gs2Iterator<Gs2.Gs2Log.Model.AccessLogWithTelemetry> {
+        Gs2Iterator<Gs2.Gs2Log.Model.AccessLogWithTelemetry>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.AccessLogWithTelemetry>
+        #endif
     #else
-    public class QueryAccessLogWithTelemetryIterator : IAsyncEnumerable<Gs2.Gs2Log.Model.AccessLogWithTelemetry> {
+        IAsyncEnumerable<Gs2.Gs2Log.Model.AccessLogWithTelemetry>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LogRestClient _client;
         public string NamespaceName { get; }
@@ -237,7 +242,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.AccessLogWithTelemetry> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Log.Model.AccessLogWithTelemetry> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -314,7 +319,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

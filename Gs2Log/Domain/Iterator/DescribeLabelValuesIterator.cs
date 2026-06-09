@@ -63,11 +63,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Log.Domain.Iterator
 {
 
+    public class DescribeLabelValuesIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeLabelValuesIterator : Gs2Iterator<Gs2.Gs2Log.Model.Label> {
+        Gs2Iterator<Gs2.Gs2Log.Model.Label>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.Label>
+        #endif
     #else
-    public class DescribeLabelValuesIterator : IAsyncEnumerable<Gs2.Gs2Log.Model.Label> {
+        IAsyncEnumerable<Gs2.Gs2Log.Model.Label>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LogRestClient _client;
         public string NamespaceName { get; }
@@ -219,7 +224,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.Label> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Log.Model.Label> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -295,7 +300,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

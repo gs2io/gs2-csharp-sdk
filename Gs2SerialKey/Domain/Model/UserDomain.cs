@@ -112,11 +112,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 this.NamespaceName,
                 campaignModelName,
                 issueJobName
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

@@ -122,11 +122,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 this.UserId,
                 rateName,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

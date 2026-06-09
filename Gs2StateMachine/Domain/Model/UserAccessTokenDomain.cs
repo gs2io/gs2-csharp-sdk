@@ -110,11 +110,7 @@ namespace Gs2.Gs2StateMachine.Domain.Model
                 this.NamespaceName,
                 this.AccessToken,
                 status
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

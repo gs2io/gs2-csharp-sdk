@@ -113,11 +113,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 this.UserId,
                 parameterName,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -245,11 +241,7 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 this.UserId,
                 parameterName,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

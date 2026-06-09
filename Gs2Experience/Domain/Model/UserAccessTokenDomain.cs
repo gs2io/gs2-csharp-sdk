@@ -110,11 +110,7 @@ namespace Gs2.Gs2Experience.Domain.Model
                 this.NamespaceName,
                 this.AccessToken,
                 experienceName
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

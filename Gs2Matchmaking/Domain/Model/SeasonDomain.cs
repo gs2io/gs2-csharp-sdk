@@ -118,11 +118,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this.SeasonName,
                 this.Season,
                 tier
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -241,11 +237,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this.SeasonName,
                 this.Season,
                 tier
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -364,11 +356,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this.SeasonName,
                 this.UserId,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -495,11 +483,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this.UserId,
                 this.SeasonName,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

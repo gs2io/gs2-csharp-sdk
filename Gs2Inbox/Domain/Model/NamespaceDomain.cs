@@ -132,11 +132,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 this._gs2,
                 this._client,
                 this.NamespaceName
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -245,11 +241,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 this._client,
                 this.NamespaceName,
                 namePrefix
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

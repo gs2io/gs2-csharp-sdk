@@ -114,11 +114,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 this.InventoryName,
                 this.UserId,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

@@ -119,11 +119,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 this.NamespaceName,
                 this.AccessToken,
                 rateName
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

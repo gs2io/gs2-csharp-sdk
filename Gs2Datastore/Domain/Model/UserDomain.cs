@@ -116,11 +116,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 this.UserId,
                 status,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

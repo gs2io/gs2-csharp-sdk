@@ -110,11 +110,7 @@ namespace Gs2.Gs2Limit.Domain.Model
                 this.NamespaceName,
                 this.AccessToken,
                 limitName
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

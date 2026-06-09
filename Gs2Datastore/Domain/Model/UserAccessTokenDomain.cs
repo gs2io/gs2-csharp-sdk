@@ -315,11 +315,7 @@ namespace Gs2.Gs2Datastore.Domain.Model
                 this.NamespaceName,
                 this.AccessToken,
                 status
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

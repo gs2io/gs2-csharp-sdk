@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Datastore.Domain.Iterator
 {
 
+    public class DescribeDataObjectHistoriesIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeDataObjectHistoriesIterator : Gs2Iterator<Gs2.Gs2Datastore.Model.DataObjectHistory> {
+        Gs2Iterator<Gs2.Gs2Datastore.Model.DataObjectHistory>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Datastore.Model.DataObjectHistory>
+        #endif
     #else
-    public class DescribeDataObjectHistoriesIterator : IAsyncEnumerable<Gs2.Gs2Datastore.Model.DataObjectHistory> {
+        IAsyncEnumerable<Gs2.Gs2Datastore.Model.DataObjectHistory>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DatastoreRestClient _client;
         public string NamespaceName { get; }
@@ -223,7 +228,7 @@ namespace Gs2.Gs2Datastore.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Datastore.Model.DataObjectHistory> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Datastore.Model.DataObjectHistory> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -302,7 +307,7 @@ namespace Gs2.Gs2Datastore.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

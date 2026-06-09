@@ -124,11 +124,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 this.ClusterName,
                 this.Season,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -258,11 +254,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 this.ClusterName,
                 this.Season,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -387,11 +379,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 this.ClusterName,
                 this.Season,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Freeze.Domain.Iterator
 {
 
+    public class DescribeStagesIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeStagesIterator : Gs2Iterator<Gs2.Gs2Freeze.Model.Stage> {
+        Gs2Iterator<Gs2.Gs2Freeze.Model.Stage>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Freeze.Model.Stage>
+        #endif
     #else
-    public class DescribeStagesIterator : IAsyncEnumerable<Gs2.Gs2Freeze.Model.Stage> {
+        IAsyncEnumerable<Gs2.Gs2Freeze.Model.Stage>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2FreezeRestClient _client;
         private bool _isCacheChecked;
@@ -198,7 +203,7 @@ namespace Gs2.Gs2Freeze.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Freeze.Model.Stage> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Freeze.Model.Stage> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -274,7 +279,7 @@ namespace Gs2.Gs2Freeze.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

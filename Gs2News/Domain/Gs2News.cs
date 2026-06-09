@@ -150,11 +150,7 @@ namespace Gs2.Gs2News.Domain
                 this._gs2,
                 this._client,
                 namePrefix
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

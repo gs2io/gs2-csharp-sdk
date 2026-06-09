@@ -190,11 +190,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -247,11 +243,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this.NamespaceName,
                 this.AccessToken,
                 withProfile
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -372,11 +364,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -487,11 +475,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

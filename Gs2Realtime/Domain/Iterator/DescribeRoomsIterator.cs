@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Realtime.Domain.Iterator
 {
 
+    public class DescribeRoomsIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeRoomsIterator : Gs2Iterator<Gs2.Gs2Realtime.Model.Room> {
+        Gs2Iterator<Gs2.Gs2Realtime.Model.Room>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Realtime.Model.Room>
+        #endif
     #else
-    public class DescribeRoomsIterator : IAsyncEnumerable<Gs2.Gs2Realtime.Model.Room> {
+        IAsyncEnumerable<Gs2.Gs2Realtime.Model.Room>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2RealtimeRestClient _client;
         public string NamespaceName { get; }
@@ -210,7 +215,7 @@ namespace Gs2.Gs2Realtime.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Realtime.Model.Room> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Realtime.Model.Room> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -287,7 +292,7 @@ namespace Gs2.Gs2Realtime.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

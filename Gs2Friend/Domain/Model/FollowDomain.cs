@@ -114,11 +114,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this.UserId,
                 this.WithProfile,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

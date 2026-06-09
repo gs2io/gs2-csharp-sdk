@@ -467,11 +467,7 @@ namespace Gs2.Gs2Chat.Domain
             return new DescribeNamespacesIterator(
                 this._gs2,
                 this._client
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

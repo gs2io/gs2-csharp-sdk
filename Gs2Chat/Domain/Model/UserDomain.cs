@@ -107,11 +107,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 this._client,
                 this.NamespaceName,
                 namePrefix
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -239,11 +235,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 this.UserId,
                 roomNamePrefix,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -352,11 +344,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                 this._client,
                 this.NamespaceName,
                 roomName
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

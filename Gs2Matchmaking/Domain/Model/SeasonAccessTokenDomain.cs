@@ -115,11 +115,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this.NamespaceName,
                 this.SeasonName,
                 this.AccessToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -242,11 +238,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 this.NamespaceName,
                 this.AccessToken,
                 this.SeasonName
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

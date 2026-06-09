@@ -103,11 +103,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 this._gs2,
                 this._client,
                 this.StackName
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -211,11 +207,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 this._gs2,
                 this._client,
                 this.StackName
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -319,11 +311,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 this._gs2,
                 this._client,
                 this.StackName
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

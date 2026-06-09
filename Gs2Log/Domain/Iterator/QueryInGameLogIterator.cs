@@ -63,11 +63,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Log.Domain.Iterator
 {
 
+    public class QueryInGameLogIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class QueryInGameLogIterator : Gs2Iterator<Gs2.Gs2Log.Model.InGameLog> {
+        Gs2Iterator<Gs2.Gs2Log.Model.InGameLog>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.InGameLog>
+        #endif
     #else
-    public class QueryInGameLogIterator : IAsyncEnumerable<Gs2.Gs2Log.Model.InGameLog> {
+        IAsyncEnumerable<Gs2.Gs2Log.Model.InGameLog>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LogRestClient _client;
         private readonly Action<long?> _onTotalCount;
@@ -249,7 +254,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.InGameLog> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Log.Model.InGameLog> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -315,7 +320,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             }
-            });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

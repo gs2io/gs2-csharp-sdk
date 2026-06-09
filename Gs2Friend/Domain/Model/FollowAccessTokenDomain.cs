@@ -177,11 +177,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this.NamespaceName,
                 this.AccessToken,
                 this.WithProfile
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

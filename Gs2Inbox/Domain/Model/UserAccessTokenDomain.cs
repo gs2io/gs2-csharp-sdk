@@ -326,11 +326,7 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 this.NamespaceName,
                 this.AccessToken,
                 isRead
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

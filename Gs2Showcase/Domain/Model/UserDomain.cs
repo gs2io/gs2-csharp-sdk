@@ -108,11 +108,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

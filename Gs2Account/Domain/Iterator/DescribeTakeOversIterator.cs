@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Account.Domain.Iterator
 {
 
+    public class DescribeTakeOversIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeTakeOversIterator : Gs2Iterator<Gs2.Gs2Account.Model.TakeOver> {
+        Gs2Iterator<Gs2.Gs2Account.Model.TakeOver>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Account.Model.TakeOver>
+        #endif
     #else
-    public class DescribeTakeOversIterator : IAsyncEnumerable<Gs2.Gs2Account.Model.TakeOver> {
+        IAsyncEnumerable<Gs2.Gs2Account.Model.TakeOver>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2AccountRestClient _client;
         public string NamespaceName { get; }
@@ -217,7 +222,7 @@ namespace Gs2.Gs2Account.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Account.Model.TakeOver> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Account.Model.TakeOver> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -295,7 +300,7 @@ namespace Gs2.Gs2Account.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

@@ -367,11 +367,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 this.NamespaceName,
                 this.AccessToken,
                 guildModelName
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -530,11 +526,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 attributes5,
                 joinPolicies,
                 includeFullMembersGuild
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
         
@@ -568,11 +560,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 this.NamespaceName,
                 this.AccessToken,
                 guildModelName
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

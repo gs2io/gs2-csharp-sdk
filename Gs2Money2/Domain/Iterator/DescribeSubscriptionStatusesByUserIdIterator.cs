@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Money2.Domain.Iterator
 {
 
+    public class DescribeSubscriptionStatusesByUserIdIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeSubscriptionStatusesByUserIdIterator : Gs2Iterator<Gs2.Gs2Money2.Model.SubscriptionStatus> {
+        Gs2Iterator<Gs2.Gs2Money2.Model.SubscriptionStatus>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Money2.Model.SubscriptionStatus>
+        #endif
     #else
-    public class DescribeSubscriptionStatusesByUserIdIterator : IAsyncEnumerable<Gs2.Gs2Money2.Model.SubscriptionStatus> {
+        IAsyncEnumerable<Gs2.Gs2Money2.Model.SubscriptionStatus>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2Money2RestClient _client;
         public string NamespaceName { get; }
@@ -213,7 +218,7 @@ namespace Gs2.Gs2Money2.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Money2.Model.SubscriptionStatus> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Money2.Model.SubscriptionStatus> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -291,7 +296,7 @@ namespace Gs2.Gs2Money2.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

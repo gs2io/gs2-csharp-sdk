@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2MegaField.Domain.Iterator
 {
 
+    public class DescribeAreaModelMastersIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeAreaModelMastersIterator : Gs2Iterator<Gs2.Gs2MegaField.Model.AreaModelMaster> {
+        Gs2Iterator<Gs2.Gs2MegaField.Model.AreaModelMaster>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2MegaField.Model.AreaModelMaster>
+        #endif
     #else
-    public class DescribeAreaModelMastersIterator : IAsyncEnumerable<Gs2.Gs2MegaField.Model.AreaModelMaster> {
+        IAsyncEnumerable<Gs2.Gs2MegaField.Model.AreaModelMaster>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MegaFieldRestClient _client;
         public string NamespaceName { get; }
@@ -210,7 +215,7 @@ namespace Gs2.Gs2MegaField.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2MegaField.Model.AreaModelMaster> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2MegaField.Model.AreaModelMaster> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -287,7 +292,7 @@ namespace Gs2.Gs2MegaField.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

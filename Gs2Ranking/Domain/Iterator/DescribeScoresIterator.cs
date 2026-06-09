@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Ranking.Domain.Iterator
 {
 
+    public class DescribeScoresIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeScoresIterator : Gs2Iterator<Gs2.Gs2Ranking.Model.Score> {
+        Gs2Iterator<Gs2.Gs2Ranking.Model.Score>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Ranking.Model.Score>
+        #endif
     #else
-    public class DescribeScoresIterator : IAsyncEnumerable<Gs2.Gs2Ranking.Model.Score> {
+        IAsyncEnumerable<Gs2.Gs2Ranking.Model.Score>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2RankingRestClient _client;
         public string NamespaceName { get; }
@@ -165,7 +170,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                     request
                 );
 
-                if (this._last && this.ScorerUserId == null) {
+                if (this._last) {
                     this._gs2.Cache.SetListCached<Gs2.Gs2Ranking.Model.Score>(
                         (null as Gs2.Gs2Ranking.Model.Score).CacheParentKey(
                             NamespaceName,
@@ -229,7 +234,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Ranking.Model.Score> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Ranking.Model.Score> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -307,7 +312,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

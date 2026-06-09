@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Ranking2.Domain.Iterator
 {
 
+    public class DescribeGlobalRankingsIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeGlobalRankingsIterator : Gs2Iterator<Gs2.Gs2Ranking2.Model.GlobalRankingData> {
+        Gs2Iterator<Gs2.Gs2Ranking2.Model.GlobalRankingData>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Ranking2.Model.GlobalRankingData>
+        #endif
     #else
-    public class DescribeGlobalRankingsIterator : IAsyncEnumerable<Gs2.Gs2Ranking2.Model.GlobalRankingData> {
+        IAsyncEnumerable<Gs2.Gs2Ranking2.Model.GlobalRankingData>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2Ranking2RestClient _client;
         public string NamespaceName { get; }
@@ -227,7 +232,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Ranking2.Model.GlobalRankingData> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Ranking2.Model.GlobalRankingData> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -306,7 +311,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

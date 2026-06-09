@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Inbox.Domain.Iterator
 {
 
+    public class DescribeGlobalMessagesIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeGlobalMessagesIterator : Gs2Iterator<Gs2.Gs2Inbox.Model.GlobalMessage> {
+        Gs2Iterator<Gs2.Gs2Inbox.Model.GlobalMessage>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Inbox.Model.GlobalMessage>
+        #endif
     #else
-    public class DescribeGlobalMessagesIterator : IAsyncEnumerable<Gs2.Gs2Inbox.Model.GlobalMessage> {
+        IAsyncEnumerable<Gs2.Gs2Inbox.Model.GlobalMessage>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2InboxRestClient _client;
         public string NamespaceName { get; }
@@ -204,7 +209,7 @@ namespace Gs2.Gs2Inbox.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Inbox.Model.GlobalMessage> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Inbox.Model.GlobalMessage> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -281,7 +286,7 @@ namespace Gs2.Gs2Inbox.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

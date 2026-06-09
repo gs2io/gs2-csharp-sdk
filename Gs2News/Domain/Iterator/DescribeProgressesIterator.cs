@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2News.Domain.Iterator
 {
 
+    public class DescribeProgressesIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeProgressesIterator : Gs2Iterator<Gs2.Gs2News.Model.Progress> {
+        Gs2Iterator<Gs2.Gs2News.Model.Progress>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2News.Model.Progress>
+        #endif
     #else
-    public class DescribeProgressesIterator : IAsyncEnumerable<Gs2.Gs2News.Model.Progress> {
+        IAsyncEnumerable<Gs2.Gs2News.Model.Progress>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2NewsRestClient _client;
         public string NamespaceName { get; }
@@ -210,7 +215,7 @@ namespace Gs2.Gs2News.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2News.Model.Progress> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2News.Model.Progress> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -287,7 +292,7 @@ namespace Gs2.Gs2News.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

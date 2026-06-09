@@ -110,11 +110,7 @@ namespace Gs2.Gs2Money.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -241,11 +237,7 @@ namespace Gs2.Gs2Money.Domain.Model
                 begin,
                 end,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

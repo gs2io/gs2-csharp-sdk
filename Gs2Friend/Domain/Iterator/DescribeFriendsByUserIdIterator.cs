@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Friend.Domain.Iterator
 {
 
+    public class DescribeFriendsByUserIdIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeFriendsByUserIdIterator : Gs2Iterator<Gs2.Gs2Friend.Model.FriendUser> {
+        Gs2Iterator<Gs2.Gs2Friend.Model.FriendUser>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.FriendUser>
+        #endif
     #else
-    public class DescribeFriendsByUserIdIterator : IAsyncEnumerable<Gs2.Gs2Friend.Model.FriendUser> {
+        IAsyncEnumerable<Gs2.Gs2Friend.Model.FriendUser>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2FriendRestClient _client;
         public string NamespaceName { get; }
@@ -225,7 +230,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.FriendUser> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Friend.Model.FriendUser> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -304,7 +309,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

@@ -113,11 +113,7 @@ namespace Gs2.Gs2Limit.Domain.Model
                 this.UserId,
                 limitName,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

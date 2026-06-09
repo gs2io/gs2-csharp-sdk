@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Matchmaking.Domain.Iterator
 {
 
+    public class DescribeSeasonModelMastersIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeSeasonModelMastersIterator : Gs2Iterator<Gs2.Gs2Matchmaking.Model.SeasonModelMaster> {
+        Gs2Iterator<Gs2.Gs2Matchmaking.Model.SeasonModelMaster>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Matchmaking.Model.SeasonModelMaster>
+        #endif
     #else
-    public class DescribeSeasonModelMastersIterator : IAsyncEnumerable<Gs2.Gs2Matchmaking.Model.SeasonModelMaster> {
+        IAsyncEnumerable<Gs2.Gs2Matchmaking.Model.SeasonModelMaster>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MatchmakingRestClient _client;
         public string NamespaceName { get; }
@@ -215,7 +220,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Matchmaking.Model.SeasonModelMaster> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Matchmaking.Model.SeasonModelMaster> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -292,7 +297,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

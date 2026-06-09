@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Quest.Domain.Iterator
 {
 
+    public class DescribeQuestModelMastersIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeQuestModelMastersIterator : Gs2Iterator<Gs2.Gs2Quest.Model.QuestModelMaster> {
+        Gs2Iterator<Gs2.Gs2Quest.Model.QuestModelMaster>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Quest.Model.QuestModelMaster>
+        #endif
     #else
-    public class DescribeQuestModelMastersIterator : IAsyncEnumerable<Gs2.Gs2Quest.Model.QuestModelMaster> {
+        IAsyncEnumerable<Gs2.Gs2Quest.Model.QuestModelMaster>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2QuestRestClient _client;
         public string NamespaceName { get; }
@@ -221,7 +226,7 @@ namespace Gs2.Gs2Quest.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Quest.Model.QuestModelMaster> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Quest.Model.QuestModelMaster> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -299,7 +304,7 @@ namespace Gs2.Gs2Quest.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

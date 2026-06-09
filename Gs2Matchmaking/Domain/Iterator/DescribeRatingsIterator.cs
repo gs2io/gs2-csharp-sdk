@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Matchmaking.Domain.Iterator
 {
 
+    public class DescribeRatingsIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeRatingsIterator : Gs2Iterator<Gs2.Gs2Matchmaking.Model.Rating> {
+        Gs2Iterator<Gs2.Gs2Matchmaking.Model.Rating>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Matchmaking.Model.Rating>
+        #endif
     #else
-    public class DescribeRatingsIterator : IAsyncEnumerable<Gs2.Gs2Matchmaking.Model.Rating> {
+        IAsyncEnumerable<Gs2.Gs2Matchmaking.Model.Rating>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MatchmakingRestClient _client;
         public string NamespaceName { get; }
@@ -217,7 +222,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Matchmaking.Model.Rating> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Matchmaking.Model.Rating> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -295,7 +300,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

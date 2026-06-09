@@ -116,11 +116,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                 currency,
                 year,
                 month
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -248,11 +244,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                 year,
                 month,
                 day
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -412,11 +404,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                 this._gs2,
                 this._client,
                 this.NamespaceName
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -521,11 +509,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                 this._gs2,
                 this._client,
                 this.NamespaceName
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -634,11 +618,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                 this._client,
                 this.NamespaceName,
                 namePrefix
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -750,11 +730,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                 this._gs2,
                 this._client,
                 this.NamespaceName
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -863,11 +839,7 @@ namespace Gs2.Gs2Money2.Domain.Model
                 this._client,
                 this.NamespaceName,
                 namePrefix
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

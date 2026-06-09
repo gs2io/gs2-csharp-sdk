@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Money.Domain.Iterator
 {
 
+    public class DescribeReceiptsIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeReceiptsIterator : Gs2Iterator<Gs2.Gs2Money.Model.Receipt> {
+        Gs2Iterator<Gs2.Gs2Money.Model.Receipt>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Money.Model.Receipt>
+        #endif
     #else
-    public class DescribeReceiptsIterator : IAsyncEnumerable<Gs2.Gs2Money.Model.Receipt> {
+        IAsyncEnumerable<Gs2.Gs2Money.Model.Receipt>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2MoneyRestClient _client;
         public string NamespaceName { get; }
@@ -236,7 +241,7 @@ namespace Gs2.Gs2Money.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Money.Model.Receipt> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Money.Model.Receipt> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -314,7 +319,7 @@ namespace Gs2.Gs2Money.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

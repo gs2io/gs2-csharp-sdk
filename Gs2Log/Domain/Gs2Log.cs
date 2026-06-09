@@ -148,11 +148,7 @@ namespace Gs2.Gs2Log.Domain
             return new DescribeNamespacesIterator(
                 this._gs2,
                 this._client
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -267,11 +263,7 @@ namespace Gs2.Gs2Log.Domain
                 begin,
                 end,
                 query
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -421,11 +413,7 @@ namespace Gs2.Gs2Log.Domain
                 groupBy,
                 interval,
                 seriesLimit
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

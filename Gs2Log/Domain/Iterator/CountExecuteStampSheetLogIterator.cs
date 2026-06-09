@@ -63,11 +63,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Log.Domain.Iterator
 {
 
+    public class CountExecuteStampSheetLogIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class CountExecuteStampSheetLogIterator : Gs2Iterator<Gs2.Gs2Log.Model.ExecuteStampSheetLogCount> {
+        Gs2Iterator<Gs2.Gs2Log.Model.ExecuteStampSheetLogCount>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.ExecuteStampSheetLogCount>
+        #endif
     #else
-    public class CountExecuteStampSheetLogIterator : IAsyncEnumerable<Gs2.Gs2Log.Model.ExecuteStampSheetLogCount> {
+        IAsyncEnumerable<Gs2.Gs2Log.Model.ExecuteStampSheetLogCount>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LogRestClient _client;
         public string NamespaceName { get; }
@@ -212,7 +217,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.ExecuteStampSheetLogCount> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Log.Model.ExecuteStampSheetLogCount> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -278,7 +283,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
             }
-            });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

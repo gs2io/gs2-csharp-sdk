@@ -117,11 +117,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 this.UserId,
                 this.RankingName,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -243,11 +239,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 this.RankingName,
                 this.Season,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

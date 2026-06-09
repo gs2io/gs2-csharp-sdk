@@ -113,11 +113,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 this.LotteryName,
                 this.UserId,
                 timeOffsetToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

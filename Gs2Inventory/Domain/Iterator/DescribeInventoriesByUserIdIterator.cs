@@ -61,11 +61,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Inventory.Domain.Iterator
 {
 
+    public class DescribeInventoriesByUserIdIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeInventoriesByUserIdIterator : Gs2Iterator<Gs2.Gs2Inventory.Model.Inventory> {
+        Gs2Iterator<Gs2.Gs2Inventory.Model.Inventory>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Inventory.Model.Inventory>
+        #endif
     #else
-    public class DescribeInventoriesByUserIdIterator : IAsyncEnumerable<Gs2.Gs2Inventory.Model.Inventory> {
+        IAsyncEnumerable<Gs2.Gs2Inventory.Model.Inventory>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2InventoryRestClient _client;
         public string NamespaceName { get; }
@@ -219,7 +224,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Inventory.Model.Inventory> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Inventory.Model.Inventory> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -297,7 +302,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

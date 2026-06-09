@@ -162,11 +162,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 this.NamespaceName,
                 this.LotteryName,
                 this.AccessToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

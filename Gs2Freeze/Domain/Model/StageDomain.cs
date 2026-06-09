@@ -102,11 +102,7 @@ namespace Gs2.Gs2Freeze.Domain.Model
                 this._gs2,
                 this._client,
                 this.StageName
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

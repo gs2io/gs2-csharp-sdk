@@ -268,11 +268,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 this.NamespaceName,
                 this.CategoryName,
                 this.AccessToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -394,11 +390,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 this.CategoryName,
                 this.AccessToken,
                 this.AdditionalScopeName
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 

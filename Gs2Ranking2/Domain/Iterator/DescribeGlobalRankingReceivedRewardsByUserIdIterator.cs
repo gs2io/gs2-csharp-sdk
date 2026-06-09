@@ -63,11 +63,16 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Ranking2.Domain.Iterator
 {
 
+    public class DescribeGlobalRankingReceivedRewardsByUserIdIterator :
     #if UNITY_2017_1_OR_NEWER
-    public class DescribeGlobalRankingReceivedRewardsByUserIdIterator : Gs2Iterator<Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward> {
+        Gs2Iterator<Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward>
+        #if GS2_ENABLE_UNITASK
+        , IUniTaskAsyncEnumerable<Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward>
+        #endif
     #else
-    public class DescribeGlobalRankingReceivedRewardsByUserIdIterator : IAsyncEnumerable<Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward> {
+        IAsyncEnumerable<Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward>
     #endif
+    {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2Ranking2RestClient _client;
         public string NamespaceName { get; }
@@ -231,7 +236,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerable<Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
             #else
 
@@ -310,7 +315,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                 }
-                });
+            }).GetAsyncEnumerator();
             #endif
         #else
             }

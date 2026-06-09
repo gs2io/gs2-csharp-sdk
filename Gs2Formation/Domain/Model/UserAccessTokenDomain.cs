@@ -106,11 +106,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.AccessToken
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
@@ -225,11 +221,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                 this.NamespaceName,
                 this.AccessToken,
                 propertyFormModelName
-            #if GS2_ENABLE_UNITASK
-            ).GetAsyncEnumerator();
-            #else
             );
-            #endif
         }
         #endif
 
