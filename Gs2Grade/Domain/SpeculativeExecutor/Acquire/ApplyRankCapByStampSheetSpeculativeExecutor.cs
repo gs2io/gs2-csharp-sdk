@@ -39,9 +39,9 @@ using Gs2.Gs2Grade.Model.Cache;
 using Gs2.Gs2Grade.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading.Tasks;
 #endif
@@ -59,60 +59,14 @@ namespace Gs2.Gs2Grade.Domain.SpeculativeExecutor
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
             ApplyRankCapByUserIdRequest request
-        ) {
-            IEnumerator Impl(Gs2Future<Func<object>> result) {
-                var future = domain.Grade.Namespace(
-                    request.NamespaceName
-                ).AccessToken(
-                    accessToken
-                ).Status(
-                    request.GradeName,
-                    request.PropertyId
-                ).ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    result.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-
-                if (item == null) {
-                    result.OnComplete(() => null);
-                    yield break;
-                }
-                try {
-                    item = item.SpeculativeExecution(request);
-
-                    result.OnComplete(() =>
-                    {
-                        item.PutCache(
-                            domain.Cache,
-                            request.NamespaceName,
-                            request.UserId,
-                            request.GradeName,
-                            request.PropertyId,
-                            null
-                        );
-                        return null;
-                    });
-                }
-                catch (Gs2Exception e) {
-                    result.OnError(e);
-                    yield break;
-                }
-                yield return null;
-            }
-
-            return new Gs2InlineFuture<Func<object>>(Impl);
-        }
+        ) => ExecuteAsync(domain, accessToken, request).ToGs2Future();
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<Func<object>> ExecuteAsync(
-    #else
+#else
         public static async Task<Func<object>> ExecuteAsync(
-    #endif
+#endif
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
             ApplyRankCapByUserIdRequest request
@@ -144,6 +98,5 @@ namespace Gs2.Gs2Grade.Domain.SpeculativeExecutor
                 return null;
             };
         }
-#endif
     }
 }

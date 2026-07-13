@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -41,9 +40,9 @@ using Gs2.Gs2Experience.Model.Cache;
 using Gs2.Gs2Experience.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading.Tasks;
 #endif
@@ -61,88 +60,26 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
             SubExperienceByUserIdRequest request
-        ) {
-            IEnumerator Impl(Gs2Future<Func<object>> result) {
-
-                var future = domain.Experience.Namespace(
-                    request.NamespaceName
-                ).ExperienceModel(
-                    request.ExperienceName
-                ).ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    result.OnError(future.Error);
-                    yield break;
-                }
-                var model = future.Result;
-
-                if (model == null) {
-                    result.OnComplete(() => null);
-                    yield break;
-                }
-
-                var future2 = domain.Experience.Namespace(
-                    request.NamespaceName
-                ).AccessToken(
-                    accessToken
-                ).Status(
-                    request.ExperienceName,
-                    request.PropertyId
-                ).ModelFuture();
-                yield return future;
-                if (future2.Error != null) {
-                    result.OnError(future2.Error);
-                    yield break;
-                }
-                var item = future2.Result;
-
-                if (item == null) {
-                    result.OnComplete(() => null);
-                    yield break;
-                }
-                try {
-                    item = item.SpeculativeExecution(request, model);
-
-                    result.OnComplete(() =>
-                    {
-                        item.PutCache(
-                            domain.Cache,
-                            request.NamespaceName,
-                            accessToken.UserId,
-                            request.ExperienceName,
-                            request.PropertyId,
-                            accessToken?.TimeOffset
-                        );
-                        return null;
-                    });
-                }
-                catch (Gs2Exception e) {
-                    result.OnError(e);
-                    yield break;
-                }
-                yield return null;
-            }
-
-            return new Gs2InlineFuture<Func<object>>(Impl);
-        }
+        ) => ExecuteAsync(domain, accessToken, request).ToGs2Future();
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<Func<object>> ExecuteAsync(
-    #else
+#else
         public static async Task<Func<object>> ExecuteAsync(
-    #endif
+#endif
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
             SubExperienceByUserIdRequest request
         ) {
+/* diff +++ start */
             var model = await domain.Experience.Namespace(
                 request.NamespaceName
             ).ExperienceModel(
                 request.ExperienceName
             ).ModelAsync();
 
+/* diff +++ end */
             var item = await domain.Experience.Namespace(
                 request.NamespaceName
             ).AccessToken(
@@ -155,7 +92,10 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
             if (item == null) {
                 return () => null;
             }
-            item = item.SpeculativeExecution(request, model);
+/* diff --- start
+            item = item.SpeculativeExecution(request);
+ diff --- end */
+            item = item.SpeculativeExecution(request, model); /* diff +++ */
 
             return () =>
             {
@@ -165,11 +105,13 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
                     accessToken.UserId,
                     request.ExperienceName,
                     request.PropertyId,
-                    accessToken?.TimeOffset
+/* diff --- start
+                    accessToken.TimeOffset
+ diff --- end */
+                    accessToken?.TimeOffset /* diff +++ */
                 );
                 return null;
             };
         }
-#endif
     }
 }

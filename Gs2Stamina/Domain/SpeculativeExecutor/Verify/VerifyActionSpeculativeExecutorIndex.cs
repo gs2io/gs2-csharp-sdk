@@ -30,15 +30,16 @@ using System.Collections;
 using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
+using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Stamina.Model.Transaction;
 using Gs2.Gs2Stamina.Request;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading.Tasks;
 #endif
@@ -53,115 +54,14 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
             AccessToken accessToken,
             VerifyAction verifyAction,
             BigInteger rate
-        ) {
-            verifyAction.Action = verifyAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
-            verifyAction.Action = verifyAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
-            verifyAction.Action = verifyAction.Action.Replace("{userId}", accessToken.UserId);
-            IEnumerator Impl(Gs2Future<Func<object>> result) {
-                if (VerifyStaminaValueByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
-                    var request = VerifyStaminaValueByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
-                    if (rate != 1) {
-                        request = request.Rate(rate);
-                    }
-                    var future = VerifyStaminaValueByUserIdSpeculativeExecutor.ExecuteFuture(
-                        domain,
-                        accessToken,
-                        request
-                    );
-                    yield return future;
-                    if (future.Error != null) {
-                        result.OnError(future.Error);
-                        yield break;
-                    }
-                    result.OnComplete(future.Result);
-                    yield break;
-                }
-                if (VerifyStaminaMaxValueByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
-                    var request = VerifyStaminaMaxValueByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
-                    if (rate != 1) {
-                        request = request.Rate(rate);
-                    }
-                    var future = VerifyStaminaMaxValueByUserIdSpeculativeExecutor.ExecuteFuture(
-                        domain,
-                        accessToken,
-                        request
-                    );
-                    yield return future;
-                    if (future.Error != null) {
-                        result.OnError(future.Error);
-                        yield break;
-                    }
-                    result.OnComplete(future.Result);
-                    yield break;
-                }
-                if (VerifyStaminaRecoverIntervalMinutesByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
-                    var request = VerifyStaminaRecoverIntervalMinutesByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
-                    if (rate != 1) {
-                        request = request.Rate(rate);
-                    }
-                    var future = VerifyStaminaRecoverIntervalMinutesByUserIdSpeculativeExecutor.ExecuteFuture(
-                        domain,
-                        accessToken,
-                        request
-                    );
-                    yield return future;
-                    if (future.Error != null) {
-                        result.OnError(future.Error);
-                        yield break;
-                    }
-                    result.OnComplete(future.Result);
-                    yield break;
-                }
-                if (VerifyStaminaRecoverValueByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
-                    var request = VerifyStaminaRecoverValueByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
-                    if (rate != 1) {
-                        request = request.Rate(rate);
-                    }
-                    var future = VerifyStaminaRecoverValueByUserIdSpeculativeExecutor.ExecuteFuture(
-                        domain,
-                        accessToken,
-                        request
-                    );
-                    yield return future;
-                    if (future.Error != null) {
-                        result.OnError(future.Error);
-                        yield break;
-                    }
-                    result.OnComplete(future.Result);
-                    yield break;
-                }
-                if (VerifyStaminaOverflowValueByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
-                    var request = VerifyStaminaOverflowValueByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
-                    if (rate != 1) {
-                        request = request.Rate(rate);
-                    }
-                    var future = VerifyStaminaOverflowValueByUserIdSpeculativeExecutor.ExecuteFuture(
-                        domain,
-                        accessToken,
-                        request
-                    );
-                    yield return future;
-                    if (future.Error != null) {
-                        result.OnError(future.Error);
-                        yield break;
-                    }
-                    result.OnComplete(future.Result);
-                    yield break;
-                }
-                result.OnComplete(null);
-                yield return null;
-            }
-
-            return new Gs2InlineFuture<Func<object>>(Impl);
-        }
+        ) => ExecuteAsync(domain, accessToken, verifyAction, rate).ToGs2Future();
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<Func<object>> ExecuteAsync(
-    #else
+#else
         public static async Task<Func<object>> ExecuteAsync(
-    #endif
+#endif
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
             VerifyAction verifyAction,
@@ -227,6 +127,5 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
             }
             return null;
         }
-#endif
     }
 }

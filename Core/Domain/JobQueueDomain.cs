@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2JobQueue.Request;
 #if UNITY_2017_1_OR_NEWER 
 using UnityEngine;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading.Tasks;
 #endif
@@ -39,51 +40,14 @@ namespace Gs2.Core.Domain
 #if UNITY_2017_1_OR_NEWER
         public Gs2Future<bool> RunFuture(
             AccessToken accessToken
-        ) {
-            IEnumerator Impl(Gs2Future<bool> self)
-            {
-                string namespaceName = null;
-                while (!this._semaphore.Wait(0)) {
-                    yield return null;
-                }
-                try {
-                    if (this._tasks.Count > 0) {
-                        namespaceName = this._tasks.First();
-                    }
-                    if (namespaceName != null) {
-                        var future = this._gs2.JobQueue.Namespace(
-                            namespaceName
-                        ).AccessToken(
-                            accessToken
-                        ).RunFuture(
-                            new RunRequest()
-                        );
-                        yield return future;
-                        if (future.Error != null) {
-
-                        }
-                        var job = future.Result;
-                        if (job.IsLastJob.HasValue && job.IsLastJob.Value) {
-                            this._tasks.Remove(namespaceName);
-                        }
-                    }
-                    self.OnComplete(this._tasks.Count == 0);
-                }
-                finally {
-                    this._semaphore.Release();
-                }
-            }
-
-            return new Gs2InlineFuture<bool>(Impl);
-        }
+        ) => RunAsync(accessToken).ToGs2Future();
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if GS2_ENABLE_UNITASK
+#if GS2_ENABLE_UNITASK
         public async UniTask<bool> RunAsync(
-    #else
+#else
         public async Task<bool> RunAsync(
-    #endif
+#endif
             AccessToken accessToken
         ) {
             string namespaceName = null;
@@ -116,58 +80,18 @@ namespace Gs2.Core.Domain
                 this._semaphore.Release();
             }
         }
-#endif
 
 #if UNITY_2017_1_OR_NEWER
         public Gs2Future<bool> RunByUserIdFuture(
             string userId
-        ) {
-            IEnumerator Impl(Gs2Future<bool> self)
-            {
-                string namespaceName = null;
-                while (!this._semaphore.Wait(0)) {
-                    yield return null;
-                }
-                try {
-                    if (this._tasks.Count > 0) {
-                        namespaceName = this._tasks.First();
-                    }
-                    if (namespaceName != null) {
-                        var future = this._gs2.JobQueue.Namespace(
-                            namespaceName
-                        ).User(
-                            userId
-                        ).RunFuture(
-                            new RunByUserIdRequest()
-                        );
-                        yield return future;
-                        if (future.Error != null)
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                        var job = future.Result;
-                        if (job.IsLastJob.HasValue && job.IsLastJob.Value) {
-                            this._tasks.Remove(namespaceName);
-                        }
-                    }
-                    self.OnComplete(this._tasks.Count == 0);
-                }
-                finally {
-                    this._semaphore.Release();
-                }
-            }
-
-            return new Gs2InlineFuture<bool>(Impl);
-        }
+        ) => RunByUserIdAsync(userId).ToGs2Future();
 #endif
         
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if GS2_ENABLE_UNITASK
+#if GS2_ENABLE_UNITASK
         public async UniTask<bool> RunByUserIdAsync(
-    #else
+#else
         public async Task<bool> RunByUserIdAsync(
-    #endif
+#endif
             string userId
         ) {
             string namespaceName = null;
@@ -200,6 +124,5 @@ namespace Gs2.Core.Domain
                 this._semaphore.Release();
             }
         }
-#endif
     }
 }

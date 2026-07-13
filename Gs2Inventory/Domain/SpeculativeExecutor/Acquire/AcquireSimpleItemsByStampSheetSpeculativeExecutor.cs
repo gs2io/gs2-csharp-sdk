@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -30,8 +29,10 @@
 using System;
 using System.Numerics;
 using System.Collections;
+/* diff +++ start */
 using System.Collections.Generic;
 using System.Linq;
+/* diff +++ end */
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
@@ -43,10 +44,10 @@ using Gs2.Gs2Inventory.Model.Cache;
 using Gs2.Gs2Inventory.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.Linq;
-    #endif
+using Cysharp.Threading.Tasks.Linq; /* diff +++ */
 #else
 using System.Threading.Tasks;
 #endif
@@ -64,69 +65,34 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
             AcquireSimpleItemsByUserIdRequest request
-        ) {
-            IEnumerator Impl(Gs2Future<Func<object>> result) {
-                var it = domain.Inventory.Namespace(
-                    request.NamespaceName
-                ).AccessToken(
-                    accessToken
-                ).SimpleInventory(
-                    request.InventoryName
-                ).SimpleItems(
-                );
-                var items = new List<Gs2.Gs2Inventory.Model.SimpleItem>();
-                while (it.HasNext()) {
-                    yield return it.Next();
-                    if (it.Error != null) {
-                        result.OnError(it.Error);
-                        yield break;
-                    }
-                    if (it.Current != null) {
-                        items.Add(it.Current);
-                    }
-                }
-
-                var items_ = items.Where(v => request.AcquireCounts.Select(v => v.ItemName).Contains(v.ItemName)).ToArray();
-                items_ = items_.SpeculativeExecution(request);
-
-                result.OnComplete(() =>
-                {
-                    foreach (var item in items_) {
-                        item.PutCache(
-                            domain.Cache,
-                            request.NamespaceName,
-                            accessToken.UserId,
-                            request.InventoryName,
-                            item.ItemName,
-                            accessToken.TimeOffset
-                        );
-                    }
-                    return null;
-                });
-                yield return null;
-            }
-
-            return new Gs2InlineFuture<Func<object>>(Impl);
-        }
+        ) => ExecuteAsync(domain, accessToken, request).ToGs2Future();
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<Func<object>> ExecuteAsync(
-    #else
+#else
         public static async Task<Func<object>> ExecuteAsync(
-    #endif
+#endif
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
             AcquireSimpleItemsByUserIdRequest request
         ) {
+/* diff --- start
+            var item = await domain.Inventory.Namespace(
+ diff --- end */
+/* diff +++ start */
     #if UNITY_2017_1_OR_NEWER
             var items = await domain.Inventory.Namespace(
+/* diff +++ end */
                 request.NamespaceName
             ).AccessToken(
                 accessToken
             ).SimpleInventory(
                 request.InventoryName
+/* diff --- start
+            ).ModelAsync();
+ diff --- end */
+/* diff +++ start */
             ).SimpleItemsAsync(
             ).ToArrayAsync();
     #else
@@ -145,12 +111,32 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             }
             var items = collection.ToArray();
     #endif
+/* diff +++ end */
 
+/* diff --- start
+            if (item == null) {
+                return () => null;
+            }
+            item = item.SpeculativeExecution(request);
+ diff --- end */
+/* diff +++ start */
             items = items.Where(v => request.AcquireCounts.Select(v => v.ItemName).Contains(v.ItemName)).ToArray();
             items = items.SpeculativeExecution(request);
+/* diff +++ end */
 
             return () =>
             {
+/* diff --- start
+                item.PutCache(
+                    domain.Cache,
+                    request.NamespaceName,
+                    request.UserId,
+                    request.InventoryName,
+                    request.ItemName,
+                    null
+                );
+ diff --- end */
+/* diff +++ start */
                 foreach (var item in items) {
                     item.PutCache(
                         domain.Cache,
@@ -161,9 +147,9 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                         accessToken.TimeOffset
                     );
                 }
+/* diff +++ end */
                 return null;
             };
         }
-#endif
     }
 }

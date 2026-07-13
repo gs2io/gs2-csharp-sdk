@@ -49,11 +49,11 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Scripting;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -85,12 +85,11 @@ namespace Gs2.Gs2Freeze.Domain
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Freeze.Model.Stage> StagesAsync(
-            #else
+        #else
         public DescribeStagesIterator StagesAsync(
-            #endif
+        #endif
         )
         {
             return new DescribeStagesIterator(
@@ -98,7 +97,6 @@ namespace Gs2.Gs2Freeze.Domain
                 this._client
             );
         }
-        #endif
 
         public ulong SubscribeStages(
             Action<Gs2.Gs2Freeze.Model.Stage[]> callback
@@ -111,10 +109,15 @@ namespace Gs2.Gs2Freeze.Domain
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await StagesAsync(
                             ).ToArrayAsync());
                         }
@@ -123,13 +126,15 @@ namespace Gs2.Gs2Freeze.Domain
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeStagesWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeStagesWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Freeze.Model.Stage[]> callback
         )
         {
@@ -141,7 +146,6 @@ namespace Gs2.Gs2Freeze.Domain
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeStages(
             ulong callbackId

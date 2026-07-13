@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -27,10 +26,10 @@ using Gs2.Core.Net;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -44,7 +43,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
             this Event self,
             string namespaceName,
             string userId,
-            bool isInSchedule,
+            bool isInSchedule, /* diff +++ */
             int? timeOffset
         ) {
             return string.Join(
@@ -52,7 +51,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                 "schedule",
                 namespaceName,
                 userId,
-                isInSchedule.ToString(),
+                isInSchedule.ToString(), /* diff +++ */
                 timeOffset?.ToString() ?? "0",
                 "Event"
             );
@@ -75,7 +74,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
             string namespaceName,
             string userId,
             string eventName,
-            bool isInSchedule,
+            bool isInSchedule, /* diff +++ */
             int? timeOffset,
             Func<IFuture<Event>> fetchImpl
         ) {
@@ -92,7 +91,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                             namespaceName,
                             userId,
                             eventName,
-                            isInSchedule,
+                            isInSchedule, /* diff +++ */
                             timeOffset
                         );
                         if (e.Errors.Length != 0 && e.Errors[0].Component == "event") {
@@ -109,7 +108,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     namespaceName,
                     userId,
                     eventName,
-                    isInSchedule,
+                    isInSchedule, /* diff +++ */
                     timeOffset
                 );
                 self.OnComplete(item);
@@ -118,24 +117,23 @@ namespace Gs2.Gs2Schedule.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<Event> FetchAsync(
-    #else
+#else
         public static async Task<Event> FetchAsync(
-    #endif
+#endif
             this Event self,
             CacheDatabase cache,
             string namespaceName,
             string userId,
             string eventName,
-            bool isInSchedule,
+            bool isInSchedule, /* diff +++ */
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<Event>> fetchImpl
-    #else
+#else
             Func<Task<Event>> fetchImpl
-    #endif
+#endif
         ) {
             try {
                 var item = await fetchImpl();
@@ -144,7 +142,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     namespaceName,
                     userId,
                     eventName,
-                    isInSchedule,
+                    isInSchedule, /* diff +++ */
                     timeOffset
                 );
                 return item;
@@ -155,7 +153,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     namespaceName,
                     userId,
                     eventName,
-                    isInSchedule,
+                    isInSchedule, /* diff +++ */
                     timeOffset
                 );
                 if (e.errors.Length == 0 || e.errors[0].component != "event") {
@@ -164,7 +162,6 @@ namespace Gs2.Gs2Schedule.Model.Cache
                 return null;
             }
         }
-#endif
 
         public static Tuple<Event, bool> GetCache(
             this Event self,
@@ -172,7 +169,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
             string namespaceName,
             string userId,
             string eventName,
-            bool isInSchedule,
+            bool isInSchedule, /* diff +++ */
             int? timeOffset
         ) {
             if (userId == null) {
@@ -182,7 +179,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    isInSchedule,
+                    isInSchedule, /* diff +++ */
                     timeOffset
                 ),
                 self.CacheKey(
@@ -197,7 +194,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
             string namespaceName,
             string userId,
             string eventName,
-            bool isInSchedule,
+            bool isInSchedule, /* diff +++ */
             int? timeOffset
         ) {
             if (userId == null) {
@@ -207,7 +204,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    isInSchedule,
+                    isInSchedule, /* diff +++ */
                     timeOffset
                 ),
                 self.CacheKey(
@@ -233,6 +230,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
+/* diff +++ start */
                     true,
                     timeOffset
                 ),
@@ -245,6 +243,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                     namespaceName,
                     userId,
                     false,
+/* diff +++ end */
                     timeOffset
                 ),
                 self.CacheKey(
@@ -258,7 +257,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            bool isInSchedule,
+            bool isInSchedule, /* diff +++ */
             int? timeOffset,
             Action<Event[]> callback
         ) {
@@ -266,7 +265,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    isInSchedule,
+                    isInSchedule, /* diff +++ */
                     timeOffset
                 ),
                 callback,
@@ -279,7 +278,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
-            bool isInSchedule,
+            bool isInSchedule, /* diff +++ */
             int? timeOffset,
             ulong callbackId
         ) {
@@ -287,7 +286,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
-                    isInSchedule,
+                    isInSchedule, /* diff +++ */
                     timeOffset
                 ),
                 callbackId

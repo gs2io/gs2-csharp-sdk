@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -29,6 +28,7 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -47,14 +47,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -86,59 +84,14 @@ namespace Gs2.Gs2Inbox.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Inbox.Domain.Model.MessageAccessTokenDomain[]> ReceiveGlobalMessageFuture(
             ReceiveGlobalMessageRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Inbox.Domain.Model.MessageAccessTokenDomain[]> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.ReceiveGlobalMessageFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                _gs2.Cache.ClearListCache<Gs2.Gs2Inbox.Model.Message>(
-                    (null as Gs2.Gs2Inbox.Model.Message).CacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        null
-                    )
-                );
-                _gs2.Cache.Delete<Gs2.Gs2Inbox.Model.Received>(
-                    (null as Gs2.Gs2Inbox.Model.Received).CacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        null
-                    ),
-                    (null as Gs2.Gs2Inbox.Model.Received).CacheKey(
-                    )
-                );
-                var domain = result?.Item?.Select(v => new Gs2.Gs2Inbox.Domain.Model.MessageAccessTokenDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    this.AccessToken,
-                    v?.Name
-                )).ToArray() ?? Array.Empty<Gs2.Gs2Inbox.Domain.Model.MessageAccessTokenDomain>();
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Inbox.Domain.Model.MessageAccessTokenDomain[]>(Impl);
-        }
+        ) => ReceiveGlobalMessageAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Inbox.Domain.Model.MessageAccessTokenDomain[]> ReceiveGlobalMessageAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Inbox.Domain.Model.MessageAccessTokenDomain[]> ReceiveGlobalMessageAsync(
-            #endif
+        #endif
             ReceiveGlobalMessageRequest request
         ) {
             request = request
@@ -175,84 +128,19 @@ namespace Gs2.Gs2Inbox.Domain.Model
             )).ToArray() ?? Array.Empty<Gs2.Gs2Inbox.Domain.Model.MessageAccessTokenDomain>();
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> BatchReadMessagesFuture(
             BatchReadMessagesRequest request,
             bool speculativeExecute = true
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token);
-
-                if (speculativeExecute) {
-                    var speculativeExecuteFuture = Gs2.Gs2Inbox.Domain.Transaction.SpeculativeExecutor.BatchReadMessagesByUserIdSpeculativeExecutor.ExecuteFuture(
-                        this._gs2,
-                        AccessToken,
-                        BatchReadMessagesByUserIdRequest.FromJson(request.ToJson())
-                    );
-                    yield return speculativeExecuteFuture;
-                    if (speculativeExecuteFuture.Error != null)
-                    {
-                        self.OnError(speculativeExecuteFuture.Error);
-                        yield break;
-                    }
-                    var commit = speculativeExecuteFuture.Result;
-                    commit?.Invoke();
-                }
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.BatchReadMessagesFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                if (result.Items.Sum(v => v.ReadAcquireActions.Length) == 0)
-                {
-                    self.OnComplete(null);
-                    yield break;
-                }
-                var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
-                    this._gs2,
-                    this.AccessToken,
-                    result.AutoRunStampSheet ?? false,
-                    result.TransactionId,
-                    result.StampSheet,
-                    result.StampSheetEncryptionKeyId,
-                    result.AtomicCommit,
-                    result.TransactionResult,
-                    result.Metadata
-                );
-                if (result.StampSheet != null) {
-                    var future2 = transaction.WaitFuture(true);
-                    yield return future2;
-                    if (future2.Error != null)
-                    {
-                        self.OnError(future2.Error);
-                        yield break;
-                    }
-                }
-                self.OnComplete(transaction);
-            }
-            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionAccessTokenDomain>(Impl);
-        }
+        ) => BatchReadMessagesAsync(request, speculativeExecute).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Core.Domain.TransactionAccessTokenDomain> BatchReadMessagesAsync(
-            #else
+        #else
         public async Task<Gs2.Core.Domain.TransactionAccessTokenDomain> BatchReadMessagesAsync(
-            #endif
+        #endif
             BatchReadMessagesRequest request,
             bool speculativeExecute = true
         ) {
@@ -275,10 +163,12 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 this.AccessToken?.TimeOffset,
                 () => this._client.BatchReadMessagesAsync(request)
             );
+/* diff +++ start */
             if (result.Items.Sum(v => v.ReadAcquireActions.Length) == 0)
             {
                 return null;
             }
+/* diff +++ end */
             var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
                 this._gs2,
                 this.AccessToken,
@@ -295,7 +185,6 @@ namespace Gs2.Gs2Inbox.Domain.Model
             }
             return transaction;
         }
-        #endif
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Inbox.Model.Message> Messages(
             bool? isRead = null
@@ -311,12 +200,11 @@ namespace Gs2.Gs2Inbox.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Inbox.Model.Message> MessagesAsync(
-            #else
+        #else
         public DescribeMessagesIterator MessagesAsync(
-            #endif
+        #endif
             bool? isRead = null
         )
         {
@@ -328,7 +216,6 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 isRead
             );
         }
-        #endif
 
         public ulong SubscribeMessages(
             Action<Gs2.Gs2Inbox.Model.Message[]> callback,
@@ -344,10 +231,15 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await MessagesAsync(
                                 isRead
                             ).ToArrayAsync());
@@ -357,13 +249,15 @@ namespace Gs2.Gs2Inbox.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeMessagesWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeMessagesWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Inbox.Model.Message[]> callback,
             bool? isRead = null
         )
@@ -378,7 +272,6 @@ namespace Gs2.Gs2Inbox.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeMessages(
             ulong callbackId,

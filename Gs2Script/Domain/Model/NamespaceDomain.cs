@@ -12,9 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
- * deny overwrite
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -31,6 +28,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -45,19 +44,16 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Exception;
 using Gs2.Core.Util;
-using Gs2.Gs2Script.Model;
+using Gs2.Gs2Script.Model; /* diff +++ */
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -72,7 +68,7 @@ namespace Gs2.Gs2Script.Domain.Model
         public string Status { get; set; } = null!;
         public int? Code { get; set; } = null!;
         public string Result { get; set; } = null!;
-        public Transaction_ Transaction { get; set; } = null!;
+        public Transaction_ Transaction { get; set; } = null!; /* diff +++ */
         public int? ExecuteTime { get; set; } = null!;
         public int? Charged { get; set; } = null!;
         public string[] Output { get; set; } = null!;
@@ -102,12 +98,11 @@ namespace Gs2.Gs2Script.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Script.Model.Script> ScriptsAsync(
-            #else
+        #else
         public DescribeScriptsIterator ScriptsAsync(
-            #endif
+        #endif
             string namePrefix = null
         )
         {
@@ -118,7 +113,6 @@ namespace Gs2.Gs2Script.Domain.Model
                 namePrefix
             );
         }
-        #endif
 
         public ulong SubscribeScripts(
             Action<Gs2.Gs2Script.Model.Script[]> callback,
@@ -133,10 +127,15 @@ namespace Gs2.Gs2Script.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await ScriptsAsync(
                                 namePrefix
                             ).ToArrayAsync());
@@ -146,13 +145,15 @@ namespace Gs2.Gs2Script.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeScriptsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeScriptsWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Script.Model.Script[]> callback,
             string namePrefix = null
         )
@@ -167,7 +168,6 @@ namespace Gs2.Gs2Script.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeScripts(
             ulong callbackId,
@@ -212,38 +212,14 @@ namespace Gs2.Gs2Script.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain> GetStatusFuture(
             GetNamespaceStatusRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.GetNamespaceStatusFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                this.Status = domain.Status = result?.Status;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain>(Impl);
-        }
+        ) => GetStatusAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Script.Domain.Model.NamespaceDomain> GetStatusAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Script.Domain.Model.NamespaceDomain> GetStatusAsync(
-            #endif
+        #endif
             GetNamespaceStatusRequest request
         ) {
             request = request
@@ -259,41 +235,18 @@ namespace Gs2.Gs2Script.Domain.Model
             this.Status = domain.Status = result?.Status;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Script.Model.Namespace> GetFuture(
             GetNamespaceRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Script.Model.Namespace> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.GetNamespaceFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Script.Model.Namespace>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Script.Model.Namespace> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Script.Model.Namespace> GetAsync(
-            #endif
+        #endif
             GetNamespaceRequest request
         ) {
             request = request
@@ -307,43 +260,18 @@ namespace Gs2.Gs2Script.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain> UpdateFuture(
             UpdateNamespaceRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.UpdateNamespaceFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain>(Impl);
-        }
+        ) => UpdateAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Script.Domain.Model.NamespaceDomain> UpdateAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Script.Domain.Model.NamespaceDomain> UpdateAsync(
-            #endif
+        #endif
             UpdateNamespaceRequest request
         ) {
             request = request
@@ -359,45 +287,18 @@ namespace Gs2.Gs2Script.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain> DeleteFuture(
             DeleteNamespaceRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.DeleteNamespaceFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    if (!(future.Error is NotFoundException)) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain>(Impl);
-        }
+        ) => DeleteAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Script.Domain.Model.NamespaceDomain> DeleteAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Script.Domain.Model.NamespaceDomain> DeleteAsync(
-            #endif
+        #endif
             DeleteNamespaceRequest request
         ) {
             try {
@@ -415,47 +316,18 @@ namespace Gs2.Gs2Script.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain> CreateScriptFuture(
             CreateScriptRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.CreateScriptFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Script.Domain.Model.ScriptDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    result?.Item?.Name
-                );
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain>(Impl);
-        }
+        ) => CreateScriptAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Script.Domain.Model.ScriptDomain> CreateScriptAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Script.Domain.Model.ScriptDomain> CreateScriptAsync(
-            #endif
+        #endif
             CreateScriptRequest request
         ) {
             request = request
@@ -475,47 +347,18 @@ namespace Gs2.Gs2Script.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain> CreateScriptFromGitHubFuture(
             CreateScriptFromGitHubRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.CreateScriptFromGitHubFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Script.Domain.Model.ScriptDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    result?.Item?.Name
-                );
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Script.Domain.Model.ScriptDomain>(Impl);
-        }
+        ) => CreateScriptFromGitHubAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Script.Domain.Model.ScriptDomain> CreateScriptFromGitHubAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Script.Domain.Model.ScriptDomain> CreateScriptFromGitHubAsync(
-            #endif
+        #endif
             CreateScriptFromGitHubRequest request
         ) {
             request = request
@@ -535,45 +378,18 @@ namespace Gs2.Gs2Script.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain> InvokeScriptFuture(
             InvokeScriptRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain> self)
-            {
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.InvokeScriptFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                this.Code = domain.Code = result?.Code;
-                this.Result = domain.Result = result?.Result;
-                this.Transaction = domain.Transaction = result?.Transaction;
-                this.ExecuteTime = domain.ExecuteTime = result?.ExecuteTime;
-                this.Charged = domain.Charged = result?.Charged;
-                this.Output = domain.Output = result?.Output;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain>(Impl);
-        }
+        ) => InvokeScriptAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Script.Domain.Model.NamespaceDomain> InvokeScriptAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Script.Domain.Model.NamespaceDomain> InvokeScriptAsync(
-            #endif
+        #endif
             InvokeScriptRequest request
         ) {
             var result = await request.InvokeAsync(
@@ -585,57 +401,32 @@ namespace Gs2.Gs2Script.Domain.Model
             var domain = this;
             this.Code = domain.Code = result?.Code;
             this.Result = domain.Result = result?.Result;
-            this.Transaction = domain.Transaction = result?.Transaction;
+            this.Transaction = domain.Transaction = result?.Transaction; /* diff +++ */
             this.ExecuteTime = domain.ExecuteTime = result?.ExecuteTime;
             this.Charged = domain.Charged = result?.Charged;
             this.Output = domain.Output = result?.Output;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain> DebugInvokeFuture(
             DebugInvokeRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.DebugInvokeFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                this.Code = domain.Code = result?.Code;
-                this.Result = domain.Result = result?.Result;
-                this.Transaction = domain.Transaction = result?.Transaction;
-                this.ExecuteTime = domain.ExecuteTime = result?.ExecuteTime;
-                this.Charged = domain.Charged = result?.Charged;
-                this.Output = domain.Output = result?.Output;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Script.Domain.Model.NamespaceDomain>(Impl);
-        }
+        ) => DebugInvokeAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Script.Domain.Model.NamespaceDomain> DebugInvokeAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Script.Domain.Model.NamespaceDomain> DebugInvokeAsync(
-            #endif
+        #endif
             DebugInvokeRequest request
         ) {
             request = request
-                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack);
+/* diff --- start
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithUserId(this.UserId);
+ diff --- end */
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack); /* diff +++ */
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
@@ -645,57 +436,26 @@ namespace Gs2.Gs2Script.Domain.Model
             var domain = this;
             this.Code = domain.Code = result?.Code;
             this.Result = domain.Result = result?.Result;
-            this.Transaction = domain.Transaction = result?.Transaction;
+            this.Transaction = domain.Transaction = result?.Transaction; /* diff +++ */
             this.ExecuteTime = domain.ExecuteTime = result?.ExecuteTime;
             this.Charged = domain.Charged = result?.Charged;
             this.Output = domain.Output = result?.Output;
             return domain;
         }
-        #endif
 
     }
 
     public partial class NamespaceDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Script.Model.Namespace> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Script.Model.Namespace> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Script.Model.Namespace).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    null
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2Script.Model.Namespace).FetchFuture(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    null,
-                    () => this.GetFuture(
-                        new GetNamespaceRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Script.Model.Namespace>(Impl);
-        }
+        public IFuture<Gs2.Gs2Script.Model.Namespace> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Script.Model.Namespace> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Script.Model.Namespace> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Script.Model.Namespace>(
                         (null as Gs2.Gs2Script.Model.Namespace).CacheParentKey(
@@ -723,28 +483,42 @@ namespace Gs2.Gs2Script.Domain.Model
                 );
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
+/* diff --- start
+        public UniTask<Gs2.Gs2Script.Model.Namespace> Model() => ModelAsync();
+ diff --- end */
+/* diff +++ start */
         public async UniTask<Gs2.Gs2Script.Model.Namespace> Model()
         {
             return await ModelAsync();
         }
+/* diff +++ end */
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
+/* diff --- start
+        public IFuture<Gs2.Gs2Script.Model.Namespace> Model() => ModelFuture();
+ diff --- end */
+/* diff +++ start */
         public IFuture<Gs2.Gs2Script.Model.Namespace> Model()
         {
             return ModelFuture();
         }
+/* diff +++ end */
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
+/* diff --- start
+        public Task<Gs2.Gs2Script.Model.Namespace> Model() => ModelAsync();
+ diff --- end */
+/* diff +++ start */
         public async Task<Gs2.Gs2Script.Model.Namespace> Model()
         {
             return await ModelAsync();
         }
+/* diff +++ end */
         #endif
 
 
@@ -769,7 +543,6 @@ namespace Gs2.Gs2Script.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -782,12 +555,7 @@ namespace Gs2.Gs2Script.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -806,38 +574,24 @@ namespace Gs2.Gs2Script.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Script.Model.Namespace> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+/* diff --- start
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Script.Model.Namespace> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
+ diff --- end */
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Script.Model.Namespace> callback) => SubscribeWithInitialCallAsync(callback).ToGs2Future(); /* diff +++ */
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Script.Model.Namespace> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Script.Model.Namespace> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

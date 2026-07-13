@@ -29,6 +29,7 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -47,14 +48,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -97,40 +96,14 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Inventory.Model.ItemSet[]> GetFuture(
             GetItemSetRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Model.ItemSet[]> self)
-            {
-                request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithInventoryName(this.InventoryName)
-                    .WithItemName(this.ItemName)
-                    .WithItemSetName(this.ItemSetName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.GetItemSetFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Items);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Inventory.Model.ItemSet[]>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Inventory.Model.ItemSet[]> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Inventory.Model.ItemSet[]> GetAsync(
-            #endif
+        #endif
             GetItemSetRequest request
         ) {
             request = request
@@ -148,48 +121,18 @@ namespace Gs2.Gs2Inventory.Domain.Model
             );
             return result?.Items;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Inventory.Domain.Model.ItemSetAccessTokenDomain> GetItemWithSignatureFuture(
             GetItemWithSignatureRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.ItemSetAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithInventoryName(this.InventoryName)
-                    .WithItemName(this.ItemName)
-                    .WithItemSetName(this.ItemSetName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.GetItemWithSignatureFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                this.Body = result?.Body;
-                this.Signature = result?.Signature;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.ItemSetAccessTokenDomain>(Impl);
-        }
+        ) => GetItemWithSignatureAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Inventory.Domain.Model.ItemSetAccessTokenDomain> GetItemWithSignatureAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Inventory.Domain.Model.ItemSetAccessTokenDomain> GetItemWithSignatureAsync(
-            #endif
+        #endif
             GetItemWithSignatureRequest request
         ) {
             request = request
@@ -210,46 +153,18 @@ namespace Gs2.Gs2Inventory.Domain.Model
             this.Signature = result?.Signature;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Inventory.Domain.Model.ItemSetAccessTokenDomain> ConsumeFuture(
             ConsumeItemSetRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.ItemSetAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithInventoryName(this.InventoryName)
-                    .WithItemName(this.ItemName)
-                    .WithItemSetName(this.ItemSetName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.ConsumeItemSetFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.ItemSetAccessTokenDomain>(Impl);
-        }
+        ) => ConsumeAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Inventory.Domain.Model.ItemSetAccessTokenDomain> ConsumeAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Inventory.Domain.Model.ItemSetAccessTokenDomain> ConsumeAsync(
-            #endif
+        #endif
             ConsumeItemSetRequest request
         ) {
             request = request
@@ -268,46 +183,18 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Inventory.Domain.Model.ItemSetAccessTokenDomain> VerifyFuture(
             VerifyItemSetRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.ItemSetAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithInventoryName(this.InventoryName)
-                    .WithItemName(this.ItemName)
-                    .WithItemSetName(this.ItemSetName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.VerifyItemSetFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.ItemSetAccessTokenDomain>(Impl);
-        }
+        ) => VerifyAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Inventory.Domain.Model.ItemSetAccessTokenDomain> VerifyAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Inventory.Domain.Model.ItemSetAccessTokenDomain> VerifyAsync(
-            #endif
+        #endif
             VerifyItemSetRequest request
         ) {
             request = request
@@ -326,55 +213,18 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain> AddReferenceOfFuture(
             AddReferenceOfRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(this._gs2.DefaultContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithInventoryName(this.InventoryName)
-                    .WithItemName(this.ItemName)
-                    .WithItemSetName(this.ItemSetName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.AddReferenceOfFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    this.AccessToken,
-                    this.InventoryName,
-                    this.ItemName,
-                    this.ItemSetName,
-                    request.ReferenceOf
-                );
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain>(Impl);
-        }
+        ) => AddReferenceOfAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain> AddReferenceOfAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain> AddReferenceOfAsync(
-            #endif
+        #endif
             AddReferenceOfRequest request
         ) {
             request = request
@@ -402,7 +252,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
 
             return domain;
         }
-        #endif
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<string> ReferenceOves(
         )
@@ -419,7 +268,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<string> ReferenceOvesAsync(
             #else
@@ -437,7 +285,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 this.ItemSetName
             );
         }
-        #endif
 
         public Gs2.Gs2Inventory.Domain.Model.ReferenceOfAccessTokenDomain ReferenceOf(
             string referenceOf
@@ -454,85 +301,14 @@ namespace Gs2.Gs2Inventory.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Inventory.Model.ItemSet[]> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Model.ItemSet[]> self)
-            {
-                if (this.ItemSetName == null) {
-                    var (value, find) = (null as Gs2.Gs2Inventory.Model.ItemSet[]).GetCache(
-                        this._gs2.Cache,
-                        this.NamespaceName,
-                        this.UserId,
-                        this.InventoryName,
-                        this.ItemName,
-                        this.AccessToken?.TimeOffset
-                    );
-                    if (find) {
-                        self.OnComplete(value ?? Array.Empty<Gs2.Gs2Inventory.Model.ItemSet>());
-                        yield break;
-                    }
-                    var future = (null as Gs2.Gs2Inventory.Model.ItemSet[]).FetchFuture(
-                        this._gs2.Cache,
-                        this.NamespaceName,
-                        this.UserId,
-                        this.InventoryName,
-                        this.ItemName,
-                        this.AccessToken?.TimeOffset,
-                        () => this.GetFuture(
-                            new GetItemSetRequest()
-                        )
-                    );
-                    yield return future;
-                    if (future.Error != null) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                    self.OnComplete(future.Result ?? Array.Empty<Gs2.Gs2Inventory.Model.ItemSet>());
-                }
-                else {
-                    var (value, find) = (null as Gs2.Gs2Inventory.Model.ItemSet).GetCache(
-                        this._gs2.Cache,
-                        this.NamespaceName,
-                        this.UserId,
-                        this.InventoryName,
-                        this.ItemName,
-                        this.ItemSetName,
-                        this.AccessToken?.TimeOffset
-                    );
-                    if (find) {
-                        self.OnComplete(value != null ? new []{ value } : Array.Empty<Gs2.Gs2Inventory.Model.ItemSet>());
-                        yield break;
-                    }
-                    var future = (null as Gs2.Gs2Inventory.Model.ItemSet).FetchFuture(
-                        this._gs2.Cache,
-                        this.NamespaceName,
-                        this.UserId,
-                        this.InventoryName,
-                        this.ItemName,
-                        this.ItemSetName,
-                        this.AccessToken?.TimeOffset,
-                        () => this.GetFuture(
-                            new GetItemSetRequest()
-                        )
-                    );
-                    yield return future;
-                    if (future.Error != null) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                    self.OnComplete(future.Result ?? Array.Empty<Gs2.Gs2Inventory.Model.ItemSet>());
-                }
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Inventory.Model.ItemSet[]>(Impl);
-        }
+        public IFuture<Gs2.Gs2Inventory.Model.ItemSet[]> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Inventory.Model.ItemSet[]> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Inventory.Model.ItemSet[]> ModelAsync()
-            #endif
+        #endif
         {
             if (this.ItemSetName == null) {
                 var (value, find) = (null as Gs2.Gs2Inventory.Model.ItemSet[]).GetCache(
@@ -585,7 +361,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 );
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
@@ -651,13 +426,11 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     callback,
                     () =>
                     {
-            #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
                 #if GS2_ENABLE_UNITASK
                         ModelAsync().Forget();
                 #else
                         ModelAsync();
                 #endif
-            #endif
                     }
                 );
             }
@@ -676,12 +449,10 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     callback,
                     () =>
                     {
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
 #if GS2_ENABLE_UNITASK
                         ModelAsync().Forget();
 #else
                         ModelAsync();
-#endif
 #endif
                     }
                 );
@@ -707,12 +478,10 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     callback,
                     () =>
                     {
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
 #if GS2_ENABLE_UNITASK
                         ModelAsync().Forget();
 #else
                         ModelAsync();
-#endif
 #endif
                     }
                 );
@@ -753,38 +522,20 @@ namespace Gs2.Gs2Inventory.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Inventory.Model.ItemSet[]> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Inventory.Model.ItemSet[]> callback) => SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Inventory.Model.ItemSet[]> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Inventory.Model.ItemSet[]> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

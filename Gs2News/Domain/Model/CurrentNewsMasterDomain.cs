@@ -27,6 +27,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -44,15 +46,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -85,39 +84,14 @@ namespace Gs2.Gs2News.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> PrepareUpdateFuture(
             PrepareUpdateCurrentNewsMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.PrepareUpdateCurrentNewsMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                this.UploadToken = domain.UploadToken = result?.UploadToken;
-                this.TemplateUploadUrl = domain.TemplateUploadUrl = result?.TemplateUploadUrl;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain>(Impl);
-        }
+        ) => PrepareUpdateAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> PrepareUpdateAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> PrepareUpdateAsync(
-            #endif
+        #endif
             PrepareUpdateCurrentNewsMasterRequest request
         ) {
             request = request
@@ -134,42 +108,18 @@ namespace Gs2.Gs2News.Domain.Model
             this.TemplateUploadUrl = domain.TemplateUploadUrl = result?.TemplateUploadUrl;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> UpdateFuture(
             UpdateCurrentNewsMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.UpdateCurrentNewsMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain>(Impl);
-        }
+        ) => UpdateAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> UpdateAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> UpdateAsync(
-            #endif
+        #endif
             UpdateCurrentNewsMasterRequest request
         ) {
             request = request
@@ -184,43 +134,18 @@ namespace Gs2.Gs2News.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> PrepareUpdateFromGitHubFuture(
             PrepareUpdateCurrentNewsMasterFromGitHubRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.PrepareUpdateCurrentNewsMasterFromGitHubFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                this.UploadToken = domain.UploadToken = result?.UploadToken;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain>(Impl);
-        }
+        ) => PrepareUpdateFromGitHubAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> PrepareUpdateFromGitHubAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2News.Domain.Model.CurrentNewsMasterDomain> PrepareUpdateFromGitHubAsync(
-            #endif
+        #endif
             PrepareUpdateCurrentNewsMasterFromGitHubRequest request
         ) {
             request = request
@@ -236,7 +161,6 @@ namespace Gs2.Gs2News.Domain.Model
             this.UploadToken = domain.UploadToken = result?.UploadToken;
             return domain;
         }
-        #endif
 
     }
 

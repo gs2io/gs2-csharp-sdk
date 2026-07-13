@@ -27,6 +27,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -44,15 +46,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -87,37 +86,14 @@ namespace Gs2.Gs2Quest.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Quest.Model.Progress> GetFuture(
             GetProgressByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Quest.Model.Progress> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.GetProgressByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Quest.Model.Progress>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Quest.Model.Progress> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Quest.Model.Progress> GetAsync(
-            #endif
+        #endif
             GetProgressByUserIdRequest request
         ) {
             request = request
@@ -132,62 +108,18 @@ namespace Gs2.Gs2Quest.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Core.Domain.TransactionDomain> EndFuture(
             EndByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.EndByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
-                    this._gs2,
-                    this.UserId,
-                    result.AutoRunStampSheet ?? false,
-                    result.TransactionId,
-                    result.StampSheet,
-                    result.StampSheetEncryptionKeyId,
-                    result.AtomicCommit,
-                    result.TransactionResult,
-                    result.Metadata
-                );
-                if (result.StampSheet != null) {
-                    var future2 = transaction.WaitFuture(true);
-                    yield return future2;
-                    if (future2.Error != null)
-                    {
-                        self.OnError(future2.Error);
-                        yield break;
-                    }
-                }
-                self.OnComplete(transaction);
-            }
-            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
-        }
+        ) => EndAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Core.Domain.TransactionDomain> EndAsync(
-            #else
+        #else
         public async Task<Gs2.Core.Domain.TransactionDomain> EndAsync(
-            #endif
+        #endif
             EndByUserIdRequest request
         ) {
             request = request
@@ -216,46 +148,18 @@ namespace Gs2.Gs2Quest.Domain.Model
             }
             return transaction;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Quest.Domain.Model.ProgressDomain> DeleteFuture(
             DeleteProgressByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Quest.Domain.Model.ProgressDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.DeleteProgressByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    if (!(future.Error is NotFoundException)) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Quest.Domain.Model.ProgressDomain>(Impl);
-        }
+        ) => DeleteAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Quest.Domain.Model.ProgressDomain> DeleteAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Quest.Domain.Model.ProgressDomain> DeleteAsync(
-            #endif
+        #endif
             DeleteProgressByUserIdRequest request
         ) {
             try {
@@ -274,53 +178,20 @@ namespace Gs2.Gs2Quest.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
     }
 
     public partial class ProgressDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Quest.Model.Progress> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Quest.Model.Progress> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Quest.Model.Progress).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    null
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2Quest.Model.Progress).FetchFuture(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    null,
-                    () => this.GetFuture(
-                        new GetProgressByUserIdRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Quest.Model.Progress>(Impl);
-        }
+        public IFuture<Gs2.Gs2Quest.Model.Progress> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Quest.Model.Progress> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Quest.Model.Progress> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Quest.Model.Progress>(
                         (null as Gs2.Gs2Quest.Model.Progress).CacheParentKey(
@@ -351,28 +222,18 @@ namespace Gs2.Gs2Quest.Domain.Model
                 );
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2Quest.Model.Progress> Model()
-        {
-            return await ModelAsync();
-        }
+        public UniTask<Gs2.Gs2Quest.Model.Progress> Model() => ModelAsync();
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2Quest.Model.Progress> Model()
-        {
-            return ModelFuture();
-        }
+        public IFuture<Gs2.Gs2Quest.Model.Progress> Model() => ModelFuture();
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2Quest.Model.Progress> Model()
-        {
-            return await ModelAsync();
-        }
+        public Task<Gs2.Gs2Quest.Model.Progress> Model() => ModelAsync();
         #endif
 
 
@@ -399,7 +260,6 @@ namespace Gs2.Gs2Quest.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -412,12 +272,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -437,38 +292,21 @@ namespace Gs2.Gs2Quest.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Quest.Model.Progress> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Quest.Model.Progress> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Quest.Model.Progress> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Quest.Model.Progress> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

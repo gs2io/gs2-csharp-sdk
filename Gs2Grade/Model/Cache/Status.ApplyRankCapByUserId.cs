@@ -27,10 +27,10 @@ using Gs2.Gs2Grade.Result;
 using Gs2.Gs2Experience.Model.Cache;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -50,7 +50,7 @@ namespace Gs2.Gs2Grade.Model.Cache
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                self.Item.UserId,
+                self?.Item?.UserId,
                 self.Item.GradeName,
                 self.Item.PropertyId,
                 timeOffset
@@ -58,7 +58,7 @@ namespace Gs2.Gs2Grade.Model.Cache
             self.ExperienceStatus?.PutCache(
                 cache,
                 Gs2.Gs2Experience.Model.Status.GetNamespaceNameFromGrn(self.ExperienceStatus?.StatusId),
-                self.Item.UserId,
+                self?.Item?.UserId,
                 self.ExperienceStatus.ExperienceName,
                 self.Item.PropertyId,
                 timeOffset
@@ -96,21 +96,22 @@ namespace Gs2.Gs2Grade.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<ApplyRankCapByUserIdResult> InvokeAsync(
-    #else
+#else
         public static async Task<ApplyRankCapByUserIdResult> InvokeAsync(
-    #endif
+#endif
             this ApplyRankCapByUserIdRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<ApplyRankCapByUserIdResult>> invokeImpl
-    #else
+#elif UNITY_2017_1_OR_NEWER
+            Func<TaskFuture<ApplyRankCapByUserIdResult>> invokeImpl
+#else
             Func<Task<ApplyRankCapByUserIdResult>> invokeImpl
-    #endif
+#endif
         )
         {
             var result = await invokeImpl();
@@ -122,6 +123,5 @@ namespace Gs2.Gs2Grade.Model.Cache
             );
             return result;
         }
-#endif
     }
 }

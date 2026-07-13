@@ -27,6 +27,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -44,15 +46,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -98,12 +97,11 @@ namespace Gs2.Gs2Formation.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Formation.Model.Form> FormsAsync(
-            #else
+        #else
         public DescribeFormsByUserIdIterator FormsAsync(
-            #endif
+        #endif
             string timeOffsetToken = null
         )
         {
@@ -116,7 +114,6 @@ namespace Gs2.Gs2Formation.Domain.Model
                 timeOffsetToken
             );
         }
-        #endif
 
         public ulong SubscribeForms(
             Action<Gs2.Gs2Formation.Model.Form[]> callback
@@ -132,10 +129,15 @@ namespace Gs2.Gs2Formation.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await FormsAsync(
                             ).ToArrayAsync());
                         }
@@ -144,13 +146,15 @@ namespace Gs2.Gs2Formation.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeFormsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeFormsWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Formation.Model.Form[]> callback
         )
         {
@@ -162,7 +166,6 @@ namespace Gs2.Gs2Formation.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeForms(
             ulong callbackId
@@ -211,38 +214,14 @@ namespace Gs2.Gs2Formation.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Formation.Model.Mold> GetFuture(
             GetMoldByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Formation.Model.Mold> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithMoldModelName(this.MoldModelName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.GetMoldByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Formation.Model.Mold>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Formation.Model.Mold> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Formation.Model.Mold> GetAsync(
-            #endif
+        #endif
             GetMoldByUserIdRequest request
         ) {
             request = request
@@ -258,45 +237,18 @@ namespace Gs2.Gs2Formation.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Formation.Domain.Model.MoldDomain> SetCapacityFuture(
             SetMoldCapacityByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.MoldDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithMoldModelName(this.MoldModelName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.SetMoldCapacityByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Formation.Domain.Model.MoldDomain>(Impl);
-        }
+        ) => SetCapacityAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Formation.Domain.Model.MoldDomain> SetCapacityAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Formation.Domain.Model.MoldDomain> SetCapacityAsync(
-            #endif
+        #endif
             SetMoldCapacityByUserIdRequest request
         ) {
             request = request
@@ -314,45 +266,18 @@ namespace Gs2.Gs2Formation.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Formation.Domain.Model.MoldDomain> AddCapacityFuture(
             AddMoldCapacityByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.MoldDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithMoldModelName(this.MoldModelName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.AddMoldCapacityByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Formation.Domain.Model.MoldDomain>(Impl);
-        }
+        ) => AddCapacityAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Formation.Domain.Model.MoldDomain> AddCapacityAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Formation.Domain.Model.MoldDomain> AddCapacityAsync(
-            #endif
+        #endif
             AddMoldCapacityByUserIdRequest request
         ) {
             request = request
@@ -370,45 +295,18 @@ namespace Gs2.Gs2Formation.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Formation.Domain.Model.MoldDomain> SubCapacityFuture(
             SubMoldCapacityByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.MoldDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithMoldModelName(this.MoldModelName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.SubMoldCapacityByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Formation.Domain.Model.MoldDomain>(Impl);
-        }
+        ) => SubCapacityAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Formation.Domain.Model.MoldDomain> SubCapacityAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Formation.Domain.Model.MoldDomain> SubCapacityAsync(
-            #endif
+        #endif
             SubMoldCapacityByUserIdRequest request
         ) {
             request = request
@@ -426,47 +324,18 @@ namespace Gs2.Gs2Formation.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Formation.Domain.Model.MoldDomain> DeleteFuture(
             DeleteMoldByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.MoldDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithMoldModelName(this.MoldModelName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.DeleteMoldByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    if (!(future.Error is NotFoundException)) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Formation.Domain.Model.MoldDomain>(Impl);
-        }
+        ) => DeleteAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Formation.Domain.Model.MoldDomain> DeleteAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Formation.Domain.Model.MoldDomain> DeleteAsync(
-            #endif
+        #endif
             DeleteMoldByUserIdRequest request
         ) {
             try {
@@ -486,55 +355,20 @@ namespace Gs2.Gs2Formation.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
     }
 
     public partial class MoldDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Formation.Model.Mold> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Formation.Model.Mold> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Formation.Model.Mold).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    this.MoldModelName,
-                    null
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2Formation.Model.Mold).FetchFuture(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    this.MoldModelName,
-                    null,
-                    () => this.GetFuture(
-                        new GetMoldByUserIdRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Formation.Model.Mold>(Impl);
-        }
+        public IFuture<Gs2.Gs2Formation.Model.Mold> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Formation.Model.Mold> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Formation.Model.Mold> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Formation.Model.Mold>(
                         (null as Gs2.Gs2Formation.Model.Mold).CacheParentKey(
@@ -568,28 +402,18 @@ namespace Gs2.Gs2Formation.Domain.Model
                 );
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2Formation.Model.Mold> Model()
-        {
-            return await ModelAsync();
-        }
+        public UniTask<Gs2.Gs2Formation.Model.Mold> Model() => ModelAsync();
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2Formation.Model.Mold> Model()
-        {
-            return ModelFuture();
-        }
+        public IFuture<Gs2.Gs2Formation.Model.Mold> Model() => ModelFuture();
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2Formation.Model.Mold> Model()
-        {
-            return await ModelAsync();
-        }
+        public Task<Gs2.Gs2Formation.Model.Mold> Model() => ModelAsync();
         #endif
 
 
@@ -618,7 +442,6 @@ namespace Gs2.Gs2Formation.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -631,12 +454,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -657,38 +475,21 @@ namespace Gs2.Gs2Formation.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Formation.Model.Mold> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Formation.Model.Mold> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Formation.Model.Mold> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Formation.Model.Mold> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

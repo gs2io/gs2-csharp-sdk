@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -29,19 +28,22 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
+/* diff --- start
+using System.Linq;
+ diff --- end */
+using System.Collections.Generic; /* diff +++ */
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2SkillTree.Request;
-using Gs2.Core.Model;
+using Gs2.Core.Model; /* diff +++ */
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading.Tasks;
 #endif
@@ -59,66 +61,27 @@ namespace Gs2.Gs2SkillTree.Domain.Transaction.SpeculativeExecutor
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
             RestrainByUserIdRequest request
-        ) {
-            IEnumerator Impl(Gs2Future<Func<object>> result) {
-
-                var commit = new List<Func<object>>();
-                foreach (var nodeModelName in request.NodeModelNames) {
-                    var future2 = domain.SkillTree.Namespace(
-                        request.NamespaceName
-                    ).NodeModel(
-                        nodeModelName
-                    ).ModelFuture();
-                    yield return future2;
-                    if (future2.Error != null) {
-                        result.OnError(future2.Error);
-                        yield break;
-                    }
-                    var model = future2.Result;
-
-                    var future3 = new Gs2.Core.SpeculativeExecutor.SpeculativeExecutor(
-                        Array.Empty<ConsumeAction>(),
-                        Gs2.Core.SpeculativeExecutor.Transaction.Revert(model.ReleaseConsumeActions),
-                        model.RestrainReturnRate ?? 1
-                    ).ExecuteFuture(
-                        domain,
-                        accessToken
-                    );
-                    if (future3.Error != null) {
-                        result.OnError(future3.Error);
-                        yield break;
-                    }
-                    commit.Add(() =>
-                    {
-                        future3.Result?.Invoke();
-                        return null;
-                    });
-                }
-
-                result.OnComplete(() =>
-                {
-                    foreach (var c in commit) {
-                        c?.Invoke();
-                    }
-                    return null;
-                });
-                yield return null;
-            }
-
-            return new Gs2InlineFuture<Func<object>>(Impl);
-        }
+        ) => ExecuteAsync(domain, accessToken, request).ToGs2Future();
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<Func<object>> ExecuteAsync(
-    #else
+#else
         public static async Task<Func<object>> ExecuteAsync(
-    #endif
+#endif
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
             RestrainByUserIdRequest request
         ) {
+/* diff --- start
+            // TODO: Speculative execution not supported
+//#if UNITY_2017_1_OR_NEWER
+            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
+//#else
+            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
+//#endif
+ diff --- end */
+/* diff +++ start */
             var commit = new List<Func<object>>();
             foreach (var nodeModelName in request.NodeModelNames) {
                 var model = await domain.SkillTree.Namespace(
@@ -126,7 +89,21 @@ namespace Gs2.Gs2SkillTree.Domain.Transaction.SpeculativeExecutor
                 ).NodeModel(
                     nodeModelName
                 ).ModelAsync();
+/* diff +++ end */
 
+/* diff --- start
+            var item = await domain.SkillTree.Namespace(
+                request.NamespaceName
+            ).AccessToken(
+                accessToken
+            ).Status(
+                request.PropertyId
+            ).ModelAsync();
+
+            var commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
+                item?.ConsumeActions.Select(v =>
+ diff --- end */
+/* diff +++ start */
                 var c = await new Gs2.Core.SpeculativeExecutor.SpeculativeExecutor(
                     Array.Empty<ConsumeAction>(),
                     Gs2.Core.SpeculativeExecutor.Transaction.Revert(model.ReleaseConsumeActions),
@@ -136,20 +113,46 @@ namespace Gs2.Gs2SkillTree.Domain.Transaction.SpeculativeExecutor
                     accessToken
                 );
                 commit.Add(() =>
+/* diff +++ end */
                 {
+/* diff --- start
+                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2SkillTree.Model.Config>()) {
+                        v = v.ApplyConfig(config.Key, config.Value);
+                    }
+                    return v;
+                }).ToArray() ?? new Gs2.Core.Model.ConsumeAction[]{},
+                item?.AcquireActions.Select(v =>
+                {
+                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2SkillTree.Model.Config>()) {
+                        v = v.ApplyConfig(config.Key, config.Value);
+                    }
+                    return v;
+                }).ToArray() ?? new Gs2.Core.Model.AcquireAction[]{},
+                1.0
+            ).ExecuteAsync(
+                domain,
+                accessToken
+            );
+ diff --- end */
+/* diff +++ start */
                     c.Invoke();
                     return null;
                 });
             }
+/* diff +++ end */
 
             return () =>
             {
+/* diff --- start
+                commit?.Invoke();
+ diff --- end */
+/* diff +++ start */
                 foreach (var c in commit) {
                     c?.Invoke();
                 }
+/* diff +++ end */
                 return null;
             };
         }
-#endif
     }
 }

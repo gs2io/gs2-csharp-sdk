@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -29,6 +28,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -46,15 +47,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -65,9 +63,15 @@ namespace Gs2.Gs2Buff.Domain.Model
     public partial class BuffDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2BuffRestClient _client;
+/* diff --- start
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+ diff --- end */
+/* diff +++ start */
         public string NamespaceName { get; }
         public string UserId { get; }
         public Gs2.Gs2Buff.Model.BuffEntryModel[] BuffEntryModels;
+/* diff +++ end */
 
         public BuffDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -87,48 +91,31 @@ namespace Gs2.Gs2Buff.Domain.Model
     public partial class BuffDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Core.Domain.Gs2> ApplyFuture(
+/* diff --- start
+        public IFuture<Gs2.Gs2Buff.Domain.Model.BuffEntryModelDomain[]> ApplyFuture(
+ diff --- end */
+        public IFuture<Gs2.Core.Domain.Gs2> ApplyFuture( /* diff +++ */
             ApplyBuffByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Core.Domain.Gs2> self)
-            {
-                request = request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.ApplyBuffByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                this.BuffEntryModels = result?.Items;
-                var newGs2 =  new Core.Domain.Gs2(
-                    this._gs2.RestSession,
-                    this._gs2.WebSocketSession,
-                    this._gs2.DistributorNamespaceName
-                );
-                newGs2.DefaultContextStack = result?.NewContextStack;
-                self.OnComplete(newGs2);
-            }
-            return new Gs2InlineFuture<Gs2.Core.Domain.Gs2>(Impl);
-        }
+        ) => ApplyAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Core.Domain.Gs2> ApplyAsync(
-            #else
-        public async Task<Gs2.Core.Domain.Gs2> ApplyAsync(
-            #endif
+        #if GS2_ENABLE_UNITASK
+/* diff --- start
+        public async UniTask<Gs2.Gs2Buff.Domain.Model.BuffEntryModelDomain[]> ApplyAsync(
+ diff --- end */
+        public async UniTask<Gs2.Core.Domain.Gs2> ApplyAsync( /* diff +++ */
+        #else
+/* diff --- start
+        public async Task<Gs2.Gs2Buff.Domain.Model.BuffEntryModelDomain[]> ApplyAsync(
+ diff --- end */
+        public async Task<Gs2.Core.Domain.Gs2> ApplyAsync( /* diff +++ */
+        #endif
             ApplyBuffByUserIdRequest request
         ) {
             request = request
+/* diff --- start
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+ diff --- end */
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId);
             var result = await request.InvokeAsync(
@@ -137,6 +124,15 @@ namespace Gs2.Gs2Buff.Domain.Model
                 null,
                 () => this._client.ApplyBuffByUserIdAsync(request)
             );
+/* diff --- start
+            var domain = result?.Items?.Select(v => new Gs2.Gs2Buff.Domain.Model.BuffEntryModelDomain(
+                this._gs2,
+                this.NamespaceName,
+                v?.Name
+            )).ToArray() ?? Array.Empty<Gs2.Gs2Buff.Domain.Model.BuffEntryModelDomain>();
+            return domain;
+ diff --- end */
+/* diff +++ start */
             this.BuffEntryModels = result?.Items;
             var newGs2 =  new Core.Domain.Gs2(
                 this._gs2.RestSession,
@@ -145,8 +141,8 @@ namespace Gs2.Gs2Buff.Domain.Model
             );
             newGs2.DefaultContextStack = result?.NewContextStack;
             return newGs2;
+/* diff +++ end */
         }
-        #endif
 
     }
 

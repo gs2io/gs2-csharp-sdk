@@ -26,10 +26,10 @@ using Gs2.Gs2Exchange.Request;
 using Gs2.Gs2Exchange.Result;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -86,21 +86,22 @@ namespace Gs2.Gs2Exchange.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<DeleteAwaitResult> InvokeAsync(
-    #else
+#else
         public static async Task<DeleteAwaitResult> InvokeAsync(
-    #endif
+#endif
             this DeleteAwaitRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<DeleteAwaitResult>> invokeImpl
-    #else
+#elif UNITY_2017_1_OR_NEWER
+            Func<TaskFuture<DeleteAwaitResult>> invokeImpl
+#else
             Func<Task<DeleteAwaitResult>> invokeImpl
-    #endif
+#endif
         )
         {
             var result = await invokeImpl();
@@ -112,6 +113,5 @@ namespace Gs2.Gs2Exchange.Model.Cache
             );
             return result;
         }
-#endif
     }
 }

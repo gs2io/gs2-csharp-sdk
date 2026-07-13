@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -29,6 +28,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -46,15 +47,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -65,20 +63,30 @@ namespace Gs2.Gs2Lottery.Domain.Model
     public partial class DrawnPrizeDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LotteryRestClient _client;
+/* diff --- start
+        public string NamespaceName { get; } = null!;
+ diff --- end */
+/* diff +++ start */
         public string NamespaceName { get; }
         public int Index { get; }
+/* diff +++ end */
 
         public DrawnPrizeDomain(
             Gs2.Core.Domain.Gs2 gs2,
+/* diff --- start
+            string namespaceName
+ diff --- end */
+/* diff +++ start */
             string namespaceName,
             int index
+/* diff +++ end */
         ) {
             this._gs2 = gs2;
             this._client = new Gs2LotteryRestClient(
                 gs2.RestSession
             );
             this.NamespaceName = namespaceName;
-            this.Index = index;
+            this.Index = index; /* diff +++ */
         }
 
     }
@@ -90,32 +98,35 @@ namespace Gs2.Gs2Lottery.Domain.Model
     public partial class DrawnPrizeDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Lottery.Model.DrawnPrize> ModelFuture()
+        public IFuture<Gs2.Gs2Lottery.Model.DrawnPrize> ModelFuture() => ModelAsync().ToGs2Future();
+        #endif
+
+        #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Lottery.Model.DrawnPrize> ModelAsync()
+        #else
+        public async Task<Gs2.Gs2Lottery.Model.DrawnPrize> ModelAsync()
+        #endif
         {
-            IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.DrawnPrize> self)
-            {
+/* diff --- start
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Lottery.Model.DrawnPrize>(
+                        (null as Gs2.Gs2Lottery.Model.DrawnPrize).CacheParentKey(
+                            this.NamespaceName,
+                            null
+                        ),
+                        (null as Gs2.Gs2Lottery.Model.DrawnPrize).CacheKey(
+                        )
+                    ).LockAsync()) {
                 var (value, find) = (null as Gs2.Gs2Lottery.Model.DrawnPrize).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.Index
+                    null
                 );
                 if (find) {
-                    self.OnComplete(value);
-                    yield break;
+                    return value;
                 }
-                self.OnComplete(null);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Lottery.Model.DrawnPrize>(Impl);
-        }
-        #endif
-
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Gs2Lottery.Model.DrawnPrize> ModelAsync()
-            #else
-        public async Task<Gs2.Gs2Lottery.Model.DrawnPrize> ModelAsync()
-            #endif
-        {
+                return null;
+ diff --- end */
+/* diff +++ start */
             var (value, find) = (null as Gs2.Gs2Lottery.Model.DrawnPrize).GetCache(
                 this._gs2.Cache,
                 this.NamespaceName,
@@ -123,31 +134,46 @@ namespace Gs2.Gs2Lottery.Domain.Model
             );
             if (find) {
                 return value;
+/* diff +++ end */
             }
-            return null;
+            return null; /* diff +++ */
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
+/* diff --- start
+        public UniTask<Gs2.Gs2Lottery.Model.DrawnPrize> Model() => ModelAsync();
+ diff --- end */
+/* diff +++ start */
         public async UniTask<Gs2.Gs2Lottery.Model.DrawnPrize> Model()
         {
             return await ModelAsync();
         }
+/* diff +++ end */
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
+/* diff --- start
+        public IFuture<Gs2.Gs2Lottery.Model.DrawnPrize> Model() => ModelFuture();
+ diff --- end */
+/* diff +++ start */
         public IFuture<Gs2.Gs2Lottery.Model.DrawnPrize> Model()
         {
             return ModelFuture();
         }
+/* diff +++ end */
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
+/* diff --- start
+        public Task<Gs2.Gs2Lottery.Model.DrawnPrize> Model() => ModelAsync();
+ diff --- end */
+/* diff +++ start */
         public async Task<Gs2.Gs2Lottery.Model.DrawnPrize> Model()
         {
             return await ModelAsync();
         }
+/* diff +++ end */
         #endif
 
 
@@ -156,7 +182,10 @@ namespace Gs2.Gs2Lottery.Domain.Model
             (null as Gs2.Gs2Lottery.Model.DrawnPrize).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.Index
+/* diff --- start
+                null
+ diff --- end */
+                this.Index /* diff +++ */
             );
         }
 
@@ -168,12 +197,11 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     null
                 ),
                 (null as Gs2.Gs2Lottery.Model.DrawnPrize).CacheKey(
-                    this.Index
+                    this.Index /* diff +++ */
                 ),
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -186,12 +214,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -204,45 +227,31 @@ namespace Gs2.Gs2Lottery.Domain.Model
                     null
                 ),
                 (null as Gs2.Gs2Lottery.Model.DrawnPrize).CacheKey(
-                    this.Index
+                    this.Index /* diff +++ */
                 ),
                 callbackId
             );
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Lottery.Model.DrawnPrize> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+/* diff --- start
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Lottery.Model.DrawnPrize> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
+ diff --- end */
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Lottery.Model.DrawnPrize> callback) => SubscribeWithInitialCallAsync(callback).ToGs2Future(); /* diff +++ */
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Lottery.Model.DrawnPrize> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Lottery.Model.DrawnPrize> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

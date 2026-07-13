@@ -13,7 +13,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -31,8 +30,11 @@
 #pragma warning disable 1998
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Domain;
@@ -44,19 +46,13 @@ using Gs2.Gs2Guild.Model.Cache;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-    #if GS2_ENABLE_UNITASK
-using System.Threading;
-using System.Collections.Generic;
+using UnityEngine.Events;
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-    #else
-using System.Collections;
-using UnityEngine.Events;
-    #endif
 #else
-using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 #endif
 
@@ -65,10 +61,10 @@ namespace Gs2.Gs2Guild.Domain.Iterator
 
     public class SearchGuildsIterator :
     #if UNITY_2017_1_OR_NEWER
-        Gs2Iterator<Gs2.Gs2Guild.Model.Guild>
-        #if GS2_ENABLE_UNITASK
-        , IUniTaskAsyncEnumerable<Gs2.Gs2Guild.Model.Guild>
-        #endif
+        Gs2Iterator<Gs2.Gs2Guild.Model.Guild>,
+    #endif
+    #if GS2_ENABLE_UNITASK
+        IUniTaskAsyncEnumerable<Gs2.Gs2Guild.Model.Guild>
     #else
         IAsyncEnumerable<Gs2.Gs2Guild.Model.Guild>
     #endif
@@ -87,6 +83,9 @@ namespace Gs2.Gs2Guild.Domain.Iterator
         public int[] Attributes5 { get; }
         public string[] JoinPolicies { get; }
         public bool? IncludeFullMembersGuild { get; }
+/* diff --- start
+        public string OrderBy { get; }
+ diff --- end */
         private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
@@ -107,7 +106,11 @@ namespace Gs2.Gs2Guild.Domain.Iterator
             int[] attributes4 = null,
             int[] attributes5 = null,
             string[] joinPolicies = null,
-            bool? includeFullMembersGuild = null
+/* diff --- start
+            bool? includeFullMembersGuild = null,
+            string orderBy = null
+ diff --- end */
+            bool? includeFullMembersGuild = null /* diff +++ */
         ) {
             this._gs2 = gs2;
             this._client = client;
@@ -122,17 +125,16 @@ namespace Gs2.Gs2Guild.Domain.Iterator
             this.Attributes5 = attributes5;
             this.JoinPolicies = joinPolicies;
             this.IncludeFullMembersGuild = includeFullMembersGuild;
+/* diff --- start
+            this.OrderBy = orderBy;
+ diff --- end */
             this._pageToken = null;
             this._last = false;
             this._result = new Gs2.Gs2Guild.Model.Guild[]{};
         }
 
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         private async UniTask _load() {
-            #else
-        private IEnumerator _load() {
-            #endif
         #else
         private async Task _load() {
         #endif
@@ -148,6 +150,19 @@ namespace Gs2.Gs2Guild.Domain.Iterator
                     out var list
             )) {
                 this._result = list
+/* diff --- start
+                    .Where(item => this.GuildModelName == null || item.GuildModelName == this.GuildModelName)
+                    .Where(item => this.AccessToken == null || item.AccessToken == this.AccessToken)
+                    .Where(item => this.DisplayName == null || item.DisplayName == this.DisplayName)
+                    .Where(item => this.Attributes1 == null || item.Attributes1 == this.Attributes1)
+                    .Where(item => this.Attributes2 == null || item.Attributes2 == this.Attributes2)
+                    .Where(item => this.Attributes3 == null || item.Attributes3 == this.Attributes3)
+                    .Where(item => this.Attributes4 == null || item.Attributes4 == this.Attributes4)
+                    .Where(item => this.Attributes5 == null || item.Attributes5 == this.Attributes5)
+                    .Where(item => this.JoinPolicies == null || item.JoinPolicies == this.JoinPolicies)
+                    .Where(item => this.IncludeFullMembersGuild == null || item.IncludeFullMembersGuild == this.IncludeFullMembersGuild)
+                    .Where(item => this.OrderBy == null || item.OrderBy == this.OrderBy)
+ diff --- end */
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -158,6 +173,10 @@ namespace Gs2.Gs2Guild.Domain.Iterator
                     .WithNamespaceName(this.NamespaceName)
                     .WithGuildModelName(this.GuildModelName)
                     .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
+/* diff --- start
+                    .WithOrderBy(this.OrderBy)
+ diff --- end */
+/* diff +++ start */
                     .WithDisplayName(this.DisplayName)
                     .WithAttributes1(this.Attributes1)
                     .WithAttributes2(this.Attributes2)
@@ -166,25 +185,26 @@ namespace Gs2.Gs2Guild.Domain.Iterator
                     .WithAttributes5(this.Attributes5)
                     .WithJoinPolicies(this.JoinPolicies)
                     .WithIncludeFullMembersGuild(this.IncludeFullMembersGuild)
+/* diff +++ end */
                     .WithPageToken(this._pageToken)
                     .WithLimit(fetchSize);
-                #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                var future = this._client.SearchGuildsFuture(
-                #else
                 var r = await this._client.SearchGuildsAsync(
-                #endif
                     request
                 );
-                #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                yield return future;
-                if (future.Error != null)
-                {
-                    Error = future.Error;
-                    yield break;
-                }
-                var r = future.Result;
-                #endif
                 this._result = r.Items
+/* diff --- start
+                    .Where(item => this.GuildModelName == null || item.GuildModelName == this.GuildModelName)
+                    .Where(item => this.AccessToken == null || item.AccessToken == this.AccessToken)
+                    .Where(item => this.DisplayName == null || item.DisplayName == this.DisplayName)
+                    .Where(item => this.Attributes1 == null || item.Attributes1 == this.Attributes1)
+                    .Where(item => this.Attributes2 == null || item.Attributes2 == this.Attributes2)
+                    .Where(item => this.Attributes3 == null || item.Attributes3 == this.Attributes3)
+                    .Where(item => this.Attributes4 == null || item.Attributes4 == this.Attributes4)
+                    .Where(item => this.Attributes5 == null || item.Attributes5 == this.Attributes5)
+                    .Where(item => this.JoinPolicies == null || item.JoinPolicies == this.JoinPolicies)
+                    .Where(item => this.IncludeFullMembersGuild == null || item.IncludeFullMembersGuild == this.IncludeFullMembersGuild)
+                    .Where(item => this.OrderBy == null || item.OrderBy == this.OrderBy)
+ diff --- end */
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
@@ -194,6 +214,17 @@ namespace Gs2.Gs2Guild.Domain.Iterator
                     this.AccessToken?.TimeOffset,
                     request
                 );
+/* diff --- start
+
+                if (this._last) {
+                    this._gs2.Cache.SetListCached<Gs2.Gs2Guild.Model.Guild>(
+                        (null as Gs2.Gs2Guild.Model.Guild).CacheParentKey(
+                            NamespaceName,
+                            this.AccessToken?.TimeOffset
+                        )
+                    );
+                }
+ diff --- end */
             }
         }
 
@@ -208,129 +239,97 @@ namespace Gs2.Gs2Guild.Domain.Iterator
             if (Error != null) return false;
             return _hasNext();
         }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
 
         protected override System.Collections.IEnumerator Next(
             Action<AsyncResult<Gs2.Gs2Guild.Model.Guild>> callback
         )
         {
-            Gs2Exception error = null;
-            yield return UniTask.ToCoroutine(
-                async () => {
-                    try {
-                        if (this._result.Length == 0 && !this._last) {
-                            await this._load();
-                        }
-                        if (this._result.Length == 0) {
-                            Current = null;
-                            return;
-                        }
-                        var ret = this._result[0];
-                        this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
-                        if (this._result.Length == 0 && !this._last) {
-                            await this._load();
-                        }
-                        Current = ret;
-                    }
-                    catch (Gs2Exception e) {
-                        Current = null;
-                        error = e;
-                    }
-                }
-            );
-            callback.Invoke(new AsyncResult<Gs2.Gs2Guild.Model.Guild>(
-                Current,
-                error
-            ));
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerator<Gs2.Gs2Guild.Model.Guild> GetAsyncEnumerator(
-            CancellationToken cancellationToken = new CancellationToken()
-            #else
-
-        protected override IEnumerator Next(
-            Action<AsyncResult<Gs2.Gs2Guild.Model.Guild>> callback
-            #endif
-        #else
-        public async IAsyncEnumerator<Gs2.Gs2Guild.Model.Guild> GetAsyncEnumerator(
-            CancellationToken cancellationToken = new CancellationToken()
-        #endif
-        )
-        {
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-            return UniTaskAsyncEnumerable.Create<Gs2.Gs2Guild.Model.Guild>(async (writer, token) =>
-            {
-            #endif
-        #endif
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-                using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Guild.Model.Guild>(
-                        (null as Gs2.Gs2Guild.Model.Guild).CacheParentKey(
-                            NamespaceName,
-                            this.AccessToken?.TimeOffset
-                       ),
-                       "ListGuild"
-                   ).LockAsync()) {
-                while(this._hasNext()) {
-                    cancellationToken.ThrowIfCancellationRequested();
-        #endif
-                    if (this._result.Length == 0 && !this._last) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                        yield return this._load();
-        #else
-                        await this._load();
-        #endif
-                    }
-                    if (this._result.Length == 0) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                        Current = null;
-                        callback.Invoke(new AsyncResult<Gs2.Gs2Guild.Model.Guild>(
-                            Current,
-                            Error
-                        ));
-                        yield break;
-        #else
-                        break;
-        #endif
-                    }
-                    var ret = this._result[0];
-                    this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
-                    if (this._result.Length == 0 && !this._last) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                        yield return this._load();
-        #else
-                        await this._load();
-        #endif
-                    }
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-                    await writer.YieldAsync(ret);
-            #else
-                    Current = ret;
+            if (this._result.Length == 0 && !this._last) {
+                var future = this._load().ToGs2Future();
+                yield return future;
+                if (future.Error != null)
+                {
+                    Current = null;
+                    Error = future.Error;
                     callback.Invoke(new AsyncResult<Gs2.Gs2Guild.Model.Guild>(
                         Current,
                         Error
                     ));
-            #endif
-        #else
-                    yield return ret;
-        #endif
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+                    yield break;
                 }
-        #endif
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-                }
-            }).GetAsyncEnumerator();
-            #endif
-        #else
             }
-        #endif
+            if (this._result.Length == 0) {
+                Current = null;
+                callback.Invoke(new AsyncResult<Gs2.Gs2Guild.Model.Guild>(
+                    Current,
+                    Error
+                ));
+                yield break;
+            }
+            var ret = this._result[0];
+            this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
+            if (this._result.Length == 0 && !this._last) {
+                var future = this._load().ToGs2Future();
+                yield return future;
+                if (future.Error != null)
+                {
+                    Current = null;
+                    Error = future.Error;
+                    callback.Invoke(new AsyncResult<Gs2.Gs2Guild.Model.Guild>(
+                        Current,
+                        Error
+                    ));
+                    yield break;
+                }
+            }
+            Current = ret;
+            callback.Invoke(new AsyncResult<Gs2.Gs2Guild.Model.Guild>(
+                Current,
+                Error
+            ));
         }
+        #endif
+
+        #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Guild.Model.Guild> GetAsyncEnumerator(
+            CancellationToken cancellationToken = new CancellationToken()
+        ) => UniTaskAsyncEnumerable.Create<Gs2.Gs2Guild.Model.Guild>(async (writer, token) =>
+        #else
+        public async IAsyncEnumerator<Gs2.Gs2Guild.Model.Guild> GetAsyncEnumerator(
+            CancellationToken cancellationToken = new CancellationToken()
+        )
+        #endif
+        {
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Guild.Model.Guild>(
+                    (null as Gs2.Gs2Guild.Model.Guild).CacheParentKey(
+                        NamespaceName,
+                        this.AccessToken?.TimeOffset
+                   ),
+                   "ListGuild"
+               ).LockAsync()) {
+                while(this._hasNext()) {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    if (this._result.Length == 0 && !this._last) {
+                        await this._load();
+                    }
+                    if (this._result.Length == 0) {
+                        break;
+                    }
+                    var ret = this._result[0];
+                    this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
+                    if (this._result.Length == 0 && !this._last) {
+                        await this._load();
+                    }
+            #if GS2_ENABLE_UNITASK
+                    await writer.YieldAsync(ret);
+            #else
+                    yield return ret;
+            #endif
+                }
+            }
+        }
+        #if GS2_ENABLE_UNITASK
+        ).GetAsyncEnumerator();
+        #endif
     }
 }

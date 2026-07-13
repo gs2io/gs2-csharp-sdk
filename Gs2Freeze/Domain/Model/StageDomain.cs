@@ -27,6 +27,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -44,15 +46,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -90,12 +89,11 @@ namespace Gs2.Gs2Freeze.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Freeze.Model.Output> OutputsAsync(
-            #else
+        #else
         public DescribeOutputsIterator OutputsAsync(
-            #endif
+        #endif
         )
         {
             return new DescribeOutputsIterator(
@@ -104,7 +102,6 @@ namespace Gs2.Gs2Freeze.Domain.Model
                 this.StageName
             );
         }
-        #endif
 
         public ulong SubscribeOutputs(
             Action<Gs2.Gs2Freeze.Model.Output[]> callback
@@ -118,10 +115,15 @@ namespace Gs2.Gs2Freeze.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await OutputsAsync(
                             ).ToArrayAsync());
                         }
@@ -130,13 +132,15 @@ namespace Gs2.Gs2Freeze.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeOutputsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeOutputsWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Freeze.Model.Output[]> callback
         )
         {
@@ -148,7 +152,6 @@ namespace Gs2.Gs2Freeze.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeOutputs(
             ulong callbackId
@@ -191,36 +194,14 @@ namespace Gs2.Gs2Freeze.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Freeze.Model.Stage> GetFuture(
             GetStageRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Freeze.Model.Stage> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithStageName(this.StageName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.GetStageFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Freeze.Model.Stage>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Freeze.Model.Stage> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Freeze.Model.Stage> GetAsync(
-            #endif
+        #endif
             GetStageRequest request
         ) {
             request = request
@@ -234,43 +215,18 @@ namespace Gs2.Gs2Freeze.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Freeze.Domain.Model.StageDomain> PromoteFuture(
             PromoteStageRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Freeze.Domain.Model.StageDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithStageName(this.StageName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.PromoteStageFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Freeze.Domain.Model.StageDomain>(Impl);
-        }
+        ) => PromoteAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Freeze.Domain.Model.StageDomain> PromoteAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Freeze.Domain.Model.StageDomain> PromoteAsync(
-            #endif
+        #endif
             PromoteStageRequest request
         ) {
             request = request
@@ -286,43 +242,18 @@ namespace Gs2.Gs2Freeze.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Freeze.Domain.Model.StageDomain> RollbackFuture(
             RollbackStageRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Freeze.Domain.Model.StageDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithStageName(this.StageName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.RollbackStageFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Freeze.Domain.Model.StageDomain>(Impl);
-        }
+        ) => RollbackAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Freeze.Domain.Model.StageDomain> RollbackAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Freeze.Domain.Model.StageDomain> RollbackAsync(
-            #endif
+        #endif
             RollbackStageRequest request
         ) {
             request = request
@@ -338,51 +269,20 @@ namespace Gs2.Gs2Freeze.Domain.Model
 
             return domain;
         }
-        #endif
 
     }
 
     public partial class StageDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Freeze.Model.Stage> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Freeze.Model.Stage> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Freeze.Model.Stage).GetCache(
-                    this._gs2.Cache,
-                    this.StageName,
-                    null
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2Freeze.Model.Stage).FetchFuture(
-                    this._gs2.Cache,
-                    this.StageName,
-                    null,
-                    () => this.GetFuture(
-                        new GetStageRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Freeze.Model.Stage>(Impl);
-        }
+        public IFuture<Gs2.Gs2Freeze.Model.Stage> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Freeze.Model.Stage> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Freeze.Model.Stage> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Freeze.Model.Stage>(
                         (null as Gs2.Gs2Freeze.Model.Stage).CacheParentKey(
@@ -410,28 +310,18 @@ namespace Gs2.Gs2Freeze.Domain.Model
                 );
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2Freeze.Model.Stage> Model()
-        {
-            return await ModelAsync();
-        }
+        public UniTask<Gs2.Gs2Freeze.Model.Stage> Model() => ModelAsync();
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2Freeze.Model.Stage> Model()
-        {
-            return ModelFuture();
-        }
+        public IFuture<Gs2.Gs2Freeze.Model.Stage> Model() => ModelFuture();
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2Freeze.Model.Stage> Model()
-        {
-            return await ModelAsync();
-        }
+        public Task<Gs2.Gs2Freeze.Model.Stage> Model() => ModelAsync();
         #endif
 
 
@@ -456,7 +346,6 @@ namespace Gs2.Gs2Freeze.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -469,12 +358,7 @@ namespace Gs2.Gs2Freeze.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -493,38 +377,21 @@ namespace Gs2.Gs2Freeze.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Freeze.Model.Stage> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Freeze.Model.Stage> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Freeze.Model.Stage> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Freeze.Model.Stage> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

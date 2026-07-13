@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -36,17 +35,35 @@ namespace Gs2.Gs2Mission.Model.Transaction
         ) {
             switch (request.VerifyType) {
                 case "less":
-                    return (self.Values?.FirstOrDefault(v => v.ResetType == request.ResetType)?.Value ?? 0) < request.Value;
+/* diff --- start
+                    return self.Value < request.Value;
+ diff --- end */
+                    return (self.Values?.FirstOrDefault(v => v.ResetType == request.ResetType)?.Value ?? 0) < request.Value; /* diff +++ */
                 case "lessEqual":
-                    return (self.Values?.FirstOrDefault(v => v.ResetType == request.ResetType)?.Value ?? 0) <= request.Value;
+/* diff --- start
+                    return self.Value <= request.Value;
+ diff --- end */
+                    return (self.Values?.FirstOrDefault(v => v.ResetType == request.ResetType)?.Value ?? 0) <= request.Value; /* diff +++ */
                 case "greater":
-                    return (self.Values?.FirstOrDefault(v => v.ResetType == request.ResetType)?.Value ?? 0) > request.Value;
+/* diff --- start
+                    return self.Value > request.Value;
+ diff --- end */
+                    return (self.Values?.FirstOrDefault(v => v.ResetType == request.ResetType)?.Value ?? 0) > request.Value; /* diff +++ */
                 case "greaterEqual":
-                    return (self.Values?.FirstOrDefault(v => v.ResetType == request.ResetType)?.Value ?? 0) >= request.Value;
+/* diff --- start
+                    return self.Value >= request.Value;
+ diff --- end */
+                    return (self.Values?.FirstOrDefault(v => v.ResetType == request.ResetType)?.Value ?? 0) >= request.Value; /* diff +++ */
                 case "equal":
-                    return (self.Values?.FirstOrDefault(v => v.ResetType == request.ResetType)?.Value ?? 0) == request.Value;
+/* diff --- start
+                    return self.Value == request.Value;
+ diff --- end */
+                    return (self.Values?.FirstOrDefault(v => v.ResetType == request.ResetType)?.Value ?? 0) == request.Value; /* diff +++ */
                 case "notEqual":
-                    return (self.Values?.FirstOrDefault(v => v.ResetType == request.ResetType)?.Value ?? 0) != request.Value;
+/* diff --- start
+                    return self.Value != request.Value;
+ diff --- end */
+                    return (self.Values?.FirstOrDefault(v => v.ResetType == request.ResetType)?.Value ?? 0) != request.Value; /* diff +++ */
             }
             return false;
         }

@@ -26,10 +26,10 @@ using Gs2.Gs2Dictionary.Request;
 using Gs2.Gs2Dictionary.Result;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -79,21 +79,22 @@ namespace Gs2.Gs2Dictionary.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<PreUpdateCurrentEntryMasterResult> InvokeAsync(
-    #else
+#else
         public static async Task<PreUpdateCurrentEntryMasterResult> InvokeAsync(
-    #endif
+#endif
             this PreUpdateCurrentEntryMasterRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<PreUpdateCurrentEntryMasterResult>> invokeImpl
-    #else
+#elif UNITY_2017_1_OR_NEWER
+            Func<TaskFuture<PreUpdateCurrentEntryMasterResult>> invokeImpl
+#else
             Func<Task<PreUpdateCurrentEntryMasterResult>> invokeImpl
-    #endif
+#endif
         )
         {
             var result = await invokeImpl();
@@ -105,6 +106,5 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             );
             return result;
         }
-#endif
     }
 }

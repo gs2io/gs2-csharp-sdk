@@ -12,27 +12,35 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
 
+/* diff --- start
+//#pragma warning disable CS0618 // Obsolete with a message
+ diff --- end */
 #pragma warning disable CS1522 // Empty switch block
 
 using System;
 using Gs2.Core.Domain;
 using Gs2.Core.Net;
 using Gs2.Core.Util;
+/* diff --- start
+//#if UNITY_2017_1_OR_NEWER
+ diff --- end */
+/* diff +++ start */
 using Gs2.Util.LitJson;
 using System.Linq;
+/* diff +++ end */
 using System.Collections;
-using Gs2.Core.Exception;
-#if UNITY_2017_1_OR_NEWER
-    #if GS2_ENABLE_UNITASK
+/* diff --- start
+//#endif
+ diff --- end */
+using Gs2.Core.Exception; /* diff +++ */
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -84,7 +92,10 @@ namespace Gs2.Gs2Distributor.Model.Cache
                 yield return future;
                 if (future.Error != null)
                 {
-                    if (future.Error is NotFoundException e)
+/* diff --- start
+                    if (future.Error is Gs2.Core.Exception.NotFoundException e)
+ diff --- end */
+                    if (future.Error is NotFoundException e) /* diff +++ */
                     {
                         (null as TransactionResult).PutCache(
                             cache,
@@ -115,23 +126,22 @@ namespace Gs2.Gs2Distributor.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<TransactionResult> FetchAsync(
-    #else
+#else
         public static async Task<TransactionResult> FetchAsync(
-    #endif
+#endif
             this TransactionResult self,
             CacheDatabase cache,
             string namespaceName,
             string userId,
             string transactionId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<TransactionResult>> fetchImpl
-    #else
+#else
             Func<Task<TransactionResult>> fetchImpl
-    #endif
+#endif
         ) {
             try {
                 var item = await fetchImpl();
@@ -144,7 +154,10 @@ namespace Gs2.Gs2Distributor.Model.Cache
                 );
                 return item;
             }
-            catch (NotFoundException e) {
+/* diff --- start
+            catch (Gs2.Core.Exception.NotFoundException e) {
+ diff --- end */
+            catch (NotFoundException e) { /* diff +++ */
                 (null as TransactionResult).PutCache(
                     cache,
                     namespaceName,
@@ -158,7 +171,6 @@ namespace Gs2.Gs2Distributor.Model.Cache
                 return null;
             }
         }
-#endif
 
         public static Tuple<TransactionResult, bool> GetCache(
             this TransactionResult self,
@@ -204,7 +216,13 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     transactionId
                 )
             );
-            if (find && (value?.Revision ?? 0) > (self?.Revision ?? 0) && (self?.Revision ?? 0) > 1) {
+/* diff --- start
+            if (find && (value?.Revision ?? -1) > (self?.Revision ?? -1) && (self?.Revision ?? -1) > 1) {
+                return;
+            }
+            if (find && (value?.Revision ?? -1) == (self?.Revision ?? -1)) {
+ diff --- end */
+            if (find && (value?.Revision ?? 0) > (self?.Revision ?? 0) && (self?.Revision ?? 0) > 1) { /* diff +++ */
                 return;
             }
             cache.Put(
@@ -217,6 +235,10 @@ namespace Gs2.Gs2Distributor.Model.Cache
                     transactionId
                 ),
                 self,
+/* diff --- start
+                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+ diff --- end */
+/* diff +++ start */
                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Core.Domain.Gs2.DefaultCacheMinutes
             );
 
@@ -272,9 +294,10 @@ namespace Gs2.Gs2Distributor.Model.Cache
                 userId,
                 transactionId,
                 timeOffset
+/* diff +++ end */
             );
         }
-        
+
         public static void DeleteCache(
             this TransactionResult self,
             CacheDatabase cache,

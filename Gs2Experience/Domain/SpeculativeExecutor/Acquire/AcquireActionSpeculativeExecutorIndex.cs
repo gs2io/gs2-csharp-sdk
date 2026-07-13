@@ -30,15 +30,16 @@ using System.Collections;
 using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
+using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Experience.Model.Transaction;
 using Gs2.Gs2Experience.Request;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading.Tasks;
 #endif
@@ -53,115 +54,14 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
             AccessToken accessToken,
             AcquireAction acquireAction,
             BigInteger rate
-        ) {
-            acquireAction.Action = acquireAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
-            acquireAction.Action = acquireAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
-            acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
-            IEnumerator Impl(Gs2Future<Func<object>> result) {
-                if (AddExperienceByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
-                    var request = AddExperienceByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    if (rate != 1) {
-                        request = request.Rate(rate);
-                    }
-                    var future = AddExperienceByUserIdSpeculativeExecutor.ExecuteFuture(
-                        domain,
-                        accessToken,
-                        request
-                    );
-                    yield return future;
-                    if (future.Error != null) {
-                        result.OnError(future.Error);
-                        yield break;
-                    }
-                    result.OnComplete(future.Result);
-                    yield break;
-                }
-                if (SetExperienceByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
-                    var request = SetExperienceByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    if (rate != 1) {
-                        request = request.Rate(rate);
-                    }
-                    var future = SetExperienceByUserIdSpeculativeExecutor.ExecuteFuture(
-                        domain,
-                        accessToken,
-                        request
-                    );
-                    yield return future;
-                    if (future.Error != null) {
-                        result.OnError(future.Error);
-                        yield break;
-                    }
-                    result.OnComplete(future.Result);
-                    yield break;
-                }
-                if (AddRankCapByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
-                    var request = AddRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    if (rate != 1) {
-                        request = request.Rate(rate);
-                    }
-                    var future = AddRankCapByUserIdSpeculativeExecutor.ExecuteFuture(
-                        domain,
-                        accessToken,
-                        request
-                    );
-                    yield return future;
-                    if (future.Error != null) {
-                        result.OnError(future.Error);
-                        yield break;
-                    }
-                    result.OnComplete(future.Result);
-                    yield break;
-                }
-                if (SetRankCapByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
-                    var request = SetRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    if (rate != 1) {
-                        request = request.Rate(rate);
-                    }
-                    var future = SetRankCapByUserIdSpeculativeExecutor.ExecuteFuture(
-                        domain,
-                        accessToken,
-                        request
-                    );
-                    yield return future;
-                    if (future.Error != null) {
-                        result.OnError(future.Error);
-                        yield break;
-                    }
-                    result.OnComplete(future.Result);
-                    yield break;
-                }
-                if (MultiplyAcquireActionsByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
-                    var request = MultiplyAcquireActionsByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
-                    if (rate != 1) {
-                        request = request.Rate(rate);
-                    }
-                    var future = MultiplyAcquireActionsByUserIdSpeculativeExecutor.ExecuteFuture(
-                        domain,
-                        accessToken,
-                        request
-                    );
-                    yield return future;
-                    if (future.Error != null) {
-                        result.OnError(future.Error);
-                        yield break;
-                    }
-                    result.OnComplete(future.Result);
-                    yield break;
-                }
-                result.OnComplete(null);
-                yield return null;
-            }
-
-            return new Gs2InlineFuture<Func<object>>(Impl);
-        }
+        ) => ExecuteAsync(domain, accessToken, acquireAction, rate).ToGs2Future();
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<Func<object>> ExecuteAsync(
-    #else
+#else
         public static async Task<Func<object>> ExecuteAsync(
-    #endif
+#endif
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
             AcquireAction acquireAction,
@@ -227,6 +127,5 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
             }
             return null;
         }
-#endif
     }
 }

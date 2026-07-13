@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -29,6 +28,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -46,15 +47,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -65,9 +63,16 @@ namespace Gs2.Gs2Showcase.Domain.Model
     public partial class RandomShowcaseStatusDomain {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2ShowcaseRestClient _client;
+/* diff --- start
+        public string NamespaceName { get; } = null!;
+        public string UserId { get; } = null!;
+        public string ShowcaseName { get; } = null!;
+ diff --- end */
+/* diff +++ start */
         public string NamespaceName { get; }
         public string UserId { get; }
         public string ShowcaseName { get; }
+/* diff +++ end */
 
         public RandomShowcaseStatusDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -91,51 +96,29 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain> IncrementPurchaseCountFuture(
             IncrementPurchaseCountByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain> self)
-            {
-                request = request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithShowcaseName(this.ShowcaseName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.IncrementPurchaseCountByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    this.UserId,
-                    result?.Item?.ShowcaseName,
-                    request.DisplayItemName
-                );
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain>(Impl);
-        }
+        ) => IncrementPurchaseCountAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain> IncrementPurchaseCountAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain> IncrementPurchaseCountAsync(
-            #endif
+        #endif
             IncrementPurchaseCountByUserIdRequest request
         ) {
             request = request
+/* diff --- start
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+ diff --- end */
                 .WithNamespaceName(this.NamespaceName)
+/* diff --- start
+                .WithShowcaseName(this.ShowcaseName)
+                .WithUserId(this.UserId);
+ diff --- end */
+/* diff +++ start */
                 .WithUserId(this.UserId)
                 .WithShowcaseName(this.ShowcaseName);
+/* diff +++ end */
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
@@ -152,56 +135,33 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain> DecrementPurchaseCountFuture(
             DecrementPurchaseCountByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain> self)
-            {
-                request = request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithShowcaseName(this.ShowcaseName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.DecrementPurchaseCountByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    this.UserId,
-                    result?.Item?.ShowcaseName,
-                    request.DisplayItemName
-                );
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain>(Impl);
-        }
+        ) => DecrementPurchaseCountAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain> DecrementPurchaseCountAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain> DecrementPurchaseCountAsync(
-            #endif
+        #endif
             DecrementPurchaseCountByUserIdRequest request
         ) {
             request = request
+/* diff --- start
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+ diff --- end */
                 .WithNamespaceName(this.NamespaceName)
+/* diff --- start
+                .WithShowcaseName(this.ShowcaseName)
+                .WithUserId(this.UserId);
+ diff --- end */
+/* diff +++ start */
                 .WithUserId(this.UserId)
                 .WithShowcaseName(this.ShowcaseName);
+/* diff +++ end */
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
@@ -218,55 +178,33 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain[]> ForceReDrawFuture(
             ForceReDrawByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain[]> self)
-            {
-                request = request
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithShowcaseName(this.ShowcaseName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.ForceReDrawByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = result?.Items?.Select(v => new Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    this.UserId,
-                    v?.ShowcaseName,
-                    v?.Name
-                )).ToArray() ?? Array.Empty<Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain>();
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain[]>(Impl);
-        }
+        ) => ForceReDrawAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain[]> ForceReDrawAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain[]> ForceReDrawAsync(
-            #endif
+        #endif
             ForceReDrawByUserIdRequest request
         ) {
             request = request
+/* diff --- start
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+ diff --- end */
                 .WithNamespaceName(this.NamespaceName)
+/* diff --- start
+                .WithShowcaseName(this.ShowcaseName)
+                .WithUserId(this.UserId);
+ diff --- end */
+/* diff +++ start */
                 .WithUserId(this.UserId)
                 .WithShowcaseName(this.ShowcaseName);
+/* diff +++ end */
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
@@ -278,11 +216,13 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 v?.ShowcaseName,
-                v?.Name
+/* diff --- start
+                this.DisplayItemName
+ diff --- end */
+                v?.Name /* diff +++ */
             )).ToArray() ?? Array.Empty<Gs2.Gs2Showcase.Domain.Model.RandomDisplayItemDomain>();
             return domain;
         }
-        #endif
 
     }
 

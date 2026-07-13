@@ -30,15 +30,16 @@ using System.Collections;
 using System.Numerics;
 using Gs2.Core.Domain;
 using Gs2.Core.Model;
+using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Guild.Model.Transaction;
 using Gs2.Gs2Guild.Request;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading.Tasks;
 #endif
@@ -53,43 +54,14 @@ namespace Gs2.Gs2Guild.Domain.SpeculativeExecutor
             AccessToken accessToken,
             ConsumeAction consumeAction,
             BigInteger rate
-        ) {
-            consumeAction.Action = consumeAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
-            consumeAction.Action = consumeAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
-            consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
-            IEnumerator Impl(Gs2Future<Func<object>> result) {
-                if (DecreaseMaximumCurrentMaximumMemberCountByGuildNameSpeculativeExecutor.Action() == consumeAction.Action) {
-                    var request = DecreaseMaximumCurrentMaximumMemberCountByGuildNameRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
-                    if (rate != 1) {
-                        request = request.Rate(rate);
-                    }
-                    var future = DecreaseMaximumCurrentMaximumMemberCountByGuildNameSpeculativeExecutor.ExecuteFuture(
-                        domain,
-                        accessToken,
-                        request
-                    );
-                    yield return future;
-                    if (future.Error != null) {
-                        result.OnError(future.Error);
-                        yield break;
-                    }
-                    result.OnComplete(future.Result);
-                    yield break;
-                }
-                result.OnComplete(null);
-                yield return null;
-            }
-
-            return new Gs2InlineFuture<Func<object>>(Impl);
-        }
+        ) => ExecuteAsync(domain, accessToken, consumeAction, rate).ToGs2Future();
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<Func<object>> ExecuteAsync(
-    #else
+#else
         public static async Task<Func<object>> ExecuteAsync(
-    #endif
+#endif
             Core.Domain.Gs2 domain,
             AccessToken accessToken,
             ConsumeAction consumeAction,
@@ -111,6 +83,5 @@ namespace Gs2.Gs2Guild.Domain.SpeculativeExecutor
             }
             return null;
         }
-#endif
     }
 }

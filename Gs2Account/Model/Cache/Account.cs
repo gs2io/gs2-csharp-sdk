@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -27,10 +26,10 @@ using Gs2.Core.Net;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -108,22 +107,21 @@ namespace Gs2.Gs2Account.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<Account> FetchAsync(
-    #else
+#else
         public static async Task<Account> FetchAsync(
-    #endif
+#endif
             this Account self,
             CacheDatabase cache,
             string namespaceName,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<Account>> fetchImpl
-    #else
+#else
             Func<Task<Account>> fetchImpl
-    #endif
+#endif
         ) {
             try {
                 var item = await fetchImpl();
@@ -148,7 +146,6 @@ namespace Gs2.Gs2Account.Model.Cache
                 return null;
             }
         }
-#endif
 
         public static Tuple<Account, bool> GetCache(
             this Account self,
@@ -190,7 +187,13 @@ namespace Gs2.Gs2Account.Model.Cache
                     userId
                 )
             );
-            if (find && (value?.Revision ?? 0) > (self?.Revision ?? 0) && (self?.Revision ?? 0) > 1) {
+/* diff --- start
+            if (find && (value?.Revision ?? -1) > (self?.Revision ?? -1) && (self?.Revision ?? -1) > 1) {
+                return;
+            }
+            if (find && (value?.Revision ?? -1) == (self?.Revision ?? -1)) {
+ diff --- end */
+            if (find && (value?.Revision ?? 0) > (self?.Revision ?? 0) && (self?.Revision ?? 0) > 1) { /* diff +++ */
                 return;
             }
             cache.Put(

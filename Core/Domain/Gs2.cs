@@ -8,6 +8,7 @@ using Gs2.Core.Exception;
 using Cysharp.Threading.Tasks;
 #endif
 using Gs2.Core.Net;
+using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Distributor.Model;
 using Gs2.Gs2JobQueue.Model;
@@ -339,124 +340,20 @@ namespace Gs2.Core.Domain
             _cache.Delete<TKind>(parentKey, key);
         }
 #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<bool> DispatchFuture(
+        public Gs2Future DispatchFuture(
             AccessToken accessToken
-        )
-        {
-            IEnumerator Impl(Gs2Future<bool> self)
-            {
-                while (true)
-                {
-                    if (DateTime.Now - _lastPingAt > TimeSpan.FromMinutes(5))
-                    {
-                        _webSocketSession?.Ping();
-                        _lastPingAt = DateTime.Now;
-                    }
-                    
-                    {
-                        var future = this.Distributor.DispatchFuture(
-                            accessToken
-                        );
-                        yield return future;
-                        if (future.Error != null)
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    {
-                        var future = this.JobQueue.DispatchFuture(
-                            accessToken
-                        );
-                        yield return future;
-                        if (future.Error != null)
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-                    }
-                    {
-                        var future = this._jobQueueDomain.RunFuture(
-                            accessToken
-                        );
-                        yield return future;
-                        if (future.Error != null)
-                        {
-                            self.OnError(future.Error);
-                            yield break;
-                        }
-
-                        if (future.Result)
-                        {
-                            break;
-                        }
-                    }
-                }
-            }
-
-            return new Gs2InlineFuture<bool>(Impl);
-        }
+        ) => DispatchAsync(accessToken).ToGs2Future();
 
         public Gs2Future DispatchByUserIdFuture(
             string userId
-        )
-        {
-            IEnumerator Impl(Gs2Future self)
-            {
-                if (DateTime.Now - _lastPingAt > TimeSpan.FromMinutes(5))
-                {
-                    _webSocketSession?.Ping();
-                    _lastPingAt = DateTime.Now;
-                }
-                
-                {
-                    var future = this.Distributor.DispatchByUserIdFuture(
-                        userId
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                {
-                    var future = this.JobQueue.DispatchByUserIdFuture(
-                        userId
-                    );
-                    yield return future;
-                    if (future.Error != null)
-                    {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                while (true)
-                {
-                    var future = this._jobQueueDomain.RunByUserIdFuture(
-                        userId
-                    );
-                    yield return future;
-                    if (future.Error != null) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                    if (future.Result) {
-                        break;
-                    }
-                }
-            }
-
-            return new Gs2InlineFuture(Impl);
-        }
+        ) => DispatchByUserIdAsync(userId).ToGs2Future();
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public async UniTask DispatchAsync(
-    #else
+#else
         public async Task DispatchAsync(
-    #endif
+#endif
             AccessToken accessToken
         )
         {
@@ -485,11 +382,11 @@ namespace Gs2.Core.Domain
             }
         }
 
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public async UniTask DispatchByUserIdAsync(
-    #else
+#else
         public async Task DispatchByUserIdAsync(
-    #endif
+#endif
             string userId
         )
         {
@@ -517,7 +414,6 @@ namespace Gs2.Core.Domain
                 }
             }
         }
-#endif
 
         public void UpdateCacheFromAcquireAction(
             CacheDatabase cache,

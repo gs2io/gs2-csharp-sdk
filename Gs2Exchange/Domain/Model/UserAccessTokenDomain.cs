@@ -27,6 +27,7 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -45,14 +46,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -104,12 +103,11 @@ namespace Gs2.Gs2Exchange.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Exchange.Model.Await> AwaitsAsync(
-            #else
+        #else
         public DescribeAwaitsIterator AwaitsAsync(
-            #endif
+        #endif
             string rateName = null
         )
         {
@@ -121,7 +119,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 rateName
             );
         }
-        #endif
 
         public ulong SubscribeAwaits(
             Action<Gs2.Gs2Exchange.Model.Await[]> callback,
@@ -137,10 +134,15 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await AwaitsAsync(
                                 rateName
                             ).ToArrayAsync());
@@ -150,13 +152,15 @@ namespace Gs2.Gs2Exchange.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeAwaitsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeAwaitsWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Exchange.Model.Await[]> callback,
             string rateName = null
         )
@@ -171,7 +175,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeAwaits(
             ulong callbackId,

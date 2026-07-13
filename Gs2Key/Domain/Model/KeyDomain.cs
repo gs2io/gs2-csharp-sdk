@@ -27,6 +27,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -44,15 +46,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -87,39 +86,14 @@ namespace Gs2.Gs2Key.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Key.Domain.Model.KeyDomain> UpdateFuture(
             UpdateKeyRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Key.Domain.Model.KeyDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithKeyName(this.KeyName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.UpdateKeyFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Key.Domain.Model.KeyDomain>(Impl);
-        }
+        ) => UpdateAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Key.Domain.Model.KeyDomain> UpdateAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Key.Domain.Model.KeyDomain> UpdateAsync(
-            #endif
+        #endif
             UpdateKeyRequest request
         ) {
             request = request
@@ -136,42 +110,18 @@ namespace Gs2.Gs2Key.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Key.Model.Key> GetFuture(
             GetKeyRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Key.Model.Key> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithKeyName(this.KeyName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.GetKeyFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Key.Model.Key>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Key.Model.Key> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Key.Model.Key> GetAsync(
-            #endif
+        #endif
             GetKeyRequest request
         ) {
             request = request
@@ -186,46 +136,18 @@ namespace Gs2.Gs2Key.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Key.Domain.Model.KeyDomain> DeleteFuture(
             DeleteKeyRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Key.Domain.Model.KeyDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithKeyName(this.KeyName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.DeleteKeyFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    if (!(future.Error is NotFoundException)) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Key.Domain.Model.KeyDomain>(Impl);
-        }
+        ) => DeleteAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Key.Domain.Model.KeyDomain> DeleteAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Key.Domain.Model.KeyDomain> DeleteAsync(
-            #endif
+        #endif
             DeleteKeyRequest request
         ) {
             try {
@@ -244,44 +166,18 @@ namespace Gs2.Gs2Key.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Key.Domain.Model.KeyDomain> EncryptFuture(
             EncryptRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Key.Domain.Model.KeyDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithKeyName(this.KeyName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.EncryptFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                this.Data = domain.Data = result?.Data;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Key.Domain.Model.KeyDomain>(Impl);
-        }
+        ) => EncryptAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Key.Domain.Model.KeyDomain> EncryptAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Key.Domain.Model.KeyDomain> EncryptAsync(
-            #endif
+        #endif
             EncryptRequest request
         ) {
             request = request
@@ -298,44 +194,18 @@ namespace Gs2.Gs2Key.Domain.Model
             this.Data = domain.Data = result?.Data;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Key.Domain.Model.KeyDomain> DecryptFuture(
             DecryptRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Key.Domain.Model.KeyDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithKeyName(this.KeyName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.DecryptFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                this.Data = domain.Data = result?.Data;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Key.Domain.Model.KeyDomain>(Impl);
-        }
+        ) => DecryptAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Key.Domain.Model.KeyDomain> DecryptAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Key.Domain.Model.KeyDomain> DecryptAsync(
-            #endif
+        #endif
             DecryptRequest request
         ) {
             request = request
@@ -352,53 +222,20 @@ namespace Gs2.Gs2Key.Domain.Model
             this.Data = domain.Data = result?.Data;
             return domain;
         }
-        #endif
 
     }
 
     public partial class KeyDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Key.Model.Key> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Key.Model.Key> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Key.Model.Key).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.KeyName,
-                    null
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2Key.Model.Key).FetchFuture(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.KeyName,
-                    null,
-                    () => this.GetFuture(
-                        new GetKeyRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Key.Model.Key>(Impl);
-        }
+        public IFuture<Gs2.Gs2Key.Model.Key> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Key.Model.Key> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Key.Model.Key> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Key.Model.Key>(
                         (null as Gs2.Gs2Key.Model.Key).CacheParentKey(
@@ -429,28 +266,18 @@ namespace Gs2.Gs2Key.Domain.Model
                 );
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2Key.Model.Key> Model()
-        {
-            return await ModelAsync();
-        }
+        public UniTask<Gs2.Gs2Key.Model.Key> Model() => ModelAsync();
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2Key.Model.Key> Model()
-        {
-            return ModelFuture();
-        }
+        public IFuture<Gs2.Gs2Key.Model.Key> Model() => ModelFuture();
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2Key.Model.Key> Model()
-        {
-            return await ModelAsync();
-        }
+        public Task<Gs2.Gs2Key.Model.Key> Model() => ModelAsync();
         #endif
 
 
@@ -477,7 +304,6 @@ namespace Gs2.Gs2Key.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -490,12 +316,7 @@ namespace Gs2.Gs2Key.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -515,38 +336,21 @@ namespace Gs2.Gs2Key.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Key.Model.Key> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Key.Model.Key> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Key.Model.Key> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Key.Model.Key> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

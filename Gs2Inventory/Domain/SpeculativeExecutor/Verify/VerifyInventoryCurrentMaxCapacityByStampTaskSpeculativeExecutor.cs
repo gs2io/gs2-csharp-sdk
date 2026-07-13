@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -33,16 +32,21 @@ using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+/* diff +++ start */
 using Gs2.Core.Exception;
 using Gs2.Core.Model;
+/* diff +++ end */
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Inventory.Request;
+using Gs2.Gs2Inventory.Model.Cache;
+using Gs2.Gs2Inventory.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading.Tasks;
 #endif
@@ -53,6 +57,7 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
 
         public static string Action() {
             return "Gs2Inventory:VerifyInventoryCurrentMaxCapacityByUserId";
+/* diff +++ start */
         }
 
         public static Gs2.Gs2Inventory.Model.Inventory Transform(
@@ -106,6 +111,7 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                     break;
             }
             return item;
+/* diff +++ end */
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -113,55 +119,14 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
             VerifyInventoryCurrentMaxCapacityByUserIdRequest request
-        ) {
-            IEnumerator Impl(Gs2Future<Func<object>> result) {
-
-                var future = domain.Inventory.Namespace(
-                    request.NamespaceName
-                ).AccessToken(
-                    accessToken
-                ).Inventory(
-                    request.InventoryName
-                ).ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    result.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-
-                if (item == null) {
-                    result.OnComplete(() =>
-                    {
-                        return null;
-                    });
-                    yield break;
-                }
-                try {
-                    item = Transform(domain, accessToken, request, item);
-                }
-                catch (Gs2Exception e) {
-                    result.OnError(e);
-                    yield break;
-                }
-
-                result.OnComplete(() =>
-                {
-                    return null;
-                });
-                yield return null;
-            }
-
-            return new Gs2InlineFuture<Func<object>>(Impl);
-        }
+        ) => ExecuteAsync(domain, accessToken, request).ToGs2Future();
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<Func<object>> ExecuteAsync(
-    #else
+#else
         public static async Task<Func<object>> ExecuteAsync(
-    #endif
+#endif
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
             VerifyInventoryCurrentMaxCapacityByUserIdRequest request
@@ -177,13 +142,15 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             if (item == null) {
                 return () => null;
             }
-            item = Transform(domain, accessToken, request, item);
+/* diff --- start
+            item = item.SpeculativeExecution(request);
+ diff --- end */
+            item = Transform(domain, accessToken, request, item); /* diff +++ */
 
             return () =>
             {
                 return null;
             };
         }
-#endif
     }
 }

@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -29,6 +28,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -46,15 +47,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -98,42 +96,14 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Ranking2.Domain.Model.ClusterRankingReceivedRewardDomain> CreateFuture(
             CreateClusterRankingReceivedRewardByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Ranking2.Domain.Model.ClusterRankingReceivedRewardDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithRankingName(this.RankingName)
-                    .WithClusterName(this.ClusterName)
-                    .WithUserId(this.UserId)
-                    .WithSeason(this.Season);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.CreateClusterRankingReceivedRewardByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Ranking2.Domain.Model.ClusterRankingReceivedRewardDomain>(Impl);
-        }
+        ) => CreateAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Ranking2.Domain.Model.ClusterRankingReceivedRewardDomain> CreateAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Ranking2.Domain.Model.ClusterRankingReceivedRewardDomain> CreateAsync(
-            #endif
+        #endif
             CreateClusterRankingReceivedRewardByUserIdRequest request
         ) {
             request = request
@@ -153,65 +123,18 @@ namespace Gs2.Gs2Ranking2.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Core.Domain.TransactionDomain> ReceiveFuture(
             ReceiveClusterRankingReceivedRewardByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithRankingName(this.RankingName)
-                    .WithClusterName(this.ClusterName)
-                    .WithSeason(this.Season);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.ReceiveClusterRankingReceivedRewardByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
-                    this._gs2,
-                    this.UserId,
-                    result.AutoRunStampSheet ?? false,
-                    result.TransactionId,
-                    result.StampSheet,
-                    result.StampSheetEncryptionKeyId,
-                    result.AtomicCommit,
-                    result.TransactionResult,
-                    result.Metadata
-                );
-                if (result.StampSheet != null) {
-                    var future2 = transaction.WaitFuture(true);
-                    yield return future2;
-                    if (future2.Error != null)
-                    {
-                        self.OnError(future2.Error);
-                        yield break;
-                    }
-                }
-                self.OnComplete(transaction);
-            }
-            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
-        }
+        ) => ReceiveAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Core.Domain.TransactionDomain> ReceiveAsync(
-            #else
+        #else
         public async Task<Gs2.Core.Domain.TransactionDomain> ReceiveAsync(
-            #endif
+        #endif
             ReceiveClusterRankingReceivedRewardByUserIdRequest request
         ) {
             request = request
@@ -243,45 +166,18 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             }
             return transaction;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward> GetFuture(
             GetClusterRankingReceivedRewardByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithRankingName(this.RankingName)
-                    .WithClusterName(this.ClusterName)
-                    .WithUserId(this.UserId)
-                    .WithSeason(this.Season);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.GetClusterRankingReceivedRewardByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward> GetAsync(
-            #endif
+        #endif
             GetClusterRankingReceivedRewardByUserIdRequest request
         ) {
             request = request
@@ -299,49 +195,18 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Ranking2.Domain.Model.ClusterRankingReceivedRewardDomain> DeleteFuture(
             DeleteClusterRankingReceivedRewardByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Ranking2.Domain.Model.ClusterRankingReceivedRewardDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithRankingName(this.RankingName)
-                    .WithClusterName(this.ClusterName)
-                    .WithUserId(this.UserId)
-                    .WithSeason(this.Season);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.DeleteClusterRankingReceivedRewardByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    if (!(future.Error is NotFoundException)) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Ranking2.Domain.Model.ClusterRankingReceivedRewardDomain>(Impl);
-        }
+        ) => DeleteAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Ranking2.Domain.Model.ClusterRankingReceivedRewardDomain> DeleteAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Ranking2.Domain.Model.ClusterRankingReceivedRewardDomain> DeleteAsync(
-            #endif
+        #endif
             DeleteClusterRankingReceivedRewardByUserIdRequest request
         ) {
             try {
@@ -363,59 +228,20 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
     }
 
     public partial class ClusterRankingReceivedRewardDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.RankingName,
-                    this.ClusterName,
-                    this.Season,
-                    this.UserId,
-                    null
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).FetchFuture(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.RankingName,
-                    this.ClusterName,
-                    this.Season,
-                    this.UserId,
-                    null,
-                    () => this.GetFuture(
-                        new GetClusterRankingReceivedRewardByUserIdRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward>(Impl);
-        }
+        public IFuture<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward>(
                         (null as Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward).CacheParentKey(
@@ -456,28 +282,42 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 );
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
+/* diff --- start
+        public UniTask<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward> Model() => ModelAsync();
+ diff --- end */
+/* diff +++ start */
         public async UniTask<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward> Model()
         {
             return await ModelAsync();
         }
+/* diff +++ end */
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
+/* diff --- start
+        public IFuture<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward> Model() => ModelFuture();
+ diff --- end */
+/* diff +++ start */
         public IFuture<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward> Model()
         {
             return ModelFuture();
         }
+/* diff +++ end */
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
+/* diff --- start
+        public Task<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward> Model() => ModelAsync();
+ diff --- end */
+/* diff +++ start */
         public async Task<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward> Model()
         {
             return await ModelAsync();
         }
+/* diff +++ end */
         #endif
 
 
@@ -511,7 +351,6 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -524,12 +363,7 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -553,38 +387,24 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+/* diff --- start
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
+ diff --- end */
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward> callback) => SubscribeWithInitialCallAsync(callback).ToGs2Future(); /* diff +++ */
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

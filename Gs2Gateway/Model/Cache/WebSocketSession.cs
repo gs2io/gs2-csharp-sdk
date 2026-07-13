@@ -12,12 +12,12 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
 
+#pragma warning disable CS0618 // Obsolete with a message
 #pragma warning disable CS1522 // Empty switch block
 
 using System;
@@ -26,10 +26,10 @@ using Gs2.Core.Net;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -105,22 +105,21 @@ namespace Gs2.Gs2Gateway.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<WebSocketSession> FetchAsync(
-    #else
+#else
         public static async Task<WebSocketSession> FetchAsync(
-    #endif
+#endif
             this WebSocketSession self,
             CacheDatabase cache,
             string namespaceName,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<WebSocketSession>> fetchImpl
-    #else
+#else
             Func<Task<WebSocketSession>> fetchImpl
-    #endif
+#endif
         ) {
             try {
                 var item = await fetchImpl();
@@ -145,7 +144,6 @@ namespace Gs2.Gs2Gateway.Model.Cache
                 return null;
             }
         }
-#endif
 
         public static Tuple<WebSocketSession, bool> GetCache(
             this WebSocketSession self,
@@ -154,6 +152,11 @@ namespace Gs2.Gs2Gateway.Model.Cache
             string userId,
             int? timeOffset
         ) {
+/* diff --- start
+            if (userId == null) {
+                throw new NullReferenceException();
+            }
+ diff --- end */
             return cache.Get<WebSocketSession>(
                 self.CacheParentKey(
                     namespaceName,
@@ -184,7 +187,13 @@ namespace Gs2.Gs2Gateway.Model.Cache
                 self.CacheKey(
                 )
             );
-            if (find && (value?.Revision ?? 0) > (self?.Revision ?? 0) && (self?.Revision ?? 0) > 1) {
+/* diff --- start
+            if (find && (value?.Revision ?? -1) > (self?.Revision ?? -1) && (self?.Revision ?? -1) > 1) {
+                return;
+            }
+            if (find && (value?.Revision ?? -1) == (self?.Revision ?? -1)) {
+ diff --- end */
+            if (find && (value?.Revision ?? 0) > (self?.Revision ?? 0) && (self?.Revision ?? 0) > 1) { /* diff +++ */
                 return;
             }
             cache.Put(

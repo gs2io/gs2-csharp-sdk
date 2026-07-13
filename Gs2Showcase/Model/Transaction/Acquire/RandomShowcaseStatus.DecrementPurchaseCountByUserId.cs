@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -28,10 +27,16 @@ using Gs2.Gs2Showcase.Request;
 
 namespace Gs2.Gs2Showcase.Model.Transaction
 {
-    public static partial class RandomDisplayItemExt
+/* diff --- start
+    public static partial class RandomShowcaseStatusExt
+ diff --- end */
+    public static partial class RandomDisplayItemExt /* diff +++ */
     {
         public static bool IsExecutable(
-            this RandomDisplayItem self,
+/* diff --- start
+            this RandomShowcaseStatus self,
+ diff --- end */
+            this RandomDisplayItem self, /* diff +++ */
             DecrementPurchaseCountByUserIdRequest request
         ) {
             var changed = self.SpeculativeExecution(request);
@@ -44,12 +49,23 @@ namespace Gs2.Gs2Showcase.Model.Transaction
             }
         }
 
+/* diff --- start
+        public static RandomShowcaseStatus SpeculativeExecution(
+            this RandomShowcaseStatus self,
+ diff --- end */
+/* diff +++ start */
         public static RandomDisplayItem SpeculativeExecution(
             this RandomDisplayItem self,
+/* diff +++ end */
             DecrementPurchaseCountByUserIdRequest request
         ) {
+/* diff --- start
+            if (self.Clone() is not RandomShowcaseStatus clone)
+ diff --- end */
+/* diff +++ start */
             var clone = self.Clone() as RandomDisplayItem;
             if (clone == null)
+/* diff +++ end */
             {
                 throw new NullReferenceException();
             }

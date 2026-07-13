@@ -27,6 +27,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -44,15 +46,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -100,12 +99,11 @@ namespace Gs2.Gs2Grade.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Grade.Model.GradeModel> GradeModelsAsync(
-            #else
+        #else
         public DescribeGradeModelsIterator GradeModelsAsync(
-            #endif
+        #endif
         )
         {
             return new DescribeGradeModelsIterator(
@@ -114,7 +112,6 @@ namespace Gs2.Gs2Grade.Domain.Model
                 this.NamespaceName
             );
         }
-        #endif
 
         public ulong SubscribeGradeModels(
             Action<Gs2.Gs2Grade.Model.GradeModel[]> callback
@@ -128,10 +125,15 @@ namespace Gs2.Gs2Grade.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await GradeModelsAsync(
                             ).ToArrayAsync());
                         }
@@ -140,13 +142,15 @@ namespace Gs2.Gs2Grade.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeGradeModelsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeGradeModelsWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Grade.Model.GradeModel[]> callback
         )
         {
@@ -158,7 +162,6 @@ namespace Gs2.Gs2Grade.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeGradeModels(
             ulong callbackId
@@ -207,12 +210,11 @@ namespace Gs2.Gs2Grade.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Grade.Model.GradeModelMaster> GradeModelMastersAsync(
-            #else
+        #else
         public DescribeGradeModelMastersIterator GradeModelMastersAsync(
-            #endif
+        #endif
             string namePrefix = null
         )
         {
@@ -223,7 +225,6 @@ namespace Gs2.Gs2Grade.Domain.Model
                 namePrefix
             );
         }
-        #endif
 
         public ulong SubscribeGradeModelMasters(
             Action<Gs2.Gs2Grade.Model.GradeModelMaster[]> callback,
@@ -238,10 +239,15 @@ namespace Gs2.Gs2Grade.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await GradeModelMastersAsync(
                                 namePrefix
                             ).ToArrayAsync());
@@ -251,13 +257,15 @@ namespace Gs2.Gs2Grade.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeGradeModelMastersWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeGradeModelMastersWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Grade.Model.GradeModelMaster[]> callback,
             string namePrefix = null
         )
@@ -272,7 +280,6 @@ namespace Gs2.Gs2Grade.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeGradeModelMasters(
             ulong callbackId,
@@ -337,38 +344,14 @@ namespace Gs2.Gs2Grade.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Grade.Domain.Model.NamespaceDomain> GetStatusFuture(
             GetNamespaceStatusRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Grade.Domain.Model.NamespaceDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.GetNamespaceStatusFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                this.Status = domain.Status = result?.Status;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Grade.Domain.Model.NamespaceDomain>(Impl);
-        }
+        ) => GetStatusAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Grade.Domain.Model.NamespaceDomain> GetStatusAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Grade.Domain.Model.NamespaceDomain> GetStatusAsync(
-            #endif
+        #endif
             GetNamespaceStatusRequest request
         ) {
             request = request
@@ -384,41 +367,18 @@ namespace Gs2.Gs2Grade.Domain.Model
             this.Status = domain.Status = result?.Status;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Grade.Model.Namespace> GetFuture(
             GetNamespaceRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Grade.Model.Namespace> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.GetNamespaceFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Grade.Model.Namespace>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Grade.Model.Namespace> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Grade.Model.Namespace> GetAsync(
-            #endif
+        #endif
             GetNamespaceRequest request
         ) {
             request = request
@@ -432,43 +392,18 @@ namespace Gs2.Gs2Grade.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Grade.Domain.Model.NamespaceDomain> UpdateFuture(
             UpdateNamespaceRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Grade.Domain.Model.NamespaceDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.UpdateNamespaceFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Grade.Domain.Model.NamespaceDomain>(Impl);
-        }
+        ) => UpdateAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Grade.Domain.Model.NamespaceDomain> UpdateAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Grade.Domain.Model.NamespaceDomain> UpdateAsync(
-            #endif
+        #endif
             UpdateNamespaceRequest request
         ) {
             request = request
@@ -484,45 +419,18 @@ namespace Gs2.Gs2Grade.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Grade.Domain.Model.NamespaceDomain> DeleteFuture(
             DeleteNamespaceRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Grade.Domain.Model.NamespaceDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.DeleteNamespaceFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    if (!(future.Error is NotFoundException)) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Grade.Domain.Model.NamespaceDomain>(Impl);
-        }
+        ) => DeleteAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Grade.Domain.Model.NamespaceDomain> DeleteAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Grade.Domain.Model.NamespaceDomain> DeleteAsync(
-            #endif
+        #endif
             DeleteNamespaceRequest request
         ) {
             try {
@@ -540,47 +448,18 @@ namespace Gs2.Gs2Grade.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Grade.Domain.Model.GradeModelMasterDomain> CreateGradeModelMasterFuture(
             CreateGradeModelMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Grade.Domain.Model.GradeModelMasterDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.CreateGradeModelMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Grade.Domain.Model.GradeModelMasterDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    result?.Item?.Name
-                );
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Grade.Domain.Model.GradeModelMasterDomain>(Impl);
-        }
+        ) => CreateGradeModelMasterAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Grade.Domain.Model.GradeModelMasterDomain> CreateGradeModelMasterAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Grade.Domain.Model.GradeModelMasterDomain> CreateGradeModelMasterAsync(
-            #endif
+        #endif
             CreateGradeModelMasterRequest request
         ) {
             request = request
@@ -600,51 +479,20 @@ namespace Gs2.Gs2Grade.Domain.Model
 
             return domain;
         }
-        #endif
 
     }
 
     public partial class NamespaceDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Grade.Model.Namespace> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Grade.Model.Namespace> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Grade.Model.Namespace).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    null
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2Grade.Model.Namespace).FetchFuture(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    null,
-                    () => this.GetFuture(
-                        new GetNamespaceRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Grade.Model.Namespace>(Impl);
-        }
+        public IFuture<Gs2.Gs2Grade.Model.Namespace> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Grade.Model.Namespace> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Grade.Model.Namespace> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Grade.Model.Namespace>(
                         (null as Gs2.Gs2Grade.Model.Namespace).CacheParentKey(
@@ -672,28 +520,18 @@ namespace Gs2.Gs2Grade.Domain.Model
                 );
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2Grade.Model.Namespace> Model()
-        {
-            return await ModelAsync();
-        }
+        public UniTask<Gs2.Gs2Grade.Model.Namespace> Model() => ModelAsync();
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2Grade.Model.Namespace> Model()
-        {
-            return ModelFuture();
-        }
+        public IFuture<Gs2.Gs2Grade.Model.Namespace> Model() => ModelFuture();
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2Grade.Model.Namespace> Model()
-        {
-            return await ModelAsync();
-        }
+        public Task<Gs2.Gs2Grade.Model.Namespace> Model() => ModelAsync();
         #endif
 
 
@@ -718,7 +556,6 @@ namespace Gs2.Gs2Grade.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -731,12 +568,7 @@ namespace Gs2.Gs2Grade.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -755,38 +587,21 @@ namespace Gs2.Gs2Grade.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Grade.Model.Namespace> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Grade.Model.Namespace> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Grade.Model.Namespace> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Grade.Model.Namespace> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

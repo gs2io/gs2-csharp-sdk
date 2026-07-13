@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -28,10 +27,10 @@ using Gs2.Gs2Showcase.Request;
 using Gs2.Gs2Showcase.Result;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -48,12 +47,13 @@ namespace Gs2.Gs2Showcase.Model.Cache
             int? timeOffset,
             GetShowcaseByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.UserId,
                 request.ShowcaseName,
                 timeOffset
+/* diff +++ start */
             );
             foreach (var displayItem in self.Item.DisplayItems) {
                 displayItem.PutCache(
@@ -72,6 +72,7 @@ namespace Gs2.Gs2Showcase.Model.Cache
                     request.ShowcaseName,
                     timeOffset
                 )
+/* diff +++ end */
             );
         }
 
@@ -106,21 +107,22 @@ namespace Gs2.Gs2Showcase.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<GetShowcaseByUserIdResult> InvokeAsync(
-    #else
+#else
         public static async Task<GetShowcaseByUserIdResult> InvokeAsync(
-    #endif
+#endif
             this GetShowcaseByUserIdRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<GetShowcaseByUserIdResult>> invokeImpl
-    #else
+#elif UNITY_2017_1_OR_NEWER
+            Func<TaskFuture<GetShowcaseByUserIdResult>> invokeImpl
+#else
             Func<Task<GetShowcaseByUserIdResult>> invokeImpl
-    #endif
+#endif
         )
         {
             var result = await invokeImpl();
@@ -132,6 +134,5 @@ namespace Gs2.Gs2Showcase.Model.Cache
             );
             return result;
         }
-#endif
     }
 }

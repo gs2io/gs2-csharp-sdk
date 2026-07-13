@@ -27,6 +27,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -44,15 +46,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -96,12 +95,11 @@ namespace Gs2.Gs2Inbox.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Inbox.Model.Message> MessagesAsync(
-            #else
+        #else
         public DescribeMessagesByUserIdIterator MessagesAsync(
-            #endif
+        #endif
             bool? isRead = null,
             string timeOffsetToken = null
         )
@@ -115,7 +113,6 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 timeOffsetToken
             );
         }
-        #endif
 
         public ulong SubscribeMessages(
             Action<Gs2.Gs2Inbox.Model.Message[]> callback,
@@ -131,10 +128,15 @@ namespace Gs2.Gs2Inbox.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await MessagesAsync(
                                 isRead
                             ).ToArrayAsync());
@@ -144,13 +146,15 @@ namespace Gs2.Gs2Inbox.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeMessagesWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeMessagesWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Inbox.Model.Message[]> callback,
             bool? isRead = null
         )
@@ -165,7 +169,6 @@ namespace Gs2.Gs2Inbox.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeMessages(
             ulong callbackId,
@@ -222,44 +225,14 @@ namespace Gs2.Gs2Inbox.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Inbox.Domain.Model.MessageDomain> SendMessageFuture(
             SendMessageByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Inbox.Domain.Model.MessageDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.SendMessageByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Inbox.Domain.Model.MessageDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    result?.Item?.UserId,
-                    result?.Item?.Name
-                );
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Inbox.Domain.Model.MessageDomain>(Impl);
-        }
+        ) => SendMessageAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Inbox.Domain.Model.MessageDomain> SendMessageAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Inbox.Domain.Model.MessageDomain> SendMessageAsync(
-            #endif
+        #endif
             SendMessageByUserIdRequest request
         ) {
             request = request
@@ -281,64 +254,18 @@ namespace Gs2.Gs2Inbox.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Inbox.Domain.Model.MessageDomain[]> ReceiveGlobalMessageFuture(
             ReceiveGlobalMessageByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Inbox.Domain.Model.MessageDomain[]> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.ReceiveGlobalMessageByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                _gs2.Cache.ClearListCache<Gs2.Gs2Inbox.Model.Message>(
-                    (null as Gs2.Gs2Inbox.Model.Message).CacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        null
-                    )
-                );
-                _gs2.Cache.Delete<Gs2.Gs2Inbox.Model.Received>(
-                    (null as Gs2.Gs2Inbox.Model.Received).CacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        null
-                    ),
-                    (null as Gs2.Gs2Inbox.Model.Received).CacheKey(
-                    )
-                );
-                var domain = result?.Item?.Select(v => new Gs2.Gs2Inbox.Domain.Model.MessageDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    v?.UserId,
-                    v?.Name
-                )).ToArray() ?? Array.Empty<Gs2.Gs2Inbox.Domain.Model.MessageDomain>();
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Inbox.Domain.Model.MessageDomain[]>(Impl);
-        }
+        ) => ReceiveGlobalMessageAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Inbox.Domain.Model.MessageDomain[]> ReceiveGlobalMessageAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Inbox.Domain.Model.MessageDomain[]> ReceiveGlobalMessageAsync(
-            #endif
+        #endif
             ReceiveGlobalMessageByUserIdRequest request
         ) {
             request = request
@@ -375,62 +302,18 @@ namespace Gs2.Gs2Inbox.Domain.Model
             )).ToArray() ?? Array.Empty<Gs2.Gs2Inbox.Domain.Model.MessageDomain>();
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Core.Domain.TransactionDomain> BatchReadMessagesFuture(
             BatchReadMessagesByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.BatchReadMessagesByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
-                    this._gs2,
-                    this.UserId,
-                    result.AutoRunStampSheet ?? false,
-                    result.TransactionId,
-                    result.StampSheet,
-                    result.StampSheetEncryptionKeyId,
-                    result.AtomicCommit,
-                    result.TransactionResult,
-                    result.Metadata
-                );
-                if (result.StampSheet != null) {
-                    var future2 = transaction.WaitFuture(true);
-                    yield return future2;
-                    if (future2.Error != null)
-                    {
-                        self.OnError(future2.Error);
-                        yield break;
-                    }
-                }
-                self.OnComplete(transaction);
-            }
-            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionDomain>(Impl);
-        }
+        ) => BatchReadMessagesAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Core.Domain.TransactionDomain> BatchReadMessagesAsync(
-            #else
+        #else
         public async Task<Gs2.Core.Domain.TransactionDomain> BatchReadMessagesAsync(
-            #endif
+        #endif
             BatchReadMessagesByUserIdRequest request
         ) {
             request = request
@@ -459,7 +342,6 @@ namespace Gs2.Gs2Inbox.Domain.Model
             }
             return transaction;
         }
-        #endif
 
     }
 

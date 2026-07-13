@@ -12,9 +12,11 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
+
+#pragma warning disable CS0618 // Obsolete with a message
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,8 +33,30 @@ namespace Gs2.Gs2Version.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class VersionModelMaster : IComparable
+/* diff --- start
+	public partial class VersionModelMaster : IComparable
+ diff --- end */
+	public class VersionModelMaster : IComparable /* diff +++ */
 	{
+/* diff --- start
+        public string VersionModelId { set; get; }
+        public string Name { set; get; }
+        public string Description { set; get; }
+        public string Metadata { set; get; }
+        public string Scope { set; get; }
+        public string Type { set; get; }
+        public Gs2.Gs2Version.Model.Version_ CurrentVersion { set; get; }
+        public Gs2.Gs2Version.Model.Version_ WarningVersion { set; get; }
+        public Gs2.Gs2Version.Model.Version_ ErrorVersion { set; get; }
+        public Gs2.Gs2Version.Model.ScheduleVersion[] ScheduleVersions { set; get; }
+        public bool? NeedSignature { set; get; }
+        public string SignatureKeyId { set; get; }
+        public string ApproveRequirement { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
+ diff --- end */
+/* diff +++ start */
         public string VersionModelId { set; get; } = null!;
         public string Name { set; get; } = null!;
         public string Description { set; get; } = null!;
@@ -49,6 +73,7 @@ namespace Gs2.Gs2Version.Model
         public long? CreatedAt { set; get; } = null!;
         public long? UpdatedAt { set; get; } = null!;
         public long? Revision { set; get; } = null!;
+/* diff +++ end */
         public VersionModelMaster WithVersionModelId(string versionModelId) {
             this.VersionModelId = versionModelId;
             return this;
@@ -524,7 +549,10 @@ namespace Gs2.Gs2Version.Model
             }
             if (Scope == "passive") {
             }
-            if (NeedSignature ?? false) {
+/* diff --- start
+            if (NeedSignature) {
+ diff --- end */
+            if (NeedSignature ?? false) { /* diff +++ */
                 if (SignatureKeyId.Length > 1024) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("versionModelMaster", "version.versionModelMaster.signatureKeyId.error.tooLong"),
@@ -588,9 +616,9 @@ namespace Gs2.Gs2Version.Model
                 Metadata = Metadata,
                 Scope = Scope,
                 Type = Type,
-                CurrentVersion = CurrentVersion.Clone() as Gs2.Gs2Version.Model.Version_,
-                WarningVersion = WarningVersion.Clone() as Gs2.Gs2Version.Model.Version_,
-                ErrorVersion = ErrorVersion.Clone() as Gs2.Gs2Version.Model.Version_,
+                CurrentVersion = CurrentVersion?.Clone() as Gs2.Gs2Version.Model.Version_,
+                WarningVersion = WarningVersion?.Clone() as Gs2.Gs2Version.Model.Version_,
+                ErrorVersion = ErrorVersion?.Clone() as Gs2.Gs2Version.Model.Version_,
                 ScheduleVersions = ScheduleVersions?.Clone() as Gs2.Gs2Version.Model.ScheduleVersion[],
                 NeedSignature = NeedSignature,
                 SignatureKeyId = SignatureKeyId,

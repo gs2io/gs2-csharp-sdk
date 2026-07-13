@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -28,10 +27,10 @@ using Gs2.Gs2Friend.Request;
 using Gs2.Gs2Friend.Result;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -51,9 +50,13 @@ namespace Gs2.Gs2Friend.Model.Cache
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                self.Item.UserId,
+/* diff --- start
+                userId,
+ diff --- end */
+                self.Item.UserId, /* diff +++ */
                 timeOffset
             );
+/* diff +++ start */
             if (self.Item != null) {
                 new PublicProfile {
                     UserId = self.Item.UserId,
@@ -65,6 +68,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     timeOffset
                 );
             }
+/* diff +++ end */
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -98,21 +102,22 @@ namespace Gs2.Gs2Friend.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<GetProfileResult> InvokeAsync(
-    #else
+#else
         public static async Task<GetProfileResult> InvokeAsync(
-    #endif
+#endif
             this GetProfileRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<GetProfileResult>> invokeImpl
-    #else
+#elif UNITY_2017_1_OR_NEWER
+            Func<TaskFuture<GetProfileResult>> invokeImpl
+#else
             Func<Task<GetProfileResult>> invokeImpl
-    #endif
+#endif
         )
         {
             var result = await invokeImpl();
@@ -124,6 +129,5 @@ namespace Gs2.Gs2Friend.Model.Cache
             );
             return result;
         }
-#endif
     }
 }

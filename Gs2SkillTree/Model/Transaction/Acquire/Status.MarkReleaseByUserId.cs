@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -48,6 +47,15 @@ namespace Gs2.Gs2SkillTree.Model.Transaction
             this Status self,
             MarkReleaseByUserIdRequest request
         ) {
+/* diff --- start
+//#if UNITY_2017_1_OR_NEWER
+            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: Gs2SkillTree:MarkReleaseByUserId");
+//#else
+            System.Console.WriteLine("Speculative execution not supported on this action: Gs2SkillTree:MarkReleaseByUserId");
+//#endif
+            return self.Clone() as Status;
+ diff --- end */
+/* diff +++ start */
             var clone = self.Clone() as Status;
             if (clone == null)
             {
@@ -60,6 +68,7 @@ namespace Gs2.Gs2SkillTree.Model.Transaction
             clone.ReleasedNodeNames = clone.ReleasedNodeNames.Concat(request.NodeModelNames).ToArray();
 
             return clone;
+/* diff +++ end */
         }
 
         public static MarkReleaseByUserIdRequest Rate(

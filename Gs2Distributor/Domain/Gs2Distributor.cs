@@ -51,11 +51,11 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Scripting;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -83,37 +83,14 @@ namespace Gs2.Gs2Distributor.Domain
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Distributor.Domain.Model.NamespaceDomain> CreateNamespaceFuture(
             CreateNamespaceRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Distributor.Domain.Model.NamespaceDomain> self)
-            {
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.CreateNamespaceFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Distributor.Domain.Model.NamespaceDomain(
-                    this._gs2,
-                    result?.Item?.Name
-                );
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Distributor.Domain.Model.NamespaceDomain>(Impl);
-        }
+        ) => CreateNamespaceAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Distributor.Domain.Model.NamespaceDomain> CreateNamespaceAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Distributor.Domain.Model.NamespaceDomain> CreateNamespaceAsync(
-            #endif
+        #endif
             CreateNamespaceRequest request
         ) {
             var result = await request.InvokeAsync(
@@ -128,7 +105,6 @@ namespace Gs2.Gs2Distributor.Domain
             );
             return domain;
         }
-        #endif
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Distributor.Model.Namespace> Namespaces(
         )
@@ -341,253 +317,14 @@ namespace Gs2.Gs2Distributor.Domain
     #if UNITY_2017_1_OR_NEWER
         public Gs2Future DispatchFuture(
             AccessToken accessToken
-        )
-        {
-            AutoRunStampSheetNotification[] copiedCompletedStampSheets;
-
-            IEnumerator Impl(Gs2Future self)
-            {
-                AutoRunStampSheetNotification[] copiedCompletedStampSheets = null;
-
-                lock (_completedStampSheets)
-                {
-                    if (_completedStampSheets.Count > 0) {
-                        copiedCompletedStampSheets = new AutoRunStampSheetNotification[_completedStampSheets.Count];
-                        _completedStampSheets.Where(v => v.UserId == accessToken.UserId).ToList().CopyTo(copiedCompletedStampSheets);
-                        foreach (var copiedCompletedStampSheet in copiedCompletedStampSheets) {
-                            _completedStampSheets.Remove(copiedCompletedStampSheet);
-                        }
-                    }
-                }
-
-                foreach (var completedStampSheet in copiedCompletedStampSheets ?? Array.Empty<AutoRunStampSheetNotification>()) {
-                    if (completedStampSheet == null) continue;
-                    {
-                        for (var i = 0; i < 3; i++) {
-                            var future = _gs2.Distributor.Namespace(
-                                completedStampSheet.NamespaceName
-                            ).AccessToken(
-                                accessToken
-                            ).StampSheetResult(
-                                completedStampSheet.TransactionId
-                            ).ModelNoCacheFuture();
-                            yield return future;
-                            if (future.Error != null) {
-                                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                                }
-                                else {
-                                    self.OnError(future.Error);
-                                }
-                                yield break;
-                            }
-                            if (future.Result != null) break;
-                        }
-                    }
-                    {
-                        var autoRun = new AutoStampSheetAccessTokenDomain(
-                            _gs2,
-                            accessToken,
-                            completedStampSheet.TransactionId
-                        );
-                        var future = autoRun.WaitFuture();
-                        yield return future;
-                        if (future.Error != null) {
-                            if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                            }
-                            else {
-                                self.OnError(future.Error);
-                            }
-                            yield break;
-                        }
-                    }
-                }
-                
-                AutoRunTransactionNotification[] copiedCompletedTransactions = null;
-
-                lock (_completedTransactions)
-                {
-                    if (_completedTransactions.Count > 0) {
-                        copiedCompletedTransactions = new AutoRunTransactionNotification[_completedTransactions.Count];
-                        _completedTransactions.Where(v => v.UserId == accessToken.UserId).ToList().CopyTo(copiedCompletedTransactions);
-                        foreach (var copiedCompletedTransaction in copiedCompletedTransactions) {
-                            _completedTransactions.Remove(copiedCompletedTransaction);
-                        }
-                    }
-                }
-
-                foreach (var completedTransaction in copiedCompletedTransactions ?? Array.Empty<AutoRunTransactionNotification>()) {
-                    if (completedTransaction == null) continue;
-                    {
-                        for (var i = 0; i < 3; i++) {
-                            var future = _gs2.Distributor.Namespace(
-                                completedTransaction.NamespaceName
-                            ).AccessToken(
-                                accessToken
-                            ).TransactionResult(
-                                completedTransaction.TransactionId
-                            ).ModelNoCacheFuture();
-                            yield return future;
-                            if (future.Error != null) {
-                                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                                }
-                                else {
-                                    self.OnError(future.Error);
-                                }
-                                yield break;
-                            }
-                            if (future.Result != null) break;
-                        }
-                    }
-                    {
-                        var autoRun = new AutoTransactionAccessTokenDomain(
-                            _gs2,
-                            accessToken,
-                            completedTransaction.TransactionId
-                        );
-                        var future = autoRun.WaitFuture();
-                        yield return future;
-                        if (future.Error != null) {
-                            if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                            }
-                            else {
-                                self.OnError(future.Error);
-                            }
-                            yield break;
-                        }
-                    }
-                }
-            }
-
-            return new Gs2InlineFuture(Impl);
-        }
-        
-        public Gs2Future DispatchByUserIdFuture(
-            string userId
-        )
-        {
-            IEnumerator Impl(Gs2Future self)
-            {
-                AutoRunStampSheetNotification[] copiedCompletedStampSheets = null;
-
-                lock (_completedStampSheets)
-                {
-                    if (_completedStampSheets.Count > 0) {
-                        copiedCompletedStampSheets = new AutoRunStampSheetNotification[_completedStampSheets.Count];
-                        _completedStampSheets.Where(v => v.UserId == userId).ToList().CopyTo(copiedCompletedStampSheets);
-                        foreach (var copiedCompletedStampSheet in copiedCompletedStampSheets) {
-                            _completedStampSheets.Remove(copiedCompletedStampSheet);
-                        }
-                    }
-                }
-
-                foreach (var completedStampSheet in copiedCompletedStampSheets ?? Array.Empty<AutoRunStampSheetNotification>()) {
-                    if (completedStampSheet == null) continue;
-                    {
-                        for (var i = 0; i < 3; i++) {
-                            var future = _gs2.Distributor.Namespace(
-                                completedStampSheet.NamespaceName
-                            ).User(
-                                userId
-                            ).StampSheetResult(
-                                completedStampSheet.TransactionId
-                            ).ModelNoCacheFuture();
-                            yield return future;
-                            if (future.Error != null) {
-                                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                                }
-                                else {
-                                    self.OnError(future.Error);
-                                    yield break;
-                                }
-                            }
-                            if (future.Result != null) break;
-                        }
-                    }
-                    {
-                        var autoRun = new AutoStampSheetDomain(
-                            _gs2,
-                            userId,
-                            completedStampSheet.TransactionId
-                        );
-                        var future = autoRun.WaitFuture();
-                        yield return future;
-                        if (future.Error != null) {
-                            if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                            }
-                            else {
-                                self.OnError(future.Error);
-                            }
-                            yield break;
-                        }
-                    }
-                }
-                
-                AutoRunTransactionNotification[] copiedCompletedTransactions = null;
-
-                lock (_completedTransactions)
-                {
-                    if (_completedTransactions.Count > 0) {
-                        copiedCompletedTransactions = new AutoRunTransactionNotification[_completedTransactions.Count];
-                        _completedTransactions.Where(v => v.UserId == userId).ToList().CopyTo(copiedCompletedTransactions);
-                        foreach (var copiedCompletedTransaction in copiedCompletedTransactions) {
-                            _completedTransactions.Remove(copiedCompletedTransaction);
-                        }
-                    }
-                }
-
-                foreach (var completedTransaction in copiedCompletedTransactions ?? Array.Empty<AutoRunTransactionNotification>()) {
-                    if (completedTransaction == null) continue;
-                    {
-                        for (var i = 0; i < 3; i++) {
-                            var future = _gs2.Distributor.Namespace(
-                                completedTransaction.NamespaceName
-                            ).User(
-                                userId
-                            ).TransactionResult(
-                                completedTransaction.TransactionId
-                            ).ModelNoCacheFuture();
-                            yield return future;
-                            if (future.Error != null) {
-                                if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                                }
-                                else {
-                                    self.OnError(future.Error);
-                                    yield break;
-                                }
-                            }
-                            if (future.Result != null) break;
-                        }
-                    }
-                    {
-                        var autoRun = new AutoTransactionDomain(
-                            _gs2,
-                            userId,
-                            completedTransaction.TransactionId
-                        );
-                        var future = autoRun.WaitFuture();
-                        yield return future;
-                        if (future.Error != null) {
-                            if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                            }
-                            else {
-                                self.OnError(future.Error);
-                            }
-                            yield break;
-                        }
-                    }
-                }
-            }
-
-            return new Gs2InlineFuture(Impl);
-        }
+        ) => DispatchAsync(accessToken).ToGs2Future();
     #endif
 
-    #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-        #if UNITY_2017_1_OR_NEWER
+    #if GS2_ENABLE_UNITASK
         public async UniTask DispatchAsync(
-        #else
+    #else
         public async Task DispatchAsync(
-        #endif
+    #endif
             AccessToken accessToken
         )
         {
@@ -610,27 +347,25 @@ namespace Gs2.Gs2Distributor.Domain
                 var autoRun = new AutoStampSheetAccessTokenDomain(
                     _gs2,
                     accessToken,
-                    completedStampSheet.TransactionId
+                    completedStampSheet.TransactionId,
+                    completedStampSheet.NamespaceName
                 );
                 try
                 {
-                    for (var i = 0; i < 3; i++) {
-                        var item = await _gs2.Distributor.Namespace(
-                            completedStampSheet.NamespaceName
-                        ).AccessToken(
-                            accessToken
-                        ).StampSheetResult(
-                            completedStampSheet.TransactionId
-                        ).ModelNoCacheAsync();
-                        if (item != null) break;
-                    }
+                    _gs2.Distributor.Namespace(
+                        completedStampSheet.NamespaceName
+                    ).AccessToken(
+                        accessToken
+                    ).StampSheetResult(
+                        completedStampSheet.TransactionId
+                    ).Invalidate();
                     await autoRun.WaitAsync();
                 }
                 catch (NotFoundException)
                 {
                 }
             }
-            
+
             AutoRunTransactionNotification[] copiedCompletedTransactions = null;
 
             lock (_completedTransactions)
@@ -649,20 +384,18 @@ namespace Gs2.Gs2Distributor.Domain
                 var autoRun = new AutoTransactionAccessTokenDomain(
                     _gs2,
                     accessToken,
-                    completedTransaction.TransactionId
+                    completedTransaction.TransactionId,
+                    completedTransaction.NamespaceName
                 );
                 try
                 {
-                    for (var i = 0; i < 3; i++) {
-                        var item = await _gs2.Distributor.Namespace(
-                            completedTransaction.NamespaceName
-                        ).AccessToken(
-                            accessToken
-                        ).TransactionResult(
-                            completedTransaction.TransactionId
-                        ).ModelNoCacheAsync();
-                        if (item != null) break;
-                    }
+                    _gs2.Distributor.Namespace(
+                        completedTransaction.NamespaceName
+                    ).AccessToken(
+                        accessToken
+                    ).TransactionResult(
+                        completedTransaction.TransactionId
+                    ).Invalidate();
                     await autoRun.WaitAsync();
                 }
                 catch (NotFoundException)
@@ -670,12 +403,18 @@ namespace Gs2.Gs2Distributor.Domain
                 }
             }
         }
-        
-        #if UNITY_2017_1_OR_NEWER
+
+    #if UNITY_2017_1_OR_NEWER
+        public Gs2Future DispatchByUserIdFuture(
+            string userId
+        ) => DispatchByUserIdAsync(userId).ToGs2Future();
+    #endif
+
+    #if GS2_ENABLE_UNITASK
         public async UniTask DispatchByUserIdAsync(
-        #else
+    #else
         public async Task DispatchByUserIdAsync(
-        #endif
+    #endif
             string userId
         )
         {
@@ -697,27 +436,25 @@ namespace Gs2.Gs2Distributor.Domain
                 var autoRun = new AutoStampSheetDomain(
                     _gs2,
                     userId,
-                    completedStampSheet.TransactionId
+                    completedStampSheet.TransactionId,
+                    completedStampSheet.NamespaceName
                 );
                 try
                 {
-                    for (var i = 0; i < 3; i++) {
-                        var item = await _gs2.Distributor.Namespace(
-                            completedStampSheet.NamespaceName
-                        ).User(
-                            userId
-                        ).StampSheetResult(
-                            completedStampSheet.TransactionId
-                        ).ModelNoCacheAsync();
-                        if (item != null) break;
-                    }
+                    _gs2.Distributor.Namespace(
+                        completedStampSheet.NamespaceName
+                    ).User(
+                        userId
+                    ).StampSheetResult(
+                        completedStampSheet.TransactionId
+                    ).Invalidate();
                     await autoRun.WaitAsync();
                 }
                 catch (NotFoundException)
                 {
                 }
             }
-            
+
             AutoRunTransactionNotification[] copiedCompletedTransactions = null;
 
             lock (_completedTransactions)
@@ -736,20 +473,18 @@ namespace Gs2.Gs2Distributor.Domain
                 var autoRun = new AutoTransactionDomain(
                     _gs2,
                     userId,
-                    completedTransaction.TransactionId
+                    completedTransaction.TransactionId,
+                    completedTransaction.NamespaceName
                 );
                 try
                 {
-                    for (var i = 0; i < 3; i++) {
-                        var item = await _gs2.Distributor.Namespace(
-                            completedTransaction.NamespaceName
-                        ).User(
-                            userId
-                        ).TransactionResult(
-                            completedTransaction.TransactionId
-                        ).ModelNoCacheAsync();
-                        if (item != null) break;
-                    }
+                    _gs2.Distributor.Namespace(
+                        completedTransaction.NamespaceName
+                    ).User(
+                        userId
+                    ).TransactionResult(
+                        completedTransaction.TransactionId
+                    ).Invalidate();
                     await autoRun.WaitAsync();
                 }
                 catch (NotFoundException)
@@ -757,6 +492,5 @@ namespace Gs2.Gs2Distributor.Domain
                 }
             }
         }
-    #endif
     }
 }

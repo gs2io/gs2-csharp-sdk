@@ -27,6 +27,7 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -45,14 +46,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -93,50 +92,14 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Ranking2.Domain.Model.ClusterRankingDataAccessTokenDomain> GetClusterRankingFuture(
             GetClusterRankingRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Ranking2.Domain.Model.ClusterRankingDataAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithRankingName(this.RankingName)
-                    .WithClusterName(this.ClusterName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithSeason(this.Season);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.GetClusterRankingFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Ranking2.Domain.Model.ClusterRankingDataAccessTokenDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    result?.Item?.RankingName,
-                    result?.Item?.ClusterName,
-                    result?.Item?.Season,
-                    this.AccessToken,
-                    result?.Item?.UserId
-                );
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Ranking2.Domain.Model.ClusterRankingDataAccessTokenDomain>(Impl);
-        }
+        ) => GetClusterRankingAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Ranking2.Domain.Model.ClusterRankingDataAccessTokenDomain> GetClusterRankingAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Ranking2.Domain.Model.ClusterRankingDataAccessTokenDomain> GetClusterRankingAsync(
-            #endif
+        #endif
             GetClusterRankingRequest request
         ) {
             request = request
@@ -164,53 +127,18 @@ namespace Gs2.Gs2Ranking2.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Ranking2.Domain.Model.ClusterRankingScoreAccessTokenDomain> PutClusterRankingScoreFuture(
             PutClusterRankingScoreRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Ranking2.Domain.Model.ClusterRankingScoreAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithRankingName(this.RankingName)
-                    .WithClusterName(this.ClusterName)
-                    .WithAccessToken(this.AccessToken?.Token);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.PutClusterRankingScoreFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Ranking2.Domain.Model.ClusterRankingScoreAccessTokenDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    result?.Item?.RankingName,
-                    result?.Item?.ClusterName,
-                    result?.Item?.Season,
-                    this.AccessToken
-                );
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Ranking2.Domain.Model.ClusterRankingScoreAccessTokenDomain>(Impl);
-        }
+        ) => PutClusterRankingScoreAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Ranking2.Domain.Model.ClusterRankingScoreAccessTokenDomain> PutClusterRankingScoreAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Ranking2.Domain.Model.ClusterRankingScoreAccessTokenDomain> PutClusterRankingScoreAsync(
-            #endif
+        #endif
             PutClusterRankingScoreRequest request
         ) {
             request = request
@@ -236,7 +164,6 @@ namespace Gs2.Gs2Ranking2.Domain.Model
 
             return domain;
         }
-        #endif
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Ranking2.Model.ClusterRankingData> ClusterRankings(
         )
@@ -253,12 +180,11 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Ranking2.Model.ClusterRankingData> ClusterRankingsAsync(
-            #else
+        #else
         public DescribeClusterRankingsIterator ClusterRankingsAsync(
-            #endif
+        #endif
         )
         {
             return new DescribeClusterRankingsIterator(
@@ -271,7 +197,6 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 this.Season
             );
         }
-        #endif
 
         public ulong SubscribeClusterRankings(
             Action<Gs2.Gs2Ranking2.Model.ClusterRankingData[]> callback
@@ -288,10 +213,15 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await ClusterRankingsAsync(
                             ).ToArrayAsync());
                         }
@@ -300,13 +230,15 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeClusterRankingsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeClusterRankingsWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Ranking2.Model.ClusterRankingData[]> callback
         )
         {
@@ -318,7 +250,6 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeClusterRankings(
             ulong callbackId
@@ -379,12 +310,11 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward> ClusterRankingReceivedRewardsAsync(
-            #else
+        #else
         public DescribeClusterRankingReceivedRewardsIterator ClusterRankingReceivedRewardsAsync(
-            #endif
+        #endif
         )
         {
             return new DescribeClusterRankingReceivedRewardsIterator(
@@ -397,7 +327,6 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 this.Season
             );
         }
-        #endif
 
         public ulong SubscribeClusterRankingReceivedRewards(
             Action<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward[]> callback
@@ -413,10 +342,15 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await ClusterRankingReceivedRewardsAsync(
                             ).ToArrayAsync());
                         }
@@ -425,13 +359,15 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeClusterRankingReceivedRewardsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeClusterRankingReceivedRewardsWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward[]> callback
         )
         {
@@ -443,7 +379,6 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeClusterRankingReceivedRewards(
             ulong callbackId
@@ -500,12 +435,11 @@ namespace Gs2.Gs2Ranking2.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Ranking2.Model.ClusterRankingScore> ClusterRankingScoresAsync(
-            #else
+        #else
         public DescribeClusterRankingScoresIterator ClusterRankingScoresAsync(
-            #endif
+        #endif
         )
         {
             return new DescribeClusterRankingScoresIterator(
@@ -518,7 +452,6 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 this.Season
             );
         }
-        #endif
 
         public ulong SubscribeClusterRankingScores(
             Action<Gs2.Gs2Ranking2.Model.ClusterRankingScore[]> callback
@@ -534,10 +467,15 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await ClusterRankingScoresAsync(
                             ).ToArrayAsync());
                         }
@@ -546,13 +484,15 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeClusterRankingScoresWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeClusterRankingScoresWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Ranking2.Model.ClusterRankingScore[]> callback
         )
         {
@@ -564,7 +504,6 @@ namespace Gs2.Gs2Ranking2.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeClusterRankingScores(
             ulong callbackId

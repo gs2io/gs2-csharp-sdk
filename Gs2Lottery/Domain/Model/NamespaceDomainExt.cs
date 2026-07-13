@@ -45,14 +45,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -73,7 +71,6 @@ namespace Gs2.Gs2Lottery.Domain.Model
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
     #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.DrawnPrize> DrawnPrizesAsync(
     #else
@@ -87,7 +84,6 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 this.NamespaceName
             );
         }
-#endif
         
         public Gs2.Gs2Lottery.Domain.Model.DrawnPrizeDomain DrawnPrize(
             int index

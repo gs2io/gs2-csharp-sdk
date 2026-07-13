@@ -45,14 +45,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -65,15 +63,10 @@ namespace Gs2.Gs2Ranking.Domain.Model
 #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Ranking.Model.Ranking> ModelFuture(
             string targetUserId
-        ) {
-            return this.Ranking(
-                targetUserId
-            ).ModelFuture();
-        }
+        ) => ModelAsync(targetUserId).ToGs2Future();
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+    #if GS2_ENABLE_UNITASK
         public UniTask<Gs2.Gs2Ranking.Model.Ranking> ModelAsync(
     #else
         public Task<Gs2.Gs2Ranking.Model.Ranking> ModelAsync(
@@ -84,7 +77,6 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 targetUserId
             ).ModelAsync();
         }
-#endif
         
     }
 }

@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -28,10 +27,10 @@ using Gs2.Gs2Guild.Request;
 using Gs2.Gs2Guild.Result;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -56,6 +55,10 @@ namespace Gs2.Gs2Guild.Model.Cache
                 request.FromUserId,
                 timeOffset
             );
+/* diff --- start
+            (null as Guild).DeleteCache(
+ diff --- end */
+/* diff +++ start */
             (null as SendMemberRequest).DeleteCache(
                 cache,
                 request.NamespaceName,
@@ -65,6 +68,7 @@ namespace Gs2.Gs2Guild.Model.Cache
                 timeOffset
             );
             self.Guild.DeleteCache(
+/* diff +++ end */
                 cache,
                 request.NamespaceName,
                 request.GuildModelName,
@@ -104,21 +108,22 @@ namespace Gs2.Gs2Guild.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<AcceptRequestByGuildNameResult> InvokeAsync(
-    #else
+#else
         public static async Task<AcceptRequestByGuildNameResult> InvokeAsync(
-    #endif
+#endif
             this AcceptRequestByGuildNameRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<AcceptRequestByGuildNameResult>> invokeImpl
-    #else
+#elif UNITY_2017_1_OR_NEWER
+            Func<TaskFuture<AcceptRequestByGuildNameResult>> invokeImpl
+#else
             Func<Task<AcceptRequestByGuildNameResult>> invokeImpl
-    #endif
+#endif
         )
         {
             var result = await invokeImpl();
@@ -130,6 +135,5 @@ namespace Gs2.Gs2Guild.Model.Cache
             );
             return result;
         }
-#endif
     }
 }

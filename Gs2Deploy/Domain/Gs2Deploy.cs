@@ -49,11 +49,11 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Scripting;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -80,36 +80,14 @@ namespace Gs2.Gs2Deploy.Domain
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2Deploy> PreCreateStackFuture(
             PreCreateStackRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2Deploy> self)
-            {
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.PreCreateStackFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                this.UploadToken = domain.UploadToken = result?.UploadToken;
-                this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2Deploy>(Impl);
-        }
+        ) => PreCreateStackAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2Deploy> PreCreateStackAsync(
-            #else
+        #else
         public async Task<Gs2Deploy> PreCreateStackAsync(
-            #endif
+        #endif
             PreCreateStackRequest request
         ) {
             var result = await request.InvokeAsync(
@@ -123,42 +101,18 @@ namespace Gs2.Gs2Deploy.Domain
             this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> CreateStackFuture(
             CreateStackRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
-            {
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.CreateStackFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Deploy.Domain.Model.StackDomain(
-                    this._gs2,
-                    result?.Item?.Name
-                );
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain>(Impl);
-        }
+        ) => CreateStackAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Deploy.Domain.Model.StackDomain> CreateStackAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Deploy.Domain.Model.StackDomain> CreateStackAsync(
-            #endif
+        #endif
             CreateStackRequest request
         ) {
             var result = await request.InvokeAsync(
@@ -173,42 +127,18 @@ namespace Gs2.Gs2Deploy.Domain
             );
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> CreateStackFromGitHubFuture(
             CreateStackFromGitHubRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
-            {
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.CreateStackFromGitHubFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Deploy.Domain.Model.StackDomain(
-                    this._gs2,
-                    result?.Item?.Name
-                );
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain>(Impl);
-        }
+        ) => CreateStackFromGitHubAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Deploy.Domain.Model.StackDomain> CreateStackFromGitHubAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Deploy.Domain.Model.StackDomain> CreateStackFromGitHubAsync(
-            #endif
+        #endif
             CreateStackFromGitHubRequest request
         ) {
             var result = await request.InvokeAsync(
@@ -223,41 +153,18 @@ namespace Gs2.Gs2Deploy.Domain
             );
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2Deploy> PreValidateFuture(
             PreValidateRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2Deploy> self)
-            {
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.PreValidateFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                this.UploadToken = domain.UploadToken = result?.UploadToken;
-                this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2Deploy>(Impl);
-        }
+        ) => PreValidateAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2Deploy> PreValidateAsync(
-            #else
+        #else
         public async Task<Gs2Deploy> PreValidateAsync(
-            #endif
+        #endif
             PreValidateRequest request
         ) {
             var result = await request.InvokeAsync(
@@ -271,39 +178,18 @@ namespace Gs2.Gs2Deploy.Domain
             this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2Deploy> ValidateFuture(
             ValidateRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2Deploy> self)
-            {
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.ValidateFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2Deploy>(Impl);
-        }
+        ) => ValidateAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2Deploy> ValidateAsync(
-            #else
+        #else
         public async Task<Gs2Deploy> ValidateAsync(
-            #endif
+        #endif
             ValidateRequest request
         ) {
             var result = await request.InvokeAsync(
@@ -315,7 +201,6 @@ namespace Gs2.Gs2Deploy.Domain
             var domain = this;
             return domain;
         }
-        #endif
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Deploy.Model.Stack> Stacks(
             string namePrefix = null
@@ -329,12 +214,11 @@ namespace Gs2.Gs2Deploy.Domain
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Deploy.Model.Stack> StacksAsync(
-            #else
+        #else
         public DescribeStacksIterator StacksAsync(
-            #endif
+        #endif
             string namePrefix = null
         )
         {
@@ -344,7 +228,6 @@ namespace Gs2.Gs2Deploy.Domain
                 namePrefix
             );
         }
-        #endif
 
         public ulong SubscribeStacks(
             Action<Gs2.Gs2Deploy.Model.Stack[]> callback,
@@ -358,10 +241,15 @@ namespace Gs2.Gs2Deploy.Domain
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await StacksAsync(
                                 namePrefix
                             ).ToArrayAsync());
@@ -371,13 +259,15 @@ namespace Gs2.Gs2Deploy.Domain
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeStacksWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeStacksWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Deploy.Model.Stack[]> callback,
             string namePrefix = null
         )
@@ -392,7 +282,6 @@ namespace Gs2.Gs2Deploy.Domain
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeStacks(
             ulong callbackId,

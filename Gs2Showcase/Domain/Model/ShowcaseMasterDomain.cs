@@ -27,6 +27,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -44,15 +46,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -86,37 +85,14 @@ namespace Gs2.Gs2Showcase.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Showcase.Model.ShowcaseMaster> GetFuture(
             GetShowcaseMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Model.ShowcaseMaster> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithShowcaseName(this.ShowcaseName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.GetShowcaseMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Showcase.Model.ShowcaseMaster>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Showcase.Model.ShowcaseMaster> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Showcase.Model.ShowcaseMaster> GetAsync(
-            #endif
+        #endif
             GetShowcaseMasterRequest request
         ) {
             request = request
@@ -131,44 +107,18 @@ namespace Gs2.Gs2Showcase.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Showcase.Domain.Model.ShowcaseMasterDomain> UpdateFuture(
             UpdateShowcaseMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Domain.Model.ShowcaseMasterDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithShowcaseName(this.ShowcaseName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.UpdateShowcaseMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Showcase.Domain.Model.ShowcaseMasterDomain>(Impl);
-        }
+        ) => UpdateAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Showcase.Domain.Model.ShowcaseMasterDomain> UpdateAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Showcase.Domain.Model.ShowcaseMasterDomain> UpdateAsync(
-            #endif
+        #endif
             UpdateShowcaseMasterRequest request
         ) {
             request = request
@@ -185,46 +135,18 @@ namespace Gs2.Gs2Showcase.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Showcase.Domain.Model.ShowcaseMasterDomain> DeleteFuture(
             DeleteShowcaseMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Domain.Model.ShowcaseMasterDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithShowcaseName(this.ShowcaseName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.DeleteShowcaseMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    if (!(future.Error is NotFoundException)) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Showcase.Domain.Model.ShowcaseMasterDomain>(Impl);
-        }
+        ) => DeleteAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Showcase.Domain.Model.ShowcaseMasterDomain> DeleteAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Showcase.Domain.Model.ShowcaseMasterDomain> DeleteAsync(
-            #endif
+        #endif
             DeleteShowcaseMasterRequest request
         ) {
             try {
@@ -243,53 +165,20 @@ namespace Gs2.Gs2Showcase.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
     }
 
     public partial class ShowcaseMasterDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Showcase.Model.ShowcaseMaster> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Showcase.Model.ShowcaseMaster> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Showcase.Model.ShowcaseMaster).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.ShowcaseName,
-                    null
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2Showcase.Model.ShowcaseMaster).FetchFuture(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.ShowcaseName,
-                    null,
-                    () => this.GetFuture(
-                        new GetShowcaseMasterRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Showcase.Model.ShowcaseMaster>(Impl);
-        }
+        public IFuture<Gs2.Gs2Showcase.Model.ShowcaseMaster> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Showcase.Model.ShowcaseMaster> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Showcase.Model.ShowcaseMaster> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Showcase.Model.ShowcaseMaster>(
                         (null as Gs2.Gs2Showcase.Model.ShowcaseMaster).CacheParentKey(
@@ -320,28 +209,18 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 );
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2Showcase.Model.ShowcaseMaster> Model()
-        {
-            return await ModelAsync();
-        }
+        public UniTask<Gs2.Gs2Showcase.Model.ShowcaseMaster> Model() => ModelAsync();
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2Showcase.Model.ShowcaseMaster> Model()
-        {
-            return ModelFuture();
-        }
+        public IFuture<Gs2.Gs2Showcase.Model.ShowcaseMaster> Model() => ModelFuture();
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2Showcase.Model.ShowcaseMaster> Model()
-        {
-            return await ModelAsync();
-        }
+        public Task<Gs2.Gs2Showcase.Model.ShowcaseMaster> Model() => ModelAsync();
         #endif
 
 
@@ -368,7 +247,6 @@ namespace Gs2.Gs2Showcase.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -381,12 +259,7 @@ namespace Gs2.Gs2Showcase.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -406,38 +279,21 @@ namespace Gs2.Gs2Showcase.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Showcase.Model.ShowcaseMaster> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Showcase.Model.ShowcaseMaster> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Showcase.Model.ShowcaseMaster> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Showcase.Model.ShowcaseMaster> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

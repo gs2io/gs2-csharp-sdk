@@ -27,6 +27,7 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -45,14 +46,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -83,39 +82,14 @@ namespace Gs2.Gs2Friend.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Friend.Domain.Model.BlackListAccessTokenDomain> RegisterFuture(
             RegisterBlackListRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.BlackListAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.RegisterBlackListFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Friend.Domain.Model.BlackListAccessTokenDomain>(Impl);
-        }
+        ) => RegisterAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Friend.Domain.Model.BlackListAccessTokenDomain> RegisterAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Friend.Domain.Model.BlackListAccessTokenDomain> RegisterAsync(
-            #endif
+        #endif
             RegisterBlackListRequest request
         ) {
             request = request
@@ -132,44 +106,18 @@ namespace Gs2.Gs2Friend.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Friend.Domain.Model.BlackListAccessTokenDomain> UnregisterFuture(
             UnregisterBlackListRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.BlackListAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.UnregisterBlackListFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Friend.Domain.Model.BlackListAccessTokenDomain>(Impl);
-        }
+        ) => UnregisterAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Friend.Domain.Model.BlackListAccessTokenDomain> UnregisterAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Friend.Domain.Model.BlackListAccessTokenDomain> UnregisterAsync(
-            #endif
+        #endif
             UnregisterBlackListRequest request
         ) {
             request = request
@@ -186,35 +134,16 @@ namespace Gs2.Gs2Friend.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Friend.Model.BlackList> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Friend.Model.BlackList> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Friend.Model.BlackList).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                self.OnComplete(null);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Friend.Model.BlackList>(Impl);
-        }
+        public IFuture<Gs2.Gs2Friend.Model.BlackList> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Friend.Model.BlackList> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Friend.Model.BlackList> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.BlackList>(
                         (null as Gs2.Gs2Friend.Model.BlackList).CacheParentKey(
@@ -237,28 +166,18 @@ namespace Gs2.Gs2Friend.Domain.Model
                 return null;
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2Friend.Model.BlackList> Model()
-        {
-            return await ModelAsync();
-        }
+        public UniTask<Gs2.Gs2Friend.Model.BlackList> Model() => ModelAsync();
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2Friend.Model.BlackList> Model()
-        {
-            return ModelFuture();
-        }
+        public IFuture<Gs2.Gs2Friend.Model.BlackList> Model() => ModelFuture();
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2Friend.Model.BlackList> Model()
-        {
-            return await ModelAsync();
-        }
+        public Task<Gs2.Gs2Friend.Model.BlackList> Model() => ModelAsync();
         #endif
 
 
@@ -285,7 +204,6 @@ namespace Gs2.Gs2Friend.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -298,12 +216,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -323,38 +236,21 @@ namespace Gs2.Gs2Friend.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Friend.Model.BlackList> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Friend.Model.BlackList> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Friend.Model.BlackList> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Friend.Model.BlackList> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

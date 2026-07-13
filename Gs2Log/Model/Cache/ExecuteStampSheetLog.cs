@@ -25,10 +25,10 @@ using Gs2.Core.Net;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -99,21 +99,20 @@ namespace Gs2.Gs2Log.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<ExecuteStampSheetLog> FetchAsync(
-    #else
+#else
         public static async Task<ExecuteStampSheetLog> FetchAsync(
-    #endif
+#endif
             this ExecuteStampSheetLog self,
             CacheDatabase cache,
             string namespaceName,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<ExecuteStampSheetLog>> fetchImpl
-    #else
+#else
             Func<Task<ExecuteStampSheetLog>> fetchImpl
-    #endif
+#endif
         ) {
             try {
                 var item = await fetchImpl();
@@ -136,7 +135,6 @@ namespace Gs2.Gs2Log.Model.Cache
                 return null;
             }
         }
-#endif
 
         public static Tuple<ExecuteStampSheetLog, bool> GetCache(
             this ExecuteStampSheetLog self,

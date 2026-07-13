@@ -27,6 +27,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -44,15 +46,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -94,12 +93,11 @@ namespace Gs2.Gs2Mission.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Mission.Model.MissionTaskModelMaster> MissionTaskModelMastersAsync(
-            #else
+        #else
         public DescribeMissionTaskModelMastersIterator MissionTaskModelMastersAsync(
-            #endif
+        #endif
             string namePrefix = null
         )
         {
@@ -111,7 +109,6 @@ namespace Gs2.Gs2Mission.Domain.Model
                 namePrefix
             );
         }
-        #endif
 
         public ulong SubscribeMissionTaskModelMasters(
             Action<Gs2.Gs2Mission.Model.MissionTaskModelMaster[]> callback,
@@ -127,10 +124,15 @@ namespace Gs2.Gs2Mission.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await MissionTaskModelMastersAsync(
                                 namePrefix
                             ).ToArrayAsync());
@@ -140,13 +142,15 @@ namespace Gs2.Gs2Mission.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeMissionTaskModelMastersWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeMissionTaskModelMastersWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Mission.Model.MissionTaskModelMaster[]> callback,
             string namePrefix = null
         )
@@ -161,7 +165,6 @@ namespace Gs2.Gs2Mission.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeMissionTaskModelMasters(
             ulong callbackId,
@@ -209,37 +212,14 @@ namespace Gs2.Gs2Mission.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Mission.Model.MissionGroupModelMaster> GetFuture(
             GetMissionGroupModelMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Mission.Model.MissionGroupModelMaster> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithMissionGroupName(this.MissionGroupName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.GetMissionGroupModelMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Mission.Model.MissionGroupModelMaster>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Mission.Model.MissionGroupModelMaster> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Mission.Model.MissionGroupModelMaster> GetAsync(
-            #endif
+        #endif
             GetMissionGroupModelMasterRequest request
         ) {
             request = request
@@ -254,44 +234,18 @@ namespace Gs2.Gs2Mission.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain> UpdateFuture(
             UpdateMissionGroupModelMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithMissionGroupName(this.MissionGroupName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.UpdateMissionGroupModelMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain>(Impl);
-        }
+        ) => UpdateAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain> UpdateAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain> UpdateAsync(
-            #endif
+        #endif
             UpdateMissionGroupModelMasterRequest request
         ) {
             request = request
@@ -308,46 +262,18 @@ namespace Gs2.Gs2Mission.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain> DeleteFuture(
             DeleteMissionGroupModelMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithMissionGroupName(this.MissionGroupName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.DeleteMissionGroupModelMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    if (!(future.Error is NotFoundException)) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain>(Impl);
-        }
+        ) => DeleteAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain> DeleteAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Mission.Domain.Model.MissionGroupModelMasterDomain> DeleteAsync(
-            #endif
+        #endif
             DeleteMissionGroupModelMasterRequest request
         ) {
             try {
@@ -366,49 +292,18 @@ namespace Gs2.Gs2Mission.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Mission.Domain.Model.MissionTaskModelMasterDomain> CreateMissionTaskModelMasterFuture(
             CreateMissionTaskModelMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Mission.Domain.Model.MissionTaskModelMasterDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithMissionGroupName(this.MissionGroupName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.CreateMissionTaskModelMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Mission.Domain.Model.MissionTaskModelMasterDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    this.MissionGroupName,
-                    result?.Item?.Name
-                );
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Mission.Domain.Model.MissionTaskModelMasterDomain>(Impl);
-        }
+        ) => CreateMissionTaskModelMasterAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Mission.Domain.Model.MissionTaskModelMasterDomain> CreateMissionTaskModelMasterAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Mission.Domain.Model.MissionTaskModelMasterDomain> CreateMissionTaskModelMasterAsync(
-            #endif
+        #endif
             CreateMissionTaskModelMasterRequest request
         ) {
             request = request
@@ -430,53 +325,20 @@ namespace Gs2.Gs2Mission.Domain.Model
 
             return domain;
         }
-        #endif
 
     }
 
     public partial class MissionGroupModelMasterDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Mission.Model.MissionGroupModelMaster> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Mission.Model.MissionGroupModelMaster> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Mission.Model.MissionGroupModelMaster).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.MissionGroupName,
-                    null
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2Mission.Model.MissionGroupModelMaster).FetchFuture(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.MissionGroupName,
-                    null,
-                    () => this.GetFuture(
-                        new GetMissionGroupModelMasterRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Mission.Model.MissionGroupModelMaster>(Impl);
-        }
+        public IFuture<Gs2.Gs2Mission.Model.MissionGroupModelMaster> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Mission.Model.MissionGroupModelMaster> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Mission.Model.MissionGroupModelMaster> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Mission.Model.MissionGroupModelMaster>(
                         (null as Gs2.Gs2Mission.Model.MissionGroupModelMaster).CacheParentKey(
@@ -507,28 +369,18 @@ namespace Gs2.Gs2Mission.Domain.Model
                 );
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2Mission.Model.MissionGroupModelMaster> Model()
-        {
-            return await ModelAsync();
-        }
+        public UniTask<Gs2.Gs2Mission.Model.MissionGroupModelMaster> Model() => ModelAsync();
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2Mission.Model.MissionGroupModelMaster> Model()
-        {
-            return ModelFuture();
-        }
+        public IFuture<Gs2.Gs2Mission.Model.MissionGroupModelMaster> Model() => ModelFuture();
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2Mission.Model.MissionGroupModelMaster> Model()
-        {
-            return await ModelAsync();
-        }
+        public Task<Gs2.Gs2Mission.Model.MissionGroupModelMaster> Model() => ModelAsync();
         #endif
 
 
@@ -555,7 +407,6 @@ namespace Gs2.Gs2Mission.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -568,12 +419,7 @@ namespace Gs2.Gs2Mission.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -593,38 +439,21 @@ namespace Gs2.Gs2Mission.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Mission.Model.MissionGroupModelMaster> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Mission.Model.MissionGroupModelMaster> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Mission.Model.MissionGroupModelMaster> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Mission.Model.MissionGroupModelMaster> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

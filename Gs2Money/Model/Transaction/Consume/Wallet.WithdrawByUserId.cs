@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -48,11 +47,20 @@ namespace Gs2.Gs2Money.Model.Transaction
             this Wallet self,
             WithdrawByUserIdRequest request
         ) {
+/* diff --- start
+            if (self.Clone() is not Wallet clone)
+ diff --- end */
+/* diff +++ start */
             var clone = self.Clone() as Wallet;
             if (clone == null)
+/* diff +++ end */
             {
                 throw new NullReferenceException();
             }
+/* diff --- start
+            clone.Total -= request.Count;
+ diff --- end */
+/* diff +++ start */
             if (request.PaidOnly ?? false) {
                 clone.Paid -= request.Count;
                 if (clone.Paid < 0) {
@@ -73,6 +81,7 @@ namespace Gs2.Gs2Money.Model.Transaction
                     }
                 }
             }
+/* diff +++ end */
             return clone;
         }
 

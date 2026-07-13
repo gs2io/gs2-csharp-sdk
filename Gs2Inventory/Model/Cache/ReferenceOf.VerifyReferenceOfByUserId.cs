@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -21,7 +20,7 @@
 #pragma warning disable CS1522 // Empty switch block
 
 using System;
-using System.Linq;
+using System.Linq; /* diff +++ */
 using Gs2.Core.Domain;
 using Gs2.Core.Net;
 using Gs2.Core.Util;
@@ -29,10 +28,10 @@ using Gs2.Gs2Inventory.Request;
 using Gs2.Gs2Inventory.Result;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -49,7 +48,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             int? timeOffset,
             VerifyReferenceOfByUserIdRequest request
         ) {
-            self.ItemSet.PutCache(
+            self.ItemSet?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.UserId,
@@ -58,18 +57,19 @@ namespace Gs2.Gs2Inventory.Model.Cache
                 request.ItemSetName,
                 timeOffset
             );
-            self.ItemModel.PutCache(
+            self.ItemModel?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.InventoryName,
                 request.ItemName,
                 timeOffset
             );
-            self.Inventory.PutCache(
+            self.Inventory?.PutCache(
                 cache,
                 request.NamespaceName,
                 request.UserId,
                 request.InventoryName,
+/* diff +++ start */
                 timeOffset
             );
             var referenceOf = new ReferenceOf().WithName(request.ReferenceOf);
@@ -81,6 +81,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                 request.ItemName,
                 request.ItemSetName,
                 referenceOf.Name,
+/* diff +++ end */
                 timeOffset
             );
         }
@@ -116,21 +117,22 @@ namespace Gs2.Gs2Inventory.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<VerifyReferenceOfByUserIdResult> InvokeAsync(
-    #else
+#else
         public static async Task<VerifyReferenceOfByUserIdResult> InvokeAsync(
-    #endif
+#endif
             this VerifyReferenceOfByUserIdRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<VerifyReferenceOfByUserIdResult>> invokeImpl
-    #else
+#elif UNITY_2017_1_OR_NEWER
+            Func<TaskFuture<VerifyReferenceOfByUserIdResult>> invokeImpl
+#else
             Func<Task<VerifyReferenceOfByUserIdResult>> invokeImpl
-    #endif
+#endif
         )
         {
             var result = await invokeImpl();
@@ -142,6 +144,5 @@ namespace Gs2.Gs2Inventory.Model.Cache
             );
             return result;
         }
-#endif
     }
 }

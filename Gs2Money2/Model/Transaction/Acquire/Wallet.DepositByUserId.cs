@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -52,6 +51,10 @@ namespace Gs2.Gs2Money2.Model.Transaction
             {
                 throw new NullReferenceException();
             }
+/* diff --- start
+            clone.Total += request.Count;
+ diff --- end */
+/* diff +++ start */
             foreach (var depositTransaction in request.DepositTransactions) {
                 if (depositTransaction.Price == 0) {
                     clone.Summary.Free += depositTransaction.Count;
@@ -61,6 +64,7 @@ namespace Gs2.Gs2Money2.Model.Transaction
                 }
                 clone.Summary.Total += depositTransaction.Count;
             }
+/* diff +++ end */
             return clone;
         }
 

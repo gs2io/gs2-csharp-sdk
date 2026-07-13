@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -28,10 +27,10 @@ using Gs2.Gs2Idle.Request;
 using Gs2.Gs2Idle.Result;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -48,7 +47,18 @@ namespace Gs2.Gs2Idle.Model.Cache
             int? timeOffset,
             PredictionRequest request
         ) {
+/* diff --- start
+            self.Status?.PutCache(
+                cache,
+                request.NamespaceName,
+                userId,
+                request.CategoryName,
+                timeOffset
+            );
+ diff --- end */
+/* diff +++ start */
             
+/* diff +++ end */
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -82,21 +92,22 @@ namespace Gs2.Gs2Idle.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<PredictionResult> InvokeAsync(
-    #else
+#else
         public static async Task<PredictionResult> InvokeAsync(
-    #endif
+#endif
             this PredictionRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<PredictionResult>> invokeImpl
-    #else
+#elif UNITY_2017_1_OR_NEWER
+            Func<TaskFuture<PredictionResult>> invokeImpl
+#else
             Func<Task<PredictionResult>> invokeImpl
-    #endif
+#endif
         )
         {
             var result = await invokeImpl();
@@ -108,6 +119,5 @@ namespace Gs2.Gs2Idle.Model.Cache
             );
             return result;
         }
-#endif
     }
 }

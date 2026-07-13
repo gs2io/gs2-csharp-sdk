@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -29,6 +28,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -46,15 +47,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -98,12 +96,11 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2JobQueue.Model.Job> JobsAsync(
-            #else
+        #else
         public DescribeJobsByUserIdIterator JobsAsync(
-            #endif
+        #endif
             string timeOffsetToken = null
         )
         {
@@ -115,7 +112,6 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 timeOffsetToken
             );
         }
-        #endif
 
         public ulong SubscribeJobs(
             Action<Gs2.Gs2JobQueue.Model.Job[]> callback
@@ -130,24 +126,35 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
-                            callback.Invoke(await JobsAsync().ToArrayAsync());
+        #endif
+/* diff --- start
+                            callback.Invoke(await JobsAsync(
+                            ).ToArrayAsync());
+ diff --- end */
+                            callback.Invoke(await JobsAsync().ToArrayAsync()); /* diff +++ */
                         }
                         catch (System.Exception) {
                             // ignored
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeJobsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeJobsWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2JobQueue.Model.Job[]> callback
         )
         {
@@ -159,7 +166,6 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeJobs(
             ulong callbackId
@@ -205,50 +211,14 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2JobQueue.Domain.Model.JobDomain[]> PushFuture(
             PushByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Domain.Model.JobDomain[]> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.PushByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = result?.Items?.Select(v => new Gs2.Gs2JobQueue.Domain.Model.JobDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    v?.UserId,
-                    v?.Name
-                )).ToArray() ?? Array.Empty<Gs2.Gs2JobQueue.Domain.Model.JobDomain>();
-                if (result.AutoRun != null && !result.AutoRun.Value)
-                {
-                    this._gs2.JobQueueDomain.Push(
-                        this.NamespaceName
-                    );
-                }
-                this.AutoRun = result?.AutoRun;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2JobQueue.Domain.Model.JobDomain[]>(Impl);
-        }
+        ) => PushAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2JobQueue.Domain.Model.JobDomain[]> PushAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2JobQueue.Domain.Model.JobDomain[]> PushAsync(
-            #endif
+        #endif
             PushByUserIdRequest request
         ) {
             request = request
@@ -276,58 +246,18 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             this.AutoRun = result?.AutoRun;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2JobQueue.Domain.Model.JobDomain> RunFuture(
             RunByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Domain.Model.JobDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.RunByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                if (result?.Item != null) {
-                    this._gs2.UpdateCacheFromJobResult(
-                        null,
-                        result?.Item,
-                        result?.Result
-                    );
-                }
-                var domain = new Gs2.Gs2JobQueue.Domain.Model.JobDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    result?.Item?.UserId,
-                    result?.Item?.Name
-                );
-                domain.Result = result?.Result;
-                domain.IsLastJob = result?.IsLastJob;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2JobQueue.Domain.Model.JobDomain>(Impl);
-        }
+        ) => RunAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2JobQueue.Domain.Model.JobDomain> RunAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2JobQueue.Domain.Model.JobDomain> RunAsync(
-            #endif
+        #endif
             RunByUserIdRequest request
         ) {
             request = request
@@ -342,7 +272,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             );
             if (result?.Item != null) {
                 this._gs2.UpdateCacheFromJobResult(
-                    null,
+                    null, /* diff +++ */
                     result?.Item,
                     result?.Result
                 );
@@ -353,12 +283,12 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 result?.Item?.UserId,
                 result?.Item?.Name
             );
-            domain.Result = result?.Result;
+            domain.Item = result?.Item; /* diff +++ */
+            domain.Result = result?.Result; /* diff +++ */
             domain.IsLastJob = result?.IsLastJob;
 
             return domain;
         }
-        #endif
 
     }
 

@@ -26,10 +26,10 @@ using Gs2.Gs2Freeze.Request;
 using Gs2.Gs2Freeze.Result;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -87,21 +87,22 @@ namespace Gs2.Gs2Freeze.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<DescribeStagesResult> InvokeAsync(
-    #else
+#else
         public static async Task<DescribeStagesResult> InvokeAsync(
-    #endif
+#endif
             this DescribeStagesRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<DescribeStagesResult>> invokeImpl
-    #else
+#elif UNITY_2017_1_OR_NEWER
+            Func<TaskFuture<DescribeStagesResult>> invokeImpl
+#else
             Func<Task<DescribeStagesResult>> invokeImpl
-    #endif
+#endif
         )
         {
             var result = await invokeImpl();
@@ -113,6 +114,5 @@ namespace Gs2.Gs2Freeze.Model.Cache
             );
             return result;
         }
-#endif
     }
 }

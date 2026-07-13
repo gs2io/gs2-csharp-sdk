@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -31,7 +30,10 @@ namespace Gs2.Gs2Lottery.Model.Transaction
     public static partial class LotteryExt
     {
         public static bool IsExecutable(
-            this LotteryModel self,
+/* diff --- start
+            this Lottery self,
+ diff --- end */
+            this LotteryModel self, /* diff +++ */
             DrawByUserIdRequest request
         ) {
             var changed = self.SpeculativeExecution(request);
@@ -44,8 +46,14 @@ namespace Gs2.Gs2Lottery.Model.Transaction
             }
         }
 
+/* diff --- start
+        public static Lottery SpeculativeExecution(
+            this Lottery self,
+ diff --- end */
+/* diff +++ start */
         public static LotteryModel SpeculativeExecution(
             this LotteryModel self,
+/* diff +++ end */
             DrawByUserIdRequest request
         ) {
 #if UNITY_2017_1_OR_NEWER
@@ -53,7 +61,10 @@ namespace Gs2.Gs2Lottery.Model.Transaction
 #else
             System.Console.WriteLine("Speculative execution not supported on this action: Gs2Lottery:DrawByUserId");
 #endif
-            return self.Clone() as LotteryModel;
+/* diff --- start
+            return self.Clone() as Lottery;
+ diff --- end */
+            return self.Clone() as LotteryModel; /* diff +++ */
         }
 
         public static DrawByUserIdRequest Rate(

@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -28,10 +27,10 @@ using Gs2.Gs2JobQueue.Request;
 using Gs2.Gs2JobQueue.Result;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -48,11 +47,22 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             int? timeOffset,
             RunByUserIdRequest request
         ) {
+/* diff +++ start */
+            if (self?.Item == null) {
+                return;
+            }
+/* diff +++ end */
             (null as Job).DeleteCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
-                self?.Item?.Name,
+/* diff --- start
+                self?.Item?.UserId,
+ diff --- end */
+                userId, /* diff +++ */
+/* diff --- start
+                default,
+ diff --- end */
+                self.Item.Name, /* diff +++ */
                 timeOffset
             );
         }
@@ -88,21 +98,22 @@ namespace Gs2.Gs2JobQueue.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<RunByUserIdResult> InvokeAsync(
-    #else
+#else
         public static async Task<RunByUserIdResult> InvokeAsync(
-    #endif
+#endif
             this RunByUserIdRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<RunByUserIdResult>> invokeImpl
-    #else
+#elif UNITY_2017_1_OR_NEWER
+            Func<TaskFuture<RunByUserIdResult>> invokeImpl
+#else
             Func<Task<RunByUserIdResult>> invokeImpl
-    #endif
+#endif
         )
         {
             var result = await invokeImpl();
@@ -114,6 +125,5 @@ namespace Gs2.Gs2JobQueue.Model.Cache
             );
             return result;
         }
-#endif
     }
 }

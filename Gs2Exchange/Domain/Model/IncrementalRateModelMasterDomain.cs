@@ -27,6 +27,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -44,15 +46,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -86,37 +85,14 @@ namespace Gs2.Gs2Exchange.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster> GetFuture(
             GetIncrementalRateModelMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithRateName(this.RateName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.GetIncrementalRateModelMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster> GetAsync(
-            #endif
+        #endif
             GetIncrementalRateModelMasterRequest request
         ) {
             request = request
@@ -131,44 +107,18 @@ namespace Gs2.Gs2Exchange.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelMasterDomain> UpdateFuture(
             UpdateIncrementalRateModelMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelMasterDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithRateName(this.RateName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.UpdateIncrementalRateModelMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelMasterDomain>(Impl);
-        }
+        ) => UpdateAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelMasterDomain> UpdateAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelMasterDomain> UpdateAsync(
-            #endif
+        #endif
             UpdateIncrementalRateModelMasterRequest request
         ) {
             request = request
@@ -185,46 +135,18 @@ namespace Gs2.Gs2Exchange.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelMasterDomain> DeleteFuture(
             DeleteIncrementalRateModelMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelMasterDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithRateName(this.RateName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.DeleteIncrementalRateModelMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    if (!(future.Error is NotFoundException)) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelMasterDomain>(Impl);
-        }
+        ) => DeleteAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelMasterDomain> DeleteAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Exchange.Domain.Model.IncrementalRateModelMasterDomain> DeleteAsync(
-            #endif
+        #endif
             DeleteIncrementalRateModelMasterRequest request
         ) {
             try {
@@ -243,53 +165,20 @@ namespace Gs2.Gs2Exchange.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
     }
 
     public partial class IncrementalRateModelMasterDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Exchange.Model.IncrementalRateModelMaster).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.RateName,
-                    null
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2Exchange.Model.IncrementalRateModelMaster).FetchFuture(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.RateName,
-                    null,
-                    () => this.GetFuture(
-                        new GetIncrementalRateModelMasterRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster>(Impl);
-        }
+        public IFuture<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster>(
                         (null as Gs2.Gs2Exchange.Model.IncrementalRateModelMaster).CacheParentKey(
@@ -320,28 +209,18 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 );
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster> Model()
-        {
-            return await ModelAsync();
-        }
+        public UniTask<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster> Model() => ModelAsync();
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster> Model()
-        {
-            return ModelFuture();
-        }
+        public IFuture<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster> Model() => ModelFuture();
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster> Model()
-        {
-            return await ModelAsync();
-        }
+        public Task<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster> Model() => ModelAsync();
         #endif
 
 
@@ -368,7 +247,6 @@ namespace Gs2.Gs2Exchange.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -381,12 +259,7 @@ namespace Gs2.Gs2Exchange.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -406,38 +279,21 @@ namespace Gs2.Gs2Exchange.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

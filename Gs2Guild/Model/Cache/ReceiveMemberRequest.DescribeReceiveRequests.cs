@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -28,10 +27,10 @@ using Gs2.Gs2Guild.Request;
 using Gs2.Gs2Guild.Result;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -54,7 +53,10 @@ namespace Gs2.Gs2Guild.Model.Cache
                     cache,
                     request.NamespaceName,
                     request.GuildModelName,
-                    item.TargetGuildName,
+/* diff --- start
+                    default,
+ diff --- end */
+                    item.TargetGuildName, /* diff +++ */
                     item.UserId,
                     timeOffset
                 );
@@ -92,21 +94,22 @@ namespace Gs2.Gs2Guild.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<DescribeReceiveRequestsResult> InvokeAsync(
-    #else
+#else
         public static async Task<DescribeReceiveRequestsResult> InvokeAsync(
-    #endif
+#endif
             this DescribeReceiveRequestsRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<DescribeReceiveRequestsResult>> invokeImpl
-    #else
+#elif UNITY_2017_1_OR_NEWER
+            Func<TaskFuture<DescribeReceiveRequestsResult>> invokeImpl
+#else
             Func<Task<DescribeReceiveRequestsResult>> invokeImpl
-    #endif
+#endif
         )
         {
             var result = await invokeImpl();
@@ -118,6 +121,5 @@ namespace Gs2.Gs2Guild.Model.Cache
             );
             return result;
         }
-#endif
     }
 }

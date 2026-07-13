@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -29,6 +28,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -46,15 +47,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -67,6 +65,12 @@ namespace Gs2.Gs2Schedule.Domain.Model
         private readonly Gs2ScheduleRestClient _client;
         public string NamespaceName { get; } = null!;
         public string UserId { get; } = null!;
+/* diff --- start
+        public bool? InSchedule { get; set; } = null!;
+        public long? ScheduleStartAt { get; set; } = null!;
+        public long? ScheduleEndAt { get; set; } = null!;
+        public bool? IsGlobalSchedule { get; set; } = null!;
+ diff --- end */
         public string NextPageToken { get; set; } = null!;
 
         public UserDomain(
@@ -96,12 +100,11 @@ namespace Gs2.Gs2Schedule.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Schedule.Model.Trigger> TriggersAsync(
-            #else
+        #else
         public DescribeTriggersByUserIdIterator TriggersAsync(
-            #endif
+        #endif
             string timeOffsetToken = null
         )
         {
@@ -113,7 +116,6 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 timeOffsetToken
             );
         }
-        #endif
 
         public ulong SubscribeTriggers(
             Action<Gs2.Gs2Schedule.Model.Trigger[]> callback
@@ -128,10 +130,15 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await TriggersAsync(
                             ).ToArrayAsync());
                         }
@@ -140,13 +147,15 @@ namespace Gs2.Gs2Schedule.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeTriggersWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeTriggersWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Schedule.Model.Trigger[]> callback
         )
         {
@@ -158,7 +167,6 @@ namespace Gs2.Gs2Schedule.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeTriggers(
             ulong callbackId
@@ -211,13 +219,12 @@ namespace Gs2.Gs2Schedule.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Schedule.Model.Event> EventsAsync(
-            #else
+        #else
         public DescribeEventsByUserIdIterator EventsAsync(
-            #endif
-            bool isInSchedule = true,
+        #endif
+            bool isInSchedule = true, /* diff +++ */
             string timeOffsetToken = null
         )
         {
@@ -229,27 +236,36 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 timeOffsetToken
             );
         }
-        #endif
 
         public ulong SubscribeEvents(
+/* diff --- start
+            Action<Gs2.Gs2Schedule.Model.Event[]> callback
+ diff --- end */
+/* diff +++ start */
             Action<Gs2.Gs2Schedule.Model.Event[]> callback,
             bool isInSchedule = true
+/* diff +++ end */
         )
         {
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Schedule.Model.Event>(
                 (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    isInSchedule,
+                    isInSchedule, /* diff +++ */
                     null
                 ),
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await EventsAsync(
                             ).ToArrayAsync());
                         }
@@ -258,27 +274,38 @@ namespace Gs2.Gs2Schedule.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeEventsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeEventsWithInitialCallAsync(
+        #endif
+/* diff --- start
+            Action<Gs2.Gs2Schedule.Model.Event[]> callback
+ diff --- end */
+/* diff +++ start */
             Action<Gs2.Gs2Schedule.Model.Event[]> callback,
             bool isInSchedule = true
+/* diff +++ end */
         )
         {
             var items = await EventsAsync(
             ).ToArrayAsync();
             var callbackId = SubscribeEvents(
+/* diff --- start
+                callback
+ diff --- end */
+/* diff +++ start */
                 callback,
                 isInSchedule
+/* diff +++ end */
             );
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeEvents(
             ulong callbackId
@@ -288,6 +315,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
+/* diff +++ start */
                     true,
                     null
                 ),
@@ -298,6 +326,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     false,
+/* diff +++ end */
                     null
                 ),
                 callbackId
@@ -311,6 +340,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
+/* diff +++ start */
                     true,
                     null
                 )
@@ -320,21 +350,32 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     false,
+/* diff +++ end */
                     null
                 )
             );
         }
 
         public Gs2.Gs2Schedule.Domain.Model.EventDomain Event(
+/* diff --- start
+            string eventName
+ diff --- end */
+/* diff +++ start */
             string eventName,
             bool isInSchedule = true
+/* diff +++ end */
         ) {
             return new Gs2.Gs2Schedule.Domain.Model.EventDomain(
                 this._gs2,
                 this.NamespaceName,
                 this.UserId,
+/* diff --- start
+                eventName
+ diff --- end */
+/* diff +++ start */
                 eventName,
                 isInSchedule
+/* diff +++ end */
             );
         }
 

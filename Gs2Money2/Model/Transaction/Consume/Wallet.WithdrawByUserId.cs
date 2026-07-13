@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -52,6 +51,10 @@ namespace Gs2.Gs2Money2.Model.Transaction
             {
                 throw new NullReferenceException();
             }
+/* diff --- start
+            clone.Total -= request.WithdrawCount;
+ diff --- end */
+/* diff +++ start */
             if (request.PaidOnly ?? false) {
                 clone.Summary.Paid -= request.WithdrawCount;
             }
@@ -63,6 +66,7 @@ namespace Gs2.Gs2Money2.Model.Transaction
                 }
             }
             clone.Summary.Total -= request.WithdrawCount;
+/* diff +++ end */
             return clone;
         }
 
@@ -70,7 +74,11 @@ namespace Gs2.Gs2Money2.Model.Transaction
             this WithdrawByUserIdRequest request,
             double rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Money2:WithdrawByUserId");
+/* diff --- start
+            request.WithdrawCount = (int?) (request.WithdrawCount * rate);
+            return request;
+ diff --- end */
+            throw new NotSupportedException($"not supported rate action Gs2Money2:WithdrawByUserId"); /* diff +++ */
         }
     }
 
@@ -80,7 +88,11 @@ namespace Gs2.Gs2Money2.Model.Transaction
             this WithdrawByUserIdRequest request,
             BigInteger rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Money2:WithdrawByUserId");
+/* diff --- start
+            request.WithdrawCount = (int?) ((request.WithdrawCount ?? 0) * rate);
+            return request;
+ diff --- end */
+            throw new NotSupportedException($"not supported rate action Gs2Money2:WithdrawByUserId"); /* diff +++ */
         }
     }
 }

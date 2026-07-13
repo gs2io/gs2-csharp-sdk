@@ -29,6 +29,7 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -47,14 +48,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -91,12 +90,11 @@ namespace Gs2.Gs2Deploy.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Deploy.Model.Resource> ResourcesAsync(
-            #else
+        #else
         public DescribeResourcesIterator ResourcesAsync(
-            #endif
+        #endif
         )
         {
             return new DescribeResourcesIterator(
@@ -105,7 +103,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 this.StackName
             );
         }
-        #endif
 
         public ulong SubscribeResources(
             Action<Gs2.Gs2Deploy.Model.Resource[]> callback
@@ -119,10 +116,15 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await ResourcesAsync().ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -130,13 +132,15 @@ namespace Gs2.Gs2Deploy.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeResourcesWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeResourcesWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Deploy.Model.Resource[]> callback
         )
         {
@@ -148,7 +152,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeResources(
             ulong callbackId
@@ -195,12 +198,11 @@ namespace Gs2.Gs2Deploy.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Deploy.Model.Event> EventsAsync(
-            #else
+        #else
         public DescribeEventsIterator EventsAsync(
-            #endif
+        #endif
         )
         {
             return new DescribeEventsIterator(
@@ -209,7 +211,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 this.StackName
             );
         }
-        #endif
 
         public ulong SubscribeEvents(
             Action<Gs2.Gs2Deploy.Model.Event[]> callback
@@ -223,10 +224,15 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await EventsAsync().ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -234,13 +240,15 @@ namespace Gs2.Gs2Deploy.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeEventsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeEventsWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Deploy.Model.Event[]> callback
         )
         {
@@ -252,7 +260,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeEvents(
             ulong callbackId
@@ -299,12 +306,11 @@ namespace Gs2.Gs2Deploy.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Deploy.Model.Output> OutputsAsync(
-            #else
+        #else
         public DescribeOutputsIterator OutputsAsync(
-            #endif
+        #endif
         )
         {
             return new DescribeOutputsIterator(
@@ -313,7 +319,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 this.StackName
             );
         }
-        #endif
 
         public ulong SubscribeOutputs(
             Action<Gs2.Gs2Deploy.Model.Output[]> callback
@@ -327,10 +332,15 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await OutputsAsync().ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -338,13 +348,15 @@ namespace Gs2.Gs2Deploy.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeOutputsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeOutputsWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Deploy.Model.Output[]> callback
         )
         {
@@ -356,7 +368,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeOutputs(
             ulong callbackId
@@ -399,38 +410,14 @@ namespace Gs2.Gs2Deploy.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> GetStatusFuture(
             GetStackStatusRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithStackName(this.StackName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.GetStackStatusFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                this.Status = domain.Status = result?.Status;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain>(Impl);
-        }
+        ) => GetStatusAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Deploy.Domain.Model.StackDomain> GetStatusAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Deploy.Domain.Model.StackDomain> GetStatusAsync(
-            #endif
+        #endif
             GetStackStatusRequest request
         ) {
             request = request
@@ -446,41 +433,18 @@ namespace Gs2.Gs2Deploy.Domain.Model
             this.Status = domain.Status = result?.Status;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Deploy.Model.Stack> GetFuture(
             GetStackRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Model.Stack> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithStackName(this.StackName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.GetStackFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Deploy.Model.Stack>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Deploy.Model.Stack> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Deploy.Model.Stack> GetAsync(
-            #endif
+        #endif
             GetStackRequest request
         ) {
             request = request
@@ -494,43 +458,18 @@ namespace Gs2.Gs2Deploy.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> UpdateFuture(
             UpdateStackRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithStackName(this.StackName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.UpdateStackFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain>(Impl);
-        }
+        ) => UpdateAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Deploy.Domain.Model.StackDomain> UpdateAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Deploy.Domain.Model.StackDomain> UpdateAsync(
-            #endif
+        #endif
             UpdateStackRequest request
         ) {
             request = request
@@ -546,42 +485,18 @@ namespace Gs2.Gs2Deploy.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Deploy.Model.ChangeSet[]> ChangeSetFuture(
             ChangeSetRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Model.ChangeSet[]> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithStackName(this.StackName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.ChangeSetFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = result?.Items;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Deploy.Model.ChangeSet[]>(Impl);
-        }
+        ) => ChangeSetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Deploy.Model.ChangeSet[]> ChangeSetAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Deploy.Model.ChangeSet[]> ChangeSetAsync(
-            #endif
+        #endif
             ChangeSetRequest request
         ) {
             request = request
@@ -596,43 +511,18 @@ namespace Gs2.Gs2Deploy.Domain.Model
             var domain = result?.Items;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> UpdateFromGitHubFuture(
             UpdateStackFromGitHubRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithStackName(this.StackName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.UpdateStackFromGitHubFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain>(Impl);
-        }
+        ) => UpdateFromGitHubAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Deploy.Domain.Model.StackDomain> UpdateFromGitHubAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Deploy.Domain.Model.StackDomain> UpdateFromGitHubAsync(
-            #endif
+        #endif
             UpdateStackFromGitHubRequest request
         ) {
             request = request
@@ -648,45 +538,18 @@ namespace Gs2.Gs2Deploy.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> DeleteFuture(
             DeleteStackRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithStackName(this.StackName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.DeleteStackFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    if (!(future.Error is NotFoundException)) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain>(Impl);
-        }
+        ) => DeleteAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Deploy.Domain.Model.StackDomain> DeleteAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Deploy.Domain.Model.StackDomain> DeleteAsync(
-            #endif
+        #endif
             DeleteStackRequest request
         ) {
             try {
@@ -704,43 +567,18 @@ namespace Gs2.Gs2Deploy.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> ForceDeleteFuture(
             ForceDeleteStackRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithStackName(this.StackName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.ForceDeleteStackFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain>(Impl);
-        }
+        ) => ForceDeleteAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Deploy.Domain.Model.StackDomain> ForceDeleteAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Deploy.Domain.Model.StackDomain> ForceDeleteAsync(
-            #endif
+        #endif
             ForceDeleteStackRequest request
         ) {
             request = request
@@ -756,45 +594,18 @@ namespace Gs2.Gs2Deploy.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> DeleteResourcesFuture(
             DeleteStackResourcesRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithStackName(this.StackName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.DeleteStackResourcesFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    if (!(future.Error is NotFoundException)) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain>(Impl);
-        }
+        ) => DeleteResourcesAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Deploy.Domain.Model.StackDomain> DeleteResourcesAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Deploy.Domain.Model.StackDomain> DeleteResourcesAsync(
-            #endif
+        #endif
             DeleteStackResourcesRequest request
         ) {
             try {
@@ -812,45 +623,18 @@ namespace Gs2.Gs2Deploy.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> DeleteEntityFuture(
             DeleteStackEntityRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithStackName(this.StackName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.DeleteStackEntityFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    if (!(future.Error is NotFoundException)) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Deploy.Domain.Model.StackDomain>(Impl);
-        }
+        ) => DeleteEntityAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Deploy.Domain.Model.StackDomain> DeleteEntityAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Deploy.Domain.Model.StackDomain> DeleteEntityAsync(
-            #endif
+        #endif
             DeleteStackEntityRequest request
         ) {
             try {
@@ -868,51 +652,20 @@ namespace Gs2.Gs2Deploy.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
     }
 
     public partial class StackDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Deploy.Model.Stack> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Deploy.Model.Stack> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Deploy.Model.Stack).GetCache(
-                    this._gs2.Cache,
-                    this.StackName,
-                    null
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2Deploy.Model.Stack).FetchFuture(
-                    this._gs2.Cache,
-                    this.StackName,
-                    null,
-                    () => this.GetFuture(
-                        new GetStackRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Deploy.Model.Stack>(Impl);
-        }
+        public IFuture<Gs2.Gs2Deploy.Model.Stack> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Deploy.Model.Stack> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Deploy.Model.Stack> ModelAsync()
-            #endif
+        #endif
         {
             var (value, find) = (null as Gs2.Gs2Deploy.Model.Stack).GetCache(
                 this._gs2.Cache,
@@ -931,7 +684,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 )
             );
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
@@ -977,7 +729,6 @@ namespace Gs2.Gs2Deploy.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -990,12 +741,7 @@ namespace Gs2.Gs2Deploy.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -1014,38 +760,20 @@ namespace Gs2.Gs2Deploy.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Deploy.Model.Stack> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Deploy.Model.Stack> callback) => SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Deploy.Model.Stack> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Deploy.Model.Stack> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

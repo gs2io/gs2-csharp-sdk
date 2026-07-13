@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -29,6 +28,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -46,15 +47,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -97,47 +95,24 @@ namespace Gs2.Gs2Ranking.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Ranking.Model.Score> GetFuture(
             GetScoreByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Ranking.Model.Score> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithCategoryName(this.CategoryName)
-                    .WithScorerUserId(this.ScorerUserId)
-                    .WithUniqueId(this.UniqueId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.GetScoreByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Ranking.Model.Score>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Ranking.Model.Score> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Ranking.Model.Score> GetAsync(
-            #endif
+        #endif
             GetScoreByUserIdRequest request
         ) {
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
-                .WithUserId(this.UserId)
+                .WithUserId(this.UserId) /* diff +++ */
                 .WithCategoryName(this.CategoryName)
+/* diff --- start
+                .WithUserId(this.UserId)
+ diff --- end */
                 .WithScorerUserId(this.ScorerUserId)
                 .WithUniqueId(this.UniqueId);
             var result = await request.InvokeAsync(
@@ -148,58 +123,60 @@ namespace Gs2.Gs2Ranking.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
     }
 
     public partial class ScoreDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Ranking.Model.Score> ModelFuture()
+        public IFuture<Gs2.Gs2Ranking.Model.Score> ModelFuture() => ModelAsync().ToGs2Future();
+        #endif
+
+        #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Ranking.Model.Score> ModelAsync()
+        #else
+        public async Task<Gs2.Gs2Ranking.Model.Score> ModelAsync()
+        #endif
         {
-            IEnumerator Impl(IFuture<Gs2.Gs2Ranking.Model.Score> self)
-            {
+/* diff --- start
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking.Model.Score>(
+                        (null as Gs2.Gs2Ranking.Model.Score).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            null
+                        ),
+                        (null as Gs2.Gs2Ranking.Model.Score).CacheKey(
+                            this.CategoryName,
+                            this.ScorerUserId,
+                            this.UniqueId
+                        )
+                    ).LockAsync()) {
                 var (value, find) = (null as Gs2.Gs2Ranking.Model.Score).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.ScorerUserId,
+                    this.UserId,
                     this.CategoryName,
+                    this.ScorerUserId,
                     this.UniqueId,
                     null
                 );
                 if (find) {
-                    self.OnComplete(value);
-                    yield break;
+                    return value;
                 }
-                var future = (null as Gs2.Gs2Ranking.Model.Score).FetchFuture(
+                return await (null as Gs2.Gs2Ranking.Model.Score).FetchAsync(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.ScorerUserId,
+                    this.UserId,
                     this.CategoryName,
+                    this.ScorerUserId,
                     this.UniqueId,
                     null,
-                    () => this.GetFuture(
+                    () => this.GetAsync(
                         new GetScoreByUserIdRequest()
                     )
                 );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Ranking.Model.Score>(Impl);
-        }
-        #endif
-
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Gs2Ranking.Model.Score> ModelAsync()
-            #else
-        public async Task<Gs2.Gs2Ranking.Model.Score> ModelAsync()
-            #endif
-        {
+ diff --- end */
+/* diff +++ start */
             var (value, find) = (null as Gs2.Gs2Ranking.Model.Score).GetCache(
                 this._gs2.Cache,
                 this.NamespaceName,
@@ -210,7 +187,9 @@ namespace Gs2.Gs2Ranking.Domain.Model
             );
             if (find) {
                 return value;
+/* diff +++ end */
             }
+/* diff +++ start */
             return await (null as Gs2.Gs2Ranking.Model.Score).FetchAsync(
                 this._gs2.Cache,
                 this.NamespaceName,
@@ -222,29 +201,44 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     new GetScoreByUserIdRequest()
                 )
             );
+/* diff +++ end */
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
+/* diff --- start
+        public UniTask<Gs2.Gs2Ranking.Model.Score> Model() => ModelAsync();
+ diff --- end */
+/* diff +++ start */
         public async UniTask<Gs2.Gs2Ranking.Model.Score> Model()
         {
             return await ModelAsync();
         }
+/* diff +++ end */
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
+/* diff --- start
+        public IFuture<Gs2.Gs2Ranking.Model.Score> Model() => ModelFuture();
+ diff --- end */
+/* diff +++ start */
         public IFuture<Gs2.Gs2Ranking.Model.Score> Model()
         {
             return ModelFuture();
         }
+/* diff +++ end */
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
+/* diff --- start
+        public Task<Gs2.Gs2Ranking.Model.Score> Model() => ModelAsync();
+ diff --- end */
+/* diff +++ start */
         public async Task<Gs2.Gs2Ranking.Model.Score> Model()
         {
             return await ModelAsync();
         }
+/* diff +++ end */
         #endif
 
 
@@ -253,8 +247,14 @@ namespace Gs2.Gs2Ranking.Domain.Model
             (null as Gs2.Gs2Ranking.Model.Score).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.ScorerUserId,
+/* diff --- start
+                this.UserId,
+ diff --- end */
+                this.ScorerUserId, /* diff +++ */
                 this.CategoryName,
+/* diff --- start
+                this.ScorerUserId,
+ diff --- end */
                 this.UniqueId,
                 null
             );
@@ -265,17 +265,22 @@ namespace Gs2.Gs2Ranking.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Ranking.Model.Score).CacheParentKey(
                     this.NamespaceName,
-                    this.ScorerUserId,
+/* diff --- start
+                    this.UserId,
+ diff --- end */
+                    this.ScorerUserId, /* diff +++ */
                     null
                 ),
                 (null as Gs2.Gs2Ranking.Model.Score).CacheKey(
                     this.CategoryName,
+/* diff --- start
+                    this.ScorerUserId,
+ diff --- end */
                     this.UniqueId
                 ),
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -288,12 +293,7 @@ namespace Gs2.Gs2Ranking.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -303,11 +303,17 @@ namespace Gs2.Gs2Ranking.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Ranking.Model.Score>(
                 (null as Gs2.Gs2Ranking.Model.Score).CacheParentKey(
                     this.NamespaceName,
-                    this.ScorerUserId,
+/* diff --- start
+                    this.UserId,
+ diff --- end */
+                    this.ScorerUserId, /* diff +++ */
                     null
                 ),
                 (null as Gs2.Gs2Ranking.Model.Score).CacheKey(
                     this.CategoryName,
+/* diff --- start
+                    this.ScorerUserId,
+ diff --- end */
                     this.UniqueId
                 ),
                 callbackId
@@ -315,38 +321,24 @@ namespace Gs2.Gs2Ranking.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Ranking.Model.Score> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+/* diff --- start
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Ranking.Model.Score> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
+ diff --- end */
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Ranking.Model.Score> callback) => SubscribeWithInitialCallAsync(callback).ToGs2Future(); /* diff +++ */
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Ranking.Model.Score> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Ranking.Model.Score> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

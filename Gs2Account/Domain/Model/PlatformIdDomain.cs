@@ -29,6 +29,7 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -47,14 +48,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -91,39 +90,14 @@ namespace Gs2.Gs2Account.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Account.Model.PlatformId> GetFuture(
             GetPlatformIdByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Account.Model.PlatformId> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithType(this.Type);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.GetPlatformIdByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-
-                self.OnComplete(result.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Account.Model.PlatformId>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Account.Model.PlatformId> GetAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Account.Model.PlatformId> GetAsync(
-            #endif
+        #endif
             GetPlatformIdByUserIdRequest request
         ) {
             request = request
@@ -140,45 +114,18 @@ namespace Gs2.Gs2Account.Domain.Model
 
             return result.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Account.Domain.Model.PlatformIdDomain> CreateFuture(
             CreatePlatformIdByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Account.Domain.Model.PlatformIdDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithType(this.Type);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.CreatePlatformIdByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Account.Domain.Model.PlatformIdDomain>(Impl);
-        }
+        ) => CreateAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Account.Domain.Model.PlatformIdDomain> CreateAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Account.Domain.Model.PlatformIdDomain> CreateAsync(
-            #endif
+        #endif
             CreatePlatformIdByUserIdRequest request
         ) {
             request = request
@@ -196,44 +143,18 @@ namespace Gs2.Gs2Account.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Account.Model.PlatformUser> FindFuture(
             FindPlatformIdByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Account.Model.PlatformUser> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithType(this.Type);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.FindPlatformIdByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-
-                self.OnComplete(result.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Account.Model.PlatformUser>(Impl);
-        }
+        ) => FindAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Account.Model.PlatformUser> FindAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Account.Model.PlatformUser> FindAsync(
-            #endif
+        #endif
             FindPlatformIdByUserIdRequest request
         ) {
             request = request
@@ -250,55 +171,20 @@ namespace Gs2.Gs2Account.Domain.Model
 
             return result.Item;
         }
-        #endif
 
     }
 
     public partial class PlatformIdDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Account.Model.PlatformId> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Account.Model.PlatformId> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Account.Model.PlatformId).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    this.Type ?? default,
-                    null
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2Account.Model.PlatformId).FetchFuture(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    this.Type ?? default,
-                    null,
-                    () => this.GetFuture(
-                        new GetPlatformIdByUserIdRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Account.Model.PlatformId>(Impl);
-        }
+        public IFuture<Gs2.Gs2Account.Model.PlatformId> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Account.Model.PlatformId> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Account.Model.PlatformId> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Account.Model.PlatformId>(
                         (null as Gs2.Gs2Account.Model.PlatformId).CacheParentKey(
@@ -332,7 +218,6 @@ namespace Gs2.Gs2Account.Domain.Model
                 );
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
@@ -382,7 +267,6 @@ namespace Gs2.Gs2Account.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -400,7 +284,6 @@ namespace Gs2.Gs2Account.Domain.Model
             #else
                     Impl();
             #endif
-        #endif
                 }
             );
         }
@@ -421,38 +304,20 @@ namespace Gs2.Gs2Account.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Account.Model.PlatformId> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Account.Model.PlatformId> callback) => SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Account.Model.PlatformId> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Account.Model.PlatformId> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

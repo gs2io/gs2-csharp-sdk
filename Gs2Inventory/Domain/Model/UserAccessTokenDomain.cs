@@ -27,6 +27,7 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -45,14 +46,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -93,12 +92,11 @@ namespace Gs2.Gs2Inventory.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Inventory.Model.Inventory> InventoriesAsync(
-            #else
+        #else
         public DescribeInventoriesIterator InventoriesAsync(
-            #endif
+        #endif
         )
         {
             return new DescribeInventoriesIterator(
@@ -108,7 +106,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 this.AccessToken
             );
         }
-        #endif
 
         public ulong SubscribeInventories(
             Action<Gs2.Gs2Inventory.Model.Inventory[]> callback
@@ -123,10 +120,15 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await InventoriesAsync(
                             ).ToArrayAsync());
                         }
@@ -135,13 +137,15 @@ namespace Gs2.Gs2Inventory.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeInventoriesWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeInventoriesWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Inventory.Model.Inventory[]> callback
         )
         {
@@ -153,7 +157,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeInventories(
             ulong callbackId

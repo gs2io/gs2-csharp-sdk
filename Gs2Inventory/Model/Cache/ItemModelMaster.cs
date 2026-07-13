@@ -25,10 +25,10 @@ using Gs2.Core.Net;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -111,23 +111,22 @@ namespace Gs2.Gs2Inventory.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<ItemModelMaster> FetchAsync(
-    #else
+#else
         public static async Task<ItemModelMaster> FetchAsync(
-    #endif
+#endif
             this ItemModelMaster self,
             CacheDatabase cache,
             string namespaceName,
             string inventoryName,
             string itemName,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<ItemModelMaster>> fetchImpl
-    #else
+#else
             Func<Task<ItemModelMaster>> fetchImpl
-    #endif
+#endif
         ) {
             try {
                 var item = await fetchImpl();
@@ -154,7 +153,6 @@ namespace Gs2.Gs2Inventory.Model.Cache
                 return null;
             }
         }
-#endif
 
         public static Tuple<ItemModelMaster, bool> GetCache(
             this ItemModelMaster self,

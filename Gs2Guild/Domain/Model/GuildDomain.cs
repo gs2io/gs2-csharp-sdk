@@ -29,6 +29,7 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -47,14 +48,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -97,12 +96,11 @@ namespace Gs2.Gs2Guild.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Guild.Model.ReceiveMemberRequest> ReceiveRequestsByGuildNameAsync(
-            #else
+        #else
         public DescribeReceiveRequestsByGuildNameIterator ReceiveRequestsByGuildNameAsync(
-            #endif
+        #endif
         )
         {
             return new DescribeReceiveRequestsByGuildNameIterator(
@@ -113,7 +111,6 @@ namespace Gs2.Gs2Guild.Domain.Model
                 this.GuildName
             );
         }
-        #endif
 
         public ulong SubscribeReceiveRequestsByGuildName(
             Action<Gs2.Gs2Guild.Model.ReceiveMemberRequest[]> callback
@@ -129,10 +126,15 @@ namespace Gs2.Gs2Guild.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await ReceiveRequestsByGuildNameAsync().ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -140,13 +142,15 @@ namespace Gs2.Gs2Guild.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeReceiveRequestsByGuildNameWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeReceiveRequestsByGuildNameWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Guild.Model.ReceiveMemberRequest[]> callback
         )
         {
@@ -158,7 +162,6 @@ namespace Gs2.Gs2Guild.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeReceiveRequestsByGuildName(
             ulong callbackId
@@ -213,12 +216,11 @@ namespace Gs2.Gs2Guild.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Guild.Model.IgnoreUser> IgnoreUsersByGuildNameAsync(
-            #else
+        #else
         public DescribeIgnoreUsersByGuildNameIterator IgnoreUsersByGuildNameAsync(
-            #endif
+        #endif
         )
         {
             return new DescribeIgnoreUsersByGuildNameIterator(
@@ -229,7 +231,6 @@ namespace Gs2.Gs2Guild.Domain.Model
                 this.GuildName
             );
         }
-        #endif
 
         public ulong SubscribeIgnoreUsersByGuildName(
             Action<Gs2.Gs2Guild.Model.IgnoreUser[]> callback
@@ -245,10 +246,15 @@ namespace Gs2.Gs2Guild.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await IgnoreUsersByGuildNameAsync().ToArrayAsync());
                         }
                         catch (System.Exception) {
@@ -256,13 +262,15 @@ namespace Gs2.Gs2Guild.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeIgnoreUsersByGuildNameWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeIgnoreUsersByGuildNameWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Guild.Model.IgnoreUser[]> callback
         )
         {
@@ -274,7 +282,6 @@ namespace Gs2.Gs2Guild.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeIgnoreUsersByGuildName(
             ulong callbackId
@@ -331,38 +338,14 @@ namespace Gs2.Gs2Guild.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Guild.Model.Guild> GetFuture(
             GetGuildRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Guild.Model.Guild> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithGuildModelName(this.GuildModelName)
-                    .WithGuildName(this.GuildName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.GuildName,
-                    null,
-                    () => this._client.GetGuildFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Guild.Model.Guild>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Guild.Model.Guild> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Guild.Model.Guild> GetAsync(
-            #endif
+        #endif
             GetGuildRequest request
         ) {
             request = request
@@ -378,45 +361,18 @@ namespace Gs2.Gs2Guild.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> UpdateFuture(
             UpdateGuildByGuildNameRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithGuildName(this.GuildName)
-                    .WithGuildModelName(this.GuildModelName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.GuildName,
-                    null,
-                    () => this._client.UpdateGuildByGuildNameFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain>(Impl);
-        }
+        ) => UpdateAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Guild.Domain.Model.GuildDomain> UpdateAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Guild.Domain.Model.GuildDomain> UpdateAsync(
-            #endif
+        #endif
             UpdateGuildByGuildNameRequest request
         ) {
             request = request
@@ -434,47 +390,18 @@ namespace Gs2.Gs2Guild.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> DeleteMemberFuture(
             DeleteMemberByGuildNameRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithGuildModelName(this.GuildModelName)
-                    .WithGuildName(this.GuildName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.GuildName,
-                    null,
-                    () => this._client.DeleteMemberByGuildNameFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    if (!(future.Error is NotFoundException)) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain>(Impl);
-        }
+        ) => DeleteMemberAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Guild.Domain.Model.GuildDomain> DeleteMemberAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Guild.Domain.Model.GuildDomain> DeleteMemberAsync(
-            #endif
+        #endif
             DeleteMemberByGuildNameRequest request
         ) {
             try {
@@ -494,45 +421,18 @@ namespace Gs2.Gs2Guild.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> UpdateMemberRoleFuture(
             UpdateMemberRoleByGuildNameRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithGuildModelName(this.GuildModelName)
-                    .WithGuildName(this.GuildName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.GuildName,
-                    null,
-                    () => this._client.UpdateMemberRoleByGuildNameFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain>(Impl);
-        }
+        ) => UpdateMemberRoleAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Guild.Domain.Model.GuildDomain> UpdateMemberRoleAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Guild.Domain.Model.GuildDomain> UpdateMemberRoleAsync(
-            #endif
+        #endif
             UpdateMemberRoleByGuildNameRequest request
         ) {
             request = request
@@ -550,45 +450,18 @@ namespace Gs2.Gs2Guild.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> BatchUpdateMemberRoleFuture(
             BatchUpdateMemberRoleByGuildNameRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithGuildModelName(this.GuildModelName)
-                    .WithGuildName(this.GuildName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.GuildName,
-                    null,
-                    () => this._client.BatchUpdateMemberRoleByGuildNameFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain>(Impl);
-        }
+        ) => BatchUpdateMemberRoleAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Guild.Domain.Model.GuildDomain> BatchUpdateMemberRoleAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Guild.Domain.Model.GuildDomain> BatchUpdateMemberRoleAsync(
-            #endif
+        #endif
             BatchUpdateMemberRoleByGuildNameRequest request
         ) {
             request = request
@@ -606,47 +479,18 @@ namespace Gs2.Gs2Guild.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> DeleteFuture(
             DeleteGuildByGuildNameRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithGuildModelName(this.GuildModelName)
-                    .WithGuildName(this.GuildName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.GuildName,
-                    null,
-                    () => this._client.DeleteGuildByGuildNameFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    if (!(future.Error is NotFoundException)) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain>(Impl);
-        }
+        ) => DeleteAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Guild.Domain.Model.GuildDomain> DeleteAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Guild.Domain.Model.GuildDomain> DeleteAsync(
-            #endif
+        #endif
             DeleteGuildByGuildNameRequest request
         ) {
             try {
@@ -666,45 +510,18 @@ namespace Gs2.Gs2Guild.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> IncreaseMaximumCurrentMaximumMemberCountFuture(
             IncreaseMaximumCurrentMaximumMemberCountByGuildNameRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithGuildModelName(this.GuildModelName)
-                    .WithGuildName(this.GuildName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.GuildName,
-                    null,
-                    () => this._client.IncreaseMaximumCurrentMaximumMemberCountByGuildNameFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain>(Impl);
-        }
+        ) => IncreaseMaximumCurrentMaximumMemberCountAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Guild.Domain.Model.GuildDomain> IncreaseMaximumCurrentMaximumMemberCountAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Guild.Domain.Model.GuildDomain> IncreaseMaximumCurrentMaximumMemberCountAsync(
-            #endif
+        #endif
             IncreaseMaximumCurrentMaximumMemberCountByGuildNameRequest request
         ) {
             request = request
@@ -722,45 +539,18 @@ namespace Gs2.Gs2Guild.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> DecreaseMaximumCurrentMaximumMemberCountFuture(
             DecreaseMaximumCurrentMaximumMemberCountByGuildNameRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithGuildModelName(this.GuildModelName)
-                    .WithGuildName(this.GuildName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.GuildName,
-                    null,
-                    () => this._client.DecreaseMaximumCurrentMaximumMemberCountByGuildNameFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain>(Impl);
-        }
+        ) => DecreaseMaximumCurrentMaximumMemberCountAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Guild.Domain.Model.GuildDomain> DecreaseMaximumCurrentMaximumMemberCountAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Guild.Domain.Model.GuildDomain> DecreaseMaximumCurrentMaximumMemberCountAsync(
-            #endif
+        #endif
             DecreaseMaximumCurrentMaximumMemberCountByGuildNameRequest request
         ) {
             request = request
@@ -778,44 +568,18 @@ namespace Gs2.Gs2Guild.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> VerifyCurrentMaximumMemberCountFuture(
             VerifyCurrentMaximumMemberCountByGuildNameRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithGuildModelName(this.GuildModelName)
-                    .WithGuildName(this.GuildName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.GuildName,
-                    null,
-                    () => this._client.VerifyCurrentMaximumMemberCountByGuildNameFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain>(Impl);
-        }
+        ) => VerifyCurrentMaximumMemberCountAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Guild.Domain.Model.GuildDomain> VerifyCurrentMaximumMemberCountAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Guild.Domain.Model.GuildDomain> VerifyCurrentMaximumMemberCountAsync(
-            #endif
+        #endif
             VerifyCurrentMaximumMemberCountByGuildNameRequest request
         ) {
             request = request
@@ -832,44 +596,18 @@ namespace Gs2.Gs2Guild.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> VerifyIncludeMemberFuture(
             VerifyIncludeMemberByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithGuildModelName(this.GuildModelName)
-                    .WithGuildName(this.GuildName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.GuildName,
-                    null,
-                    () => this._client.VerifyIncludeMemberByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain>(Impl);
-        }
+        ) => VerifyIncludeMemberAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Guild.Domain.Model.GuildDomain> VerifyIncludeMemberAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Guild.Domain.Model.GuildDomain> VerifyIncludeMemberAsync(
-            #endif
+        #endif
             VerifyIncludeMemberByUserIdRequest request
         ) {
             request = request
@@ -886,45 +624,18 @@ namespace Gs2.Gs2Guild.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> SetMaximumCurrentMaximumMemberCountFuture(
             SetMaximumCurrentMaximumMemberCountByGuildNameRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithGuildName(this.GuildName)
-                    .WithGuildModelName(this.GuildModelName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.GuildName,
-                    null,
-                    () => this._client.SetMaximumCurrentMaximumMemberCountByGuildNameFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Guild.Domain.Model.GuildDomain>(Impl);
-        }
+        ) => SetMaximumCurrentMaximumMemberCountAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Guild.Domain.Model.GuildDomain> SetMaximumCurrentMaximumMemberCountAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Guild.Domain.Model.GuildDomain> SetMaximumCurrentMaximumMemberCountAsync(
-            #endif
+        #endif
             SetMaximumCurrentMaximumMemberCountByGuildNameRequest request
         ) {
             request = request
@@ -942,7 +653,6 @@ namespace Gs2.Gs2Guild.Domain.Model
 
             return domain;
         }
-        #endif
 
     }
 
@@ -951,49 +661,14 @@ namespace Gs2.Gs2Guild.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Guild.Model.Guild> ModelFuture(
             AccessToken accessToken
-        )
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Guild.Model.Guild> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Guild.Model.Guild).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.GuildModelName,
-                    this.GuildName,
-                    null
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2Guild.Model.Guild).FetchFuture(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.GuildModelName,
-                    this.GuildName,
-                    null,
-                    () => this.GetFuture(
-                        new GetGuildRequest()
-                            .WithAccessToken(accessToken.Token)
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Guild.Model.Guild>(Impl);
-        }
+        ) => ModelAsync(accessToken).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Guild.Model.Guild> ModelAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Guild.Model.Guild> ModelAsync(
-            #endif
+        #endif
             AccessToken accessToken
         ) {
             var (value, find) = (null as Gs2.Gs2Guild.Model.Guild).GetCache(
@@ -1018,7 +693,6 @@ namespace Gs2.Gs2Guild.Domain.Model
                 )
             );
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
@@ -1077,13 +751,7 @@ namespace Gs2.Gs2Guild.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
                     ModelAsync(accessToken).Forget();
-            #else
-                    ModelAsync(accessToken);
-            #endif
-        #endif
                 }
             );
         }
@@ -1109,44 +777,26 @@ namespace Gs2.Gs2Guild.Domain.Model
         public Gs2Future<ulong> SubscribeWithInitialCallFuture(
             AccessToken accessToken,
             Action<Gs2.Gs2Guild.Model.Guild> callback
-        )
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture(accessToken);
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(accessToken, callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        ) => SubscribeWithInitialCallAsync(accessToken, callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(
             AccessToken accessToken,
             Action<Gs2.Gs2Guild.Model.Guild> callback
         )
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(
             AccessToken accessToken,
             Action<Gs2.Gs2Guild.Model.Guild> callback
         )
-            #endif
+        #endif
         {
             var item = await ModelAsync(accessToken);
             var callbackId = Subscribe(accessToken, callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

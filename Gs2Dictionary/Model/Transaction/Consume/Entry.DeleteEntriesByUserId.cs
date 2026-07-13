@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -24,7 +23,7 @@ using System;
 using System.Linq;
 using System.Numerics;
 using Gs2.Core.Exception;
-using Gs2.Core.Util;
+using Gs2.Core.Util; /* diff +++ */
 using Gs2.Gs2Dictionary.Request;
 
 namespace Gs2.Gs2Dictionary.Model.Transaction
@@ -32,14 +31,22 @@ namespace Gs2.Gs2Dictionary.Model.Transaction
     public static partial class EntryExt
     {
         public static bool IsExecutable(
-            this Entry[] self,
+/* diff --- start
+            this Entry self,
+ diff --- end */
+            this Entry[] self, /* diff +++ */
             DeleteEntriesByUserIdRequest request
         ) {
             var changed = self.SpeculativeExecution(request);
             try {
+/* diff --- start
+                changed.Validate();
+ diff --- end */
+/* diff +++ start */
                 foreach (var v in changed) {
                     v.Validate();
                 }
+/* diff +++ end */
                 return true;
             }
             catch (Gs2Exception) {
@@ -47,10 +54,20 @@ namespace Gs2.Gs2Dictionary.Model.Transaction
             }
         }
 
+/* diff --- start
+        public static Entry SpeculativeExecution(
+            this Entry self,
+ diff --- end */
+/* diff +++ start */
         public static Entry[] SpeculativeExecution(
             this Entry[] self,
+/* diff +++ end */
             DeleteEntriesByUserIdRequest request
         ) {
+/* diff --- start
+            return null;
+ diff --- end */
+/* diff +++ start */
             var items = self.ToList();
             foreach (var entryModelName in request.EntryModelNames) {
                 if (!items.Select(v => v.Name).ToList().Contains(entryModelName)) {
@@ -62,6 +79,7 @@ namespace Gs2.Gs2Dictionary.Model.Transaction
                 }
             }
             return items.ToArray();
+/* diff +++ end */
         }
 
         public static DeleteEntriesByUserIdRequest Rate(

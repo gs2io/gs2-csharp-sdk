@@ -27,6 +27,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -44,15 +46,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -93,12 +92,11 @@ namespace Gs2.Gs2Chat.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Chat.Model.Room> RoomsAsync(
-            #else
+        #else
         public DescribeRoomsIterator RoomsAsync(
-            #endif
+        #endif
             string namePrefix = null
         )
         {
@@ -109,7 +107,6 @@ namespace Gs2.Gs2Chat.Domain.Model
                 namePrefix
             );
         }
-        #endif
 
         public ulong SubscribeRooms(
             Action<Gs2.Gs2Chat.Model.Room[]> callback,
@@ -125,10 +122,15 @@ namespace Gs2.Gs2Chat.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await RoomsAsync(
                                 namePrefix
                             ).ToArrayAsync());
@@ -138,13 +140,15 @@ namespace Gs2.Gs2Chat.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeRoomsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeRoomsWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Chat.Model.Room[]> callback,
             string namePrefix = null
         )
@@ -159,7 +163,6 @@ namespace Gs2.Gs2Chat.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeRooms(
             ulong callbackId,
@@ -218,12 +221,11 @@ namespace Gs2.Gs2Chat.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Chat.Model.Subscribe> SubscribesAsync(
-            #else
+        #else
         public DescribeSubscribesByUserIdIterator SubscribesAsync(
-            #endif
+        #endif
             string roomNamePrefix = null,
             string timeOffsetToken = null
         )
@@ -237,7 +239,6 @@ namespace Gs2.Gs2Chat.Domain.Model
                 timeOffsetToken
             );
         }
-        #endif
 
         public ulong SubscribeSubscribes(
             Action<Gs2.Gs2Chat.Model.Subscribe[]> callback,
@@ -253,10 +254,15 @@ namespace Gs2.Gs2Chat.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await SubscribesAsync(
                                 roomNamePrefix
                             ).ToArrayAsync());
@@ -266,13 +272,15 @@ namespace Gs2.Gs2Chat.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeSubscribesWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeSubscribesWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Chat.Model.Subscribe[]> callback,
             string roomNamePrefix = null
         )
@@ -287,7 +295,6 @@ namespace Gs2.Gs2Chat.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeSubscribes(
             ulong callbackId,
@@ -330,12 +337,11 @@ namespace Gs2.Gs2Chat.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Chat.Model.Subscribe> SubscribesByRoomNameAsync(
-            #else
+        #else
         public DescribeSubscribesByRoomNameIterator SubscribesByRoomNameAsync(
-            #endif
+        #endif
             string roomName
         )
         {
@@ -346,7 +352,6 @@ namespace Gs2.Gs2Chat.Domain.Model
                 roomName
             );
         }
-        #endif
 
         public ulong SubscribeSubscribesByRoomName(
             Action<Gs2.Gs2Chat.Model.Subscribe[]> callback,
@@ -362,10 +367,15 @@ namespace Gs2.Gs2Chat.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await SubscribesByRoomNameAsync(
                                 roomName
                             ).ToArrayAsync());
@@ -375,13 +385,15 @@ namespace Gs2.Gs2Chat.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeSubscribesByRoomNameWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeSubscribesByRoomNameWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Chat.Model.Subscribe[]> callback,
             string roomName
         )
@@ -396,7 +408,6 @@ namespace Gs2.Gs2Chat.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeSubscribesByRoomName(
             ulong callbackId,

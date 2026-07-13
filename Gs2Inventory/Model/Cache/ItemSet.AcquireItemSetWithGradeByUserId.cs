@@ -27,10 +27,10 @@ using Gs2.Gs2Inventory.Result;
 using Gs2.Gs2Grade.Model.Cache;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -50,7 +50,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                self.Item.UserId,
+                self?.Item?.UserId,
                 self.Item.InventoryName,
                 self.Item.ItemName,
                 self.Item.Name,
@@ -59,7 +59,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             self.Status?.PutCache(
                 cache,
                 Gs2.Gs2Grade.Model.Status.GetNamespaceNameFromGrn(self.Status?.StatusId),
-                self.Item.UserId,
+                self?.Item?.UserId,
                 self.Status.GradeName,
                 self.Status.PropertyId,
                 timeOffset
@@ -74,7 +74,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             self.Inventory?.PutCache(
                 cache,
                 request.NamespaceName,
-                self.Item.UserId,
+                self?.Item?.UserId,
                 self.Item.InventoryName,
                 timeOffset
             );
@@ -111,21 +111,22 @@ namespace Gs2.Gs2Inventory.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<AcquireItemSetWithGradeByUserIdResult> InvokeAsync(
-    #else
+#else
         public static async Task<AcquireItemSetWithGradeByUserIdResult> InvokeAsync(
-    #endif
+#endif
             this AcquireItemSetWithGradeByUserIdRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<AcquireItemSetWithGradeByUserIdResult>> invokeImpl
-    #else
+#elif UNITY_2017_1_OR_NEWER
+            Func<TaskFuture<AcquireItemSetWithGradeByUserIdResult>> invokeImpl
+#else
             Func<Task<AcquireItemSetWithGradeByUserIdResult>> invokeImpl
-    #endif
+#endif
         )
         {
             var result = await invokeImpl();
@@ -137,6 +138,5 @@ namespace Gs2.Gs2Inventory.Model.Cache
             );
             return result;
         }
-#endif
     }
 }

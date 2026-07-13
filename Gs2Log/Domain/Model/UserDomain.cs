@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -29,6 +28,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -46,15 +47,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -83,7 +81,164 @@ namespace Gs2.Gs2Log.Domain.Model
             this.NamespaceName = namespaceName;
             this.UserId = userId;
         }
+/* diff --- start
+        //#if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Log.Model.InGameLog> InGameLog(
+            Gs2.Gs2Log.Model.InGameLogTag[] tags = null,
+            long? begin = null,
+            long? end = null,
+            bool? longTerm = null,
+            string timeOffsetToken = null
+        )
+        {
+            return new QueryInGameLogIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName,
+                this.UserId,
+                tags,
+                begin,
+                end,
+                longTerm,
+                timeOffsetToken
+            );
+        }
+        //#endif
+
+        //#if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.InGameLog> InGameLogAsync(
+        //#else
+        public QueryInGameLogIterator InGameLogAsync(
+        //#endif
+            Gs2.Gs2Log.Model.InGameLogTag[] tags = null,
+            long? begin = null,
+            long? end = null,
+            bool? longTerm = null,
+            string timeOffsetToken = null
+        )
+        {
+            return new QueryInGameLogIterator(
+                this._gs2,
+                this._client,
+                this.NamespaceName,
+                this.UserId,
+                tags,
+                begin,
+                end,
+                longTerm,
+                timeOffsetToken
+            );
+        }
+
+        public ulong SubscribeInGameLog(
+            Action<Gs2.Gs2Log.Model.InGameLog[]> callback,
+            Gs2.Gs2Log.Model.InGameLogTag[] tags = null,
+            long? begin = null,
+            long? end = null,
+            bool? longTerm = null
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Log.Model.InGameLog>(
+                (null as Gs2.Gs2Log.Model.InGameLog).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    null
+                ),
+                callback,
+                () =>
+                {
+        //#if GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+        //#else
+                    async Task Impl() {
+        //#endif
+                        try {
+        //#if GS2_ENABLE_UNITASK
+                            await UniTask.SwitchToMainThread();
+        //#endif
+                            callback.Invoke(await InGameLogAsync(
+                                tags,
+                                begin,
+                                end,
+                                longTerm
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+                }
+            );
+        }
+
+        //#if GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeInGameLogWithInitialCallAsync(
+        //#else
+        public async Task<ulong> SubscribeInGameLogWithInitialCallAsync(
+        //#endif
+            Action<Gs2.Gs2Log.Model.InGameLog[]> callback,
+            Gs2.Gs2Log.Model.InGameLogTag[] tags = null,
+            long? begin = null,
+            long? end = null,
+            bool? longTerm = null
+        )
+        {
+            var items = await InGameLogAsync(
+                tags,
+                begin,
+                end,
+                longTerm
+            ).ToArrayAsync();
+            var callbackId = SubscribeInGameLog(
+                callback,
+                tags,
+                begin,
+                end,
+                longTerm
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+
+        public void UnsubscribeInGameLog(
+            ulong callbackId,
+            Gs2.Gs2Log.Model.InGameLogTag[] tags = null,
+            long? begin = null,
+            long? end = null,
+            bool? longTerm = null
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Log.Model.InGameLog>(
+                (null as Gs2.Gs2Log.Model.InGameLog).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    null
+                ),
+                callbackId
+            );
+        }
+
+        public void InvalidateInGameLog(
+            Gs2.Gs2Log.Model.InGameLogTag[] tags = null,
+            long? begin = null,
+            long? end = null,
+            bool? longTerm = null
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Log.Model.InGameLog>(
+                (null as Gs2.Gs2Log.Model.InGameLog).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    null
+                )
+            );
+        }
+
+ diff --- end */
+/* diff +++ start */
         
+/* diff +++ end */
         public Gs2.Gs2Log.Domain.Model.InGameLogDomain InGameLog(
             string requestId
         ) {
@@ -102,44 +257,14 @@ namespace Gs2.Gs2Log.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Log.Domain.Model.InGameLogDomain> SendInGameLogFuture(
             SendInGameLogByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Log.Domain.Model.InGameLogDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.SendInGameLogByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Log.Domain.Model.InGameLogDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    result?.Item?.UserId,
-                    result?.Item?.RequestId
-                );
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Log.Domain.Model.InGameLogDomain>(Impl);
-        }
+        ) => SendInGameLogAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Log.Domain.Model.InGameLogDomain> SendInGameLogAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Log.Domain.Model.InGameLogDomain> SendInGameLogAsync(
-            #endif
+        #endif
             SendInGameLogByUserIdRequest request
         ) {
             request = request
@@ -161,7 +286,6 @@ namespace Gs2.Gs2Log.Domain.Model
 
             return domain;
         }
-        #endif
 
     }
 

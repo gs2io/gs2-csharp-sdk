@@ -26,10 +26,10 @@ using Gs2.Gs2Enhance.Request;
 using Gs2.Gs2Enhance.Result;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -88,21 +88,22 @@ namespace Gs2.Gs2Enhance.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<DescribeRateModelsResult> InvokeAsync(
-    #else
+#else
         public static async Task<DescribeRateModelsResult> InvokeAsync(
-    #endif
+#endif
             this DescribeRateModelsRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<DescribeRateModelsResult>> invokeImpl
-    #else
+#elif UNITY_2017_1_OR_NEWER
+            Func<TaskFuture<DescribeRateModelsResult>> invokeImpl
+#else
             Func<Task<DescribeRateModelsResult>> invokeImpl
-    #endif
+#endif
         )
         {
             var result = await invokeImpl();
@@ -114,6 +115,5 @@ namespace Gs2.Gs2Enhance.Model.Cache
             );
             return result;
         }
-#endif
     }
 }

@@ -27,6 +27,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -44,15 +46,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -98,12 +97,11 @@ namespace Gs2.Gs2Inventory.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Inventory.Model.SimpleItem> SimpleItemsAsync(
-            #else
+        #else
         public DescribeSimpleItemsByUserIdIterator SimpleItemsAsync(
-            #endif
+        #endif
             string timeOffsetToken = null
         )
         {
@@ -116,7 +114,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 timeOffsetToken
             );
         }
-        #endif
 
         public ulong SubscribeSimpleItems(
             Action<Gs2.Gs2Inventory.Model.SimpleItem[]> callback
@@ -132,10 +129,15 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await SimpleItemsAsync(
                             ).ToArrayAsync());
                         }
@@ -144,13 +146,15 @@ namespace Gs2.Gs2Inventory.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeSimpleItemsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeSimpleItemsWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Inventory.Model.SimpleItem[]> callback
         )
         {
@@ -162,7 +166,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeSimpleItems(
             ulong callbackId
@@ -211,45 +214,14 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain[]> AcquireSimpleItemsFuture(
             AcquireSimpleItemsByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain[]> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithInventoryName(this.InventoryName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.AcquireSimpleItemsByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = result?.Items?.Select(v => new Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    v?.UserId,
-                    this.InventoryName,
-                    v?.ItemName
-                )).ToArray() ?? Array.Empty<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain>();
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain[]>(Impl);
-        }
+        ) => AcquireSimpleItemsAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain[]> AcquireSimpleItemsAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain[]> AcquireSimpleItemsAsync(
-            #endif
+        #endif
             AcquireSimpleItemsByUserIdRequest request
         ) {
             request = request
@@ -272,50 +244,18 @@ namespace Gs2.Gs2Inventory.Domain.Model
             )).ToArray() ?? Array.Empty<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain>();
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain[]> ConsumeSimpleItemsFuture(
             ConsumeSimpleItemsByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain[]> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithInventoryName(this.InventoryName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.ConsumeSimpleItemsByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = result?.Items?.Select(v => new Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    v?.UserId,
-                    this.InventoryName,
-                    v?.ItemName
-                )).ToArray() ?? Array.Empty<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain>();
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain[]>(Impl);
-        }
+        ) => ConsumeSimpleItemsAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain[]> ConsumeSimpleItemsAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain[]> ConsumeSimpleItemsAsync(
-            #endif
+        #endif
             ConsumeSimpleItemsByUserIdRequest request
         ) {
             request = request
@@ -338,50 +278,18 @@ namespace Gs2.Gs2Inventory.Domain.Model
             )).ToArray() ?? Array.Empty<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain>();
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain[]> SetSimpleItemsFuture(
             SetSimpleItemsByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain[]> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithInventoryName(this.InventoryName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.SetSimpleItemsByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = result?.Items?.Select(v => new Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    v?.UserId,
-                    this.InventoryName,
-                    v?.ItemName
-                )).ToArray() ?? Array.Empty<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain>();
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain[]>(Impl);
-        }
+        ) => SetSimpleItemsAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain[]> SetSimpleItemsAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain[]> SetSimpleItemsAsync(
-            #endif
+        #endif
             SetSimpleItemsByUserIdRequest request
         ) {
             request = request
@@ -404,46 +312,18 @@ namespace Gs2.Gs2Inventory.Domain.Model
             )).ToArray() ?? Array.Empty<Gs2.Gs2Inventory.Domain.Model.SimpleItemDomain>();
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain> DeleteSimpleItemsFuture(
             DeleteSimpleItemsByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithInventoryName(this.InventoryName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.DeleteSimpleItemsByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    if (!(future.Error is NotFoundException)) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                var result = future.Result;
-                var domain = this;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain>(Impl);
-        }
+        ) => DeleteSimpleItemsAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain> DeleteSimpleItemsAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Inventory.Domain.Model.SimpleInventoryDomain> DeleteSimpleItemsAsync(
-            #endif
+        #endif
             DeleteSimpleItemsByUserIdRequest request
         ) {
             try {
@@ -463,40 +343,20 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
     }
 
     public partial class SimpleInventoryDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Inventory.Model.SimpleInventory> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Model.SimpleInventory> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Inventory.Model.SimpleInventory).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    this.InventoryName,
-                    null
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                self.OnComplete(null);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Inventory.Model.SimpleInventory>(Impl);
-        }
+        public IFuture<Gs2.Gs2Inventory.Model.SimpleInventory> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Inventory.Model.SimpleInventory> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Inventory.Model.SimpleInventory> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Inventory.Model.SimpleInventory>(
                         (null as Gs2.Gs2Inventory.Model.SimpleInventory).CacheParentKey(
@@ -521,28 +381,18 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 return null;
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2Inventory.Model.SimpleInventory> Model()
-        {
-            return await ModelAsync();
-        }
+        public UniTask<Gs2.Gs2Inventory.Model.SimpleInventory> Model() => ModelAsync();
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2Inventory.Model.SimpleInventory> Model()
-        {
-            return ModelFuture();
-        }
+        public IFuture<Gs2.Gs2Inventory.Model.SimpleInventory> Model() => ModelFuture();
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2Inventory.Model.SimpleInventory> Model()
-        {
-            return await ModelAsync();
-        }
+        public Task<Gs2.Gs2Inventory.Model.SimpleInventory> Model() => ModelAsync();
         #endif
 
 
@@ -571,7 +421,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -584,12 +433,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -610,38 +454,21 @@ namespace Gs2.Gs2Inventory.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Inventory.Model.SimpleInventory> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Inventory.Model.SimpleInventory> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Inventory.Model.SimpleInventory> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Inventory.Model.SimpleInventory> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

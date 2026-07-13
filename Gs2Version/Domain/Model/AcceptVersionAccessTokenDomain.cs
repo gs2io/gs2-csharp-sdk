@@ -27,6 +27,7 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -45,14 +46,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -86,40 +85,14 @@ namespace Gs2.Gs2Version.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Version.Domain.Model.AcceptVersionAccessTokenDomain> AcceptFuture(
             AcceptRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Version.Domain.Model.AcceptVersionAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithVersionName(this.VersionName)
-                    .WithAccessToken(this.AccessToken?.Token);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.AcceptFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Version.Domain.Model.AcceptVersionAccessTokenDomain>(Impl);
-        }
+        ) => AcceptAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Version.Domain.Model.AcceptVersionAccessTokenDomain> AcceptAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Version.Domain.Model.AcceptVersionAccessTokenDomain> AcceptAsync(
-            #endif
+        #endif
             AcceptRequest request
         ) {
             request = request
@@ -137,45 +110,18 @@ namespace Gs2.Gs2Version.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Version.Domain.Model.AcceptVersionAccessTokenDomain> RejectFuture(
             RejectRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Version.Domain.Model.AcceptVersionAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithVersionName(this.VersionName)
-                    .WithAccessToken(this.AccessToken?.Token);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.RejectFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Version.Domain.Model.AcceptVersionAccessTokenDomain>(Impl);
-        }
+        ) => RejectAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Version.Domain.Model.AcceptVersionAccessTokenDomain> RejectAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Version.Domain.Model.AcceptVersionAccessTokenDomain> RejectAsync(
-            #endif
+        #endif
             RejectRequest request
         ) {
             request = request
@@ -193,43 +139,18 @@ namespace Gs2.Gs2Version.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Version.Model.AcceptVersion> GetFuture(
             GetAcceptVersionRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Version.Model.AcceptVersion> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithVersionName(this.VersionName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.GetAcceptVersionFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Version.Model.AcceptVersion>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Version.Model.AcceptVersion> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Version.Model.AcceptVersion> GetAsync(
-            #endif
+        #endif
             GetAcceptVersionRequest request
         ) {
             request = request
@@ -245,47 +166,18 @@ namespace Gs2.Gs2Version.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Version.Domain.Model.AcceptVersionAccessTokenDomain> DeleteFuture(
             DeleteAcceptVersionRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Version.Domain.Model.AcceptVersionAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithVersionName(this.VersionName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.DeleteAcceptVersionFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    if (!(future.Error is NotFoundException)) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Version.Domain.Model.AcceptVersionAccessTokenDomain>(Impl);
-        }
+        ) => DeleteAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Version.Domain.Model.AcceptVersionAccessTokenDomain> DeleteAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Version.Domain.Model.AcceptVersionAccessTokenDomain> DeleteAsync(
-            #endif
+        #endif
             DeleteAcceptVersionRequest request
         ) {
             try {
@@ -305,51 +197,16 @@ namespace Gs2.Gs2Version.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Version.Model.AcceptVersion> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Version.Model.AcceptVersion> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Version.Model.AcceptVersion).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    this.VersionName,
-                    this.AccessToken?.TimeOffset
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2Version.Model.AcceptVersion).FetchFuture(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    this.VersionName,
-                    this.AccessToken?.TimeOffset,
-                    () => this.GetFuture(
-                        new GetAcceptVersionRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Version.Model.AcceptVersion>(Impl);
-        }
+        public IFuture<Gs2.Gs2Version.Model.AcceptVersion> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Version.Model.AcceptVersion> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Version.Model.AcceptVersion> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Version.Model.AcceptVersion>(
                         (null as Gs2.Gs2Version.Model.AcceptVersion).CacheParentKey(
@@ -383,28 +240,18 @@ namespace Gs2.Gs2Version.Domain.Model
                 );
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2Version.Model.AcceptVersion> Model()
-        {
-            return await ModelAsync();
-        }
+        public UniTask<Gs2.Gs2Version.Model.AcceptVersion> Model() => ModelAsync();
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2Version.Model.AcceptVersion> Model()
-        {
-            return ModelFuture();
-        }
+        public IFuture<Gs2.Gs2Version.Model.AcceptVersion> Model() => ModelFuture();
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2Version.Model.AcceptVersion> Model()
-        {
-            return await ModelAsync();
-        }
+        public Task<Gs2.Gs2Version.Model.AcceptVersion> Model() => ModelAsync();
         #endif
 
 
@@ -433,7 +280,6 @@ namespace Gs2.Gs2Version.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -446,12 +292,7 @@ namespace Gs2.Gs2Version.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -472,38 +313,21 @@ namespace Gs2.Gs2Version.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Version.Model.AcceptVersion> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Version.Model.AcceptVersion> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Version.Model.AcceptVersion> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Version.Model.AcceptVersion> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

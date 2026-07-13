@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Gs2.Core.Util;
 
 namespace Core.Util
 {
@@ -9,7 +10,7 @@ namespace Core.Util
 
         public async Task<IDisposable> LockAsync()
         {
-            await this._semaphore.WaitAsync();
+            await TaskUtilities.WaitAsync(this._semaphore);
             return this;
         }
         

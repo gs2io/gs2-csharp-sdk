@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -48,14 +47,24 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this BigItem self,
             AcquireBigItemByUserIdRequest request
         ) {
+/* diff --- start
+            if (self.Clone() is not BigItem clone)
+ diff --- end */
+/* diff +++ start */
             var clone = self.Clone() as BigItem;
             if (clone == null)
+/* diff +++ end */
             {
                 throw new NullReferenceException();
             }
+/* diff --- start
+            clone.Count += request.AcquireCount;
+ diff --- end */
+/* diff +++ start */
             BigInteger.TryParse(self.Count, out var v1);
             BigInteger.TryParse(request.AcquireCount, out var v2);
             clone.Count = BigInteger.Add(v1, v2).ToString();
+/* diff +++ end */
             return clone;
         }
 
@@ -63,8 +72,13 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this AcquireBigItemByUserIdRequest request,
             double rate
         ) {
+/* diff --- start
+            throw new NotSupportedException($"not supported rate action Gs2Inventory:AcquireBigItemByUserId");
+ diff --- end */
+/* diff +++ start */
             request.AcquireCount = BigInteger.Multiply(BigInteger.Parse(request.AcquireCount), new BigInteger(rate)).ToString("D");
             return request;
+/* diff +++ end */
         }
     }
 
@@ -74,8 +88,13 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this AcquireBigItemByUserIdRequest request,
             BigInteger rate
         ) {
+/* diff --- start
+            throw new NotSupportedException($"not supported rate action Gs2Inventory:AcquireBigItemByUserId");
+ diff --- end */
+/* diff +++ start */
             request.AcquireCount = BigInteger.Multiply(BigInteger.Parse(request.AcquireCount), rate).ToString("D");
             return request;
+/* diff +++ end */
         }
     }
 }

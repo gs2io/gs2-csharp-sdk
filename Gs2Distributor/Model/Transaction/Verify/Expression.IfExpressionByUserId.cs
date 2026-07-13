@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -31,7 +30,10 @@ namespace Gs2.Gs2Distributor.Model.Transaction
     public static partial class ExpressionExt
     {
         public static bool IsExecutable(
-            this Namespace self,
+/* diff --- start
+            this Expression self,
+ diff --- end */
+            this Namespace self, /* diff +++ */
             IfExpressionByUserIdRequest request
         ) {
             var changed = self.SpeculativeExecution(request);
@@ -44,8 +46,14 @@ namespace Gs2.Gs2Distributor.Model.Transaction
             }
         }
 
+/* diff --- start
+        public static Expression SpeculativeExecution(
+            this Expression self,
+ diff --- end */
+/* diff +++ start */
         public static Namespace SpeculativeExecution(
             this Namespace self,
+/* diff +++ end */
             IfExpressionByUserIdRequest request
         ) {
 #if UNITY_2017_1_OR_NEWER
@@ -53,7 +61,10 @@ namespace Gs2.Gs2Distributor.Model.Transaction
 #else
             System.Console.WriteLine("Speculative execution not supported on this action: Gs2Distributor:IfExpressionByUserId");
 #endif
-            return self.Clone() as Namespace;
+/* diff --- start
+            return self.Clone() as Expression;
+ diff --- end */
+            return self.Clone() as Namespace; /* diff +++ */
         }
 
         public static IfExpressionByUserIdRequest Rate(
@@ -66,5 +77,13 @@ namespace Gs2.Gs2Distributor.Model.Transaction
 
     public static partial class IfExpressionByUserIdRequestExt
     {
+/* diff --- start
+        public static IfExpressionByUserIdRequest Rate(
+            this IfExpressionByUserIdRequest request,
+            BigInteger rate
+        ) {
+            throw new NotSupportedException($"not supported rate action Gs2Distributor:IfExpressionByUserId");
+        }
+ diff --- end */
     }
 }

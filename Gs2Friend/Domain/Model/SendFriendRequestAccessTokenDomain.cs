@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -29,6 +28,7 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -43,19 +43,17 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Exception;
 using Gs2.Core.Util;
-using Gs2.Gs2Friend.Model;
+using Gs2.Gs2Friend.Model; /* diff +++ */
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -87,43 +85,25 @@ namespace Gs2.Gs2Friend.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        private IFuture<Gs2.Gs2Friend.Model.SendFriendRequest> GetFuture(
+/* diff --- start
+        private IFuture<Gs2.Gs2Friend.Model.FriendRequest> GetFuture(
+ diff --- end */
+        private IFuture<Gs2.Gs2Friend.Model.SendFriendRequest> GetFuture( /* diff +++ */
             GetSendRequestRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Friend.Model.SendFriendRequest> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithTargetUserId(this.TargetUserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.GetSendRequestFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item == null ? null : new SendFriendRequest {
-                    UserId = result.Item.UserId,
-                    TargetUserId = result.Item.TargetUserId,
-                });
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Friend.Model.SendFriendRequest>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
-        private async UniTask<Gs2.Gs2Friend.Model.SendFriendRequest> GetAsync(
-            #else
-        private async Task<Gs2.Gs2Friend.Model.SendFriendRequest> GetAsync(
-            #endif
+        #if GS2_ENABLE_UNITASK
+/* diff --- start
+        private async UniTask<Gs2.Gs2Friend.Model.FriendRequest> GetAsync(
+ diff --- end */
+        private async UniTask<Gs2.Gs2Friend.Model.SendFriendRequest> GetAsync( /* diff +++ */
+        #else
+/* diff --- start
+        private async Task<Gs2.Gs2Friend.Model.FriendRequest> GetAsync(
+ diff --- end */
+        private async Task<Gs2.Gs2Friend.Model.SendFriendRequest> GetAsync( /* diff +++ */
+        #endif
             GetSendRequestRequest request
         ) {
             request = request
@@ -137,57 +117,37 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this.AccessToken?.TimeOffset,
                 () => this._client.GetSendRequestAsync(request)
             );
+/* diff --- start
+            return result?.Item;
+ diff --- end */
+/* diff +++ start */
             return result?.Item == null ? null : new SendFriendRequest {
                 UserId = result.Item.UserId,
                 TargetUserId = result.Item.TargetUserId,
             };
+/* diff +++ end */
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Friend.Domain.Model.SendFriendRequestAccessTokenDomain> DeleteFuture(
+/* diff --- start
+        public IFuture<Gs2.Gs2Friend.Domain.Model.FriendRequestAccessTokenDomain> DeleteFuture(
+ diff --- end */
+        public IFuture<Gs2.Gs2Friend.Domain.Model.SendFriendRequestAccessTokenDomain> DeleteFuture( /* diff +++ */
             DeleteRequestRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.SendFriendRequestAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithTargetUserId(this.TargetUserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.DeleteRequestFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    if (!(future.Error is NotFoundException)) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Friend.Domain.Model.SendFriendRequestAccessTokenDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    this.AccessToken,
-                    result?.Item?.TargetUserId
-                );
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Friend.Domain.Model.SendFriendRequestAccessTokenDomain>(Impl);
-        }
+        ) => DeleteAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Gs2Friend.Domain.Model.SendFriendRequestAccessTokenDomain> DeleteAsync(
-            #else
-        public async Task<Gs2.Gs2Friend.Domain.Model.SendFriendRequestAccessTokenDomain> DeleteAsync(
-            #endif
+        #if GS2_ENABLE_UNITASK
+/* diff --- start
+        public async UniTask<Gs2.Gs2Friend.Domain.Model.FriendRequestAccessTokenDomain> DeleteAsync(
+ diff --- end */
+        public async UniTask<Gs2.Gs2Friend.Domain.Model.SendFriendRequestAccessTokenDomain> DeleteAsync( /* diff +++ */
+        #else
+/* diff --- start
+        public async Task<Gs2.Gs2Friend.Domain.Model.FriendRequestAccessTokenDomain> DeleteAsync(
+ diff --- end */
+        public async Task<Gs2.Gs2Friend.Domain.Model.SendFriendRequestAccessTokenDomain> DeleteAsync( /* diff +++ */
+        #endif
             DeleteRequestRequest request
         ) {
             try {
@@ -204,6 +164,10 @@ namespace Gs2.Gs2Friend.Domain.Model
                 );
             }
             catch (NotFoundException e) {}
+/* diff --- start
+            var domain = new Gs2.Gs2Friend.Domain.Model.FriendRequestAccessTokenDomain(
+ diff --- end */
+/* diff +++ start */
             _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.SendFriendRequest>(
                 (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                     this.NamespaceName,
@@ -219,66 +183,41 @@ namespace Gs2.Gs2Friend.Domain.Model
                 )
             );
             var domain = new Gs2.Gs2Friend.Domain.Model.SendFriendRequestAccessTokenDomain(
+/* diff +++ end */
                 this._gs2,
                 this.NamespaceName,
                 this.AccessToken,
-                request?.TargetUserId
+/* diff --- start
+                result?.Item?.TargetUserId
+ diff --- end */
+                request?.TargetUserId /* diff +++ */
             );
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Friend.Model.SendFriendRequest> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Friend.Model.SendFriendRequest> self)
-            {
-                if (this.UserId == null) {
-                    throw new NullReferenceException();
-                }
-                var (value, find) = this._gs2.Cache.Get<Gs2.Gs2Friend.Model.SendFriendRequest>(
-                    (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
-                        this.NamespaceName,
-                        this.UserId,
-                        this.AccessToken?.TimeOffset
-                    ),
-                    (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
-                        this.TargetUserId
-                    )
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2Friend.Model.SendFriendRequest).FetchFuture(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    this.TargetUserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this.GetFuture(
-                        new GetSendRequestRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Friend.Model.SendFriendRequest>(Impl);
-        }
+/* diff --- start
+        public IFuture<Gs2.Gs2Friend.Model.FriendRequest> ModelFuture() => ModelAsync().ToGs2Future();
+ diff --- end */
+        public IFuture<Gs2.Gs2Friend.Model.SendFriendRequest> ModelFuture() => ModelAsync().ToGs2Future(); /* diff +++ */
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Gs2Friend.Model.SendFriendRequest> ModelAsync()
-            #else
-        public async Task<Gs2.Gs2Friend.Model.SendFriendRequest> ModelAsync()
-            #endif
+        #if GS2_ENABLE_UNITASK
+/* diff --- start
+        public async UniTask<Gs2.Gs2Friend.Model.FriendRequest> ModelAsync()
+ diff --- end */
+        public async UniTask<Gs2.Gs2Friend.Model.SendFriendRequest> ModelAsync() /* diff +++ */
+        #else
+/* diff --- start
+        public async Task<Gs2.Gs2Friend.Model.FriendRequest> ModelAsync()
+ diff --- end */
+        public async Task<Gs2.Gs2Friend.Model.SendFriendRequest> ModelAsync() /* diff +++ */
+        #endif
         {
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.SendFriendRequest>(
+/* diff --- start
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.FriendRequest>(
+ diff --- end */
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.SendFriendRequest>( /* diff +++ */
                         (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                             this.NamespaceName,
                             this.UserId,
@@ -291,7 +230,10 @@ namespace Gs2.Gs2Friend.Domain.Model
                 if (this.UserId == null) {
                     throw new NullReferenceException();
                 }
-                var (value, find) = this._gs2.Cache.Get<Gs2.Gs2Friend.Model.SendFriendRequest>(
+/* diff --- start
+                var (value, find) = this._gs2.Cache.Get<Gs2.Gs2Friend.Model.FriendRequest>(
+ diff --- end */
+                var (value, find) = this._gs2.Cache.Get<Gs2.Gs2Friend.Model.SendFriendRequest>( /* diff +++ */
                     (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                         this.NamespaceName,
                         this.UserId,
@@ -304,7 +246,10 @@ namespace Gs2.Gs2Friend.Domain.Model
                 if (find) {
                     return value;
                 }
-                return await (null as Gs2.Gs2Friend.Model.SendFriendRequest).FetchAsync(
+/* diff --- start
+                return await (null as Gs2.Gs2Friend.Model.FriendRequest).FetchAsync(
+ diff --- end */
+                return await (null as Gs2.Gs2Friend.Model.SendFriendRequest).FetchAsync( /* diff +++ */
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
@@ -316,34 +261,51 @@ namespace Gs2.Gs2Friend.Domain.Model
                 );
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
+/* diff --- start
+        public UniTask<Gs2.Gs2Friend.Model.FriendRequest> Model() => ModelAsync();
+ diff --- end */
+/* diff +++ start */
         public async UniTask<Gs2.Gs2Friend.Model.SendFriendRequest> Model()
         {
             return await ModelAsync();
         }
+/* diff +++ end */
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
+/* diff --- start
+        public IFuture<Gs2.Gs2Friend.Model.FriendRequest> Model() => ModelFuture();
+ diff --- end */
+/* diff +++ start */
         public IFuture<Gs2.Gs2Friend.Model.SendFriendRequest> Model()
         {
             return ModelFuture();
         }
+/* diff +++ end */
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
+/* diff --- start
+        public Task<Gs2.Gs2Friend.Model.FriendRequest> Model() => ModelAsync();
+ diff --- end */
+/* diff +++ start */
         public async Task<Gs2.Gs2Friend.Model.SendFriendRequest> Model()
         {
             return await ModelAsync();
         }
+/* diff +++ end */
         #endif
 
 
         public void Invalidate()
         {
-            (null as Gs2.Gs2Friend.Model.SendFriendRequest).DeleteCache(
+/* diff --- start
+            (null as Gs2.Gs2Friend.Model.FriendRequest).DeleteCache(
+ diff --- end */
+            (null as Gs2.Gs2Friend.Model.SendFriendRequest).DeleteCache( /* diff +++ */
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
@@ -352,7 +314,10 @@ namespace Gs2.Gs2Friend.Domain.Model
             );
         }
 
-        public ulong Subscribe(Action<Gs2.Gs2Friend.Model.SendFriendRequest> callback)
+/* diff --- start
+        public ulong Subscribe(Action<Gs2.Gs2Friend.Model.FriendRequest> callback)
+ diff --- end */
+        public ulong Subscribe(Action<Gs2.Gs2Friend.Model.SendFriendRequest> callback) /* diff +++ */
         {
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
@@ -366,7 +331,6 @@ namespace Gs2.Gs2Friend.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -379,19 +343,23 @@ namespace Gs2.Gs2Friend.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
+            #if GS2_ENABLE_UNITASK // diff +++
                     Impl().Forget();
+/* diff +++ start */
             #else
                     Impl();
             #endif
-        #endif
+/* diff +++ end */
                 }
             );
         }
 
         public void Unsubscribe(ulong callbackId)
         {
-            this._gs2.Cache.Unsubscribe<Gs2.Gs2Friend.Model.SendFriendRequest>(
+/* diff --- start
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
+ diff --- end */
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Friend.Model.SendFriendRequest>( /* diff +++ */
                 (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
@@ -405,38 +373,30 @@ namespace Gs2.Gs2Friend.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Friend.Model.SendFriendRequest> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+/* diff --- start
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Friend.Model.FriendRequest> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
+ diff --- end */
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Friend.Model.SendFriendRequest> callback) => SubscribeWithInitialCallAsync(callback).ToGs2Future(); /* diff +++ */
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
-        public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Friend.Model.SendFriendRequest> callback)
-            #else
-        public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Friend.Model.SendFriendRequest> callback)
-            #endif
+        #if GS2_ENABLE_UNITASK
+/* diff --- start
+        public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Friend.Model.FriendRequest> callback)
+ diff --- end */
+        public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Friend.Model.SendFriendRequest> callback) /* diff +++ */
+        #else
+/* diff --- start
+        public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Friend.Model.FriendRequest> callback)
+ diff --- end */
+        public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Friend.Model.SendFriendRequest> callback) /* diff +++ */
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

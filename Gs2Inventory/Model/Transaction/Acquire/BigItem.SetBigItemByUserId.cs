@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -48,8 +47,13 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this BigItem self,
             SetBigItemByUserIdRequest request
         ) {
+/* diff --- start
+            if (self.Clone() is not BigItem clone)
+ diff --- end */
+/* diff +++ start */
             var clone = self.Clone() as BigItem;
             if (clone == null)
+/* diff +++ end */
             {
                 throw new NullReferenceException();
             }
@@ -61,8 +65,13 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this SetBigItemByUserIdRequest request,
             double rate
         ) {
+/* diff --- start
+            throw new NotSupportedException($"not supported rate action Gs2Inventory:SetBigItemByUserId");
+ diff --- end */
+/* diff +++ start */
             request.Count = BigInteger.Multiply(BigInteger.Parse(request.Count), new BigInteger(rate)).ToString("D");
             return request;
+/* diff +++ end */
         }
     }
 
@@ -72,8 +81,13 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this SetBigItemByUserIdRequest request,
             BigInteger rate
         ) {
+/* diff --- start
+            throw new NotSupportedException($"not supported rate action Gs2Inventory:SetBigItemByUserId");
+ diff --- end */
+/* diff +++ start */
             request.Count = BigInteger.Multiply(BigInteger.Parse(request.Count), rate).ToString("D");
             return request;
+/* diff +++ end */
         }
     }
 }

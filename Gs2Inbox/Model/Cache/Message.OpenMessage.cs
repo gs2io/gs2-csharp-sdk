@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -28,10 +27,10 @@ using Gs2.Gs2Inbox.Request;
 using Gs2.Gs2Inbox.Result;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -54,6 +53,7 @@ namespace Gs2.Gs2Inbox.Model.Cache
                 userId,
                 request.MessageName,
                 timeOffset
+/* diff +++ start */
             );
             cache.ClearListCache<Message>(
                 (null as Message).CacheParentKey(
@@ -61,6 +61,7 @@ namespace Gs2.Gs2Inbox.Model.Cache
                     userId,
                     timeOffset
                 )
+/* diff +++ end */
             );
         }
 
@@ -95,21 +96,22 @@ namespace Gs2.Gs2Inbox.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<OpenMessageResult> InvokeAsync(
-    #else
+#else
         public static async Task<OpenMessageResult> InvokeAsync(
-    #endif
+#endif
             this OpenMessageRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<OpenMessageResult>> invokeImpl
-    #else
+#elif UNITY_2017_1_OR_NEWER
+            Func<TaskFuture<OpenMessageResult>> invokeImpl
+#else
             Func<Task<OpenMessageResult>> invokeImpl
-    #endif
+#endif
         )
         {
             var result = await invokeImpl();
@@ -121,6 +123,5 @@ namespace Gs2.Gs2Inbox.Model.Cache
             );
             return result;
         }
-#endif
     }
 }

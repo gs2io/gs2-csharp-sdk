@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -28,10 +27,10 @@ using Gs2.Gs2Schedule.Request;
 using Gs2.Gs2Schedule.Result;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -53,8 +52,9 @@ namespace Gs2.Gs2Schedule.Model.Cache
                 request.NamespaceName,
                 request.UserId,
                 request.EventName,
-                request.IsInSchedule ?? true,
+                request.IsInSchedule ?? true, /* diff +++ */
                 timeOffset
+/* diff +++ start */
             );
             self.RepeatSchedule?.PutCache(
                 cache,
@@ -62,6 +62,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
                 userId,
                 request.EventName,
                 request.IsInSchedule ?? true
+/* diff +++ end */
             );
         }
 
@@ -96,21 +97,22 @@ namespace Gs2.Gs2Schedule.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<GetEventByUserIdResult> InvokeAsync(
-    #else
+#else
         public static async Task<GetEventByUserIdResult> InvokeAsync(
-    #endif
+#endif
             this GetEventByUserIdRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<GetEventByUserIdResult>> invokeImpl
-    #else
+#elif UNITY_2017_1_OR_NEWER
+            Func<TaskFuture<GetEventByUserIdResult>> invokeImpl
+#else
             Func<Task<GetEventByUserIdResult>> invokeImpl
-    #endif
+#endif
         )
         {
             var result = await invokeImpl();
@@ -122,6 +124,5 @@ namespace Gs2.Gs2Schedule.Model.Cache
             );
             return result;
         }
-#endif
     }
 }

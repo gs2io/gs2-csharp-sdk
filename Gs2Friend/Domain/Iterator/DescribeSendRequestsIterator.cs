@@ -13,7 +13,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -31,33 +30,30 @@
 #pragma warning disable 1998
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Domain;
 using Gs2.Core.Exception;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
-using Gs2.Gs2Friend.Model;
+using Gs2.Gs2Friend.Model; /* diff +++ */
 using Gs2.Util.LitJson;
 using Gs2.Gs2Friend.Model.Cache;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-    #if GS2_ENABLE_UNITASK
-using System.Threading;
-using System.Collections.Generic;
+using UnityEngine.Events;
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-    #else
-using System.Collections;
-using UnityEngine.Events;
-    #endif
 #else
-using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 #endif
 
@@ -66,12 +62,21 @@ namespace Gs2.Gs2Friend.Domain.Iterator
 
     public class DescribeSendRequestsIterator :
     #if UNITY_2017_1_OR_NEWER
-        Gs2Iterator<Gs2.Gs2Friend.Model.SendFriendRequest>
-        #if GS2_ENABLE_UNITASK
-        , IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.SendFriendRequest>
-        #endif
+/* diff --- start
+        Gs2Iterator<Gs2.Gs2Friend.Model.FriendRequest>,
+ diff --- end */
+        Gs2Iterator<Gs2.Gs2Friend.Model.SendFriendRequest>, /* diff +++ */
+    #endif
+    #if GS2_ENABLE_UNITASK
+/* diff --- start
+        IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.FriendRequest>
+ diff --- end */
+        IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.SendFriendRequest> /* diff +++ */
     #else
-        IAsyncEnumerable<Gs2.Gs2Friend.Model.SendFriendRequest>
+/* diff --- start
+        IAsyncEnumerable<Gs2.Gs2Friend.Model.FriendRequest>
+ diff --- end */
+        IAsyncEnumerable<Gs2.Gs2Friend.Model.SendFriendRequest> /* diff +++ */
     #endif
     {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
@@ -79,10 +84,16 @@ namespace Gs2.Gs2Friend.Domain.Iterator
         public string NamespaceName { get; }
         public AccessToken AccessToken { get; }
         public string UserId => AccessToken?.UserId;
+/* diff --- start
+        public bool? WithProfile { get; }
+ diff --- end */
         private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
-        private Gs2.Gs2Friend.Model.SendFriendRequest[] _result;
+/* diff --- start
+        private Gs2.Gs2Friend.Model.FriendRequest[] _result;
+ diff --- end */
+        private Gs2.Gs2Friend.Model.SendFriendRequest[] _result; /* diff +++ */
 
         public static int? fetchSize;
 
@@ -90,35 +101,47 @@ namespace Gs2.Gs2Friend.Domain.Iterator
             Gs2.Core.Domain.Gs2 gs2,
             Gs2FriendRestClient client,
             string namespaceName,
-            AccessToken accessToken
+/* diff --- start
+            AccessToken accessToken,
+            bool? withProfile = null
+ diff --- end */
+            AccessToken accessToken /* diff +++ */
         ) {
             this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.AccessToken = accessToken;
+/* diff --- start
+            this.WithProfile = withProfile;
+ diff --- end */
             this._pageToken = null;
             this._last = false;
-            this._result = new Gs2.Gs2Friend.Model.SendFriendRequest[]{};
+/* diff --- start
+            this._result = new Gs2.Gs2Friend.Model.FriendRequest[]{};
+ diff --- end */
+            this._result = new Gs2.Gs2Friend.Model.SendFriendRequest[]{}; /* diff +++ */
         }
 
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         private async UniTask _load() {
-            #else
-        private IEnumerator _load() {
-            #endif
         #else
         private async Task _load() {
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
             if (!isCacheChecked && this._gs2.Cache.TryGetList
-                    <Gs2.Gs2Friend.Model.SendFriendRequest>
+/* diff --- start
+                    <Gs2.Gs2Friend.Model.FriendRequest>
+ diff --- end */
+                    <Gs2.Gs2Friend.Model.SendFriendRequest> /* diff +++ */
             (
                     (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                         NamespaceName,
                         AccessToken?.UserId,
-                        AccessToken?.TimeOffset
+/* diff --- start
+                        this.AccessToken?.TimeOffset
+ diff --- end */
+                        AccessToken?.TimeOffset /* diff +++ */
                     ),
                     out var list
             )) {
@@ -132,44 +155,48 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                     .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
+/* diff --- start
+                    .WithWithProfile(this.WithProfile)
+ diff --- end */
                     .WithPageToken(this._pageToken)
                     .WithLimit(fetchSize);
-                #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                var future = this._client.DescribeSendRequestsFuture(
-                #else
                 var r = await this._client.DescribeSendRequestsAsync(
-                #endif
                     request
                 );
-                #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                yield return future;
-                if (future.Error != null)
-                {
-                    Error = future.Error;
-                    yield break;
-                }
-                var r = future.Result;
-                #endif
+/* diff --- start
+                this._result = r.Items
+ diff --- end */
+/* diff +++ start */
                 this._result = r.Items.Select(v => new SendFriendRequest {
                         UserId = v.UserId,
                         TargetUserId = v.TargetUserId,
                     })
+/* diff +++ end */
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
                 r.PutCache(
                     this._gs2.Cache,
                     UserId,
-                    AccessToken?.TimeOffset,
+/* diff --- start
+                    this.AccessToken?.TimeOffset,
+ diff --- end */
+                    AccessToken?.TimeOffset, /* diff +++ */
                     request
                 );
 
                 if (this._last) {
-                    this._gs2.Cache.SetListCached<Gs2.Gs2Friend.Model.SendFriendRequest>(
+/* diff --- start
+                    this._gs2.Cache.SetListCached<Gs2.Gs2Friend.Model.FriendRequest>(
+ diff --- end */
+                    this._gs2.Cache.SetListCached<Gs2.Gs2Friend.Model.SendFriendRequest>( /* diff +++ */
                         (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                             NamespaceName,
                             AccessToken?.UserId,
-                            AccessToken?.TimeOffset
+/* diff --- start
+                            this.AccessToken?.TimeOffset
+ diff --- end */
+                            AccessToken?.TimeOffset /* diff +++ */
                         )
                     );
                 }
@@ -187,67 +214,102 @@ namespace Gs2.Gs2Friend.Domain.Iterator
             if (Error != null) return false;
             return _hasNext();
         }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
 
         protected override System.Collections.IEnumerator Next(
-            Action<AsyncResult<Gs2.Gs2Friend.Model.SendFriendRequest>> callback
+/* diff --- start
+            Action<AsyncResult<Gs2.Gs2Friend.Model.FriendRequest>> callback
+ diff --- end */
+            Action<AsyncResult<Gs2.Gs2Friend.Model.SendFriendRequest>> callback /* diff +++ */
         )
         {
-            Gs2Exception error = null;
-            yield return UniTask.ToCoroutine(
-                async () => {
-                    try {
-                        if (this._result.Length == 0 && !this._last) {
-                            await this._load();
-                        }
-                        if (this._result.Length == 0) {
-                            Current = null;
-                            return;
-                        }
-                        var ret = this._result[0];
-                        this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
-                        if (this._result.Length == 0 && !this._last) {
-                            await this._load();
-                        }
-                        Current = ret;
-                    }
-                    catch (Gs2Exception e) {
-                        Current = null;
-                        error = e;
-                    }
+            if (this._result.Length == 0 && !this._last) {
+                var future = this._load().ToGs2Future();
+                yield return future;
+                if (future.Error != null)
+                {
+                    Current = null;
+                    Error = future.Error;
+/* diff --- start
+                    callback.Invoke(new AsyncResult<Gs2.Gs2Friend.Model.FriendRequest>(
+ diff --- end */
+                    callback.Invoke(new AsyncResult<Gs2.Gs2Friend.Model.SendFriendRequest>( /* diff +++ */
+                        Current,
+                        Error
+                    ));
+                    yield break;
                 }
-            );
-            callback.Invoke(new AsyncResult<Gs2.Gs2Friend.Model.SendFriendRequest>(
+            }
+            if (this._result.Length == 0) {
+                Current = null;
+/* diff --- start
+                callback.Invoke(new AsyncResult<Gs2.Gs2Friend.Model.FriendRequest>(
+ diff --- end */
+                callback.Invoke(new AsyncResult<Gs2.Gs2Friend.Model.SendFriendRequest>( /* diff +++ */
+                    Current,
+                    Error
+                ));
+                yield break;
+            }
+            var ret = this._result[0];
+            this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
+            if (this._result.Length == 0 && !this._last) {
+                var future = this._load().ToGs2Future();
+                yield return future;
+                if (future.Error != null)
+                {
+                    Current = null;
+                    Error = future.Error;
+/* diff --- start
+                    callback.Invoke(new AsyncResult<Gs2.Gs2Friend.Model.FriendRequest>(
+ diff --- end */
+                    callback.Invoke(new AsyncResult<Gs2.Gs2Friend.Model.SendFriendRequest>( /* diff +++ */
+                        Current,
+                        Error
+                    ));
+                    yield break;
+                }
+            }
+            Current = ret;
+/* diff --- start
+            callback.Invoke(new AsyncResult<Gs2.Gs2Friend.Model.FriendRequest>(
+ diff --- end */
+            callback.Invoke(new AsyncResult<Gs2.Gs2Friend.Model.SendFriendRequest>( /* diff +++ */
                 Current,
-                error
+                Error
             ));
         }
         #endif
 
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerator<Gs2.Gs2Friend.Model.SendFriendRequest> GetAsyncEnumerator(
+        #if GS2_ENABLE_UNITASK
+/* diff --- start
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Friend.Model.FriendRequest> GetAsyncEnumerator(
+ diff --- end */
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Friend.Model.SendFriendRequest> GetAsyncEnumerator( /* diff +++ */
             CancellationToken cancellationToken = new CancellationToken()
-            #else
-
-        protected override IEnumerator Next(
-            Action<AsyncResult<Gs2.Gs2Friend.Model.SendFriendRequest>> callback
-            #endif
+/* diff --- start
+        ) => UniTaskAsyncEnumerable.Create<Gs2.Gs2Friend.Model.FriendRequest>(async (writer, token) =>
+ diff --- end */
+        ) => UniTaskAsyncEnumerable.Create<Gs2.Gs2Friend.Model.SendFriendRequest>(async (writer, token) => /* diff +++ */
         #else
-        public async IAsyncEnumerator<Gs2.Gs2Friend.Model.SendFriendRequest> GetAsyncEnumerator(
+/* diff --- start
+        public async IAsyncEnumerator<Gs2.Gs2Friend.Model.FriendRequest> GetAsyncEnumerator(
+ diff --- end */
+        public async IAsyncEnumerator<Gs2.Gs2Friend.Model.SendFriendRequest> GetAsyncEnumerator( /* diff +++ */
             CancellationToken cancellationToken = new CancellationToken()
-        #endif
         )
-        {
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-            return UniTaskAsyncEnumerable.Create<Gs2.Gs2Friend.Model.SendFriendRequest>(async (writer, token) =>
-            {
-            #endif
         #endif
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+        {
+/* diff --- start
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.FriendRequest>(
+                    (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
+                        NamespaceName,
+                        AccessToken?.UserId,
+                        this.AccessToken?.TimeOffset
+                   ),
+                   "ListFriendRequest"
+               ).LockAsync()) {
+ diff --- end */
+/* diff +++ start */
                 using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.SendFriendRequest>(
                         (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                             NamespaceName,
@@ -256,61 +318,30 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                        ),
                        "ListSendFriendRequest"
                    ).LockAsync()) {
+/* diff +++ end */
                 while(this._hasNext()) {
                     cancellationToken.ThrowIfCancellationRequested();
-        #endif
                     if (this._result.Length == 0 && !this._last) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                        yield return this._load();
-        #else
                         await this._load();
-        #endif
                     }
                     if (this._result.Length == 0) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                        Current = null;
-                        callback.Invoke(new AsyncResult<Gs2.Gs2Friend.Model.SendFriendRequest>(
-                            Current,
-                            Error
-                        ));
-                        yield break;
-        #else
                         break;
-        #endif
                     }
                     var ret = this._result[0];
                     this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
                     if (this._result.Length == 0 && !this._last) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                        yield return this._load();
-        #else
                         await this._load();
-        #endif
                     }
-        #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
                     await writer.YieldAsync(ret);
             #else
-                    Current = ret;
-                    callback.Invoke(new AsyncResult<Gs2.Gs2Friend.Model.SendFriendRequest>(
-                        Current,
-                        Error
-                    ));
-            #endif
-        #else
                     yield return ret;
-        #endif
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-                }
-        #endif
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-                }
-            }).GetAsyncEnumerator();
             #endif
-        #else
+                }
             }
-        #endif
         }
+        #if GS2_ENABLE_UNITASK
+        ).GetAsyncEnumerator();
+        #endif
     }
 }

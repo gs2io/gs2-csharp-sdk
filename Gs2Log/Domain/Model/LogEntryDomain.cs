@@ -27,6 +27,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -44,15 +46,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -82,35 +81,14 @@ namespace Gs2.Gs2Log.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Log.Domain.Model.LogEntryDomain> GetLogFuture(
             GetLogRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Log.Domain.Model.LogEntryDomain> self)
-            {
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.GetLogFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Log.Domain.Model.LogEntryDomain>(Impl);
-        }
+        ) => GetLogAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Log.Domain.Model.LogEntryDomain> GetLogAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Log.Domain.Model.LogEntryDomain> GetLogAsync(
-            #endif
+        #endif
             GetLogRequest request
         ) {
             var result = await request.InvokeAsync(
@@ -123,41 +101,18 @@ namespace Gs2.Gs2Log.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Log.Domain.Model.FacetDomain[]> FacetsFuture(
             QueryFacetsRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Log.Domain.Model.FacetDomain[]> self)
-            {
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.QueryFacetsFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = result?.Items?.Select(v => new Gs2.Gs2Log.Domain.Model.FacetDomain(
-                    this._gs2
-                )).ToArray() ?? Array.Empty<Gs2.Gs2Log.Domain.Model.FacetDomain>();
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Log.Domain.Model.FacetDomain[]>(Impl);
-        }
+        ) => FacetsAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Log.Domain.Model.FacetDomain[]> FacetsAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Log.Domain.Model.FacetDomain[]> FacetsAsync(
-            #endif
+        #endif
             QueryFacetsRequest request
         ) {
             var result = await request.InvokeAsync(
@@ -171,41 +126,18 @@ namespace Gs2.Gs2Log.Domain.Model
             )).ToArray() ?? Array.Empty<Gs2.Gs2Log.Domain.Model.FacetDomain>();
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Log.Domain.Model.LogEntryDomain> GetTraceFuture(
             GetTraceRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Log.Domain.Model.LogEntryDomain> self)
-            {
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.GetTraceFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                this.Parallels = domain.Parallels = result?.Parallels;
-                this.ParallelTruncated = domain.ParallelTruncated = result?.ParallelTruncated;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Log.Domain.Model.LogEntryDomain>(Impl);
-        }
+        ) => GetTraceAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Log.Domain.Model.LogEntryDomain> GetTraceAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Log.Domain.Model.LogEntryDomain> GetTraceAsync(
-            #endif
+        #endif
             GetTraceRequest request
         ) {
             var result = await request.InvokeAsync(
@@ -219,37 +151,20 @@ namespace Gs2.Gs2Log.Domain.Model
             this.ParallelTruncated = domain.ParallelTruncated = result?.ParallelTruncated;
             return domain;
         }
-        #endif
 
     }
 
     public partial class LogEntryDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Log.Model.LogEntry> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Log.Model.LogEntry> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Log.Model.LogEntry).GetCache(
-                    this._gs2.Cache,
-                    null
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                self.OnComplete(null);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Log.Model.LogEntry>(Impl);
-        }
+        public IFuture<Gs2.Gs2Log.Model.LogEntry> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Log.Model.LogEntry> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Log.Model.LogEntry> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Log.Model.LogEntry>(
                         (null as Gs2.Gs2Log.Model.LogEntry).CacheParentKey(
@@ -268,28 +183,18 @@ namespace Gs2.Gs2Log.Domain.Model
                 return null;
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2Log.Model.LogEntry> Model()
-        {
-            return await ModelAsync();
-        }
+        public UniTask<Gs2.Gs2Log.Model.LogEntry> Model() => ModelAsync();
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2Log.Model.LogEntry> Model()
-        {
-            return ModelFuture();
-        }
+        public IFuture<Gs2.Gs2Log.Model.LogEntry> Model() => ModelFuture();
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2Log.Model.LogEntry> Model()
-        {
-            return await ModelAsync();
-        }
+        public Task<Gs2.Gs2Log.Model.LogEntry> Model() => ModelAsync();
         #endif
 
 
@@ -312,7 +217,6 @@ namespace Gs2.Gs2Log.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -325,12 +229,7 @@ namespace Gs2.Gs2Log.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -348,38 +247,21 @@ namespace Gs2.Gs2Log.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Log.Model.LogEntry> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Log.Model.LogEntry> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Log.Model.LogEntry> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Log.Model.LogEntry> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -30,21 +29,26 @@
 using System;
 using System.Numerics;
 using System.Collections;
-using System.Collections.Generic;
+using System.Collections.Generic; /* diff +++ */
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+/* diff +++ start */
 using Gs2.Core.Exception;
 using Gs2.Core.Model;
+/* diff +++ end */
 using Gs2.Core.Util;
+using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Inventory.Request;
+using Gs2.Gs2Inventory.Model.Cache;
+using Gs2.Gs2Inventory.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.Linq;
-    #endif
+using Cysharp.Threading.Tasks.Linq; /* diff +++ */
 #else
 using System.Threading.Tasks;
 #endif
@@ -55,6 +59,7 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
 
         public static string Action() {
             return "Gs2Inventory:VerifyReferenceOfByUserId";
+/* diff +++ start */
         }
 
         public static List<string> Transform(
@@ -94,6 +99,7 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                     break;
             }
             return items;
+/* diff +++ end */
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -101,70 +107,22 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
             VerifyReferenceOfByUserIdRequest request
-        ) {
-            IEnumerator Impl(Gs2Future<Func<object>> result) {
-
-                var it = domain.Inventory.Namespace(
-                    request.NamespaceName
-                ).AccessToken(
-                    accessToken
-                ).Inventory(
-                    request.InventoryName
-                ).ItemSet(
-                    request.ItemName,
-                    request.ItemSetName
-                ).ReferenceOves(
-                );
-                var items = new List<string>();
-                while (it.HasNext()) {
-                    yield return it.Next();
-                    if (it.Error != null) {
-                        result.OnError(it.Error);
-                        yield break;
-                    }
-                    if (it.Current != null) {
-                        items.Add(it.Current);
-                    }
-                }
-                
-                if (items == null) {
-                    result.OnComplete(() =>
-                    {
-                        return null;
-                    });
-                    yield break;
-                }
-
-                try {
-                    Transform(domain, accessToken, request, items);
-                }
-                catch (Gs2Exception e) {
-                    result.OnError(e);
-                    yield break;
-                }
-
-                result.OnComplete(() =>
-                {
-                    return null;
-                });
-                yield return null;
-            }
-
-            return new Gs2InlineFuture<Func<object>>(Impl);
-        }
+        ) => ExecuteAsync(domain, accessToken, request).ToGs2Future();
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<Func<object>> ExecuteAsync(
-    #else
+#else
         public static async Task<Func<object>> ExecuteAsync(
-    #endif
+#endif
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
             VerifyReferenceOfByUserIdRequest request
         ) {
-            var items = await domain.Inventory.Namespace(
+/* diff --- start
+            var item = await domain.Inventory.Namespace(
+ diff --- end */
+            var items = await domain.Inventory.Namespace( /* diff +++ */
                 request.NamespaceName
             ).AccessToken(
                 accessToken
@@ -173,19 +131,31 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             ).ItemSet(
                 request.ItemName,
                 request.ItemSetName
+/* diff --- start
+            ).ReferenceOf(
+                request.ReferenceOf
+            ).ModelAsync();
+ diff --- end */
+/* diff +++ start */
             ).ReferenceOvesAsync(
             ).ToListAsync();
+/* diff +++ end */
 
-            if (items == null) {
+/* diff --- start
+            if (item == null) {
+ diff --- end */
+            if (items == null) { /* diff +++ */
                 return () => null;
             }
-            items = Transform(domain, accessToken, request, items);
+/* diff --- start
+            item = item.SpeculativeExecution(request);
+ diff --- end */
+            items = Transform(domain, accessToken, request, items); /* diff +++ */
 
             return () =>
             {
                 return null;
             };
         }
-#endif
     }
 }

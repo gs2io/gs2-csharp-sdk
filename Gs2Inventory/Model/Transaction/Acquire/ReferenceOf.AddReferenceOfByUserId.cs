@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -31,7 +30,10 @@ namespace Gs2.Gs2Inventory.Model.Transaction
     public static partial class ReferenceOfExt
     {
         public static bool IsExecutable(
-            this ItemSet self,
+/* diff --- start
+            this ReferenceOf self,
+ diff --- end */
+            this ItemSet self, /* diff +++ */
             AddReferenceOfByUserIdRequest request
         ) {
             var changed = self.SpeculativeExecution(request);
@@ -44,16 +46,32 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             }
         }
 
+/* diff --- start
+        public static ReferenceOf SpeculativeExecution(
+            this ReferenceOf self,
+ diff --- end */
+/* diff +++ start */
         public static ItemSet SpeculativeExecution(
             this ItemSet self,
+/* diff +++ end */
             AddReferenceOfByUserIdRequest request
         ) {
+/* diff --- start
+//#if UNITY_2017_1_OR_NEWER
+            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: Gs2Inventory:AddReferenceOfByUserId");
+//#else
+            System.Console.WriteLine("Speculative execution not supported on this action: Gs2Inventory:AddReferenceOfByUserId");
+//#endif
+            return self.Clone() as ReferenceOf;
+ diff --- end */
+/* diff +++ start */
             var clone = self.Clone() as ItemSet;
             if (clone == null) {
                 throw new NullReferenceException();
             }
             clone.ReferenceOf = clone.ReferenceOf.Concat(new []{ request.ReferenceOf }).ToArray();
             return clone;
+/* diff +++ end */
         }
 
         public static AddReferenceOfByUserIdRequest Rate(

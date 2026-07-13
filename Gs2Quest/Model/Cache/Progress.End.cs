@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -28,10 +27,10 @@ using Gs2.Gs2Quest.Request;
 using Gs2.Gs2Quest.Result;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -53,6 +52,7 @@ namespace Gs2.Gs2Quest.Model.Cache
                 request.NamespaceName,
                 userId,
                 timeOffset
+/* diff +++ start */
             );
             cache.ClearListCache<CompletedQuestList>(
                 (null as CompletedQuestList).CacheParentKey(
@@ -60,6 +60,7 @@ namespace Gs2.Gs2Quest.Model.Cache
                     userId,
                     timeOffset
                 )
+/* diff +++ end */
             );
         }
 
@@ -94,21 +95,22 @@ namespace Gs2.Gs2Quest.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<EndResult> InvokeAsync(
-    #else
+#else
         public static async Task<EndResult> InvokeAsync(
-    #endif
+#endif
             this EndRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<EndResult>> invokeImpl
-    #else
+#elif UNITY_2017_1_OR_NEWER
+            Func<TaskFuture<EndResult>> invokeImpl
+#else
             Func<Task<EndResult>> invokeImpl
-    #endif
+#endif
         )
         {
             var result = await invokeImpl();
@@ -120,6 +122,5 @@ namespace Gs2.Gs2Quest.Model.Cache
             );
             return result;
         }
-#endif
     }
 }

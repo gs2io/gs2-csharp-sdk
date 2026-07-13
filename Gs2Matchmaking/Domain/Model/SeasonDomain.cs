@@ -27,6 +27,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -44,15 +46,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -102,12 +101,11 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Matchmaking.Model.SeasonGathering> SeasonGatheringsAsync(
-            #else
+        #else
         public DescribeSeasonGatheringsIterator SeasonGatheringsAsync(
-            #endif
+        #endif
             long? tier = null
         )
         {
@@ -120,7 +118,6 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 tier
             );
         }
-        #endif
 
         public ulong SubscribeSeasonGatherings(
             Action<Gs2.Gs2Matchmaking.Model.SeasonGathering[]> callback,
@@ -138,10 +135,15 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await SeasonGatheringsAsync(
                                 tier
                             ).ToArrayAsync());
@@ -151,13 +153,15 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeSeasonGatheringsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeSeasonGatheringsWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Matchmaking.Model.SeasonGathering[]> callback,
             long? tier = null
         )
@@ -172,7 +176,6 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeSeasonGatherings(
             ulong callbackId,
@@ -221,12 +224,11 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Matchmaking.Model.SeasonGathering> MatchmakingSeasonGatheringsAsync(
-            #else
+        #else
         public DescribeMatchmakingSeasonGatheringsIterator MatchmakingSeasonGatheringsAsync(
-            #endif
+        #endif
             long? tier = null
         )
         {
@@ -239,7 +241,6 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 tier
             );
         }
-        #endif
 
         public ulong SubscribeMatchmakingSeasonGatherings(
             Action<Gs2.Gs2Matchmaking.Model.SeasonGathering[]> callback,
@@ -257,10 +258,15 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await MatchmakingSeasonGatheringsAsync(
                                 tier
                             ).ToArrayAsync());
@@ -270,13 +276,15 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeMatchmakingSeasonGatheringsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeMatchmakingSeasonGatheringsWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Matchmaking.Model.SeasonGathering[]> callback,
             long? tier = null
         )
@@ -291,7 +299,6 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeMatchmakingSeasonGatherings(
             ulong callbackId,
@@ -340,12 +347,11 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Matchmaking.Model.SeasonGathering> DoSeasonMatchmakingAsync(
-            #else
+        #else
         public DoSeasonMatchmakingByUserIdIterator DoSeasonMatchmakingAsync(
-            #endif
+        #endif
             string timeOffsetToken = null
         )
         {
@@ -358,7 +364,6 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 timeOffsetToken
             );
         }
-        #endif
 
         public ulong SubscribeDoSeasonMatchmaking(
             Action<Gs2.Gs2Matchmaking.Model.SeasonGathering[]> callback
@@ -375,10 +380,15 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await DoSeasonMatchmakingAsync(
                             ).ToArrayAsync());
                         }
@@ -387,13 +397,15 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeDoSeasonMatchmakingWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeDoSeasonMatchmakingWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Matchmaking.Model.SeasonGathering[]> callback
         )
         {
@@ -405,7 +417,6 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeDoSeasonMatchmaking(
             ulong callbackId
@@ -467,12 +478,11 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Matchmaking.Model.JoinedSeasonGathering> JoinedSeasonGatheringsAsync(
-            #else
+        #else
         public DescribeJoinedSeasonGatheringsByUserIdIterator JoinedSeasonGatheringsAsync(
-            #endif
+        #endif
             string timeOffsetToken = null
         )
         {
@@ -485,7 +495,6 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 timeOffsetToken
             );
         }
-        #endif
 
         public ulong SubscribeJoinedSeasonGatherings(
             Action<Gs2.Gs2Matchmaking.Model.JoinedSeasonGathering[]> callback
@@ -502,10 +511,15 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await JoinedSeasonGatheringsAsync(
                             ).ToArrayAsync());
                         }
@@ -514,13 +528,15 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeJoinedSeasonGatheringsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeJoinedSeasonGatheringsWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Matchmaking.Model.JoinedSeasonGathering[]> callback
         )
         {
@@ -532,7 +548,6 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeJoinedSeasonGatherings(
             ulong callbackId

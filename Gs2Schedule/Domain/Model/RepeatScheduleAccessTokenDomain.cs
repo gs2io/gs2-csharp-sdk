@@ -29,6 +29,7 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -47,14 +48,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -104,39 +103,14 @@ namespace Gs2.Gs2Schedule.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Schedule.Model.RepeatSchedule> GetFuture(
             GetEventRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Schedule.Model.RepeatSchedule> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithEventName(this.EventName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithIsInSchedule(this.InSchedule);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.GetEventFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.RepeatSchedule);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Schedule.Model.RepeatSchedule>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Schedule.Model.RepeatSchedule> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Schedule.Model.RepeatSchedule> GetAsync(
-            #endif
+        #endif
             GetEventRequest request
         ) {
             request = request
@@ -153,51 +127,16 @@ namespace Gs2.Gs2Schedule.Domain.Model
             );
             return result?.RepeatSchedule;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Schedule.Model.RepeatSchedule> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Schedule.Model.RepeatSchedule> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Schedule.Model.RepeatSchedule).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    this.EventName,
-                    this.InSchedule ?? true
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2Schedule.Model.RepeatSchedule).FetchFuture(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    this.EventName,
-                    this.InSchedule ?? true,
-                    () => this.GetFuture(
-                        new GetEventRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Schedule.Model.RepeatSchedule>(Impl);
-        }
+        public IFuture<Gs2.Gs2Schedule.Model.RepeatSchedule> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Schedule.Model.RepeatSchedule> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Schedule.Model.RepeatSchedule> ModelAsync()
-            #endif
+        #endif
         {
             var (value, find) = (null as Gs2.Gs2Schedule.Model.RepeatSchedule).GetCache(
                 this._gs2.Cache,
@@ -220,7 +159,6 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 )
             );
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
@@ -269,7 +207,6 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -287,7 +224,6 @@ namespace Gs2.Gs2Schedule.Domain.Model
             #else
                     Impl();
             #endif
-        #endif
                 }
             );
         }
@@ -308,38 +244,20 @@ namespace Gs2.Gs2Schedule.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Schedule.Model.RepeatSchedule> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Schedule.Model.RepeatSchedule> callback) => SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Schedule.Model.RepeatSchedule> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Schedule.Model.RepeatSchedule> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -28,10 +27,10 @@ using Gs2.Gs2Dictionary.Request;
 using Gs2.Gs2Dictionary.Result;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -48,6 +47,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             int? timeOffset,
             ResetByUserIdRequest request
         ) {
+/* diff +++ start */
             foreach (var item in cache.List<Entry>(
                          (null as Entry).CacheParentKey(
                              request.NamespaceName,
@@ -63,6 +63,7 @@ namespace Gs2.Gs2Dictionary.Model.Cache
                     timeOffset
                 );
             }
+/* diff +++ end */
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -96,21 +97,22 @@ namespace Gs2.Gs2Dictionary.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<ResetByUserIdResult> InvokeAsync(
-    #else
+#else
         public static async Task<ResetByUserIdResult> InvokeAsync(
-    #endif
+#endif
             this ResetByUserIdRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<ResetByUserIdResult>> invokeImpl
-    #else
+#elif UNITY_2017_1_OR_NEWER
+            Func<TaskFuture<ResetByUserIdResult>> invokeImpl
+#else
             Func<Task<ResetByUserIdResult>> invokeImpl
-    #endif
+#endif
         )
         {
             var result = await invokeImpl();
@@ -122,6 +124,5 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             );
             return result;
         }
-#endif
     }
 }

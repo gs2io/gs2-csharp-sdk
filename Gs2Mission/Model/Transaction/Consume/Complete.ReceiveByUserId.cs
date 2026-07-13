@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -48,6 +47,15 @@ namespace Gs2.Gs2Mission.Model.Transaction
             this Complete self,
             ReceiveByUserIdRequest request
         ) {
+/* diff --- start
+//#if UNITY_2017_1_OR_NEWER
+            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: Gs2Mission:ReceiveByUserId");
+//#else
+            System.Console.WriteLine("Speculative execution not supported on this action: Gs2Mission:ReceiveByUserId");
+//#endif
+            return self.Clone() as Complete;
+ diff --- end */
+/* diff +++ start */
             var clone = self.Clone() as Complete;
             if (clone == null)
             {
@@ -64,6 +72,7 @@ namespace Gs2.Gs2Mission.Model.Transaction
             ).ToArray();
             
             return clone;
+/* diff +++ end */
         }
 
         public static ReceiveByUserIdRequest Rate(

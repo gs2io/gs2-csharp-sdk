@@ -27,6 +27,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -44,15 +46,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -89,38 +88,14 @@ namespace Gs2.Gs2Inventory.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Inventory.Model.BigItemModelMaster> GetFuture(
             GetBigItemModelMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Model.BigItemModelMaster> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithInventoryName(this.InventoryName)
-                    .WithItemName(this.ItemName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.GetBigItemModelMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Inventory.Model.BigItemModelMaster>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Inventory.Model.BigItemModelMaster> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Inventory.Model.BigItemModelMaster> GetAsync(
-            #endif
+        #endif
             GetBigItemModelMasterRequest request
         ) {
             request = request
@@ -136,45 +111,18 @@ namespace Gs2.Gs2Inventory.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Inventory.Domain.Model.BigItemModelMasterDomain> UpdateFuture(
             UpdateBigItemModelMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.BigItemModelMasterDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithInventoryName(this.InventoryName)
-                    .WithItemName(this.ItemName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.UpdateBigItemModelMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.BigItemModelMasterDomain>(Impl);
-        }
+        ) => UpdateAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Inventory.Domain.Model.BigItemModelMasterDomain> UpdateAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Inventory.Domain.Model.BigItemModelMasterDomain> UpdateAsync(
-            #endif
+        #endif
             UpdateBigItemModelMasterRequest request
         ) {
             request = request
@@ -192,47 +140,18 @@ namespace Gs2.Gs2Inventory.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Inventory.Domain.Model.BigItemModelMasterDomain> DeleteFuture(
             DeleteBigItemModelMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Domain.Model.BigItemModelMasterDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithInventoryName(this.InventoryName)
-                    .WithItemName(this.ItemName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.DeleteBigItemModelMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    if (!(future.Error is NotFoundException)) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Inventory.Domain.Model.BigItemModelMasterDomain>(Impl);
-        }
+        ) => DeleteAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Inventory.Domain.Model.BigItemModelMasterDomain> DeleteAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Inventory.Domain.Model.BigItemModelMasterDomain> DeleteAsync(
-            #endif
+        #endif
             DeleteBigItemModelMasterRequest request
         ) {
             try {
@@ -252,55 +171,20 @@ namespace Gs2.Gs2Inventory.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
     }
 
     public partial class BigItemModelMasterDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Inventory.Model.BigItemModelMaster> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Inventory.Model.BigItemModelMaster> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Inventory.Model.BigItemModelMaster).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.InventoryName,
-                    this.ItemName,
-                    null
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2Inventory.Model.BigItemModelMaster).FetchFuture(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.InventoryName,
-                    this.ItemName,
-                    null,
-                    () => this.GetFuture(
-                        new GetBigItemModelMasterRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Inventory.Model.BigItemModelMaster>(Impl);
-        }
+        public IFuture<Gs2.Gs2Inventory.Model.BigItemModelMaster> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Inventory.Model.BigItemModelMaster> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Inventory.Model.BigItemModelMaster> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Inventory.Model.BigItemModelMaster>(
                         (null as Gs2.Gs2Inventory.Model.BigItemModelMaster).CacheParentKey(
@@ -334,28 +218,18 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 );
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2Inventory.Model.BigItemModelMaster> Model()
-        {
-            return await ModelAsync();
-        }
+        public UniTask<Gs2.Gs2Inventory.Model.BigItemModelMaster> Model() => ModelAsync();
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2Inventory.Model.BigItemModelMaster> Model()
-        {
-            return ModelFuture();
-        }
+        public IFuture<Gs2.Gs2Inventory.Model.BigItemModelMaster> Model() => ModelFuture();
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2Inventory.Model.BigItemModelMaster> Model()
-        {
-            return await ModelAsync();
-        }
+        public Task<Gs2.Gs2Inventory.Model.BigItemModelMaster> Model() => ModelAsync();
         #endif
 
 
@@ -384,7 +258,6 @@ namespace Gs2.Gs2Inventory.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -397,12 +270,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -423,38 +291,21 @@ namespace Gs2.Gs2Inventory.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Inventory.Model.BigItemModelMaster> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Inventory.Model.BigItemModelMaster> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Inventory.Model.BigItemModelMaster> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Inventory.Model.BigItemModelMaster> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

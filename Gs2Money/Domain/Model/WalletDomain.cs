@@ -27,6 +27,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -44,15 +46,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -90,38 +89,14 @@ namespace Gs2.Gs2Money.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Money.Model.Wallet> GetFuture(
             GetWalletByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Money.Model.Wallet> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithSlot(this.Slot);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.GetWalletByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Money.Model.Wallet>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Money.Model.Wallet> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Money.Model.Wallet> GetAsync(
-            #endif
+        #endif
             GetWalletByUserIdRequest request
         ) {
             request = request
@@ -137,45 +112,18 @@ namespace Gs2.Gs2Money.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Money.Domain.Model.WalletDomain> DepositFuture(
             DepositByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Money.Domain.Model.WalletDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithSlot(this.Slot);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.DepositByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Money.Domain.Model.WalletDomain>(Impl);
-        }
+        ) => DepositAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Money.Domain.Model.WalletDomain> DepositAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Money.Domain.Model.WalletDomain> DepositAsync(
-            #endif
+        #endif
             DepositByUserIdRequest request
         ) {
             request = request
@@ -193,46 +141,18 @@ namespace Gs2.Gs2Money.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Money.Domain.Model.WalletDomain> WithdrawFuture(
             WithdrawByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Money.Domain.Model.WalletDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithSlot(this.Slot);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.WithdrawByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                domain.Price = result?.Price;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Money.Domain.Model.WalletDomain>(Impl);
-        }
+        ) => WithdrawAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Money.Domain.Model.WalletDomain> WithdrawAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Money.Domain.Model.WalletDomain> WithdrawAsync(
-            #endif
+        #endif
             WithdrawByUserIdRequest request
         ) {
             request = request
@@ -251,55 +171,20 @@ namespace Gs2.Gs2Money.Domain.Model
 
             return domain;
         }
-        #endif
 
     }
 
     public partial class WalletDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Money.Model.Wallet> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Money.Model.Wallet> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Money.Model.Wallet).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    this.Slot,
-                    null
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2Money.Model.Wallet).FetchFuture(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    this.Slot,
-                    null,
-                    () => this.GetFuture(
-                        new GetWalletByUserIdRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Money.Model.Wallet>(Impl);
-        }
+        public IFuture<Gs2.Gs2Money.Model.Wallet> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Money.Model.Wallet> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Money.Model.Wallet> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Money.Model.Wallet>(
                         (null as Gs2.Gs2Money.Model.Wallet).CacheParentKey(
@@ -333,28 +218,18 @@ namespace Gs2.Gs2Money.Domain.Model
                 );
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2Money.Model.Wallet> Model()
-        {
-            return await ModelAsync();
-        }
+        public UniTask<Gs2.Gs2Money.Model.Wallet> Model() => ModelAsync();
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2Money.Model.Wallet> Model()
-        {
-            return ModelFuture();
-        }
+        public IFuture<Gs2.Gs2Money.Model.Wallet> Model() => ModelFuture();
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2Money.Model.Wallet> Model()
-        {
-            return await ModelAsync();
-        }
+        public Task<Gs2.Gs2Money.Model.Wallet> Model() => ModelAsync();
         #endif
 
 
@@ -383,7 +258,6 @@ namespace Gs2.Gs2Money.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -396,12 +270,7 @@ namespace Gs2.Gs2Money.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -422,38 +291,21 @@ namespace Gs2.Gs2Money.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Money.Model.Wallet> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Money.Model.Wallet> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Money.Model.Wallet> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Money.Model.Wallet> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

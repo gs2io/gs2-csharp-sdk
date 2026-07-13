@@ -27,6 +27,7 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -45,14 +46,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -89,39 +88,14 @@ namespace Gs2.Gs2Limit.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Limit.Model.Counter> GetFuture(
             GetCounterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Limit.Model.Counter> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithLimitName(this.LimitName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithCounterName(this.CounterName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.GetCounterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Limit.Model.Counter>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Limit.Model.Counter> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Limit.Model.Counter> GetAsync(
-            #endif
+        #endif
             GetCounterRequest request
         ) {
             request = request
@@ -138,46 +112,18 @@ namespace Gs2.Gs2Limit.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Limit.Domain.Model.CounterAccessTokenDomain> CountUpFuture(
             CountUpRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Limit.Domain.Model.CounterAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithLimitName(this.LimitName)
-                    .WithCounterName(this.CounterName)
-                    .WithAccessToken(this.AccessToken?.Token);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.CountUpFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Limit.Domain.Model.CounterAccessTokenDomain>(Impl);
-        }
+        ) => CountUpAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Limit.Domain.Model.CounterAccessTokenDomain> CountUpAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Limit.Domain.Model.CounterAccessTokenDomain> CountUpAsync(
-            #endif
+        #endif
             CountUpRequest request
         ) {
             request = request
@@ -196,46 +142,18 @@ namespace Gs2.Gs2Limit.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Limit.Domain.Model.CounterAccessTokenDomain> VerifyFuture(
             VerifyCounterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Limit.Domain.Model.CounterAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithLimitName(this.LimitName)
-                    .WithCounterName(this.CounterName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.VerifyCounterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Limit.Domain.Model.CounterAccessTokenDomain>(Impl);
-        }
+        ) => VerifyAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Limit.Domain.Model.CounterAccessTokenDomain> VerifyAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Limit.Domain.Model.CounterAccessTokenDomain> VerifyAsync(
-            #endif
+        #endif
             VerifyCounterRequest request
         ) {
             request = request
@@ -254,53 +172,16 @@ namespace Gs2.Gs2Limit.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Limit.Model.Counter> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Limit.Model.Counter> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Limit.Model.Counter).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    this.LimitName,
-                    this.CounterName,
-                    this.AccessToken?.TimeOffset
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2Limit.Model.Counter).FetchFuture(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    this.LimitName,
-                    this.CounterName,
-                    this.AccessToken?.TimeOffset,
-                    () => this.GetFuture(
-                        new GetCounterRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Limit.Model.Counter>(Impl);
-        }
+        public IFuture<Gs2.Gs2Limit.Model.Counter> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Limit.Model.Counter> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Limit.Model.Counter> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Limit.Model.Counter>(
                         (null as Gs2.Gs2Limit.Model.Counter).CacheParentKey(
@@ -337,28 +218,18 @@ namespace Gs2.Gs2Limit.Domain.Model
                 );
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2Limit.Model.Counter> Model()
-        {
-            return await ModelAsync();
-        }
+        public UniTask<Gs2.Gs2Limit.Model.Counter> Model() => ModelAsync();
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2Limit.Model.Counter> Model()
-        {
-            return ModelFuture();
-        }
+        public IFuture<Gs2.Gs2Limit.Model.Counter> Model() => ModelFuture();
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2Limit.Model.Counter> Model()
-        {
-            return await ModelAsync();
-        }
+        public Task<Gs2.Gs2Limit.Model.Counter> Model() => ModelAsync();
         #endif
 
 
@@ -389,7 +260,6 @@ namespace Gs2.Gs2Limit.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -402,12 +272,7 @@ namespace Gs2.Gs2Limit.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -429,38 +294,21 @@ namespace Gs2.Gs2Limit.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Limit.Model.Counter> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Limit.Model.Counter> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Limit.Model.Counter> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Limit.Model.Counter> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

@@ -12,9 +12,11 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
+
+#pragma warning disable CS0618 // Obsolete with a message
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +33,10 @@ namespace Gs2.Gs2Stamina.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class StaminaModel : IComparable
+/* diff --- start
+	public partial class StaminaModel : IComparable
+ diff --- end */
+	public class StaminaModel : IComparable /* diff +++ */
 	{
         public string StaminaModelId { set; get; }
         public string Name { set; get; }
@@ -401,7 +406,10 @@ namespace Gs2.Gs2Stamina.Model
             }
             {
             }
-            if (IsOverflow ?? false) {
+/* diff --- start
+            if (IsOverflow == true) {
+ diff --- end */
+            if (IsOverflow ?? false) { /* diff +++ */
                 if (MaxCapacity < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("staminaModel", "stamina.staminaModel.maxCapacity.error.invalid"),
@@ -431,9 +439,9 @@ namespace Gs2.Gs2Stamina.Model
                 InitialCapacity = InitialCapacity,
                 IsOverflow = IsOverflow,
                 MaxCapacity = MaxCapacity,
-                MaxStaminaTable = MaxStaminaTable.Clone() as Gs2.Gs2Stamina.Model.MaxStaminaTable,
-                RecoverIntervalTable = RecoverIntervalTable.Clone() as Gs2.Gs2Stamina.Model.RecoverIntervalTable,
-                RecoverValueTable = RecoverValueTable.Clone() as Gs2.Gs2Stamina.Model.RecoverValueTable,
+                MaxStaminaTable = MaxStaminaTable?.Clone() as Gs2.Gs2Stamina.Model.MaxStaminaTable,
+                RecoverIntervalTable = RecoverIntervalTable?.Clone() as Gs2.Gs2Stamina.Model.RecoverIntervalTable,
+                RecoverValueTable = RecoverValueTable?.Clone() as Gs2.Gs2Stamina.Model.RecoverValueTable,
             };
         }
     }

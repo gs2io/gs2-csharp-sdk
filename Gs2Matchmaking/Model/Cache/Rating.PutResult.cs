@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -28,10 +27,10 @@ using Gs2.Gs2Matchmaking.Request;
 using Gs2.Gs2Matchmaking.Result;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -53,7 +52,10 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                 item.PutCache(
                     cache,
                     request.NamespaceName,
-                    item.UserId,
+/* diff --- start
+                    userId,
+ diff --- end */
+                    item.UserId, /* diff +++ */
                     item.Name,
                     timeOffset
                 );
@@ -91,21 +93,22 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<PutResultResult> InvokeAsync(
-    #else
+#else
         public static async Task<PutResultResult> InvokeAsync(
-    #endif
+#endif
             this PutResultRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<PutResultResult>> invokeImpl
-    #else
+#elif UNITY_2017_1_OR_NEWER
+            Func<TaskFuture<PutResultResult>> invokeImpl
+#else
             Func<Task<PutResultResult>> invokeImpl
-    #endif
+#endif
         )
         {
             var result = await invokeImpl();
@@ -117,6 +120,5 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             );
             return result;
         }
-#endif
     }
 }

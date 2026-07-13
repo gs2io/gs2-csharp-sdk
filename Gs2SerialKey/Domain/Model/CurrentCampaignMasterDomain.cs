@@ -27,6 +27,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -44,15 +46,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -85,38 +84,14 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2SerialKey.Domain.Model.CurrentCampaignMasterDomain> ExportMasterFuture(
             ExportMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Domain.Model.CurrentCampaignMasterDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.ExportMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2SerialKey.Domain.Model.CurrentCampaignMasterDomain>(Impl);
-        }
+        ) => ExportMasterAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2SerialKey.Domain.Model.CurrentCampaignMasterDomain> ExportMasterAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2SerialKey.Domain.Model.CurrentCampaignMasterDomain> ExportMasterAsync(
-            #endif
+        #endif
             ExportMasterRequest request
         ) {
             request = request
@@ -132,41 +107,18 @@ namespace Gs2.Gs2SerialKey.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2SerialKey.Model.CurrentCampaignMaster> GetFuture(
             GetCurrentCampaignMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Model.CurrentCampaignMaster> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.GetCurrentCampaignMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2SerialKey.Model.CurrentCampaignMaster>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2SerialKey.Model.CurrentCampaignMaster> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2SerialKey.Model.CurrentCampaignMaster> GetAsync(
-            #endif
+        #endif
             GetCurrentCampaignMasterRequest request
         ) {
             request = request
@@ -180,44 +132,18 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2SerialKey.Domain.Model.CurrentCampaignMasterDomain> PreUpdateFuture(
             PreUpdateCurrentCampaignMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Domain.Model.CurrentCampaignMasterDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.PreUpdateCurrentCampaignMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                this.UploadToken = domain.UploadToken = result?.UploadToken;
-                this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2SerialKey.Domain.Model.CurrentCampaignMasterDomain>(Impl);
-        }
+        ) => PreUpdateAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2SerialKey.Domain.Model.CurrentCampaignMasterDomain> PreUpdateAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2SerialKey.Domain.Model.CurrentCampaignMasterDomain> PreUpdateAsync(
-            #endif
+        #endif
             PreUpdateCurrentCampaignMasterRequest request
         ) {
             request = request
@@ -234,43 +160,18 @@ namespace Gs2.Gs2SerialKey.Domain.Model
             this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2SerialKey.Domain.Model.CurrentCampaignMasterDomain> UpdateFuture(
             UpdateCurrentCampaignMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Domain.Model.CurrentCampaignMasterDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.UpdateCurrentCampaignMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2SerialKey.Domain.Model.CurrentCampaignMasterDomain>(Impl);
-        }
+        ) => UpdateAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2SerialKey.Domain.Model.CurrentCampaignMasterDomain> UpdateAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2SerialKey.Domain.Model.CurrentCampaignMasterDomain> UpdateAsync(
-            #endif
+        #endif
             UpdateCurrentCampaignMasterRequest request
         ) {
             request = request
@@ -286,43 +187,18 @@ namespace Gs2.Gs2SerialKey.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2SerialKey.Domain.Model.CurrentCampaignMasterDomain> UpdateFromGitHubFuture(
             UpdateCurrentCampaignMasterFromGitHubRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Domain.Model.CurrentCampaignMasterDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.UpdateCurrentCampaignMasterFromGitHubFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2SerialKey.Domain.Model.CurrentCampaignMasterDomain>(Impl);
-        }
+        ) => UpdateFromGitHubAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2SerialKey.Domain.Model.CurrentCampaignMasterDomain> UpdateFromGitHubAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2SerialKey.Domain.Model.CurrentCampaignMasterDomain> UpdateFromGitHubAsync(
-            #endif
+        #endif
             UpdateCurrentCampaignMasterFromGitHubRequest request
         ) {
             request = request
@@ -338,51 +214,20 @@ namespace Gs2.Gs2SerialKey.Domain.Model
 
             return domain;
         }
-        #endif
 
     }
 
     public partial class CurrentCampaignMasterDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2SerialKey.Model.CurrentCampaignMaster> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Model.CurrentCampaignMaster> self)
-            {
-                var (value, find) = (null as Gs2.Gs2SerialKey.Model.CurrentCampaignMaster).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    null
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2SerialKey.Model.CurrentCampaignMaster).FetchFuture(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    null,
-                    () => this.GetFuture(
-                        new GetCurrentCampaignMasterRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2SerialKey.Model.CurrentCampaignMaster>(Impl);
-        }
+        public IFuture<Gs2.Gs2SerialKey.Model.CurrentCampaignMaster> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2SerialKey.Model.CurrentCampaignMaster> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2SerialKey.Model.CurrentCampaignMaster> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2SerialKey.Model.CurrentCampaignMaster>(
                         (null as Gs2.Gs2SerialKey.Model.CurrentCampaignMaster).CacheParentKey(
@@ -410,28 +255,18 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 );
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2SerialKey.Model.CurrentCampaignMaster> Model()
-        {
-            return await ModelAsync();
-        }
+        public UniTask<Gs2.Gs2SerialKey.Model.CurrentCampaignMaster> Model() => ModelAsync();
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2SerialKey.Model.CurrentCampaignMaster> Model()
-        {
-            return ModelFuture();
-        }
+        public IFuture<Gs2.Gs2SerialKey.Model.CurrentCampaignMaster> Model() => ModelFuture();
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2SerialKey.Model.CurrentCampaignMaster> Model()
-        {
-            return await ModelAsync();
-        }
+        public Task<Gs2.Gs2SerialKey.Model.CurrentCampaignMaster> Model() => ModelAsync();
         #endif
 
 
@@ -456,7 +291,6 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -469,12 +303,7 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -493,38 +322,21 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2SerialKey.Model.CurrentCampaignMaster> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2SerialKey.Model.CurrentCampaignMaster> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2SerialKey.Model.CurrentCampaignMaster> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2SerialKey.Model.CurrentCampaignMaster> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

@@ -51,11 +51,11 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Scripting;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -85,37 +85,14 @@ namespace Gs2.Gs2JobQueue.Domain
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2JobQueue.Domain.Model.NamespaceDomain> CreateNamespaceFuture(
             CreateNamespaceRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Domain.Model.NamespaceDomain> self)
-            {
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.CreateNamespaceFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2JobQueue.Domain.Model.NamespaceDomain(
-                    this._gs2,
-                    result?.Item?.Name
-                );
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2JobQueue.Domain.Model.NamespaceDomain>(Impl);
-        }
+        ) => CreateNamespaceAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2JobQueue.Domain.Model.NamespaceDomain> CreateNamespaceAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2JobQueue.Domain.Model.NamespaceDomain> CreateNamespaceAsync(
-            #endif
+        #endif
             CreateNamespaceRequest request
         ) {
             var result = await request.InvokeAsync(
@@ -130,39 +107,18 @@ namespace Gs2.Gs2JobQueue.Domain
             );
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2JobQueue> DumpUserDataFuture(
             DumpUserDataByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2JobQueue> self)
-            {
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.DumpUserDataByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2JobQueue>(Impl);
-        }
+        ) => DumpUserDataAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2JobQueue> DumpUserDataAsync(
-            #else
+        #else
         public async Task<Gs2JobQueue> DumpUserDataAsync(
-            #endif
+        #endif
             DumpUserDataByUserIdRequest request
         ) {
             var result = await request.InvokeAsync(
@@ -174,40 +130,18 @@ namespace Gs2.Gs2JobQueue.Domain
             var domain = this;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2JobQueue> CheckDumpUserDataFuture(
             CheckDumpUserDataByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2JobQueue> self)
-            {
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.CheckDumpUserDataByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                this.Url = domain.Url = result?.Url;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2JobQueue>(Impl);
-        }
+        ) => CheckDumpUserDataAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2JobQueue> CheckDumpUserDataAsync(
-            #else
+        #else
         public async Task<Gs2JobQueue> CheckDumpUserDataAsync(
-            #endif
+        #endif
             CheckDumpUserDataByUserIdRequest request
         ) {
             var result = await request.InvokeAsync(
@@ -220,39 +154,18 @@ namespace Gs2.Gs2JobQueue.Domain
             this.Url = domain.Url = result?.Url;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2JobQueue> CleanUserDataFuture(
             CleanUserDataByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2JobQueue> self)
-            {
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.CleanUserDataByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2JobQueue>(Impl);
-        }
+        ) => CleanUserDataAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2JobQueue> CleanUserDataAsync(
-            #else
+        #else
         public async Task<Gs2JobQueue> CleanUserDataAsync(
-            #endif
+        #endif
             CleanUserDataByUserIdRequest request
         ) {
             var result = await request.InvokeAsync(
@@ -264,39 +177,18 @@ namespace Gs2.Gs2JobQueue.Domain
             var domain = this;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2JobQueue> CheckCleanUserDataFuture(
             CheckCleanUserDataByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2JobQueue> self)
-            {
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.CheckCleanUserDataByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2JobQueue>(Impl);
-        }
+        ) => CheckCleanUserDataAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2JobQueue> CheckCleanUserDataAsync(
-            #else
+        #else
         public async Task<Gs2JobQueue> CheckCleanUserDataAsync(
-            #endif
+        #endif
             CheckCleanUserDataByUserIdRequest request
         ) {
             var result = await request.InvokeAsync(
@@ -308,41 +200,18 @@ namespace Gs2.Gs2JobQueue.Domain
             var domain = this;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2JobQueue> PrepareImportUserDataFuture(
             PrepareImportUserDataByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2JobQueue> self)
-            {
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.PrepareImportUserDataByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                this.UploadToken = domain.UploadToken = result?.UploadToken;
-                this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2JobQueue>(Impl);
-        }
+        ) => PrepareImportUserDataAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2JobQueue> PrepareImportUserDataAsync(
-            #else
+        #else
         public async Task<Gs2JobQueue> PrepareImportUserDataAsync(
-            #endif
+        #endif
             PrepareImportUserDataByUserIdRequest request
         ) {
             var result = await request.InvokeAsync(
@@ -356,39 +225,18 @@ namespace Gs2.Gs2JobQueue.Domain
             this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2JobQueue> ImportUserDataFuture(
             ImportUserDataByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2JobQueue> self)
-            {
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.ImportUserDataByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2JobQueue>(Impl);
-        }
+        ) => ImportUserDataAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2JobQueue> ImportUserDataAsync(
-            #else
+        #else
         public async Task<Gs2JobQueue> ImportUserDataAsync(
-            #endif
+        #endif
             ImportUserDataByUserIdRequest request
         ) {
             var result = await request.InvokeAsync(
@@ -400,40 +248,18 @@ namespace Gs2.Gs2JobQueue.Domain
             var domain = this;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2JobQueue> CheckImportUserDataFuture(
             CheckImportUserDataByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2JobQueue> self)
-            {
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.CheckImportUserDataByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                this.Url = domain.Url = result?.Url;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2JobQueue>(Impl);
-        }
+        ) => CheckImportUserDataAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2JobQueue> CheckImportUserDataAsync(
-            #else
+        #else
         public async Task<Gs2JobQueue> CheckImportUserDataAsync(
-            #endif
+        #endif
             CheckImportUserDataByUserIdRequest request
         ) {
             var result = await request.InvokeAsync(
@@ -446,7 +272,6 @@ namespace Gs2.Gs2JobQueue.Domain
             this.Url = domain.Url = result?.Url;
             return domain;
         }
-        #endif
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2JobQueue.Model.Namespace> Namespaces(
         )
@@ -705,76 +530,14 @@ namespace Gs2.Gs2JobQueue.Domain
 #if UNITY_2017_1_OR_NEWER
         public Gs2Future DispatchFuture(
             AccessToken accessToken
-        )
-        {
-            RunNotification[] copiedCompletedJobs;
-            IEnumerator Impl(Gs2Future self)
-            {
-                lock (_completedJobs)
-                {
-                    if (_completedJobs.Count == 0) {
-                        yield break;
-                    }
-                    copiedCompletedJobs = new RunNotification[_completedJobs.Count];
-                    _completedJobs.Where(v => v.UserId == accessToken.UserId).ToList().CopyTo(copiedCompletedJobs);
-                    foreach (var copiedCompletedJob in copiedCompletedJobs) {
-                        _completedJobs.Remove(copiedCompletedJob);
-                    }
-                }
-                foreach (var completedJob in copiedCompletedJobs)
-                {
-                    if (completedJob == null) continue;
-                    {
-                        var future = Namespace(
-                            completedJob.NamespaceName
-                        ).AccessToken(
-                            accessToken
-                        ).Job(
-                            completedJob.JobName
-                        ).JobResult().ModelNoCacheFuture();
-                        yield return future;
-                        if (future.Error != null) {
-                            if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                            }
-                            else {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                    }
-                    {
-                        var autoRun = new AutoJobQueueAccessTokenDomain(
-                            _gs2,
-                            accessToken,
-                            completedJob.NamespaceName,
-                            completedJob.JobName
-                        );
-                        var future = autoRun.WaitFuture();
-                        yield return future;
-                        if (future.Error != null) {
-                            if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                            }
-                            else {
-                                self.OnError(future.Error);
-                            }
-                            yield break;
-                        }
-                    }
-                }
-                self.OnComplete(null);
-                yield return null;
-            }
-
-            return new Gs2InlineFuture(Impl);
-        }
+        ) => DispatchAsync(accessToken).ToGs2Future();
 #endif
         
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public async UniTask DispatchAsync(
-    #else
+#else
         public async Task DispatchAsync(
-    #endif
+#endif
             AccessToken accessToken
         )
         {
@@ -801,13 +564,13 @@ namespace Gs2.Gs2JobQueue.Domain
                 );
                 try
                 {
-                    await Namespace(
+                    Namespace(
                         completedJob.NamespaceName
                     ).AccessToken(
                         accessToken
                     ).Job(
                         completedJob.JobName
-                    ).JobResult().ModelNoCacheAsync();
+                    ).JobResult().Invalidate();
                     await autoRun.WaitAsync();
                 }
                 catch (NotFoundException)
@@ -815,79 +578,18 @@ namespace Gs2.Gs2JobQueue.Domain
                 }
             }
         }
-#endif
         
 #if UNITY_2017_1_OR_NEWER
         public Gs2Future DispatchByUserIdFuture(
             string userId
-        )
-        {
-            RunNotification[] copiedCompletedJobs;
-            IEnumerator Impl(Gs2Future self)
-            {
-                lock (_completedJobs)
-                {
-                    if (_completedJobs.Count == 0) {
-                        yield break;
-                    }
-                    copiedCompletedJobs = new RunNotification[_completedJobs.Count];
-                    _completedJobs.Where(v => v.UserId == userId).ToList().CopyTo(copiedCompletedJobs);
-                    foreach (var copiedCompletedJob in copiedCompletedJobs) {
-                        _completedJobs.Remove(copiedCompletedJob);
-                    }
-                }
-                foreach (var completedJob in copiedCompletedJobs)
-                {
-                    if (completedJob == null) continue;
-                    {
-                        var future = Namespace(
-                            completedJob.NamespaceName
-                        ).User(
-                            userId
-                        ).Job(
-                            completedJob.JobName
-                        ).JobResult().ModelNoCacheFuture();
-                        yield return future;
-                        if (future.Error != null) {
-                            if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                            }
-                            else {
-                                self.OnError(future.Error);
-                                yield break;
-                            }
-                        }
-                    }
-                    {
-                        var autoRun = new AutoJobQueueDomain(
-                            _gs2,
-                            userId,
-                            completedJob.NamespaceName,
-                            completedJob.JobName
-                        );
-                        var future = autoRun.WaitFuture();
-                        yield return future;
-                        if (future.Error != null) {
-                            if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                            }
-                            else {
-                                self.OnError(future.Error);
-                            }
-                            yield break;
-                        }
-                    }
-                }
-            }
-
-            return new Gs2InlineFuture(Impl);
-        }
+        ) => DispatchByUserIdAsync(userId).ToGs2Future();
 #endif
         
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public async UniTask DispatchByUserIdAsync(
-    #else
+#else
         public async Task DispatchByUserIdAsync(
-    #endif
+#endif
             string userId
         )
         {
@@ -914,13 +616,13 @@ namespace Gs2.Gs2JobQueue.Domain
                 );
                 try
                 {
-                    await Namespace(
+                    Namespace(
                         completedJob.NamespaceName
                     ).User(
                         userId
                     ).Job(
                         completedJob.JobName
-                    ).JobResult().ModelNoCacheAsync();
+                    ).JobResult().Invalidate();
                     await autoRun.WaitAsync();
                 }
                 catch (NotFoundException)
@@ -928,6 +630,5 @@ namespace Gs2.Gs2JobQueue.Domain
                 }
             }
         }
-#endif
     }
 }

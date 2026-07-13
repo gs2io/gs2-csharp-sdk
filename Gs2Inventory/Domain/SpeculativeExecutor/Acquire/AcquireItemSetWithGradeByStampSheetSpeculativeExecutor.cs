@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -41,9 +40,9 @@ using Gs2.Gs2Inventory.Model.Cache;
 using Gs2.Gs2Inventory.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading.Tasks;
 #endif
@@ -61,31 +60,48 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
             AcquireItemSetWithGradeByUserIdRequest request
-        ) {
-            IEnumerator Impl(Gs2Future<Func<object>> result) {
-                result.OnComplete(() => null);
-                yield return null;
-            }
-
-            return new Gs2InlineFuture<Func<object>>(Impl);
-        }
+        ) => ExecuteAsync(domain, accessToken, request).ToGs2Future();
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<Func<object>> ExecuteAsync(
-    #else
+#else
         public static async Task<Func<object>> ExecuteAsync(
-    #endif
+#endif
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
             AcquireItemSetWithGradeByUserIdRequest request
         ) {
+/* diff --- start
+            var item = await domain.Inventory.Namespace(
+                request.NamespaceName
+            ).AccessToken(
+                accessToken
+            ).Inventory(
+                request.InventoryName
+            ).ModelAsync();
+
+            if (item == null) {
+                return () => null;
+            }
+            item = item.SpeculativeExecution(request);
+
+ diff --- end */
             return () =>
             {
+/* diff --- start
+                item.PutCache(
+                    domain.Cache,
+                    request.NamespaceName,
+                    request.UserId,
+                    request.InventoryName,
+                    request.ItemName,
+                    request.ItemSetName,
+                    null
+                );
+ diff --- end */
                 return null;
             };
         }
-#endif
     }
 }

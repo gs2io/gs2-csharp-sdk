@@ -38,9 +38,9 @@ using Gs2.Gs2JobQueue.Result;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER 
 using UnityEngine;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading.Tasks;
 #endif
@@ -97,16 +97,18 @@ namespace Gs2.Core.Domain
             }
             
             var nextTransactions = new List<TransactionDomain>();
+            JsonData resultJson = null!;
             if (job.ScriptId.EndsWith("push_by_user_id")) {
+                resultJson = JsonMapper.ToObject(result.Result);
                 nextTransactions.Add(JobQueueJobDomainFactory.ToTransaction(
                     Gs2,
                     UserId,
-                    PushByUserIdResult.FromJson(JsonMapper.ToObject(result.Result))
+                    PushByUserIdResult.FromJson(resultJson)
                 ));
             }
             
-            var resultJson = JsonMapper.ToObject(result.Result);
-            if (resultJson.ContainsKey("autoRunStampSheet")) {
+            resultJson = resultJson ?? TryParseObjectResult(result.Result);
+            if (resultJson != null && resultJson.ContainsKey("autoRunStampSheet")) {
                 nextTransactions.Add(TransactionDomainFactory.ToTransaction(
                     Gs2,
                     UserId,
@@ -130,81 +132,27 @@ namespace Gs2.Core.Domain
             return null;
         }
 
+        private static JsonData TryParseObjectResult(
+            string result
+        ) {
+            var trimmed = result?.TrimStart();
+            if (string.IsNullOrEmpty(trimmed) || trimmed[0] != '{') {
+                return null!;
+            }
+            return JsonMapper.ToObject(result);
+        }
+
 #if UNITY_2017_1_OR_NEWER
         public override IFuture<TransactionDomain> WaitFuture(
             bool all = false
-        ) {
-            IEnumerator Impl(IFuture<TransactionDomain> self) {
-                var begin = DateTime.Now;
-                RETRY:
-                if (DateTime.Now - begin > TimeSpan.FromSeconds(10)) {
-                    self.OnError(new UnknownException("Failed to retrieve the results of the Job Queue execution: either there is some kind of failure in GS2, or the GS2-Gateway used for notification has not been configured for GS2-JobQueue used to execute the Job Queue, or the GS2-Gateway has a user ID setting to receive notifications. API may not have been invoked."));
-                    yield break;
-                }
-                var future = Gs2.JobQueue.Namespace(
-                    this._namespaceName
-                ).User(
-                    UserId
-                ).Job(
-                    this._jobName
-                ).JobResult().ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                if (result == null) {
-                    yield return new WaitForSeconds(0.01f);
-                    
-                    var future2 = Gs2.JobQueue.DispatchByUserIdFuture(UserId);
-                    yield return future2;
-                    if (future2.Error != null) {
-                        self.OnError(future2.Error);
-                        yield break;
-                    }
-                    
-                    goto RETRY;
-                }
-
-                var transaction = HandleResult(
-                    new Job {
-                        JobId = result.JobId,
-                        Name = Job.GetJobNameFromGrn(result.JobId),
-                        UserId = Job.GetUserIdFromGrn(result.JobId),
-                        ScriptId = result.ScriptId,
-                        Args = result.Args,
-                    },
-                    new JobResultBody {
-                        TryNumber = result.TryNumber,
-                        StatusCode = result.StatusCode,
-                        Result = result.Result,
-                    }
-                );
-                if (all && transaction != null) {
-                    var future3 = transaction.WaitFuture(true);
-                    yield return future3;
-                    if (future3.Error != null) {
-                        self.OnError(future3.Error);
-                        yield break;
-                    }
-                    self.OnComplete(null);
-                    yield return null;
-                }
-                self.OnComplete(transaction);
-                yield return null;
-            }
-            return new Gs2InlineFuture<TransactionDomain>(Impl);
-        }
+        ) => WaitAsync(all).ToGs2Future();
 #endif
         
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public override async UniTask<TransactionDomain> WaitAsync(
-    #else
+#else
         public override async Task<TransactionDomain> WaitAsync(
-    #endif
+#endif
             bool all = false
         ) {
             var begin = DateTime.Now;
@@ -212,7 +160,7 @@ namespace Gs2.Core.Domain
             if (DateTime.Now - begin > TimeSpan.FromSeconds(10)) {
                 throw new TimeoutException("Failed to retrieve the results of the Job Queue execution: either there is some kind of failure in GS2, or the GS2-Gateway used for notification has not been configured for GS2-JobQueue used to execute the Job Queue, or the GS2-Gateway has a user ID setting to receive notifications. API may not have been invoked.");
             }
-            var result = await new Gs2JobQueue.Domain.Gs2JobQueue(
+            var domain = new Gs2JobQueue.Domain.Gs2JobQueue(
                 Gs2
             ).Namespace(
                 this._namespaceName
@@ -220,13 +168,11 @@ namespace Gs2.Core.Domain
                 UserId
             ).Job(
                 this._jobName
-            ).JobResult().ModelAsync();
+            ).JobResult();
+            var result = await domain.ModelAsync();
             if (result == null) {
-#if UNITY_2017_1_OR_NEWER
-                await UniTask.Delay(TimeSpan.FromMilliseconds(10));
-#else
-                await Task.Delay(TimeSpan.FromMilliseconds(10));
-#endif
+                domain.Invalidate();
+                await TaskUtilities.DelayAsync(Gs2Constant.RetryWait);
                 await Gs2.JobQueue.DispatchByUserIdAsync(UserId);
                 goto RETRY;
             }
@@ -250,6 +196,5 @@ namespace Gs2.Core.Domain
             }
             return transaction;
         }
-#endif
     }
 }

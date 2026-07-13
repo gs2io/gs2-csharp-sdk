@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -29,6 +28,7 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -47,14 +47,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -62,4 +60,158 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Friend.Domain.Model
 {
 
+/* diff --- start
+    public partial class FriendRequestAccessTokenDomain {
+        private readonly Gs2.Core.Domain.Gs2 _gs2;
+        private readonly Gs2FriendRestClient _client;
+        public string NamespaceName { get; } = null!;
+        public AccessToken AccessToken { get; }
+        public string UserId => this.AccessToken.UserId;
+        public string TargetUserId { get; } = null!;
+
+        public FriendRequestAccessTokenDomain(
+            Gs2.Core.Domain.Gs2 gs2,
+            string namespaceName,
+            AccessToken accessToken,
+            string targetUserId
+        ) {
+            this._gs2 = gs2;
+            this._client = new Gs2FriendRestClient(
+                gs2.RestSession
+            );
+            this.NamespaceName = namespaceName;
+            this.AccessToken = accessToken;
+            this.TargetUserId = targetUserId;
+        }
+
+        //#if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Friend.Model.FriendRequest> ModelFuture() => ModelAsync().ToGs2Future();
+        //#endif
+
+        //#if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Friend.Model.FriendRequest> ModelAsync()
+        //#else
+        public async Task<Gs2.Gs2Friend.Model.FriendRequest> ModelAsync()
+        //#endif
+        {
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.FriendRequest>(
+                        (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            this.AccessToken?.TimeOffset
+                        ),
+                        (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
+                            this.TargetUserId
+                        )
+                    ).LockAsync()) {
+                if (this.UserId == null) {
+                    throw new NullReferenceException();
+                }
+                var (value, find) = this._gs2.Cache.Get<Gs2.Gs2Friend.Model.FriendRequest>(
+                    (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
+                        this.NamespaceName,
+                        this.UserId,
+                        this.AccessToken?.TimeOffset
+                    ),
+                    (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
+                        this.TargetUserId
+                    )
+                );
+                if (find) {
+                    return value;
+                }
+                return null;
+            }
+        }
+
+        //#if UNITY_2017_1_OR_NEWER
+            //#if GS2_ENABLE_UNITASK
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public UniTask<Gs2.Gs2Friend.Model.FriendRequest> Model() => ModelAsync();
+            //#else
+        [Obsolete("The name has been changed to ModelFuture.")]
+        public IFuture<Gs2.Gs2Friend.Model.FriendRequest> Model() => ModelFuture();
+            //#endif
+        //#else
+        [Obsolete("The name has been changed to ModelAsync.")]
+        public Task<Gs2.Gs2Friend.Model.FriendRequest> Model() => ModelAsync();
+        //#endif
+
+
+        public void Invalidate()
+        {
+            (null as Gs2.Gs2Friend.Model.FriendRequest).DeleteCache(
+                this._gs2.Cache,
+                this.NamespaceName,
+                this.UserId,
+                this.TargetUserId,
+                this.AccessToken?.TimeOffset
+            );
+        }
+
+        public ulong Subscribe(Action<Gs2.Gs2Friend.Model.FriendRequest> callback)
+        {
+            return this._gs2.Cache.Subscribe(
+                (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
+                ),
+                (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
+                    this.TargetUserId
+                ),
+                callback,
+                () =>
+                {
+            //#if GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+            //#else
+                    async Task Impl() {
+            //#endif
+                        try {
+                            await ModelAsync();
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+                }
+            );
+        }
+
+        public void Unsubscribe(ulong callbackId)
+        {
+            this._gs2.Cache.Unsubscribe<Gs2.Gs2Friend.Model.FriendRequest>(
+                (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
+                    this.NamespaceName,
+                    this.UserId,
+                    this.AccessToken?.TimeOffset
+                ),
+                (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
+                    this.TargetUserId
+                ),
+                callbackId
+            );
+        }
+
+        //#if UNITY_2017_1_OR_NEWER
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Friend.Model.FriendRequest> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
+        //#endif
+
+        //#if GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Friend.Model.FriendRequest> callback)
+        //#else
+        public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Friend.Model.FriendRequest> callback)
+        //#endif
+        {
+            var item = await ModelAsync();
+            var callbackId = Subscribe(callback);
+            callback.Invoke(item);
+            return callbackId;
+        }
+
+    }
+ diff --- end */
 }

@@ -27,6 +27,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -44,15 +46,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -91,41 +90,14 @@ namespace Gs2.Gs2Version.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Version.Domain.Model.CheckerDomain> CheckVersionFuture(
             CheckVersionByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Version.Domain.Model.CheckerDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.CheckVersionByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                this.ProjectToken = domain.ProjectToken = result?.ProjectToken;
-                this.Warnings = domain.Warnings = result?.Warnings;
-                this.Errors = domain.Errors = result?.Errors;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Version.Domain.Model.CheckerDomain>(Impl);
-        }
+        ) => CheckVersionAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Version.Domain.Model.CheckerDomain> CheckVersionAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Version.Domain.Model.CheckerDomain> CheckVersionAsync(
-            #endif
+        #endif
             CheckVersionByUserIdRequest request
         ) {
             request = request
@@ -144,7 +116,6 @@ namespace Gs2.Gs2Version.Domain.Model
             this.Errors = domain.Errors = result?.Errors;
             return domain;
         }
-        #endif
 
     }
 

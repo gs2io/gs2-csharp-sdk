@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -41,9 +40,9 @@ using Gs2.Gs2Inventory.Model.Cache;
 using Gs2.Gs2Inventory.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading.Tasks;
 #endif
@@ -61,63 +60,14 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
             AddReferenceOfByUserIdRequest request
-        ) {
-            IEnumerator Impl(Gs2Future<Func<object>> result) {
-                var future = domain.Inventory.Namespace(
-                    request.NamespaceName
-                ).AccessToken(
-                    accessToken
-                ).Inventory(
-                    request.InventoryName
-                ).ItemSet(
-                    request.ItemName,
-                    request.ItemSetName
-                ).ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    result.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-
-                if (item == null || item.Length == 0) {
-                    result.OnComplete(() => null);
-                    yield break;
-                }
-                try {
-                    var item_ = item[0].SpeculativeExecution(request);
-
-                    result.OnComplete(() =>
-                    {
-                        item_.PutCache(
-                            domain.Cache,
-                            request.NamespaceName,
-                            accessToken.UserId,
-                            request.InventoryName,
-                            request.ItemName,
-                            request.ItemSetName,
-                            accessToken.TimeOffset
-                        );
-                        return null;
-                    });
-                }
-                catch (Gs2Exception e) {
-                    result.OnError(e);
-                    yield break;
-                }
-                yield return null;
-            }
-
-            return new Gs2InlineFuture<Func<object>>(Impl);
-        }
+        ) => ExecuteAsync(domain, accessToken, request).ToGs2Future();
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<Func<object>> ExecuteAsync(
-    #else
+#else
         public static async Task<Func<object>> ExecuteAsync(
-    #endif
+#endif
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
             AddReferenceOfByUserIdRequest request
@@ -133,25 +83,40 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                 request.ItemSetName
             ).ModelAsync();
 
-            if (item == null || item.Length == 0) {
+/* diff --- start
+            if (item == null) {
+ diff --- end */
+            if (item == null || item.Length == 0) { /* diff +++ */
                 return () => null;
             }
-            var item_ = item[0].SpeculativeExecution(request);
+/* diff --- start
+            item = item.SpeculativeExecution(request);
+ diff --- end */
+            var item_ = item[0].SpeculativeExecution(request); /* diff +++ */
 
             return () =>
             {
-                item_.PutCache(
+/* diff --- start
+                item.PutCache(
+ diff --- end */
+                item_.PutCache( /* diff +++ */
                     domain.Cache,
                     request.NamespaceName,
-                    accessToken.UserId,
+/* diff --- start
+                    request.UserId,
+ diff --- end */
+                    accessToken.UserId, /* diff +++ */
                     request.InventoryName,
                     request.ItemName,
                     request.ItemSetName,
-                    accessToken.TimeOffset
+/* diff --- start
+                    request.ReferenceOf,
+                    null
+ diff --- end */
+                    accessToken.TimeOffset /* diff +++ */
                 );
                 return null;
             };
         }
-#endif
     }
 }

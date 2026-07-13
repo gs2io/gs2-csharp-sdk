@@ -27,6 +27,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -44,15 +46,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -94,12 +93,11 @@ namespace Gs2.Gs2Quest.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Quest.Model.QuestModelMaster> QuestModelMastersAsync(
-            #else
+        #else
         public DescribeQuestModelMastersIterator QuestModelMastersAsync(
-            #endif
+        #endif
             string namePrefix = null
         )
         {
@@ -111,7 +109,6 @@ namespace Gs2.Gs2Quest.Domain.Model
                 namePrefix
             );
         }
-        #endif
 
         public ulong SubscribeQuestModelMasters(
             Action<Gs2.Gs2Quest.Model.QuestModelMaster[]> callback,
@@ -127,10 +124,15 @@ namespace Gs2.Gs2Quest.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await QuestModelMastersAsync(
                                 namePrefix
                             ).ToArrayAsync());
@@ -140,13 +142,15 @@ namespace Gs2.Gs2Quest.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeQuestModelMastersWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeQuestModelMastersWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Quest.Model.QuestModelMaster[]> callback,
             string namePrefix = null
         )
@@ -161,7 +165,6 @@ namespace Gs2.Gs2Quest.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeQuestModelMasters(
             ulong callbackId,
@@ -209,37 +212,14 @@ namespace Gs2.Gs2Quest.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Quest.Model.QuestGroupModelMaster> GetFuture(
             GetQuestGroupModelMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Quest.Model.QuestGroupModelMaster> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithQuestGroupName(this.QuestGroupName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.GetQuestGroupModelMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Quest.Model.QuestGroupModelMaster>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Quest.Model.QuestGroupModelMaster> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Quest.Model.QuestGroupModelMaster> GetAsync(
-            #endif
+        #endif
             GetQuestGroupModelMasterRequest request
         ) {
             request = request
@@ -254,44 +234,18 @@ namespace Gs2.Gs2Quest.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain> UpdateFuture(
             UpdateQuestGroupModelMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithQuestGroupName(this.QuestGroupName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.UpdateQuestGroupModelMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain>(Impl);
-        }
+        ) => UpdateAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain> UpdateAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain> UpdateAsync(
-            #endif
+        #endif
             UpdateQuestGroupModelMasterRequest request
         ) {
             request = request
@@ -308,46 +262,18 @@ namespace Gs2.Gs2Quest.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain> DeleteFuture(
             DeleteQuestGroupModelMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithQuestGroupName(this.QuestGroupName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.DeleteQuestGroupModelMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    if (!(future.Error is NotFoundException)) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain>(Impl);
-        }
+        ) => DeleteAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain> DeleteAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Quest.Domain.Model.QuestGroupModelMasterDomain> DeleteAsync(
-            #endif
+        #endif
             DeleteQuestGroupModelMasterRequest request
         ) {
             try {
@@ -366,49 +292,18 @@ namespace Gs2.Gs2Quest.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Quest.Domain.Model.QuestModelMasterDomain> CreateQuestModelMasterFuture(
             CreateQuestModelMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Quest.Domain.Model.QuestModelMasterDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithQuestGroupName(this.QuestGroupName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.CreateQuestModelMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Quest.Domain.Model.QuestModelMasterDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    result?.Item?.QuestGroupName,
-                    result?.Item?.Name
-                );
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Quest.Domain.Model.QuestModelMasterDomain>(Impl);
-        }
+        ) => CreateQuestModelMasterAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Quest.Domain.Model.QuestModelMasterDomain> CreateQuestModelMasterAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Quest.Domain.Model.QuestModelMasterDomain> CreateQuestModelMasterAsync(
-            #endif
+        #endif
             CreateQuestModelMasterRequest request
         ) {
             request = request
@@ -430,53 +325,20 @@ namespace Gs2.Gs2Quest.Domain.Model
 
             return domain;
         }
-        #endif
 
     }
 
     public partial class QuestGroupModelMasterDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Quest.Model.QuestGroupModelMaster> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Quest.Model.QuestGroupModelMaster> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Quest.Model.QuestGroupModelMaster).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.QuestGroupName,
-                    null
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2Quest.Model.QuestGroupModelMaster).FetchFuture(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.QuestGroupName,
-                    null,
-                    () => this.GetFuture(
-                        new GetQuestGroupModelMasterRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Quest.Model.QuestGroupModelMaster>(Impl);
-        }
+        public IFuture<Gs2.Gs2Quest.Model.QuestGroupModelMaster> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Quest.Model.QuestGroupModelMaster> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Quest.Model.QuestGroupModelMaster> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Quest.Model.QuestGroupModelMaster>(
                         (null as Gs2.Gs2Quest.Model.QuestGroupModelMaster).CacheParentKey(
@@ -507,28 +369,18 @@ namespace Gs2.Gs2Quest.Domain.Model
                 );
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2Quest.Model.QuestGroupModelMaster> Model()
-        {
-            return await ModelAsync();
-        }
+        public UniTask<Gs2.Gs2Quest.Model.QuestGroupModelMaster> Model() => ModelAsync();
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2Quest.Model.QuestGroupModelMaster> Model()
-        {
-            return ModelFuture();
-        }
+        public IFuture<Gs2.Gs2Quest.Model.QuestGroupModelMaster> Model() => ModelFuture();
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2Quest.Model.QuestGroupModelMaster> Model()
-        {
-            return await ModelAsync();
-        }
+        public Task<Gs2.Gs2Quest.Model.QuestGroupModelMaster> Model() => ModelAsync();
         #endif
 
 
@@ -555,7 +407,6 @@ namespace Gs2.Gs2Quest.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -568,12 +419,7 @@ namespace Gs2.Gs2Quest.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -593,38 +439,21 @@ namespace Gs2.Gs2Quest.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Quest.Model.QuestGroupModelMaster> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Quest.Model.QuestGroupModelMaster> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Quest.Model.QuestGroupModelMaster> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Quest.Model.QuestGroupModelMaster> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

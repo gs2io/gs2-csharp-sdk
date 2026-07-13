@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -29,6 +28,7 @@
 
 using System;
 using System.Collections;
+using System.Linq;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
@@ -37,9 +37,9 @@ using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Enhance.Request;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading.Tasks;
 #endif
@@ -57,45 +57,64 @@ namespace Gs2.Gs2Enhance.Domain.Transaction.SpeculativeExecutor
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
             StartByUserIdRequest request
-        ) {
-            IEnumerator Impl(Gs2Future<Func<object>> result) {
-
-#if UNITY_2017_1_OR_NEWER
-                UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
-#else
-                System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
-#endif
-                result.OnComplete(() =>
-                {
-                    return null;
-                });
-                yield return null;
-            }
-
-            return new Gs2InlineFuture<Func<object>>(Impl);
-        }
+        ) => ExecuteAsync(domain, accessToken, request).ToGs2Future();
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<Func<object>> ExecuteAsync(
-    #else
+#else
         public static async Task<Func<object>> ExecuteAsync(
-    #endif
+#endif
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
             StartByUserIdRequest request
         ) {
+/* diff --- start
+            // TODO: Speculative execution not supported
+ diff --- end */
 #if UNITY_2017_1_OR_NEWER
             UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
 #else
             System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
 #endif
+/* diff --- start
+
+            var item = await domain.Enhance.Namespace(
+                request.NamespaceName
+            ).AccessToken(
+                accessToken
+            ).Progress(
+            ).ModelAsync();
+
+            var commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
+                item?.ConsumeActions.Select(v =>
+                {
+                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Enhance.Model.Config>()) {
+                        v = v.ApplyConfig(config.Key, config.Value);
+                    }
+                    return v;
+                }).ToArray() ?? new Gs2.Core.Model.ConsumeAction[]{},
+                item?.AcquireActions.Select(v =>
+                {
+                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Enhance.Model.Config>()) {
+                        v = v.ApplyConfig(config.Key, config.Value);
+                    }
+                    return v;
+                }).ToArray() ?? new Gs2.Core.Model.AcquireAction[]{},
+                1.0
+            ).ExecuteAsync(
+                domain,
+                accessToken
+            );
+
+ diff --- end */
             return () =>
             {
+/* diff --- start
+                commit?.Invoke();
+ diff --- end */
                 return null;
             };
         }
-#endif
     }
 }

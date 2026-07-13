@@ -27,6 +27,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -44,15 +46,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -95,12 +94,11 @@ namespace Gs2.Gs2Money2.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Money2.Model.Wallet> WalletsAsync(
-            #else
+        #else
         public DescribeWalletsByUserIdIterator WalletsAsync(
-            #endif
+        #endif
             string timeOffsetToken = null
         )
         {
@@ -112,7 +110,6 @@ namespace Gs2.Gs2Money2.Domain.Model
                 timeOffsetToken
             );
         }
-        #endif
 
         public ulong SubscribeWallets(
             Action<Gs2.Gs2Money2.Model.Wallet[]> callback
@@ -127,10 +124,15 @@ namespace Gs2.Gs2Money2.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await WalletsAsync(
                             ).ToArrayAsync());
                         }
@@ -139,13 +141,15 @@ namespace Gs2.Gs2Money2.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWalletsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeWalletsWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Money2.Model.Wallet[]> callback
         )
         {
@@ -157,7 +161,6 @@ namespace Gs2.Gs2Money2.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeWallets(
             ulong callbackId
@@ -214,12 +217,11 @@ namespace Gs2.Gs2Money2.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Money2.Model.Event> EventsAsync(
-            #else
+        #else
         public DescribeEventsByUserIdIterator EventsAsync(
-            #endif
+        #endif
             long? begin = null,
             long? end = null,
             string timeOffsetToken = null
@@ -235,7 +237,6 @@ namespace Gs2.Gs2Money2.Domain.Model
                 timeOffsetToken
             );
         }
-        #endif
 
         public ulong SubscribeEvents(
             Action<Gs2.Gs2Money2.Model.Event[]> callback,
@@ -252,10 +253,15 @@ namespace Gs2.Gs2Money2.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await EventsAsync(
                                 begin,
                                 end
@@ -266,13 +272,15 @@ namespace Gs2.Gs2Money2.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeEventsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeEventsWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Money2.Model.Event[]> callback,
             long? begin = null,
             long? end = null
@@ -290,7 +298,6 @@ namespace Gs2.Gs2Money2.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeEvents(
             ulong callbackId,
@@ -347,12 +354,11 @@ namespace Gs2.Gs2Money2.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Money2.Model.SubscriptionStatus> SubscriptionStatusesAsync(
-            #else
+        #else
         public DescribeSubscriptionStatusesByUserIdIterator SubscriptionStatusesAsync(
-            #endif
+        #endif
             string timeOffsetToken = null
         )
         {
@@ -364,7 +370,6 @@ namespace Gs2.Gs2Money2.Domain.Model
                 timeOffsetToken
             );
         }
-        #endif
 
         public ulong SubscribeSubscriptionStatuses(
             Action<Gs2.Gs2Money2.Model.SubscriptionStatus[]> callback
@@ -379,10 +384,15 @@ namespace Gs2.Gs2Money2.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await SubscriptionStatusesAsync(
                             ).ToArrayAsync());
                         }
@@ -391,13 +401,15 @@ namespace Gs2.Gs2Money2.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeSubscriptionStatusesWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeSubscriptionStatusesWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Money2.Model.SubscriptionStatus[]> callback
         )
         {
@@ -409,7 +421,6 @@ namespace Gs2.Gs2Money2.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeSubscriptionStatuses(
             ulong callbackId
@@ -455,44 +466,14 @@ namespace Gs2.Gs2Money2.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Money2.Domain.Model.EventDomain> VerifyReceiptFuture(
             VerifyReceiptByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Money2.Domain.Model.EventDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.VerifyReceiptByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Money2.Domain.Model.EventDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    result?.Item?.UserId,
-                    result?.Item?.TransactionId
-                );
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Money2.Domain.Model.EventDomain>(Impl);
-        }
+        ) => VerifyReceiptAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Money2.Domain.Model.EventDomain> VerifyReceiptAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Money2.Domain.Model.EventDomain> VerifyReceiptAsync(
-            #endif
+        #endif
             VerifyReceiptByUserIdRequest request
         ) {
             request = request
@@ -514,49 +495,18 @@ namespace Gs2.Gs2Money2.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Money2.Domain.Model.SubscriptionStatusDomain> AllocateSubscriptionStatusFuture(
             AllocateSubscriptionStatusByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Money2.Domain.Model.SubscriptionStatusDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.AllocateSubscriptionStatusByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Money2.Domain.Model.SubscriptionStatusDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    result?.Item?.UserId,
-                    result?.Item?.ContentName
-                );
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Money2.Domain.Model.SubscriptionStatusDomain>(Impl);
-        }
+        ) => AllocateSubscriptionStatusAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Money2.Domain.Model.SubscriptionStatusDomain> AllocateSubscriptionStatusAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Money2.Domain.Model.SubscriptionStatusDomain> AllocateSubscriptionStatusAsync(
-            #endif
+        #endif
             AllocateSubscriptionStatusByUserIdRequest request
         ) {
             request = request
@@ -578,49 +528,18 @@ namespace Gs2.Gs2Money2.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Money2.Domain.Model.SubscriptionStatusDomain> TakeoverSubscriptionStatusFuture(
             TakeoverSubscriptionStatusByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Money2.Domain.Model.SubscriptionStatusDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.TakeoverSubscriptionStatusByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Money2.Domain.Model.SubscriptionStatusDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    result?.Item?.UserId,
-                    result?.Item?.ContentName
-                );
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Money2.Domain.Model.SubscriptionStatusDomain>(Impl);
-        }
+        ) => TakeoverSubscriptionStatusAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Money2.Domain.Model.SubscriptionStatusDomain> TakeoverSubscriptionStatusAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Money2.Domain.Model.SubscriptionStatusDomain> TakeoverSubscriptionStatusAsync(
-            #endif
+        #endif
             TakeoverSubscriptionStatusByUserIdRequest request
         ) {
             request = request
@@ -642,7 +561,6 @@ namespace Gs2.Gs2Money2.Domain.Model
 
             return domain;
         }
-        #endif
 
     }
 

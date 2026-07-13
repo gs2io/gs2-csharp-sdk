@@ -112,9 +112,8 @@ namespace Gs2.Core.Domain
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
         [Obsolete("FollowsAsync() -> Follow().FollowsAsync()")]
-    #if UNITY_2017_1_OR_NEWER
+    #if GS2_ENABLE_UNITASK
         public static IUniTaskAsyncEnumerable<FollowUser> FollowsAsync(
     #else
         public static DescribeFollowsIterator FollowsAsync(
@@ -129,7 +128,7 @@ namespace Gs2.Core.Domain
         }
 
         [Obsolete("FollowsAsync() -> Follow().FollowsAsync()")]
-    #if UNITY_2017_1_OR_NEWER
+    #if GS2_ENABLE_UNITASK
         public static IUniTaskAsyncEnumerable<FollowUser> FollowsAsync(
     #else
         public static DescribeFollowsByUserIdIterator FollowsAsync(
@@ -142,7 +141,6 @@ namespace Gs2.Core.Domain
             ).FollowsAsync(
             );
         }
-#endif
         
         [Obsolete("SubscribeFollows() -> Follow().SubscribeFollows()")]
         public static ulong SubscribeFollows(

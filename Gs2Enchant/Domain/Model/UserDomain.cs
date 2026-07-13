@@ -27,6 +27,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -44,15 +46,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -96,12 +95,11 @@ namespace Gs2.Gs2Enchant.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Enchant.Model.BalanceParameterStatus> BalanceParameterStatusesAsync(
-            #else
+        #else
         public DescribeBalanceParameterStatusesByUserIdIterator BalanceParameterStatusesAsync(
-            #endif
+        #endif
             string parameterName = null,
             string timeOffsetToken = null
         )
@@ -115,7 +113,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 timeOffsetToken
             );
         }
-        #endif
 
         public ulong SubscribeBalanceParameterStatuses(
             Action<Gs2.Gs2Enchant.Model.BalanceParameterStatus[]> callback,
@@ -131,10 +128,15 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await BalanceParameterStatusesAsync(
                                 parameterName
                             ).ToArrayAsync());
@@ -144,13 +146,15 @@ namespace Gs2.Gs2Enchant.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeBalanceParameterStatusesWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeBalanceParameterStatusesWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Enchant.Model.BalanceParameterStatus[]> callback,
             string parameterName = null
         )
@@ -165,7 +169,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeBalanceParameterStatuses(
             ulong callbackId,
@@ -224,12 +227,11 @@ namespace Gs2.Gs2Enchant.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Enchant.Model.RarityParameterStatus> RarityParameterStatusesAsync(
-            #else
+        #else
         public DescribeRarityParameterStatusesByUserIdIterator RarityParameterStatusesAsync(
-            #endif
+        #endif
             string parameterName = null,
             string timeOffsetToken = null
         )
@@ -243,7 +245,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 timeOffsetToken
             );
         }
-        #endif
 
         public ulong SubscribeRarityParameterStatuses(
             Action<Gs2.Gs2Enchant.Model.RarityParameterStatus[]> callback,
@@ -259,10 +260,15 @@ namespace Gs2.Gs2Enchant.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await RarityParameterStatusesAsync(
                                 parameterName
                             ).ToArrayAsync());
@@ -272,13 +278,15 @@ namespace Gs2.Gs2Enchant.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeRarityParameterStatusesWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeRarityParameterStatusesWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Enchant.Model.RarityParameterStatus[]> callback,
             string parameterName = null
         )
@@ -293,7 +301,6 @@ namespace Gs2.Gs2Enchant.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeRarityParameterStatuses(
             ulong callbackId,

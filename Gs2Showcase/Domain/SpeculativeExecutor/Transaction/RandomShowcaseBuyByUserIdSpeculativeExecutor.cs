@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -38,9 +37,9 @@ using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Showcase.Request;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading.Tasks;
 #endif
@@ -58,73 +57,27 @@ namespace Gs2.Gs2Showcase.Domain.Transaction.SpeculativeExecutor
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
             RandomShowcaseBuyByUserIdRequest request
-        ) {
-            IEnumerator Impl(Gs2Future<Func<object>> result) {
-                var future = domain.Showcase.Namespace(
-                    request.NamespaceName
-                ).AccessToken(
-                    accessToken
-                ).RandomShowcase(
-                    request.ShowcaseName
-                ).RandomDisplayItem(
-                    request.DisplayItemName
-                ).ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    result.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-
-                var future2 = new Core.SpeculativeExecutor.SpeculativeExecutor(
-                    item?.ConsumeActions.Select(v =>
-                    {
-                        foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Showcase.Model.Config>()) {
-                            v = v.ApplyConfig(config.Key, config.Value);
-                        }
-                        return v;
-                    }).ToArray() ?? new Gs2.Core.Model.ConsumeAction[]{},
-                    item?.AcquireActions.Select(v =>
-                    {
-                        foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Showcase.Model.Config>()) {
-                            v = v.ApplyConfig(config.Key, config.Value);
-                        }
-                        return v;
-                    }).ToArray() ?? new Gs2.Core.Model.AcquireAction[]{},
-                    1.0
-                ).ExecuteFuture(
-                    domain,
-                    accessToken
-                );
-                yield return future2;
-                if (future2.Error != null) {
-                    result.OnError(future2.Error);
-                    yield break;
-                }
-                var commit = future2.Result;
-
-                result.OnComplete(() =>
-                {
-                    commit?.Invoke();
-                    return null;
-                });
-                yield return null;
-            }
-
-            return new Gs2InlineFuture<Func<object>>(Impl);
-        }
+        ) => ExecuteAsync(domain, accessToken, request).ToGs2Future();
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<Func<object>> ExecuteAsync(
-    #else
+#else
         public static async Task<Func<object>> ExecuteAsync(
-    #endif
+#endif
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
             RandomShowcaseBuyByUserIdRequest request
         ) {
+/* diff --- start
+            // TODO: Speculative execution not supported
+//#if UNITY_2017_1_OR_NEWER
+            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
+//#else
+            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
+//#endif
+
+ diff --- end */
             var item = await domain.Showcase.Namespace(
                 request.NamespaceName
             ).AccessToken(
@@ -162,6 +115,5 @@ namespace Gs2.Gs2Showcase.Domain.Transaction.SpeculativeExecutor
                 return null;
             };
         }
-#endif
     }
 }

@@ -26,10 +26,10 @@ using Gs2.Gs2Grade.Request;
 using Gs2.Gs2Grade.Result;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -84,21 +84,22 @@ namespace Gs2.Gs2Grade.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<GetCurrentGradeMasterResult> InvokeAsync(
-    #else
+#else
         public static async Task<GetCurrentGradeMasterResult> InvokeAsync(
-    #endif
+#endif
             this GetCurrentGradeMasterRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<GetCurrentGradeMasterResult>> invokeImpl
-    #else
+#elif UNITY_2017_1_OR_NEWER
+            Func<TaskFuture<GetCurrentGradeMasterResult>> invokeImpl
+#else
             Func<Task<GetCurrentGradeMasterResult>> invokeImpl
-    #endif
+#endif
         )
         {
             var result = await invokeImpl();
@@ -110,6 +111,5 @@ namespace Gs2.Gs2Grade.Model.Cache
             );
             return result;
         }
-#endif
     }
 }

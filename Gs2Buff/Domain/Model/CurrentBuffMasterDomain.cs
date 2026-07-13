@@ -27,6 +27,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -44,15 +46,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -85,38 +84,14 @@ namespace Gs2.Gs2Buff.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Buff.Domain.Model.CurrentBuffMasterDomain> ExportMasterFuture(
             ExportMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Buff.Domain.Model.CurrentBuffMasterDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.ExportMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Buff.Domain.Model.CurrentBuffMasterDomain>(Impl);
-        }
+        ) => ExportMasterAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Buff.Domain.Model.CurrentBuffMasterDomain> ExportMasterAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Buff.Domain.Model.CurrentBuffMasterDomain> ExportMasterAsync(
-            #endif
+        #endif
             ExportMasterRequest request
         ) {
             request = request
@@ -132,41 +107,18 @@ namespace Gs2.Gs2Buff.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Buff.Model.CurrentBuffMaster> GetFuture(
             GetCurrentBuffMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Buff.Model.CurrentBuffMaster> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.GetCurrentBuffMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Buff.Model.CurrentBuffMaster>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Buff.Model.CurrentBuffMaster> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Buff.Model.CurrentBuffMaster> GetAsync(
-            #endif
+        #endif
             GetCurrentBuffMasterRequest request
         ) {
             request = request
@@ -180,44 +132,18 @@ namespace Gs2.Gs2Buff.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Buff.Domain.Model.CurrentBuffMasterDomain> PreUpdateFuture(
             PreUpdateCurrentBuffMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Buff.Domain.Model.CurrentBuffMasterDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.PreUpdateCurrentBuffMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                this.UploadToken = domain.UploadToken = result?.UploadToken;
-                this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Buff.Domain.Model.CurrentBuffMasterDomain>(Impl);
-        }
+        ) => PreUpdateAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Buff.Domain.Model.CurrentBuffMasterDomain> PreUpdateAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Buff.Domain.Model.CurrentBuffMasterDomain> PreUpdateAsync(
-            #endif
+        #endif
             PreUpdateCurrentBuffMasterRequest request
         ) {
             request = request
@@ -234,43 +160,18 @@ namespace Gs2.Gs2Buff.Domain.Model
             this.UploadUrl = domain.UploadUrl = result?.UploadUrl;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Buff.Domain.Model.CurrentBuffMasterDomain> UpdateFuture(
             UpdateCurrentBuffMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Buff.Domain.Model.CurrentBuffMasterDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.UpdateCurrentBuffMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Buff.Domain.Model.CurrentBuffMasterDomain>(Impl);
-        }
+        ) => UpdateAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Buff.Domain.Model.CurrentBuffMasterDomain> UpdateAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Buff.Domain.Model.CurrentBuffMasterDomain> UpdateAsync(
-            #endif
+        #endif
             UpdateCurrentBuffMasterRequest request
         ) {
             request = request
@@ -286,43 +187,18 @@ namespace Gs2.Gs2Buff.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Buff.Domain.Model.CurrentBuffMasterDomain> UpdateFromGitHubFuture(
             UpdateCurrentBuffMasterFromGitHubRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Buff.Domain.Model.CurrentBuffMasterDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.UpdateCurrentBuffMasterFromGitHubFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Buff.Domain.Model.CurrentBuffMasterDomain>(Impl);
-        }
+        ) => UpdateFromGitHubAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Buff.Domain.Model.CurrentBuffMasterDomain> UpdateFromGitHubAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Buff.Domain.Model.CurrentBuffMasterDomain> UpdateFromGitHubAsync(
-            #endif
+        #endif
             UpdateCurrentBuffMasterFromGitHubRequest request
         ) {
             request = request
@@ -338,51 +214,20 @@ namespace Gs2.Gs2Buff.Domain.Model
 
             return domain;
         }
-        #endif
 
     }
 
     public partial class CurrentBuffMasterDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Buff.Model.CurrentBuffMaster> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Buff.Model.CurrentBuffMaster> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Buff.Model.CurrentBuffMaster).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    null
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2Buff.Model.CurrentBuffMaster).FetchFuture(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    null,
-                    () => this.GetFuture(
-                        new GetCurrentBuffMasterRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Buff.Model.CurrentBuffMaster>(Impl);
-        }
+        public IFuture<Gs2.Gs2Buff.Model.CurrentBuffMaster> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Buff.Model.CurrentBuffMaster> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Buff.Model.CurrentBuffMaster> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Buff.Model.CurrentBuffMaster>(
                         (null as Gs2.Gs2Buff.Model.CurrentBuffMaster).CacheParentKey(
@@ -410,28 +255,18 @@ namespace Gs2.Gs2Buff.Domain.Model
                 );
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2Buff.Model.CurrentBuffMaster> Model()
-        {
-            return await ModelAsync();
-        }
+        public UniTask<Gs2.Gs2Buff.Model.CurrentBuffMaster> Model() => ModelAsync();
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2Buff.Model.CurrentBuffMaster> Model()
-        {
-            return ModelFuture();
-        }
+        public IFuture<Gs2.Gs2Buff.Model.CurrentBuffMaster> Model() => ModelFuture();
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2Buff.Model.CurrentBuffMaster> Model()
-        {
-            return await ModelAsync();
-        }
+        public Task<Gs2.Gs2Buff.Model.CurrentBuffMaster> Model() => ModelAsync();
         #endif
 
 
@@ -456,7 +291,6 @@ namespace Gs2.Gs2Buff.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -469,12 +303,7 @@ namespace Gs2.Gs2Buff.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -493,38 +322,21 @@ namespace Gs2.Gs2Buff.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Buff.Model.CurrentBuffMaster> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Buff.Model.CurrentBuffMaster> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Buff.Model.CurrentBuffMaster> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Buff.Model.CurrentBuffMaster> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

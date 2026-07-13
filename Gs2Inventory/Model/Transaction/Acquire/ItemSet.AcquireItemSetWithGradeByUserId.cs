@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -32,12 +31,18 @@ namespace Gs2.Gs2Inventory.Model.Transaction
     {
         public static bool IsExecutable(
             this ItemSet self,
+/* diff --- start
+            AcquireItemSetWithGradeByUserIdRequest request
+ diff --- end */
+/* diff +++ start */
             AcquireItemSetWithGradeByUserIdRequest request,
             ItemModel itemModel = null,
             Inventory inventory = null
+/* diff +++ end */
         ) {
             var changed = self.SpeculativeExecution(request);
             try {
+/* diff +++ start */
                 var newCount = (self.Count ?? 0) + 1;
                 if (itemModel?.StackingLimit != null && itemModel.StackingLimit < newCount)
                 {
@@ -49,6 +54,7 @@ namespace Gs2.Gs2Inventory.Model.Transaction
                         return false;
                     }
                 }
+/* diff +++ end */
                 changed.Validate();
                 return true;
             }

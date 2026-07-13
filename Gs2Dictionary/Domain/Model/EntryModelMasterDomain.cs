@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -29,6 +28,10 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+/* diff --- start
+using System.Collections;
+ diff --- end */
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -46,15 +49,13 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+using System.Collections; /* diff +++ */
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -66,59 +67,46 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DictionaryRestClient _client;
         public string NamespaceName { get; } = null!;
-        public string EntryName { get; } = null!;
+/* diff --- start
+        public string EntryModelName { get; } = null!;
+ diff --- end */
+        public string EntryName { get; } = null!; /* diff +++ */
 
         public EntryModelMasterDomain(
             Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
-            string entryName
+/* diff --- start
+            string entryModelName
+ diff --- end */
+            string entryName /* diff +++ */
         ) {
             this._gs2 = gs2;
             this._client = new Gs2DictionaryRestClient(
                 gs2.RestSession
             );
             this.NamespaceName = namespaceName;
-            this.EntryName = entryName;
+/* diff --- start
+            this.EntryModelName = entryModelName;
+ diff --- end */
+            this.EntryName = entryName; /* diff +++ */
         }
 
     }
 
     public partial class EntryModelMasterDomain {
+/* diff +++ start */
 
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Dictionary.Model.EntryModelMaster> GetFuture(
             GetEntryModelMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Model.EntryModelMaster> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithEntryName(this.EntryName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.GetEntryModelMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Dictionary.Model.EntryModelMaster>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Dictionary.Model.EntryModelMaster> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Dictionary.Model.EntryModelMaster> GetAsync(
-            #endif
+        #endif
             GetEntryModelMasterRequest request
         ) {
             request = request
@@ -133,44 +121,18 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain> UpdateFuture(
             UpdateEntryModelMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithEntryName(this.EntryName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.UpdateEntryModelMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain>(Impl);
-        }
+        ) => UpdateAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain> UpdateAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain> UpdateAsync(
-            #endif
+        #endif
             UpdateEntryModelMasterRequest request
         ) {
             request = request
@@ -187,46 +149,18 @@ namespace Gs2.Gs2Dictionary.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain> DeleteFuture(
             DeleteEntryModelMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithEntryName(this.EntryName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.DeleteEntryModelMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    if (!(future.Error is NotFoundException)) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain>(Impl);
-        }
+        ) => DeleteAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain> DeleteAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Dictionary.Domain.Model.EntryModelMasterDomain> DeleteAsync(
-            #endif
+        #endif
             DeleteEntryModelMasterRequest request
         ) {
             try {
@@ -245,54 +179,52 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
+/* diff +++ end */
 
     }
 
     public partial class EntryModelMasterDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Dictionary.Model.EntryModelMaster> ModelFuture()
+        public IFuture<Gs2.Gs2Dictionary.Model.EntryModelMaster> ModelFuture() => ModelAsync().ToGs2Future();
+        #endif
+
+        #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Dictionary.Model.EntryModelMaster> ModelAsync()
+        #else
+        public async Task<Gs2.Gs2Dictionary.Model.EntryModelMaster> ModelAsync()
+        #endif
         {
-            IEnumerator Impl(IFuture<Gs2.Gs2Dictionary.Model.EntryModelMaster> self)
-            {
+/* diff --- start
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
+                        (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).CacheParentKey(
+                            this.NamespaceName,
+                            null
+                        ),
+                        (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).CacheKey(
+                            this.EntryModelName
+                        )
+                    ).LockAsync()) {
                 var (value, find) = (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.EntryName,
+                    this.EntryModelName,
                     null
                 );
                 if (find) {
-                    self.OnComplete(value);
-                    yield break;
+                    return value;
                 }
-                var future = (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).FetchFuture(
+                return await (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).FetchAsync(
                     this._gs2.Cache,
                     this.NamespaceName,
-                    this.EntryName,
+                    this.EntryModelName,
                     null,
-                    () => this.GetFuture(
+                    () => this.GetAsync(
                         new GetEntryModelMasterRequest()
                     )
                 );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Dictionary.Model.EntryModelMaster>(Impl);
-        }
-        #endif
-
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Gs2Dictionary.Model.EntryModelMaster> ModelAsync()
-            #else
-        public async Task<Gs2.Gs2Dictionary.Model.EntryModelMaster> ModelAsync()
-            #endif
-        {
+ diff --- end */
+/* diff +++ start */
             var (value, find) = (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).GetCache(
                 this._gs2.Cache,
                 this.NamespaceName,
@@ -301,7 +233,9 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             );
             if (find) {
                 return value;
+/* diff +++ end */
             }
+/* diff +++ start */
             return await (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).FetchAsync(
                 this._gs2.Cache,
                 this.NamespaceName,
@@ -311,29 +245,44 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     new GetEntryModelMasterRequest()
                 )
             );
+/* diff +++ end */
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
+/* diff --- start
+        public UniTask<Gs2.Gs2Dictionary.Model.EntryModelMaster> Model() => ModelAsync();
+ diff --- end */
+/* diff +++ start */
         public async UniTask<Gs2.Gs2Dictionary.Model.EntryModelMaster> Model()
         {
             return await ModelAsync();
         }
+/* diff +++ end */
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
+/* diff --- start
+        public IFuture<Gs2.Gs2Dictionary.Model.EntryModelMaster> Model() => ModelFuture();
+ diff --- end */
+/* diff +++ start */
         public IFuture<Gs2.Gs2Dictionary.Model.EntryModelMaster> Model()
         {
             return ModelFuture();
         }
+/* diff +++ end */
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
+/* diff --- start
+        public Task<Gs2.Gs2Dictionary.Model.EntryModelMaster> Model() => ModelAsync();
+ diff --- end */
+/* diff +++ start */
         public async Task<Gs2.Gs2Dictionary.Model.EntryModelMaster> Model()
         {
             return await ModelAsync();
         }
+/* diff +++ end */
         #endif
 
 
@@ -342,7 +291,10 @@ namespace Gs2.Gs2Dictionary.Domain.Model
             (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).DeleteCache(
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.EntryName,
+/* diff --- start
+                this.EntryModelName,
+ diff --- end */
+                this.EntryName, /* diff +++ */
                 null
             );
         }
@@ -355,18 +307,37 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     null
                 ),
                 (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).CacheKey(
-                    this.EntryName
+/* diff --- start
+                    this.EntryModelName
+ diff --- end */
+                    this.EntryName /* diff +++ */
                 ),
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK // diff +++
             #if GS2_ENABLE_UNITASK
-                    ModelAsync().Forget();
+/* diff --- start
+                    async UniTask Impl() {
+ diff --- end */
+                    ModelAsync().Forget(); /* diff +++ */
             #else
-                    ModelAsync();
+/* diff --- start
+                    async Task Impl() {
+ diff --- end */
+                    ModelAsync(); /* diff +++ */
             #endif
-        #endif
+/* diff --- start
+                        try {
+                            await ModelAsync();
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+ diff --- end */
+        #endif // diff +++
                 }
             );
         }
@@ -379,45 +350,34 @@ namespace Gs2.Gs2Dictionary.Domain.Model
                     null
                 ),
                 (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).CacheKey(
-                    this.EntryName
+/* diff --- start
+                    this.EntryModelName
+ diff --- end */
+                    this.EntryName /* diff +++ */
                 ),
                 callbackId
             );
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Dictionary.Model.EntryModelMaster> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+/* diff --- start
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Dictionary.Model.EntryModelMaster> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
+ diff --- end */
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Dictionary.Model.EntryModelMaster> callback) => SubscribeWithInitialCallAsync(callback).ToGs2Future(); /* diff +++ */
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Dictionary.Model.EntryModelMaster> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Dictionary.Model.EntryModelMaster> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

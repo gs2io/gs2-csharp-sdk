@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -31,7 +30,10 @@ namespace Gs2.Gs2Enhance.Model.Transaction
     public static partial class EnhanceExt
     {
         public static bool IsExecutable(
-            this UnleashRateModel self,
+/* diff --- start
+            this Enhance self,
+ diff --- end */
+            this UnleashRateModel self, /* diff +++ */
             UnleashByUserIdRequest request
         ) {
             var changed = self.SpeculativeExecution(request);
@@ -44,8 +46,14 @@ namespace Gs2.Gs2Enhance.Model.Transaction
             }
         }
 
+/* diff --- start
+        public static Enhance SpeculativeExecution(
+            this Enhance self,
+ diff --- end */
+/* diff +++ start */
         public static UnleashRateModel SpeculativeExecution(
             this UnleashRateModel self,
+/* diff +++ end */
             UnleashByUserIdRequest request
         ) {
 #if UNITY_2017_1_OR_NEWER
@@ -53,7 +61,10 @@ namespace Gs2.Gs2Enhance.Model.Transaction
 #else
             System.Console.WriteLine("Speculative execution not supported on this action: Gs2Enhance:UnleashByUserId");
 #endif
-            return self.Clone() as UnleashRateModel;
+/* diff --- start
+            return self.Clone() as Enhance;
+ diff --- end */
+            return self.Clone() as UnleashRateModel; /* diff +++ */
         }
 
         public static UnleashByUserIdRequest Rate(

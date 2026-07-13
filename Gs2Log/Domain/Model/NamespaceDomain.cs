@@ -29,6 +29,7 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -48,14 +49,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -108,12 +107,11 @@ namespace Gs2.Gs2Log.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.AccessLog> AccessLogAsync(
-            #else
+        #else
         public QueryAccessLogIterator AccessLogAsync(
-            #endif
+        #endif
             string service = null,
             string method = null,
             string userId = null,
@@ -136,7 +134,6 @@ namespace Gs2.Gs2Log.Domain.Model
                 timeOffsetToken
             );
         }
-        #endif
 
         public ulong SubscribeAccessLog(
             Action<Gs2.Gs2Log.Model.AccessLog[]> callback,
@@ -156,10 +153,15 @@ namespace Gs2.Gs2Log.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await AccessLogAsync(
                                 service,
                                 method,
@@ -174,13 +176,15 @@ namespace Gs2.Gs2Log.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeAccessLogWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeAccessLogWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Log.Model.AccessLog[]> callback,
             string service = null,
             string method = null,
@@ -210,7 +214,6 @@ namespace Gs2.Gs2Log.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeAccessLog(
             ulong callbackId,
@@ -273,12 +276,11 @@ namespace Gs2.Gs2Log.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.AccessLogCount> CountAccessLogAsync(
-            #else
+        #else
         public CountAccessLogIterator CountAccessLogAsync(
-            #endif
+        #endif
             bool? service = null,
             bool? method = null,
             bool? userId = null,
@@ -301,7 +303,6 @@ namespace Gs2.Gs2Log.Domain.Model
                 timeOffsetToken
             );
         }
-        #endif
 
         public ulong SubscribeCountAccessLog(
             Action<Gs2.Gs2Log.Model.AccessLogCount[]> callback,
@@ -320,10 +321,15 @@ namespace Gs2.Gs2Log.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await CountAccessLogAsync(
                                 service,
                                 method,
@@ -338,13 +344,15 @@ namespace Gs2.Gs2Log.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeCountAccessLogWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeCountAccessLogWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Log.Model.AccessLogCount[]> callback,
             bool? service = null,
             bool? method = null,
@@ -374,7 +382,6 @@ namespace Gs2.Gs2Log.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeCountAccessLog(
             ulong callbackId,
@@ -445,12 +452,11 @@ namespace Gs2.Gs2Log.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.ExecuteStampSheetLog> ExecuteStampSheetLogAsync(
-            #else
+        #else
         public QueryExecuteStampSheetLogIterator ExecuteStampSheetLogAsync(
-            #endif
+        #endif
             string service = null,
             string method = null,
             string userId = null,
@@ -475,7 +481,6 @@ namespace Gs2.Gs2Log.Domain.Model
                 timeOffsetToken
             );
         }
-        #endif
 
         public ulong SubscribeExecuteStampSheetLog(
             Action<Gs2.Gs2Log.Model.ExecuteStampSheetLog[]> callback,
@@ -496,10 +501,15 @@ namespace Gs2.Gs2Log.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await ExecuteStampSheetLogAsync(
                                 service,
                                 method,
@@ -515,13 +525,15 @@ namespace Gs2.Gs2Log.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeExecuteStampSheetLogWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeExecuteStampSheetLogWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Log.Model.ExecuteStampSheetLog[]> callback,
             string service = null,
             string method = null,
@@ -554,7 +566,6 @@ namespace Gs2.Gs2Log.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeExecuteStampSheetLog(
             ulong callbackId,
@@ -621,12 +632,11 @@ namespace Gs2.Gs2Log.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.ExecuteStampSheetLogCount> CountExecuteStampSheetLogAsync(
-            #else
+        #else
         public CountExecuteStampSheetLogIterator CountExecuteStampSheetLogAsync(
-            #endif
+        #endif
             bool? service = null,
             bool? method = null,
             bool? userId = null,
@@ -651,7 +661,6 @@ namespace Gs2.Gs2Log.Domain.Model
                 timeOffsetToken
             );
         }
-        #endif
 
         public ulong SubscribeCountExecuteStampSheetLog(
             Action<Gs2.Gs2Log.Model.ExecuteStampSheetLogCount[]> callback,
@@ -671,10 +680,15 @@ namespace Gs2.Gs2Log.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await CountExecuteStampSheetLogAsync(
                                 service,
                                 method,
@@ -690,13 +704,15 @@ namespace Gs2.Gs2Log.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeCountExecuteStampSheetLogWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeCountExecuteStampSheetLogWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Log.Model.ExecuteStampSheetLogCount[]> callback,
             bool? service = null,
             bool? method = null,
@@ -729,7 +745,6 @@ namespace Gs2.Gs2Log.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeCountExecuteStampSheetLog(
             ulong callbackId,
@@ -802,12 +817,11 @@ namespace Gs2.Gs2Log.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.ExecuteStampTaskLog> ExecuteStampTaskLogAsync(
-            #else
+        #else
         public QueryExecuteStampTaskLogIterator ExecuteStampTaskLogAsync(
-            #endif
+        #endif
             string service = null,
             string method = null,
             string userId = null,
@@ -832,7 +846,6 @@ namespace Gs2.Gs2Log.Domain.Model
                 timeOffsetToken
             );
         }
-        #endif
 
         public ulong SubscribeExecuteStampTaskLog(
             Action<Gs2.Gs2Log.Model.ExecuteStampTaskLog[]> callback,
@@ -853,10 +866,15 @@ namespace Gs2.Gs2Log.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await ExecuteStampTaskLogAsync(
                                 service,
                                 method,
@@ -872,13 +890,15 @@ namespace Gs2.Gs2Log.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeExecuteStampTaskLogWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeExecuteStampTaskLogWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Log.Model.ExecuteStampTaskLog[]> callback,
             string service = null,
             string method = null,
@@ -911,7 +931,6 @@ namespace Gs2.Gs2Log.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeExecuteStampTaskLog(
             ulong callbackId,
@@ -978,12 +997,11 @@ namespace Gs2.Gs2Log.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.ExecuteStampTaskLogCount> CountExecuteStampTaskLogAsync(
-            #else
+        #else
         public CountExecuteStampTaskLogIterator CountExecuteStampTaskLogAsync(
-            #endif
+        #endif
             bool? service = null,
             bool? method = null,
             bool? userId = null,
@@ -1008,7 +1026,6 @@ namespace Gs2.Gs2Log.Domain.Model
                 timeOffsetToken
             );
         }
-        #endif
 
         public ulong SubscribeCountExecuteStampTaskLog(
             Action<Gs2.Gs2Log.Model.ExecuteStampTaskLogCount[]> callback,
@@ -1028,10 +1045,15 @@ namespace Gs2.Gs2Log.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await CountExecuteStampTaskLogAsync(
                                 service,
                                 method,
@@ -1047,13 +1069,15 @@ namespace Gs2.Gs2Log.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeCountExecuteStampTaskLogWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeCountExecuteStampTaskLogWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Log.Model.ExecuteStampTaskLogCount[]> callback,
             bool? service = null,
             bool? method = null,
@@ -1086,7 +1110,6 @@ namespace Gs2.Gs2Log.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeCountExecuteStampTaskLog(
             ulong callbackId,
@@ -1159,12 +1182,11 @@ namespace Gs2.Gs2Log.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.IssueStampSheetLog> IssueStampSheetLogAsync(
-            #else
+        #else
         public QueryIssueStampSheetLogIterator IssueStampSheetLogAsync(
-            #endif
+        #endif
             string service = null,
             string method = null,
             string userId = null,
@@ -1189,7 +1211,6 @@ namespace Gs2.Gs2Log.Domain.Model
                 timeOffsetToken
             );
         }
-        #endif
 
         public ulong SubscribeIssueStampSheetLog(
             Action<Gs2.Gs2Log.Model.IssueStampSheetLog[]> callback,
@@ -1210,10 +1231,15 @@ namespace Gs2.Gs2Log.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await IssueStampSheetLogAsync(
                                 service,
                                 method,
@@ -1229,13 +1255,15 @@ namespace Gs2.Gs2Log.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeIssueStampSheetLogWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeIssueStampSheetLogWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Log.Model.IssueStampSheetLog[]> callback,
             string service = null,
             string method = null,
@@ -1268,7 +1296,6 @@ namespace Gs2.Gs2Log.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeIssueStampSheetLog(
             ulong callbackId,
@@ -1335,12 +1362,11 @@ namespace Gs2.Gs2Log.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.IssueStampSheetLogCount> CountIssueStampSheetLogAsync(
-            #else
+        #else
         public CountIssueStampSheetLogIterator CountIssueStampSheetLogAsync(
-            #endif
+        #endif
             bool? service = null,
             bool? method = null,
             bool? userId = null,
@@ -1365,7 +1391,6 @@ namespace Gs2.Gs2Log.Domain.Model
                 timeOffsetToken
             );
         }
-        #endif
 
         public ulong SubscribeCountIssueStampSheetLog(
             Action<Gs2.Gs2Log.Model.IssueStampSheetLogCount[]> callback,
@@ -1385,10 +1410,15 @@ namespace Gs2.Gs2Log.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await CountIssueStampSheetLogAsync(
                                 service,
                                 method,
@@ -1404,13 +1434,15 @@ namespace Gs2.Gs2Log.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeCountIssueStampSheetLogWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeCountIssueStampSheetLogWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Log.Model.IssueStampSheetLogCount[]> callback,
             bool? service = null,
             bool? method = null,
@@ -1443,7 +1475,6 @@ namespace Gs2.Gs2Log.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeCountIssueStampSheetLog(
             ulong callbackId,
@@ -1500,12 +1531,11 @@ namespace Gs2.Gs2Log.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.Insight> InsightsAsync(
-            #else
+        #else
         public DescribeInsightsIterator InsightsAsync(
-            #endif
+        #endif
         )
         {
             return new DescribeInsightsIterator(
@@ -1514,7 +1544,6 @@ namespace Gs2.Gs2Log.Domain.Model
                 this.NamespaceName
             );
         }
-        #endif
 
         public ulong SubscribeInsights(
             Action<Gs2.Gs2Log.Model.Insight[]> callback
@@ -1528,10 +1557,15 @@ namespace Gs2.Gs2Log.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await InsightsAsync(
                             ).ToArrayAsync());
                         }
@@ -1540,13 +1574,15 @@ namespace Gs2.Gs2Log.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeInsightsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeInsightsWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Log.Model.Insight[]> callback
         )
         {
@@ -1558,7 +1594,6 @@ namespace Gs2.Gs2Log.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeInsights(
             ulong callbackId
@@ -1615,12 +1650,11 @@ namespace Gs2.Gs2Log.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.AccessLogWithTelemetry> AccessLogWithTelemetryAsync(
-            #else
+        #else
         public QueryAccessLogWithTelemetryIterator AccessLogWithTelemetryAsync(
-            #endif
+        #endif
             string userId = null,
             long? begin = null,
             long? end = null,
@@ -1639,7 +1673,6 @@ namespace Gs2.Gs2Log.Domain.Model
                 timeOffsetToken
             );
         }
-        #endif
 
         public ulong SubscribeAccessLogWithTelemetry(
             Action<Gs2.Gs2Log.Model.AccessLogWithTelemetry[]> callback,
@@ -1657,10 +1690,15 @@ namespace Gs2.Gs2Log.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await AccessLogWithTelemetryAsync(
                                 userId,
                                 begin,
@@ -1673,13 +1711,15 @@ namespace Gs2.Gs2Log.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeAccessLogWithTelemetryWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeAccessLogWithTelemetryWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Log.Model.AccessLogWithTelemetry[]> callback,
             string userId = null,
             long? begin = null,
@@ -1703,7 +1743,6 @@ namespace Gs2.Gs2Log.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeAccessLogWithTelemetry(
             ulong callbackId,
@@ -1734,14 +1773,6 @@ namespace Gs2.Gs2Log.Domain.Model
                     this.NamespaceName,
                     null
                 )
-            );
-        }
-
-        public Gs2.Gs2Log.Domain.Model.AccessLogWithTelemetryDomain AccessLogWithTelemetry(
-        ) {
-            return new Gs2.Gs2Log.Domain.Model.AccessLogWithTelemetryDomain(
-                this._gs2,
-                this.NamespaceName
             );
         }
 
@@ -1778,12 +1809,11 @@ namespace Gs2.Gs2Log.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.FacetModel> FacetModelsAsync(
-            #else
+        #else
         public DescribeFacetModelsIterator FacetModelsAsync(
-            #endif
+        #endif
             string namePrefix = null
         )
         {
@@ -1794,7 +1824,6 @@ namespace Gs2.Gs2Log.Domain.Model
                 namePrefix
             );
         }
-        #endif
 
         public ulong SubscribeFacetModels(
             Action<Gs2.Gs2Log.Model.FacetModel[]> callback,
@@ -1809,10 +1838,15 @@ namespace Gs2.Gs2Log.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await FacetModelsAsync(
                                 namePrefix
                             ).ToArrayAsync());
@@ -1822,13 +1856,15 @@ namespace Gs2.Gs2Log.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeFacetModelsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeFacetModelsWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Log.Model.FacetModel[]> callback,
             string namePrefix = null
         )
@@ -1843,7 +1879,6 @@ namespace Gs2.Gs2Log.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeFacetModels(
             ulong callbackId,
@@ -1894,12 +1929,11 @@ namespace Gs2.Gs2Log.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.Dashboard> DashboardsAsync(
-            #else
+        #else
         public DescribeDashboardsIterator DashboardsAsync(
-            #endif
+        #endif
             string namePrefix = null
         )
         {
@@ -1910,7 +1944,6 @@ namespace Gs2.Gs2Log.Domain.Model
                 namePrefix
             );
         }
-        #endif
 
         public ulong SubscribeDashboards(
             Action<Gs2.Gs2Log.Model.Dashboard[]> callback,
@@ -1925,10 +1958,15 @@ namespace Gs2.Gs2Log.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await DashboardsAsync(
                                 namePrefix
                             ).ToArrayAsync());
@@ -1938,13 +1976,15 @@ namespace Gs2.Gs2Log.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeDashboardsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeDashboardsWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Log.Model.Dashboard[]> callback,
             string namePrefix = null
         )
@@ -1959,7 +1999,6 @@ namespace Gs2.Gs2Log.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeDashboards(
             ulong callbackId,
@@ -2010,12 +2049,11 @@ namespace Gs2.Gs2Log.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.MetricModel> MetricsAsync(
-            #else
+        #else
         public DescribeMetricsIterator MetricsAsync(
-            #endif
+        #endif
             string namePrefix = null
         )
         {
@@ -2026,7 +2064,6 @@ namespace Gs2.Gs2Log.Domain.Model
                 namePrefix
             );
         }
-        #endif
 
         public ulong SubscribeMetrics(
             Action<Gs2.Gs2Log.Model.MetricModel[]> callback,
@@ -2041,10 +2078,15 @@ namespace Gs2.Gs2Log.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await MetricsAsync(
                                 namePrefix
                             ).ToArrayAsync());
@@ -2054,13 +2096,15 @@ namespace Gs2.Gs2Log.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeMetricsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeMetricsWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Log.Model.MetricModel[]> callback,
             string namePrefix = null
         )
@@ -2075,7 +2119,6 @@ namespace Gs2.Gs2Log.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeMetrics(
             ulong callbackId,
@@ -2118,12 +2161,11 @@ namespace Gs2.Gs2Log.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.Label> LabelValuesAsync(
-            #else
+        #else
         public DescribeLabelValuesIterator LabelValuesAsync(
-            #endif
+        #endif
             string metricName,
             string labelNamePrefix = null
         )
@@ -2136,7 +2178,6 @@ namespace Gs2.Gs2Log.Domain.Model
                 labelNamePrefix
             );
         }
-        #endif
 
         public ulong SubscribeLabelValues(
             Action<Gs2.Gs2Log.Model.Label[]> callback,
@@ -2151,10 +2192,15 @@ namespace Gs2.Gs2Log.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await LabelValuesAsync(
                                 metricName,
                                 labelNamePrefix
@@ -2165,13 +2211,15 @@ namespace Gs2.Gs2Log.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeLabelValuesWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeLabelValuesWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Log.Model.Label[]> callback,
             string metricName,
             string labelNamePrefix = null
@@ -2189,7 +2237,6 @@ namespace Gs2.Gs2Log.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeLabelValues(
             ulong callbackId,
@@ -2234,38 +2281,14 @@ namespace Gs2.Gs2Log.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Log.Domain.Model.NamespaceDomain> GetStatusFuture(
             GetNamespaceStatusRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Log.Domain.Model.NamespaceDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.GetNamespaceStatusFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                this.Status = domain.Status = result?.Status;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Log.Domain.Model.NamespaceDomain>(Impl);
-        }
+        ) => GetStatusAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Log.Domain.Model.NamespaceDomain> GetStatusAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Log.Domain.Model.NamespaceDomain> GetStatusAsync(
-            #endif
+        #endif
             GetNamespaceStatusRequest request
         ) {
             request = request
@@ -2281,41 +2304,18 @@ namespace Gs2.Gs2Log.Domain.Model
             this.Status = domain.Status = result?.Status;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Log.Model.Namespace> GetFuture(
             GetNamespaceRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Log.Model.Namespace> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.GetNamespaceFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Log.Model.Namespace>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Log.Model.Namespace> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Log.Model.Namespace> GetAsync(
-            #endif
+        #endif
             GetNamespaceRequest request
         ) {
             request = request
@@ -2329,43 +2329,18 @@ namespace Gs2.Gs2Log.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Log.Domain.Model.NamespaceDomain> UpdateFuture(
             UpdateNamespaceRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Log.Domain.Model.NamespaceDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.UpdateNamespaceFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Log.Domain.Model.NamespaceDomain>(Impl);
-        }
+        ) => UpdateAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Log.Domain.Model.NamespaceDomain> UpdateAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Log.Domain.Model.NamespaceDomain> UpdateAsync(
-            #endif
+        #endif
             UpdateNamespaceRequest request
         ) {
             request = request
@@ -2381,45 +2356,18 @@ namespace Gs2.Gs2Log.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Log.Domain.Model.NamespaceDomain> DeleteFuture(
             DeleteNamespaceRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Log.Domain.Model.NamespaceDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.DeleteNamespaceFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    if (!(future.Error is NotFoundException)) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Log.Domain.Model.NamespaceDomain>(Impl);
-        }
+        ) => DeleteAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Log.Domain.Model.NamespaceDomain> DeleteAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Log.Domain.Model.NamespaceDomain> DeleteAsync(
-            #endif
+        #endif
             DeleteNamespaceRequest request
         ) {
             try {
@@ -2437,47 +2385,18 @@ namespace Gs2.Gs2Log.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Log.Domain.Model.InsightDomain> CreateInsightFuture(
             CreateInsightRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Log.Domain.Model.InsightDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.CreateInsightFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Log.Domain.Model.InsightDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    result?.Item?.Name
-                );
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Log.Domain.Model.InsightDomain>(Impl);
-        }
+        ) => CreateInsightAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Log.Domain.Model.InsightDomain> CreateInsightAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Log.Domain.Model.InsightDomain> CreateInsightAsync(
-            #endif
+        #endif
             CreateInsightRequest request
         ) {
             request = request
@@ -2497,47 +2416,18 @@ namespace Gs2.Gs2Log.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Log.Domain.Model.DashboardDomain> CreateDashboardFuture(
             CreateDashboardRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Log.Domain.Model.DashboardDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.CreateDashboardFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Log.Domain.Model.DashboardDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    result?.Item?.Name
-                );
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Log.Domain.Model.DashboardDomain>(Impl);
-        }
+        ) => CreateDashboardAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Log.Domain.Model.DashboardDomain> CreateDashboardAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Log.Domain.Model.DashboardDomain> CreateDashboardAsync(
-            #endif
+        #endif
             CreateDashboardRequest request
         ) {
             request = request
@@ -2557,44 +2447,18 @@ namespace Gs2.Gs2Log.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Log.Domain.Model.TimeseriesPointDomain[]> MetricsTimeseriesFuture(
             QueryMetricsTimeseriesRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Log.Domain.Model.TimeseriesPointDomain[]> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.QueryMetricsTimeseriesFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = result?.Items?.Select(v => new Gs2.Gs2Log.Domain.Model.TimeseriesPointDomain(
-                    this._gs2
-                )).ToArray() ?? Array.Empty<Gs2.Gs2Log.Domain.Model.TimeseriesPointDomain>();
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Log.Domain.Model.TimeseriesPointDomain[]>(Impl);
-        }
+        ) => MetricsTimeseriesAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Log.Domain.Model.TimeseriesPointDomain[]> MetricsTimeseriesAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Log.Domain.Model.TimeseriesPointDomain[]> MetricsTimeseriesAsync(
-            #endif
+        #endif
             QueryMetricsTimeseriesRequest request
         ) {
             request = request
@@ -2611,51 +2475,20 @@ namespace Gs2.Gs2Log.Domain.Model
             )).ToArray() ?? Array.Empty<Gs2.Gs2Log.Domain.Model.TimeseriesPointDomain>();
             return domain;
         }
-        #endif
 
     }
 
     public partial class NamespaceDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Log.Model.Namespace> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Log.Model.Namespace> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Log.Model.Namespace).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    null
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2Log.Model.Namespace).FetchFuture(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    null,
-                    () => this.GetFuture(
-                        new GetNamespaceRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Log.Model.Namespace>(Impl);
-        }
+        public IFuture<Gs2.Gs2Log.Model.Namespace> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Log.Model.Namespace> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Log.Model.Namespace> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Log.Model.Namespace>(
                         (null as Gs2.Gs2Log.Model.Namespace).CacheParentKey(
@@ -2683,7 +2516,6 @@ namespace Gs2.Gs2Log.Domain.Model
                 );
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
@@ -2729,7 +2561,6 @@ namespace Gs2.Gs2Log.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -2747,7 +2578,6 @@ namespace Gs2.Gs2Log.Domain.Model
             #else
                     Impl();
             #endif
-        #endif
                 }
             );
         }
@@ -2766,38 +2596,20 @@ namespace Gs2.Gs2Log.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Log.Model.Namespace> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Log.Model.Namespace> callback) => SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Log.Model.Namespace> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Log.Model.Namespace> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Log.Model.InGameLog> InGameLog(
@@ -2824,12 +2636,11 @@ namespace Gs2.Gs2Log.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.InGameLog> InGameLogAsync(
-            #else
+        #else
         public QueryInGameLogIterator InGameLogAsync(
-            #endif
+        #endif
             string userId = null,
             InGameLogTag[] tags = null,
             long? begin = null,
@@ -2851,7 +2662,6 @@ namespace Gs2.Gs2Log.Domain.Model
                 totalCount => this.TotalCount = totalCount
             );
         }
-        #endif
 
         public ulong SubscribeInGameLog(
             Action<Gs2.Gs2Log.Model.InGameLog[]> callback
@@ -2867,8 +2677,11 @@ namespace Gs2.Gs2Log.Domain.Model
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeInGameLogWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeInGameLogWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Log.Model.InGameLog[]> callback,
             string userId = null,
             InGameLogTag[] tags = null,
@@ -2890,7 +2703,6 @@ namespace Gs2.Gs2Log.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeInGameLog(
             ulong callbackId

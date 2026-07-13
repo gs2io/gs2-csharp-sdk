@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 using System;
@@ -35,11 +34,17 @@ namespace Gs2.Gs2Friend.Result
 	[System.Serializable]
 	public class DescribeSendRequestsResult : IResult
 	{
-        public Gs2.Gs2Friend.Model.SendFriendRequest[] Items { set; get; }
+/* diff --- start
+        public Gs2.Gs2Friend.Model.FriendRequest[] Items { set; get; }
+ diff --- end */
+        public Gs2.Gs2Friend.Model.SendFriendRequest[] Items { set; get; } /* diff +++ */
         public string NextPageToken { set; get; }
         public ResultMetadata Metadata { set; get; }
 
-        public DescribeSendRequestsResult WithItems(Gs2.Gs2Friend.Model.SendFriendRequest[] items) {
+/* diff --- start
+        public DescribeSendRequestsResult WithItems(Gs2.Gs2Friend.Model.FriendRequest[] items) {
+ diff --- end */
+        public DescribeSendRequestsResult WithItems(Gs2.Gs2Friend.Model.SendFriendRequest[] items) { /* diff +++ */
             this.Items = items;
             return this;
         }
@@ -64,7 +69,10 @@ namespace Gs2.Gs2Friend.Result
             }
             return new DescribeSendRequestsResult()
                 .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
-                    return Gs2.Gs2Friend.Model.SendFriendRequest.FromJson(v);
+/* diff --- start
+                    return Gs2.Gs2Friend.Model.FriendRequest.FromJson(v);
+ diff --- end */
+                    return Gs2.Gs2Friend.Model.SendFriendRequest.FromJson(v); /* diff +++ */
                 }).ToArray())
                 .WithNextPageToken(!data.Keys.Contains("nextPageToken") || data["nextPageToken"] == null ? null : data["nextPageToken"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));

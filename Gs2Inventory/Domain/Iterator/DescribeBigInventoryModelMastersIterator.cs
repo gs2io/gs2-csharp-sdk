@@ -29,8 +29,11 @@
 #pragma warning disable 1998
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Domain;
@@ -42,19 +45,13 @@ using Gs2.Gs2Inventory.Model.Cache;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-    #if GS2_ENABLE_UNITASK
-using System.Threading;
-using System.Collections.Generic;
+using UnityEngine.Events;
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-    #else
-using System.Collections;
-using UnityEngine.Events;
-    #endif
 #else
-using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 #endif
 
@@ -63,10 +60,10 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
 
     public class DescribeBigInventoryModelMastersIterator :
     #if UNITY_2017_1_OR_NEWER
-        Gs2Iterator<Gs2.Gs2Inventory.Model.BigInventoryModelMaster>
-        #if GS2_ENABLE_UNITASK
-        , IUniTaskAsyncEnumerable<Gs2.Gs2Inventory.Model.BigInventoryModelMaster>
-        #endif
+        Gs2Iterator<Gs2.Gs2Inventory.Model.BigInventoryModelMaster>,
+    #endif
+    #if GS2_ENABLE_UNITASK
+        IUniTaskAsyncEnumerable<Gs2.Gs2Inventory.Model.BigInventoryModelMaster>
     #else
         IAsyncEnumerable<Gs2.Gs2Inventory.Model.BigInventoryModelMaster>
     #endif
@@ -97,12 +94,8 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
             this._result = new Gs2.Gs2Inventory.Model.BigInventoryModelMaster[]{};
         }
 
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         private async UniTask _load() {
-            #else
-        private IEnumerator _load() {
-            #endif
         #else
         private async Task _load() {
         #endif
@@ -129,22 +122,9 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
                     .WithNamespaceName(this.NamespaceName)
                     .WithPageToken(this._pageToken)
                     .WithLimit(fetchSize);
-                #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                var future = this._client.DescribeBigInventoryModelMastersFuture(
-                #else
                 var r = await this._client.DescribeBigInventoryModelMastersAsync(
-                #endif
                     request
                 );
-                #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                yield return future;
-                if (future.Error != null)
-                {
-                    Error = future.Error;
-                    yield break;
-                }
-                var r = future.Result;
-                #endif
                 this._result = r.Items
                     .Where(item => this.NamePrefix == null || item.Name.StartsWith(this.NamePrefix))
                     .ToArray();
@@ -179,129 +159,97 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
             if (Error != null) return false;
             return _hasNext();
         }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
 
         protected override System.Collections.IEnumerator Next(
             Action<AsyncResult<Gs2.Gs2Inventory.Model.BigInventoryModelMaster>> callback
         )
         {
-            Gs2Exception error = null;
-            yield return UniTask.ToCoroutine(
-                async () => {
-                    try {
-                        if (this._result.Length == 0 && !this._last) {
-                            await this._load();
-                        }
-                        if (this._result.Length == 0) {
-                            Current = null;
-                            return;
-                        }
-                        var ret = this._result[0];
-                        this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
-                        if (this._result.Length == 0 && !this._last) {
-                            await this._load();
-                        }
-                        Current = ret;
-                    }
-                    catch (Gs2Exception e) {
-                        Current = null;
-                        error = e;
-                    }
-                }
-            );
-            callback.Invoke(new AsyncResult<Gs2.Gs2Inventory.Model.BigInventoryModelMaster>(
-                Current,
-                error
-            ));
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerator<Gs2.Gs2Inventory.Model.BigInventoryModelMaster> GetAsyncEnumerator(
-            CancellationToken cancellationToken = new CancellationToken()
-            #else
-
-        protected override IEnumerator Next(
-            Action<AsyncResult<Gs2.Gs2Inventory.Model.BigInventoryModelMaster>> callback
-            #endif
-        #else
-        public async IAsyncEnumerator<Gs2.Gs2Inventory.Model.BigInventoryModelMaster> GetAsyncEnumerator(
-            CancellationToken cancellationToken = new CancellationToken()
-        #endif
-        )
-        {
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-            return UniTaskAsyncEnumerable.Create<Gs2.Gs2Inventory.Model.BigInventoryModelMaster>(async (writer, token) =>
-            {
-            #endif
-        #endif
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-                using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Inventory.Model.BigInventoryModelMaster>(
-                        (null as Gs2.Gs2Inventory.Model.BigInventoryModelMaster).CacheParentKey(
-                            NamespaceName,
-                            null
-                       ),
-                       "ListBigInventoryModelMaster"
-                   ).LockAsync()) {
-                while(this._hasNext()) {
-                    cancellationToken.ThrowIfCancellationRequested();
-        #endif
-                    if (this._result.Length == 0 && !this._last) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                        yield return this._load();
-        #else
-                        await this._load();
-        #endif
-                    }
-                    if (this._result.Length == 0) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                        Current = null;
-                        callback.Invoke(new AsyncResult<Gs2.Gs2Inventory.Model.BigInventoryModelMaster>(
-                            Current,
-                            Error
-                        ));
-                        yield break;
-        #else
-                        break;
-        #endif
-                    }
-                    var ret = this._result[0];
-                    this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
-                    if (this._result.Length == 0 && !this._last) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                        yield return this._load();
-        #else
-                        await this._load();
-        #endif
-                    }
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-                    await writer.YieldAsync(ret);
-            #else
-                    Current = ret;
+            if (this._result.Length == 0 && !this._last) {
+                var future = this._load().ToGs2Future();
+                yield return future;
+                if (future.Error != null)
+                {
+                    Current = null;
+                    Error = future.Error;
                     callback.Invoke(new AsyncResult<Gs2.Gs2Inventory.Model.BigInventoryModelMaster>(
                         Current,
                         Error
                     ));
-            #endif
-        #else
-                    yield return ret;
-        #endif
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
+                    yield break;
                 }
-        #endif
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-                }
-            }).GetAsyncEnumerator();
-            #endif
-        #else
             }
-        #endif
+            if (this._result.Length == 0) {
+                Current = null;
+                callback.Invoke(new AsyncResult<Gs2.Gs2Inventory.Model.BigInventoryModelMaster>(
+                    Current,
+                    Error
+                ));
+                yield break;
+            }
+            var ret = this._result[0];
+            this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
+            if (this._result.Length == 0 && !this._last) {
+                var future = this._load().ToGs2Future();
+                yield return future;
+                if (future.Error != null)
+                {
+                    Current = null;
+                    Error = future.Error;
+                    callback.Invoke(new AsyncResult<Gs2.Gs2Inventory.Model.BigInventoryModelMaster>(
+                        Current,
+                        Error
+                    ));
+                    yield break;
+                }
+            }
+            Current = ret;
+            callback.Invoke(new AsyncResult<Gs2.Gs2Inventory.Model.BigInventoryModelMaster>(
+                Current,
+                Error
+            ));
         }
+        #endif
+
+        #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Inventory.Model.BigInventoryModelMaster> GetAsyncEnumerator(
+            CancellationToken cancellationToken = new CancellationToken()
+        ) => UniTaskAsyncEnumerable.Create<Gs2.Gs2Inventory.Model.BigInventoryModelMaster>(async (writer, token) =>
+        #else
+        public async IAsyncEnumerator<Gs2.Gs2Inventory.Model.BigInventoryModelMaster> GetAsyncEnumerator(
+            CancellationToken cancellationToken = new CancellationToken()
+        )
+        #endif
+        {
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Inventory.Model.BigInventoryModelMaster>(
+                    (null as Gs2.Gs2Inventory.Model.BigInventoryModelMaster).CacheParentKey(
+                        NamespaceName,
+                        null
+                   ),
+                   "ListBigInventoryModelMaster"
+               ).LockAsync()) {
+                while(this._hasNext()) {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    if (this._result.Length == 0 && !this._last) {
+                        await this._load();
+                    }
+                    if (this._result.Length == 0) {
+                        break;
+                    }
+                    var ret = this._result[0];
+                    this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
+                    if (this._result.Length == 0 && !this._last) {
+                        await this._load();
+                    }
+            #if GS2_ENABLE_UNITASK
+                    await writer.YieldAsync(ret);
+            #else
+                    yield return ret;
+            #endif
+                }
+            }
+        }
+        #if GS2_ENABLE_UNITASK
+        ).GetAsyncEnumerator();
+        #endif
     }
 }

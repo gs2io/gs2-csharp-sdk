@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -31,23 +30,41 @@ namespace Gs2.Gs2Dictionary.Model.Transaction
     public static partial class EntryExt
     {
         public static bool IsExecutable(
-            this Entry[] self,
+/* diff --- start
+            this Entry self,
+ diff --- end */
+            this Entry[] self, /* diff +++ */
             VerifyEntryByUserIdRequest request
         ) {
             switch (request.VerifyType) {
                 case "havent":
-                    return !self.Select(v => v.Name).Contains(request.EntryModelName);
+/* diff --- start
+                    throw new NotImplementedException($"not implemented action Gs2Dictionary:VerifyEntryByUserId");
+ diff --- end */
+                    return !self.Select(v => v.Name).Contains(request.EntryModelName); /* diff +++ */
                 case "have":
-                    return self.Select(v => v.Name).Contains(request.EntryModelName);
+/* diff --- start
+                    throw new NotImplementedException($"not implemented action Gs2Dictionary:VerifyEntryByUserId");
+ diff --- end */
+                    return self.Select(v => v.Name).Contains(request.EntryModelName); /* diff +++ */
             }
             return false;
         }
 
+/* diff --- start
+        public static Entry SpeculativeExecution(
+            this Entry self,
+ diff --- end */
+/* diff +++ start */
         public static Entry[] SpeculativeExecution(
             this Entry[] self,
+/* diff +++ end */
             VerifyEntryByUserIdRequest request
         ) {
-            return self.Clone() as Entry[];
+/* diff --- start
+            return self.Clone() as Entry;
+ diff --- end */
+            return self.Clone() as Entry[]; /* diff +++ */
         }
 
         public static VerifyEntryByUserIdRequest Rate(

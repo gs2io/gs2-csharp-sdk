@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -31,7 +30,10 @@ namespace Gs2.Gs2Exchange.Model.Transaction
     public static partial class ExchangeExt
     {
         public static bool IsExecutable(
-            this IncrementalRateModel self,
+/* diff --- start
+            this Exchange self,
+ diff --- end */
+            this IncrementalRateModel self, /* diff +++ */
             IncrementalExchangeByUserIdRequest request
         ) {
             var changed = self.SpeculativeExecution(request);
@@ -44,8 +46,14 @@ namespace Gs2.Gs2Exchange.Model.Transaction
             }
         }
 
+/* diff --- start
+        public static Exchange SpeculativeExecution(
+            this Exchange self,
+ diff --- end */
+/* diff +++ start */
         public static IncrementalRateModel SpeculativeExecution(
             this IncrementalRateModel self,
+/* diff +++ end */
             IncrementalExchangeByUserIdRequest request
         ) {
 #if UNITY_2017_1_OR_NEWER
@@ -53,7 +61,10 @@ namespace Gs2.Gs2Exchange.Model.Transaction
 #else
             System.Console.WriteLine("Speculative execution not supported on this action: Gs2Exchange:IncrementalExchangeByUserId");
 #endif
-            return self.Clone() as IncrementalRateModel;
+/* diff --- start
+            return self.Clone() as Exchange;
+ diff --- end */
+            return self.Clone() as IncrementalRateModel; /* diff +++ */
         }
 
         public static IncrementalExchangeByUserIdRequest Rate(

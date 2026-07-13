@@ -13,7 +13,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -31,8 +30,11 @@
 #pragma warning disable 1998
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using Gs2.Core;
 using Gs2.Core.Model;
 using Gs2.Core.Domain;
@@ -44,19 +46,13 @@ using Gs2.Gs2Log.Model.Cache;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-    #if GS2_ENABLE_UNITASK
-using System.Threading;
-using System.Collections.Generic;
+using UnityEngine.Events;
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-    #else
-using System.Collections;
-using UnityEngine.Events;
-    #endif
 #else
-using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 #endif
 
@@ -65,17 +61,17 @@ namespace Gs2.Gs2Log.Domain.Iterator
 
     public class QueryInGameLogIterator :
     #if UNITY_2017_1_OR_NEWER
-        Gs2Iterator<Gs2.Gs2Log.Model.InGameLog>
-        #if GS2_ENABLE_UNITASK
-        , IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.InGameLog>
-        #endif
+        Gs2Iterator<Gs2.Gs2Log.Model.InGameLog>,
+    #endif
+    #if GS2_ENABLE_UNITASK
+        IUniTaskAsyncEnumerable<Gs2.Gs2Log.Model.InGameLog>
     #else
         IAsyncEnumerable<Gs2.Gs2Log.Model.InGameLog>
     #endif
     {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2LogRestClient _client;
-        private readonly Action<long?> _onTotalCount;
+        private readonly Action<long?> _onTotalCount; /* diff +++ */
         public string NamespaceName { get; }
         public string UserId { get; }
         public Gs2.Gs2Log.Model.InGameLogTag[] Tags { get; }
@@ -99,12 +95,17 @@ namespace Gs2.Gs2Log.Domain.Iterator
             long? begin = null,
             long? end = null,
             bool? longTerm = null,
+/* diff --- start
+            string timeOffsetToken = null
+ diff --- end */
+/* diff +++ start */
             string timeOffsetToken = null,
             Action<long?> onTotalCount = null
+/* diff +++ end */
         ) {
             this._gs2 = gs2;
             this._client = client;
-            this._onTotalCount = onTotalCount;
+            this._onTotalCount = onTotalCount; /* diff +++ */
             this.NamespaceName = namespaceName;
             this.UserId = userId;
             this.Tags = tags;
@@ -117,12 +118,8 @@ namespace Gs2.Gs2Log.Domain.Iterator
             this._result = new Gs2.Gs2Log.Model.InGameLog[]{};
         }
 
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         private async UniTask _load() {
-            #else
-        private IEnumerator _load() {
-            #endif
         #else
         private async Task _load() {
         #endif
@@ -133,12 +130,18 @@ namespace Gs2.Gs2Log.Domain.Iterator
             (
                     (null as Gs2.Gs2Log.Model.InGameLog).CacheParentKey(
                         NamespaceName,
+/* diff --- start
+                        UserId ?? default,
+ diff --- end */
                         null
                     ),
                     out var list
             )) {
                 this._result = list
-                    .Where(item => this.Tags == null || (item.Tags != null && this.Tags.All(t => item.Tags.Any(it => it.Key == t.Key && it.Value == t.Value))))
+/* diff --- start
+                    .Where(item => this.Tags == null || item.Tags == this.Tags)
+ diff --- end */
+                    .Where(item => this.Tags == null || (item.Tags != null && this.Tags.All(t => item.Tags.Any(it => it.Key == t.Key && it.Value == t.Value)))) /* diff +++ */
                     .Where(item => this.Begin == null || item.Timestamp >= this.Begin)
                     .Where(item => this.End == null || item.Timestamp <= this.End)
                     .ToArray();
@@ -146,11 +149,22 @@ namespace Gs2.Gs2Log.Domain.Iterator
                 this._last = true;
             } else {
 
-                #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                var future = this._client.QueryInGameLogFuture(
-                #else
+/* diff --- start
+                var request = new Gs2.Gs2Log.Request.QueryInGameLogRequest()
+                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithUserId(this.UserId)
+                    .WithBegin(this.Begin)
+                    .WithEnd(this.End)
+                    .WithLongTerm(this.LongTerm)
+                    .WithPageToken(this._pageToken)
+                    .WithLimit(fetchSize);
+ diff --- end */
                 var r = await this._client.QueryInGameLogAsync(
-                #endif
+/* diff --- start
+                    request
+ diff --- end */
+/* diff +++ start */
                     new Gs2.Gs2Log.Request.QueryInGameLogRequest()
                         .WithContextStack(this._gs2.DefaultContextStack)
                         .WithNamespaceName(this.NamespaceName)
@@ -161,23 +175,30 @@ namespace Gs2.Gs2Log.Domain.Iterator
                         .WithLongTerm(this.LongTerm)
                         .WithPageToken(this._pageToken)
                         .WithLimit(fetchSize)
+/* diff +++ end */
                 );
-                #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                yield return future;
-                if (future.Error != null)
-                {
-                    Error = future.Error;
-                    yield break;
-                }
-                var r = future.Result;
-                #endif
+/* diff --- start
+                this._result = r.Items
+                    .Where(item => this.Tags == null || item.Tags == this.Tags)
+ diff --- end */
+/* diff +++ start */
                 this._result = (r.Items ?? Array.Empty<Gs2.Gs2Log.Model.InGameLog>())
                     .Where(item => this.Tags == null || (item.Tags != null && this.Tags.All(t => item.Tags.Any(it => it.Key == t.Key && it.Value == t.Value))))
+/* diff +++ end */
                     .Where(item => this.Begin == null || item.Timestamp >= this.Begin)
                     .Where(item => this.End == null || item.Timestamp <= this.End)
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;
+/* diff --- start
+                r.PutCache(
+                    this._gs2.Cache,
+                    UserId,
+                    null,
+                    request
+                );
+ diff --- end */
+/* diff +++ start */
                 this._onTotalCount?.Invoke(r.TotalCount);
                 if (UserId != null) {
                     foreach (var item in r.Items ?? Array.Empty<Gs2.Gs2Log.Model.InGameLog>()) {
@@ -189,7 +210,19 @@ namespace Gs2.Gs2Log.Domain.Iterator
                             null
                         );
                     }
+/* diff +++ end */
 
+/* diff --- start
+                if (this._last) {
+                    this._gs2.Cache.SetListCached<Gs2.Gs2Log.Model.InGameLog>(
+                        (null as Gs2.Gs2Log.Model.InGameLog).CacheParentKey(
+                            NamespaceName,
+                            UserId ?? default,
+                            null
+                        )
+                    );
+ diff --- end */
+/* diff +++ start */
                     if (this._last) {
                         this._gs2.Cache.SetListCached<Gs2.Gs2Log.Model.InGameLog>(
                             (null as Gs2.Gs2Log.Model.InGameLog).CacheParentKey(
@@ -198,6 +231,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
                             )
                         );
                     }
+/* diff +++ end */
                 }
             }
         }
@@ -213,118 +247,120 @@ namespace Gs2.Gs2Log.Domain.Iterator
             if (Error != null) return false;
             return _hasNext();
         }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
 
         protected override System.Collections.IEnumerator Next(
             Action<AsyncResult<Gs2.Gs2Log.Model.InGameLog>> callback
         )
         {
-            Gs2Exception error = null;
-            yield return UniTask.ToCoroutine(
-                async () => {
-                    try {
-                        if (this._result.Length == 0 && !this._last) {
-                            await this._load();
-                        }
-                        if (this._result.Length == 0) {
-                            Current = null;
-                            return;
-                        }
-                        var ret = this._result[0];
-                        this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
-                        if (this._result.Length == 0 && !this._last) {
-                            await this._load();
-                        }
-                        Current = ret;
-                    }
-                    catch (Gs2Exception e) {
-                        Current = null;
-                        error = e;
-                    }
-                }
-            );
-            callback.Invoke(new AsyncResult<Gs2.Gs2Log.Model.InGameLog>(
-                Current,
-                error
-            ));
-        }
-        #endif
-
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerator<Gs2.Gs2Log.Model.InGameLog> GetAsyncEnumerator(
-            CancellationToken cancellationToken = new CancellationToken()
-            #else
-
-        protected override IEnumerator Next(
-            Action<AsyncResult<Gs2.Gs2Log.Model.InGameLog>> callback
-            #endif
-        #else
-        public async IAsyncEnumerator<Gs2.Gs2Log.Model.InGameLog> GetAsyncEnumerator(
-            CancellationToken cancellationToken = new CancellationToken()
-        #endif
-        )
-        {
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-            return UniTaskAsyncEnumerable.Create<Gs2.Gs2Log.Model.InGameLog>(async (writer, token) =>
-            {
-            #endif
-        #endif
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            while(this._hasNext()) {
-        #endif
-                if (this._result.Length == 0 && !this._last) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    yield return this._load();
-        #else
-                    await this._load();
-        #endif
-                }
-                if (this._result.Length == 0) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+            if (this._result.Length == 0 && !this._last) {
+                var future = this._load().ToGs2Future();
+                yield return future;
+                if (future.Error != null)
+                {
                     Current = null;
+                    Error = future.Error;
                     callback.Invoke(new AsyncResult<Gs2.Gs2Log.Model.InGameLog>(
                         Current,
                         Error
                     ));
                     yield break;
-        #else
-                    break;
-        #endif
                 }
-                var ret = this._result[0];
-                this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
-                if (this._result.Length == 0 && !this._last) {
-        #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
-                    yield return this._load();
-        #else
-                    await this._load();
-        #endif
-                }
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
-                await writer.YieldAsync(ret);
-            #else
-                Current = ret;
+            }
+            if (this._result.Length == 0) {
+                Current = null;
                 callback.Invoke(new AsyncResult<Gs2.Gs2Log.Model.InGameLog>(
                     Current,
                     Error
                 ));
-            #endif
+                yield break;
+            }
+            var ret = this._result[0];
+            this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
+            if (this._result.Length == 0 && !this._last) {
+                var future = this._load().ToGs2Future();
+                yield return future;
+                if (future.Error != null)
+                {
+                    Current = null;
+                    Error = future.Error;
+                    callback.Invoke(new AsyncResult<Gs2.Gs2Log.Model.InGameLog>(
+                        Current,
+                        Error
+                    ));
+                    yield break;
+                }
+            }
+            Current = ret;
+            callback.Invoke(new AsyncResult<Gs2.Gs2Log.Model.InGameLog>(
+                Current,
+                Error
+            ));
+        }
+        #endif
+
+        #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Log.Model.InGameLog> GetAsyncEnumerator(
+            CancellationToken cancellationToken = new CancellationToken()
+        ) => UniTaskAsyncEnumerable.Create<Gs2.Gs2Log.Model.InGameLog>(async (writer, token) =>
+        #else
+        public async IAsyncEnumerator<Gs2.Gs2Log.Model.InGameLog> GetAsyncEnumerator(
+            CancellationToken cancellationToken = new CancellationToken()
+        )
+        #endif
+        {
+/* diff --- start
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Log.Model.InGameLog>(
+                    (null as Gs2.Gs2Log.Model.InGameLog).CacheParentKey(
+                        NamespaceName,
+                        UserId ?? default,
+                        null
+                   ),
+                   "ListInGameLog"
+               ).LockAsync()) {
+                while(this._hasNext()) {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    if (this._result.Length == 0 && !this._last) {
+                        await this._load();
+                    }
+                    if (this._result.Length == 0) {
+                        break;
+                    }
+                    var ret = this._result[0];
+                    this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
+                    if (this._result.Length == 0 && !this._last) {
+                        await this._load();
+                    }
+            //#if GS2_ENABLE_UNITASK
+                    await writer.YieldAsync(ret);
+            //#else
+                    yield return ret;
+            //#endif
+ diff --- end */
+/* diff +++ start */
+            while(this._hasNext()) {
+                if (this._result.Length == 0 && !this._last) {
+                    await this._load();
+/* diff +++ end */
+                }
+/* diff +++ start */
+                if (this._result.Length == 0) {
+                    break;
+                }
+                var ret = this._result[0];
+                this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
+                if (this._result.Length == 0 && !this._last) {
+                    await this._load();
+                }
+        #if GS2_ENABLE_UNITASK
+                await writer.YieldAsync(ret);
         #else
                 yield return ret;
         #endif
-        #if UNITY_2017_1_OR_NEWER
-            #if GS2_ENABLE_UNITASK
+/* diff +++ end */
             }
-            }).GetAsyncEnumerator();
-            #endif
-        #else
-            }
-        #endif
         }
+        #if GS2_ENABLE_UNITASK
+        ).GetAsyncEnumerator();
+        #endif
     }
 }

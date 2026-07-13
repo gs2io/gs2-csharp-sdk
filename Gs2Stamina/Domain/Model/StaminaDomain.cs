@@ -27,6 +27,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -44,15 +46,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -90,38 +89,14 @@ namespace Gs2.Gs2Stamina.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Stamina.Model.Stamina> GetFuture(
             GetStaminaByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Model.Stamina> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithStaminaName(this.StaminaName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.GetStaminaByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Stamina.Model.Stamina>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Stamina.Model.Stamina> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Stamina.Model.Stamina> GetAsync(
-            #endif
+        #endif
             GetStaminaByUserIdRequest request
         ) {
             request = request
@@ -137,45 +112,18 @@ namespace Gs2.Gs2Stamina.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> UpdateFuture(
             UpdateStaminaByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithStaminaName(this.StaminaName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.UpdateStaminaByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain>(Impl);
-        }
+        ) => UpdateAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> UpdateAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> UpdateAsync(
-            #endif
+        #endif
             UpdateStaminaByUserIdRequest request
         ) {
             request = request
@@ -193,45 +141,18 @@ namespace Gs2.Gs2Stamina.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> ConsumeFuture(
             ConsumeStaminaByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithStaminaName(this.StaminaName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.ConsumeStaminaByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain>(Impl);
-        }
+        ) => ConsumeAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> ConsumeAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> ConsumeAsync(
-            #endif
+        #endif
             ConsumeStaminaByUserIdRequest request
         ) {
             request = request
@@ -249,45 +170,18 @@ namespace Gs2.Gs2Stamina.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> ApplyFuture(
             ApplyStaminaByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithStaminaName(this.StaminaName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.ApplyStaminaByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain>(Impl);
-        }
+        ) => ApplyAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> ApplyAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> ApplyAsync(
-            #endif
+        #endif
             ApplyStaminaByUserIdRequest request
         ) {
             request = request
@@ -305,46 +199,18 @@ namespace Gs2.Gs2Stamina.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> RecoverFuture(
             RecoverStaminaByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithStaminaName(this.StaminaName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.RecoverStaminaByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                domain.OverflowValue = result?.OverflowValue;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain>(Impl);
-        }
+        ) => RecoverAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> RecoverAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> RecoverAsync(
-            #endif
+        #endif
             RecoverStaminaByUserIdRequest request
         ) {
             request = request
@@ -363,45 +229,18 @@ namespace Gs2.Gs2Stamina.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> RaiseMaxValueFuture(
             RaiseMaxValueByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithStaminaName(this.StaminaName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.RaiseMaxValueByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain>(Impl);
-        }
+        ) => RaiseMaxValueAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> RaiseMaxValueAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> RaiseMaxValueAsync(
-            #endif
+        #endif
             RaiseMaxValueByUserIdRequest request
         ) {
             request = request
@@ -419,45 +258,18 @@ namespace Gs2.Gs2Stamina.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> DecreaseMaxValueFuture(
             DecreaseMaxValueByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithStaminaName(this.StaminaName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.DecreaseMaxValueByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain>(Impl);
-        }
+        ) => DecreaseMaxValueAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> DecreaseMaxValueAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> DecreaseMaxValueAsync(
-            #endif
+        #endif
             DecreaseMaxValueByUserIdRequest request
         ) {
             request = request
@@ -475,45 +287,18 @@ namespace Gs2.Gs2Stamina.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> SetMaxValueFuture(
             SetMaxValueByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithStaminaName(this.StaminaName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.SetMaxValueByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain>(Impl);
-        }
+        ) => SetMaxValueAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> SetMaxValueAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> SetMaxValueAsync(
-            #endif
+        #endif
             SetMaxValueByUserIdRequest request
         ) {
             request = request
@@ -531,45 +316,18 @@ namespace Gs2.Gs2Stamina.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> SetRecoverIntervalFuture(
             SetRecoverIntervalByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithStaminaName(this.StaminaName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.SetRecoverIntervalByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain>(Impl);
-        }
+        ) => SetRecoverIntervalAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> SetRecoverIntervalAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> SetRecoverIntervalAsync(
-            #endif
+        #endif
             SetRecoverIntervalByUserIdRequest request
         ) {
             request = request
@@ -587,45 +345,18 @@ namespace Gs2.Gs2Stamina.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> SetRecoverValueFuture(
             SetRecoverValueByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithStaminaName(this.StaminaName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.SetRecoverValueByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain>(Impl);
-        }
+        ) => SetRecoverValueAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> SetRecoverValueAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> SetRecoverValueAsync(
-            #endif
+        #endif
             SetRecoverValueByUserIdRequest request
         ) {
             request = request
@@ -643,47 +374,18 @@ namespace Gs2.Gs2Stamina.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> DeleteFuture(
             DeleteStaminaByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithStaminaName(this.StaminaName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.DeleteStaminaByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    if (!(future.Error is NotFoundException)) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain>(Impl);
-        }
+        ) => DeleteAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> DeleteAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> DeleteAsync(
-            #endif
+        #endif
             DeleteStaminaByUserIdRequest request
         ) {
             try {
@@ -703,45 +405,18 @@ namespace Gs2.Gs2Stamina.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> VerifyValueFuture(
             VerifyStaminaValueByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithStaminaName(this.StaminaName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.VerifyStaminaValueByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain>(Impl);
-        }
+        ) => VerifyValueAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> VerifyValueAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> VerifyValueAsync(
-            #endif
+        #endif
             VerifyStaminaValueByUserIdRequest request
         ) {
             request = request
@@ -759,45 +434,18 @@ namespace Gs2.Gs2Stamina.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> VerifyMaxValueFuture(
             VerifyStaminaMaxValueByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithStaminaName(this.StaminaName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.VerifyStaminaMaxValueByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain>(Impl);
-        }
+        ) => VerifyMaxValueAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> VerifyMaxValueAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> VerifyMaxValueAsync(
-            #endif
+        #endif
             VerifyStaminaMaxValueByUserIdRequest request
         ) {
             request = request
@@ -815,45 +463,18 @@ namespace Gs2.Gs2Stamina.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> VerifyRecoverIntervalMinutesFuture(
             VerifyStaminaRecoverIntervalMinutesByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithStaminaName(this.StaminaName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.VerifyStaminaRecoverIntervalMinutesByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain>(Impl);
-        }
+        ) => VerifyRecoverIntervalMinutesAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> VerifyRecoverIntervalMinutesAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> VerifyRecoverIntervalMinutesAsync(
-            #endif
+        #endif
             VerifyStaminaRecoverIntervalMinutesByUserIdRequest request
         ) {
             request = request
@@ -871,45 +492,18 @@ namespace Gs2.Gs2Stamina.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> VerifyRecoverValueFuture(
             VerifyStaminaRecoverValueByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithStaminaName(this.StaminaName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.VerifyStaminaRecoverValueByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain>(Impl);
-        }
+        ) => VerifyRecoverValueAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> VerifyRecoverValueAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> VerifyRecoverValueAsync(
-            #endif
+        #endif
             VerifyStaminaRecoverValueByUserIdRequest request
         ) {
             request = request
@@ -927,45 +521,18 @@ namespace Gs2.Gs2Stamina.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> VerifyOverflowValueFuture(
             VerifyStaminaOverflowValueByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithStaminaName(this.StaminaName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.VerifyStaminaOverflowValueByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Stamina.Domain.Model.StaminaDomain>(Impl);
-        }
+        ) => VerifyOverflowValueAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> VerifyOverflowValueAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Stamina.Domain.Model.StaminaDomain> VerifyOverflowValueAsync(
-            #endif
+        #endif
             VerifyStaminaOverflowValueByUserIdRequest request
         ) {
             request = request
@@ -983,55 +550,20 @@ namespace Gs2.Gs2Stamina.Domain.Model
 
             return domain;
         }
-        #endif
 
     }
 
     public partial class StaminaDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Stamina.Model.Stamina> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Stamina.Model.Stamina> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Stamina.Model.Stamina).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    this.StaminaName,
-                    null
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2Stamina.Model.Stamina).FetchFuture(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    this.StaminaName,
-                    null,
-                    () => this.GetFuture(
-                        new GetStaminaByUserIdRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Stamina.Model.Stamina>(Impl);
-        }
+        public IFuture<Gs2.Gs2Stamina.Model.Stamina> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Stamina.Model.Stamina> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Stamina.Model.Stamina> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Stamina.Model.Stamina>(
                         (null as Gs2.Gs2Stamina.Model.Stamina).CacheParentKey(
@@ -1065,28 +597,18 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 );
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2Stamina.Model.Stamina> Model()
-        {
-            return await ModelAsync();
-        }
+        public UniTask<Gs2.Gs2Stamina.Model.Stamina> Model() => ModelAsync();
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2Stamina.Model.Stamina> Model()
-        {
-            return ModelFuture();
-        }
+        public IFuture<Gs2.Gs2Stamina.Model.Stamina> Model() => ModelFuture();
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2Stamina.Model.Stamina> Model()
-        {
-            return await ModelAsync();
-        }
+        public Task<Gs2.Gs2Stamina.Model.Stamina> Model() => ModelAsync();
         #endif
 
 
@@ -1115,7 +637,6 @@ namespace Gs2.Gs2Stamina.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -1128,12 +649,7 @@ namespace Gs2.Gs2Stamina.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -1154,38 +670,21 @@ namespace Gs2.Gs2Stamina.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Stamina.Model.Stamina> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Stamina.Model.Stamina> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Stamina.Model.Stamina> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Stamina.Model.Stamina> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

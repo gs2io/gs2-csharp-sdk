@@ -27,6 +27,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -44,15 +46,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -97,12 +96,11 @@ namespace Gs2.Gs2MegaField.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2MegaField.Model.AreaModel> AreaModelsAsync(
-            #else
+        #else
         public DescribeAreaModelsIterator AreaModelsAsync(
-            #endif
+        #endif
         )
         {
             return new DescribeAreaModelsIterator(
@@ -111,7 +109,6 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 this.NamespaceName
             );
         }
-        #endif
 
         public ulong SubscribeAreaModels(
             Action<Gs2.Gs2MegaField.Model.AreaModel[]> callback
@@ -125,10 +122,15 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await AreaModelsAsync(
                             ).ToArrayAsync());
                         }
@@ -137,13 +139,15 @@ namespace Gs2.Gs2MegaField.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeAreaModelsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeAreaModelsWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2MegaField.Model.AreaModel[]> callback
         )
         {
@@ -155,7 +159,6 @@ namespace Gs2.Gs2MegaField.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeAreaModels(
             ulong callbackId
@@ -222,12 +225,11 @@ namespace Gs2.Gs2MegaField.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2MegaField.Model.AreaModelMaster> AreaModelMastersAsync(
-            #else
+        #else
         public DescribeAreaModelMastersIterator AreaModelMastersAsync(
-            #endif
+        #endif
         )
         {
             return new DescribeAreaModelMastersIterator(
@@ -236,7 +238,6 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 this.NamespaceName
             );
         }
-        #endif
 
         public ulong SubscribeAreaModelMasters(
             Action<Gs2.Gs2MegaField.Model.AreaModelMaster[]> callback
@@ -250,10 +251,15 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await AreaModelMastersAsync(
                             ).ToArrayAsync());
                         }
@@ -262,13 +268,15 @@ namespace Gs2.Gs2MegaField.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeAreaModelMastersWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeAreaModelMastersWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2MegaField.Model.AreaModelMaster[]> callback
         )
         {
@@ -280,7 +288,6 @@ namespace Gs2.Gs2MegaField.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeAreaModelMasters(
             ulong callbackId
@@ -323,38 +330,14 @@ namespace Gs2.Gs2MegaField.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2MegaField.Domain.Model.NamespaceDomain> GetStatusFuture(
             GetNamespaceStatusRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Domain.Model.NamespaceDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.GetNamespaceStatusFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                this.Status = domain.Status = result?.Status;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2MegaField.Domain.Model.NamespaceDomain>(Impl);
-        }
+        ) => GetStatusAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2MegaField.Domain.Model.NamespaceDomain> GetStatusAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2MegaField.Domain.Model.NamespaceDomain> GetStatusAsync(
-            #endif
+        #endif
             GetNamespaceStatusRequest request
         ) {
             request = request
@@ -370,41 +353,18 @@ namespace Gs2.Gs2MegaField.Domain.Model
             this.Status = domain.Status = result?.Status;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2MegaField.Model.Namespace> GetFuture(
             GetNamespaceRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Model.Namespace> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.GetNamespaceFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2MegaField.Model.Namespace>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2MegaField.Model.Namespace> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2MegaField.Model.Namespace> GetAsync(
-            #endif
+        #endif
             GetNamespaceRequest request
         ) {
             request = request
@@ -418,43 +378,18 @@ namespace Gs2.Gs2MegaField.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2MegaField.Domain.Model.NamespaceDomain> UpdateFuture(
             UpdateNamespaceRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Domain.Model.NamespaceDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.UpdateNamespaceFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2MegaField.Domain.Model.NamespaceDomain>(Impl);
-        }
+        ) => UpdateAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2MegaField.Domain.Model.NamespaceDomain> UpdateAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2MegaField.Domain.Model.NamespaceDomain> UpdateAsync(
-            #endif
+        #endif
             UpdateNamespaceRequest request
         ) {
             request = request
@@ -470,45 +405,18 @@ namespace Gs2.Gs2MegaField.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2MegaField.Domain.Model.NamespaceDomain> DeleteFuture(
             DeleteNamespaceRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Domain.Model.NamespaceDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.DeleteNamespaceFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    if (!(future.Error is NotFoundException)) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2MegaField.Domain.Model.NamespaceDomain>(Impl);
-        }
+        ) => DeleteAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2MegaField.Domain.Model.NamespaceDomain> DeleteAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2MegaField.Domain.Model.NamespaceDomain> DeleteAsync(
-            #endif
+        #endif
             DeleteNamespaceRequest request
         ) {
             try {
@@ -526,47 +434,18 @@ namespace Gs2.Gs2MegaField.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2MegaField.Domain.Model.AreaModelMasterDomain> CreateAreaModelMasterFuture(
             CreateAreaModelMasterRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Domain.Model.AreaModelMasterDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.CreateAreaModelMasterFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2MegaField.Domain.Model.AreaModelMasterDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    result?.Item?.Name
-                );
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2MegaField.Domain.Model.AreaModelMasterDomain>(Impl);
-        }
+        ) => CreateAreaModelMasterAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2MegaField.Domain.Model.AreaModelMasterDomain> CreateAreaModelMasterAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2MegaField.Domain.Model.AreaModelMasterDomain> CreateAreaModelMasterAsync(
-            #endif
+        #endif
             CreateAreaModelMasterRequest request
         ) {
             request = request
@@ -586,51 +465,20 @@ namespace Gs2.Gs2MegaField.Domain.Model
 
             return domain;
         }
-        #endif
 
     }
 
     public partial class NamespaceDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2MegaField.Model.Namespace> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2MegaField.Model.Namespace> self)
-            {
-                var (value, find) = (null as Gs2.Gs2MegaField.Model.Namespace).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    null
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2MegaField.Model.Namespace).FetchFuture(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    null,
-                    () => this.GetFuture(
-                        new GetNamespaceRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2MegaField.Model.Namespace>(Impl);
-        }
+        public IFuture<Gs2.Gs2MegaField.Model.Namespace> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2MegaField.Model.Namespace> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2MegaField.Model.Namespace> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2MegaField.Model.Namespace>(
                         (null as Gs2.Gs2MegaField.Model.Namespace).CacheParentKey(
@@ -658,28 +506,18 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 );
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2MegaField.Model.Namespace> Model()
-        {
-            return await ModelAsync();
-        }
+        public UniTask<Gs2.Gs2MegaField.Model.Namespace> Model() => ModelAsync();
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2MegaField.Model.Namespace> Model()
-        {
-            return ModelFuture();
-        }
+        public IFuture<Gs2.Gs2MegaField.Model.Namespace> Model() => ModelFuture();
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2MegaField.Model.Namespace> Model()
-        {
-            return await ModelAsync();
-        }
+        public Task<Gs2.Gs2MegaField.Model.Namespace> Model() => ModelAsync();
         #endif
 
 
@@ -704,7 +542,6 @@ namespace Gs2.Gs2MegaField.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -717,12 +554,7 @@ namespace Gs2.Gs2MegaField.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -741,38 +573,21 @@ namespace Gs2.Gs2MegaField.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2MegaField.Model.Namespace> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2MegaField.Model.Namespace> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2MegaField.Model.Namespace> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2MegaField.Model.Namespace> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

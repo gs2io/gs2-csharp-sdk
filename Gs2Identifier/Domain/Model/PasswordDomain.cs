@@ -27,6 +27,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -44,15 +46,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -84,38 +83,14 @@ namespace Gs2.Gs2Identifier.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> CreateFuture(
             CreatePasswordRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithUserName(this.UserName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.CreatePasswordFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.PasswordDomain>(Impl);
-        }
+        ) => CreateAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> CreateAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> CreateAsync(
-            #endif
+        #endif
             CreatePasswordRequest request
         ) {
             request = request
@@ -131,41 +106,18 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Identifier.Model.Password> GetFuture(
             GetPasswordRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Model.Password> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithUserName(this.UserName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.GetPasswordFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Identifier.Model.Password>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Identifier.Model.Password> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Identifier.Model.Password> GetAsync(
-            #endif
+        #endif
             GetPasswordRequest request
         ) {
             request = request
@@ -179,44 +131,18 @@ namespace Gs2.Gs2Identifier.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> EnableMfaFuture(
             EnableMfaRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithUserName(this.UserName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.EnableMfaFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                domain.ChallengeToken = result?.ChallengeToken;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.PasswordDomain>(Impl);
-        }
+        ) => EnableMfaAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> EnableMfaAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> EnableMfaAsync(
-            #endif
+        #endif
             EnableMfaRequest request
         ) {
             request = request
@@ -233,43 +159,18 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> ChallengeMfaFuture(
             ChallengeMfaRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithUserName(this.UserName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.ChallengeMfaFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.PasswordDomain>(Impl);
-        }
+        ) => ChallengeMfaAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> ChallengeMfaAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> ChallengeMfaAsync(
-            #endif
+        #endif
             ChallengeMfaRequest request
         ) {
             request = request
@@ -285,43 +186,18 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> DisableMfaFuture(
             DisableMfaRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithUserName(this.UserName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.DisableMfaFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.PasswordDomain>(Impl);
-        }
+        ) => DisableMfaAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> DisableMfaAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> DisableMfaAsync(
-            #endif
+        #endif
             DisableMfaRequest request
         ) {
             request = request
@@ -337,45 +213,18 @@ namespace Gs2.Gs2Identifier.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> DeleteFuture(
             DeletePasswordRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithUserName(this.UserName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.DeletePasswordFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    if (!(future.Error is NotFoundException)) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.PasswordDomain>(Impl);
-        }
+        ) => DeleteAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> DeleteAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Identifier.Domain.Model.PasswordDomain> DeleteAsync(
-            #endif
+        #endif
             DeletePasswordRequest request
         ) {
             try {
@@ -393,51 +242,20 @@ namespace Gs2.Gs2Identifier.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
     }
 
     public partial class PasswordDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Identifier.Model.Password> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Model.Password> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Identifier.Model.Password).GetCache(
-                    this._gs2.Cache,
-                    this.UserName,
-                    null
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2Identifier.Model.Password).FetchFuture(
-                    this._gs2.Cache,
-                    this.UserName,
-                    null,
-                    () => this.GetFuture(
-                        new GetPasswordRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Identifier.Model.Password>(Impl);
-        }
+        public IFuture<Gs2.Gs2Identifier.Model.Password> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Identifier.Model.Password> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Identifier.Model.Password> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Identifier.Model.Password>(
                         (null as Gs2.Gs2Identifier.Model.Password).CacheParentKey(
@@ -465,28 +283,18 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 );
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2Identifier.Model.Password> Model()
-        {
-            return await ModelAsync();
-        }
+        public UniTask<Gs2.Gs2Identifier.Model.Password> Model() => ModelAsync();
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2Identifier.Model.Password> Model()
-        {
-            return ModelFuture();
-        }
+        public IFuture<Gs2.Gs2Identifier.Model.Password> Model() => ModelFuture();
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2Identifier.Model.Password> Model()
-        {
-            return await ModelAsync();
-        }
+        public Task<Gs2.Gs2Identifier.Model.Password> Model() => ModelAsync();
         #endif
 
 
@@ -511,7 +319,6 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -524,12 +331,7 @@ namespace Gs2.Gs2Identifier.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -548,38 +350,21 @@ namespace Gs2.Gs2Identifier.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Identifier.Model.Password> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Identifier.Model.Password> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Identifier.Model.Password> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Identifier.Model.Password> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

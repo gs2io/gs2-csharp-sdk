@@ -12,16 +12,20 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
+
+#pragma warning disable CS0618 // Obsolete with a message
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
+/* diff +++ start */
 using Gs2.Core.Util;
 using Gs2.Gs2JobQueue.Model;
+/* diff +++ end */
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine.Scripting;
@@ -33,8 +37,29 @@ namespace Gs2.Gs2Distributor.Model
 #if UNITY_2017_1_OR_NEWER
 	[Preserve]
 #endif
-	public class StampSheetResult : IComparable
+/* diff --- start
+	public partial class StampSheetResult : IComparable
+ diff --- end */
+	public class StampSheetResult : IComparable /* diff +++ */
 	{
+/* diff --- start
+        public string StampSheetResultId { set; get; }
+        public string UserId { set; get; }
+        public string TransactionId { set; get; }
+        public Gs2.Core.Model.VerifyAction[] VerifyTaskRequests { set; get; }
+        public Gs2.Core.Model.ConsumeAction[] TaskRequests { set; get; }
+        public Gs2.Core.Model.AcquireAction SheetRequest { set; get; }
+        public int[] VerifyTaskResultCodes { set; get; }
+        public string[] VerifyTaskResults { set; get; }
+        public int[] TaskResultCodes { set; get; }
+        public string[] TaskResults { set; get; }
+        public int? SheetResultCode { set; get; }
+        public string SheetResult { set; get; }
+        public string NextTransactionId { set; get; }
+        public long? CreatedAt { set; get; }
+        public long? Revision { set; get; }
+ diff --- end */
+/* diff +++ start */
         public string StampSheetResultId { set; get; } = null!;
         public string UserId { set; get; } = null!;
         public string TransactionId { set; get; } = null!;
@@ -50,6 +75,7 @@ namespace Gs2.Gs2Distributor.Model
         public string NextTransactionId { set; get; } = null!;
         public long? CreatedAt { set; get; } = null!;
         public long? Revision { set; get; } = null!;
+/* diff +++ end */
         public StampSheetResult WithStampSheetResultId(string stampSheetResultId) {
             this.StampSheetResultId = stampSheetResultId;
             return this;
@@ -204,27 +230,48 @@ namespace Gs2.Gs2Distributor.Model
             if (data == null) {
                 return null;
             }
-            var result = new StampSheetResult()
+/* diff --- start
+            return new StampSheetResult()
+ diff --- end */
+            var result = new StampSheetResult() /* diff +++ */
                 .WithStampSheetResultId(!data.Keys.Contains("stampSheetResultId") || data["stampSheetResultId"] == null ? null : data["stampSheetResultId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
-                .WithVerifyTaskRequests(!data.Keys.Contains("verifyTaskRequests") || data["verifyTaskRequests"] == null || !data["verifyTaskRequests"].IsArray ? new Gs2.Core.Model.VerifyAction[]{} : data["verifyTaskRequests"].Cast<JsonData>().Select(v => {
+/* diff --- start
+                .WithVerifyTaskRequests(!data.Keys.Contains("verifyTaskRequests") || data["verifyTaskRequests"] == null || !data["verifyTaskRequests"].IsArray ? null : data["verifyTaskRequests"].Cast<JsonData>().Select(v => {
+ diff --- end */
+                .WithVerifyTaskRequests(!data.Keys.Contains("verifyTaskRequests") || data["verifyTaskRequests"] == null || !data["verifyTaskRequests"].IsArray ? new Gs2.Core.Model.VerifyAction[]{} : data["verifyTaskRequests"].Cast<JsonData>().Select(v => { /* diff +++ */
                     return Gs2.Core.Model.VerifyAction.FromJson(v);
                 }).ToArray())
-                .WithTaskRequests(!data.Keys.Contains("taskRequests") || data["taskRequests"] == null || !data["taskRequests"].IsArray ? new Gs2.Core.Model.ConsumeAction[]{} : data["taskRequests"].Cast<JsonData>().Select(v => {
+/* diff --- start
+                .WithTaskRequests(!data.Keys.Contains("taskRequests") || data["taskRequests"] == null || !data["taskRequests"].IsArray ? null : data["taskRequests"].Cast<JsonData>().Select(v => {
+ diff --- end */
+                .WithTaskRequests(!data.Keys.Contains("taskRequests") || data["taskRequests"] == null || !data["taskRequests"].IsArray ? new Gs2.Core.Model.ConsumeAction[]{} : data["taskRequests"].Cast<JsonData>().Select(v => { /* diff +++ */
                     return Gs2.Core.Model.ConsumeAction.FromJson(v);
                 }).ToArray())
                 .WithSheetRequest(!data.Keys.Contains("sheetRequest") || data["sheetRequest"] == null ? null : Gs2.Core.Model.AcquireAction.FromJson(data["sheetRequest"]))
-                .WithVerifyTaskResultCodes(!data.Keys.Contains("verifyTaskResultCodes") || data["verifyTaskResultCodes"] == null || !data["verifyTaskResultCodes"].IsArray ? new int[]{} : data["verifyTaskResultCodes"].Cast<JsonData>().Select(v => {
+/* diff --- start
+                .WithVerifyTaskResultCodes(!data.Keys.Contains("verifyTaskResultCodes") || data["verifyTaskResultCodes"] == null || !data["verifyTaskResultCodes"].IsArray ? null : data["verifyTaskResultCodes"].Cast<JsonData>().Select(v => {
+ diff --- end */
+                .WithVerifyTaskResultCodes(!data.Keys.Contains("verifyTaskResultCodes") || data["verifyTaskResultCodes"] == null || !data["verifyTaskResultCodes"].IsArray ? new int[]{} : data["verifyTaskResultCodes"].Cast<JsonData>().Select(v => { /* diff +++ */
                     return (v.ToString().Contains(".") ? (int)double.Parse(v.ToString()) : int.Parse(v.ToString()));
                 }).ToArray())
-                .WithVerifyTaskResults(!data.Keys.Contains("verifyTaskResults") || data["verifyTaskResults"] == null || !data["verifyTaskResults"].IsArray ? new string[]{} : data["verifyTaskResults"].Cast<JsonData>().Select(v => {
+/* diff --- start
+                .WithVerifyTaskResults(!data.Keys.Contains("verifyTaskResults") || data["verifyTaskResults"] == null || !data["verifyTaskResults"].IsArray ? null : data["verifyTaskResults"].Cast<JsonData>().Select(v => {
+ diff --- end */
+                .WithVerifyTaskResults(!data.Keys.Contains("verifyTaskResults") || data["verifyTaskResults"] == null || !data["verifyTaskResults"].IsArray ? new string[]{} : data["verifyTaskResults"].Cast<JsonData>().Select(v => { /* diff +++ */
                     return v.ToString();
                 }).ToArray())
-                .WithTaskResultCodes(!data.Keys.Contains("taskResultCodes") || data["taskResultCodes"] == null || !data["taskResultCodes"].IsArray ? new int[]{} : data["taskResultCodes"].Cast<JsonData>().Select(v => {
+/* diff --- start
+                .WithTaskResultCodes(!data.Keys.Contains("taskResultCodes") || data["taskResultCodes"] == null || !data["taskResultCodes"].IsArray ? null : data["taskResultCodes"].Cast<JsonData>().Select(v => {
+ diff --- end */
+                .WithTaskResultCodes(!data.Keys.Contains("taskResultCodes") || data["taskResultCodes"] == null || !data["taskResultCodes"].IsArray ? new int[]{} : data["taskResultCodes"].Cast<JsonData>().Select(v => { /* diff +++ */
                     return (v.ToString().Contains(".") ? (int)double.Parse(v.ToString()) : int.Parse(v.ToString()));
                 }).ToArray())
-                .WithTaskResults(!data.Keys.Contains("taskResults") || data["taskResults"] == null || !data["taskResults"].IsArray ? new string[]{} : data["taskResults"].Cast<JsonData>().Select(v => {
+/* diff --- start
+                .WithTaskResults(!data.Keys.Contains("taskResults") || data["taskResults"] == null || !data["taskResults"].IsArray ? null : data["taskResults"].Cast<JsonData>().Select(v => {
+ diff --- end */
+                .WithTaskResults(!data.Keys.Contains("taskResults") || data["taskResults"] == null || !data["taskResults"].IsArray ? new string[]{} : data["taskResults"].Cast<JsonData>().Select(v => { /* diff +++ */
                     return v.ToString();
                 }).ToArray())
                 .WithSheetResultCode(!data.Keys.Contains("sheetResultCode") || data["sheetResultCode"] == null ? null : (int?)(data["sheetResultCode"].ToString().Contains(".") ? (int)double.Parse(data["sheetResultCode"].ToString()) : int.Parse(data["sheetResultCode"].ToString())))
@@ -232,12 +279,14 @@ namespace Gs2.Gs2Distributor.Model
                 .WithNextTransactionId(!data.Keys.Contains("nextTransactionId") || data["nextTransactionId"] == null ? null : data["nextTransactionId"].ToString())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
+/* diff +++ start */
             
             if (result != null) {
                 Telemetry.HandleTransaction(result.TransactionId, result);
             }
 
             return result;
+/* diff +++ end */
         }
 
         public JsonData ToJson()
@@ -598,14 +647,20 @@ namespace Gs2.Gs2Distributor.Model
                 }
             }
             {
-                if (VerifyTaskRequests.Length > 10) {
+/* diff --- start
+                if (VerifyTaskRequests.Length > 100) {
+ diff --- end */
+                if (VerifyTaskRequests.Length > 10) { /* diff +++ */
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("stampSheetResult", "distributor.stampSheetResult.verifyTaskRequests.error.tooMany"),
                     });
                 }
             }
             {
-                if (TaskRequests.Length > 10) {
+/* diff --- start
+                if (TaskRequests.Length > 100) {
+ diff --- end */
+                if (TaskRequests.Length > 10) { /* diff +++ */
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("stampSheetResult", "distributor.stampSheetResult.taskRequests.error.tooMany"),
                     });
@@ -614,28 +669,40 @@ namespace Gs2.Gs2Distributor.Model
             {
             }
             {
-                if (VerifyTaskResultCodes.Length > 10) {
+/* diff --- start
+                if (VerifyTaskResultCodes.Length > 100) {
+ diff --- end */
+                if (VerifyTaskResultCodes.Length > 10) { /* diff +++ */
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("stampSheetResult", "distributor.stampSheetResult.verifyTaskResultCodes.error.tooMany"),
                     });
                 }
             }
             {
-                if (VerifyTaskResults.Length > 10) {
+/* diff --- start
+                if (VerifyTaskResults.Length > 100) {
+ diff --- end */
+                if (VerifyTaskResults.Length > 10) { /* diff +++ */
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("stampSheetResult", "distributor.stampSheetResult.verifyTaskResults.error.tooMany"),
                     });
                 }
             }
             {
-                if (TaskResultCodes.Length > 10) {
+/* diff --- start
+                if (TaskResultCodes.Length > 100) {
+ diff --- end */
+                if (TaskResultCodes.Length > 10) { /* diff +++ */
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("stampSheetResult", "distributor.stampSheetResult.taskResultCodes.error.tooMany"),
                     });
                 }
             }
             {
-                if (TaskResults.Length > 10) {
+/* diff --- start
+                if (TaskResults.Length > 100) {
+ diff --- end */
+                if (TaskResults.Length > 10) { /* diff +++ */
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("stampSheetResult", "distributor.stampSheetResult.taskResults.error.tooMany"),
                     });
@@ -705,7 +772,7 @@ namespace Gs2.Gs2Distributor.Model
                 TransactionId = TransactionId,
                 VerifyTaskRequests = VerifyTaskRequests?.Clone() as Gs2.Core.Model.VerifyAction[],
                 TaskRequests = TaskRequests?.Clone() as Gs2.Core.Model.ConsumeAction[],
-                SheetRequest = SheetRequest.Clone() as Gs2.Core.Model.AcquireAction,
+                SheetRequest = SheetRequest?.Clone() as Gs2.Core.Model.AcquireAction,
                 VerifyTaskResultCodes = VerifyTaskResultCodes?.Clone() as int[],
                 VerifyTaskResults = VerifyTaskResults?.Clone() as string[],
                 TaskResultCodes = TaskResultCodes?.Clone() as int[],

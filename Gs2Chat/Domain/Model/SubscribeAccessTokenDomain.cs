@@ -27,6 +27,7 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -45,14 +46,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -86,40 +85,14 @@ namespace Gs2.Gs2Chat.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeAccessTokenDomain> SubscribeFuture(
             SubscribeRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithRoomName(this.RoomName)
-                    .WithAccessToken(this.AccessToken?.Token);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.SubscribeFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Chat.Domain.Model.SubscribeAccessTokenDomain>(Impl);
-        }
+        ) => SubscribeAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Chat.Domain.Model.SubscribeAccessTokenDomain> SubscribeAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Chat.Domain.Model.SubscribeAccessTokenDomain> SubscribeAsync(
-            #endif
+        #endif
             SubscribeRequest request
         ) {
             request = request
@@ -137,43 +110,18 @@ namespace Gs2.Gs2Chat.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Chat.Model.Subscribe> GetFuture(
             GetSubscribeRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Chat.Model.Subscribe> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithRoomName(this.RoomName)
-                    .WithAccessToken(this.AccessToken?.Token);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.GetSubscribeFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Chat.Model.Subscribe>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Chat.Model.Subscribe> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Chat.Model.Subscribe> GetAsync(
-            #endif
+        #endif
             GetSubscribeRequest request
         ) {
             request = request
@@ -189,45 +137,18 @@ namespace Gs2.Gs2Chat.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeAccessTokenDomain> UpdateNotificationTypeFuture(
             UpdateNotificationTypeRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithRoomName(this.RoomName)
-                    .WithAccessToken(this.AccessToken?.Token);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.UpdateNotificationTypeFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Chat.Domain.Model.SubscribeAccessTokenDomain>(Impl);
-        }
+        ) => UpdateNotificationTypeAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Chat.Domain.Model.SubscribeAccessTokenDomain> UpdateNotificationTypeAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Chat.Domain.Model.SubscribeAccessTokenDomain> UpdateNotificationTypeAsync(
-            #endif
+        #endif
             UpdateNotificationTypeRequest request
         ) {
             request = request
@@ -245,45 +166,18 @@ namespace Gs2.Gs2Chat.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeAccessTokenDomain> UnsubscribeFuture(
             UnsubscribeRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.SubscribeAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithRoomName(this.RoomName)
-                    .WithAccessToken(this.AccessToken?.Token);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.UnsubscribeFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Chat.Domain.Model.SubscribeAccessTokenDomain>(Impl);
-        }
+        ) => UnsubscribeAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Chat.Domain.Model.SubscribeAccessTokenDomain> UnsubscribeAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Chat.Domain.Model.SubscribeAccessTokenDomain> UnsubscribeAsync(
-            #endif
+        #endif
             UnsubscribeRequest request
         ) {
             request = request
@@ -301,51 +195,16 @@ namespace Gs2.Gs2Chat.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Chat.Model.Subscribe> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Chat.Model.Subscribe> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Chat.Model.Subscribe).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    this.RoomName,
-                    this.AccessToken?.TimeOffset
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2Chat.Model.Subscribe).FetchFuture(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    this.RoomName,
-                    this.AccessToken?.TimeOffset,
-                    () => this.GetFuture(
-                        new GetSubscribeRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Chat.Model.Subscribe>(Impl);
-        }
+        public IFuture<Gs2.Gs2Chat.Model.Subscribe> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Chat.Model.Subscribe> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Chat.Model.Subscribe> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Chat.Model.Subscribe>(
                         (null as Gs2.Gs2Chat.Model.Subscribe).CacheParentKey(
@@ -379,28 +238,18 @@ namespace Gs2.Gs2Chat.Domain.Model
                 );
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2Chat.Model.Subscribe> Model()
-        {
-            return await ModelAsync();
-        }
+        public UniTask<Gs2.Gs2Chat.Model.Subscribe> Model() => ModelAsync();
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2Chat.Model.Subscribe> Model()
-        {
-            return ModelFuture();
-        }
+        public IFuture<Gs2.Gs2Chat.Model.Subscribe> Model() => ModelFuture();
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2Chat.Model.Subscribe> Model()
-        {
-            return await ModelAsync();
-        }
+        public Task<Gs2.Gs2Chat.Model.Subscribe> Model() => ModelAsync();
         #endif
 
 
@@ -429,7 +278,6 @@ namespace Gs2.Gs2Chat.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -442,12 +290,7 @@ namespace Gs2.Gs2Chat.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -468,38 +311,21 @@ namespace Gs2.Gs2Chat.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Chat.Model.Subscribe> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Chat.Model.Subscribe> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Chat.Model.Subscribe> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Chat.Model.Subscribe> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

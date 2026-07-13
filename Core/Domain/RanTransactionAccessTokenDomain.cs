@@ -38,9 +38,9 @@ using Gs2.Gs2JobQueue.Result;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER 
 using UnityEngine;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading.Tasks;
 #endif
@@ -271,41 +271,14 @@ namespace Gs2.Core.Domain
 #if UNITY_2017_1_OR_NEWER
         public override IFuture<TransactionAccessTokenDomain> WaitFuture(
             bool all = false
-        ) {
-            IEnumerator Impl(IFuture<TransactionAccessTokenDomain> self) {
-                var nextTransactions = new List<TransactionAccessTokenDomain>();
-                foreach (var transaction in _nextTransactions) {
-                    var future = transaction.WaitFuture(all);
-                    yield return future;
-                    if (future.Error != null) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                    if (future.Result != null) {
-                        nextTransactions.Add(future.Result);
-                    }
-                }
-                if (nextTransactions.Count == 0) {
-                    self.OnComplete(null);
-                    yield break;
-                }
-                self.OnComplete(new TransactionAccessTokenDomain(
-                    Gs2,
-                    AccessToken,
-                    nextTransactions
-                ));
-            }
-            return new Gs2InlineFuture<TransactionAccessTokenDomain>(Impl);
-        }
+        ) => WaitAsync(all).ToGs2Future();
 #endif
         
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public override async UniTask<TransactionAccessTokenDomain> WaitAsync(
-    #else
+#else
         public override async Task<TransactionAccessTokenDomain> WaitAsync(
-    #endif
+#endif
             bool all = false
         ) {
             var nextTransactions = new List<TransactionAccessTokenDomain>();
@@ -324,6 +297,5 @@ namespace Gs2.Core.Domain
                 nextTransactions
             );
         }
-#endif
     }
 }

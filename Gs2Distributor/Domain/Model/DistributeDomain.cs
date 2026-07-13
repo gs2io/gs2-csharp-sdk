@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -29,6 +28,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -46,15 +47,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -76,6 +74,11 @@ namespace Gs2.Gs2Distributor.Domain.Model
         public string[] TaskResults { get; set; } = null!;
         public int? SheetResultCode { get; set; } = null!;
         public string SheetResult { get; set; } = null!;
+/* diff --- start
+        public string Body { get; set; } = null!;
+        public string Signature { get; set; } = null!;
+        public Gs2.Gs2Distributor.Model.BatchResultPayload[] Results { get; set; } = null!;
+ diff --- end */
 
         public DistributeDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -92,5 +95,66 @@ namespace Gs2.Gs2Distributor.Domain.Model
 
     public partial class DistributeDomain {
 
+/* diff --- start
+        //#if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Distributor.Domain.Model.DistributeDomain> FreezeMasterDataFuture(
+            FreezeMasterDataByUserIdRequest request
+        ) => FreezeMasterDataAsync(request).ToGs2Future();
+        //#endif
+
+        //#if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Distributor.Domain.Model.DistributeDomain> FreezeMasterDataAsync(
+        //#else
+        public async Task<Gs2.Gs2Distributor.Domain.Model.DistributeDomain> FreezeMasterDataAsync(
+        //#endif
+            FreezeMasterDataByUserIdRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                null,
+                () => this._client.FreezeMasterDataByUserIdAsync(request)
+            );
+            var domain = this;
+            return domain;
+        }
+
+        //#if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Distributor.Domain.Model.DistributeDomain> SignFreezeMasterDataTimestampFuture(
+            SignFreezeMasterDataTimestampRequest request
+        ) => SignFreezeMasterDataTimestampAsync(request).ToGs2Future();
+        //#endif
+
+        //#if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Distributor.Domain.Model.DistributeDomain> SignFreezeMasterDataTimestampAsync(
+        //#else
+        public async Task<Gs2.Gs2Distributor.Domain.Model.DistributeDomain> SignFreezeMasterDataTimestampAsync(
+        //#endif
+            SignFreezeMasterDataTimestampRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                null,
+                () => this._client.SignFreezeMasterDataTimestampAsync(request)
+            );
+            var domain = this;
+            this.Body = domain.Body = result?.Body;
+            this.Signature = domain.Signature = result?.Signature;
+            return domain;
+        }
+
+    }
+
+    public partial class DistributeDomain {
+
+ diff --- end */
     }
 }

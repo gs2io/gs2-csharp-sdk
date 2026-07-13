@@ -38,9 +38,9 @@ using Gs2.Gs2JobQueue.Result;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER 
 using UnityEngine;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading.Tasks;
 #endif
@@ -102,16 +102,18 @@ namespace Gs2.Core.Domain
             }
             
             var nextTransactions = new List<TransactionAccessTokenDomain>();
+            JsonData resultJson = null!;
             if (job.ScriptId.EndsWith("push_by_user_id")) {
+                resultJson = JsonMapper.ToObject(result.Result);
                 nextTransactions.Add(JobQueueJobDomainFactory.ToTransaction(
                     Gs2,
                     AccessToken,
-                    PushByUserIdResult.FromJson(JsonMapper.ToObject(result.Result))
+                    PushByUserIdResult.FromJson(resultJson)
                 ));
             }
             
-            var resultJson = JsonMapper.ToObject(result.Result);
-            if (resultJson.ContainsKey("autoRunStampSheet")) {
+            resultJson = resultJson ?? TryParseObjectResult(result.Result);
+            if (resultJson != null && resultJson.ContainsKey("autoRunStampSheet")) {
                 nextTransactions.Add(TransactionDomainFactory.ToTransaction(
                     Gs2,
                     AccessToken,
@@ -136,87 +138,27 @@ namespace Gs2.Core.Domain
             return null;
         }
 
+        private static JsonData TryParseObjectResult(
+            string result
+        ) {
+            var trimmed = result?.TrimStart();
+            if (string.IsNullOrEmpty(trimmed) || trimmed[0] != '{') {
+                return null!;
+            }
+            return JsonMapper.ToObject(result);
+        }
+
 #if UNITY_2017_1_OR_NEWER
         public override IFuture<TransactionAccessTokenDomain> WaitFuture(
             bool all = false
-        ) {
-            IEnumerator Impl(IFuture<TransactionAccessTokenDomain> self) {
-                var begin = DateTime.Now;
-                RETRY:
-                if (DateTime.Now - begin > TimeSpan.FromSeconds(10)) {
-                    self.OnError(new UnknownException("Failed to retrieve the results of the Job Queue execution: either there is some kind of failure in GS2, or the GS2-Gateway used for notification has not been configured for GS2-JobQueue used to execute the Job Queue, or the GS2-Gateway has a user ID setting to receive notifications. API may not have been invoked."));
-                    yield break;
-                }
-                var domain = Gs2.JobQueue.Namespace(
-                    this._namespaceName
-                ).AccessToken(
-                    AccessToken
-                ).Job(
-                    this._jobName
-                ).JobResult();
-                var future = domain.ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    domain.Invalidate();
-                    if (!future.Error.RecommendAutoRetry) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                    yield return new WaitForSeconds(0.01f);
-                    goto RETRY;
-                }
-                var result = future.Result;
-                if (result == null) {
-                    yield return new WaitForSeconds(0.01f);
-                    
-                    var future2 = Gs2.JobQueue.DispatchFuture(AccessToken);
-                    yield return future2;
-                    if (future2.Error != null) {
-                        self.OnError(future2.Error);
-                        yield break;
-                    }
-                    
-                    goto RETRY;
-                }
-
-                var transaction = HandleResult(
-                    new Job {
-                        JobId = result.JobId,
-                        Name = Job.GetJobNameFromGrn(result.JobId),
-                        UserId = Job.GetUserIdFromGrn(result.JobId),
-                        ScriptId = result.ScriptId,
-                        Args = result.Args,
-                    },
-                    new JobResultBody {
-                        TryNumber = result.TryNumber,
-                        StatusCode = result.StatusCode,
-                        Result = result.Result,
-                    }
-                );
-                if (all && transaction != null) {
-                    var future3 = transaction.WaitFuture(true);
-                    yield return future3;
-                    if (future3.Error != null) {
-                        self.OnError(future3.Error);
-                        yield break;
-                    }
-                    self.OnComplete(null);
-                    yield return null;
-                }
-                self.OnComplete(transaction);
-                yield return null;
-            }
-            return new Gs2InlineFuture<TransactionAccessTokenDomain>(Impl);
-        }
+        ) => WaitAsync(all).ToGs2Future();
 #endif
-        
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
 
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public override async UniTask<TransactionAccessTokenDomain> WaitAsync(
-    #else
+#else
         public override async Task<TransactionAccessTokenDomain> WaitAsync(
-    #endif
+#endif
             bool all = false
         ) {
             var begin = DateTime.Now;
@@ -234,11 +176,8 @@ namespace Gs2.Core.Domain
             try {
                 var result = await domain.ModelAsync();
                 if (result == null) {
-#if UNITY_2017_1_OR_NEWER
-                    await UniTask.Delay(TimeSpan.FromMilliseconds(10));
-#else
-                    await Task.Delay(TimeSpan.FromMilliseconds(10));
-#endif
+                    domain.Invalidate();
+                    await TaskUtilities.DelayAsync(Gs2Constant.RetryWait);
                     await Gs2.JobQueue.DispatchAsync(AccessToken);
                     goto RETRY;
                 }
@@ -267,14 +206,9 @@ namespace Gs2.Core.Domain
                 if (!e.RecommendAutoRetry) {
                     throw;
                 }
-#if UNITY_2017_1_OR_NEWER
-                await UniTask.Delay(TimeSpan.FromMilliseconds(10));
-#else
-                await Task.Delay(TimeSpan.FromMilliseconds(10));
-#endif
+                await TaskUtilities.Yield();
                 goto RETRY;
             }
         }
-#endif
     }
 }

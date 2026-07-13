@@ -25,10 +25,10 @@ using Gs2.Core.Net;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -99,21 +99,20 @@ namespace Gs2.Gs2Distributor.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<CurrentDistributorMaster> FetchAsync(
-    #else
+#else
         public static async Task<CurrentDistributorMaster> FetchAsync(
-    #endif
+#endif
             this CurrentDistributorMaster self,
             CacheDatabase cache,
             string namespaceName,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<CurrentDistributorMaster>> fetchImpl
-    #else
+#else
             Func<Task<CurrentDistributorMaster>> fetchImpl
-    #endif
+#endif
         ) {
             try {
                 var item = await fetchImpl();
@@ -136,7 +135,6 @@ namespace Gs2.Gs2Distributor.Model.Cache
                 return null;
             }
         }
-#endif
 
         public static Tuple<CurrentDistributorMaster, bool> GetCache(
             this CurrentDistributorMaster self,

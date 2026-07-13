@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -29,21 +28,23 @@
 
 using System;
 using System.Collections;
-using System.Linq;
+using System.Linq; /* diff +++ */
 using System.Reflection;
-using System.Numerics;
+using System.Numerics; /* diff +++ */
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+/* diff +++ start */
 using Gs2.Core.Exception;
 using Gs2.Core.Model;
+/* diff +++ end */
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Experience.Request;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading.Tasks;
 #endif
@@ -61,103 +62,33 @@ namespace Gs2.Gs2Experience.Domain.Transaction.SpeculativeExecutor
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
             MultiplyAcquireActionsByUserIdRequest request
-        ) {
-            IEnumerator Impl(Gs2Future<Func<object>> result) {
-                
-                var future = domain.Experience.Namespace(
-                    request.NamespaceName
-                ).ExperienceModel(
-                    request.ExperienceName
-                ).ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    result.OnError(future.Error);
-                    yield break;
-                }
-                var model = future.Result;
-
-                var future2 = domain.Experience.Namespace(
-                    request.NamespaceName
-                ).AccessToken(
-                    accessToken
-                ).Status(
-                    request.ExperienceName,
-                    request.PropertyId
-                ).ModelFuture();
-                yield return future2;
-                if (future2.Error != null) {
-                    result.OnError(future2.Error);
-                    yield break;
-                }
-                var item = future2.Result;
-
-                Gs2Future<Func<object>> future3;
-                var rate = model.AcquireActionRates.FirstOrDefault(v => v.Name == request.RateName);
-                
-                if (rate == null) {
-                    throw new NotFoundException(new RequestError[] {
-                        new RequestError(
-                            "rateName",
-                            "experience.experienceModel.acquireActionRates.error.notFound"
-                        )
-                    });
-                }
-                else if (rate.Mode == "double") {
-                    future3 = new Core.SpeculativeExecutor.SpeculativeExecutor(
-                        Array.Empty<ConsumeAction>(),
-                        request.AcquireActions,
-                        rate.Rates[item.RankValue ?? 1]
-                    ).ExecuteFuture(
-                        domain,
-                        accessToken
-                    );
-                }
-                else {
-                    future3 = new Core.SpeculativeExecutor.SpeculativeExecutor(
-                        Array.Empty<ConsumeAction>(),
-                        request.AcquireActions,
-                        BigInteger.Parse(rate.BigRates[item.RankValue ?? 1] ?? "1")
-                    ).ExecuteFuture(
-                        domain,
-                        accessToken
-                    );
-                }
-                
-                
-                yield return future3;
-                if (future3.Error != null) {
-                    result.OnError(future3.Error);
-                    yield break;
-                }
-                var commit = future3.Result;
-
-                result.OnComplete(() =>
-                {
-                    commit?.Invoke();
-                    return null;
-                });
-                yield return null;
-            }
-
-            return new Gs2InlineFuture<Func<object>>(Impl);
-        }
+        ) => ExecuteAsync(domain, accessToken, request).ToGs2Future();
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<Func<object>> ExecuteAsync(
-    #else
+#else
         public static async Task<Func<object>> ExecuteAsync(
-    #endif
+#endif
             Gs2.Core.Domain.Gs2 domain,
             AccessToken accessToken,
             MultiplyAcquireActionsByUserIdRequest request
         ) {
+/* diff --- start
+            // TODO: Speculative execution not supported
+//#if UNITY_2017_1_OR_NEWER
+            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
+//#else
+            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
+//#endif
+ diff --- end */
+/* diff +++ start */
             var model = await domain.Experience.Namespace(
                 request.NamespaceName
             ).ExperienceModel(
                 request.ExperienceName
             ).ModelAsync();
+/* diff +++ end */
 
             var item = await domain.Experience.Namespace(
                 request.NamespaceName
@@ -168,6 +99,17 @@ namespace Gs2.Gs2Experience.Domain.Transaction.SpeculativeExecutor
                 request.PropertyId
             ).ModelAsync();
 
+/* diff --- start
+            var commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
+                item.ConsumeActions,
+                item.AcquireActions,
+                1.0
+            ).ExecuteAsync(
+                domain,
+                accessToken
+            );
+ diff --- end */
+/* diff +++ start */
             Func<object> commit;
             var rate = model.AcquireActionRates.FirstOrDefault(v => v.Name == request.RateName);
             if (rate == null) {
@@ -198,6 +140,7 @@ namespace Gs2.Gs2Experience.Domain.Transaction.SpeculativeExecutor
                     accessToken
                 );
             }
+/* diff +++ end */
 
             return () =>
             {
@@ -205,6 +148,5 @@ namespace Gs2.Gs2Experience.Domain.Transaction.SpeculativeExecutor
                 return null;
             };
         }
-#endif
     }
 }

@@ -27,6 +27,7 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -45,14 +46,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -84,45 +83,14 @@ namespace Gs2.Gs2Chat.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain> CreateRoomFuture(
             CreateRoomRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.CreateRoomFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    this.AccessToken,
-                    result?.Item?.Name,
-                    result?.Item?.Password
-                );
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain>(Impl);
-        }
+        ) => CreateRoomAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain> CreateRoomAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain> CreateRoomAsync(
-            #endif
+        #endif
             CreateRoomRequest request
         ) {
             request = request
@@ -145,7 +113,6 @@ namespace Gs2.Gs2Chat.Domain.Model
 
             return domain;
         }
-        #endif
 
         public Gs2.Gs2Chat.Domain.Model.RoomAccessTokenDomain Room(
             string roomName,
@@ -174,12 +141,11 @@ namespace Gs2.Gs2Chat.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Chat.Model.Subscribe> SubscribesAsync(
-            #else
+        #else
         public DescribeSubscribesIterator SubscribesAsync(
-            #endif
+        #endif
             string roomNamePrefix = null
         )
         {
@@ -191,7 +157,6 @@ namespace Gs2.Gs2Chat.Domain.Model
                 roomNamePrefix
             );
         }
-        #endif
 
         public ulong SubscribeSubscribes(
             Action<Gs2.Gs2Chat.Model.Subscribe[]> callback,
@@ -207,10 +172,15 @@ namespace Gs2.Gs2Chat.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await SubscribesAsync(
                                 roomNamePrefix
                             ).ToArrayAsync());
@@ -220,13 +190,15 @@ namespace Gs2.Gs2Chat.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeSubscribesWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeSubscribesWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Chat.Model.Subscribe[]> callback,
             string roomNamePrefix = null
         )
@@ -241,7 +213,6 @@ namespace Gs2.Gs2Chat.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeSubscribes(
             ulong callbackId,

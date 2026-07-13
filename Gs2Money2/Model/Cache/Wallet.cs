@@ -12,12 +12,12 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
 
+#pragma warning disable CS0618 // Obsolete with a message
 #pragma warning disable CS1522 // Empty switch block
 
 using System;
@@ -26,10 +26,10 @@ using Gs2.Core.Net;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -112,23 +112,22 @@ namespace Gs2.Gs2Money2.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<Wallet> FetchAsync(
-    #else
+#else
         public static async Task<Wallet> FetchAsync(
-    #endif
+#endif
             this Wallet self,
             CacheDatabase cache,
             string namespaceName,
             string userId,
             int? slot,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<Wallet>> fetchImpl
-    #else
+#else
             Func<Task<Wallet>> fetchImpl
-    #endif
+#endif
         ) {
             try {
                 var item = await fetchImpl();
@@ -155,7 +154,6 @@ namespace Gs2.Gs2Money2.Model.Cache
                 return null;
             }
         }
-#endif
 
         public static Tuple<Wallet, bool> GetCache(
             this Wallet self,
@@ -201,7 +199,13 @@ namespace Gs2.Gs2Money2.Model.Cache
                     slot
                 )
             );
-            if (find && (value?.Revision ?? 0) > (self?.Revision ?? 0) && (self?.Revision ?? 0) > 1) {
+/* diff --- start
+            if (find && (value?.Revision ?? -1) > (self?.Revision ?? -1) && (self?.Revision ?? -1) > 1) {
+                return;
+            }
+            if (find && (value?.Revision ?? -1) == (self?.Revision ?? -1)) {
+ diff --- end */
+            if (find && (value?.Revision ?? 0) > (self?.Revision ?? 0) && (self?.Revision ?? 0) > 1) { /* diff +++ */
                 return;
             }
             cache.Put(
@@ -216,6 +220,7 @@ namespace Gs2.Gs2Money2.Model.Cache
                 self,
                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
             );
+/* diff +++ start */
             if ((self?.SharedFreeCurrency ?? false) && (slot ?? 0) == 0) {
                 cache.ClearListCache<Wallet>(
                     self.CacheParentKey(
@@ -225,6 +230,7 @@ namespace Gs2.Gs2Money2.Model.Cache
                     )
                 );
             }
+/* diff +++ end */
         }
 
         public static void DeleteCache(

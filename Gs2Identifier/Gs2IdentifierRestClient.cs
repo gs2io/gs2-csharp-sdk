@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -1777,6 +1776,93 @@ namespace Gs2.Gs2Identifier
 #endif
 
 
+/* diff --- start
+        public class GetServiceVersionTask : Gs2RestSessionTask<GetServiceVersionRequest, GetServiceVersionResult>
+        {
+            public GetServiceVersionTask(IGs2Session session, RestSessionRequestFactory factory, GetServiceVersionRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetServiceVersionRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "identifier")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/system/version";
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+//#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetServiceVersion(
+                Request.GetServiceVersionRequest request,
+                UnityAction<AsyncResult<Result.GetServiceVersionResult>> callback
+        ) =>
+            new GetServiceVersionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.GetServiceVersionResult> GetServiceVersionFuture(
+                Request.GetServiceVersionRequest request
+        ) =>
+            new GetServiceVersionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    //#if GS2_ENABLE_UNITASK
+		public UniTask<Result.GetServiceVersionResult> GetServiceVersionAsync(
+                Request.GetServiceVersionRequest request
+        ) =>
+            new GetServiceVersionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetServiceVersionResult>();
+    //#else
+		public GetServiceVersionTask GetServiceVersionAsync(
+                Request.GetServiceVersionRequest request
+        )
+		{
+			return new GetServiceVersionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    //#endif
+//#else
+		public Task<Result.GetServiceVersionResult> GetServiceVersionAsync(
+                Request.GetServiceVersionRequest request
+        ) =>
+            new GetServiceVersionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+//#endif
+
+
+ diff --- end */
         public class CreatePasswordTask : Gs2RestSessionTask<CreatePasswordRequest, CreatePasswordResult>
         {
             public CreatePasswordTask(IGs2Session session, RestSessionRequestFactory factory, CreatePasswordRequest request) : base(session, factory, request)

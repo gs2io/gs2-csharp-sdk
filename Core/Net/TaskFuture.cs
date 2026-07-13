@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections;
-using System.Threading.Tasks;
 using Gs2.Core.Exception;
 using Gs2.Core.Model;
 using Gs2.Core.Util;
 #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
+#else
+using System.Threading.Tasks;
+    #if UNITY_2017_1_OR_NEWER
+using System.Runtime.CompilerServices;
+    #endif
 #endif
 
 namespace Gs2.Core.Net
@@ -78,5 +82,9 @@ namespace Gs2.Core.Net
         {
             Result = result;
         }
+
+#if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK
+        public TaskAwaiter<TResult> GetAwaiter() => Invoke().GetAwaiter();
+#endif
     }
 }

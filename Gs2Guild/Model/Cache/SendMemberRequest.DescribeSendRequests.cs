@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -28,10 +27,10 @@ using Gs2.Gs2Guild.Request;
 using Gs2.Gs2Guild.Result;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -54,8 +53,14 @@ namespace Gs2.Gs2Guild.Model.Cache
                     cache,
                     request.NamespaceName,
                     userId,
+/* diff --- start
+                    item.GuildModelName,
+                    item.GuildName,
+ diff --- end */
+/* diff +++ start */
                     request.GuildModelName,
                     item.TargetGuildName,
+/* diff +++ end */
                     timeOffset
                 );
             }
@@ -92,21 +97,22 @@ namespace Gs2.Gs2Guild.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<DescribeSendRequestsResult> InvokeAsync(
-    #else
+#else
         public static async Task<DescribeSendRequestsResult> InvokeAsync(
-    #endif
+#endif
             this DescribeSendRequestsRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<DescribeSendRequestsResult>> invokeImpl
-    #else
+#elif UNITY_2017_1_OR_NEWER
+            Func<TaskFuture<DescribeSendRequestsResult>> invokeImpl
+#else
             Func<Task<DescribeSendRequestsResult>> invokeImpl
-    #endif
+#endif
         )
         {
             var result = await invokeImpl();
@@ -118,6 +124,5 @@ namespace Gs2.Gs2Guild.Model.Cache
             );
             return result;
         }
-#endif
     }
 }

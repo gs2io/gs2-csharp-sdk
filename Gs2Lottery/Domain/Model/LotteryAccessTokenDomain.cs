@@ -27,6 +27,7 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -45,14 +46,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -86,38 +85,14 @@ namespace Gs2.Gs2Lottery.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Lottery.Model.DrawnPrize[]> PredictionFuture(
             PredictionRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Lottery.Model.DrawnPrize[]> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithLotteryName(this.LotteryName)
-                    .WithAccessToken(this.AccessToken?.Token);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.PredictionFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Items);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Lottery.Model.DrawnPrize[]>(Impl);
-        }
+        ) => PredictionAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Lottery.Model.DrawnPrize[]> PredictionAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Lottery.Model.DrawnPrize[]> PredictionAsync(
-            #endif
+        #endif
             PredictionRequest request
         ) {
             request = request
@@ -133,7 +108,6 @@ namespace Gs2.Gs2Lottery.Domain.Model
             );
             return result?.Items;
         }
-        #endif
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Lottery.Model.Probability> Probabilities(
         )
@@ -148,12 +122,11 @@ namespace Gs2.Gs2Lottery.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Lottery.Model.Probability> ProbabilitiesAsync(
-            #else
+        #else
         public DescribeProbabilitiesIterator ProbabilitiesAsync(
-            #endif
+        #endif
         )
         {
             return new DescribeProbabilitiesIterator(
@@ -164,7 +137,6 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 this.AccessToken
             );
         }
-        #endif
 
         public ulong SubscribeProbabilities(
             Action<Gs2.Gs2Lottery.Model.Probability[]> callback
@@ -180,10 +152,15 @@ namespace Gs2.Gs2Lottery.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await ProbabilitiesAsync(
                             ).ToArrayAsync());
                         }
@@ -192,13 +169,15 @@ namespace Gs2.Gs2Lottery.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeProbabilitiesWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeProbabilitiesWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Lottery.Model.Probability[]> callback
         )
         {
@@ -210,7 +189,6 @@ namespace Gs2.Gs2Lottery.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeProbabilities(
             ulong callbackId

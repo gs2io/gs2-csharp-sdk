@@ -27,6 +27,7 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -45,14 +46,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -85,44 +84,14 @@ namespace Gs2.Gs2SerialKey.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2SerialKey.Domain.Model.SerialKeyAccessTokenDomain> VerifyCodeFuture(
             VerifyCodeRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2SerialKey.Domain.Model.SerialKeyAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.VerifyCodeFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2SerialKey.Domain.Model.SerialKeyAccessTokenDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    this.AccessToken,
-                    result?.Item?.Code
-                );
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2SerialKey.Domain.Model.SerialKeyAccessTokenDomain>(Impl);
-        }
+        ) => VerifyCodeAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2SerialKey.Domain.Model.SerialKeyAccessTokenDomain> VerifyCodeAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2SerialKey.Domain.Model.SerialKeyAccessTokenDomain> VerifyCodeAsync(
-            #endif
+        #endif
             VerifyCodeRequest request
         ) {
             request = request
@@ -144,7 +113,6 @@ namespace Gs2.Gs2SerialKey.Domain.Model
 
             return domain;
         }
-        #endif
 
         public Gs2.Gs2SerialKey.Domain.Model.SerialKeyAccessTokenDomain SerialKey(
             string serialKeyCode

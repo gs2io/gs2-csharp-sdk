@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -29,6 +28,7 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -47,14 +47,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -91,39 +89,14 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2JobQueue.Model.JobResult> GetFuture(
             GetJobResultRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Model.JobResult> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithJobName(this.JobName)
-                    .WithTryNumber(this.TryNumber);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.GetJobResultFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2JobQueue.Model.JobResult>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2JobQueue.Model.JobResult> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2JobQueue.Model.JobResult> GetAsync(
-            #endif
+        #endif
             GetJobResultRequest request
         ) {
             request = request
@@ -140,54 +113,53 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2JobQueue.Model.JobResult> ModelFuture()
+        public IFuture<Gs2.Gs2JobQueue.Model.JobResult> ModelFuture() => ModelAsync().ToGs2Future();
+        #endif
+
+        #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2JobQueue.Model.JobResult> ModelAsync()
+        #else
+        public async Task<Gs2.Gs2JobQueue.Model.JobResult> ModelAsync()
+        #endif
         {
-            IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Model.JobResult> self)
-            {
+/* diff --- start
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2JobQueue.Model.JobResult>(
+                        (null as Gs2.Gs2JobQueue.Model.JobResult).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            this.JobName,
+                            this.AccessToken?.TimeOffset
+                        ),
+                        (null as Gs2.Gs2JobQueue.Model.JobResult).CacheKey(
+                            this.TryNumber
+                        )
+                    ).LockAsync()) {
                 var (value, find) = (null as Gs2.Gs2JobQueue.Model.JobResult).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
                     this.JobName,
-                    this.TryNumber ?? default,
+                    this.TryNumber,
                     this.AccessToken?.TimeOffset
                 );
                 if (find) {
-                    self.OnComplete(value);
-                    yield break;
+                    return value;
                 }
-                var future = (null as Gs2.Gs2JobQueue.Model.JobResult).FetchFuture(
+                return await (null as Gs2.Gs2JobQueue.Model.JobResult).FetchAsync(
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
                     this.JobName,
-                    this.TryNumber ?? default,
+                    this.TryNumber,
                     this.AccessToken?.TimeOffset,
-                    () => this.GetFuture(
+                    () => this.GetAsync(
                         new GetJobResultRequest()
                     )
                 );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2JobQueue.Model.JobResult>(Impl);
-        }
-        #endif
-
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Gs2JobQueue.Model.JobResult> ModelAsync()
-            #else
-        public async Task<Gs2.Gs2JobQueue.Model.JobResult> ModelAsync()
-            #endif
-        {
+ diff --- end */
+/* diff +++ start */
             var (value, find) = (null as Gs2.Gs2JobQueue.Model.JobResult).GetCache(
                 this._gs2.Cache,
                 this.NamespaceName,
@@ -198,7 +170,9 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             );
             if (find) {
                 return value;
+/* diff +++ end */
             }
+/* diff +++ start */
             return await (null as Gs2.Gs2JobQueue.Model.JobResult).FetchAsync(
                 this._gs2.Cache,
                 this.NamespaceName,
@@ -211,41 +185,16 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 )
             );
         }
-        #endif
         
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2JobQueue.Model.JobResult> ModelNoCacheFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Model.JobResult> self)
-            {
-                var future = (null as Gs2.Gs2JobQueue.Model.JobResult).FetchFuture(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    this.JobName,
-                    this.TryNumber ?? default,
-                    this.AccessToken?.TimeOffset,
-                    () => this.GetFuture(
-                        new GetJobResultRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2JobQueue.Model.JobResult>(Impl);
-        }
+        public IFuture<Gs2.Gs2JobQueue.Model.JobResult> ModelNoCacheFuture() => ModelNoCacheAsync().ToGs2Future();
         #endif
         
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2JobQueue.Model.JobResult> ModelNoCacheAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2JobQueue.Model.JobResult> ModelNoCacheAsync()
-            #endif
+        #endif
         {
             return await (null as Gs2.Gs2JobQueue.Model.JobResult).FetchAsync(
                 this._gs2.Cache,
@@ -258,29 +207,44 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                     new GetJobResultRequest()
                 )
             );
+/* diff +++ end */
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
+/* diff --- start
+        public UniTask<Gs2.Gs2JobQueue.Model.JobResult> Model() => ModelAsync();
+ diff --- end */
+/* diff +++ start */
         public async UniTask<Gs2.Gs2JobQueue.Model.JobResult> Model()
         {
             return await ModelAsync();
         }
+/* diff +++ end */
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
+/* diff --- start
+        public IFuture<Gs2.Gs2JobQueue.Model.JobResult> Model() => ModelFuture();
+ diff --- end */
+/* diff +++ start */
         public IFuture<Gs2.Gs2JobQueue.Model.JobResult> Model()
         {
             return ModelFuture();
         }
+/* diff +++ end */
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
+/* diff --- start
+        public Task<Gs2.Gs2JobQueue.Model.JobResult> Model() => ModelAsync();
+ diff --- end */
+/* diff +++ start */
         public async Task<Gs2.Gs2JobQueue.Model.JobResult> Model()
         {
             return await ModelAsync();
         }
+/* diff +++ end */
         #endif
 
 
@@ -291,7 +255,10 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.JobName,
-                this.TryNumber ?? default,
+/* diff --- start
+                this.TryNumber,
+ diff --- end */
+                this.TryNumber ?? default, /* diff +++ */
                 this.AccessToken?.TimeOffset
             );
         }
@@ -306,12 +273,14 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                     this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2JobQueue.Model.JobResult).CacheKey(
-                    this.TryNumber ?? default
+/* diff --- start
+                    this.TryNumber
+ diff --- end */
+                    this.TryNumber ?? default /* diff +++ */
                 ),
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -324,12 +293,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -344,45 +308,34 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                     this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2JobQueue.Model.JobResult).CacheKey(
-                    this.TryNumber ?? default
+/* diff --- start
+                    this.TryNumber
+ diff --- end */
+                    this.TryNumber ?? default /* diff +++ */
                 ),
                 callbackId
             );
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2JobQueue.Model.JobResult> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+/* diff --- start
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2JobQueue.Model.JobResult> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
+ diff --- end */
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2JobQueue.Model.JobResult> callback) => SubscribeWithInitialCallAsync(callback).ToGs2Future(); /* diff +++ */
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2JobQueue.Model.JobResult> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2JobQueue.Model.JobResult> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

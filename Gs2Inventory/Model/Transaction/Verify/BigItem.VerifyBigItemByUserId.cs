@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -36,13 +35,25 @@ namespace Gs2.Gs2Inventory.Model.Transaction
         ) {
             switch (request.VerifyType) {
                 case "less":
-                    return BigInteger.Parse(self.Count) < BigInteger.Parse(request.Count);
+/* diff --- start
+                    return self.Count < request.Count;
+ diff --- end */
+                    return BigInteger.Parse(self.Count) < BigInteger.Parse(request.Count); /* diff +++ */
                 case "lessEqual":
-                    return BigInteger.Parse(self.Count) <= BigInteger.Parse(request.Count);
+/* diff --- start
+                    return self.Count <= request.Count;
+ diff --- end */
+                    return BigInteger.Parse(self.Count) <= BigInteger.Parse(request.Count); /* diff +++ */
                 case "greater":
-                    return BigInteger.Parse(self.Count) > BigInteger.Parse(request.Count);
+/* diff --- start
+                    return self.Count > request.Count;
+ diff --- end */
+                    return BigInteger.Parse(self.Count) > BigInteger.Parse(request.Count); /* diff +++ */
                 case "greaterEqual":
-                    return BigInteger.Parse(self.Count) >= BigInteger.Parse(request.Count);
+/* diff --- start
+                    return self.Count >= request.Count;
+ diff --- end */
+                    return BigInteger.Parse(self.Count) >= BigInteger.Parse(request.Count); /* diff +++ */
                 case "equal":
                     return self.Count == request.Count;
                 case "notEqual":
@@ -62,8 +73,13 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this VerifyBigItemByUserIdRequest request,
             double rate
         ) {
+/* diff --- start
+            throw new NotSupportedException($"not supported rate action Gs2Inventory:VerifyBigItemByUserId");
+ diff --- end */
+/* diff +++ start */
             request.Count = BigInteger.Multiply(BigInteger.Parse(request.Count), new BigInteger(rate)).ToString("D");
             return request;
+/* diff +++ end */
         }
     }
 
@@ -73,8 +89,13 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this VerifyBigItemByUserIdRequest request,
             BigInteger rate
         ) {
+/* diff --- start
+            throw new NotSupportedException($"not supported rate action Gs2Inventory:VerifyBigItemByUserId");
+ diff --- end */
+/* diff +++ start */
             request.Count = BigInteger.Multiply(BigInteger.Parse(request.Count), rate).ToString("D");
             return request;
+/* diff +++ end */
         }
     }
 }

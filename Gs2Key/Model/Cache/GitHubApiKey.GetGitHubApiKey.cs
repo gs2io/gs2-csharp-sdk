@@ -26,10 +26,10 @@ using Gs2.Gs2Key.Request;
 using Gs2.Gs2Key.Result;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -85,21 +85,22 @@ namespace Gs2.Gs2Key.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<GetGitHubApiKeyResult> InvokeAsync(
-    #else
+#else
         public static async Task<GetGitHubApiKeyResult> InvokeAsync(
-    #endif
+#endif
             this GetGitHubApiKeyRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<GetGitHubApiKeyResult>> invokeImpl
-    #else
+#elif UNITY_2017_1_OR_NEWER
+            Func<TaskFuture<GetGitHubApiKeyResult>> invokeImpl
+#else
             Func<Task<GetGitHubApiKeyResult>> invokeImpl
-    #endif
+#endif
         )
         {
             var result = await invokeImpl();
@@ -111,6 +112,5 @@ namespace Gs2.Gs2Key.Model.Cache
             );
             return result;
         }
-#endif
     }
 }

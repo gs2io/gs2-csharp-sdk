@@ -38,9 +38,9 @@ using Gs2.Gs2JobQueue.Result;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER 
 using UnityEngine;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading.Tasks;
 #endif
@@ -102,16 +102,18 @@ namespace Gs2.Core.Domain
             }
             
             var nextTransactions = new List<TransactionAccessTokenDomain>();
+            JsonData resultJson = null!;
             if (job.ScriptId.EndsWith("push_by_user_id")) {
+                resultJson = JsonMapper.ToObject(result.Result);
                 nextTransactions.Add(JobQueueJobDomainFactory.ToTransaction(
                     Gs2,
                     AccessToken,
-                    PushByUserIdResult.FromJson(JsonMapper.ToObject(result.Result))
+                    PushByUserIdResult.FromJson(resultJson)
                 ));
             }
             
-            var resultJson = JsonMapper.ToObject(result.Result);
-            if (resultJson.ContainsKey("autoRunStampSheet")) {
+            resultJson = resultJson ?? TryParseObjectResult(result.Result);
+            if (resultJson != null && resultJson.ContainsKey("autoRunStampSheet")) {
                 nextTransactions.Add(TransactionDomainFactory.ToTransaction(
                     Gs2,
                     AccessToken,
@@ -135,70 +137,27 @@ namespace Gs2.Core.Domain
             return null;
         }
 
+        private static JsonData TryParseObjectResult(
+            string result
+        ) {
+            var trimmed = result?.TrimStart();
+            if (string.IsNullOrEmpty(trimmed) || trimmed[0] != '{') {
+                return null!;
+            }
+            return JsonMapper.ToObject(result);
+        }
+
 #if UNITY_2017_1_OR_NEWER
         public override IFuture<TransactionAccessTokenDomain> WaitFuture(
             bool all = false
-        ) {
-            IEnumerator Impl(IFuture<TransactionAccessTokenDomain> self) {
-                RETRY:
-                var future = Gs2.JobQueue.Namespace(
-                    this._namespaceName
-                ).AccessToken(
-                    AccessToken
-                ).RunFuture(
-                    new RunRequest()
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                if (result?.IsLastJob ?? true) {
-                    self.OnComplete(null);
-                    yield break;
-                }
-                var future2 = result.ModelFuture();
-                yield return future2;
-                if (future2.Error != null) {
-                    self.OnError(future2.Error);
-                    yield break;
-                }
-                var job = future2.Result;
-                if (job == null) {
-                    self.OnComplete(null);
-                    yield break;
-                }
-                if (job.Name != this._jobName) {
-                    HandleResult(job, result.Result);
-                    goto RETRY;
-                }
-
-                var transaction = HandleResult(job, result.Result);
-                if (all && transaction != null) {
-                    var future3 = transaction.WaitFuture(true);
-                    yield return future3;
-                    if (future3.Error != null) {
-                        self.OnError(future3.Error);
-                        yield break;
-                    }
-                    self.OnComplete(null);
-                    yield return null;
-                }
-                self.OnComplete(transaction);
-                yield return null;
-            }
-            return new Gs2InlineFuture<TransactionAccessTokenDomain>(Impl);
-        }
+        ) => WaitAsync(all).ToGs2Future();
 #endif
         
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public override async UniTask<TransactionAccessTokenDomain> WaitAsync(
-    #else
+#else
         public override async Task<TransactionAccessTokenDomain> WaitAsync(
-    #endif
+#endif
             bool all = false
         ) {
             RETRY:
@@ -211,15 +170,15 @@ namespace Gs2.Core.Domain
             ).RunAsync(
                 new RunRequest()
             );
-            if (result?.IsLastJob ?? true) {
-                return null;
-            }
-            var job = await result.ModelAsync();
+            var job = result.Item;
             if (job == null) {
                 return null;
             }
             if (job.Name != this._jobName) {
                 HandleResult(job, result.Result);
+                if (result.IsLastJob ?? true) {
+                    return null;
+                }
                 goto RETRY;
             }
 
@@ -229,6 +188,5 @@ namespace Gs2.Core.Domain
             }
             return transaction;
         }
-#endif
     }
 }

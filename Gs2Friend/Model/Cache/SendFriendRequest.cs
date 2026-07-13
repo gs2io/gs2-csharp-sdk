@@ -12,12 +12,12 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
 
+#pragma warning disable CS0618 // Obsolete with a message
 #pragma warning disable CS1522 // Empty switch block
 
 using System;
@@ -26,10 +26,10 @@ using Gs2.Core.Net;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -99,10 +99,15 @@ namespace Gs2.Gs2Friend.Model.Cache
                     yield break;
                 }
                 var item = future.Result;
+/* diff --- start
+                item.PutCache(
+ diff --- end */
+/* diff +++ start */
                 new SendFriendRequest {
                     UserId = item.UserId,
                     TargetUserId = item.TargetUserId,
                 }.PutCache(
+/* diff +++ end */
                     cache,
                     namespaceName,
                     userId,
@@ -115,30 +120,34 @@ namespace Gs2.Gs2Friend.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<SendFriendRequest> FetchAsync(
-    #else
+#else
         public static async Task<SendFriendRequest> FetchAsync(
-    #endif
+#endif
             this SendFriendRequest self,
             CacheDatabase cache,
             string namespaceName,
             string userId,
             string targetUserId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<SendFriendRequest>> fetchImpl
-    #else
+#else
             Func<Task<SendFriendRequest>> fetchImpl
-    #endif
+#endif
         ) {
             try {
                 var item = await fetchImpl();
+/* diff --- start
+                item.PutCache(
+ diff --- end */
+/* diff +++ start */
                 new SendFriendRequest {
                     UserId = item.UserId,
                     TargetUserId = item.TargetUserId,
                 }.PutCache(
+/* diff +++ end */
                     cache,
                     namespaceName,
                     userId,
@@ -161,7 +170,6 @@ namespace Gs2.Gs2Friend.Model.Cache
                 return null;
             }
         }
-#endif
 
         public static Tuple<SendFriendRequest, bool> GetCache(
             this SendFriendRequest self,

@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -28,8 +27,39 @@ using Gs2.Gs2Distributor.Request;
 
 namespace Gs2.Gs2Distributor.Model.Transaction
 {
-    public static partial class DistributeExt
+/* diff --- start
+    public static partial class ExpressionExt
+ diff --- end */
+    public static partial class DistributeExt /* diff +++ */
     {
+/* diff --- start
+        public static bool IsExecutable(
+            this Expression self,
+            OrExpressionByUserIdRequest request
+        ) {
+            var changed = self.SpeculativeExecution(request);
+            try {
+                changed.Validate();
+                return true;
+            }
+            catch (Gs2Exception) {
+                return false;
+            }
+        }
+
+        public static Expression SpeculativeExecution(
+            this Expression self,
+            OrExpressionByUserIdRequest request
+        ) {
+//#if UNITY_2017_1_OR_NEWER
+            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: Gs2Distributor:OrExpressionByUserId");
+//#else
+            System.Console.WriteLine("Speculative execution not supported on this action: Gs2Distributor:OrExpressionByUserId");
+//#endif
+            return self.Clone() as Expression;
+        }
+
+ diff --- end */
         public static OrExpressionByUserIdRequest Rate(
             this OrExpressionByUserIdRequest request,
             double rate

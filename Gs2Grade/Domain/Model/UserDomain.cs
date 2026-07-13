@@ -27,6 +27,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -44,15 +46,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -97,12 +96,11 @@ namespace Gs2.Gs2Grade.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Grade.Model.Status> StatusesAsync(
-            #else
+        #else
         public DescribeStatusesByUserIdIterator StatusesAsync(
-            #endif
+        #endif
             string gradeName = null,
             string timeOffsetToken = null
         )
@@ -116,7 +114,6 @@ namespace Gs2.Gs2Grade.Domain.Model
                 timeOffsetToken
             );
         }
-        #endif
 
         public ulong SubscribeStatuses(
             Action<Gs2.Gs2Grade.Model.Status[]> callback,
@@ -132,10 +129,15 @@ namespace Gs2.Gs2Grade.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await StatusesAsync(
                                 gradeName
                             ).ToArrayAsync());
@@ -145,13 +147,15 @@ namespace Gs2.Gs2Grade.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeStatusesWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeStatusesWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Grade.Model.Status[]> callback,
             string gradeName = null
         )
@@ -166,7 +170,6 @@ namespace Gs2.Gs2Grade.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeStatuses(
             ulong callbackId,

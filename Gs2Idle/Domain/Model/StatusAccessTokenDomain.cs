@@ -27,6 +27,7 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -45,14 +46,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -86,38 +85,14 @@ namespace Gs2.Gs2Idle.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Idle.Model.Status> GetFuture(
             GetStatusRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Idle.Model.Status> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithCategoryName(this.CategoryName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.GetStatusFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Idle.Model.Status>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Idle.Model.Status> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Idle.Model.Status> GetAsync(
-            #endif
+        #endif
             GetStatusRequest request
         ) {
             request = request
@@ -133,43 +108,18 @@ namespace Gs2.Gs2Idle.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Core.Model.AcquireAction[]> PredictionFuture(
             PredictionRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Core.Model.AcquireAction[]> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithCategoryName(this.CategoryName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.PredictionFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Items);
-            }
-            return new Gs2InlineFuture<Gs2.Core.Model.AcquireAction[]>(Impl);
-        }
+        ) => PredictionAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Core.Model.AcquireAction[]> PredictionAsync(
-            #else
+        #else
         public async Task<Gs2.Core.Model.AcquireAction[]> PredictionAsync(
-            #endif
+        #endif
             PredictionRequest request
         ) {
             request = request
@@ -185,80 +135,19 @@ namespace Gs2.Gs2Idle.Domain.Model
             );
             return result?.Items;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> ReceiveFuture(
             ReceiveRequest request,
             bool speculativeExecute = true
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithCategoryName(this.CategoryName);
-
-                if (speculativeExecute) {
-                    var speculativeExecuteFuture = Gs2.Gs2Idle.Domain.Transaction.SpeculativeExecutor.ReceiveByUserIdSpeculativeExecutor.ExecuteFuture(
-                        this._gs2,
-                        AccessToken,
-                        ReceiveByUserIdRequest.FromJson(request.ToJson())
-                    );
-                    yield return speculativeExecuteFuture;
-                    if (speculativeExecuteFuture.Error != null)
-                    {
-                        self.OnError(speculativeExecuteFuture.Error);
-                        yield break;
-                    }
-                    var commit = speculativeExecuteFuture.Result;
-                    commit?.Invoke();
-                }
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.ReceiveFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
-                    this._gs2,
-                    this.AccessToken,
-                    result.AutoRunStampSheet ?? false,
-                    result.TransactionId,
-                    result.StampSheet,
-                    result.StampSheetEncryptionKeyId,
-                    result.AtomicCommit,
-                    result.TransactionResult,
-                    result.Metadata
-                );
-                if (result.StampSheet != null) {
-                    var future2 = transaction.WaitFuture(true);
-                    yield return future2;
-                    if (future2.Error != null)
-                    {
-                        self.OnError(future2.Error);
-                        yield break;
-                    }
-                }
-                self.OnComplete(transaction);
-            }
-            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionAccessTokenDomain>(Impl);
-        }
+        ) => ReceiveAsync(request, speculativeExecute).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Core.Domain.TransactionAccessTokenDomain> ReceiveAsync(
-            #else
+        #else
         public async Task<Gs2.Core.Domain.TransactionAccessTokenDomain> ReceiveAsync(
-            #endif
+        #endif
             ReceiveRequest request,
             bool speculativeExecute = true
         ) {
@@ -298,45 +187,18 @@ namespace Gs2.Gs2Idle.Domain.Model
             }
             return transaction;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Idle.Domain.Model.StatusAccessTokenDomain> DecreaseMaximumIdleMinutesFuture(
             DecreaseMaximumIdleMinutesRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Idle.Domain.Model.StatusAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithCategoryName(this.CategoryName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.DecreaseMaximumIdleMinutesFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Idle.Domain.Model.StatusAccessTokenDomain>(Impl);
-        }
+        ) => DecreaseMaximumIdleMinutesAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Idle.Domain.Model.StatusAccessTokenDomain> DecreaseMaximumIdleMinutesAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Idle.Domain.Model.StatusAccessTokenDomain> DecreaseMaximumIdleMinutesAsync(
-            #endif
+        #endif
             DecreaseMaximumIdleMinutesRequest request
         ) {
             request = request
@@ -354,51 +216,16 @@ namespace Gs2.Gs2Idle.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Idle.Model.Status> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Idle.Model.Status> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Idle.Model.Status).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    this.CategoryName,
-                    this.AccessToken?.TimeOffset
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2Idle.Model.Status).FetchFuture(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    this.CategoryName,
-                    this.AccessToken?.TimeOffset,
-                    () => this.GetFuture(
-                        new GetStatusRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Idle.Model.Status>(Impl);
-        }
+        public IFuture<Gs2.Gs2Idle.Model.Status> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Idle.Model.Status> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Idle.Model.Status> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Idle.Model.Status>(
                         (null as Gs2.Gs2Idle.Model.Status).CacheParentKey(
@@ -432,28 +259,18 @@ namespace Gs2.Gs2Idle.Domain.Model
                 );
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2Idle.Model.Status> Model()
-        {
-            return await ModelAsync();
-        }
+        public UniTask<Gs2.Gs2Idle.Model.Status> Model() => ModelAsync();
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2Idle.Model.Status> Model()
-        {
-            return ModelFuture();
-        }
+        public IFuture<Gs2.Gs2Idle.Model.Status> Model() => ModelFuture();
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2Idle.Model.Status> Model()
-        {
-            return await ModelAsync();
-        }
+        public Task<Gs2.Gs2Idle.Model.Status> Model() => ModelAsync();
         #endif
 
 
@@ -482,7 +299,6 @@ namespace Gs2.Gs2Idle.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -495,12 +311,7 @@ namespace Gs2.Gs2Idle.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -521,38 +332,21 @@ namespace Gs2.Gs2Idle.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Idle.Model.Status> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Idle.Model.Status> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Idle.Model.Status> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Idle.Model.Status> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

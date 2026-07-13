@@ -146,6 +146,12 @@ namespace Gs2.Core.Util
         public static System.Runtime.CompilerServices.YieldAwaitable Yield() => Task.Yield();
 #endif // UNITY_2018_3_OR_NEWER && GS2_ENABLE_UNITASK
 
+#if UNITY_2018_3_OR_NEWER && GS2_ENABLE_UNITASK
+        internal static Cysharp.Threading.Tasks.UniTask DelayAsync(int millisecondsDelay) => UniTask.Delay(millisecondsDelay);
+#else
+        internal static Task DelayAsync(int millisecondsDelay) => Task.Delay(millisecondsDelay);
+#endif
+
 #if UNITY_2018_3_OR_NEWER && UNITY_WEBGL && !UNITY_EDITOR
         public static async Task WaitAsync(SemaphoreSlim semaphore)
         {

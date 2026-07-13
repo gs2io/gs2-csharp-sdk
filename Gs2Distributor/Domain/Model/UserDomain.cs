@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -29,6 +28,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -46,15 +47,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -108,46 +106,17 @@ namespace Gs2.Gs2Distributor.Domain.Model
     public partial class UserDomain {
 
         #if UNITY_2017_1_OR_NEWER
+/* diff +++ start */
         public IFuture<Gs2.Core.Domain.Gs2> FreezeMasterDataFuture(
             FreezeMasterDataByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Core.Domain.Gs2> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.FreezeMasterDataByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                var newGs2 =  new Core.Domain.Gs2(
-                    this._gs2.RestSession,
-                    this._gs2.WebSocketSession,
-                    this._gs2.DistributorNamespaceName
-                );
-                newGs2.DefaultContextStack = result?.NewContextStack;
-                self.OnComplete(newGs2);
-            }
-            return new Gs2InlineFuture<Gs2.Core.Domain.Gs2>(Impl);
-        }
+        ) => FreezeMasterDataAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Core.Domain.Gs2> FreezeMasterDataAsync(
-            #else
+        #else
         public async Task<Gs2.Core.Domain.Gs2> FreezeMasterDataAsync(
-            #endif
+        #endif
             FreezeMasterDataByUserIdRequest request
         ) {
             request = request
@@ -169,49 +138,19 @@ namespace Gs2.Gs2Distributor.Domain.Model
             newGs2.DefaultContextStack = result?.NewContextStack;
             return newGs2;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
+/* diff +++ end */
         public IFuture<Gs2.Gs2Distributor.Domain.Model.TransactionResultDomain> RunTransactionFuture(
             RunTransactionRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Distributor.Domain.Model.TransactionResultDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.RunTransactionFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Distributor.Domain.Model.TransactionResultDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    result?.Item?.UserId,
-                    result?.Item?.TransactionId
-                );
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Distributor.Domain.Model.TransactionResultDomain>(Impl);
-        }
+        ) => RunTransactionAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Distributor.Domain.Model.TransactionResultDomain> RunTransactionAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Distributor.Domain.Model.TransactionResultDomain> RunTransactionAsync(
-            #endif
+        #endif
             RunTransactionRequest request
         ) {
             request = request
@@ -233,7 +172,6 @@ namespace Gs2.Gs2Distributor.Domain.Model
 
             return domain;
         }
-        #endif
 
     }
 

@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -28,10 +27,10 @@ using Gs2.Gs2Matchmaking.Request;
 using Gs2.Gs2Matchmaking.Result;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -53,8 +52,14 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                 request.NamespaceName,
                 userId,
                 self.Item.SeasonName,
+/* diff --- start
+                self.Item.Season ?? default,
+                self.Item.Tier ?? default,
+ diff --- end */
+/* diff +++ start */
                 self.Item.Season,
                 self.Item.Tier,
+/* diff +++ end */
                 self.Item.Name,
                 timeOffset
             );
@@ -91,21 +96,22 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<DoSeasonMatchmakingResult> InvokeAsync(
-    #else
+#else
         public static async Task<DoSeasonMatchmakingResult> InvokeAsync(
-    #endif
+#endif
             this DoSeasonMatchmakingRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<DoSeasonMatchmakingResult>> invokeImpl
-    #else
+#elif UNITY_2017_1_OR_NEWER
+            Func<TaskFuture<DoSeasonMatchmakingResult>> invokeImpl
+#else
             Func<Task<DoSeasonMatchmakingResult>> invokeImpl
-    #endif
+#endif
         )
         {
             var result = await invokeImpl();
@@ -117,6 +123,5 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
             );
             return result;
         }
-#endif
     }
 }

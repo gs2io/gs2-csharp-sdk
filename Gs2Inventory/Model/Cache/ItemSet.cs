@@ -27,10 +27,10 @@ using Gs2.Core.Net;
 using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -202,12 +202,11 @@ namespace Gs2.Gs2Inventory.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<ItemSet[]> FetchAsync(
-    #else
+#else
         public static async Task<ItemSet[]> FetchAsync(
-    #endif
+#endif
             this ItemSet self,
             CacheDatabase cache,
             string namespaceName,
@@ -216,11 +215,11 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string itemName,
             string itemSetName,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<ItemSet[]>> fetchImpl
-    #else
+#else
             Func<Task<ItemSet[]>> fetchImpl
-    #endif
+#endif
         ) {
             try {
                 var items = await fetchImpl();
@@ -254,7 +253,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             }
         }
 
-#if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<ItemSet[]> FetchAsync(
 #else
         public static async Task<ItemSet[]> FetchAsync(
@@ -266,7 +265,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
             string inventoryName,
             string itemName,
             int? timeOffset,
-#if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<ItemSet[]>> fetchImpl
 #else
             Func<Task<ItemSet[]>> fetchImpl
@@ -299,7 +298,6 @@ namespace Gs2.Gs2Inventory.Model.Cache
                 return Array.Empty<ItemSet>();
             }
         }
-#endif
 
         public static Tuple<ItemSet, bool> GetCache(
             this ItemSet self,

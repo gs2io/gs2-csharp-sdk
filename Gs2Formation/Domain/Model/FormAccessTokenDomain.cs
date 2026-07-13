@@ -27,6 +27,7 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -45,14 +46,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -91,39 +90,14 @@ namespace Gs2.Gs2Formation.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Formation.Model.Form> GetFuture(
             GetFormRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Formation.Model.Form> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithMoldModelName(this.MoldModelName)
-                    .WithIndex(this.Index);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.GetFormFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Formation.Model.Form>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Formation.Model.Form> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Formation.Model.Form> GetAsync(
-            #endif
+        #endif
             GetFormRequest request
         ) {
             request = request
@@ -140,48 +114,18 @@ namespace Gs2.Gs2Formation.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Formation.Domain.Model.FormAccessTokenDomain> GetWithSignatureFuture(
             GetFormWithSignatureRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.FormAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithMoldModelName(this.MoldModelName)
-                    .WithIndex(this.Index);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.GetFormWithSignatureFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                domain.Body = result?.Body;
-                domain.Signature = result?.Signature;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Formation.Domain.Model.FormAccessTokenDomain>(Impl);
-        }
+        ) => GetWithSignatureAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Formation.Domain.Model.FormAccessTokenDomain> GetWithSignatureAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Formation.Domain.Model.FormAccessTokenDomain> GetWithSignatureAsync(
-            #endif
+        #endif
             GetFormWithSignatureRequest request
         ) {
             request = request
@@ -202,46 +146,18 @@ namespace Gs2.Gs2Formation.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Formation.Domain.Model.FormAccessTokenDomain> SetFuture(
             SetFormRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.FormAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithMoldModelName(this.MoldModelName)
-                    .WithIndex(this.Index);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.SetFormFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Formation.Domain.Model.FormAccessTokenDomain>(Impl);
-        }
+        ) => SetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Formation.Domain.Model.FormAccessTokenDomain> SetAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Formation.Domain.Model.FormAccessTokenDomain> SetAsync(
-            #endif
+        #endif
             SetFormRequest request
         ) {
             request = request
@@ -260,46 +176,18 @@ namespace Gs2.Gs2Formation.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Formation.Domain.Model.FormAccessTokenDomain> SetWithSignatureFuture(
             SetFormWithSignatureRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.FormAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithMoldModelName(this.MoldModelName)
-                    .WithIndex(this.Index);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.SetFormWithSignatureFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Formation.Domain.Model.FormAccessTokenDomain>(Impl);
-        }
+        ) => SetWithSignatureAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Formation.Domain.Model.FormAccessTokenDomain> SetWithSignatureAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Formation.Domain.Model.FormAccessTokenDomain> SetWithSignatureAsync(
-            #endif
+        #endif
             SetFormWithSignatureRequest request
         ) {
             request = request
@@ -318,48 +206,18 @@ namespace Gs2.Gs2Formation.Domain.Model
 
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Formation.Domain.Model.FormAccessTokenDomain> DeleteFuture(
             DeleteFormRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Formation.Domain.Model.FormAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token)
-                    .WithMoldModelName(this.MoldModelName)
-                    .WithIndex(this.Index);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.DeleteFormFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    if (!(future.Error is NotFoundException)) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Formation.Domain.Model.FormAccessTokenDomain>(Impl);
-        }
+        ) => DeleteAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Formation.Domain.Model.FormAccessTokenDomain> DeleteAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Formation.Domain.Model.FormAccessTokenDomain> DeleteAsync(
-            #endif
+        #endif
             DeleteFormRequest request
         ) {
             try {
@@ -380,53 +238,16 @@ namespace Gs2.Gs2Formation.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Formation.Model.Form> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Formation.Model.Form> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Formation.Model.Form).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    this.MoldModelName,
-                    this.Index,
-                    this.AccessToken?.TimeOffset
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2Formation.Model.Form).FetchFuture(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    this.MoldModelName,
-                    this.Index,
-                    this.AccessToken?.TimeOffset,
-                    () => this.GetFuture(
-                        new GetFormRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Formation.Model.Form>(Impl);
-        }
+        public IFuture<Gs2.Gs2Formation.Model.Form> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Formation.Model.Form> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Formation.Model.Form> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Formation.Model.Form>(
                         (null as Gs2.Gs2Formation.Model.Form).CacheParentKey(
@@ -463,28 +284,18 @@ namespace Gs2.Gs2Formation.Domain.Model
                 );
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async UniTask<Gs2.Gs2Formation.Model.Form> Model()
-        {
-            return await ModelAsync();
-        }
+        public UniTask<Gs2.Gs2Formation.Model.Form> Model() => ModelAsync();
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
-        public IFuture<Gs2.Gs2Formation.Model.Form> Model()
-        {
-            return ModelFuture();
-        }
+        public IFuture<Gs2.Gs2Formation.Model.Form> Model() => ModelFuture();
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
-        public async Task<Gs2.Gs2Formation.Model.Form> Model()
-        {
-            return await ModelAsync();
-        }
+        public Task<Gs2.Gs2Formation.Model.Form> Model() => ModelAsync();
         #endif
 
 
@@ -515,7 +326,6 @@ namespace Gs2.Gs2Formation.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -528,12 +338,7 @@ namespace Gs2.Gs2Formation.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -555,38 +360,21 @@ namespace Gs2.Gs2Formation.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Formation.Model.Form> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Formation.Model.Form> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Formation.Model.Form> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Formation.Model.Form> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

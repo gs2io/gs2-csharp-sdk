@@ -37,9 +37,9 @@ using Gs2.Gs2JobQueue.Result;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER 
 using UnityEngine;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading.Tasks;
 #endif
@@ -50,18 +50,33 @@ namespace Gs2.Core.Domain
     {
         private static Dictionary<string, long> _handled = new Dictionary<string, long>();
         private readonly string _transactionId;
+        private readonly string _namespaceName;
         public string TransactionId => _transactionId;
 
         public AutoTransactionAccessTokenDomain(
             Gs2 gs2,
             AccessToken accessToken,
             string transactionId
+        ): this(
+            gs2,
+            accessToken,
+            transactionId,
+            null
+        ) {
+        }
+
+        internal AutoTransactionAccessTokenDomain(
+            Gs2 gs2,
+            AccessToken accessToken,
+            string transactionId,
+            string namespaceName
         ): base(
             gs2,
             accessToken,
             null
         ) {
             this._transactionId = transactionId;
+            this._namespaceName = namespaceName;
         }
 
         private TransactionAccessTokenDomain HandleResult(
@@ -191,77 +206,14 @@ namespace Gs2.Core.Domain
 #if UNITY_2017_1_OR_NEWER
         public override IFuture<TransactionAccessTokenDomain> WaitFuture(
             bool all = false
-        ) {
-            IEnumerator Impl(IFuture<TransactionAccessTokenDomain> self) {
-                var begin = DateTime.Now;
-                RETRY:
-                if (DateTime.Now - begin > TimeSpan.FromSeconds(10)) {
-                    self.OnError(new UnknownException("Failed to retrieve transaction results, either because there is some failure in GS2, or the GS2-Gateway used to notify the GS2-Distributor used to execute the transaction is not yet configured, or the GS2-Gateway has a user ID to receive notifications The configuration API may not have been invoked."));
-                    yield break;
-                }
-                var domain = Gs2.Distributor.Namespace(
-                    Gs2.TransactionConfiguration.NamespaceName ?? "default"
-                ).AccessToken(
-                    AccessToken
-                ).TransactionResult(
-                    this._transactionId
-                );
-                var future = domain.ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    domain.Invalidate();
-                    if (!future.Error.RecommendAutoRetry) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                    yield return new WaitForSeconds(0.01f);
-                    goto RETRY;
-                }
-                var result = future.Result;
-                if (result == null) {
-                    yield return new WaitForSeconds(0.01f);
-                    
-                    var future2 = Gs2.DispatchFuture(AccessToken);
-                    yield return future2;
-                    if (future2.Error != null) {
-                        self.OnError(future2.Error);
-                        yield break;
-                    }
-
-                    goto RETRY;
-                }
-
-                TransactionAccessTokenDomain transaction;
-                try {
-                    transaction = HandleResult(result);
-                } catch (Gs2Exception e) {
-                    self.OnError(e);
-                    yield break;
-                }
-                if (all && transaction != null) {
-                    var future3 = transaction.WaitFuture(true);
-                    yield return future3;
-                    if (future3.Error != null) {
-                        self.OnError(future3.Error);
-                        yield break;
-                    }
-                    self.OnComplete(null);
-                    yield return null;
-                }
-                self.OnComplete(transaction);
-                yield return null;
-            }
-            return new Gs2InlineFuture<TransactionAccessTokenDomain>(Impl);
-        }
+        ) => WaitAsync(all).ToGs2Future();
 #endif
         
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public override async UniTask<TransactionAccessTokenDomain> WaitAsync(
-    #else
+#else
         public override async Task<TransactionAccessTokenDomain> WaitAsync(
-    #endif
+#endif
             bool all = false
         ) {
             var begin = DateTime.Now;
@@ -272,7 +224,7 @@ namespace Gs2.Core.Domain
             var domain = new Gs2Distributor.Domain.Gs2Distributor(
                 Gs2
             ).Namespace(
-                Gs2.TransactionConfiguration.NamespaceName ?? "default"
+                this._namespaceName ?? Gs2.TransactionConfiguration.NamespaceName ?? "default"
             ).AccessToken(
                 AccessToken
             ).TransactionResult(
@@ -281,11 +233,8 @@ namespace Gs2.Core.Domain
             try {
                 var result = await domain.ModelAsync();
                 if (result == null) {
-#if UNITY_2017_1_OR_NEWER
-                    await UniTask.Delay(TimeSpan.FromMilliseconds(10));
-#else
-                    await Task.Delay(TimeSpan.FromMilliseconds(10));
-#endif
+                    domain.Invalidate();
+                    await TaskUtilities.DelayAsync(Gs2Constant.RetryWait);
                     await Gs2.Distributor.DispatchAsync(AccessToken);
                     goto RETRY;
                 }
@@ -301,14 +250,9 @@ namespace Gs2.Core.Domain
                 if (!e.RecommendAutoRetry) {
                     throw;
                 }
-#if UNITY_2017_1_OR_NEWER
-                await UniTask.Delay(TimeSpan.FromMilliseconds(10));
-#else
-                await Task.Delay(TimeSpan.FromMilliseconds(10));
-#endif
+                await TaskUtilities.Yield();
                 goto RETRY;
             }
         }
-#endif
     }
 }

@@ -27,6 +27,7 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -45,14 +46,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -93,12 +92,11 @@ namespace Gs2.Gs2Formation.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Formation.Model.Mold> MoldsAsync(
-            #else
+        #else
         public DescribeMoldsIterator MoldsAsync(
-            #endif
+        #endif
         )
         {
             return new DescribeMoldsIterator(
@@ -108,7 +106,6 @@ namespace Gs2.Gs2Formation.Domain.Model
                 this.AccessToken
             );
         }
-        #endif
 
         public ulong SubscribeMolds(
             Action<Gs2.Gs2Formation.Model.Mold[]> callback
@@ -123,10 +120,15 @@ namespace Gs2.Gs2Formation.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await MoldsAsync(
                             ).ToArrayAsync());
                         }
@@ -135,13 +137,15 @@ namespace Gs2.Gs2Formation.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeMoldsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeMoldsWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Formation.Model.Mold[]> callback
         )
         {
@@ -153,7 +157,6 @@ namespace Gs2.Gs2Formation.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeMolds(
             ulong callbackId
@@ -206,12 +209,11 @@ namespace Gs2.Gs2Formation.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Formation.Model.PropertyForm> PropertyFormsAsync(
-            #else
+        #else
         public DescribePropertyFormsIterator PropertyFormsAsync(
-            #endif
+        #endif
             string propertyFormModelName
         )
         {
@@ -223,7 +225,6 @@ namespace Gs2.Gs2Formation.Domain.Model
                 propertyFormModelName
             );
         }
-        #endif
 
         public ulong SubscribePropertyForms(
             Action<Gs2.Gs2Formation.Model.PropertyForm[]> callback,
@@ -239,10 +240,15 @@ namespace Gs2.Gs2Formation.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await PropertyFormsAsync(
                                 propertyFormModelName
                             ).ToArrayAsync());
@@ -252,13 +258,15 @@ namespace Gs2.Gs2Formation.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribePropertyFormsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribePropertyFormsWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Formation.Model.PropertyForm[]> callback,
             string propertyFormModelName
         )
@@ -273,7 +281,6 @@ namespace Gs2.Gs2Formation.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribePropertyForms(
             ulong callbackId,

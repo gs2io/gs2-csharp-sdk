@@ -27,6 +27,7 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -45,14 +46,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -86,74 +85,14 @@ namespace Gs2.Gs2Enhance.Domain.Model
         public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> DirectFuture(
             DirectEnhanceRequest request,
             bool speculativeExecute = true
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token);
-
-                if (speculativeExecute) {
-                    var speculativeExecuteFuture = Gs2.Gs2Enhance.Domain.Transaction.SpeculativeExecutor.DirectEnhanceByUserIdSpeculativeExecutor.ExecuteFuture(
-                        this._gs2,
-                        AccessToken,
-                        DirectEnhanceByUserIdRequest.FromJson(request.ToJson())
-                    );
-                    yield return speculativeExecuteFuture;
-                    if (speculativeExecuteFuture.Error != null)
-                    {
-                        self.OnError(speculativeExecuteFuture.Error);
-                        yield break;
-                    }
-                    var commit = speculativeExecuteFuture.Result;
-                    commit?.Invoke();
-                }
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.DirectEnhanceFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                BonusRate = result.BonusRate;
-                var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
-                    this._gs2,
-                    this.AccessToken,
-                    result.AutoRunStampSheet ?? false,
-                    result.TransactionId,
-                    result.StampSheet,
-                    result.StampSheetEncryptionKeyId,
-                    result.AtomicCommit,
-                    result.TransactionResult,
-                    result.Metadata
-                );
-                if (result.StampSheet != null) {
-                    var future2 = transaction.WaitFuture(true);
-                    yield return future2;
-                    if (future2.Error != null)
-                    {
-                        self.OnError(future2.Error);
-                        yield break;
-                    }
-                }
-                self.OnComplete(transaction);
-            }
-            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionAccessTokenDomain>(Impl);
-        }
+        ) => DirectAsync(request, speculativeExecute).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Core.Domain.TransactionAccessTokenDomain> DirectAsync(
-            #else
+        #else
         public async Task<Gs2.Core.Domain.TransactionAccessTokenDomain> DirectAsync(
-            #endif
+        #endif
             DirectEnhanceRequest request,
             bool speculativeExecute = true
         ) {
@@ -193,79 +132,19 @@ namespace Gs2.Gs2Enhance.Domain.Model
             }
             return transaction;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> UnleashFuture(
             UnleashRequest request,
             bool speculativeExecute = true
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Core.Domain.TransactionAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token);
-
-                if (speculativeExecute) {
-                    var speculativeExecuteFuture = Gs2.Gs2Enhance.Domain.Transaction.SpeculativeExecutor.UnleashByUserIdSpeculativeExecutor.ExecuteFuture(
-                        this._gs2,
-                        AccessToken,
-                        UnleashByUserIdRequest.FromJson(request.ToJson())
-                    );
-                    yield return speculativeExecuteFuture;
-                    if (speculativeExecuteFuture.Error != null)
-                    {
-                        self.OnError(speculativeExecuteFuture.Error);
-                        yield break;
-                    }
-                    var commit = speculativeExecuteFuture.Result;
-                    commit?.Invoke();
-                }
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.UnleashFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var transaction = Gs2.Core.Domain.TransactionDomainFactory.ToTransaction(
-                    this._gs2,
-                    this.AccessToken,
-                    result.AutoRunStampSheet ?? false,
-                    result.TransactionId,
-                    result.StampSheet,
-                    result.StampSheetEncryptionKeyId,
-                    result.AtomicCommit,
-                    result.TransactionResult,
-                    result.Metadata
-                );
-                if (result.StampSheet != null) {
-                    var future2 = transaction.WaitFuture(true);
-                    yield return future2;
-                    if (future2.Error != null)
-                    {
-                        self.OnError(future2.Error);
-                        yield break;
-                    }
-                }
-                self.OnComplete(transaction);
-            }
-            return new Gs2InlineFuture<Gs2.Core.Domain.TransactionAccessTokenDomain>(Impl);
-        }
+        ) => UnleashAsync(request, speculativeExecute).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Core.Domain.TransactionAccessTokenDomain> UnleashAsync(
-            #else
+        #else
         public async Task<Gs2.Core.Domain.TransactionAccessTokenDomain> UnleashAsync(
-            #endif
+        #endif
             UnleashRequest request,
             bool speculativeExecute = true
         ) {
@@ -304,7 +183,6 @@ namespace Gs2.Gs2Enhance.Domain.Model
             }
             return transaction;
         }
-        #endif
 
     }
 }

@@ -26,10 +26,10 @@ using Gs2.Gs2SeasonRating.Request;
 using Gs2.Gs2SeasonRating.Result;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -79,21 +79,22 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<CleanUserDataByUserIdResult> InvokeAsync(
-    #else
+#else
         public static async Task<CleanUserDataByUserIdResult> InvokeAsync(
-    #endif
+#endif
             this CleanUserDataByUserIdRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<CleanUserDataByUserIdResult>> invokeImpl
-    #else
+#elif UNITY_2017_1_OR_NEWER
+            Func<TaskFuture<CleanUserDataByUserIdResult>> invokeImpl
+#else
             Func<Task<CleanUserDataByUserIdResult>> invokeImpl
-    #endif
+#endif
         )
         {
             var result = await invokeImpl();
@@ -105,6 +106,5 @@ namespace Gs2.Gs2SeasonRating.Model.Cache
             );
             return result;
         }
-#endif
     }
 }

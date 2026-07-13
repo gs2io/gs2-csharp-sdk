@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -29,6 +28,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -43,19 +44,16 @@ using Gs2.Core;
 using Gs2.Core.Domain;
 using Gs2.Core.Exception;
 using Gs2.Core.Util;
-using Gs2.Gs2JobQueue.Model;
+using Gs2.Gs2JobQueue.Model; /* diff +++ */
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -71,7 +69,8 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         public string JobName { get; } = null!;
         public bool? AutoRun { get; set; } = null!;
         public bool? IsLastJob { get; set; } = null!;
-        public JobResultBody Result { get; set; }
+        internal Gs2.Gs2JobQueue.Model.Job Item { get; set; } = null!; /* diff +++ */
+        public JobResultBody Result { get; set; } /* diff +++ */
         public bool? NeedRetry { get; set; } = null!;
 
         public JobDomain(
@@ -90,7 +89,10 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         }
 
         public Gs2.Gs2JobQueue.Domain.Model.JobResultDomain JobResult(
-            int? tryNumber = 0
+/* diff --- start
+            int? tryNumber
+ diff --- end */
+            int? tryNumber = 0 /* diff +++ */
         ) {
             return new Gs2.Gs2JobQueue.Domain.Model.JobResultDomain(
                 this._gs2,
@@ -108,38 +110,14 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2JobQueue.Model.Job> GetFuture(
             GetJobByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Model.Job> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithJobName(this.JobName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.GetJobByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2JobQueue.Model.Job>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2JobQueue.Model.Job> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2JobQueue.Model.Job> GetAsync(
-            #endif
+        #endif
             GetJobByUserIdRequest request
         ) {
             request = request
@@ -155,45 +133,18 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2JobQueue.Domain.Model.JobDomain> DeleteFuture(
             DeleteJobByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Domain.Model.JobDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithJobName(this.JobName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.DeleteJobByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2JobQueue.Domain.Model.JobDomain>(Impl);
-        }
+        ) => DeleteAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2JobQueue.Domain.Model.JobDomain> DeleteAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2JobQueue.Domain.Model.JobDomain> DeleteAsync(
-            #endif
+        #endif
             DeleteJobByUserIdRequest request
         ) {
             try {
@@ -213,17 +164,32 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             var domain = this;
             return domain;
         }
-        #endif
 
     }
 
     public partial class JobDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2JobQueue.Model.Job> ModelFuture()
+        public IFuture<Gs2.Gs2JobQueue.Model.Job> ModelFuture() => ModelAsync().ToGs2Future();
+        #endif
+
+        #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2JobQueue.Model.Job> ModelAsync()
+        #else
+        public async Task<Gs2.Gs2JobQueue.Model.Job> ModelAsync()
+        #endif
         {
-            IEnumerator Impl(IFuture<Gs2.Gs2JobQueue.Model.Job> self)
-            {
+/* diff --- start
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2JobQueue.Model.Job>(
+                        (null as Gs2.Gs2JobQueue.Model.Job).CacheParentKey(
+                            this.NamespaceName,
+                            this.UserId,
+                            null
+                        ),
+                        (null as Gs2.Gs2JobQueue.Model.Job).CacheKey(
+                            this.JobName
+                        )
+                    ).LockAsync()) {
                 var (value, find) = (null as Gs2.Gs2JobQueue.Model.Job).GetCache(
                     this._gs2.Cache,
                     this.NamespaceName,
@@ -232,37 +198,20 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                     null
                 );
                 if (find) {
-                    self.OnComplete(value);
-                    yield break;
+                    return value;
                 }
-                var future = (null as Gs2.Gs2JobQueue.Model.Job).FetchFuture(
+                return await (null as Gs2.Gs2JobQueue.Model.Job).FetchAsync(
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
                     this.JobName,
                     null,
-                    () => this.GetFuture(
+                    () => this.GetAsync(
                         new GetJobByUserIdRequest()
                     )
                 );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2JobQueue.Model.Job>(Impl);
-        }
-        #endif
-
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
-        public async UniTask<Gs2.Gs2JobQueue.Model.Job> ModelAsync()
-            #else
-        public async Task<Gs2.Gs2JobQueue.Model.Job> ModelAsync()
-            #endif
-        {
+ diff --- end */
+/* diff +++ start */
             var (value, find) = (null as Gs2.Gs2JobQueue.Model.Job).GetCache(
                 this._gs2.Cache,
                 this.NamespaceName,
@@ -272,7 +221,9 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             );
             if (find) {
                 return value;
+/* diff +++ end */
             }
+/* diff +++ start */
             return await (null as Gs2.Gs2JobQueue.Model.Job).FetchAsync(
                 this._gs2.Cache,
                 this.NamespaceName,
@@ -283,29 +234,44 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                     new GetJobByUserIdRequest()
                 )
             );
+/* diff +++ end */
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
+/* diff --- start
+        public UniTask<Gs2.Gs2JobQueue.Model.Job> Model() => ModelAsync();
+ diff --- end */
+/* diff +++ start */
         public async UniTask<Gs2.Gs2JobQueue.Model.Job> Model()
         {
             return await ModelAsync();
         }
+/* diff +++ end */
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
+/* diff --- start
+        public IFuture<Gs2.Gs2JobQueue.Model.Job> Model() => ModelFuture();
+ diff --- end */
+/* diff +++ start */
         public IFuture<Gs2.Gs2JobQueue.Model.Job> Model()
         {
             return ModelFuture();
         }
+/* diff +++ end */
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
+/* diff --- start
+        public Task<Gs2.Gs2JobQueue.Model.Job> Model() => ModelAsync();
+ diff --- end */
+/* diff +++ start */
         public async Task<Gs2.Gs2JobQueue.Model.Job> Model()
         {
             return await ModelAsync();
         }
+/* diff +++ end */
         #endif
 
 
@@ -334,7 +300,6 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -347,12 +312,7 @@ namespace Gs2.Gs2JobQueue.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -373,38 +333,24 @@ namespace Gs2.Gs2JobQueue.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2JobQueue.Model.Job> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+/* diff --- start
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2JobQueue.Model.Job> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
+ diff --- end */
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2JobQueue.Model.Job> callback) => SubscribeWithInitialCallAsync(callback).ToGs2Future(); /* diff +++ */
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2JobQueue.Model.Job> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2JobQueue.Model.Job> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

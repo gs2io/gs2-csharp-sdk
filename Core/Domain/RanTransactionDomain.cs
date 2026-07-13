@@ -40,9 +40,9 @@ using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER 
 using UnityEngine;
 using UnityEngine.Scripting;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading.Tasks;
 #endif
@@ -294,41 +294,14 @@ namespace Gs2.Core.Domain
 #if UNITY_2017_1_OR_NEWER
         public override IFuture<TransactionDomain> WaitFuture(
             bool all = false
-        ) {
-            IEnumerator Impl(IFuture<TransactionDomain> self) {
-                var nextTransactions = new List<TransactionDomain>();
-                foreach (var transaction in _nextTransactions) {
-                    var future = transaction.WaitFuture(all);
-                    yield return future;
-                    if (future.Error != null) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                    if (future.Result != null) {
-                        nextTransactions.Add(future.Result);
-                    }
-                }
-                if (nextTransactions.Count == 0) {
-                    self.OnComplete(null);
-                    yield break;
-                }
-                self.OnComplete(new TransactionDomain(
-                    Gs2,
-                    UserId,
-                    nextTransactions
-                ));
-            }
-            return new Gs2InlineFuture<TransactionDomain>(Impl);
-        }
+        ) => WaitAsync(all).ToGs2Future();
 #endif
         
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public override async UniTask<TransactionDomain> WaitAsync(
-    #else
+#else
         public override async Task<TransactionDomain> WaitAsync(
-    #endif
+#endif
             bool all = false
         ) {
             var nextTransactions = new List<TransactionDomain>();
@@ -347,6 +320,5 @@ namespace Gs2.Core.Domain
                 nextTransactions
             );
         }
-#endif
     }
 }

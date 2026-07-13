@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -24,7 +23,7 @@ using System;
 using System.Linq;
 using System.Numerics;
 using Gs2.Core.Exception;
-using Gs2.Core.Model;
+using Gs2.Core.Model; /* diff +++ */
 using Gs2.Gs2LoginReward.Request;
 
 namespace Gs2.Gs2LoginReward.Model.Transaction
@@ -49,6 +48,15 @@ namespace Gs2.Gs2LoginReward.Model.Transaction
             this ReceiveStatus self,
             MarkReceivedByUserIdRequest request
         ) {
+/* diff --- start
+//#if UNITY_2017_1_OR_NEWER
+            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: Gs2LoginReward:MarkReceivedByUserId");
+//#else
+            System.Console.WriteLine("Speculative execution not supported on this action: Gs2LoginReward:MarkReceivedByUserId");
+//#endif
+            return self.Clone() as ReceiveStatus;
+ diff --- end */
+/* diff +++ start */
             var clone = self.Clone() as ReceiveStatus;
             if (clone == null) {
                 throw new NullReferenceException();
@@ -61,6 +69,7 @@ namespace Gs2.Gs2LoginReward.Model.Transaction
             }
             self.ReceivedSteps[request.StepNumber ?? 0] = true;
             return clone;
+/* diff +++ end */
         }
 
         public static MarkReceivedByUserIdRequest Rate(

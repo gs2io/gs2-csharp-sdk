@@ -26,10 +26,10 @@ using Gs2.Gs2Money2.Request;
 using Gs2.Gs2Money2.Result;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -89,21 +89,22 @@ namespace Gs2.Gs2Money2.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<DescribeWalletsByUserIdResult> InvokeAsync(
-    #else
+#else
         public static async Task<DescribeWalletsByUserIdResult> InvokeAsync(
-    #endif
+#endif
             this DescribeWalletsByUserIdRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<DescribeWalletsByUserIdResult>> invokeImpl
-    #else
+#elif UNITY_2017_1_OR_NEWER
+            Func<TaskFuture<DescribeWalletsByUserIdResult>> invokeImpl
+#else
             Func<Task<DescribeWalletsByUserIdResult>> invokeImpl
-    #endif
+#endif
         )
         {
             var result = await invokeImpl();
@@ -115,6 +116,5 @@ namespace Gs2.Gs2Money2.Model.Cache
             );
             return result;
         }
-#endif
     }
 }

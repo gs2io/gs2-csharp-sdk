@@ -26,10 +26,10 @@ using Gs2.Gs2Ranking2.Request;
 using Gs2.Gs2Ranking2.Result;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -52,7 +52,7 @@ namespace Gs2.Gs2Ranking2.Model.Cache
                 self.Item.RankingName,
                 self.Item.ClusterName,
                 request.Season ?? default,
-                self.Item.UserId,
+                self?.Item?.UserId,
                 timeOffset
             );
         }
@@ -88,21 +88,22 @@ namespace Gs2.Gs2Ranking2.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<DeleteClusterRankingScoreByUserIdResult> InvokeAsync(
-    #else
+#else
         public static async Task<DeleteClusterRankingScoreByUserIdResult> InvokeAsync(
-    #endif
+#endif
             this DeleteClusterRankingScoreByUserIdRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<DeleteClusterRankingScoreByUserIdResult>> invokeImpl
-    #else
+#elif UNITY_2017_1_OR_NEWER
+            Func<TaskFuture<DeleteClusterRankingScoreByUserIdResult>> invokeImpl
+#else
             Func<Task<DeleteClusterRankingScoreByUserIdResult>> invokeImpl
-    #endif
+#endif
         )
         {
             var result = await invokeImpl();
@@ -114,6 +115,5 @@ namespace Gs2.Gs2Ranking2.Model.Cache
             );
             return result;
         }
-#endif
     }
 }

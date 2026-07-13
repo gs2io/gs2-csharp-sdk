@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -29,6 +28,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -46,15 +47,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -68,7 +66,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
         public string NamespaceName { get; } = null!;
         public string UserId { get; } = null!;
         public string EventName { get; } = null!;
-        public bool? IsInSchedule { get; } = null!;
+        public bool? IsInSchedule { get; } = null!; /* diff +++ */
         public bool? InSchedule { get; set; } = null!;
         public long? ScheduleStartAt { get; set; } = null!;
         public long? ScheduleEndAt { get; set; } = null!;
@@ -78,8 +76,13 @@ namespace Gs2.Gs2Schedule.Domain.Model
             Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             string userId,
+/* diff --- start
+            string eventName
+ diff --- end */
+/* diff +++ start */
             string eventName,
             bool? isInSchedule
+/* diff +++ end */
         ) {
             this._gs2 = gs2;
             this._client = new Gs2ScheduleRestClient(
@@ -88,7 +91,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
             this.NamespaceName = namespaceName;
             this.UserId = userId;
             this.EventName = eventName;
-            this.IsInSchedule = isInSchedule;
+            this.IsInSchedule = isInSchedule; /* diff +++ */
         }
 
     }
@@ -98,46 +101,21 @@ namespace Gs2.Gs2Schedule.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         private IFuture<Gs2.Gs2Schedule.Model.Event> GetFuture(
             GetEventByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Schedule.Model.Event> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithEventName(this.EventName)
-                    .WithIsInSchedule(this.IsInSchedule)
-                    .WithUserId(this.UserId);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.GetEventByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                self.OnComplete(result?.Item);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Schedule.Model.Event>(Impl);
-        }
+        ) => GetAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         private async UniTask<Gs2.Gs2Schedule.Model.Event> GetAsync(
-            #else
+        #else
         private async Task<Gs2.Gs2Schedule.Model.Event> GetAsync(
-            #endif
+        #endif
             GetEventByUserIdRequest request
         ) {
             request = request
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithEventName(this.EventName)
-                .WithIsInSchedule(this.IsInSchedule)
+                .WithIsInSchedule(this.IsInSchedule) /* diff +++ */
                 .WithUserId(this.UserId);
             var result = await request.InvokeAsync(
                 _gs2.Cache,
@@ -147,49 +125,18 @@ namespace Gs2.Gs2Schedule.Domain.Model
             );
             return result?.Item;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Schedule.Domain.Model.EventDomain> VerifyFuture(
             VerifyEventByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Schedule.Domain.Model.EventDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithUserId(this.UserId)
-                    .WithEventName(this.EventName);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    null,
-                    () => this._client.VerifyEventByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                domain.InSchedule = result?.InSchedule;
-                domain.ScheduleStartAt = result?.ScheduleStartAt;
-                domain.ScheduleEndAt = result?.ScheduleEndAt;
-                domain.IsGlobalSchedule = result?.IsGlobalSchedule;
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Schedule.Domain.Model.EventDomain>(Impl);
-        }
+        ) => VerifyAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Schedule.Domain.Model.EventDomain> VerifyAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Schedule.Domain.Model.EventDomain> VerifyAsync(
-            #endif
+        #endif
             VerifyEventByUserIdRequest request
         ) {
             request = request
@@ -211,63 +158,26 @@ namespace Gs2.Gs2Schedule.Domain.Model
 
             return domain;
         }
-        #endif
 
     }
 
     public partial class EventDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Schedule.Model.Event> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Schedule.Model.Event> self)
-            {
-                var (value, find) = (null as Gs2.Gs2Schedule.Model.Event).GetCache(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    this.EventName,
-                    this.IsInSchedule ?? true,
-                    null
-                );
-                if (find) {
-                    self.OnComplete(value);
-                    yield break;
-                }
-                var future = (null as Gs2.Gs2Schedule.Model.Event).FetchFuture(
-                    this._gs2.Cache,
-                    this.NamespaceName,
-                    this.UserId,
-                    this.EventName,
-                    this.IsInSchedule ?? true,
-                    null,
-                    () => this.GetFuture(
-                        new GetEventByUserIdRequest()
-                    )
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                self.OnComplete(future.Result);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Schedule.Model.Event>(Impl);
-        }
+        public IFuture<Gs2.Gs2Schedule.Model.Event> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Schedule.Model.Event> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Schedule.Model.Event> ModelAsync()
-            #endif
+        #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Schedule.Model.Event>(
                         (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                             this.NamespaceName,
                             this.UserId,
-                            this.IsInSchedule ?? true,
+                            this.IsInSchedule ?? true, /* diff +++ */
                             null
                         ),
                         (null as Gs2.Gs2Schedule.Model.Event).CacheKey(
@@ -279,7 +189,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.EventName,
-                    this.IsInSchedule ?? true,
+                    this.IsInSchedule ?? true, /* diff +++ */
                     null
                 );
                 if (find) {
@@ -290,7 +200,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                     this.NamespaceName,
                     this.UserId,
                     this.EventName,
-                    this.IsInSchedule ?? true,
+                    this.IsInSchedule ?? true, /* diff +++ */
                     null,
                     () => this.GetAsync(
                         new GetEventByUserIdRequest()
@@ -298,28 +208,42 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 );
             }
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
+/* diff --- start
+        public UniTask<Gs2.Gs2Schedule.Model.Event> Model() => ModelAsync();
+ diff --- end */
+/* diff +++ start */
         public async UniTask<Gs2.Gs2Schedule.Model.Event> Model()
         {
             return await ModelAsync();
         }
+/* diff +++ end */
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
+/* diff --- start
+        public IFuture<Gs2.Gs2Schedule.Model.Event> Model() => ModelFuture();
+ diff --- end */
+/* diff +++ start */
         public IFuture<Gs2.Gs2Schedule.Model.Event> Model()
         {
             return ModelFuture();
         }
+/* diff +++ end */
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
+/* diff --- start
+        public Task<Gs2.Gs2Schedule.Model.Event> Model() => ModelAsync();
+ diff --- end */
+/* diff +++ start */
         public async Task<Gs2.Gs2Schedule.Model.Event> Model()
         {
             return await ModelAsync();
         }
+/* diff +++ end */
         #endif
 
 
@@ -340,7 +264,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.IsInSchedule ?? true,
+                    this.IsInSchedule ?? true, /* diff +++ */
                     null
                 ),
                 (null as Gs2.Gs2Schedule.Model.Event).CacheKey(
@@ -349,7 +273,6 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 callback,
                 () =>
                 {
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -362,12 +285,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -378,7 +296,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 (null as Gs2.Gs2Schedule.Model.Event).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.IsInSchedule ?? true,
+                    this.IsInSchedule ?? true, /* diff +++ */
                     null
                 ),
                 (null as Gs2.Gs2Schedule.Model.Event).CacheKey(
@@ -389,38 +307,24 @@ namespace Gs2.Gs2Schedule.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Schedule.Model.Event> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+/* diff --- start
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Schedule.Model.Event> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
+ diff --- end */
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Schedule.Model.Event> callback) => SubscribeWithInitialCallAsync(callback).ToGs2Future(); /* diff +++ */
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Schedule.Model.Event> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Schedule.Model.Event> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

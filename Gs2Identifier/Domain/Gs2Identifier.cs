@@ -49,11 +49,11 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Scripting;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -78,37 +78,14 @@ namespace Gs2.Gs2Identifier.Domain
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain> CreateUserFuture(
             CreateUserRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain> self)
-            {
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.CreateUserFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Identifier.Domain.Model.UserDomain(
-                    this._gs2,
-                    result?.Item?.Name
-                );
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.UserDomain>(Impl);
-        }
+        ) => CreateUserAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Identifier.Domain.Model.UserDomain> CreateUserAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Identifier.Domain.Model.UserDomain> CreateUserAsync(
-            #endif
+        #endif
             CreateUserRequest request
         ) {
             var result = await request.InvokeAsync(
@@ -123,42 +100,18 @@ namespace Gs2.Gs2Identifier.Domain
             );
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> CreateSecurityPolicyFuture(
             CreateSecurityPolicyRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> self)
-            {
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.CreateSecurityPolicyFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain(
-                    this._gs2,
-                    result?.Item?.Name
-                );
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain>(Impl);
-        }
+        ) => CreateSecurityPolicyAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> CreateSecurityPolicyAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Identifier.Domain.Model.SecurityPolicyDomain> CreateSecurityPolicyAsync(
-            #endif
+        #endif
             CreateSecurityPolicyRequest request
         ) {
             var result = await request.InvokeAsync(
@@ -173,7 +126,6 @@ namespace Gs2.Gs2Identifier.Domain
             );
             return domain;
         }
-        #endif
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Identifier.Model.User> Users(
         )
@@ -185,12 +137,11 @@ namespace Gs2.Gs2Identifier.Domain
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Identifier.Model.User> UsersAsync(
-            #else
+        #else
         public DescribeUsersIterator UsersAsync(
-            #endif
+        #endif
         )
         {
             return new DescribeUsersIterator(
@@ -198,7 +149,6 @@ namespace Gs2.Gs2Identifier.Domain
                 this._client
             );
         }
-        #endif
 
         public ulong SubscribeUsers(
             Action<Gs2.Gs2Identifier.Model.User[]> callback
@@ -211,10 +161,15 @@ namespace Gs2.Gs2Identifier.Domain
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await UsersAsync(
                             ).ToArrayAsync());
                         }
@@ -223,13 +178,15 @@ namespace Gs2.Gs2Identifier.Domain
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeUsersWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeUsersWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Identifier.Model.User[]> callback
         )
         {
@@ -241,7 +198,6 @@ namespace Gs2.Gs2Identifier.Domain
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeUsers(
             ulong callbackId
@@ -284,12 +240,11 @@ namespace Gs2.Gs2Identifier.Domain
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Identifier.Model.SecurityPolicy> SecurityPoliciesAsync(
-            #else
+        #else
         public DescribeSecurityPoliciesIterator SecurityPoliciesAsync(
-            #endif
+        #endif
         )
         {
             return new DescribeSecurityPoliciesIterator(
@@ -297,7 +252,6 @@ namespace Gs2.Gs2Identifier.Domain
                 this._client
             );
         }
-        #endif
 
         public ulong SubscribeSecurityPolicies(
             Action<Gs2.Gs2Identifier.Model.SecurityPolicy[]> callback
@@ -310,10 +264,15 @@ namespace Gs2.Gs2Identifier.Domain
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await SecurityPoliciesAsync(
                             ).ToArrayAsync());
                         }
@@ -322,13 +281,15 @@ namespace Gs2.Gs2Identifier.Domain
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeSecurityPoliciesWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeSecurityPoliciesWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Identifier.Model.SecurityPolicy[]> callback
         )
         {
@@ -340,7 +301,6 @@ namespace Gs2.Gs2Identifier.Domain
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeSecurityPolicies(
             ulong callbackId
@@ -374,12 +334,11 @@ namespace Gs2.Gs2Identifier.Domain
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Identifier.Model.SecurityPolicy> CommonSecurityPoliciesAsync(
-            #else
+        #else
         public DescribeCommonSecurityPoliciesIterator CommonSecurityPoliciesAsync(
-            #endif
+        #endif
         )
         {
             return new DescribeCommonSecurityPoliciesIterator(
@@ -387,7 +346,6 @@ namespace Gs2.Gs2Identifier.Domain
                 this._client
             );
         }
-        #endif
 
         public ulong SubscribeCommonSecurityPolicies(
             Action<Gs2.Gs2Identifier.Model.SecurityPolicy[]> callback
@@ -400,10 +358,15 @@ namespace Gs2.Gs2Identifier.Domain
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await CommonSecurityPoliciesAsync(
                             ).ToArrayAsync());
                         }
@@ -412,13 +375,15 @@ namespace Gs2.Gs2Identifier.Domain
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeCommonSecurityPoliciesWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeCommonSecurityPoliciesWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Identifier.Model.SecurityPolicy[]> callback
         )
         {
@@ -430,7 +395,6 @@ namespace Gs2.Gs2Identifier.Domain
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeCommonSecurityPolicies(
             ulong callbackId

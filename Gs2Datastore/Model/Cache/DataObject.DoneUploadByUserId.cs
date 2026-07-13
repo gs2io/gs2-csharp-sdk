@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -28,10 +27,10 @@ using Gs2.Gs2Datastore.Request;
 using Gs2.Gs2Datastore.Result;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -48,12 +47,13 @@ namespace Gs2.Gs2Datastore.Model.Cache
             int? timeOffset,
             DoneUploadByUserIdRequest request
         ) {
-            self.Item.PutCache(
+            self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
+                self?.Item?.UserId,
                 request.DataObjectName,
                 timeOffset
+/* diff +++ start */
             );
             cache.ClearListCache<DataObjectHistory>(
                 (null as DataObjectHistory).CacheParentKey(
@@ -62,6 +62,7 @@ namespace Gs2.Gs2Datastore.Model.Cache
                     request.DataObjectName,
                     timeOffset
                 )
+/* diff +++ end */
             );
         }
 
@@ -96,21 +97,22 @@ namespace Gs2.Gs2Datastore.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<DoneUploadByUserIdResult> InvokeAsync(
-    #else
+#else
         public static async Task<DoneUploadByUserIdResult> InvokeAsync(
-    #endif
+#endif
             this DoneUploadByUserIdRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<DoneUploadByUserIdResult>> invokeImpl
-    #else
+#elif UNITY_2017_1_OR_NEWER
+            Func<TaskFuture<DoneUploadByUserIdResult>> invokeImpl
+#else
             Func<Task<DoneUploadByUserIdResult>> invokeImpl
-    #endif
+#endif
         )
         {
             var result = await invokeImpl();
@@ -122,6 +124,5 @@ namespace Gs2.Gs2Datastore.Model.Cache
             );
             return result;
         }
-#endif
     }
 }

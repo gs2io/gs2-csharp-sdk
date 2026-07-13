@@ -29,6 +29,7 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -47,14 +48,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -86,44 +85,14 @@ namespace Gs2.Gs2Friend.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Friend.Domain.Model.SendFriendRequestAccessTokenDomain> SendRequestFuture(
             SendRequestRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Friend.Domain.Model.SendFriendRequestAccessTokenDomain> self)
-            {
-                request = request
-                    .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
-                    .WithNamespaceName(this.NamespaceName)
-                    .WithAccessToken(this.AccessToken?.Token);
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    this.UserId,
-                    this.AccessToken?.TimeOffset,
-                    () => this._client.SendRequestFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = new Gs2.Gs2Friend.Domain.Model.SendFriendRequestAccessTokenDomain(
-                    this._gs2,
-                    this.NamespaceName,
-                    this.AccessToken,
-                    result?.Item?.TargetUserId
-                );
-
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Friend.Domain.Model.SendFriendRequestAccessTokenDomain>(Impl);
-        }
+        ) => SendRequestAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Friend.Domain.Model.SendFriendRequestAccessTokenDomain> SendRequestAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Friend.Domain.Model.SendFriendRequestAccessTokenDomain> SendRequestAsync(
-            #endif
+        #endif
             SendRequestRequest request
         ) {
             request = request
@@ -145,7 +114,6 @@ namespace Gs2.Gs2Friend.Domain.Model
 
             return domain;
         }
-        #endif
 
         public Gs2.Gs2Friend.Domain.Model.ProfileAccessTokenDomain Profile(
         ) {
@@ -177,12 +145,11 @@ namespace Gs2.Gs2Friend.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<string> BlackListUsersAsync(
-            #else
+        #else
         public DescribeBlackListIterator BlackListUsersAsync(
-            #endif
+        #endif
         )
         {
             return new DescribeBlackListIterator(
@@ -192,7 +159,6 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this.AccessToken
             );
         }
-        #endif
 
         public Gs2.Gs2Friend.Domain.Model.BlackListAccessTokenDomain BlackList(
         ) {
@@ -228,12 +194,11 @@ namespace Gs2.Gs2Friend.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.FriendUser> FriendsAsync(
-            #else
+        #else
         public DescribeFriendsIterator FriendsAsync(
-            #endif
+        #endif
             bool? withProfile = null
         )
         {
@@ -245,7 +210,6 @@ namespace Gs2.Gs2Friend.Domain.Model
                 withProfile
             );
         }
-        #endif
 
         public ulong SubscribeFriends(
             Action<Gs2.Gs2Friend.Model.FriendUser[]> callback,
@@ -262,10 +226,15 @@ namespace Gs2.Gs2Friend.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await FriendsAsync(
                                 withProfile
                             ).ToArrayAsync());
@@ -275,13 +244,15 @@ namespace Gs2.Gs2Friend.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeFriendsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeFriendsWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Friend.Model.FriendUser[]> callback,
             bool? withProfile = null
         )
@@ -296,7 +267,6 @@ namespace Gs2.Gs2Friend.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeFriends(
             ulong callbackId,
@@ -351,12 +321,11 @@ namespace Gs2.Gs2Friend.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.SendFriendRequest> SendRequestsAsync(
-            #else
+        #else
         public DescribeSendRequestsIterator SendRequestsAsync(
-            #endif
+        #endif
         )
         {
             return new DescribeSendRequestsIterator(
@@ -366,7 +335,6 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this.AccessToken
             );
         }
-        #endif
 
         public ulong SubscribeSendRequests(
             Action<Gs2.Gs2Friend.Model.SendFriendRequest[]> callback
@@ -381,10 +349,15 @@ namespace Gs2.Gs2Friend.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await SendRequestsAsync(
                             ).ToArrayAsync());
                         }
@@ -393,13 +366,15 @@ namespace Gs2.Gs2Friend.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeSendRequestsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeSendRequestsWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Friend.Model.SendFriendRequest[]> callback
         )
         {
@@ -411,7 +386,6 @@ namespace Gs2.Gs2Friend.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeSendRequests(
             ulong callbackId
@@ -462,12 +436,11 @@ namespace Gs2.Gs2Friend.Domain.Model
         }
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Friend.Model.ReceiveFriendRequest> ReceiveRequestsAsync(
-            #else
+        #else
         public DescribeReceiveRequestsIterator ReceiveRequestsAsync(
-            #endif
+        #endif
         )
         {
             return new DescribeReceiveRequestsIterator(
@@ -477,7 +450,6 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this.AccessToken
             );
         }
-        #endif
 
         public ulong SubscribeReceiveRequests(
             Action<Gs2.Gs2Friend.Model.ReceiveFriendRequest[]> callback
@@ -492,10 +464,15 @@ namespace Gs2.Gs2Friend.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
                         try {
+        #if GS2_ENABLE_UNITASK
                             await UniTask.SwitchToMainThread();
+        #endif
                             callback.Invoke(await ReceiveRequestsAsync(
                             ).ToArrayAsync());
                         }
@@ -504,13 +481,15 @@ namespace Gs2.Gs2Friend.Domain.Model
                         }
                     }
                     Impl().Forget();
-        #endif
                 }
             );
         }
 
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeReceiveRequestsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeReceiveRequestsWithInitialCallAsync(
+        #endif
             Action<Gs2.Gs2Friend.Model.ReceiveFriendRequest[]> callback
         )
         {
@@ -522,7 +501,6 @@ namespace Gs2.Gs2Friend.Domain.Model
             callback.Invoke(items);
             return callbackId;
         }
-        #endif
 
         public void UnsubscribeReceiveRequests(
             ulong callbackId

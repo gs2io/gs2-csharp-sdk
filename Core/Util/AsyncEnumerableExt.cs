@@ -25,7 +25,7 @@
 // ReSharper disable NotAccessedField.Local
 // ReSharper disable InconsistentNaming
 
-#if !UNITY_2017_1_OR_NEWER
+#if !GS2_ENABLE_UNITASK
 
 using System.Collections.Generic;
 using System.Threading;
@@ -44,6 +44,10 @@ namespace Gs2.Core.Util
                 results.Add(item);
             return results;
         }
+
+        public static async Task<T[]> ToArrayAsync<T>(this IAsyncEnumerable<T> items,
+            CancellationToken cancellationToken = default)
+        => (await items.ToListAsync(cancellationToken)).ToArray();
     }
 }
 #endif

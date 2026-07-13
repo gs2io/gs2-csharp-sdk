@@ -26,10 +26,10 @@ using Gs2.Gs2Mission.Request;
 using Gs2.Gs2Mission.Result;
 #if UNITY_2017_1_OR_NEWER
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading;
 using System.Threading.Tasks;
@@ -49,7 +49,7 @@ namespace Gs2.Gs2Mission.Model.Cache
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
-                self.Item.UserId,
+                self?.Item?.UserId,
                 request.CounterName,
                 timeOffset
             );
@@ -58,7 +58,7 @@ namespace Gs2.Gs2Mission.Model.Cache
                 item.PutCache(
                     cache,
                     request.NamespaceName,
-                    self.Item.UserId,
+                    self?.Item?.UserId,
                     item.MissionGroupName,
                     timeOffset
                 );
@@ -96,21 +96,22 @@ namespace Gs2.Gs2Mission.Model.Cache
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public static async UniTask<DecreaseCounterByUserIdResult> InvokeAsync(
-    #else
+#else
         public static async Task<DecreaseCounterByUserIdResult> InvokeAsync(
-    #endif
+#endif
             this DecreaseCounterByUserIdRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
             Func<UniTask<DecreaseCounterByUserIdResult>> invokeImpl
-    #else
+#elif UNITY_2017_1_OR_NEWER
+            Func<TaskFuture<DecreaseCounterByUserIdResult>> invokeImpl
+#else
             Func<Task<DecreaseCounterByUserIdResult>> invokeImpl
-    #endif
+#endif
         )
         {
             var result = await invokeImpl();
@@ -122,6 +123,5 @@ namespace Gs2.Gs2Mission.Model.Cache
             );
             return result;
         }
-#endif
     }
 }

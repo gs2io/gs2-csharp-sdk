@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
@@ -29,6 +28,8 @@
 #pragma warning disable CS0169, CS0168
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Gs2.Core.Model;
@@ -45,15 +46,12 @@ using Gs2.Core.Util;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 using UnityEngine.Scripting;
-using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -85,34 +83,21 @@ namespace Gs2.Gs2Auth.Domain.Model
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> LoginFuture(
             LoginRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> self)
-            {
-                var future = this._client.LoginFuture(request);
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                this.Token = domain.Token = result?.Token;
-                this.UserId = domain.UserId = result?.UserId;
-                this.Expire = domain.Expire = result?.Expire;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain>(Impl);
-        }
+        ) => LoginAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> LoginAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> LoginAsync(
-            #endif
+        #endif
             LoginRequest request
         ) {
+/* diff --- start
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithUserId(this.UserId);
+ diff --- end */
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
@@ -125,37 +110,18 @@ namespace Gs2.Gs2Auth.Domain.Model
             this.Expire = domain.Expire = result?.Expire;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> LoginBySignatureFuture(
             LoginBySignatureRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> self)
-            {
-                var future = this._client.LoginBySignatureFuture(request);
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                this.Token = domain.Token = result?.Token;
-                this.UserId = domain.UserId = result?.UserId;
-                this.Expire = domain.Expire = result?.Expire;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain>(Impl);
-        }
+        ) => LoginBySignatureAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> LoginBySignatureAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> LoginBySignatureAsync(
-            #endif
+        #endif
             LoginBySignatureRequest request
         ) {
             var result = await request.InvokeAsync(
@@ -170,44 +136,25 @@ namespace Gs2.Gs2Auth.Domain.Model
             this.Expire = domain.Expire = result?.Expire;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> FederationFuture(
             FederationRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> self)
-            {
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.FederationFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                this.Token = domain.Token = result?.Token;
-                this.UserId = domain.UserId = result?.UserId;
-                this.Expire = domain.Expire = result?.Expire;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain>(Impl);
-        }
+        ) => FederationAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> FederationAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> FederationAsync(
-            #endif
+        #endif
             FederationRequest request
         ) {
+/* diff --- start
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithUserId(this.UserId);
+ diff --- end */
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
@@ -220,44 +167,25 @@ namespace Gs2.Gs2Auth.Domain.Model
             this.Expire = domain.Expire = result?.Expire;
             return domain;
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> IssueTimeOffsetTokenFuture(
             IssueTimeOffsetTokenByUserIdRequest request
-        ) {
-            IEnumerator Impl(IFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> self)
-            {
-                var future = request.InvokeFuture(
-                    _gs2.Cache,
-                    null,
-                    null,
-                    () => this._client.IssueTimeOffsetTokenByUserIdFuture(request)
-                );
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var result = future.Result;
-                var domain = this;
-                this.Token = domain.Token = result?.Token;
-                this.UserId = domain.UserId = result?.UserId;
-                this.Expire = domain.Expire = result?.Expire;
-                self.OnComplete(domain);
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain>(Impl);
-        }
+        ) => IssueTimeOffsetTokenAsync(request).ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> IssueTimeOffsetTokenAsync(
-            #else
+        #else
         public async Task<Gs2.Gs2Auth.Domain.Model.AccessTokenDomain> IssueTimeOffsetTokenAsync(
-            #endif
+        #endif
             IssueTimeOffsetTokenByUserIdRequest request
         ) {
+/* diff --- start
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithUserId(this.UserId);
+ diff --- end */
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 null,
@@ -270,62 +198,82 @@ namespace Gs2.Gs2Auth.Domain.Model
             this.Expire = domain.Expire = result?.Expire;
             return domain;
         }
-        #endif
 
     }
 
     public partial class AccessTokenDomain {
 
         #if UNITY_2017_1_OR_NEWER
-        public IFuture<Gs2.Gs2Auth.Model.AccessToken> ModelFuture()
-        {
-            IEnumerator Impl(IFuture<Gs2.Gs2Auth.Model.AccessToken> self)
-            {
-                self.OnComplete(new AccessToken()
-                    .WithToken(Token)
-                    .WithUserId(UserId)
-                    .WithExpire(Expire)
-                );
-                yield return null;
-            }
-            return new Gs2InlineFuture<Gs2.Gs2Auth.Model.AccessToken>(Impl);
-        }
+        public IFuture<Gs2.Gs2Auth.Model.AccessToken> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<Gs2.Gs2Auth.Model.AccessToken> ModelAsync()
-            #else
+        #else
         public async Task<Gs2.Gs2Auth.Model.AccessToken> ModelAsync()
-            #endif
+        #endif
         {
+/* diff --- start
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Auth.Model.AccessToken>(
+                        (null as Gs2.Gs2Auth.Model.AccessToken).CacheParentKey(
+                            null
+                        ),
+                        (null as Gs2.Gs2Auth.Model.AccessToken).CacheKey(
+                        )
+                    ).LockAsync()) {
+                var (value, find) = (null as Gs2.Gs2Auth.Model.AccessToken).GetCache(
+                    this._gs2.Cache,
+                    null
+                );
+                if (find) {
+                    return value;
+                }
+                return null;
+            }
+ diff --- end */
+/* diff +++ start */
             return new AccessToken()
                 .WithToken(Token)
                 .WithUserId(UserId)
                 .WithExpire(Expire);
+/* diff +++ end */
         }
-        #endif
 
         #if UNITY_2017_1_OR_NEWER
             #if GS2_ENABLE_UNITASK
         [Obsolete("The name has been changed to ModelAsync.")]
+/* diff --- start
+        public UniTask<Gs2.Gs2Auth.Model.AccessToken> Model() => ModelAsync();
+ diff --- end */
+/* diff +++ start */
         public async UniTask<Gs2.Gs2Auth.Model.AccessToken> Model()
         {
             return await ModelAsync();
         }
+/* diff +++ end */
             #else
         [Obsolete("The name has been changed to ModelFuture.")]
+/* diff --- start
+        public IFuture<Gs2.Gs2Auth.Model.AccessToken> Model() => ModelFuture();
+ diff --- end */
+/* diff +++ start */
         public IFuture<Gs2.Gs2Auth.Model.AccessToken> Model()
         {
             return ModelFuture();
         }
+/* diff +++ end */
             #endif
         #else
         [Obsolete("The name has been changed to ModelAsync.")]
+/* diff --- start
+        public Task<Gs2.Gs2Auth.Model.AccessToken> Model() => ModelAsync();
+ diff --- end */
+/* diff +++ start */
         public async Task<Gs2.Gs2Auth.Model.AccessToken> Model()
         {
             return await ModelAsync();
         }
+/* diff +++ end */
         #endif
 
 
@@ -348,7 +296,6 @@ namespace Gs2.Gs2Auth.Domain.Model
                 callback,
                 () =>
                 {
-        #if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
             #if GS2_ENABLE_UNITASK
                     async UniTask Impl() {
             #else
@@ -361,12 +308,7 @@ namespace Gs2.Gs2Auth.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
-        #endif
                 }
             );
         }
@@ -384,38 +326,24 @@ namespace Gs2.Gs2Auth.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
-        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Auth.Model.AccessToken> callback)
-        {
-            IEnumerator Impl(IFuture<ulong> self)
-            {
-                var future = ModelFuture();
-                yield return future;
-                if (future.Error != null) {
-                    self.OnError(future.Error);
-                    yield break;
-                }
-                var item = future.Result;
-                var callbackId = Subscribe(callback);
-                callback.Invoke(item);
-                self.OnComplete(callbackId);
-            }
-            return new Gs2InlineFuture<ulong>(Impl);
-        }
+/* diff --- start
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Auth.Model.AccessToken> callback) =>
+            SubscribeWithInitialCallAsync(callback).ToGs2Future();
+ diff --- end */
+        public Gs2Future<ulong> SubscribeWithInitialCallFuture(Action<Gs2.Gs2Auth.Model.AccessToken> callback) => SubscribeWithInitialCallAsync(callback).ToGs2Future(); /* diff +++ */
         #endif
 
-        #if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-            #if UNITY_2017_1_OR_NEWER
+        #if GS2_ENABLE_UNITASK
         public async UniTask<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Auth.Model.AccessToken> callback)
-            #else
+        #else
         public async Task<ulong> SubscribeWithInitialCallAsync(Action<Gs2.Gs2Auth.Model.AccessToken> callback)
-            #endif
+        #endif
         {
             var item = await ModelAsync();
             var callbackId = Subscribe(callback);
             callback.Invoke(item);
             return callbackId;
         }
-        #endif
 
     }
 }

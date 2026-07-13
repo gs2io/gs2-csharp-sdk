@@ -28,15 +28,16 @@ using System.Collections;
 using System.Collections.Generic;
 using Gs2.Core.Exception;
 using Gs2.Core.Net;
+using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2JobQueue.Request;
 using Gs2.Gs2JobQueue.Result;
 using Gs2.Util.LitJson;
 #if UNITY_2017_1_OR_NEWER 
 using UnityEngine;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-    #endif
 #else
 using System.Threading.Tasks;
 #endif
@@ -83,69 +84,14 @@ namespace Gs2.Core.Domain
 #if UNITY_2017_1_OR_NEWER
         public virtual IFuture<TransactionAccessTokenDomain> WaitFuture(
             bool all = false
-        ) {
-            IEnumerator Impl(IFuture<TransactionAccessTokenDomain> self) {
-                if (this.Actions.Count == 0) {
-                    self.OnComplete(null);
-                    yield break;
-                }
-                var nextActions = new List<TransactionAccessTokenDomain>();
-                foreach (var action in this.Actions) {
-                    var innerFuture = action.WaitFuture();
-                    yield return innerFuture;
-                    if (innerFuture.Error != null) {
-                        self.OnError(innerFuture.Error);
-                        yield break;
-                    }
-                    var innerNext = innerFuture.Result;
-                    if (innerNext != null) {
-                        nextActions.Add(innerNext);
-                    }
-                }
-                var next = new TransactionAccessTokenDomain(
-                    this.Gs2,
-                    this.AccessToken,
-                    nextActions
-                );
-                if (!all) {
-                    {
-                        var dispatchFuture = this.Gs2.DispatchFuture(this.AccessToken);
-                        yield return dispatchFuture;
-                        if (dispatchFuture.Error != null) {
-                            self.OnError(dispatchFuture.Error);
-                            yield break;
-                        }
-                    }
-                    self.OnComplete(next);
-                    yield break;
-                }
-                var nextFuture = next.WaitFuture(true);
-                yield return nextFuture;
-                if (nextFuture.Error != null) {
-                    self.OnError(nextFuture.Error);
-                    yield break;
-                }
-                {
-                    var dispatchFuture = this.Gs2.DispatchFuture(this.AccessToken);
-                    yield return dispatchFuture;
-                    if (dispatchFuture.Error != null) {
-                        self.OnError(dispatchFuture.Error);
-                        yield break;
-                    }
-                }
-                self.OnComplete(null);
-            }
-            return new Gs2InlineFuture<TransactionAccessTokenDomain>(Impl);
-        }
+        ) => WaitAsync(all).ToGs2Future();
 #endif
         
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-
-    #if UNITY_2017_1_OR_NEWER
+#if GS2_ENABLE_UNITASK
         public virtual async UniTask<TransactionAccessTokenDomain> WaitAsync(
-    #else
+#else
         public virtual async Task<TransactionAccessTokenDomain> WaitAsync(
-    #endif
+#endif
             bool all = false
         ) {
             if (this.Actions.Count == 0) {
@@ -171,6 +117,5 @@ namespace Gs2.Core.Domain
             await this.Gs2.DispatchAsync(this.AccessToken);
             return null;
         }
-#endif
     }
 }

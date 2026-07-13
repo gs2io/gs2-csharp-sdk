@@ -45,14 +45,12 @@ using Gs2.Core.Util;
 using UnityEngine;
 using UnityEngine.Scripting;
 using System.Collections;
-    #if GS2_ENABLE_UNITASK
+#endif
+#if GS2_ENABLE_UNITASK
 using Cysharp.Threading;
 using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Linq;
-using System.Collections.Generic;
-    #endif
 #else
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -75,17 +73,10 @@ namespace Gs2.Gs2Ranking.Domain.Model
 #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Ranking.Domain.Model.SubscribeUserDomain> SubscribeFuture(
             Gs2.Gs2Ranking.Request.SubscribeByUserIdRequest request
-        ) {
-            return this.RankingCategory(
-                request.CategoryName
-            ).SubscribeFuture(
-                request
-            );
-        }
+        ) => SubscribeAsync(request).ToGs2Future();
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+    #if GS2_ENABLE_UNITASK
         public UniTask<Gs2.Gs2Ranking.Domain.Model.SubscribeUserDomain> SubscribeAsync(
     #else
         public Task<Gs2.Gs2Ranking.Domain.Model.SubscribeUserDomain> SubscribeAsync(
@@ -98,7 +89,6 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 request
             );
         }
-#endif
 
 #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Ranking.Model.SubscribeUser> SubscribesByCategoryName(
@@ -110,7 +100,6 @@ namespace Gs2.Gs2Ranking.Domain.Model
         }
 #endif
         
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
     #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Ranking.Model.SubscribeUser> SubscribesByCategoryNameAsync(
     #else
@@ -122,7 +111,6 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 categoryName
             ).SubscribesByCategoryNameAsync();
         }
-#endif
 
         public Gs2.Gs2Ranking.Domain.Model.RankingCategoryDomain Ranking(
             string categoryName,
@@ -146,7 +134,6 @@ namespace Gs2.Gs2Ranking.Domain.Model
         }
 #endif
         
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
 #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Ranking.Model.Ranking> RankingsAsync(
 #else
@@ -161,7 +148,6 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 additionalScopeName
             ).RankingsAsync();
         }
-#endif
 
 #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Ranking.Model.Ranking> NearRankings(
@@ -178,7 +164,6 @@ namespace Gs2.Gs2Ranking.Domain.Model
         }
 #endif
 
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
     #if GS2_ENABLE_UNITASK
         public IUniTaskAsyncEnumerable<Gs2.Gs2Ranking.Model.Ranking> NearRankingsAsync(
     #else
@@ -195,7 +180,6 @@ namespace Gs2.Gs2Ranking.Domain.Model
                 score
             );
         }
-#endif
 
     }
 }

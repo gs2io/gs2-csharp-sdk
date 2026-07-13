@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- *
  * deny overwrite
  */
 
@@ -31,18 +30,33 @@ namespace Gs2.Gs2Inventory.Model.Transaction
     public static partial class ReferenceOfExt
     {
         public static bool IsExecutable(
-            this ItemSet self,
+/* diff --- start
+            this ReferenceOf self,
+ diff --- end */
+            this ItemSet self, /* diff +++ */
             VerifyReferenceOfByUserIdRequest request
         ) {
             switch (request.VerifyType) {
                 case "not_entry":
-                    return self.ReferenceOf.Contains(request.ReferenceOf);
+/* diff --- start
+                    return self.Name.Contains(request.ReferenceOf);
+ diff --- end */
+                    return self.ReferenceOf.Contains(request.ReferenceOf); /* diff +++ */
                 case "already_entry":
-                    return !self.ReferenceOf.Contains(request.ReferenceOf);
+/* diff --- start
+                    return !self.Name.Contains(request.ReferenceOf);
+ diff --- end */
+                    return !self.ReferenceOf.Contains(request.ReferenceOf); /* diff +++ */
                 case "empty":
-                    return self.ReferenceOf.Length != 0;
+/* diff --- start
+                    return self.Name.Length != 0;
+ diff --- end */
+                    return self.ReferenceOf.Length != 0; /* diff +++ */
                 case "not_empty":
-                    return self.ReferenceOf.Length != 0;
+/* diff --- start
+                    return self.Name.Length != 0;
+ diff --- end */
+                    return self.ReferenceOf.Length != 0; /* diff +++ */
             }
             return false;
         }
