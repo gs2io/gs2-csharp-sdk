@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Gs2.Core.Exception;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2JobQueue.Request;
@@ -20,6 +21,7 @@ namespace Gs2.Core.Domain
     [Obsolete("Use of the auto-execute feature is strongly recommended")]
     public class JobQueueDomain
     {
+        private static readonly TimeSpan RunRetryTimeout = TimeSpan.FromSeconds(15);
         private readonly SemaphoreSlim _semaphore  = new SemaphoreSlim(1, 1);
 
         private readonly Gs2 _gs2;
@@ -63,15 +65,26 @@ namespace Gs2.Core.Domain
                     namespaceName = this._tasks.First();
                 }
                 if (namespaceName != null) {
-                    var job = await this._gs2.JobQueue.Namespace(
-                        namespaceName
-                    ).AccessToken(
-                        accessToken
-                    ).RunAsync(
-                        new RunRequest()
-                    );
-                    if (job.IsLastJob.HasValue && job.IsLastJob.Value) {
-                        this._tasks.Remove(namespaceName);
+                    var begin = DateTime.Now;
+                    RETRY:
+                    try {
+                        var job = await this._gs2.JobQueue.Namespace(
+                            namespaceName
+                        ).AccessToken(
+                            accessToken
+                        ).RunAsync(
+                            new RunRequest()
+                        );
+                        if (job.IsLastJob.HasValue && job.IsLastJob.Value) {
+                            this._tasks.Remove(namespaceName);
+                        }
+                    }
+                    catch (Gs2Exception e) {
+                        if (!e.RecommendAutoRetry || DateTime.Now - begin > RunRetryTimeout) {
+                            throw;
+                        }
+                        await TaskUtilities.DelayAsync(Gs2Constant.RetryWait);
+                        goto RETRY;
                     }
                 }
                 return this._tasks.Count == 0;
@@ -107,15 +120,26 @@ namespace Gs2.Core.Domain
                     namespaceName = this._tasks.First();
                 }
                 if (namespaceName != null) {
-                    var job = await this._gs2.JobQueue.Namespace(
-                        namespaceName
-                    ).User(
-                        userId
-                    ).RunAsync(
-                        new RunByUserIdRequest()
-                    );
-                    if (job.IsLastJob.HasValue && job.IsLastJob.Value) {
-                        this._tasks.Remove(namespaceName);
+                    var begin = DateTime.Now;
+                    RETRY:
+                    try {
+                        var job = await this._gs2.JobQueue.Namespace(
+                            namespaceName
+                        ).User(
+                            userId
+                        ).RunAsync(
+                            new RunByUserIdRequest()
+                        );
+                        if (job.IsLastJob.HasValue && job.IsLastJob.Value) {
+                            this._tasks.Remove(namespaceName);
+                        }
+                    }
+                    catch (Gs2Exception e) {
+                        if (!e.RecommendAutoRetry || DateTime.Now - begin > RunRetryTimeout) {
+                            throw;
+                        }
+                        await TaskUtilities.DelayAsync(Gs2Constant.RetryWait);
+                        goto RETRY;
                     }
                 }
                 return this._tasks.Count == 0;

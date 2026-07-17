@@ -49,6 +49,7 @@ namespace Gs2.Core.Domain
 {
     public partial class ManualJobQueueAccessTokenDomain : TransactionAccessTokenDomain
     {
+        private static readonly TimeSpan RunRetryTimeout = TimeSpan.FromSeconds(15);
         private static Dictionary<string, long> _handled = new Dictionary<string, long>();
         private readonly string _namespaceName;
         private readonly string _jobName;
@@ -160,16 +161,27 @@ namespace Gs2.Core.Domain
 #endif
             bool all = false
         ) {
+            var begin = DateTime.Now;
             RETRY:
-            var result = await new Gs2JobQueue.Domain.Gs2JobQueue(
-                Gs2
-            ).Namespace(
-                this._namespaceName
-            ).AccessToken(
-                AccessToken
-            ).RunAsync(
-                new RunRequest()
-            );
+            global::Gs2.Gs2JobQueue.Domain.Model.JobAccessTokenDomain result;
+            try {
+                result = await new Gs2JobQueue.Domain.Gs2JobQueue(
+                    Gs2
+                ).Namespace(
+                    this._namespaceName
+                ).AccessToken(
+                    AccessToken
+                ).RunAsync(
+                    new RunRequest()
+                );
+            }
+            catch (Gs2Exception e) {
+                if (!e.RecommendAutoRetry || DateTime.Now - begin > RunRetryTimeout) {
+                    throw;
+                }
+                await TaskUtilities.DelayAsync(Gs2Constant.RetryWait);
+                goto RETRY;
+            }
             var job = result.Item;
             if (job == null) {
                 return null;
