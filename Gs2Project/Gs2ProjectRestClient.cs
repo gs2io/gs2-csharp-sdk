@@ -2892,6 +2892,97 @@ namespace Gs2.Gs2Project
 #endif
 
 
+        public class GetBillingsTask : Gs2RestSessionTask<GetBillingsRequest, GetBillingsResult>
+        {
+            public GetBillingsTask(IGs2Session session, RestSessionRequestFactory factory, GetBillingsRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(GetBillingsRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "project")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/billing/{year}/{month}";
+
+                url = url.Replace("{year}",request.Year != null ? request.Year.ToString() : "null");
+                url = url.Replace("{month}",request.Month != null ? request.Month.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.Service != null) {
+                    sessionRequest.AddQueryString("service", $"{request.Service}");
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator GetBillings(
+                Request.GetBillingsRequest request,
+                UnityAction<AsyncResult<Result.GetBillingsResult>> callback
+        ) =>
+            new GetBillingsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.GetBillingsResult> GetBillingsFuture(
+                Request.GetBillingsRequest request
+        ) =>
+            new GetBillingsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.GetBillingsResult> GetBillingsAsync(
+                Request.GetBillingsRequest request
+        ) =>
+            new GetBillingsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.GetBillingsResult>();
+    #else
+		public GetBillingsTask GetBillingsAsync(
+                Request.GetBillingsRequest request
+        )
+		{
+			return new GetBillingsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.GetBillingsResult> GetBillingsAsync(
+                Request.GetBillingsRequest request
+        ) =>
+            new GetBillingsTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
         public class DescribeDumpProgressesTask : Gs2RestSessionTask<DescribeDumpProgressesRequest, DescribeDumpProgressesResult>
         {
             public DescribeDumpProgressesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeDumpProgressesRequest request) : base(session, factory, request)

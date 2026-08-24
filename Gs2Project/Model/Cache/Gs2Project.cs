@@ -248,6 +248,14 @@ namespace Gs2.Gs2Project.Model.Cache
                         Request.DescribeBillingsRequest.FromJson(requestPayload)
                     );
                     break;
+                case "getBillings":
+                    Result.GetBillingsResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.GetBillingsRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "describeDumpProgresses":
                     Result.DescribeDumpProgressesResult.FromJson(resultPayload).PutCache(
                         cache,

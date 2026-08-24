@@ -105,7 +105,7 @@ namespace Gs2.Gs2Matchmaking.Model
 
         public void Validate() {
             {
-                if (Rank < 0) {
+                if (Rank < 1) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("gameResult", "matchmaking.gameResult.rank.error.invalid"),
                     });
