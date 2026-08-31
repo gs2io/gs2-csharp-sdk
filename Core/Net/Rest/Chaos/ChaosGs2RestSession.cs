@@ -1,14 +1,11 @@
 using System;
 using System.Collections;
 using Gs2.Core.Model;
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
+#if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-    #else
+#else
 using System.Threading.Tasks;
-    #endif
 #endif
-using System.Threading.Tasks;
 
 namespace Gs2.Core.Net.Chaos
 {

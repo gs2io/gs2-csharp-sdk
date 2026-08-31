@@ -324,6 +324,7 @@ namespace Gs2.Core.Net
             yield return null;
         }
         
+#pragma warning disable CS1998 // The cross-platform async API delegates to a synchronous WebSocket send.
 #if GS2_ENABLE_UNITASK
         public async UniTask SendAsync(IGs2SessionRequest request)
 #else
@@ -332,6 +333,7 @@ namespace Gs2.Core.Net
         {
             SendImpl(request);
         }
+#pragma warning restore CS1998
         
         public void SendNonBlocking(IGs2SessionRequest request)
         {

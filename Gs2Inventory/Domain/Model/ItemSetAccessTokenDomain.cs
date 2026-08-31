@@ -426,11 +426,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     callback,
                     () =>
                     {
-                #if GS2_ENABLE_UNITASK
                         ModelAsync().Forget();
-                #else
-                        ModelAsync();
-                #endif
                     }
                 );
             }
@@ -449,11 +445,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     callback,
                     () =>
                     {
-#if GS2_ENABLE_UNITASK
                         ModelAsync().Forget();
-#else
-                        ModelAsync();
-#endif
                     }
                 );
             }
@@ -478,11 +470,7 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     callback,
                     () =>
                     {
-#if GS2_ENABLE_UNITASK
                         ModelAsync().Forget();
-#else
-                        ModelAsync();
-#endif
                     }
                 );
             }

@@ -173,11 +173,7 @@ namespace Gs2.Gs2Lottery.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
         #endif
                 }
             );

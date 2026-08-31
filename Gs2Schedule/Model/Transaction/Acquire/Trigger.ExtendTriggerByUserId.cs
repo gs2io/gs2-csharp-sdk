@@ -51,7 +51,6 @@ namespace Gs2.Gs2Schedule.Model.Transaction
                 throw new NullReferenceException();
             }
             throw new NotImplementedException($"not implemented action Gs2Schedule:ExtendTriggerByUserId");
-            return clone;
         }
 
         public static ExtendTriggerByUserIdRequest Rate(

@@ -343,13 +343,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK // diff +++
                     Impl().Forget();
-/* diff +++ start */
-            #else
-                    Impl();
-            #endif
-/* diff +++ end */
                 }
             );
         }

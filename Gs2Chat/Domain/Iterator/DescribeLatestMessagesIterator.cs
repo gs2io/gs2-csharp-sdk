@@ -79,7 +79,6 @@ namespace Gs2.Gs2Chat.Domain.Iterator
         public AccessToken AccessToken { get; }
         public string UserId => AccessToken?.UserId;
         private long? _startAt;
-        private bool _isCacheChecked;
         private bool _last;
         private Gs2.Gs2Chat.Model.Message[] _result;
 

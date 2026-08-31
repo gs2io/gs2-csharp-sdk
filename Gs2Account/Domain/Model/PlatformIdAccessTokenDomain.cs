@@ -303,11 +303,7 @@ namespace Gs2.Gs2Account.Domain.Model
                             // ignored
                         }
                     }
-            #if GS2_ENABLE_UNITASK
                     Impl().Forget();
-            #else
-                    Impl();
-            #endif
                 }
             );
         }

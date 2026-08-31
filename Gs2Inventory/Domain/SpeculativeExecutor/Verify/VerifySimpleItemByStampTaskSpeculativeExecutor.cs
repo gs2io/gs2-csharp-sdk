@@ -33,7 +33,6 @@ using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 /* diff +++ start */
-using Gs2.Core.Exception;
 using Gs2.Core.Model;
 /* diff +++ end */
 using Gs2.Core.Util;
