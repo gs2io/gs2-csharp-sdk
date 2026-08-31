@@ -3,6 +3,8 @@
 #endif
 
 using System;
+using System.Threading.Tasks;
+using Gs2.Core.Util;
 #if GS2_USE_HYBRID_WEBSOCKET
 using Gs2.HybridWebSocket;
 #else
@@ -112,7 +114,20 @@ namespace Gs2.Core.Net
 
         public void Send(string message) => _session.Send(message);
 
-        public bool Ping() => _session.Ping();
+        /// <remarks>
+        /// websocket-sharp の Ping() は pong 受信を最大 WaitTime(既定5秒) 同期待ちするため、
+        /// 呼び出しスレッド(多くの場合 Unity のメインスレッド)をブロックしないようバックグラウンドで送信する。
+        /// 戻り値は「ping の送信を開始した」ことのみを表し、pong 受信の成否は表さない。
+        /// </remarks>
+        public bool Ping()
+        {
+            if (_session.ReadyState != WebSocketState.Open)
+            {
+                return false;
+            }
+            Task.Run(() => _session.Ping()).Forget();
+            return true;
+        }
 
         public StateEnum GetState()
         {

@@ -338,7 +338,7 @@ namespace Gs2.Core.Net
             SendImpl(request);
         }
 
-        public bool Ping() => this._session.Ping();
+        public bool Ping() => this._session?.Ping() ?? false;
 
         public bool IsCanceled()
         {

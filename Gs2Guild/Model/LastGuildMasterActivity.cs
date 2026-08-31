@@ -36,12 +36,17 @@ namespace Gs2.Gs2Guild.Model
 	{
         public string UserId { set; get; }
         public long? UpdatedAt { set; get; }
+        public long? Revision { set; get; }
         public LastGuildMasterActivity WithUserId(string userId) {
             this.UserId = userId;
             return this;
         }
         public LastGuildMasterActivity WithUpdatedAt(long? updatedAt) {
             this.UpdatedAt = updatedAt;
+            return this;
+        }
+        public LastGuildMasterActivity WithRevision(long? revision) {
+            this.Revision = revision;
             return this;
         }
 
@@ -140,7 +145,8 @@ namespace Gs2.Gs2Guild.Model
             }
             return new LastGuildMasterActivity()
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())));
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
         }
 
         public JsonData ToJson()
@@ -148,6 +154,7 @@ namespace Gs2.Gs2Guild.Model
             return new JsonData {
                 ["userId"] = UserId,
                 ["updatedAt"] = UpdatedAt,
+                ["revision"] = Revision,
             };
         }
 
@@ -161,6 +168,10 @@ namespace Gs2.Gs2Guild.Model
             if (UpdatedAt != null) {
                 writer.WritePropertyName("updatedAt");
                 writer.Write((UpdatedAt.ToString().Contains(".") ? (long)double.Parse(UpdatedAt.ToString()) : long.Parse(UpdatedAt.ToString())));
+            }
+            if (Revision != null) {
+                writer.WritePropertyName("revision");
+                writer.Write((Revision.ToString().Contains(".") ? (long)double.Parse(Revision.ToString()) : long.Parse(Revision.ToString())));
             }
             writer.WriteObjectEnd();
         }
@@ -185,6 +196,14 @@ namespace Gs2.Gs2Guild.Model
             {
                 diff += (int)(UpdatedAt - other.UpdatedAt);
             }
+            if (Revision == null && Revision == other.Revision)
+            {
+                // null and null
+            }
+            else
+            {
+                diff += (int)(Revision - other.Revision);
+            }
             return diff;
         }
 
@@ -208,12 +227,25 @@ namespace Gs2.Gs2Guild.Model
                     });
                 }
             }
+            {
+                if (Revision < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("lastGuildMasterActivity", "guild.lastGuildMasterActivity.revision.error.invalid"),
+                    });
+                }
+                if (Revision > 9223372036854775805) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("lastGuildMasterActivity", "guild.lastGuildMasterActivity.revision.error.invalid"),
+                    });
+                }
+            }
         }
 
         public object Clone() {
             return new LastGuildMasterActivity {
                 UserId = UserId,
                 UpdatedAt = UpdatedAt,
+                Revision = Revision,
             };
         }
     }

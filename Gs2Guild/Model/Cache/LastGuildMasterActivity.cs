@@ -180,6 +180,22 @@ namespace Gs2.Gs2Guild.Model.Cache
             string guildName,
             int? timeOffset
         ) {
+            var (value, find) = cache.Get<LastGuildMasterActivity>(
+                self.CacheParentKey(
+                    namespaceName,
+                    guildModelName,
+                    guildName,
+                    timeOffset
+                ),
+                self.CacheKey(
+                )
+            );
+            if (find && (value?.Revision ?? -1) > (self?.Revision ?? -1) && (self?.Revision ?? -1) > 1) {
+                return;
+            }
+            if (find && (value?.Revision ?? -1) == (self?.Revision ?? -1)) {
+                return;
+            }
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,

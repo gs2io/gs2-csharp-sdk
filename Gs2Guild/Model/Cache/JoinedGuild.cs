@@ -199,6 +199,23 @@ namespace Gs2.Gs2Guild.Model.Cache
             if (userId == null) {
                 throw new NullReferenceException();
             }
+            var (value, find) = cache.Get<JoinedGuild>(
+                self.CacheParentKey(
+                    namespaceName,
+                    userId,
+                    timeOffset
+                ),
+                self.CacheKey(
+                    guildModelName,
+                    guildName
+                )
+            );
+            if (find && (value?.Revision ?? -1) > (self?.Revision ?? -1) && (self?.Revision ?? -1) > 1) {
+                return;
+            }
+            if (find && (value?.Revision ?? -1) == (self?.Revision ?? -1)) {
+                return;
+            }
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
