@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
@@ -32,12 +33,20 @@ namespace Gs2.Gs2Experience.Model.Transaction
             this Status self,
             SetRankCapByUserIdRequest request
         ) {
+/* diff --- start
             var changed = self.SpeculativeExecution(request);
+ diff --- end */
             try {
+/* diff --- start
                 changed.Validate();
+ diff --- end */
+                self.SpeculativeExecution(request); /* diff +++ */
                 return true;
             }
+/* diff --- start
             catch (Gs2Exception) {
+ diff --- end */
+            catch (Exception) { /* diff +++ */
                 return false;
             }
         }
@@ -46,19 +55,49 @@ namespace Gs2.Gs2Experience.Model.Transaction
             this Status self,
             SetRankCapByUserIdRequest request
         ) {
-#if UNITY_2017_1_OR_NEWER
+/* diff --- start
+//#if UNITY_2017_1_OR_NEWER
             UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: Gs2Experience:SetRankCapByUserId");
-#else
+//#else
             System.Console.WriteLine("Speculative execution not supported on this action: Gs2Experience:SetRankCapByUserId");
-#endif
+//#endif
             return self.Clone() as Status;
+ diff --- end */
+/* diff +++ start */
+            if (self?.Clone() is not Status clone ||
+                request?.RankCapValue == null) {
+                throw new NullReferenceException();
+            }
+            clone.RankCapValue = request.RankCapValue;
+            clone.Revision = 0;
+            return clone;
+        }
+
+        public static Status SpeculativeExecution(
+            this Status self,
+            SetRankCapByUserIdRequest request,
+            ExperienceModel model
+        ) {
+            if (self?.ExperienceValue == null ||
+                request?.RankCapValue == null || model == null) {
+                throw new NullReferenceException();
+            }
+            return model.RecalculateStatus(
+                self,
+                self.ExperienceValue.Value,
+                request.RankCapValue.Value
+            );
+/* diff +++ end */
         }
 
         public static SetRankCapByUserIdRequest Rate(
             this SetRankCapByUserIdRequest request,
             double rate
         ) {
+/* diff --- start
             throw new NotSupportedException($"not supported rate action Gs2Experience:SetRankCapByUserId");
+ diff --- end */
+            return request; /* diff +++ */
         }
     }
 
@@ -68,7 +107,10 @@ namespace Gs2.Gs2Experience.Model.Transaction
             this SetRankCapByUserIdRequest request,
             BigInteger rate
         ) {
+/* diff --- start
             throw new NotSupportedException($"not supported rate action Gs2Experience:SetRankCapByUserId");
+ diff --- end */
+            return request; /* diff +++ */
         }
     }
 }

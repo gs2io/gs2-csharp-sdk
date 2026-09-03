@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -32,8 +33,12 @@ using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
+/* diff --- start
 using Gs2.Core.Exception;
+ diff --- end */
+using Gs2.Core.Model; /* diff +++ */
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Idle.Model; /* diff +++ */
 using Gs2.Gs2Idle.Request;
 using Gs2.Gs2Idle.Model.Cache;
 using Gs2.Gs2Idle.Model.Transaction;
@@ -54,6 +59,39 @@ namespace Gs2.Gs2Idle.Domain.SpeculativeExecutor
             return "Gs2Idle:SetMaximumIdleMinutesByUserId";
         }
 
+/* diff +++ start */
+        public static Status Transform(
+            SetMaximumIdleMinutesByUserIdRequest request,
+            Status item,
+            long currentTimeMillis,
+            string region = null,
+            string ownerId = null
+        ) {
+            return item.SpeculativeExecutionAt(
+                request,
+                currentTimeMillis,
+                region,
+                ownerId
+            );
+        }
+
+        public static void Commit(
+            CacheDatabase cache,
+            SetMaximumIdleMinutesByUserIdRequest request,
+            Status item,
+            string userId,
+            int? timeOffset
+        ) {
+            item.PutCache(
+                cache,
+                request.NamespaceName,
+                userId,
+                request.CategoryName,
+                timeOffset
+            );
+        }
+
+/* diff +++ end */
 #if UNITY_2017_1_OR_NEWER
         public static Gs2Future<Func<object>> ExecuteFuture(
             Gs2.Core.Domain.Gs2 domain,
@@ -71,6 +109,7 @@ namespace Gs2.Gs2Idle.Domain.SpeculativeExecutor
             AccessToken accessToken,
             SetMaximumIdleMinutesByUserIdRequest request
         ) {
+/* diff --- start
             var item = await domain.Idle.Namespace(
                 request.NamespaceName
             ).AccessToken(
@@ -81,7 +120,16 @@ namespace Gs2.Gs2Idle.Domain.SpeculativeExecutor
 
             if (item == null) {
                 return () => null;
+ diff --- end */
+/* diff +++ start */
+            var prepared = request == null ? null :
+                SetMaximumIdleMinutesByUserIdRequest.FromJson(request.ToJson());
+            var preparedAccessToken = AccessToken.FromJson(accessToken?.ToJson());
+            if (prepared?.UserId == "#{userId}") {
+                prepared.UserId = preparedAccessToken?.UserId;
+/* diff +++ end */
             }
+/* diff --- start
             item = item.SpeculativeExecution(request);
 
             return () =>
@@ -93,8 +141,40 @@ namespace Gs2.Gs2Idle.Domain.SpeculativeExecutor
                     request.CategoryName,
                     null
                 );
+ diff --- end */
+/* diff +++ start */
+            if (domain?.RestSession == null ||
+                string.IsNullOrEmpty(preparedAccessToken?.UserId) ||
+                prepared?.UserId != preparedAccessToken.UserId ||
+                string.IsNullOrEmpty(prepared.NamespaceName) ||
+                string.IsNullOrEmpty(prepared.CategoryName)) {
+/* diff +++ end */
                 return null;
+/* diff --- start
             };
+ diff --- end */
+/* diff +++ start */
+            }
+            var region = domain.RestSession.Region.DisplayName();
+            var ownerId = domain.RestSession.OwnerId;
+            var physicalTimeMillis = UnixTime.ToUnixTime(DateTime.Now);
+            var logicalTimeMillis = physicalTimeMillis +
+                                    (long)(preparedAccessToken.TimeOffset ?? 0) * 1000L;
+            return MaximumIdleMinutesSpeculativeExecutor.Prepare(
+                domain,
+                preparedAccessToken,
+                prepared.NamespaceName,
+                prepared.UserId,
+                prepared.CategoryName,
+                item => Transform(
+                    prepared,
+                    item,
+                    logicalTimeMillis,
+                    region,
+                    ownerId
+                )
+            );
+/* diff +++ end */
         }
     }
 }

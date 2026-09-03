@@ -32,8 +32,11 @@ using System.Linq;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2SkillTree.Domain.SpeculativeExecutor;
+using Gs2.Gs2SkillTree.Model;
 using Gs2.Gs2SkillTree.Model.Cache; /* diff +++ */
 using Gs2.Gs2SkillTree.Request;
 #if UNITY_2017_1_OR_NEWER
@@ -70,62 +73,47 @@ namespace Gs2.Gs2SkillTree.Domain.Transaction.SpeculativeExecutor
             AccessToken accessToken,
             ResetByUserIdRequest request
         ) {
-/* diff --- start
-            // TODO: Speculative execution not supported
-//#if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
-//#else
-            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
-//#endif
-
- diff --- end */
-            var item = await domain.SkillTree.Namespace(
-                request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).Status(
-                request.PropertyId
-            ).ModelAsync();
-
-/* diff --- start
-            var commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
-                item?.ConsumeActions.Select(v =>
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2SkillTree.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
-                    }
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.ConsumeAction[]{},
-                item?.AcquireActions.Select(v =>
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2SkillTree.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
-                    }
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.AcquireAction[]{},
-                1.0
-            ).ExecuteAsync(
-                domain,
-                accessToken
+            var token = AccessToken.FromJson(accessToken?.ToJson());
+            var prepared = ResetByUserIdRequest.FromJson(request?.ToJson());
+            if (prepared?.UserId == "#{userId}") {
+                prepared.UserId = token?.UserId;
+            }
+            if (domain?.RestSession == null ||
+                string.IsNullOrEmpty(token?.UserId) ||
+                prepared == null || prepared.UserId != token.UserId) return null;
+            var expectedId =
+                $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                $"{domain.RestSession.OwnerId}:skillTree:" +
+                $"{prepared.NamespaceName}:user:{token.UserId}:status:" +
+                prepared.PropertyId;
+            var cached = ((Status)null).GetCache(
+                domain.Cache,
+                prepared.NamespaceName,
+                token.UserId,
+                prepared.PropertyId,
+                token.TimeOffset
             );
-
- diff --- end */
-            return () =>
-            {
-/* diff --- start
-                commit?.Invoke();
- diff --- end */
-/* diff +++ start */
-                item.DeleteCache(
-                    domain.Cache,
-                    request.NamespaceName,
-                    accessToken.UserId,
-                    request.PropertyId,
-                    accessToken.TimeOffset
-                );
-/* diff +++ end */
-                return null;
-            };
+            if (!cached.Item2 || cached.Item1 == null ||
+                cached.Item1.StatusId != expectedId ||
+                cached.Item1.UserId != token.UserId ||
+                cached.Item1.PropertyId != prepared.PropertyId ||
+                cached.Item1.ReleasedNodeNames == null) return null;
+            var commit = new StatusSpeculativeCommit(
+                domain.Cache,
+                prepared.NamespaceName,
+                token.UserId,
+                prepared.PropertyId,
+                token.TimeOffset,
+                expectedId,
+                item => {
+                    var changed = item.Clone() as Status;
+                    changed.ReleasedNodeNames = Array.Empty<string>();
+                    changed.Revision = 0;
+                    return changed;
+                },
+                true
+            );
+            return commit.CanPrepare() ? commit.Invoke : null;
         }
     }
 }

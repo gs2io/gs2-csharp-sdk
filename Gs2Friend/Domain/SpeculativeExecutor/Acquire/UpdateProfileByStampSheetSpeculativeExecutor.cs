@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -29,11 +30,17 @@ using System;
 using System.Numerics;
 using System.Collections;
 using System.Reflection;
+/* diff --- start
 using Gs2.Core.SpeculativeExecutor;
+ diff --- end */
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
+/* diff --- start
 using Gs2.Core.Exception;
+ diff --- end */
+using Gs2.Core.Model; /* diff +++ */
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Friend.Model; /* diff +++ */
 using Gs2.Gs2Friend.Request;
 using Gs2.Gs2Friend.Model.Cache;
 using Gs2.Gs2Friend.Model.Transaction;
@@ -54,6 +61,49 @@ namespace Gs2.Gs2Friend.Domain.SpeculativeExecutor
             return "Gs2Friend:UpdateProfileByUserId";
         }
 
+/* diff +++ start */
+        public static Profile Transform(
+            UpdateProfileByUserIdRequest request,
+            Profile item,
+            long currentTimeMillis,
+            long createdAtMillis,
+            string region = null,
+            string ownerId = null
+        ) {
+            return item.SpeculativeExecutionAt(
+                request,
+                currentTimeMillis,
+                createdAtMillis,
+                region,
+                ownerId
+            );
+        }
+
+        public static void Commit(
+            CacheDatabase cache,
+            UpdateProfileByUserIdRequest request,
+            Profile item,
+            string userId,
+            int? timeOffset
+        ) {
+            item.PutCache(
+                cache,
+                request.NamespaceName,
+                userId,
+                timeOffset
+            );
+            new PublicProfile {
+                UserId = userId,
+                Value = item.PublicProfile,
+            }.PutCache(
+                cache,
+                request.NamespaceName,
+                userId,
+                timeOffset
+            );
+        }
+
+/* diff +++ end */
 #if UNITY_2017_1_OR_NEWER
         public static Gs2Future<Func<object>> ExecuteFuture(
             Gs2.Core.Domain.Gs2 domain,
@@ -71,26 +121,125 @@ namespace Gs2.Gs2Friend.Domain.SpeculativeExecutor
             AccessToken accessToken,
             UpdateProfileByUserIdRequest request
         ) {
+/* diff --- start
             var item = await domain.Friend.Namespace(
                 request.NamespaceName
             ).AccessToken(
                 accessToken
             ).Profile(
             ).ModelAsync();
+ diff --- end */
+/* diff +++ start */
+            var preparedRequest = request == null
+                ? null
+                : new UpdateProfileByUserIdRequest()
+                    .WithNamespaceName(request.NamespaceName)
+                    .WithUserId(request.UserId)
+                    .WithPublicProfile(request.PublicProfile)
+                    .WithFollowerProfile(request.FollowerProfile)
+                    .WithFriendProfile(request.FriendProfile);
+            var preparedAccessToken = accessToken == null
+                ? null
+                : new AccessToken()
+                    .WithUserId(accessToken.UserId)
+                    .WithTimeOffset(accessToken.TimeOffset);
+            if (preparedRequest?.UserId == "#{userId}") {
+                preparedRequest.UserId = preparedAccessToken?.UserId;
+            }
+            if (domain?.RestSession == null ||
+                string.IsNullOrEmpty(preparedAccessToken?.UserId) ||
+                preparedRequest?.UserId != preparedAccessToken.UserId) {
+                return null;
+            }
+            var userId = preparedAccessToken.UserId;
+            var timeOffset = preparedAccessToken.TimeOffset;
+            var region = domain.RestSession.Region.DisplayName();
+            var ownerId = domain.RestSession.OwnerId ?? "";
+            var expectedProfileId = string.Join(
+                ":", "grn", "gs2",
+                region,
+                ownerId,
+                "friend", preparedRequest.NamespaceName,
+                "user", userId
+            );
+            var (item, find) = ((Profile)null).GetCache(
+                domain.Cache,
+                preparedRequest.NamespaceName,
+                userId,
+                timeOffset
+            );
+            if (!find || item == null ||
+                item.ProfileId != expectedProfileId ||
+                item.UserId != userId) {
+                return null;
+            }
+/* diff +++ end */
 
+/* diff --- start
             if (item == null) {
                 return () => null;
             }
             item = item.SpeculativeExecution(request);
 
+ diff --- end */
+/* diff +++ start */
+            var physicalTimeMillis = UnixTime.ToUnixTime(DateTime.Now);
+            var logicalTimeMillis = physicalTimeMillis +
+                                    (long)(timeOffset ?? 0) * 1000L;
+            var preparedRevision = item.Revision;
+/* diff +++ end */
             return () =>
             {
+/* diff --- start
                 item.PutCache(
+ diff --- end */
+                var cached = ((Profile)null).GetCache( /* diff +++ */
                     domain.Cache,
+/* diff --- start
                     request.NamespaceName,
                     request.UserId,
                     null
+ diff --- end */
+/* diff +++ start */
+                    preparedRequest.NamespaceName,
+                    userId,
+                    timeOffset
+/* diff +++ end */
                 );
+/* diff +++ start */
+                var current = cached.Item2 ? cached.Item1 : null;
+                if (current == null ||
+                    current.ProfileId != expectedProfileId ||
+                    current.UserId != userId ||
+                    current.Revision > 0 &&
+                    current.Revision != preparedRevision) {
+                    return null;
+                }
+                try {
+                    var changed = Transform(
+                        preparedRequest,
+                        current,
+                        logicalTimeMillis,
+                        physicalTimeMillis,
+                        region,
+                        ownerId
+                    );
+                    if (changed.ProfileId != expectedProfileId ||
+                        changed.UserId != userId || changed.Revision != 0) {
+                        return null;
+                    }
+                    Commit(
+                        domain.Cache,
+                        preparedRequest,
+                        changed,
+                        userId,
+                        timeOffset
+                    );
+                }
+                catch (System.Exception) {
+                    return null;
+                }
+/* diff +++ end */
                 return null;
             };
         }

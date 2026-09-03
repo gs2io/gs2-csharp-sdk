@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -71,6 +72,7 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
             AccessToken accessToken,
             ReDrawRarityParameterStatusByUserIdRequest request
         ) {
+/* diff --- start
             var item = await domain.Enchant.Namespace(
                 request.NamespaceName
             ).AccessToken(
@@ -97,6 +99,12 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
                 );
                 return null;
             };
+ diff --- end */
+/* diff +++ start */
+            // The server chooses new parameter values randomly. Rewriting the
+            // previous cached status would be a stale prediction.
+            return null;
+/* diff +++ end */
         }
     }
 }

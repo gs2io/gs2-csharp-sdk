@@ -70,58 +70,9 @@ namespace Gs2.Gs2Idle.Domain.Transaction.SpeculativeExecutor
             AccessToken accessToken,
             ReceiveByUserIdRequest request
         ) {
-/* diff --- start
-            // TODO: Speculative execution not supported
-//#if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
-//#else
-            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
-//#endif
-
- diff --- end */
-            var item = await domain.Idle.Namespace(
-                request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).Status(
-                request.CategoryName
-/* diff --- start
-            ).ModelAsync();
- diff --- end */
-            ).PredictionAsync(new PredictionRequest()); /* diff +++ */
-
-            var commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
-/* diff --- start
-                item?.ConsumeActions.Select(v =>
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Idle.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
-                    }
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.ConsumeAction[]{},
-                item?.AcquireActions.Select(v =>
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Idle.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
-                    }
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.AcquireAction[]{},
- diff --- end */
-/* diff +++ start */
-                Array.Empty<ConsumeAction>(),
-                item,
-/* diff +++ end */
-                1.0
-            ).ExecuteAsync(
-                domain,
-                accessToken
-            );
-
-            return () =>
-            {
-                commit?.Invoke();
-                return null;
-            };
+            // Receive generates a new random seed and may invoke Lottery or
+            // user scripts. There is no cache-only deterministic prediction.
+            return null;
         }
     }
 }

@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
@@ -58,7 +59,20 @@ namespace Gs2.Gs2Formation.Model.Transaction
             this AddMoldCapacityByUserIdRequest request,
             double rate
         ) {
+/* diff --- start
             request.Capacity = (int?) (request.Capacity * rate);
+ diff --- end */
+/* diff +++ start */
+            if (request == null) return request;
+            if (!Gs2.Gs2Inventory.Model.Transaction
+                    .SetCapacityByUserIdRequestExt.TryApplyRate(
+                        request.Capacity ?? 1, rate, out var value
+                    )) {
+                request.Capacity = null;
+                return request;
+            }
+            request.Capacity = value;
+/* diff +++ end */
             return request;
         }
     }
@@ -69,7 +83,16 @@ namespace Gs2.Gs2Formation.Model.Transaction
             this AddMoldCapacityByUserIdRequest request,
             BigInteger rate
         ) {
+/* diff --- start
             request.Capacity = (int?) ((request.Capacity ?? 0) * rate);
+ diff --- end */
+/* diff +++ start */
+            if (request == null) return request;
+            var value = new BigInteger(request.Capacity ?? 1) * rate;
+            request.Capacity = value <= int.MinValue || value > int.MaxValue
+                ? (int?)null
+                : (int)value;
+/* diff +++ end */
             return request;
         }
     }

@@ -22,7 +22,6 @@
 using System;
 using System.Linq;
 using System.Numerics;
-using Gs2.Core.Exception;
 using Gs2.Gs2Mission.Request;
 
 namespace Gs2.Gs2Mission.Model.Transaction
@@ -33,12 +32,11 @@ namespace Gs2.Gs2Mission.Model.Transaction
             this Complete self,
             ReceiveByUserIdRequest request
         ) {
-            var changed = self.SpeculativeExecution(request);
             try {
-                changed.Validate();
+                self.SpeculativeExecution(request);
                 return true;
             }
-            catch (Gs2Exception) {
+            catch (System.Exception) {
                 return false;
             }
         }
@@ -56,21 +54,20 @@ namespace Gs2.Gs2Mission.Model.Transaction
             return self.Clone() as Complete;
  diff --- end */
 /* diff +++ start */
-            var clone = self.Clone() as Complete;
-            if (clone == null)
-            {
+            if (self?.ReceivedMissionTaskNames == null || request == null) {
                 throw new NullReferenceException();
             }
-            if (clone.ReceivedMissionTaskNames.Count(v => v == request.MissionTaskName) != 0) {
-                return clone;
+            if (self.ReceivedMissionTaskNames.Contains(request.MissionTaskName)) {
+                throw new InvalidOperationException("mission task is already received");
             }
 
+            var clone = self.Clone() as Complete;
             clone.ReceivedMissionTaskNames = clone.ReceivedMissionTaskNames.Concat(
                 new[] {
                     request.MissionTaskName,
                 }
             ).ToArray();
-            
+            clone.Revision = 0;
             return clone;
 /* diff +++ end */
         }
@@ -79,7 +76,7 @@ namespace Gs2.Gs2Mission.Model.Transaction
             this ReceiveByUserIdRequest request,
             double rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Mission:ReceiveByUserId");
+            return request;
         }
     }
 
@@ -89,7 +86,7 @@ namespace Gs2.Gs2Mission.Model.Transaction
             this ReceiveByUserIdRequest request,
             BigInteger rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Mission:ReceiveByUserId");
+            return request;
         }
     }
 }

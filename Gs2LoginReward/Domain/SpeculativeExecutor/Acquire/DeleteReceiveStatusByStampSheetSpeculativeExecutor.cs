@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -31,9 +32,11 @@ using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model; /* diff +++ */
 using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2LoginReward.Model; /* diff +++ */
 using Gs2.Gs2LoginReward.Request;
 using Gs2.Gs2LoginReward.Model.Cache;
 using Gs2.Gs2LoginReward.Model.Transaction;
@@ -71,6 +74,7 @@ namespace Gs2.Gs2LoginReward.Domain.SpeculativeExecutor
             AccessToken accessToken,
             DeleteReceiveStatusByUserIdRequest request
         ) {
+/* diff --- start
             var item = await domain.LoginReward.Namespace(
                 request.NamespaceName
             ).AccessToken(
@@ -81,17 +85,79 @@ namespace Gs2.Gs2LoginReward.Domain.SpeculativeExecutor
 
             if (item == null) {
                 return () => null;
+ diff --- end */
+/* diff +++ start */
+            var prepared = request == null ? null :
+                DeleteReceiveStatusByUserIdRequest.FromJson(request.ToJson());
+            if (prepared?.UserId == "#{userId}") {
+                prepared.UserId = accessToken?.UserId;
+/* diff +++ end */
             }
+/* diff --- start
             item = item.SpeculativeExecution(request);
+ diff --- end */
+/* diff +++ start */
+            if (domain?.RestSession == null ||
+                string.IsNullOrEmpty(accessToken?.UserId) ||
+                prepared?.UserId != accessToken.UserId ||
+                string.IsNullOrEmpty(prepared.NamespaceName) ||
+                string.IsNullOrEmpty(prepared.BonusModelName)) {
+                return null;
+            }
+            var userId = accessToken.UserId;
+            var timeOffset = accessToken.TimeOffset;
+            var cached = ((ReceiveStatus)null).GetCache(
+                domain.Cache,
+                prepared.NamespaceName,
+                userId,
+                prepared.BonusModelName,
+                timeOffset
+            );
+            var item = cached.Item1;
+            var expectedId =
+                $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                $"{domain.RestSession.OwnerId}:loginReward:{prepared.NamespaceName}:" +
+                $"user:{userId}:status:{prepared.BonusModelName}";
+            if (!cached.Item2 || !item.IsExecutable(prepared) ||
+                item.ReceiveStatusId != expectedId) {
+                return null;
+            }
+            var expected = item.Clone() as ReceiveStatus;
+/* diff +++ end */
 
             return () =>
             {
+/* diff --- start
                 item.PutCache(
+ diff --- end */
+                var current = ((ReceiveStatus)null).GetCache( /* diff +++ */
                     domain.Cache,
+/* diff --- start
                     request.NamespaceName,
                     request.UserId,
                     request.BonusModelName,
                     null
+ diff --- end */
+/* diff +++ start */
+                    prepared.NamespaceName,
+                    userId,
+                    prepared.BonusModelName,
+                    timeOffset
+                );
+                if (!current.Item2 || current.Item1 == null ||
+                    current.Item1.ReceiveStatusId != expectedId ||
+                    (current.Item1.Revision > 0 &&
+                     current.Item1.ToJson().ToJson() !=
+                     expected.ToJson().ToJson())) {
+                    return null;
+                }
+                ((ReceiveStatus)null).PutCache(
+                    domain.Cache,
+                    prepared.NamespaceName,
+                    userId,
+                    prepared.BonusModelName,
+                    timeOffset
+/* diff +++ end */
                 );
                 return null;
             };

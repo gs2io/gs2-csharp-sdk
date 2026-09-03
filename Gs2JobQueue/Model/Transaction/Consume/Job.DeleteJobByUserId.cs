@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
@@ -32,6 +33,7 @@ namespace Gs2.Gs2JobQueue.Model.Transaction
             this Job self,
             DeleteJobByUserIdRequest request
         ) {
+/* diff --- start
             var changed = self.SpeculativeExecution(request);
             try {
                 changed.Validate();
@@ -40,6 +42,17 @@ namespace Gs2.Gs2JobQueue.Model.Transaction
             catch (Gs2Exception) {
                 return false;
             }
+ diff --- end */
+/* diff +++ start */
+            return self != null &&
+                   request != null &&
+                   !string.IsNullOrEmpty(self.UserId) &&
+                   !string.IsNullOrEmpty(request.UserId) &&
+                   !string.IsNullOrEmpty(self.Name) &&
+                   !string.IsNullOrEmpty(request.JobName) &&
+                   self.UserId == request.UserId &&
+                   self.Name == request.JobName;
+/* diff +++ end */
         }
 
         public static Job SpeculativeExecution(
@@ -53,7 +66,10 @@ namespace Gs2.Gs2JobQueue.Model.Transaction
             this DeleteJobByUserIdRequest request,
             double rate
         ) {
+/* diff --- start
             throw new NotSupportedException($"not supported rate action Gs2JobQueue:DeleteJobByUserId");
+ diff --- end */
+            return request; /* diff +++ */
         }
     }
 
@@ -63,7 +79,10 @@ namespace Gs2.Gs2JobQueue.Model.Transaction
             this DeleteJobByUserIdRequest request,
             BigInteger rate
         ) {
+/* diff --- start
             throw new NotSupportedException($"not supported rate action Gs2JobQueue:DeleteJobByUserId");
+ diff --- end */
+            return request; /* diff +++ */
         }
     }
 }

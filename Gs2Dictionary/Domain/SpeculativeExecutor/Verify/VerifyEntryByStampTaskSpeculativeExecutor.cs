@@ -29,14 +29,14 @@
 using System;
 using System.Numerics;
 using System.Collections;
-using System.Collections.Generic; /* diff +++ */
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model;
 using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
-using Gs2.Gs2Dictionary.Model; /* diff +++ */
+using Gs2.Gs2Dictionary.Model;
 using Gs2.Gs2Dictionary.Request;
 using Gs2.Gs2Dictionary.Model.Cache;
 using Gs2.Gs2Dictionary.Model.Transaction;
@@ -45,7 +45,6 @@ using UnityEngine;
 #endif
 #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.Linq; /* diff +++ */
 #else
 using System.Threading.Tasks;
 #endif
@@ -53,9 +52,99 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
 {
     public static class VerifyEntryByUserIdSpeculativeExecutor {
+        private sealed class PreparedVerification :
+            IPreparedSpeculativeVerification
+        {
+            private readonly Gs2.Core.Domain.Gs2 _domain;
+            private readonly AccessToken _accessToken;
+            private readonly VerifyEntryByUserIdRequest _request;
+            private readonly string _expectedEntryId;
+
+            public PreparedVerification(
+                Gs2.Core.Domain.Gs2 domain,
+                AccessToken accessToken,
+                VerifyEntryByUserIdRequest request,
+                string expectedEntryId
+            ) {
+                _domain = domain;
+                _accessToken = accessToken;
+                _request = request;
+                _expectedEntryId = expectedEntryId;
+            }
+
+            public bool IsStillSatisfied()
+            {
+                var (item, found) = ((Entry)null).GetCache(
+                    _domain.Cache,
+                    _request.NamespaceName,
+                    _accessToken.UserId,
+                    _request.EntryModelName,
+                    _accessToken.TimeOffset
+                );
+                return IsUsable(
+                           item,
+                           found,
+                           _request,
+                           _accessToken.UserId,
+                           _expectedEntryId
+                       ) && Entries(item).IsExecutable(_request);
+            }
+
+            public object Invoke()
+            {
+                return null;
+            }
+        }
 
         public static string Action() {
             return "Gs2Dictionary:VerifyEntryByUserId";
+        }
+
+        public static Gs2.Gs2Dictionary.Model.Entry[] Transform(
+            Gs2.Core.Domain.Gs2 domain,
+            AccessToken accessToken,
+            VerifyEntryByUserIdRequest request,
+            Gs2.Gs2Dictionary.Model.Entry[] items
+        ) {
+            items.SpeculativeExecution(request);
+            return items;
+        }
+
+        private static Entry[] Entries(Entry item)
+        {
+            return item == null ? new Entry[0] : new[] { item };
+        }
+
+        private static bool IsUsable(
+            Entry item,
+            bool found,
+            VerifyEntryByUserIdRequest request,
+            string userId,
+            string expectedEntryId
+        ) {
+            return found && (item == null ||
+                item.EntryId == expectedEntryId &&
+                item.UserId == userId &&
+                item.Name == request.EntryModelName);
+        }
+
+#if GS2_ENABLE_UNITASK
+        public static async UniTask<Func<object>> ExecuteInverseAsync(
+#else
+        public static async Task<Func<object>> ExecuteInverseAsync(
+#endif
+            Gs2.Core.Domain.Gs2 domain,
+            AccessToken accessToken,
+            VerifyEntryByUserIdRequest request
+        ) {
+            var inverse = request == null ? null :
+                VerifyEntryByUserIdRequest.FromJson(request.ToJson());
+            switch (inverse?.VerifyType) {
+                case "have": inverse.VerifyType = "havent"; break;
+                case "havent": inverse.VerifyType = "have"; break;
+                default: return null;
+            }
+            return await ExecuteAsync(domain, accessToken, inverse);
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -75,32 +164,66 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
             AccessToken accessToken,
             VerifyEntryByUserIdRequest request
         ) {
-/* diff --- start
-            var item = await domain.Dictionary.Namespace(
- diff --- end */
-            var items = await domain.Dictionary.Namespace( /* diff +++ */
-                request.NamespaceName
-            ).AccessToken(
-                accessToken
-/* diff --- start
-            ).Entry(
-                request.EntryModelName
-            ).ModelAsync();
- diff --- end */
-            ).EntriesAsync().ToListAsync(); /* diff +++ */
-
-/* diff --- start
-            if (item == null) {
-                return () => null;
+            var token = accessToken?.Clone() as AccessToken;
+            var prepared = request == null ? null :
+                VerifyEntryByUserIdRequest.FromJson(request.ToJson());
+            if (prepared?.UserId == "#{userId}") {
+                prepared.UserId = token?.UserId;
             }
-            item = item.SpeculativeExecution(request);
- diff --- end */
-            var items_ = items.ToArray().SpeculativeExecution(request); /* diff +++ */
-
-            return () =>
-            {
+            if (domain?.RestSession == null ||
+                string.IsNullOrEmpty(domain.RestSession.OwnerId) ||
+                string.IsNullOrEmpty(token?.UserId) ||
+                prepared?.UserId != token.UserId ||
+                string.IsNullOrEmpty(prepared.NamespaceName) ||
+                string.IsNullOrEmpty(prepared.EntryModelName) ||
+                Gs2.Gs2Dictionary.Model.Transaction.EntryExt
+                    .EntryVerificationFailureReason(
+                    prepared.VerifyType
+                ) == null) {
                 return null;
-            };
+            }
+            var userId = token.UserId;
+            var timeOffset = token.TimeOffset;
+            var region = domain.RestSession.Region.DisplayName();
+            var ownerId = domain.RestSession.OwnerId;
+            var expectedEntryId = string.Join(
+                ":",
+                "grn",
+                "gs2",
+                region,
+                ownerId,
+                "dictionary",
+                prepared.NamespaceName,
+                "user",
+                userId,
+                "entry",
+                prepared.EntryModelName
+            );
+            var cached = ((Entry)null).GetCache(
+                domain.Cache,
+                prepared.NamespaceName,
+                userId,
+                prepared.EntryModelName,
+                timeOffset
+            );
+            var item = cached.Item1;
+            if (!IsUsable(
+                    item,
+                    cached.Item2,
+                    prepared,
+                    userId,
+                    expectedEntryId
+                )) {
+                return null;
+            }
+            Transform(domain, token, prepared, Entries(item));
+
+            return new PreparedVerification(
+                domain,
+                token,
+                prepared,
+                expectedEntryId
+            ).Invoke;
         }
     }
 }

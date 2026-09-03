@@ -92,6 +92,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
             this.NamespaceName = namespaceName;
             this.AccessToken = accessToken;
             this.EventName = eventName;
+            this.IsInSchedule = inSchedule;
             this.InSchedule = inSchedule; /* diff +++ */
         }
 

@@ -208,6 +208,19 @@ namespace Gs2.Gs2Money2.Model.Cache
             if (find && (value?.Revision ?? 0) > (self?.Revision ?? 0) && (self?.Revision ?? 0) > 1) { /* diff +++ */
                 return;
             }
+/* diff +++ start */
+            if ((self?.SharedFreeCurrency ?? false) &&
+                (slot ?? 0) == 0 &&
+                self.Revision != 0) {
+                cache.ClearListCache<Wallet>(
+                    self.CacheParentKey(
+                        namespaceName,
+                        userId,
+                        timeOffset
+                    )
+                );
+            }
+/* diff +++ end */
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
@@ -220,17 +233,6 @@ namespace Gs2.Gs2Money2.Model.Cache
                 self,
                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
             );
-/* diff +++ start */
-            if ((self?.SharedFreeCurrency ?? false) && (slot ?? 0) == 0) {
-                cache.ClearListCache<Wallet>(
-                    self.CacheParentKey(
-                        namespaceName,
-                        userId,
-                        timeOffset
-                    )
-                );
-            }
-/* diff +++ end */
         }
 
         public static void DeleteCache(

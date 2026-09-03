@@ -23,6 +23,7 @@ using System;
 using System.Linq;
 using System.Numerics;
 using Gs2.Core.Exception;
+using Gs2.Core.Model;
 using Gs2.Gs2Money2.Request;
 
 namespace Gs2.Gs2Money2.Model.Transaction
@@ -33,12 +34,11 @@ namespace Gs2.Gs2Money2.Model.Transaction
             this Wallet self,
             WithdrawByUserIdRequest request
         ) {
-            var changed = self.SpeculativeExecution(request);
             try {
-                changed.Validate();
+                self.SpeculativeExecution(request);
                 return true;
             }
-            catch (Gs2Exception) {
+            catch (System.Exception) {
                 return false;
             }
         }
@@ -47,26 +47,58 @@ namespace Gs2.Gs2Money2.Model.Transaction
             this Wallet self,
             WithdrawByUserIdRequest request
         ) {
+            if (request?.WithdrawCount == null) {
+                throw new InvalidOperationException("withdraw count is unavailable");
+            }
             if (self.Clone() is not Wallet clone)
             {
                 throw new NullReferenceException();
             }
-/* diff --- start
-            clone.Total -= request.WithdrawCount;
- diff --- end */
-/* diff +++ start */
-            if (request.PaidOnly ?? false) {
-                clone.Summary.Paid -= request.WithdrawCount;
-            }
-            else {
-                clone.Summary.Free -= request.WithdrawCount;
-                if (clone.Summary.Free < 0) {
-                    clone.Summary.Paid -= -clone.Summary.Free;
-                    clone.Summary.Free = 0;
+            var depositTransactions = (clone.DepositTransactions ??
+                    Array.Empty<DepositTransaction>())
+                .Select(transaction => transaction?.Clone() as DepositTransaction)
+                .Where(transaction => transaction != null)
+                .ToList();
+            var remaining = request.WithdrawCount.Value;
+            if (!(request.PaidOnly ?? false)) {
+                var free = depositTransactions.FirstOrDefault(transaction =>
+                    transaction.Price == 0
+                );
+                if (free != null) {
+                    var consumed = Math.Min(free.Count ?? 0, remaining);
+                    remaining = checked(remaining - consumed);
+                    var freeCount = checked((free.Count ?? 0) - consumed);
+                    depositTransactions = depositTransactions
+                        .Where(transaction => transaction.Price != 0)
+                        .ToList();
+                    if (freeCount > 0) {
+                        free.Count = freeCount;
+                        depositTransactions.Add(free);
+                    }
                 }
             }
-            clone.Summary.Total -= request.WithdrawCount;
-/* diff +++ end */
+            for (var i = 0; i < depositTransactions.Count && remaining > 0; i++) {
+                var transaction = depositTransactions[i];
+                if (transaction.Price == 0 || (transaction.Count ?? 0) <= 0) {
+                    continue;
+                }
+                var consumed = Math.Min(transaction.Count.Value, remaining);
+                var unitPrice = transaction.Price.Value / transaction.Count.Value;
+                transaction.Count = checked(transaction.Count.Value - consumed);
+                transaction.Price = checked(unitPrice * transaction.Count.Value);
+                remaining = checked(remaining - consumed);
+            }
+            depositTransactions = depositTransactions
+                .Where(transaction => (transaction.Count ?? 0) > 0)
+                .ToList();
+            if (remaining > 0) {
+                throw new BadRequestException(new[] {
+                    new RequestError("wallet", "fewBalance"),
+                });
+            }
+            clone.DepositTransactions = depositTransactions.ToArray();
+            clone.Summary = WalletExt.CalculateSummary(clone.DepositTransactions);
+            clone.Revision = 0;
             return clone;
         }
 
@@ -74,11 +106,8 @@ namespace Gs2.Gs2Money2.Model.Transaction
             this WithdrawByUserIdRequest request,
             double rate
         ) {
-/* diff --- start
             request.WithdrawCount = (int?) (request.WithdrawCount * rate);
             return request;
- diff --- end */
-            throw new NotSupportedException($"not supported rate action Gs2Money2:WithdrawByUserId"); /* diff +++ */
         }
     }
 
@@ -88,11 +117,8 @@ namespace Gs2.Gs2Money2.Model.Transaction
             this WithdrawByUserIdRequest request,
             BigInteger rate
         ) {
-/* diff --- start
             request.WithdrawCount = (int?) ((request.WithdrawCount ?? 0) * rate);
             return request;
- diff --- end */
-            throw new NotSupportedException($"not supported rate action Gs2Money2:WithdrawByUserId"); /* diff +++ */
         }
     }
 }

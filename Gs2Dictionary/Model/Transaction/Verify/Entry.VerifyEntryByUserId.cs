@@ -23,6 +23,7 @@ using System;
 using System.Linq;
 using System.Numerics;
 using Gs2.Core.Exception;
+using Gs2.Core.Model;
 using Gs2.Gs2Dictionary.Request;
 
 namespace Gs2.Gs2Dictionary.Model.Transaction
@@ -36,17 +37,23 @@ namespace Gs2.Gs2Dictionary.Model.Transaction
             this Entry[] self, /* diff +++ */
             VerifyEntryByUserIdRequest request
         ) {
+            if (self == null ||
+                request?.EntryModelName == null ||
+                self.Any(v => v?.Name == null)) {
+                return false;
+            }
+
             switch (request.VerifyType) {
                 case "havent":
 /* diff --- start
                     throw new NotImplementedException($"not implemented action Gs2Dictionary:VerifyEntryByUserId");
  diff --- end */
-                    return !self.Select(v => v.Name).Contains(request.EntryModelName); /* diff +++ */
+                    return !self.Any(v => v.Name == request.EntryModelName); /* diff +++ */
                 case "have":
 /* diff --- start
                     throw new NotImplementedException($"not implemented action Gs2Dictionary:VerifyEntryByUserId");
  diff --- end */
-                    return self.Select(v => v.Name).Contains(request.EntryModelName); /* diff +++ */
+                    return self.Any(v => v.Name == request.EntryModelName); /* diff +++ */
             }
             return false;
         }
@@ -64,14 +71,34 @@ namespace Gs2.Gs2Dictionary.Model.Transaction
 /* diff --- start
             return self.Clone() as Entry;
  diff --- end */
+            var reason = EntryVerificationFailureReason(request?.VerifyType);
+            if (self != null && request?.EntryModelName != null &&
+                self.All(v => v?.Name != null) && reason != null &&
+                !self.IsExecutable(request)) {
+                throw new BadRequestException(new [] {
+                    new RequestError(
+                        "entry",
+                        $"dictionary.entry.entry.error.{reason}"
+                    ),
+                });
+            }
             return self.Clone() as Entry[]; /* diff +++ */
+        }
+
+        internal static string EntryVerificationFailureReason(string verifyType)
+        {
+            switch (verifyType) {
+                case "havent": return "have";
+                case "have": return "havent";
+                default: return null;
+            }
         }
 
         public static VerifyEntryByUserIdRequest Rate(
             this VerifyEntryByUserIdRequest request,
             double rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Dictionary:VerifyEntryByUserId");
+            return request;
         }
     }
 
@@ -81,7 +108,7 @@ namespace Gs2.Gs2Dictionary.Model.Transaction
             this VerifyEntryByUserIdRequest request,
             BigInteger rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Dictionary:VerifyEntryByUserId");
+            return request;
         }
     }
 }

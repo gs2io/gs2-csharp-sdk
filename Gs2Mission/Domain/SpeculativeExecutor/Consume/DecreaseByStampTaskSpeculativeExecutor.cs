@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -28,15 +29,20 @@
 using System;
 using System.Numerics;
 using System.Collections;
+using System.Collections.Generic; /* diff +++ */
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model; /* diff +++ */
 using Gs2.Core.Util;
+/* diff --- start
 using Gs2.Core.Exception;
+ diff --- end */
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Mission.Request;
 using Gs2.Gs2Mission.Model.Cache;
 using Gs2.Gs2Mission.Model.Transaction;
+using Gs2.Gs2Mission.Model; /* diff +++ */
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 #endif
@@ -71,6 +77,7 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
             AccessToken accessToken,
             DecreaseCounterByUserIdRequest request
         ) {
+/* diff --- start
             var item = await domain.Mission.Namespace(
                 request.NamespaceName
             ).AccessToken(
@@ -81,7 +88,25 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
 
             if (item == null) {
                 return () => null;
+ diff --- end */
+/* diff +++ start */
+            var token = accessToken == null
+                ? null
+                : new AccessToken()
+                    .WithUserId(accessToken.UserId)
+                    .WithTimeOffset(accessToken.TimeOffset);
+            var prepared = request == null
+                ? null
+                : new DecreaseCounterByUserIdRequest()
+                    .WithNamespaceName(request.NamespaceName)
+                    .WithCounterName(request.CounterName)
+                    .WithUserId(request.UserId)
+                    .WithValue(request.Value);
+            if (prepared?.UserId == "#{userId}") {
+                prepared.UserId = token?.UserId;
+/* diff +++ end */
             }
+/* diff --- start
             item = item.SpeculativeExecution(request);
 
             return () =>
@@ -95,6 +120,69 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
                 );
                 return null;
             };
+ diff --- end */
+/* diff +++ start */
+            if (domain?.RestSession == null ||
+                string.IsNullOrEmpty(token?.UserId) ||
+                prepared?.UserId != token.UserId ||
+                string.IsNullOrEmpty(prepared.NamespaceName) ||
+                string.IsNullOrEmpty(prepared.CounterName) ||
+                !prepared.Value.HasValue) return null;
+            var expectedId =
+                $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                $"{domain.RestSession.OwnerId}:mission:" +
+                $"{prepared.NamespaceName}:user:{token.UserId}:counter:" +
+                prepared.CounterName;
+            var cached = ((Counter)null).GetCache(
+                domain.Cache,
+                prepared.NamespaceName,
+                token.UserId,
+                prepared.CounterName,
+                token.TimeOffset
+            );
+            if (!cached.Item2 || cached.Item1 == null ||
+                cached.Item1.CounterId != expectedId ||
+                cached.Item1.UserId != token.UserId ||
+                cached.Item1.Name != prepared.CounterName ||
+                cached.Item1.Values == null) return null;
+            var logicalTimeMillis = UnixTime.ToUnixTime(DateTime.Now) +
+                                    (long)(token.TimeOffset ?? 0) * 1000L;
+            var commit = new CounterMutationSpeculativeCommit(
+                domain.Cache,
+                prepared.NamespaceName,
+                token.UserId,
+                prepared.CounterName,
+                token.TimeOffset,
+                expectedId,
+                cached.Item1.Revision,
+                current => {
+                    var changed = current.Clone() as Counter;
+                    var changedAny = false;
+                    var values = new List<ScopedValue>();
+                    foreach (var value in current.Values) {
+                        if (value == null) continue;
+                        var next = value.Clone() as ScopedValue;
+                        if (next == null) continue;
+                        values.Add(next);
+                        if (next.ScopeType != "resetTiming" ||
+                            next.NextResetAt.HasValue &&
+                            next.NextResetAt <= logicalTimeMillis ||
+                            !next.Value.HasValue) continue;
+                        changedAny = true;
+                        var decreased = new BigInteger(next.Value.Value) -
+                                        prepared.Value.Value;
+                        next.Value = decreased < 0 ? 0 : (long)decreased;
+                        next.UpdatedAt = logicalTimeMillis;
+                    }
+                    if (!changedAny) return current;
+                    changed.Values = values.ToArray();
+                    changed.UpdatedAt = logicalTimeMillis;
+                    changed.Revision = 0;
+                    return changed;
+                }
+            );
+            return commit.Invoke;
+/* diff +++ end */
         }
     }
 }

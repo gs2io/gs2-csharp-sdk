@@ -930,37 +930,16 @@ namespace Gs2.Core.Domain
             }
         }
         
-        public Gs2Future DisconnectFuture()
-        {
-            IEnumerator Impl(Gs2Future self)
-            {
-                {
-                    var future = this._restSession.CloseFuture();
-                    yield return future;
-                    if (future.Error != null) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                {
-                    var future = this._webSocketSession.CloseFuture();
-                    yield return future;
-                    if (future.Error != null) {
-                        self.OnError(future.Error);
-                        yield break;
-                    }
-                }
-                self.OnComplete(null);
-            }
-            return new Gs2InlineFuture(Impl);
-        }
+        public Gs2Future DisconnectFuture() => DisconnectAsync().ToGs2Future();
         
 #if GS2_ENABLE_UNITASK
         public async UniTask DisconnectAsync()
+#else
+        public async Task DisconnectAsync()
+#endif
         {
             await this._restSession.CloseAsync();
             await this._webSocketSession.CloseAsync();
         }
-#endif
     }
 }

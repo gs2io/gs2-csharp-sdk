@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -72,9 +73,20 @@ namespace Gs2.Gs2Showcase.Domain.SpeculativeExecutor
             consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (IncrementPurchaseCountByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = IncrementPurchaseCountByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
+/* diff --- start
                 if (rate != 1) {
                     request = request.Rate(rate);
+ diff --- end */
+/* diff +++ start */
+                if (!PurchaseCountRate.TryApply(
+                        request?.Count ?? 1,
+                        rate,
+                        out var value
+                    )) {
+                    return null;
+/* diff +++ end */
                 }
+                request.Count = value; /* diff +++ */
                 return await IncrementPurchaseCountByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

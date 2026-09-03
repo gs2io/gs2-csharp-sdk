@@ -36,12 +36,11 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this ItemSet self, /* diff +++ */
             AddReferenceOfByUserIdRequest request
         ) {
-            var changed = self.SpeculativeExecution(request);
             try {
-                changed.Validate();
+                self.SpeculativeExecution(request);
                 return true;
             }
-            catch (Gs2Exception) {
+            catch (System.Exception) {
                 return false;
             }
         }
@@ -56,6 +55,15 @@ namespace Gs2.Gs2Inventory.Model.Transaction
 /* diff +++ end */
             AddReferenceOfByUserIdRequest request
         ) {
+            if (self?.ReferenceOf == null || request == null ||
+                request.ReferenceOf == null) {
+                throw new InvalidOperationException();
+            }
+            if (self.ReferenceOf.Contains(request.ReferenceOf)) {
+                throw new BadRequestException(new [] {
+                    new Gs2.Core.Model.RequestError("referenceOf", "duplicate"),
+                });
+            }
 /* diff --- start
 //#if UNITY_2017_1_OR_NEWER
             UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: Gs2Inventory:AddReferenceOfByUserId");
@@ -69,7 +77,9 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             if (clone == null) {
                 throw new NullReferenceException();
             }
-            clone.ReferenceOf = clone.ReferenceOf.Concat(new []{ request.ReferenceOf }).ToArray();
+            clone.ReferenceOf = clone.ReferenceOf
+                .Concat(new []{ request.ReferenceOf })
+                .ToArray();
             return clone;
 /* diff +++ end */
         }
@@ -78,7 +88,7 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this AddReferenceOfByUserIdRequest request,
             double rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Inventory:AddReferenceOfByUserId");
+            return request;
         }
     }
 
@@ -88,7 +98,7 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this AddReferenceOfByUserIdRequest request,
             BigInteger rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Inventory:AddReferenceOfByUserId");
+            return request;
         }
     }
 }

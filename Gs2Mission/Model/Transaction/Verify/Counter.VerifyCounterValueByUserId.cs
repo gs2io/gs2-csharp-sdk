@@ -23,6 +23,7 @@ using System;
 using System.Linq;
 using System.Numerics;
 using Gs2.Core.Exception;
+using Gs2.Core.Model;
 using Gs2.Gs2Mission.Request;
 
 namespace Gs2.Gs2Mission.Model.Transaction
@@ -33,45 +34,48 @@ namespace Gs2.Gs2Mission.Model.Transaction
             this Counter self,
             VerifyCounterValueByUserIdRequest request
         ) {
+            if (self?.Values == null || request?.Value == null) return false;
+            var current = self.Values.FirstOrDefault(v =>
+                MatchesVerifyScope(v, request)
+            )?.Value ?? 0;
             switch (request.VerifyType) {
                 case "less":
-/* diff --- start
-                    return self.Value < request.Value;
- diff --- end */
-                    return (self.Values?.FirstOrDefault(v => v.ResetType == request.ResetType)?.Value ?? 0) < request.Value; /* diff +++ */
+                    return current < request.Value;
                 case "lessEqual":
-/* diff --- start
-                    return self.Value <= request.Value;
- diff --- end */
-                    return (self.Values?.FirstOrDefault(v => v.ResetType == request.ResetType)?.Value ?? 0) <= request.Value; /* diff +++ */
+                    return current <= request.Value;
                 case "greater":
-/* diff --- start
-                    return self.Value > request.Value;
- diff --- end */
-                    return (self.Values?.FirstOrDefault(v => v.ResetType == request.ResetType)?.Value ?? 0) > request.Value; /* diff +++ */
+                    return current > request.Value;
                 case "greaterEqual":
-/* diff --- start
-                    return self.Value >= request.Value;
- diff --- end */
-                    return (self.Values?.FirstOrDefault(v => v.ResetType == request.ResetType)?.Value ?? 0) >= request.Value; /* diff +++ */
+                    return current >= request.Value;
                 case "equal":
-/* diff --- start
-                    return self.Value == request.Value;
- diff --- end */
-                    return (self.Values?.FirstOrDefault(v => v.ResetType == request.ResetType)?.Value ?? 0) == request.Value; /* diff +++ */
+                    return current == request.Value;
                 case "notEqual":
-/* diff --- start
-                    return self.Value != request.Value;
- diff --- end */
-                    return (self.Values?.FirstOrDefault(v => v.ResetType == request.ResetType)?.Value ?? 0) != request.Value; /* diff +++ */
+                    return current != request.Value;
             }
             return false;
+        }
+
+        internal static bool MatchesVerifyScope(
+            ScopedValue value,
+            VerifyCounterValueByUserIdRequest request
+        ) {
+            if (value == null || request == null ||
+                value.ScopeType != request.ScopeType) return false;
+            return request.ScopeType == "resetTiming"
+                ? value.ResetType == request.ResetType
+                : request.ScopeType == "verifyAction" &&
+                  value.ConditionName == request.ConditionName;
         }
 
         public static Counter SpeculativeExecution(
             this Counter self,
             VerifyCounterValueByUserIdRequest request
         ) {
+            if (!self.IsExecutable(request)) {
+                throw new BadRequestException(new [] {
+                    new RequestError("value", "invalid"),
+                });
+            }
             return self.Clone() as Counter;
         }
 
@@ -79,7 +83,11 @@ namespace Gs2.Gs2Mission.Model.Transaction
             this VerifyCounterValueByUserIdRequest request,
             double rate
         ) {
-            request.Value = (long?) (request.Value * rate);
+            if (request?.MultiplyValueSpecifyingQuantity != true ||
+                !Gs2.Gs2Experience.Model.Transaction.StatusExt.TryApplyServerRate(
+                    request.Value ?? 1L, rate, out var value
+                )) return request;
+            request.Value = value;
             return request;
         }
     }
@@ -90,7 +98,10 @@ namespace Gs2.Gs2Mission.Model.Transaction
             this VerifyCounterValueByUserIdRequest request,
             BigInteger rate
         ) {
-            request.Value = (long?) ((request.Value ?? 0) * rate);
+            if (request?.MultiplyValueSpecifyingQuantity != true) return request;
+            var value = new BigInteger(request.Value ?? 1L) * rate;
+            if (value <= long.MinValue || value >= long.MaxValue) return request;
+            request.Value = (long)value;
             return request;
         }
     }

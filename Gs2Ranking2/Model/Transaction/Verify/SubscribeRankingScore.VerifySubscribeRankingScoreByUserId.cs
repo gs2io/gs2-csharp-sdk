@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
@@ -22,6 +23,7 @@ using System;
 using System.Linq;
 using System.Numerics;
 using Gs2.Core.Exception;
+using Gs2.Core.Model; /* diff +++ */
 using Gs2.Gs2Ranking2.Request;
 
 namespace Gs2.Gs2Ranking2.Model.Transaction
@@ -32,6 +34,11 @@ namespace Gs2.Gs2Ranking2.Model.Transaction
             this SubscribeRankingScore self,
             VerifySubscribeRankingScoreByUserIdRequest request
         ) {
+/* diff +++ start */
+            if (self?.Score == null || request?.Score == null) {
+                return false;
+            }
+/* diff +++ end */
             switch (request.VerifyType) {
                 case "less":
                     return self.Score < request.Score;
@@ -53,14 +60,55 @@ namespace Gs2.Gs2Ranking2.Model.Transaction
             this SubscribeRankingScore self,
             VerifySubscribeRankingScoreByUserIdRequest request
         ) {
+/* diff +++ start */
+            if (!self.IsExecutable(request)) {
+                var reason = FailureReason(request?.VerifyType);
+                throw new BadRequestException(new [] {
+                    new RequestError(
+                        "score",
+                        $"ranking2.subscribeRankingScore.score.error.{reason}"
+                    ),
+                });
+            }
+/* diff +++ end */
             return self.Clone() as SubscribeRankingScore;
+/* diff +++ start */
+        }
+
+        private static string FailureReason(string verifyType)
+        {
+            switch (verifyType) {
+                case "less": return "greaterEqual";
+                case "lessEqual": return "greater";
+                case "greater": return "lessEqual";
+                case "greaterEqual": return "less";
+                case "equal": return "notEqual";
+                case "notEqual": return "equal";
+                default: return "invalid";
+            }
+/* diff +++ end */
         }
 
         public static VerifySubscribeRankingScoreByUserIdRequest Rate(
             this VerifySubscribeRankingScoreByUserIdRequest request,
             double rate
         ) {
+/* diff --- start
             request.Score = (long?) (request.Score * rate);
+ diff --- end */
+/* diff +++ start */
+            if (request?.MultiplyValueSpecifyingQuantity != true) {
+                return request;
+            }
+            if (!RankingScoreRate.TryApply(
+                    request.Score ?? 1L,
+                    rate,
+                    out var value
+                )) {
+                return request;
+            }
+            request.Score = value;
+/* diff +++ end */
             return request;
         }
     }
@@ -71,7 +119,19 @@ namespace Gs2.Gs2Ranking2.Model.Transaction
             this VerifySubscribeRankingScoreByUserIdRequest request,
             BigInteger rate
         ) {
+/* diff --- start
             request.Score = (long?) ((request.Score ?? 0) * rate);
+ diff --- end */
+/* diff +++ start */
+            if (request?.MultiplyValueSpecifyingQuantity != true) {
+                return request;
+            }
+            var value = (request.Score ?? 1L) * rate;
+            if (value <= long.MinValue || value >= long.MaxValue) {
+                return request;
+            }
+            request.Score = (long)value;
+/* diff +++ end */
             return request;
         }
     }

@@ -28,13 +28,23 @@
 
 using System;
 using System.Collections;
-using System.Linq;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Enhance.Domain.SpeculativeExecutor;
+using Gs2.Gs2Enhance.Model;
+using Gs2.Gs2Enhance.Model.Cache;
 using Gs2.Gs2Enhance.Request;
+using Gs2.Gs2Experience.Domain.SpeculativeExecutor;
+using Gs2.Gs2Experience.Request;
+using AcquireAction = Gs2.Core.Model.AcquireAction;
+using ConsumeAction = Gs2.Core.Model.ConsumeAction;
+using Progress = Gs2.Gs2Enhance.Model.Progress;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 #endif
@@ -50,6 +60,56 @@ namespace Gs2.Gs2Enhance.Domain.Transaction.SpeculativeExecutor
 
         public static string Action() {
             return "Gs2Enhance:EndByUserId";
+        }
+
+        private static Progress GetProgress(
+            Gs2.Core.Domain.Gs2 domain,
+            AccessToken token,
+            EndByUserIdRequest request
+        ) {
+            var cached = ((Progress)null).GetCache(
+                domain.Cache,
+                request.NamespaceName,
+                token.UserId,
+                token.TimeOffset
+            );
+            var expectedId =
+                $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                $"{domain.RestSession.OwnerId}:enhance:{request.NamespaceName}:" +
+                $"user:{token.UserId}:progress";
+            var progress = cached.Item1;
+            return cached.Item2 && progress != null &&
+                   progress.ProgressId == expectedId &&
+                   progress.UserId == token.UserId
+                ? progress
+                : null;
+        }
+
+        private static bool TryGetRateModel(
+            Gs2.Core.Domain.Gs2 domain,
+            EndByUserIdRequest request,
+            string rateName,
+            out RateModel model,
+            out bool found
+        ) {
+            var cached = ((RateModel)null).GetCache(
+                domain.Cache,
+                request.NamespaceName,
+                rateName,
+                null
+            );
+            var expectedId =
+                $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                   $"{domain.RestSession.OwnerId}:enhance:{request.NamespaceName}:" +
+                   $"rateModel:{rateName}";
+            found = cached.Item2;
+            model = cached.Item1;
+            if (!found) {
+                model = null;
+                return true;
+            }
+            return model != null && model.RateModelId == expectedId &&
+                   model.Name == rateName;
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -69,51 +129,96 @@ namespace Gs2.Gs2Enhance.Domain.Transaction.SpeculativeExecutor
             AccessToken accessToken,
             EndByUserIdRequest request
         ) {
-/* diff --- start
-            // TODO: Speculative execution not supported
- diff --- end */
-#if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
-#else
-            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
-#endif
-/* diff --- start
-
-            var item = await domain.Enhance.Namespace(
-                request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).Progress(
-            ).ModelAsync();
-
-            var commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
-                item?.ConsumeActions.Select(v =>
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Enhance.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
-                    }
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.ConsumeAction[]{},
-                item?.AcquireActions.Select(v =>
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Enhance.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
-                    }
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.AcquireAction[]{},
-                1.0
-            ).ExecuteAsync(
-                domain,
-                accessToken
-            );
-
- diff --- end */
-            return () =>
-            {
-/* diff --- start
-                commit?.Invoke();
- diff --- end */
+            var token = AccessToken.FromJson(accessToken?.ToJson());
+            var prepared = EndByUserIdRequest.FromJson(request?.ToJson());
+            if (prepared?.UserId == "#{userId}") prepared.UserId = token?.UserId;
+            if (domain?.RestSession == null || string.IsNullOrEmpty(token?.UserId) ||
+                prepared == null || prepared.UserId != token.UserId) {
                 return null;
+            }
+            var progress = GetProgress(domain, token, prepared);
+            if (progress == null || progress.RateName == null) return null;
+            var progressSnapshot = progress.ToJson().ToJson();
+            if (!TryGetRateModel(
+                    domain,
+                    prepared,
+                    progress.RateName,
+                    out var rateModel,
+                    out var rateFound
+                )) {
+                return null;
+            }
+            var rateSnapshot = rateModel?.ToJson().ToJson();
+
+            ConsumeAction consume = new ConsumeAction()
+                .WithAction(DeleteProgressByUserIdSpeculativeExecutor.Action())
+                .WithRequest(new DeleteProgressByUserIdRequest()
+                    .WithNamespaceName(prepared.NamespaceName)
+                    .WithUserId(token.UserId)
+                    .ToJson().ToJson());
+            foreach (var config in prepared.Config ?? Array.Empty<Config>()) {
+                consume = consume?.ApplyConfig(config.Key, config.Value);
+            }
+
+            var acquireActions = new List<AcquireAction>();
+            if (rateModel != null) {
+                var namespaceName = Gs2.Gs2Experience.Model.ExperienceModel
+                    .GetNamespaceNameFromGrn(rateModel.ExperienceModelId);
+                var experienceName = Gs2.Gs2Experience.Model.ExperienceModel
+                    .GetExperienceNameFromGrn(rateModel.ExperienceModelId);
+                if (namespaceName == null || experienceName == null ||
+                    progress.PropertyId == null ||
+                    progress.ExperienceValue == null) {
+                    return null;
+                }
+                AcquireAction acquire = new AcquireAction()
+                    .WithAction(AddExperienceByUserIdSpeculativeExecutor.Action())
+                    .WithRequest(new AddExperienceByUserIdRequest()
+                        .WithNamespaceName(namespaceName)
+                        .WithUserId(token.UserId)
+                        .WithExperienceName(experienceName)
+                        .WithPropertyId(progress.PropertyId)
+                        .WithExperienceValue(progress.ExperienceValue)
+                        .WithTruncateExperienceWhenRankUp(false)
+                        .ToJson().ToJson());
+                foreach (var config in prepared.Config ?? Array.Empty<Config>()) {
+                    acquire = acquire?.ApplyConfig(config.Key, config.Value);
+                }
+                if (acquire != null) acquireActions.Add(acquire);
+            }
+
+            var commits = new List<Func<object>> {
+                consume == null ? null : await Gs2.Gs2Enhance.Domain
+                    .SpeculativeExecutor.ConsumeActionSpeculativeExecutorIndex
+                    .ExecuteAsync(domain, token, consume, BigInteger.One),
+            };
+            foreach (var acquire in acquireActions) {
+                commits.Add(await Gs2.Gs2Experience.Domain.SpeculativeExecutor
+                    .AcquireActionSpeculativeExecutorIndex.ExecuteAsync(
+                        domain, token, acquire, BigInteger.One
+                    ));
+            }
+            var commit = Core.SpeculativeExecutor.SpeculativeExecutor
+                .BuildAtomicCommit(
+                    commits,
+                    (consume == null ? 0 : 1) + acquireActions.Count
+                );
+            if (commit == null) return null;
+            return () => {
+                var validRateState = TryGetRateModel(
+                    domain,
+                    prepared,
+                    progress.RateName,
+                    out var liveRate,
+                    out var liveRateFound
+                );
+                if (GetProgress(domain, token, prepared)?.ToJson().ToJson() !=
+                        progressSnapshot ||
+                    !validRateState || liveRateFound != rateFound ||
+                    liveRate?.ToJson().ToJson() != rateSnapshot) {
+                    return null;
+                }
+                return commit();
             };
         }
     }

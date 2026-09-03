@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -31,9 +32,13 @@ using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model; /* diff +++ */
 using Gs2.Core.Util;
+/* diff --- start
 using Gs2.Core.Exception;
+ diff --- end */
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Limit.Model; /* diff +++ */
 using Gs2.Gs2Limit.Request;
 using Gs2.Gs2Limit.Model.Cache;
 using Gs2.Gs2Limit.Model.Transaction;
@@ -71,6 +76,7 @@ namespace Gs2.Gs2Limit.Domain.SpeculativeExecutor
             AccessToken accessToken,
             CountUpByUserIdRequest request
         ) {
+/* diff --- start
             var item = await domain.Limit.Namespace(
                 request.NamespaceName
             ).AccessToken(
@@ -82,18 +88,110 @@ namespace Gs2.Gs2Limit.Domain.SpeculativeExecutor
 
             if (item == null) {
                 return () => null;
+ diff --- end */
+/* diff +++ start */
+            var preparedRequest = request == null
+                ? null
+                : new CountUpByUserIdRequest()
+                    .WithNamespaceName(request.NamespaceName)
+                    .WithUserId(request.UserId)
+                    .WithLimitName(request.LimitName)
+                    .WithCounterName(request.CounterName)
+                    .WithCountUpValue(request.CountUpValue);
+            var preparedAccessToken = accessToken == null
+                ? null
+                : new AccessToken()
+                    .WithUserId(accessToken.UserId)
+                    .WithTimeOffset(accessToken.TimeOffset);
+            if (preparedRequest?.UserId == "#{userId}") {
+                preparedRequest.UserId = preparedAccessToken?.UserId;
+/* diff +++ end */
             }
+/* diff --- start
             item = item.SpeculativeExecution(request);
+ diff --- end */
+/* diff +++ start */
+            if (domain?.RestSession == null ||
+                string.IsNullOrEmpty(preparedAccessToken?.UserId) ||
+                preparedRequest?.UserId != preparedAccessToken.UserId ||
+                string.IsNullOrEmpty(preparedRequest.NamespaceName) ||
+                string.IsNullOrEmpty(preparedRequest.LimitName) ||
+                string.IsNullOrEmpty(preparedRequest.CounterName) ||
+                !preparedRequest.CountUpValue.HasValue) {
+                return null;
+            }
+            var userId = preparedAccessToken.UserId;
+            var timeOffset = preparedAccessToken.TimeOffset;
+            var expectedCounterId = string.Join(
+                ":", "grn", "gs2",
+                domain.RestSession.Region.DisplayName(),
+                domain.RestSession.OwnerId,
+                "limit", preparedRequest.NamespaceName,
+                "user", userId,
+                "limit", preparedRequest.LimitName,
+                "counter", preparedRequest.CounterName
+            );
+            bool IsExpected(Counter item) {
+                return item != null &&
+                       item.CounterId == expectedCounterId &&
+                       item.UserId == userId &&
+                       item.LimitName == preparedRequest.LimitName &&
+                       item.Name == preparedRequest.CounterName;
+            }
+            var (item, found) = ((Counter)null).GetCache(
+                domain.Cache,
+                preparedRequest.NamespaceName,
+                userId,
+                preparedRequest.LimitName,
+                preparedRequest.CounterName,
+                timeOffset
+            );
+            if (!found || !IsExpected(item)) {
+                return null;
+            }
+/* diff +++ end */
 
             return () =>
             {
+/* diff --- start
                 item.PutCache(
+ diff --- end */
+                var (cachedItem, find) = ((Counter)null).GetCache( /* diff +++ */
                     domain.Cache,
+/* diff --- start
                     request.NamespaceName,
                     accessToken.UserId,
                     request.LimitName,
                     request.CounterName,
                     accessToken.TimeOffset
+ diff --- end */
+/* diff +++ start */
+                    preparedRequest.NamespaceName,
+                    userId,
+                    preparedRequest.LimitName,
+                    preparedRequest.CounterName,
+                    timeOffset
+                );
+                if (!find || !IsExpected(cachedItem)) {
+                    return null;
+                }
+                Counter committedItem;
+                try {
+                    committedItem = cachedItem.SpeculativeExecution(
+                        preparedRequest
+                    );
+                }
+                catch (System.Exception) {
+                    return null;
+                }
+                committedItem.PutCache(
+                    domain.Cache,
+                    preparedRequest.NamespaceName,
+                    userId,
+                    preparedRequest.LimitName,
+                    preparedRequest.CounterName,
+                    timeOffset
+/* diff +++ end */
                 );
                 return null;
             };

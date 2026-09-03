@@ -46,16 +46,16 @@ namespace Gs2.Core.Net.Chaos
         // Send
         
 #if GS2_ENABLE_UNITASK
-        protected override async UniTask SendImplAsync(IGs2SessionRequest request)
+        public override async UniTask SendAsync(IGs2SessionRequest request)
 #else
-        protected override async Task SendImplAsync(IGs2SessionRequest request)
+        public override async Task SendAsync(IGs2SessionRequest request)
 #endif
         {
             if (this._random.NextDouble() < this._chaos) {
                 ThrowNeedRetryException(request);
                 return;
             }
-            await base.SendImplAsync(request);
+            await base.SendAsync(request);
         }
 
     }

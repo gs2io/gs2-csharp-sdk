@@ -35,7 +35,7 @@ using Gs2.Core.Domain;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Quest.Request;
-using Gs2.Core.Model; /* diff +++ */
+using Gs2.Core.Model;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 #endif
@@ -70,65 +70,36 @@ namespace Gs2.Gs2Quest.Domain.Transaction.SpeculativeExecutor
             AccessToken accessToken,
             EndByUserIdRequest request
         ) {
-/* diff --- start
-            // TODO: Speculative execution not supported
-//#if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
-//#else
-            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
-//#endif
-
- diff --- end */
-            var item = await domain.Quest.Namespace(
-                request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).Progress(
-            ).ModelAsync();
+            var token = accessToken?.Clone() as AccessToken;
+            if (domain == null || request == null || string.IsNullOrEmpty(token?.UserId)) {
+                return null;
+            }
+            var prepared = EndByUserIdRequest.FromJson(request.ToJson());
+            if (prepared.UserId == "#{userId}") {
+                prepared.UserId = token.UserId;
+            }
+            if (prepared.UserId != token.UserId) {
+                return null;
+            }
 
             var commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
-/* diff --- start
-                item?.ConsumeActions.Select(v =>
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Quest.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
- diff --- end */
-/* diff +++ start */
                 new [] {
                     new ConsumeAction {
                         Action = "Gs2Quest:DeleteProgressByUserId",
                         Request = new DeleteProgressByUserIdRequest {
-                            NamespaceName = request.NamespaceName,
-                            UserId = accessToken.UserId,
+                            NamespaceName = prepared.NamespaceName,
+                            UserId = token.UserId,
                         }.ToJson().ToJson()
-/* diff +++ end */
                     }
-/* diff --- start
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.ConsumeAction[]{},
-                item?.AcquireActions.Select(v =>
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Quest.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
-                    }
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.AcquireAction[]{},
- diff --- end */
-/* diff +++ start */
                 },
                 Array.Empty<AcquireAction>(),
-/* diff +++ end */
                 1.0
             ).ExecuteAsync(
                 domain,
-                accessToken
+                token
             );
 
-            return () =>
-            {
-                commit?.Invoke();
-                return null;
-            };
+            return commit;
         }
     }
 }

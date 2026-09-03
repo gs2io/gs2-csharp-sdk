@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -48,6 +49,54 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
 {
     public static class VerifyActionSpeculativeExecutorIndex
     {
+/* diff +++ start */
+#if GS2_ENABLE_UNITASK
+        public static async UniTask<Func<object>> ExecuteInverseAsync(
+#else
+        public static async Task<Func<object>> ExecuteInverseAsync(
+#endif
+            Core.Domain.Gs2 domain,
+            AccessToken accessToken,
+            VerifyAction verifyAction,
+            BigInteger rate
+        ) {
+            verifyAction.Action = verifyAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            verifyAction.Action = verifyAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            verifyAction.Action = verifyAction.Action.Replace("{userId}", accessToken.UserId);
+            if (VerifyStaminaValueByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                var request = VerifyStaminaValueByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
+                if (rate != 1) request = request.Rate(rate);
+                return await VerifyStaminaValueByUserIdSpeculativeExecutor
+                    .ExecuteInverseAsync(domain, accessToken, request);
+            }
+            if (VerifyStaminaMaxValueByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                var request = VerifyStaminaMaxValueByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
+                if (rate != 1) request = request.Rate(rate);
+                return await VerifyStaminaMaxValueByUserIdSpeculativeExecutor
+                    .ExecuteInverseAsync(domain, accessToken, request);
+            }
+            if (VerifyStaminaRecoverIntervalMinutesByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                var request = VerifyStaminaRecoverIntervalMinutesByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
+                if (rate != 1) request = request.Rate(rate);
+                return await VerifyStaminaRecoverIntervalMinutesByUserIdSpeculativeExecutor
+                    .ExecuteInverseAsync(domain, accessToken, request);
+            }
+            if (VerifyStaminaRecoverValueByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                var request = VerifyStaminaRecoverValueByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
+                if (rate != 1) request = request.Rate(rate);
+                return await VerifyStaminaRecoverValueByUserIdSpeculativeExecutor
+                    .ExecuteInverseAsync(domain, accessToken, request);
+            }
+            if (VerifyStaminaOverflowValueByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                var request = VerifyStaminaOverflowValueByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
+                if (rate != 1) request = request.Rate(rate);
+                return await VerifyStaminaOverflowValueByUserIdSpeculativeExecutor
+                    .ExecuteInverseAsync(domain, accessToken, request);
+            }
+            return null;
+        }
+
+/* diff +++ end */
 #if UNITY_2017_1_OR_NEWER
         public static Gs2Future<Func<object>> ExecuteFuture(
             Core.Domain.Gs2 domain,

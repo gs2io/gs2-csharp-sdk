@@ -33,12 +33,11 @@ namespace Gs2.Gs2SkillTree.Model.Transaction
             this Status self,
             MarkRestrainByUserIdRequest request
         ) {
-            var changed = self.SpeculativeExecution(request);
             try {
-                changed.Validate();
+                self.SpeculativeExecution(request);
                 return true;
             }
-            catch (Gs2Exception) {
+            catch (Exception) {
                 return false;
             }
         }
@@ -56,17 +55,27 @@ namespace Gs2.Gs2SkillTree.Model.Transaction
             return self.Clone() as Status;
  diff --- end */
 /* diff +++ start */
-            var clone = self.Clone() as Status;
-            if (clone == null)
-            {
+            if (self?.Clone() is not Status clone ||
+                clone.ReleasedNodeNames == null ||
+                request?.NodeModelNames == null) {
                 throw new NullReferenceException();
             }
-            if (clone.ReleasedNodeNames.Count(v => request.NodeModelNames.Contains(v)) > 0) {
-                return clone;
+            var releasedNodeNames = clone.ReleasedNodeNames.ToList();
+            var requested = request.NodeModelNames
+                .Where(nodeModelName => nodeModelName != null)
+                .ToArray();
+            if (requested.Length == 0) {
+                throw new InvalidOperationException();
             }
-
-            clone.ReleasedNodeNames = clone.ReleasedNodeNames.Where(v => !request.NodeModelNames.Contains(v)).ToArray();
-
+            foreach (var nodeModelName in requested) {
+                var index = releasedNodeNames.IndexOf(nodeModelName);
+                if (index < 0) {
+                    throw new InvalidOperationException();
+                }
+                releasedNodeNames.RemoveAll(value => value == nodeModelName);
+            }
+            clone.ReleasedNodeNames = releasedNodeNames.ToArray();
+            clone.Revision = 0;
             return clone;
 /* diff +++ end */
         }
@@ -75,7 +84,7 @@ namespace Gs2.Gs2SkillTree.Model.Transaction
             this MarkRestrainByUserIdRequest request,
             double rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2SkillTree:MarkRestrainByUserId");
+            return request;
         }
     }
 
@@ -85,7 +94,7 @@ namespace Gs2.Gs2SkillTree.Model.Transaction
             this MarkRestrainByUserIdRequest request,
             BigInteger rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2SkillTree:MarkRestrainByUserId");
+            return request;
         }
     }
 }

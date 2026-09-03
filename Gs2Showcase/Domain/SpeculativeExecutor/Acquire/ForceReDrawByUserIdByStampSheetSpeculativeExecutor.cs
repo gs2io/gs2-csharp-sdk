@@ -88,11 +88,9 @@ namespace Gs2.Gs2Showcase.Domain.SpeculativeExecutor
             AccessToken accessToken,
             ForceReDrawByUserIdRequest request
         ) {
-/* diff +++ start */
-            Transform(domain, accessToken, request, null);
-
-/* diff +++ end */
-            return () => null;
+            // The server draws a new set of random display items, so their
+            // identities and contents cannot be known before the response.
+            return null;
 /* diff +++ start */
         }
 

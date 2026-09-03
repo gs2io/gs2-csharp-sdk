@@ -29,13 +29,11 @@
 using System;
 using System.Numerics;
 using System.Collections;
-/* diff +++ start */
 using System.Collections.Generic;
-using System.Linq;
-/* diff +++ end */
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model;
 using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
@@ -47,7 +45,6 @@ using UnityEngine;
 #endif
 #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.Linq; /* diff +++ */
 #else
 using System.Threading.Tasks;
 #endif
@@ -77,79 +74,77 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             AccessToken accessToken,
             ConsumeSimpleItemsByUserIdRequest request
         ) {
-/* diff --- start
-            var item = await domain.Inventory.Namespace(
- diff --- end */
-/* diff +++ start */
-    #if UNITY_2017_1_OR_NEWER
-            var items = await domain.Inventory.Namespace(
-/* diff +++ end */
-                request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).SimpleInventory(
-                request.InventoryName
-/* diff --- start
-            ).ModelAsync();
- diff --- end */
-/* diff +++ start */
-            ).SimpleItemsAsync(
-            ).ToArrayAsync();
-    #else
-            var it = domain.Inventory.Namespace(
-                request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).SimpleInventory(
-                request.InventoryName
-            ).SimpleItemsAsync(
-            );
-            var collection = new List<Gs2.Gs2Inventory.Model.SimpleItem>();
-            await foreach (var item in it)
-            {
-                collection.Add(item);
-            }
-            var items = collection.ToArray();
-    #endif
-/* diff +++ end */
-
-/* diff --- start
-            if (item == null) {
-                return () => null;
-            }
-            item = item.SpeculativeExecution(request);
- diff --- end */
-/* diff +++ start */
-            items = items.Where(v => request.ConsumeCounts.Select(v => v.ItemName).Contains(v.ItemName)).ToArray();
-            items = items.SpeculativeExecution(request);
-/* diff +++ end */
-
-            return () =>
-            {
-/* diff --- start
-                item.PutCache(
-                    domain.Cache,
-                    request.NamespaceName,
-                    accessToken.UserId,
-                    request.InventoryName,
-                    request.ItemName,
-                    accessToken.TimeOffset
-                );
- diff --- end */
-/* diff +++ start */
-                foreach (var item in items) {
-                    item.PutCache(
-                        domain.Cache,
-                        request.NamespaceName,
-                        accessToken.UserId,
-                        request.InventoryName,
-                        item.ItemName,
-                        accessToken.TimeOffset
-                    );
-                }
-/* diff +++ end */
+            var token = accessToken?.Clone() as AccessToken;
+            if (domain?.RestSession == null || request == null ||
+                string.IsNullOrEmpty(token?.UserId)) {
                 return null;
-            };
+            }
+            var prepared = ConsumeSimpleItemsByUserIdRequest.FromJson(request.ToJson());
+            if (prepared.UserId == "#{userId}") prepared.UserId = token.UserId;
+            if (prepared.UserId != token.UserId || prepared.ConsumeCounts == null) {
+                return null;
+            }
+
+            var commits = new List<SimpleItemMutationSpeculativeCommit>();
+            foreach (var consumeCount in prepared.ConsumeCounts) {
+                if (consumeCount?.ItemName == null || !consumeCount.Count.HasValue) {
+                    continue;
+                }
+                var expectedId =
+                    $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                    $"{domain.RestSession.OwnerId}:inventory:{prepared.NamespaceName}:" +
+                    $"user:{token.UserId}:simple:inventory:{prepared.InventoryName}:" +
+                    $"item:{consumeCount.ItemName}";
+                var cached = ((Gs2.Gs2Inventory.Model.SimpleItem)null).GetCache(
+                    domain.Cache,
+                    prepared.NamespaceName,
+                    token.UserId,
+                    prepared.InventoryName,
+                    consumeCount.ItemName,
+                    token.TimeOffset
+                );
+                var item = cached.Item1;
+                if (!cached.Item2 || item == null || item.ItemId != expectedId ||
+                    item.UserId != token.UserId ||
+                    item.ItemName != consumeCount.ItemName || !item.Count.HasValue) {
+                    continue;
+                }
+                var count = consumeCount.Count.Value;
+                commits.Add(new SimpleItemMutationSpeculativeCommit(
+                    domain.Cache,
+                    prepared.NamespaceName,
+                    token.UserId,
+                    prepared.InventoryName,
+                    consumeCount.ItemName,
+                    token.TimeOffset,
+                    expectedId,
+                    item.Revision,
+                    false,
+                    current => {
+                        var value = checked(current.Count.Value - count);
+                        if (value < 0) return null;
+                        var changed = current.Clone() as Gs2.Gs2Inventory.Model.SimpleItem;
+                        changed.Count = value;
+                        changed.Revision = 0;
+                        return changed;
+                    }
+                ));
+            }
+
+            if (commits.Count == 0) {
+                return prepared.ConsumeCounts.Length == 0 ? () => null : null;
+            }
+            var compositionKey = ((Gs2.Gs2Inventory.Model.SimpleItem)null)
+                .CacheParentKey(
+                    prepared.NamespaceName,
+                    token.UserId,
+                    prepared.InventoryName,
+                    token.TimeOffset
+                );
+            return new SimpleItemBatchSpeculativeCommit(
+                compositionKey,
+                commits
+            ).Invoke;
         }
     }
 }

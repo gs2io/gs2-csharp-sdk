@@ -20,9 +20,7 @@
 #pragma warning disable CS1522 // Empty switch block
 
 using System;
-using System.Linq;
 using System.Numerics;
-using Gs2.Core.Exception;
 using Gs2.Gs2Inventory.Request;
 
 namespace Gs2.Gs2Inventory.Model.Transaction
@@ -36,19 +34,11 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this SimpleItem[] self, /* diff +++ */
             AcquireSimpleItemsByUserIdRequest request
         ) {
-            var changed = self.SpeculativeExecution(request);
             try {
-/* diff --- start
-                changed.Validate();
- diff --- end */
-/* diff +++ start */
-                foreach (var v in changed) {
-                    v.Validate();
-                }
-/* diff +++ end */
+                self.SpeculativeExecution(request);
                 return true;
             }
-            catch (Gs2Exception) {
+            catch (System.Exception) {
                 return false;
             }
         }
@@ -72,12 +62,22 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             return self.Clone() as SimpleItem;
  diff --- end */
 /* diff +++ start */
-            var clone = self.Clone() as SimpleItem[];
-            if (clone == null) {
+            if (self == null || request?.AcquireCounts == null) {
                 throw new NullReferenceException();
             }
-            foreach (var v in clone) {
-                v.Count += request.AcquireCounts.FirstOrDefault(i => i.ItemName == v.ItemName)?.Count ?? 0;
+            var clone = new SimpleItem[self.Length];
+            for (var i = 0; i < self.Length; i++) {
+                clone[i] = self[i]?.Clone() as SimpleItem;
+                var item = clone[i];
+                if (item == null || !item.Count.HasValue) continue;
+                var changed = false;
+                foreach (var acquireCount in request.AcquireCounts) {
+                    if (acquireCount?.ItemName != item.ItemName ||
+                        !acquireCount.Count.HasValue) continue;
+                    item.Count = checked(item.Count.Value + acquireCount.Count.Value);
+                    changed = true;
+                }
+                if (changed) item.Revision = 0;
             }
             return clone;
 /* diff +++ end */
@@ -87,15 +87,15 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this AcquireSimpleItemsByUserIdRequest request,
             double rate
         ) {
-/* diff --- start
-            throw new NotSupportedException($"not supported rate action Gs2Inventory:AcquireSimpleItemsByUserId");
- diff --- end */
-/* diff +++ start */
+            if (request?.AcquireCounts == null) return null;
             foreach (var acquireCount in request.AcquireCounts) {
-                acquireCount.Count = (long?) (acquireCount.Count * rate);
+                if (acquireCount?.Count == null) continue;
+                if (!SimpleItemCountRate.TryApply(
+                        acquireCount.Count.Value, rate, out var value
+                    )) return null;
+                acquireCount.Count = value;
             }
             return request;
-/* diff +++ end */
         }
     }
 
@@ -105,15 +105,86 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this AcquireSimpleItemsByUserIdRequest request,
             BigInteger rate
         ) {
-/* diff --- start
-            throw new NotSupportedException($"not supported rate action Gs2Inventory:AcquireSimpleItemsByUserId");
- diff --- end */
-/* diff +++ start */
+            if (request?.AcquireCounts == null) return null;
             foreach (var acquireCount in request.AcquireCounts) {
-                acquireCount.Count = (long?) (acquireCount.Count * rate);
+                if (acquireCount?.Count != null) {
+                    acquireCount.Count = SimpleItemCountRate.Apply(
+                        acquireCount.Count.Value,
+                        rate
+                    );
+                }
             }
             return request;
-/* diff +++ end */
+        }
+    }
+
+    internal static class SimpleItemCountRate
+    {
+        internal static bool TryApply(
+            long count,
+            double rate,
+            out long value
+        ) {
+            value = count;
+            if (double.IsNaN(rate) || double.IsInfinity(rate)) {
+                return false;
+            }
+
+            var bits = (ulong)BitConverter.DoubleToInt64Bits(rate);
+            var exponentBits = (int)((bits >> 52) & 0x7ffUL);
+            var fraction = bits & 0x000fffffffffffffUL;
+            var significand = exponentBits == 0
+                ? new BigInteger(fraction)
+                : new BigInteger(fraction | 0x0010000000000000UL);
+            if ((bits & 0x8000000000000000UL) != 0) {
+                significand = BigInteger.Negate(significand);
+            }
+            var exponent = exponentBits == 0 ? -1074 : exponentBits - 1075;
+            var product = new BigInteger(count) * significand;
+            RoundTo100Bits(ref product, ref exponent);
+            var scaled = exponent >= 0
+                ? product << exponent
+                : product / (BigInteger.One << -exponent);
+            value = Saturate(scaled);
+            return true;
+        }
+
+        internal static long Apply(long count, BigInteger rate) {
+            return Saturate(new BigInteger(count) * rate);
+        }
+
+        private static long Saturate(BigInteger value) {
+            if (value < long.MinValue) return long.MinValue;
+            if (value > long.MaxValue) return long.MaxValue;
+            return (long)value;
+        }
+
+        private static void RoundTo100Bits(
+            ref BigInteger value,
+            ref int exponent
+        ) {
+            var absolute = BigInteger.Abs(value);
+            var bitLength = 0;
+            for (var remaining = absolute;
+                 remaining > BigInteger.Zero;
+                 remaining >>= 1) {
+                bitLength++;
+            }
+            if (bitLength <= 100) return;
+            var shift = bitLength - 100;
+            var rounded = absolute >> shift;
+            var remainder = absolute - (rounded << shift);
+            var half = BigInteger.One << (shift - 1);
+            if (remainder > half ||
+                (remainder == half && !rounded.IsEven)) {
+                rounded += BigInteger.One;
+            }
+            if ((rounded >> 100) != BigInteger.Zero) {
+                rounded >>= 1;
+                shift++;
+            }
+            value = value.Sign < 0 ? -rounded : rounded;
+            exponent += shift;
         }
     }
 }

@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -31,10 +32,14 @@ using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model; /* diff +++ */
 using Gs2.Core.Util;
+/* diff --- start
 using Gs2.Core.Exception;
+ diff --- end */
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Schedule.Request;
+using Gs2.Gs2Schedule.Model; /* diff +++ */
 using Gs2.Gs2Schedule.Model.Cache;
 using Gs2.Gs2Schedule.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
@@ -71,6 +76,7 @@ namespace Gs2.Gs2Schedule.Domain.SpeculativeExecutor
             AccessToken accessToken,
             DeleteTriggerByUserIdRequest request
         ) {
+/* diff --- start
             var item = await domain.Schedule.Namespace(
                 request.NamespaceName
             ).AccessToken(
@@ -81,17 +87,79 @@ namespace Gs2.Gs2Schedule.Domain.SpeculativeExecutor
 
             if (item == null) {
                 return () => null;
+ diff --- end */
+/* diff +++ start */
+            if (string.IsNullOrEmpty(accessToken?.UserId) || request == null) {
+                return null;
+/* diff +++ end */
             }
+/* diff --- start
             item = item.SpeculativeExecution(request);
+ diff --- end */
+/* diff +++ start */
+            var prepared = DeleteTriggerByUserIdRequest.FromJson(request.ToJson());
+            if (prepared.UserId == "#{userId}") {
+                prepared.UserId = accessToken.UserId;
+            }
+            if (prepared.UserId != accessToken.UserId || domain == null) {
+                return null;
+            }
+            var userId = accessToken.UserId;
+            var timeOffset = accessToken.TimeOffset;
+            var expectedTriggerId = string.Join(
+                ":", "grn", "gs2", domain.RestSession.Region.DisplayName(),
+                domain.RestSession.OwnerId, "schedule", prepared.NamespaceName,
+                "user", userId, "trigger", prepared.TriggerName
+            );
+            bool IsExpected(Trigger value) {
+                return value != null &&
+                       value.TriggerId == expectedTriggerId &&
+                       value.UserId == userId &&
+                       value.Name == prepared.TriggerName;
+            }
+            var cached = ((Trigger)null).GetCache(
+                domain.Cache,
+                prepared.NamespaceName,
+                userId,
+                prepared.TriggerName,
+                timeOffset
+            );
+            if (!cached.Item2 || !IsExpected(cached.Item1)) {
+                return null;
+            }
+            var preparedSnapshot = cached.Item1.ToJson().ToJson();
+/* diff +++ end */
 
             return () =>
             {
+/* diff --- start
                 item.PutCache(
+ diff --- end */
+                var live = ((Trigger)null).GetCache( /* diff +++ */
                     domain.Cache,
+/* diff --- start
                     request.NamespaceName,
                     accessToken.UserId,
                     request.TriggerName,
                     accessToken.TimeOffset
+ diff --- end */
+/* diff +++ start */
+                    prepared.NamespaceName,
+                    userId,
+                    prepared.TriggerName,
+                    timeOffset
+                );
+                if (!live.Item2 || !IsExpected(live.Item1) ||
+                    live.Item1.ToJson().ToJson() != preparedSnapshot) {
+                    return null;
+                }
+                ((Trigger)null).PutCache(
+                    domain.Cache,
+                    prepared.NamespaceName,
+                    userId,
+                    prepared.TriggerName,
+                    timeOffset
+/* diff +++ end */
                 );
                 return null;
             };

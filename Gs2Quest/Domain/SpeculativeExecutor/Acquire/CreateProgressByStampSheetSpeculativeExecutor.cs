@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -71,7 +72,15 @@ namespace Gs2.Gs2Quest.Domain.SpeculativeExecutor
             AccessToken accessToken,
             CreateProgressByUserIdRequest request
         ) {
+/* diff --- start
             return () => null;
+ diff --- end */
+/* diff +++ start */
+            // Quest selection and its random seed are determined by the server.
+            // A local no-op must not make the containing transaction appear to
+            // have been prepared successfully.
+            return null;
+/* diff +++ end */
         }
     }
 }

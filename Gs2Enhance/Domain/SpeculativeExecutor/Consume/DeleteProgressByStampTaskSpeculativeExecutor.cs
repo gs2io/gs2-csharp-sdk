@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -31,12 +32,15 @@ using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model; /* diff +++ */
 using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Enhance.Request;
+using Gs2.Gs2Enhance.Model; /* diff +++ */
 using Gs2.Gs2Enhance.Model.Cache;
 using Gs2.Gs2Enhance.Model.Transaction;
+using Progress = Gs2.Gs2Enhance.Model.Progress; /* diff +++ */
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 #endif
@@ -71,6 +75,7 @@ namespace Gs2.Gs2Enhance.Domain.SpeculativeExecutor
             AccessToken accessToken,
             DeleteProgressByUserIdRequest request
         ) {
+/* diff --- start
             var item = await domain.Enhance.Namespace(
                 request.NamespaceName
             ).AccessToken(
@@ -80,16 +85,65 @@ namespace Gs2.Gs2Enhance.Domain.SpeculativeExecutor
 
             if (item == null) {
                 return () => null;
+ diff --- end */
+/* diff +++ start */
+            var token = AccessToken.FromJson(accessToken?.ToJson());
+            var prepared = DeleteProgressByUserIdRequest.FromJson(
+                request?.ToJson()
+            );
+            if (prepared?.UserId == "#{userId}") {
+                prepared.UserId = token?.UserId;
+/* diff +++ end */
             }
+/* diff --- start
             item = item.SpeculativeExecution(request);
 
             return () =>
             {
                 item.PutCache(
+ diff --- end */
+/* diff +++ start */
+            if (domain?.RestSession == null ||
+                string.IsNullOrEmpty(token?.UserId) ||
+                prepared == null || prepared.UserId != token.UserId) return null;
+            var expectedId =
+                $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                $"{domain.RestSession.OwnerId}:enhance:" +
+                $"{prepared.NamespaceName}:user:{token.UserId}:progress";
+            bool IsExpected(Progress value) {
+                return value != null && value.ProgressId == expectedId &&
+                       value.UserId == token.UserId;
+            }
+            var cached = ((Progress)null).GetCache(
+                domain.Cache,
+                prepared.NamespaceName,
+                token.UserId,
+                token.TimeOffset
+            );
+            if (!cached.Item2 || !IsExpected(cached.Item1)) return null;
+            var preparedSnapshot = cached.Item1.ToJson().ToJson();
+            return () => {
+                var live = ((Progress)null).GetCache(
+/* diff +++ end */
                     domain.Cache,
+/* diff --- start
                     request.NamespaceName,
                     accessToken.UserId,
                     accessToken.TimeOffset
+ diff --- end */
+/* diff +++ start */
+                    prepared.NamespaceName,
+                    token.UserId,
+                    token.TimeOffset
+                );
+                if (!live.Item2 || !IsExpected(live.Item1) ||
+                    live.Item1.ToJson().ToJson() != preparedSnapshot) return null;
+                ((Progress)null).PutCache(
+                    domain.Cache,
+                    prepared.NamespaceName,
+                    token.UserId,
+                    token.TimeOffset
+/* diff +++ end */
                 );
                 return null;
             };

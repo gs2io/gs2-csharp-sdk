@@ -22,7 +22,7 @@
 using System;
 using System.Linq;
 using System.Numerics;
-using Gs2.Core.Exception;
+using Gs2.Core.Model;
 using Gs2.Gs2Money2.Request;
 
 namespace Gs2.Gs2Money2.Model.Transaction
@@ -33,12 +33,11 @@ namespace Gs2.Gs2Money2.Model.Transaction
             this Wallet self,
             DepositByUserIdRequest request
         ) {
-            var changed = self.SpeculativeExecution(request);
             try {
-                changed.Validate();
+                self.SpeculativeExecution(request);
                 return true;
             }
-            catch (Gs2Exception) {
+            catch (System.Exception) {
                 return false;
             }
         }
@@ -47,32 +46,101 @@ namespace Gs2.Gs2Money2.Model.Transaction
             this Wallet self,
             DepositByUserIdRequest request
         ) {
-            if (self.Clone() is not Wallet clone)
+            if (self?.Clone() is not Wallet clone ||
+                request?.DepositTransactions == null)
             {
                 throw new NullReferenceException();
             }
-/* diff --- start
-            clone.Total += request.Count;
- diff --- end */
-/* diff +++ start */
+            var depositTransactions = (clone.DepositTransactions ??
+                    Array.Empty<DepositTransaction>())
+                .Select(transaction => transaction?.Clone() as DepositTransaction)
+                .Where(transaction => transaction != null)
+                .ToList();
             foreach (var depositTransaction in request.DepositTransactions) {
+                if (depositTransaction == null) {
+                    continue;
+                }
                 if (depositTransaction.Price == 0) {
-                    clone.Summary.Free += depositTransaction.Count;
+                    var free = depositTransactions.FirstOrDefault(transaction =>
+                        transaction.Price == 0
+                    );
+                    var freeCount = (free?.Count ?? 0) + depositTransaction.Count;
+                    depositTransactions = depositTransactions
+                        .Where(transaction => transaction.Price != 0)
+                        .ToList();
+                    if (freeCount > 0) {
+                        depositTransactions.Add(
+                            new DepositTransaction()
+                                .WithPrice(0)
+                                .WithCurrency(null)
+                                .WithCount(freeCount)
+                                .WithDepositedAt(
+                                    depositTransaction.DepositedAt ?? free?.DepositedAt
+                                )
+                        );
+                    }
                 }
                 else {
-                    clone.Summary.Paid += depositTransaction.Count;
+                    depositTransactions.Add(
+                        depositTransaction.Clone() as DepositTransaction
+                    );
                 }
-                clone.Summary.Total += depositTransaction.Count;
             }
-/* diff +++ end */
+            clone.DepositTransactions = depositTransactions.ToArray();
+            clone.Summary = CalculateSummary(clone.DepositTransactions);
+            clone.Revision = 0;
             return clone;
+        }
+
+        internal static Wallet SpeculativeSyncFree(
+            this Wallet self,
+            Wallet source
+        ) {
+            if (self?.Clone() is not Wallet clone || source == null)
+            {
+                throw new NullReferenceException();
+            }
+            var paid = (clone.DepositTransactions ?? Array.Empty<DepositTransaction>())
+                .Where(transaction => transaction?.Price > 0)
+                .Select(transaction => transaction.Clone() as DepositTransaction)
+                .ToList();
+            var free = source.DepositTransactions?
+                .FirstOrDefault(transaction => transaction?.Price == 0);
+            if ((free?.Count ?? 0) > 0) {
+                paid.Add(free.Clone() as DepositTransaction);
+            }
+            clone.DepositTransactions = paid.ToArray();
+            clone.Summary = CalculateSummary(clone.DepositTransactions);
+            return clone;
+        }
+
+        internal static WalletSummary CalculateSummary(
+            DepositTransaction[] depositTransactions
+        ) {
+            var paid = depositTransactions?
+                .Where(transaction => transaction?.Price > 0)
+                .Sum(transaction => transaction.Count ?? 0) ?? 0;
+            var free = depositTransactions?
+                .Where(transaction => transaction?.Price == 0)
+                .Sum(transaction => transaction.Count ?? 0) ?? 0;
+            return new WalletSummary()
+                .WithPaid(paid)
+                .WithFree(free)
+                .WithTotal(paid + free);
         }
 
         public static DepositByUserIdRequest Rate(
             this DepositByUserIdRequest request,
             double rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Money2:DepositByUserId");
+            if (request?.DepositTransactions != null) {
+                foreach (var transaction in request.DepositTransactions) {
+                    if (transaction != null) {
+                        transaction.Count = (int?) (transaction.Count * rate);
+                    }
+                }
+            }
+            return request;
         }
     }
 
@@ -82,7 +150,16 @@ namespace Gs2.Gs2Money2.Model.Transaction
             this DepositByUserIdRequest request,
             BigInteger rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Money2:DepositByUserId");
+            if (request?.DepositTransactions != null) {
+                foreach (var transaction in request.DepositTransactions) {
+                    if (transaction != null) {
+                        transaction.Count = (int?) (
+                            (transaction.Count ?? 0) * rate
+                        );
+                    }
+                }
+            }
+            return request;
         }
     }
 }

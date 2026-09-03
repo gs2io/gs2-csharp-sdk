@@ -68,9 +68,9 @@ namespace Gs2.Core.Net
         
         
 #if GS2_ENABLE_UNITASK
-        private async UniTask<OpenResult> OpenImplAsync()
+        public async UniTask<OpenResult> OpenAsync()
 #else
-        private async Task<OpenResult> OpenImplAsync()
+        public async Task<OpenResult> OpenAsync()
 #endif
         {
             await TaskUtilities.WaitAsync(this._semaphore);
@@ -187,26 +187,20 @@ namespace Gs2.Core.Net
         }
 
 #if UNITY_2017_1_OR_NEWER
-        public IEnumerator Open(UnityAction<AsyncResult<OpenResult>> callback) => OpenImplAsync().ToCoroutine(callback);
+        public IEnumerator Open(UnityAction<AsyncResult<OpenResult>> callback) => OpenAsync().ToCoroutine(callback);
 #else
-        public IEnumerator Open(Action<AsyncResult<OpenResult>> callback) => OpenImplAsync().ToCoroutine(callback);
+        public IEnumerator Open(Action<AsyncResult<OpenResult>> callback) => OpenAsync().ToCoroutine(callback);
 #endif
 
-        public Gs2Future<OpenResult> OpenFuture() => OpenImplAsync().ToGs2Future();
-        
-#if GS2_ENABLE_UNITASK
-        public UniTask<OpenResult> OpenAsync() => OpenImplAsync().AsUniTask<OpenResult>();
-#else
-        public Task<OpenResult> OpenAsync() => OpenImplAsync().AsTask();
-#endif
+        public Gs2Future<OpenResult> OpenFuture() => OpenAsync().ToGs2Future();
         
         // ReOpen
         
         
 #if GS2_ENABLE_UNITASK
-        private async UniTask<OpenResult> ReOpenImplAsync()
+        public async UniTask<OpenResult> ReOpenAsync()
 #else
-        private async Task<OpenResult> ReOpenImplAsync()
+        public async Task<OpenResult> ReOpenAsync()
 #endif
         {
             if (this.State == State.Opening || this.State == State.LoggingIn) {
@@ -220,35 +214,26 @@ namespace Gs2.Core.Net
                 }
             }
 
-            await OpenImplAsync();
+            await OpenAsync();
 
             return new OpenResult();
         }
 
 #if UNITY_2017_1_OR_NEWER
-        public IEnumerator ReOpen(UnityAction<AsyncResult<OpenResult>> callback) => ReOpenImplAsync().ToCoroutine(callback);
+        public IEnumerator ReOpen(UnityAction<AsyncResult<OpenResult>> callback) => ReOpenAsync().ToCoroutine(callback);
 #else
-        public IEnumerator ReOpen(Action<AsyncResult<OpenResult>> callback) => ReOpenImplAsync().ToCoroutine(callback);
+        public IEnumerator ReOpen(Action<AsyncResult<OpenResult>> callback) => ReOpenAsync().ToCoroutine(callback);
 #endif
 
         // ReSharper disable once MemberCanBePrivate.Global
-        public Gs2Future<OpenResult> ReOpenFuture() => ReOpenImplAsync().ToGs2Future();
-        
-        // ReSharper disable once MemberCanBePrivate.Global
-#if !UNITY_2017_1_OR_NEWER || GS2_ENABLE_UNITASK
-    #if UNITY_2017_1_OR_NEWER
-        public UniTask<OpenResult> ReOpenAsync() => ReOpenImplAsync().AsUniTask<OpenResult>();
-    #else
-        public Task<OpenResult> ReOpenAsync() => ReOpenImplAsync().AsTask();
-    #endif
-#endif
+        public Gs2Future<OpenResult> ReOpenFuture() => ReOpenAsync().ToGs2Future();
         
         // Close
 
 #if GS2_ENABLE_UNITASK
-        private async UniTask CloseImplAsync()
+        public async UniTask CloseAsync()
 #else
-        private async Task CloseImplAsync()
+        public async Task CloseAsync()
 #endif
         {
             if (this.State == State.Idle) {
@@ -291,18 +276,12 @@ namespace Gs2.Core.Net
         }
         
 #if UNITY_2017_1_OR_NEWER
-        public IEnumerator Close(UnityAction callback) => CloseImplAsync().ToCoroutine(callback);
+        public IEnumerator Close(UnityAction callback) => CloseAsync().ToCoroutine(callback);
 #else
-        public IEnumerator Close(Action callback) => CloseImplAsync().ToCoroutine(callback);
+        public IEnumerator Close(Action callback) => CloseAsync().ToCoroutine(callback);
 #endif
         
-        public Gs2Future CloseFuture() => CloseImplAsync().ToGs2Future();
-        
-#if GS2_ENABLE_UNITASK
-        public UniTask CloseAsync() => CloseImplAsync().AsUniTask();
-#else
-        public Task CloseAsync() => CloseImplAsync().AsTask();
-#endif
+        public Gs2Future CloseFuture() => CloseAsync().ToGs2Future();
         
         // Send
         

@@ -34,17 +34,15 @@ using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
-using Gs2.Core.Exception;
+using Gs2.Core.Model; /* diff +++ */
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Dictionary.Request;
 using Gs2.Gs2Dictionary.Model.Cache;
-using Gs2.Gs2Dictionary.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 #endif
 #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.Linq; /* diff +++ */
 #else
 using System.Threading.Tasks;
 #endif
@@ -55,6 +53,11 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
 
         public static string Action() {
             return "Gs2Dictionary:AddEntriesByUserId";
+        }
+
+        private static long CurrentTimeMillis(AccessToken accessToken) {
+            return UnixTime.ToUnixTime(DateTime.Now) +
+                   (long)(accessToken?.TimeOffset ?? 0) * 1000L;
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -74,32 +77,114 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
             AccessToken accessToken,
             AddEntriesByUserIdRequest request
         ) {
-/* diff --- start
-            return () => null;
- diff --- end */
-/* diff +++ start */
-            var items = await domain.Dictionary.Namespace(
-                request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).EntriesAsync().ToListAsync();
+            var token = accessToken?.Clone() as AccessToken;
+            if (domain == null || request == null || string.IsNullOrEmpty(token?.UserId)) {
+                return null;
+            }
+            var prepared = AddEntriesByUserIdRequest.FromJson(request.ToJson());
+            if (prepared.UserId == "#{userId}") {
+                prepared.UserId = token.UserId;
+            }
+            if (prepared.UserId != token.UserId) {
+                return null;
+            }
 
-            var items_ = items.ToArray().SpeculativeExecution(request);
+            var additions = new List<Tuple<string, Gs2.Gs2Dictionary.Model.Entry>>();
+            var handled = 0;
+            var seen = new HashSet<string>();
+            foreach (var entryModelName in prepared.EntryModelNames ?? Array.Empty<string>()) {
+                if (entryModelName == null || !seen.Add(entryModelName)) {
+                    continue;
+                }
+                var modelCached = ((Gs2.Gs2Dictionary.Model.EntryModel)null).GetCache(
+                    domain.Cache,
+                    prepared.NamespaceName,
+                    entryModelName,
+                    null
+                );
+                var model = modelCached.Item1;
+                var expectedModelId =
+                    $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                    $"{domain.RestSession.OwnerId}:dictionary:{prepared.NamespaceName}:" +
+                    $"model:{entryModelName}";
+                if (!modelCached.Item2 || model == null ||
+                    model.EntryModelId != expectedModelId || model.Name != entryModelName) {
+                    continue;
+                }
 
-            return () =>
-            {
-                foreach (var item in items_) {
-                    item.PutCache(
+                var entryCached = ((Gs2.Gs2Dictionary.Model.Entry)null).GetCache(
+                    domain.Cache,
+                    prepared.NamespaceName,
+                    token.UserId,
+                    entryModelName,
+                    token.TimeOffset
+                );
+                if (!entryCached.Item2) {
+                    continue;
+                }
+                if (entryCached.Item1 != null) {
+                    var expectedEntryId =
+                        $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                        $"{domain.RestSession.OwnerId}:dictionary:{prepared.NamespaceName}:" +
+                        $"user:{token.UserId}:entry:{entryModelName}";
+                    if (entryCached.Item1.EntryId != expectedEntryId ||
+                        entryCached.Item1.UserId != token.UserId ||
+                        entryCached.Item1.Name != entryModelName) {
+                        continue;
+                    }
+                }
+
+                handled++;
+                additions.Add(Tuple.Create(
+                    entryModelName,
+                    new Gs2.Gs2Dictionary.Model.Entry {
+                        EntryId =
+                            $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                            $"{domain.RestSession.OwnerId}:dictionary:{prepared.NamespaceName}:" +
+                            $"user:{token.UserId}:entry:{entryModelName}",
+                        UserId = token.UserId,
+                        Name = entryModelName,
+                        AcquiredAt = CurrentTimeMillis(token),
+                    }
+                ));
+            }
+            if (handled == 0) {
+                return null;
+            }
+
+            return () => {
+                foreach (var addition in additions) {
+                    var model = ((Gs2.Gs2Dictionary.Model.EntryModel)null).GetCache(
                         domain.Cache,
-                        request.NamespaceName,
-                        accessToken.UserId,
-                        item.Name,
-                        accessToken?.TimeOffset
+                        prepared.NamespaceName,
+                        addition.Item1,
+                        null
                     );
+                    var entry = ((Gs2.Gs2Dictionary.Model.Entry)null).GetCache(
+                        domain.Cache,
+                        prepared.NamespaceName,
+                        token.UserId,
+                        addition.Item1,
+                        token.TimeOffset
+                    );
+                    if (model.Item2 && model.Item1 != null &&
+                        model.Item1.EntryModelId ==
+                            $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                            $"{domain.RestSession.OwnerId}:dictionary:{prepared.NamespaceName}:" +
+                            $"model:{addition.Item1}" &&
+                        model.Item1.Name == addition.Item1 &&
+                        entry.Item2 && entry.Item1 == null) {
+                        addition.Item2.PutCache(
+                            domain.Cache,
+                            prepared.NamespaceName,
+                            token.UserId,
+                            addition.Item1,
+                            token.TimeOffset
+                        );
+                    }
                 }
                 return null;
             };
-/* diff +++ end */
         }
     }
 }

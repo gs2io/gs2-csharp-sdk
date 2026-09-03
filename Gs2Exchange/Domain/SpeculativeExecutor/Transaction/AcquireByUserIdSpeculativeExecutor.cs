@@ -28,14 +28,19 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using Gs2.Core.SpeculativeExecutor;
+using System.Numerics;
 using Gs2.Core.Domain;
-using Gs2.Core.Model; /* diff +++ */
+using Gs2.Core.SpeculativeExecutor;
+using Gs2.Core.Model;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Exchange.Model.Cache;
 using Gs2.Gs2Exchange.Request;
+using Await = Gs2.Gs2Exchange.Model.Await;
+using Config = Gs2.Gs2Exchange.Model.Config;
+using RateModel = Gs2.Gs2Exchange.Model.RateModel;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 #endif
@@ -70,63 +75,125 @@ namespace Gs2.Gs2Exchange.Domain.Transaction.SpeculativeExecutor
             AccessToken accessToken,
             AcquireByUserIdRequest request
         ) {
-/* diff --- start
-            // TODO: Speculative execution not supported
-//#if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
-//#else
-            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
-//#endif
-
- diff --- end */
-            var item = await domain.Exchange.Namespace(
-                request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).Await(
-                request.AwaitName
-            ).ModelAsync();
-
-/* diff +++ start */
-            var model = await domain.Exchange.Namespace(
-                request.NamespaceName
-            ).RateModel(
-                item.RateName
-            ).ModelAsync();
-
-/* diff +++ end */
-            var commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
-/* diff --- start
-                item?.ConsumeActions.Select(v =>
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Exchange.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
-                    }
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.ConsumeAction[]{},
-                item?.AcquireActions.Select(v =>
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Exchange.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
-                    }
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.AcquireAction[]{},
-                1.0
- diff --- end */
-/* diff +++ start */
-                Array.Empty<ConsumeAction>(),
-                model.AcquireActions,
-                item.Count ?? 1.0
-/* diff +++ end */
-            ).ExecuteAsync(
-                domain,
-                accessToken
-            );
-
-            return () =>
-            {
-                commit?.Invoke();
+            var token = AccessToken.FromJson(accessToken?.ToJson());
+            var prepared = AcquireByUserIdRequest.FromJson(request?.ToJson());
+            if (prepared?.UserId == "#{userId}") prepared.UserId = token?.UserId;
+            if (domain?.RestSession == null || string.IsNullOrEmpty(token?.UserId) ||
+                prepared == null || prepared.UserId != token.UserId) {
                 return null;
+            }
+
+            var cachedAwait = ((Await)null).GetCache(
+                domain.Cache, prepared.NamespaceName, token.UserId,
+                prepared.AwaitName, token.TimeOffset
+            );
+            var item = cachedAwait.Item1;
+            var expectedAwaitId =
+                $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                $"{domain.RestSession.OwnerId}:exchange:{prepared.NamespaceName}:" +
+                $"user:{token.UserId}:await:{prepared.AwaitName}";
+            if (!cachedAwait.Item2 || item == null ||
+                item.AwaitId != expectedAwaitId || item.UserId != token.UserId ||
+                item.Name != prepared.AwaitName || item.RateName == null) {
+                return null;
+            }
+            var cachedRate = ((RateModel)null).GetCache(
+                domain.Cache, prepared.NamespaceName, item.RateName, null
+            );
+            var rateFound = cachedRate.Item2;
+            var rateModel = cachedRate.Item1;
+            var expectedRateId =
+                $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                $"{domain.RestSession.OwnerId}:exchange:{prepared.NamespaceName}:" +
+                $"model:{item.RateName}";
+            if (rateFound && (rateModel == null ||
+                rateModel.RateModelId != expectedRateId ||
+                rateModel.Name != item.RateName)) {
+                return null;
+            }
+
+            long acquirableAt;
+            if (rateFound) {
+                if (!rateModel.LockTime.HasValue ||
+                    !item.ExchangedAt.HasValue ||
+                    !item.SkipSeconds.HasValue) {
+                    return null;
+                }
+                var lockSeconds = unchecked(rateModel.LockTime.Value * 60);
+                acquirableAt = item.ExchangedAt.Value +
+                    ((long)lockSeconds - item.SkipSeconds.Value) * 1000L;
+            }
+            else {
+                if (!item.AcquirableAt.HasValue) return null;
+                acquirableAt = item.AcquirableAt.Value;
+            }
+            var now = UnixTime.ToUnixTime(DateTime.Now) +
+                      (long)(token.TimeOffset ?? 0) * 1000L;
+            if (acquirableAt > now) return null;
+
+            var configs = new List<Config>(
+                (prepared.Config ?? Array.Empty<Config>())
+                    .Where(v => v != null)
+            );
+            foreach (var config in item.Config ?? Array.Empty<Config>()) {
+                if (config != null && configs.All(v => v.Key != config.Key)) {
+                    configs.Add(config);
+                }
+            }
+
+            AcquireAction[] acquireActions;
+            try {
+                acquireActions = (rateModel?.AcquireActions ??
+                        Array.Empty<AcquireAction>())
+                    .Where(v => v != null)
+                    .Select(v => {
+                        var action = v.ApplyConfig("userId", token.UserId);
+                        foreach (var config in configs) {
+                            if (config.Value != null) {
+                                action = action.ApplyConfig(
+                                    config.Key, config.Value
+                                );
+                            }
+                        }
+                        return action;
+                    })
+                    .ToArray();
+            }
+            catch (System.Exception) {
+                return null;
+            }
+
+            var delete = new ConsumeAction()
+                .WithAction(Gs2.Gs2Exchange.Domain.SpeculativeExecutor
+                    .DeleteAwaitByUserIdSpeculativeExecutor.Action())
+                .WithRequest(new DeleteAwaitByUserIdRequest()
+                    .WithNamespaceName(prepared.NamespaceName)
+                    .WithUserId(token.UserId)
+                    .WithAwaitName(prepared.AwaitName)
+                    .ToJson().ToJson());
+            var commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
+                new[] { delete }, acquireActions,
+                new BigInteger(item.Count ?? 1)
+            ).ExecuteAsync(domain, token);
+            if (commit == null) return null;
+
+            var awaitSnapshot = item.ToJson().ToJson();
+            var rateSnapshot = rateModel?.ToJson().ToJson();
+            return () => {
+                var liveAwait = ((Await)null).GetCache(
+                    domain.Cache, prepared.NamespaceName, token.UserId,
+                    prepared.AwaitName, token.TimeOffset
+                );
+                var liveRate = ((RateModel)null).GetCache(
+                    domain.Cache, prepared.NamespaceName, item.RateName, null
+                );
+                if (!liveAwait.Item2 ||
+                    liveAwait.Item1?.ToJson().ToJson() != awaitSnapshot ||
+                    liveRate.Item2 != rateFound ||
+                    liveRate.Item1?.ToJson().ToJson() != rateSnapshot) {
+                    return null;
+                }
+                return commit();
             };
         }
     }

@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -77,11 +78,35 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
                 request
             );
 
+/* diff --- start
             return () =>
             {
                 commit?.Invoke();
                 return null;
             };
+ diff --- end */
+/* diff +++ start */
+            return commit;
+        }
+
+#if GS2_ENABLE_UNITASK
+        internal static async UniTask<Func<object>> ExecuteAsync(
+#else
+        internal static async Task<Func<object>> ExecuteAsync(
+#endif
+            Gs2.Core.Domain.Gs2 domain,
+            AccessToken accessToken,
+            MultiplyAcquireActionsByUserIdRequest request,
+            BigInteger rate
+        ) {
+            return await Gs2.Gs2Experience.Domain.Transaction.SpeculativeExecutor
+                .MultiplyAcquireActionsByUserIdSpeculativeExecutor.ExecuteAsync(
+                    domain,
+                    accessToken,
+                    request,
+                    rate
+                );
+/* diff +++ end */
         }
     }
 }

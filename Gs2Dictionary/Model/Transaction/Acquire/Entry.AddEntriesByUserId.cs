@@ -22,7 +22,6 @@
 using System;
 using System.Linq;
 using System.Numerics;
-using Gs2.Core.Exception;
 using Gs2.Core.Util; /* diff +++ */
 using Gs2.Gs2Dictionary.Request;
 
@@ -37,19 +36,11 @@ namespace Gs2.Gs2Dictionary.Model.Transaction
             this Entry[] self, /* diff +++ */
             AddEntriesByUserIdRequest request
         ) {
-            var changed = self.SpeculativeExecution(request);
             try {
-/* diff --- start
-                changed.Validate();
- diff --- end */
-/* diff +++ start */
-                foreach (var v in changed) {
-                    v.Validate();
-                }
-/* diff +++ end */
+                self.SpeculativeExecution(request);
                 return true;
             }
-            catch (Gs2Exception) {
+            catch (Exception) {
                 return false;
             }
         }
@@ -73,13 +64,38 @@ namespace Gs2.Gs2Dictionary.Model.Transaction
             return self.Clone() as Entry;
  diff --- end */
 /* diff +++ start */
+            return self.SpeculativeExecutionAt(
+                request,
+                "{region}",
+                "{ownerId}",
+                UnixTime.ToUnixTime(DateTime.Now)
+            );
+        }
+
+        public static Entry[] SpeculativeExecutionAt(
+            this Entry[] self,
+            AddEntriesByUserIdRequest request,
+            string region,
+            string ownerId,
+            long currentTimeMillis
+        ) {
+            if (self == null ||
+                request == null ||
+                self.Any(v => v?.Name == null)) {
+                throw new NullReferenceException();
+            }
+            if (string.IsNullOrEmpty(region) || string.IsNullOrEmpty(ownerId)) {
+                throw new NullReferenceException();
+            }
             var items = self.ToList();
-            foreach (var entryModelName in request.EntryModelNames) {
-                if (!self.Select(v => v.Name).ToList().Contains(entryModelName)) {
+            var names = self.Select(v => v.Name).ToHashSet();
+            foreach (var entryModelName in request.EntryModelNames ?? Array.Empty<string>()) {
+                if (names.Add(entryModelName)) {
                     items.Add(new Entry {
+                        EntryId = $"grn:gs2:{region}:{ownerId}:dictionary:{request.NamespaceName}:user:{request.UserId}:entry:{entryModelName}",
                         UserId = request.UserId,
                         Name = entryModelName,
-                        AcquiredAt = UnixTime.ToUnixTime(DateTime.Now),
+                        AcquiredAt = currentTimeMillis,
                     });
                 }
             }
@@ -91,7 +107,7 @@ namespace Gs2.Gs2Dictionary.Model.Transaction
             this AddEntriesByUserIdRequest request,
             double rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Dictionary:AddEntriesByUserId");
+            return request;
         }
     }
 
@@ -101,7 +117,7 @@ namespace Gs2.Gs2Dictionary.Model.Transaction
             this AddEntriesByUserIdRequest request,
             BigInteger rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Dictionary:AddEntriesByUserId");
+            return request;
         }
     }
 }

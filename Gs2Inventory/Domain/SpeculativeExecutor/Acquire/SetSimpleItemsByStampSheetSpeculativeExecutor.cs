@@ -29,13 +29,11 @@
 using System;
 using System.Numerics;
 using System.Collections;
-/* diff +++ start */
 using System.Collections.Generic;
-using System.Linq;
-/* diff +++ end */
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model;
 using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
@@ -47,7 +45,6 @@ using UnityEngine;
 #endif
 #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.Linq; /* diff +++ */
 #else
 using System.Threading.Tasks;
 #endif
@@ -77,79 +74,103 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             AccessToken accessToken,
             SetSimpleItemsByUserIdRequest request
         ) {
-/* diff --- start
-            var item = await domain.Inventory.Namespace(
- diff --- end */
-/* diff +++ start */
-    #if UNITY_2017_1_OR_NEWER
-            var items = await domain.Inventory.Namespace(
-/* diff +++ end */
-                request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).SimpleInventory(
-                request.InventoryName
-/* diff --- start
-            ).ModelAsync();
- diff --- end */
-/* diff +++ start */
-            ).SimpleItemsAsync(
-            ).ToArrayAsync();
-    #else
-            var it = domain.Inventory.Namespace(
-                request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).SimpleInventory(
-                request.InventoryName
-            ).SimpleItemsAsync(
-            );
-            var collection = new List<Gs2.Gs2Inventory.Model.SimpleItem>();
-            await foreach (var item in it)
-            {
-                collection.Add(item);
-            }
-            var items = collection.ToArray();
-    #endif
-/* diff +++ end */
-
-/* diff --- start
-            if (item == null) {
-                return () => null;
-            }
-            item = item.SpeculativeExecution(request);
- diff --- end */
-/* diff +++ start */
-            items = items.Where(v => request.Counts.Select(v => v.ItemName).Contains(v.ItemName)).ToArray();
-            items = items.SpeculativeExecution(request);
-/* diff +++ end */
-
-            return () =>
-            {
-/* diff --- start
-                item.PutCache(
-                    domain.Cache,
-                    request.NamespaceName,
-                    request.UserId,
-                    request.InventoryName,
-                    request.ItemName,
-                    null
-                );
- diff --- end */
-/* diff +++ start */
-                foreach (var item in items) {
-                    item.PutCache(
-                        domain.Cache,
-                        request.NamespaceName,
-                        accessToken.UserId,
-                        request.InventoryName,
-                        item.ItemName,
-                        accessToken.TimeOffset
-                    );
-                }
-/* diff +++ end */
+            var token = accessToken?.Clone() as AccessToken;
+            if (domain?.RestSession == null || request == null ||
+                string.IsNullOrEmpty(token?.UserId)) {
                 return null;
-            };
+            }
+            var prepared = SetSimpleItemsByUserIdRequest.FromJson(request.ToJson());
+            if (prepared.UserId == "#{userId}") prepared.UserId = token.UserId;
+            if (prepared.UserId != token.UserId || prepared.Counts == null) {
+                return null;
+            }
+
+            var commits = new List<SimpleItemMutationSpeculativeCommit>();
+            var absoluteSets = new Dictionary<string, long>();
+            var hasInternalSetConflict = false;
+            foreach (var heldCount in prepared.Counts) {
+                if (heldCount?.ItemName == null || !heldCount.Count.HasValue) {
+                    continue;
+                }
+                if (absoluteSets.TryGetValue(heldCount.ItemName, out var count) &&
+                    count != heldCount.Count.Value) {
+                    hasInternalSetConflict = true;
+                }
+                absoluteSets[heldCount.ItemName] = heldCount.Count.Value;
+            }
+            for (var i = 0; i < prepared.Counts.Length; i++) {
+                var heldCount = prepared.Counts[i];
+                if (heldCount?.ItemName == null || !heldCount.Count.HasValue) {
+                    continue;
+                }
+                var superseded = false;
+                for (var j = i + 1; j < prepared.Counts.Length; j++) {
+                    if (prepared.Counts[j]?.ItemName == heldCount.ItemName) {
+                        superseded = true;
+                        break;
+                    }
+                }
+                if (superseded) continue;
+                var expectedId =
+                    $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                    $"{domain.RestSession.OwnerId}:inventory:{prepared.NamespaceName}:" +
+                    $"user:{token.UserId}:simple:inventory:{prepared.InventoryName}:" +
+                    $"item:{heldCount.ItemName}";
+                var cached = ((Gs2.Gs2Inventory.Model.SimpleItem)null).GetCache(
+                    domain.Cache,
+                    prepared.NamespaceName,
+                    token.UserId,
+                    prepared.InventoryName,
+                    heldCount.ItemName,
+                    token.TimeOffset
+                );
+                var preparedWasTombstone = cached.Item1 == null;
+                var item = cached.Item1 ?? SimpleItemSpeculativeState.KnownZero(
+                    expectedId, token.UserId, heldCount.ItemName
+                );
+                if (!cached.Item2 || item.ItemId != expectedId ||
+                    item.UserId != token.UserId ||
+                    item.ItemName != heldCount.ItemName) {
+                    continue;
+                }
+                var count = heldCount.Count.Value;
+                commits.Add(new SimpleItemMutationSpeculativeCommit(
+                    domain.Cache,
+                    prepared.NamespaceName,
+                    token.UserId,
+                    prepared.InventoryName,
+                    heldCount.ItemName,
+                    token.TimeOffset,
+                    expectedId,
+                    item.Revision,
+                    preparedWasTombstone,
+                    current => {
+                        var changed = current.Clone() as Gs2.Gs2Inventory.Model.SimpleItem;
+                        changed.Count = count;
+                        changed.Revision = 0;
+                        return changed;
+                    },
+                    count
+                ));
+            }
+
+            if (absoluteSets.Count == 0) {
+                return prepared.Counts.Length == 0 ? () => null : null;
+            }
+            var compositionKey = ((Gs2.Gs2Inventory.Model.SimpleItem)null)
+                .CacheParentKey(
+                    prepared.NamespaceName,
+                    token.UserId,
+                    prepared.InventoryName,
+                    token.TimeOffset
+                );
+            return new SimpleItemBatchSpeculativeCommit(
+                compositionKey,
+                commits,
+                absoluteSets,
+                true,
+                hasInternalSetConflict
+            ).Invoke;
         }
     }
 }

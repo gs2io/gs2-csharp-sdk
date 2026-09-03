@@ -28,13 +28,19 @@
 
 using System;
 using System.Collections;
-using System.Linq;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Enhance.Request;
+using Gs2.Gs2Inventory.Domain.SpeculativeExecutor;
+using Gs2.Gs2Inventory.Model;
+using Gs2.Gs2Inventory.Request;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 #endif
@@ -48,8 +54,65 @@ namespace Gs2.Gs2Enhance.Domain.Transaction.SpeculativeExecutor
 {
     public static class DirectEnhanceByUserIdSpeculativeExecutor {
 
+        private static readonly Regex ItemSetIdRegex = new Regex(
+            @"\Agrn:gs2:[-_.{}a-zA-Z0-9]+:[-_.{}a-zA-Z0-9]+:" +
+            @"inventory:(?<namespaceName>[-_.{}a-zA-Z0-9]+):" +
+            @"user:[-_.{}a-zA-Z0-9]+:" +
+            @"inventory:(?<inventoryName>[-_.{}a-zA-Z0-9]+):" +
+            @"item:(?<itemName>[-_.{}a-zA-Z0-9]+):" +
+            @"itemSet:(?<itemSetName>[-_.{}a-zA-Z0-9]+)\z",
+            RegexOptions.CultureInvariant
+        );
+
+        private static readonly Regex SimpleItemIdRegex = new Regex(
+            @"\Agrn:gs2:[-_.{}a-zA-Z0-9]+:[-_.{}a-zA-Z0-9]+:" +
+            @"inventory:(?<namespaceName>[-_.{}a-zA-Z0-9]+):" +
+            @"user:[-_.{}a-zA-Z0-9]+:simple:" +
+            @"inventory:(?<inventoryName>[-_.{}a-zA-Z0-9]+):" +
+            @"item:(?<itemName>[-_.{}a-zA-Z0-9]+)\z",
+            RegexOptions.CultureInvariant
+        );
+
         public static string Action() {
             return "Gs2Enhance:DirectEnhanceByUserId";
+        }
+
+        private static ConsumeAction BuildConsumeAction(
+            AccessToken token,
+            Gs2.Gs2Enhance.Model.Material material
+        ) {
+            var itemSetId = material?.MaterialItemSetId;
+            var count = material?.Count;
+            if (itemSetId == null || !count.HasValue) return null;
+
+            var match = ItemSetIdRegex.Match(itemSetId);
+            if (match.Success) {
+                return new ConsumeAction()
+                    .WithAction(ConsumeItemSetByUserIdSpeculativeExecutor.Action())
+                    .WithRequest(new ConsumeItemSetByUserIdRequest()
+                        .WithNamespaceName(match.Groups["namespaceName"].Value)
+                        .WithInventoryName(match.Groups["inventoryName"].Value)
+                        .WithUserId(token.UserId)
+                        .WithItemName(match.Groups["itemName"].Value)
+                        .WithItemSetName(match.Groups["itemSetName"].Value)
+                        .WithConsumeCount(count.Value)
+                        .ToJson().ToJson());
+            }
+
+            match = SimpleItemIdRegex.Match(itemSetId);
+            if (!match.Success) return null;
+            return new ConsumeAction()
+                .WithAction(ConsumeSimpleItemsByUserIdSpeculativeExecutor.Action())
+                .WithRequest(new ConsumeSimpleItemsByUserIdRequest()
+                    .WithNamespaceName(match.Groups["namespaceName"].Value)
+                    .WithInventoryName(match.Groups["inventoryName"].Value)
+                    .WithUserId(token.UserId)
+                    .WithConsumeCounts(new[] {
+                        new ConsumeCount()
+                            .WithItemName(match.Groups["itemName"].Value)
+                            .WithCount(count.Value)
+                    })
+                    .ToJson().ToJson());
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -69,52 +132,33 @@ namespace Gs2.Gs2Enhance.Domain.Transaction.SpeculativeExecutor
             AccessToken accessToken,
             DirectEnhanceByUserIdRequest request
         ) {
-/* diff --- start
-            // TODO: Speculative execution not supported
- diff --- end */
-#if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
-#else
-            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
-#endif
-/* diff --- start
-
-            var item = await domain.Enhance.Namespace(
-                request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).Enhance(
-            ).ModelAsync();
-
-            var commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
-                item?.ConsumeActions.Select(v =>
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Enhance.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
-                    }
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.ConsumeAction[]{},
-                item?.AcquireActions.Select(v =>
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Enhance.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
-                    }
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.AcquireAction[]{},
-                1.0
-            ).ExecuteAsync(
-                domain,
-                accessToken
-            );
-
- diff --- end */
-            return () =>
-            {
-/* diff --- start
-                commit?.Invoke();
- diff --- end */
+            var token = AccessToken.FromJson(accessToken?.ToJson());
+            var prepared = DirectEnhanceByUserIdRequest.FromJson(request?.ToJson());
+            if (prepared?.UserId == "#{userId}") prepared.UserId = token?.UserId;
+            if (domain?.RestSession == null || string.IsNullOrEmpty(token?.UserId) ||
+                prepared == null || prepared.UserId != token.UserId) {
                 return null;
-            };
+            }
+
+            var commits = new List<Func<object>>();
+            foreach (var material in prepared.Materials ??
+                         Array.Empty<Gs2.Gs2Enhance.Model.Material>()) {
+                var action = BuildConsumeAction(token, material);
+                foreach (var config in prepared.Config ??
+                             Array.Empty<Gs2.Gs2Enhance.Model.Config>()) {
+                    action = action?.ApplyConfig(config.Key, config.Value);
+                }
+                if (action == null) continue;
+                var commit = await ConsumeActionSpeculativeExecutorIndex.ExecuteAsync(
+                    domain, token, action, BigInteger.One
+                );
+                if (commit != null) commits.Add(commit);
+            }
+            if (commits.Count == 0) return null;
+            return Core.SpeculativeExecutor.SpeculativeExecutor.BuildAtomicCommit(
+                commits,
+                commits.Count
+            );
         }
     }
 }

@@ -113,7 +113,7 @@ namespace Gs2.Gs2Exchange.Domain.Transaction.SpeculativeExecutor
                 return null;
             };
  diff --- end */
-            return () => null; /* diff +++ */
+            return null; /* diff +++ */
         }
     }
 }

@@ -28,13 +28,26 @@
 
 using System;
 using System.Collections;
-using System.Linq;
+using System.Collections.Generic;
+using System.Numerics;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Enhance.Model;
+using Gs2.Gs2Enhance.Model.Cache;
 using Gs2.Gs2Enhance.Request;
+using Gs2.Gs2Grade.Model.Cache;
+using Gs2.Gs2Grade.Request;
+using Gs2.Gs2Inventory.Request;
+using GradeAcquireIndex = Gs2.Gs2Grade.Domain.SpeculativeExecutor.AcquireActionSpeculativeExecutorIndex;
+using GradeAddExecutor = Gs2.Gs2Grade.Domain.SpeculativeExecutor.AddGradeByUserIdSpeculativeExecutor;
+using InventoryConsumeIndex = Gs2.Gs2Inventory.Domain.SpeculativeExecutor.ConsumeActionSpeculativeExecutorIndex;
+using InventoryConsumeExecutor = Gs2.Gs2Inventory.Domain.SpeculativeExecutor.ConsumeItemSetByUserIdSpeculativeExecutor;
+using GradeStatus = Gs2.Gs2Grade.Model.Status;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 #endif
@@ -48,8 +61,104 @@ namespace Gs2.Gs2Enhance.Domain.Transaction.SpeculativeExecutor
 {
     public static class UnleashByUserIdSpeculativeExecutor {
 
+        private static readonly Regex ItemSetIdRegex = new Regex(
+            @"\Agrn:gs2:[-_.{}a-zA-Z0-9]+:[-_.{}a-zA-Z0-9]+:" +
+            @"inventory:(?<namespaceName>[-_.{}a-zA-Z0-9]+):" +
+            @"user:[-_.{}a-zA-Z0-9]+:" +
+            @"inventory:(?<inventoryName>[-_.{}a-zA-Z0-9]+):" +
+            @"item:(?<itemName>[-_.{}a-zA-Z0-9]+):" +
+            @"itemSet:(?<itemSetName>[-_.{}a-zA-Z0-9]+)\z",
+            RegexOptions.CultureInvariant
+        );
+
+        private static readonly Regex GradeModelIdRegex = new Regex(
+            @"\Agrn:gs2:[-_.{}a-zA-Z0-9]+:[-_.{}a-zA-Z0-9]+:" +
+            @"grade:(?<namespaceName>[-_.{}a-zA-Z0-9]+):" +
+            @"model:(?<gradeName>[-_.{}a-zA-Z0-9]+)\z",
+            RegexOptions.CultureInvariant
+        );
+
         public static string Action() {
             return "Gs2Enhance:UnleashByUserId";
+        }
+
+        private static bool TryGetRateModel(
+            Gs2.Core.Domain.Gs2 domain,
+            UnleashByUserIdRequest request,
+            out UnleashRateModel model,
+            out bool found
+        ) {
+            var cached = ((UnleashRateModel)null).GetCache(
+                domain.Cache,
+                request.NamespaceName,
+                request.RateName,
+                null
+            );
+            var expectedId =
+                $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                $"{domain.RestSession.OwnerId}:enhance:{request.NamespaceName}:" +
+                $"unleashRateModel:{request.RateName}";
+            found = cached.Item2;
+            model = cached.Item1;
+            if (!found) {
+                model = null;
+                return true;
+            }
+            return model != null && model.UnleashRateModelId == expectedId &&
+                   model.Name == request.RateName;
+        }
+
+        private static ConsumeAction BuildConsumeAction(
+            AccessToken token,
+            string materialItemSetId
+        ) {
+            if (materialItemSetId == null) return null;
+            var match = ItemSetIdRegex.Match(materialItemSetId);
+            if (!match.Success) return null;
+            return new ConsumeAction()
+                .WithAction(InventoryConsumeExecutor.Action())
+                .WithRequest(new ConsumeItemSetByUserIdRequest()
+                    .WithNamespaceName(match.Groups["namespaceName"].Value)
+                    .WithInventoryName(match.Groups["inventoryName"].Value)
+                    .WithUserId(token.UserId)
+                    .WithItemName(match.Groups["itemName"].Value)
+                    .WithItemSetName(match.Groups["itemSetName"].Value)
+                    .WithConsumeCount(1)
+                    .ToJson().ToJson());
+        }
+
+        private static bool TryGetGradeStatus(
+            Gs2.Core.Domain.Gs2 domain,
+            AccessToken token,
+            string namespaceName,
+            string gradeName,
+            string propertyId,
+            out GradeStatus status,
+            out bool found
+        ) {
+            var cached = ((GradeStatus)null).GetCache(
+                domain.Cache,
+                namespaceName,
+                token.UserId,
+                gradeName,
+                propertyId,
+                token.TimeOffset
+            );
+            var expectedId =
+                $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                $"{domain.RestSession.OwnerId}:grade:{namespaceName}:" +
+                $"user:{token.UserId}:gradeModel:{gradeName}:" +
+                $"property:{propertyId}";
+            found = cached.Item2;
+            status = cached.Item1;
+            if (!found) {
+                status = null;
+                return true;
+            }
+            return status != null && status.StatusId == expectedId &&
+                   status.UserId == token.UserId &&
+                   status.GradeName == gradeName &&
+                   status.PropertyId == propertyId;
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -69,51 +178,120 @@ namespace Gs2.Gs2Enhance.Domain.Transaction.SpeculativeExecutor
             AccessToken accessToken,
             UnleashByUserIdRequest request
         ) {
-/* diff --- start
-            // TODO: Speculative execution not supported
- diff --- end */
-#if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
-#else
-            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
-#endif
-/* diff --- start
-
-            var item = await domain.Enhance.Namespace(
-                request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).Enhance(
-            ).ModelAsync();
-
-            var commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
-                item?.ConsumeActions.Select(v =>
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Enhance.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
-                    }
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.ConsumeAction[]{},
-                item?.AcquireActions.Select(v =>
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Enhance.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
-                    }
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.AcquireAction[]{},
-                1.0
-            ).ExecuteAsync(
-                domain,
-                accessToken
-            );
-
- diff --- end */
-            return () =>
-            {
-/* diff --- start
-                commit?.Invoke();
- diff --- end */
+            var token = AccessToken.FromJson(accessToken?.ToJson());
+            var prepared = UnleashByUserIdRequest.FromJson(request?.ToJson());
+            if (prepared?.UserId == "#{userId}") prepared.UserId = token?.UserId;
+            if (domain?.RestSession == null || string.IsNullOrEmpty(token?.UserId) ||
+                prepared == null || prepared.UserId != token.UserId) {
                 return null;
+            }
+            if (!TryGetRateModel(
+                    domain, prepared, out var rateModel, out var rateFound
+                )) {
+                return null;
+            }
+            var rateSnapshot = rateModel?.ToJson().ToJson();
+            string gradeNamespace = null;
+            string gradeName = null;
+            GradeStatus gradeStatus = null;
+            var gradeFound = false;
+            string gradeSnapshot = null;
+            if (rateModel != null) {
+                if (rateModel.GradeEntries == null ||
+                    rateModel.GradeEntries.Length == 0) {
+                    return null;
+                }
+                var match = GradeModelIdRegex.Match(rateModel.GradeModelId ?? "");
+                if (!match.Success) return null;
+                gradeNamespace = match.Groups["namespaceName"].Value;
+                gradeName = match.Groups["gradeName"].Value;
+                if (!TryGetGradeStatus(
+                        domain,
+                        token,
+                        gradeNamespace,
+                        gradeName,
+                        prepared.TargetItemSetId,
+                        out gradeStatus,
+                        out gradeFound
+                    )) {
+                    return null;
+                }
+                gradeSnapshot = gradeStatus?.ToJson().ToJson();
+                if (gradeStatus != null) {
+                    UnleashRateEntryModel entry = null;
+                    foreach (var candidate in rateModel.GradeEntries) {
+                        if (candidate?.GradeValue == gradeStatus.GradeValue) {
+                            entry = candidate;
+                            break;
+                        }
+                    }
+                    if (entry?.NeedCount != (prepared.Materials?.Length ?? 0)) {
+                        return null;
+                    }
+                }
+            }
+
+            var commits = new List<Func<object>>();
+            foreach (var material in prepared.Materials ?? Array.Empty<string>()) {
+                var action = BuildConsumeAction(token, material);
+                foreach (var config in prepared.Config ?? Array.Empty<Config>()) {
+                    action = action?.ApplyConfig(config.Key, config.Value);
+                }
+                if (action == null) continue;
+                var commit = await InventoryConsumeIndex.ExecuteAsync(
+                    domain, token, action, BigInteger.One
+                );
+                if (commit != null) commits.Add(commit);
+            }
+
+            if (gradeStatus != null) {
+                AcquireAction action = new AcquireAction()
+                    .WithAction(GradeAddExecutor.Action())
+                    .WithRequest(new AddGradeByUserIdRequest()
+                        .WithNamespaceName(gradeNamespace)
+                        .WithUserId(token.UserId)
+                        .WithGradeName(gradeName)
+                        .WithPropertyId(prepared.TargetItemSetId)
+                        .WithGradeValue(1)
+                        .ToJson().ToJson());
+                foreach (var config in prepared.Config ?? Array.Empty<Config>()) {
+                    action = action?.ApplyConfig(config.Key, config.Value);
+                }
+                if (action != null) {
+                    var commit = await GradeAcquireIndex.ExecuteAsync(
+                        domain, token, action, BigInteger.One
+                    );
+                    if (commit != null) commits.Add(commit);
+                }
+            }
+            if (commits.Count == 0) return null;
+            var commitAll = Core.SpeculativeExecutor.SpeculativeExecutor
+                .BuildAtomicCommit(commits, commits.Count);
+            if (commitAll == null) return null;
+            return () => {
+                var validRateState = TryGetRateModel(
+                    domain, prepared, out var liveRate, out var liveRateFound
+                );
+                if (!validRateState || liveRateFound != rateFound ||
+                    liveRate?.ToJson().ToJson() != rateSnapshot) {
+                    return null;
+                }
+                if (rateModel != null) {
+                    var validGradeState = TryGetGradeStatus(
+                        domain,
+                        token,
+                        gradeNamespace,
+                        gradeName,
+                        prepared.TargetItemSetId,
+                        out var liveGrade,
+                        out var liveGradeFound
+                    );
+                    if (!validGradeState || liveGradeFound != gradeFound ||
+                        liveGrade?.ToJson().ToJson() != gradeSnapshot) {
+                        return null;
+                    }
+                }
+                return commitAll();
             };
         }
     }

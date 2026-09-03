@@ -32,9 +32,11 @@ using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model;
 using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Guild.Model;
 using Gs2.Gs2Guild.Request;
 using Gs2.Gs2Guild.Model.Cache;
 using Gs2.Gs2Guild.Model.Transaction;
@@ -72,40 +74,44 @@ namespace Gs2.Gs2Guild.Domain.SpeculativeExecutor
             AccessToken accessToken,
             DecreaseMaximumCurrentMaximumMemberCountByGuildNameRequest request
         ) {
-            var item = await domain.Guild.Namespace(
-                request.NamespaceName
-/* diff +++ start */
-            ).User(
-                accessToken.UserId
-/* diff +++ end */
-            ).Guild(
-                request.GuildModelName,
-/* diff --- start
-                request.GuildName,
-                request.UserId
-            ).ModelAsync();
- diff --- end */
-/* diff +++ start */
-                request.GuildName
-            ).ModelAsync(accessToken);
-/* diff +++ end */
-
-            if (item == null) {
-                return () => null;
-            }
-            item = item.SpeculativeExecution(request);
-
-            return () =>
-            {
-                item.PutCache(
-                    domain.Cache,
-                    request.NamespaceName,
-                    request.GuildModelName,
-                    request.GuildName,
-                    accessToken.TimeOffset
-                );
+            var token = accessToken?.Clone() as AccessToken;
+            if (domain?.RestSession == null || request == null || token == null)
                 return null;
-            };
+            var prepared = DecreaseMaximumCurrentMaximumMemberCountByGuildNameRequest
+                .FromJson(request.ToJson());
+            if (!prepared.Value.HasValue) return null;
+            var region = domain.RestSession.Region.DisplayName();
+            var ownerId = domain.RestSession.OwnerId;
+            var expectedGuildId = $"grn:gs2:{region}:{ownerId}:guild:" +
+                $"{prepared.NamespaceName}:guild:{prepared.GuildModelName}:" +
+                prepared.GuildName;
+            var cached = ((Guild)null).GetCache(
+                domain.Cache, prepared.NamespaceName, prepared.GuildModelName,
+                prepared.GuildName, token.TimeOffset
+            );
+            if (!cached.Item2 || cached.Item1 == null ||
+                cached.Item1.GuildId != expectedGuildId ||
+                cached.Item1.GuildModelName != prepared.GuildModelName ||
+                cached.Item1.Name != prepared.GuildName ||
+                !cached.Item1.CurrentMaximumMemberCount.HasValue ||
+                cached.Item1.Members == null) return null;
+            var value = prepared.Value.Value;
+            return new GuildMaximumMemberCountMutationSpeculativeCommit(
+                domain.Cache, prepared.NamespaceName,
+                prepared.GuildModelName, prepared.GuildName, token.TimeOffset,
+                expectedGuildId, null, cached.Item1.Revision, false,
+                (current, _) => {
+                    if (!current.CurrentMaximumMemberCount.HasValue ||
+                        current.Members == null) return false;
+                    var next =
+                        (long)current.CurrentMaximumMemberCount.Value - value;
+                    if (next < current.Members.Length ||
+                        next > int.MaxValue || next < int.MinValue)
+                        return false;
+                    current.CurrentMaximumMemberCount = (int)next;
+                    return true;
+                }
+            ).Invoke;
         }
     }
 }

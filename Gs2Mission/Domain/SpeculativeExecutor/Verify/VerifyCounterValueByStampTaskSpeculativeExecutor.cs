@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -28,9 +29,11 @@
 using System;
 using System.Numerics;
 using System.Collections;
+using System.Linq; /* diff +++ */
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model; /* diff +++ */
 using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
@@ -50,8 +53,125 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
 {
     public static class VerifyCounterValueByUserIdSpeculativeExecutor {
 
+/* diff +++ start */
+        private sealed class PreparedVerification :
+            IPreparedSpeculativeVerification
+        {
+            private readonly Gs2.Core.Domain.Gs2 _domain;
+            private readonly AccessToken _accessToken;
+            private readonly VerifyCounterValueByUserIdRequest _request;
+            private readonly string _expectedId;
+
+            public PreparedVerification(
+                Gs2.Core.Domain.Gs2 domain,
+                AccessToken accessToken,
+                VerifyCounterValueByUserIdRequest request,
+                string expectedId
+            ) {
+                _domain = domain;
+                _accessToken = accessToken;
+                _request = request;
+                _expectedId = expectedId;
+            }
+
+            public bool IsStillSatisfied()
+            {
+                var (item, found) =
+                    ((Gs2.Gs2Mission.Model.Counter)null).GetCache(
+                        _domain.Cache,
+                        _request.NamespaceName,
+                        _request.UserId,
+                        _request.CounterName,
+                        _accessToken.TimeOffset
+                    );
+                if (!found || item == null ||
+                    item.CounterId != _expectedId ||
+                    item.UserId != _request.UserId ||
+                    item.Name != _request.CounterName ||
+                    item.Values == null) {
+                    return false;
+                }
+                var matched = item.Values.FirstOrDefault(v =>
+                    Gs2.Gs2Mission.Model.Transaction.CounterExt
+                        .MatchesVerifyScope(v, _request)
+                );
+                if (matched != null && !matched.Value.HasValue) {
+                    return false;
+                }
+                try {
+                    item.SpeculativeExecution(_request);
+                    return true;
+                }
+                catch (Gs2Exception) {
+                    return false;
+                }
+            }
+
+            public object Invoke()
+            {
+                return null;
+            }
+        }
+
+/* diff +++ end */
         public static string Action() {
             return "Gs2Mission:VerifyCounterValueByUserId";
+/* diff +++ start */
+        }
+
+        private static VerifyCounterValueByUserIdRequest Snapshot(
+            VerifyCounterValueByUserIdRequest request
+        ) {
+            return request == null
+                ? null
+                : new VerifyCounterValueByUserIdRequest()
+                    .WithNamespaceName(request.NamespaceName)
+                    .WithUserId(request.UserId)
+                    .WithCounterName(request.CounterName)
+                    .WithVerifyType(request.VerifyType)
+                    .WithScopeType(request.ScopeType)
+                    .WithResetType(request.ResetType)
+                    .WithConditionName(request.ConditionName)
+                    .WithValue(request.Value)
+                    .WithMultiplyValueSpecifyingQuantity(
+                        request.MultiplyValueSpecifyingQuantity
+                    );
+        }
+
+#if GS2_ENABLE_UNITASK
+        public static async UniTask<Func<object>> ExecuteInverseAsync(
+#else
+        public static async Task<Func<object>> ExecuteInverseAsync(
+#endif
+            Gs2.Core.Domain.Gs2 domain,
+            AccessToken accessToken,
+            VerifyCounterValueByUserIdRequest request
+        ) {
+            var inverse = Snapshot(request);
+            switch (inverse?.VerifyType) {
+                case "less":
+                    inverse.VerifyType = "greaterEqual";
+                    break;
+                case "lessEqual":
+                    inverse.VerifyType = "greater";
+                    break;
+                case "greater":
+                    inverse.VerifyType = "lessEqual";
+                    break;
+                case "greaterEqual":
+                    inverse.VerifyType = "less";
+                    break;
+                case "equal":
+                    inverse.VerifyType = "notEqual";
+                    break;
+                case "notEqual":
+                    inverse.VerifyType = "equal";
+                    break;
+                default:
+                    return null;
+            }
+            return await ExecuteAsync(domain, accessToken, inverse);
+/* diff +++ end */
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -71,6 +191,7 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
             AccessToken accessToken,
             VerifyCounterValueByUserIdRequest request
         ) {
+/* diff --- start
             var item = await domain.Mission.Namespace(
                 request.NamespaceName
             ).AccessToken(
@@ -78,16 +199,90 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
             ).Counter(
                 request.CounterName
             ).ModelAsync();
+ diff --- end */
+/* diff +++ start */
+            if (domain?.RestSession == null || accessToken == null ||
+                request == null) {
+                return null;
+            }
+            var prepared = Snapshot(request);
+            var preparedAccessToken = new AccessToken()
+                .WithUserId(accessToken.UserId)
+                .WithTimeOffset(accessToken.TimeOffset);
+            if (prepared.UserId == "#{userId}") {
+                prepared.UserId = preparedAccessToken.UserId;
+            }
+            if (string.IsNullOrEmpty(prepared.NamespaceName) ||
+                string.IsNullOrEmpty(prepared.CounterName) ||
+                string.IsNullOrEmpty(prepared.UserId) ||
+                prepared.UserId != preparedAccessToken.UserId ||
+                !IsVerifyType(prepared.VerifyType) ||
+                (prepared.ScopeType != "resetTiming" &&
+                 prepared.ScopeType != "verifyAction") ||
+                !IsResetType(prepared.ResetType) ||
+                !prepared.Value.HasValue) {
+                return null;
+            }
+            var cached = ((Gs2.Gs2Mission.Model.Counter)null).GetCache(
+                domain.Cache,
+                prepared.NamespaceName,
+                prepared.UserId,
+                prepared.CounterName,
+                preparedAccessToken.TimeOffset
+            );
+            var item = cached.Item1;
+            var expectedId =
+                $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                $"{domain.RestSession.OwnerId}:mission:{prepared.NamespaceName}:" +
+                $"user:{prepared.UserId}:counter:{prepared.CounterName}";
+            if (!cached.Item2 || item == null || item.CounterId != expectedId ||
+                item.UserId != prepared.UserId || item.Name != prepared.CounterName ||
+                item.Values == null) {
+                return null;
+            }
+            var matched = item.Values.FirstOrDefault(v =>
+                Gs2.Gs2Mission.Model.Transaction.CounterExt
+                    .MatchesVerifyScope(v, prepared)
+            );
+            if (matched != null && !matched.Value.HasValue) {
+                return null;
+            }
+            item.SpeculativeExecution(prepared);
+/* diff +++ end */
 
+/* diff --- start
             if (item == null) {
                 return () => null;
             }
             item = item.SpeculativeExecution(request);
+ diff --- end */
+/* diff +++ start */
+            return new PreparedVerification(
+                domain,
+                preparedAccessToken,
+                prepared,
+                expectedId
+            ).Invoke;
+        }
+/* diff +++ end */
 
+/* diff --- start
             return () =>
             {
                 return null;
             };
+ diff --- end */
+/* diff +++ start */
+        private static bool IsVerifyType(string value) {
+            return value == "less" || value == "lessEqual" ||
+                   value == "greater" || value == "greaterEqual" ||
+                   value == "equal" || value == "notEqual";
+        }
+
+        private static bool IsResetType(string value) {
+            return value == "notReset" || value == "daily" ||
+                   value == "weekly" || value == "monthly" || value == "days";
+/* diff +++ end */
         }
     }
 }

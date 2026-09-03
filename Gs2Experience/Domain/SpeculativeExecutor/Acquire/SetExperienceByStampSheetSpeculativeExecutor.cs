@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -71,6 +72,7 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
             AccessToken accessToken,
             SetExperienceByUserIdRequest request
         ) {
+/* diff --- start
             var item = await domain.Experience.Namespace(
                 request.NamespaceName
             ).AccessToken(
@@ -82,7 +84,17 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
 
             if (item == null) {
                 return () => null;
+ diff --- end */
+/* diff +++ start */
+            var preparedRequest = SetExperienceByUserIdRequest.FromJson(
+                request?.ToJson()
+            );
+            var preparedAccessToken = AccessToken.FromJson(accessToken?.ToJson());
+            if (preparedRequest?.UserId == "#{userId}") {
+                preparedRequest.UserId = preparedAccessToken?.UserId;
+/* diff +++ end */
             }
+/* diff --- start
             item = item.SpeculativeExecution(request);
 
             return () =>
@@ -97,6 +109,25 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
                 );
                 return null;
             };
+ diff --- end */
+/* diff +++ start */
+            return await StatusSpeculativeExecutor.PrepareAsync(
+                domain,
+                preparedAccessToken,
+                preparedRequest?.NamespaceName,
+                preparedRequest?.UserId,
+                preparedRequest?.ExperienceName,
+                preparedRequest?.PropertyId,
+                (item, model) => item.SpeculativeExecution(
+                    preparedRequest,
+                    model
+                ),
+                item => StatusSpeculativeExecutor.WithExperience(
+                    item,
+                    preparedRequest.ExperienceValue.Value
+                )
+            );
+/* diff +++ end */
         }
     }
 }

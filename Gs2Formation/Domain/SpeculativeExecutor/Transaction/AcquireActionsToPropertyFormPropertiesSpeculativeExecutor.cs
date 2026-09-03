@@ -29,13 +29,15 @@
 using System;
 using System.Collections;
 using System.Linq;
-using System.Reflection;
-using Gs2.Core.SpeculativeExecutor;
+using System.Numerics;
 using Gs2.Core.Domain;
-using Gs2.Core.Model; /* diff +++ */
+using Gs2.Core.Model;
+using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Formation.Model.Cache;
 using Gs2.Gs2Formation.Request;
+using PropertyForm = Gs2.Gs2Formation.Model.PropertyForm;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 #endif
@@ -51,6 +53,17 @@ namespace Gs2.Gs2Formation.Domain.Transaction.SpeculativeExecutor
 
         public static string Action() {
             return "Gs2Formation:AcquireActionsToPropertyFormProperties";
+        }
+
+        private static string Snapshot(PropertyForm item) {
+            if (item?.Clone() is not PropertyForm clone) {
+                return null;
+            }
+            clone.Slots = item.Slots?
+                .Where(slot => slot != null)
+                .Select(slot => slot.Clone() as Gs2.Gs2Formation.Model.Slot)
+                .ToArray();
+            return clone.ToJson().ToJson();
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -70,61 +83,94 @@ namespace Gs2.Gs2Formation.Domain.Transaction.SpeculativeExecutor
             AccessToken accessToken,
             AcquireActionsToPropertyFormPropertiesRequest request
         ) {
-/* diff --- start
-            // TODO: Speculative execution not supported
-//#if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
-//#else
-            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
-//#endif
-
- diff --- end */
-            var item = await domain.Formation.Namespace(
-                request.NamespaceName
-/* diff --- start
-            ).AccessToken(
-                accessToken
- diff --- end */
-/* diff +++ start */
-            ).User(
-                request.UserId
-/* diff +++ end */
-            ).PropertyForm(
-                request.PropertyFormModelName,
-                request.PropertyId
-            ).ModelAsync();
-
-            var commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
-/* diff --- start
-                item?.ConsumeActions.Select(v =>
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Formation.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
-                    }
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.ConsumeAction[]{},
-                item?.AcquireActions.Select(v =>
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Formation.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
-                    }
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.AcquireAction[]{},
- diff --- end */
-/* diff +++ start */
-                Array.Empty<ConsumeAction>(),
-                item.Slots.Select(v => request.AcquireAction.ApplyConfig("propertyId", v.PropertyId)).ToArray(),
-/* diff +++ end */
-                1.0
-            ).ExecuteAsync(
-                domain,
-                accessToken
-            );
-
-            return () =>
-            {
-                commit?.Invoke();
+            var token = AccessToken.FromJson(accessToken?.ToJson());
+            var prepared =
+                AcquireActionsToPropertyFormPropertiesRequest.FromJson(
+                    request?.ToJson()
+                );
+            if (prepared?.UserId == "#{userId}") {
+                prepared.UserId = token?.UserId;
+            }
+            if (domain?.RestSession == null ||
+                string.IsNullOrEmpty(token?.UserId) || prepared == null ||
+                prepared.UserId != token.UserId ||
+                prepared.AcquireAction == null) {
                 return null;
+            }
+
+            var cached = ((PropertyForm)null).GetCache(
+                domain.Cache, prepared.NamespaceName, token.UserId,
+                prepared.PropertyFormModelName, prepared.PropertyId,
+                token.TimeOffset
+            );
+            var item = cached.Item1;
+            var expectedFormId =
+                $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                $"{domain.RestSession.OwnerId}:formation:" +
+                $"{prepared.NamespaceName}:user:{token.UserId}:" +
+                $"propertyForm:{prepared.PropertyFormModelName}:" +
+                $"{prepared.PropertyId}";
+            if (!cached.Item2 || item == null ||
+                item.FormId != expectedFormId ||
+                item.UserId != token.UserId ||
+                item.Name != prepared.PropertyFormModelName ||
+                item.PropertyId != prepared.PropertyId ||
+                item.Slots == null ||
+                prepared.AcquireAction.Action == Action() ||
+                prepared.AcquireAction.Action ==
+                    AcquireActionsToFormPropertiesSpeculativeExecutor.Action()) {
+                return null;
+            }
+
+            AcquireAction[] actions;
+            try {
+                actions = item.Slots.Where(slot => slot != null).Select(slot => {
+                    var action = prepared.AcquireAction.ApplyConfig(
+                        "propertyId", slot.PropertyId ?? ""
+                    ).ApplyConfig("userId", token.UserId);
+                    foreach (var config in prepared.Config ??
+                             Array.Empty<Gs2.Gs2Formation.Model.Config>()) {
+                        if (config?.Value != null) {
+                            action = action.ApplyConfig(
+                                config.Key, config.Value
+                            );
+                        }
+                    }
+                    return action;
+                }).ToArray();
+                if (item.Slots.Length > 0 && actions.Length == 0) {
+                    return null;
+                }
+            }
+            catch (System.Exception) {
+                return null;
+            }
+
+            Func<object> commit;
+            try {
+                commit = await new Core.SpeculativeExecutor
+                    .SpeculativeExecutor(
+                        Array.Empty<ConsumeAction>(), actions, BigInteger.One
+                    )
+                    .ExecuteAsync(domain, token);
+            }
+            catch (System.Exception) {
+                return null;
+            }
+            if (commit == null) return null;
+
+            var snapshot = Snapshot(item);
+            return () => {
+                var live = ((PropertyForm)null).GetCache(
+                    domain.Cache, prepared.NamespaceName, token.UserId,
+                    prepared.PropertyFormModelName, prepared.PropertyId,
+                    token.TimeOffset
+                );
+                if (!live.Item2 ||
+                    Snapshot(live.Item1) != snapshot) {
+                    return null;
+                }
+                return commit();
             };
         }
     }

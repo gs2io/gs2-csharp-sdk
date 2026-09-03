@@ -69,6 +69,7 @@ namespace Gs2.Gs2Showcase.Domain.Transaction.SpeculativeExecutor
             AccessToken accessToken,
             RandomShowcaseBuyByUserIdRequest request
         ) {
+            return null;
 /* diff --- start
             // TODO: Speculative execution not supported
 //#if UNITY_2017_1_OR_NEWER
@@ -78,42 +79,6 @@ namespace Gs2.Gs2Showcase.Domain.Transaction.SpeculativeExecutor
 //#endif
 
  diff --- end */
-            var item = await domain.Showcase.Namespace(
-                request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).RandomShowcase(
-                request.ShowcaseName
-            ).RandomDisplayItem(
-                request.DisplayItemName
-            ).ModelAsync();
-
-            var commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
-                item?.ConsumeActions.Select(v =>
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Showcase.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
-                    }
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.ConsumeAction[]{},
-                item?.AcquireActions.Select(v =>
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Showcase.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
-                    }
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.AcquireAction[]{},
-                1.0
-            ).ExecuteAsync(
-                domain,
-                accessToken
-            );
-
-            return () =>
-            {
-                commit?.Invoke();
-                return null;
-            };
         }
     }
 }

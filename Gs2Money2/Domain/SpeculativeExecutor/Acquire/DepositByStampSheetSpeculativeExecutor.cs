@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -26,14 +27,19 @@
 #pragma warning disable 1998
 
 using System;
+using System.Linq; /* diff +++ */
 using System.Numerics;
 using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model; /* diff +++ */
 using Gs2.Core.Util;
+/* diff --- start
 using Gs2.Core.Exception;
+ diff --- end */
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Money2.Model; /* diff +++ */
 using Gs2.Gs2Money2.Request;
 using Gs2.Gs2Money2.Model.Cache;
 using Gs2.Gs2Money2.Model.Transaction;
@@ -71,6 +77,7 @@ namespace Gs2.Gs2Money2.Domain.SpeculativeExecutor
             AccessToken accessToken,
             DepositByUserIdRequest request
         ) {
+/* diff --- start
             var item = await domain.Money2.Namespace(
                 request.NamespaceName
             ).AccessToken(
@@ -81,20 +88,213 @@ namespace Gs2.Gs2Money2.Domain.SpeculativeExecutor
 
             if (item == null) {
                 return () => null;
+ diff --- end */
+/* diff +++ start */
+            var preparedRequest = request == null ? null :
+                new DepositByUserIdRequest()
+                    .WithNamespaceName(request.NamespaceName)
+                    .WithUserId(request.UserId)
+                    .WithSlot(request.Slot)
+                    .WithDepositTransactions(request.DepositTransactions?
+                        .Where(transaction => transaction != null)
+                        .Select(transaction => new DepositTransaction()
+                            .WithPrice(transaction.Price)
+                            .WithCurrency(transaction.Currency)
+                            .WithCount(transaction.Count)
+                            .WithDepositedAt(transaction.DepositedAt)
+                        )
+                        .ToArray())
+                    .WithTimeOffsetToken(request.TimeOffsetToken);
+            var preparedAccessToken = AccessToken.FromJson(accessToken?.ToJson());
+            if (preparedRequest?.UserId == "#{userId}") {
+                preparedRequest.UserId = preparedAccessToken?.UserId;
+/* diff +++ end */
             }
+/* diff --- start
             item = item.SpeculativeExecution(request);
+ diff --- end */
+/* diff +++ start */
+            if (domain?.RestSession == null ||
+                string.IsNullOrEmpty(preparedAccessToken?.UserId) ||
+                preparedRequest?.UserId != preparedAccessToken.UserId ||
+                string.IsNullOrEmpty(preparedRequest.NamespaceName) ||
+                preparedRequest.Slot == null ||
+                preparedRequest.DepositTransactions == null) {
+                return null;
+            }
+            var userId = preparedAccessToken.UserId;
+            var timeOffset = preparedAccessToken.TimeOffset;
+            bool IsExpected(Wallet wallet, int? slot) {
+                var walletId = string.Join(
+                    ":", "grn", "gs2",
+                    domain.RestSession.Region.DisplayName(),
+                    domain.RestSession.OwnerId,
+                    "money2", preparedRequest.NamespaceName,
+                    "user", userId,
+                    "wallet", slot
+                );
+                return wallet != null &&
+                       wallet.WalletId == walletId &&
+                       wallet.UserId == userId && wallet.Slot == slot;
+            }
+            var (item, found) = ((Wallet)null).GetCache(
+                domain.Cache,
+                preparedRequest.NamespaceName,
+                userId,
+                preparedRequest.Slot,
+                timeOffset
+            );
+            if (!found || !IsExpected(item, preparedRequest.Slot)) {
+                return null;
+            }
+            SynchronizeSharedFree(
+                domain, item,
+                preparedRequest.NamespaceName,
+                userId,
+                preparedRequest.Slot,
+                timeOffset,
+                out var preparedSharedWallet,
+                out var sharedFreeUnavailable
+            );
+            if (SpeculativeRequest(preparedRequest, sharedFreeUnavailable) == null ||
+                preparedSharedWallet != null &&
+                !IsExpected(preparedSharedWallet, 0)) {
+                return null;
+            }
+/* diff +++ end */
 
             return () =>
             {
+/* diff --- start
                 item.PutCache(
+ diff --- end */
+                var (cachedItem, find) = ((Wallet)null).GetCache( /* diff +++ */
                     domain.Cache,
+/* diff --- start
                     request.NamespaceName,
                     request.UserId,
                     request.Slot,
                     null
+ diff --- end */
+/* diff +++ start */
+                    preparedRequest.NamespaceName,
+                    userId,
+                    preparedRequest.Slot,
+                    timeOffset
+                );
+                if (!find || !IsExpected(cachedItem, preparedRequest.Slot)) {
+                    return null;
+                }
+                var sourceItem = SynchronizeSharedFree(
+                    domain,
+                    cachedItem,
+                    preparedRequest.NamespaceName,
+                    userId,
+                    preparedRequest.Slot,
+                    timeOffset,
+                    out var sharedWallet,
+                    out sharedFreeUnavailable
+                );
+                var speculativeRequest = SpeculativeRequest(
+                    preparedRequest,
+                    sharedFreeUnavailable
+                );
+                if (speculativeRequest == null) {
+                    return null;
+                }
+                if (sharedWallet != null && !IsExpected(sharedWallet, 0)) {
+                    return null;
+                }
+                var previousFree = sourceItem?.Summary?.Free;
+                Wallet committedItem;
+                try {
+                    committedItem = sourceItem.SpeculativeExecution(
+                        speculativeRequest
+                    );
+                }
+                catch (System.Exception) {
+                    return null;
+                }
+                Wallet committedSharedWallet = null;
+                if (sharedWallet != null &&
+                    previousFree != committedItem.Summary?.Free) {
+                    try {
+                        committedSharedWallet = sharedWallet
+                            .SpeculativeSyncFree(committedItem);
+                        committedSharedWallet.Revision = 0;
+                    }
+                    catch (System.Exception) {
+                        return null;
+                    }
+                }
+                if (committedSharedWallet != null) {
+                    committedSharedWallet.PutCache(
+                        domain.Cache,
+                        preparedRequest.NamespaceName,
+                        userId,
+                        0,
+                        timeOffset
+                    );
+                }
+                committedItem.PutCache(
+                    domain.Cache,
+                    preparedRequest.NamespaceName,
+                    userId,
+                    preparedRequest.Slot,
+                    timeOffset
+/* diff +++ end */
                 );
                 return null;
             };
         }
+/* diff +++ start */
+
+        internal static Wallet SynchronizeSharedFree(
+            Gs2.Core.Domain.Gs2 domain,
+            Wallet item,
+            string namespaceName,
+            string userId,
+            int? slot,
+            int? timeOffset,
+            out Wallet sharedWallet,
+            out bool sharedFreeUnavailable
+        ) {
+            sharedWallet = null;
+            sharedFreeUnavailable = false;
+            if (item?.SharedFreeCurrency != true || slot is null or 0) {
+                return item;
+            }
+            var (cachedSharedWallet, find) = ((Wallet)null).GetCache(
+                domain.Cache,
+                namespaceName,
+                userId,
+                0,
+                timeOffset
+            );
+            if (!find || cachedSharedWallet == null) {
+                sharedFreeUnavailable = true;
+                return item;
+            }
+            sharedWallet = cachedSharedWallet;
+            return item.SpeculativeSyncFree(cachedSharedWallet);
+        }
+
+        private static DepositByUserIdRequest SpeculativeRequest(
+            DepositByUserIdRequest request,
+            bool sharedFreeUnavailable
+        ) {
+            if (!sharedFreeUnavailable) {
+                return request;
+            }
+            var paidTransactions = request.DepositTransactions?
+                .Where(transaction => transaction?.Price > 0)
+                .ToArray();
+            if (paidTransactions == null || paidTransactions.Length == 0) {
+                return null;
+            }
+            return DepositByUserIdRequest.FromJson(request.ToJson())
+                .WithDepositTransactions(paidTransactions);
+        }
+/* diff +++ end */
     }
 }

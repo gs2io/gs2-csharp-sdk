@@ -72,52 +72,9 @@ namespace Gs2.Gs2Ranking2.Domain.SpeculativeExecutor
             AccessToken accessToken,
             CreateClusterRankingReceivedRewardByUserIdRequest request
         ) {
-            var item = await domain.Ranking2.Namespace(
-                request.NamespaceName
-            ).ClusterRankingModel(
-                request.RankingName
-            ).ClusterRankingSeason(
-                request.ClusterName,
-                request.Season,
-/* diff --- start
-                request.UserId
-            ).ClusterRankingReceivedReward(
-            ).ModelAsync();
- diff --- end */
-/* diff +++ start */
-                accessToken
-            ).ClusterRankingReceivedReward().ModelAsync();
-/* diff +++ end */
-
-            if (item == null) {
-                return () => null;
-            }
-            item = item.SpeculativeExecution(request);
-
-            return () =>
-            {
-                item.PutCache(
-                    domain.Cache,
-                    request.NamespaceName,
-                    request.RankingName,
-                    request.ClusterName,
-                    request.Season,
-                    accessToken.UserId,
-                    accessToken.TimeOffset
-                );
-/* diff +++ start */
-                item.PutCache(
-                    domain.Cache,
-                    request.NamespaceName,
-                    request.RankingName,
-                    request.ClusterName,
-                    null,
-                    accessToken.UserId,
-                    accessToken.TimeOffset
-                );
-/* diff +++ end */
-                return null;
-            };
+            // Reward receipt records are created by the server after it resolves the
+            // ranking result. A local clone or no-op commit cannot represent that state.
+            return null;
         }
     }
 }

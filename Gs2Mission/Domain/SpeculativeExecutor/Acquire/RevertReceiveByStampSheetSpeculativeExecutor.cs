@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -71,6 +72,7 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
             AccessToken accessToken,
             RevertReceiveByUserIdRequest request
         ) {
+/* diff --- start
             var item = await domain.Mission.Namespace(
                 request.NamespaceName
             ).AccessToken(
@@ -95,6 +97,14 @@ namespace Gs2.Gs2Mission.Domain.SpeculativeExecutor
                 );
                 return null;
             };
+ diff --- end */
+/* diff +++ start */
+            return await CompleteSpeculativeExecutor.PrepareRevertReceiveAsync(
+                domain,
+                accessToken,
+                request
+            );
+/* diff +++ end */
         }
     }
 }

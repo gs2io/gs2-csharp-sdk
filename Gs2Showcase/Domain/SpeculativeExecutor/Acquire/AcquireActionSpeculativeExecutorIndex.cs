@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -72,9 +73,20 @@ namespace Gs2.Gs2Showcase.Domain.SpeculativeExecutor
             acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (DecrementPurchaseCountByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = DecrementPurchaseCountByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+/* diff --- start
                 if (rate != 1) {
                     request = request.Rate(rate);
+ diff --- end */
+/* diff +++ start */
+                if (!PurchaseCountRate.TryApply(
+                        request?.Count ?? 1,
+                        rate,
+                        out var value
+                    )) {
+                    return null;
+/* diff +++ end */
                 }
+                request.Count = value; /* diff +++ */
                 return await DecrementPurchaseCountByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -84,7 +96,10 @@ namespace Gs2.Gs2Showcase.Domain.SpeculativeExecutor
             if (ForceReDrawByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = ForceReDrawByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
                 if (rate != 1) {
+/* diff --- start
                     request = request.Rate(rate);
+ diff --- end */
+                    request = ForceReDrawByUserIdSpeculativeExecutor.Rate(request, rate); /* diff +++ */
                 }
                 return await ForceReDrawByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,

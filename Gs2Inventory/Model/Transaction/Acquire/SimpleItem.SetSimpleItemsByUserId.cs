@@ -20,9 +20,7 @@
 #pragma warning disable CS1522 // Empty switch block
 
 using System;
-using System.Linq;
 using System.Numerics;
-using Gs2.Core.Exception;
 using Gs2.Gs2Inventory.Request;
 
 namespace Gs2.Gs2Inventory.Model.Transaction
@@ -36,19 +34,11 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this SimpleItem[] self, /* diff +++ */
             SetSimpleItemsByUserIdRequest request
         ) {
-            var changed = self.SpeculativeExecution(request);
             try {
-/* diff --- start
-                changed.Validate();
- diff --- end */
-/* diff +++ start */
-                foreach (var v in changed) {
-                    v.Validate();
-                }
-/* diff +++ end */
+                self.SpeculativeExecution(request);
                 return true;
             }
-            catch (Gs2Exception) {
+            catch (System.Exception) {
                 return false;
             }
         }
@@ -72,12 +62,22 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             return self.Clone() as SimpleItem;
  diff --- end */
 /* diff +++ start */
-            var clone = self.Clone() as SimpleItem[];
-            if (clone == null) {
+            if (self == null || request?.Counts == null) {
                 throw new NullReferenceException();
             }
-            foreach (var v in clone) {
-                v.Count += request.Counts.FirstOrDefault(i => i.ItemName == v.ItemName)?.Count ?? 0;
+            var clone = new SimpleItem[self.Length];
+            for (var i = 0; i < self.Length; i++) {
+                clone[i] = self[i]?.Clone() as SimpleItem;
+                var item = clone[i];
+                if (item == null) continue;
+                var changed = false;
+                foreach (var count in request.Counts) {
+                    if (count?.ItemName != item.ItemName ||
+                        !count.Count.HasValue) continue;
+                    item.Count = count.Count;
+                    changed = true;
+                }
+                if (changed) item.Revision = 0;
             }
             return clone;
 /* diff +++ end */
@@ -87,7 +87,7 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this SetSimpleItemsByUserIdRequest request,
             double rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Inventory:SetSimpleItemsByUserId");
+            return request;
         }
     }
 
@@ -97,7 +97,7 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this SetSimpleItemsByUserIdRequest request,
             BigInteger rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Inventory:SetSimpleItemsByUserId");
+            return request;
         }
     }
 }

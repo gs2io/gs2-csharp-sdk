@@ -28,12 +28,14 @@
 
 using System;
 using System.Collections;
-using System.Linq;
+using System.Collections.Generic;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Showcase.Model.Cache;
 using Gs2.Gs2Showcase.Request;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -47,6 +49,7 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Showcase.Domain.Transaction.SpeculativeExecutor
 {
     public static class BuyByUserIdSpeculativeExecutor {
+        private const int MaxSpeculativeActionCount = 4096;
 
         public static string Action() {
             return "Gs2Showcase:BuyByUserId";
@@ -69,58 +72,108 @@ namespace Gs2.Gs2Showcase.Domain.Transaction.SpeculativeExecutor
             AccessToken accessToken,
             BuyByUserIdRequest request
         ) {
-/* diff --- start
-            // TODO: Speculative execution not supported
-//#if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
-//#else
-            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
-//#endif
+            var token = accessToken?.Clone() as AccessToken;
+            if (domain == null || request == null || string.IsNullOrEmpty(token?.UserId)) {
+                return null;
+            }
+            var prepared = BuyByUserIdRequest.FromJson(request.ToJson());
+            if (prepared.UserId == "#{userId}") {
+                prepared.UserId = token.UserId;
+            }
+            if (prepared.UserId != token.UserId || prepared.Quantity == null ||
+                prepared.Quantity <= 0) {
+                return null;
+            }
 
- diff --- end */
-            var item = await domain.Showcase.Namespace(
-                request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).Showcase(
-                request.ShowcaseName
-            ).DisplayItem(
-                request.DisplayItemId
-            ).ModelAsync();
-
-            var commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
-/* diff --- start
-                item?.ConsumeActions.Select(v =>
- diff --- end */
-                item?.SalesItem.ConsumeActions.Select(v => /* diff +++ */
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Showcase.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
-                    }
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.ConsumeAction[]{},
-/* diff --- start
-                item?.AcquireActions.Select(v =>
- diff --- end */
-                item?.SalesItem.AcquireActions.Select(v => /* diff +++ */
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Showcase.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
-                    }
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.AcquireAction[]{},
-/* diff --- start
-                1.0
- diff --- end */
-                request.Quantity ?? 1.0 /* diff +++ */
-            ).ExecuteAsync(
-                domain,
-                accessToken
+            var cached = ((Gs2.Gs2Showcase.Model.DisplayItem)null).GetCache(
+                domain.Cache,
+                prepared.NamespaceName,
+                token.UserId,
+                prepared.ShowcaseName,
+                prepared.DisplayItemId,
+                token.TimeOffset
             );
+            var item = cached.Item1;
+            if (!cached.Item2 || item == null ||
+                item.DisplayItemId != prepared.DisplayItemId ||
+                item.Type != "salesItem" || item.SalesItem == null) {
+                return null;
+            }
+            var expected = item.ToJson().ToJson();
 
-            return () =>
-            {
-                commit?.Invoke();
+            var consumeSources = item.SalesItem.ConsumeActions ??
+                                 Array.Empty<ConsumeAction>();
+            var acquireSources = item.SalesItem.AcquireActions ??
+                                 Array.Empty<AcquireAction>();
+            var sourceCount = consumeSources.Length + acquireSources.Length;
+            if (sourceCount == 0 ||
+                (long)sourceCount * prepared.Quantity.Value > MaxSpeculativeActionCount) {
+                // This is a local resource budget, not server-side request validation.
+                return null;
+            }
+
+            Func<object> commit;
+            try {
+                var consumeActions = new List<ConsumeAction>();
+                var acquireActions = new List<AcquireAction>();
+                for (var i = 0; i < prepared.Quantity.Value; i++) {
+                    foreach (var source in consumeSources) {
+                        var action = (source?.Clone() as ConsumeAction)
+                            ?.ApplyConfig("userId", token.UserId);
+                        foreach (var config in prepared.Config ??
+                                 Array.Empty<Gs2.Gs2Showcase.Model.Config>()) {
+                            if (config != null) {
+                                action = action?.ApplyConfig(config.Key, config.Value);
+                            }
+                        }
+                        if (action != null) {
+                            consumeActions.Add(action);
+                        }
+                    }
+                    foreach (var source in acquireSources) {
+                        var action = (source?.Clone() as AcquireAction)
+                            ?.ApplyConfig("userId", token.UserId);
+                        foreach (var config in prepared.Config ??
+                                 Array.Empty<Gs2.Gs2Showcase.Model.Config>()) {
+                            if (config != null) {
+                                action = action?.ApplyConfig(config.Key, config.Value);
+                            }
+                        }
+                        if (action != null) {
+                            acquireActions.Add(action);
+                        }
+                    }
+                }
+                if (consumeActions.Count == 0 && acquireActions.Count == 0) {
+                    return null;
+                }
+
+                commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
+                    consumeActions.ToArray(),
+                    acquireActions.ToArray(),
+                    1.0
+                ).ExecuteAsync(domain, token);
+            }
+            catch (Exception) {
+                return null;
+            }
+            if (commit == null) {
+                return null;
+            }
+
+            return () => {
+                var current = ((Gs2.Gs2Showcase.Model.DisplayItem)null).GetCache(
+                    domain.Cache,
+                    prepared.NamespaceName,
+                    token.UserId,
+                    prepared.ShowcaseName,
+                    prepared.DisplayItemId,
+                    token.TimeOffset
+                );
+                if (current.Item2 && current.Item1 != null &&
+                    current.Item1.ToJson().ToJson() == expected) {
+                    commit();
+                }
                 return null;
             };
         }

@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -31,8 +32,11 @@ using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model; /* diff +++ */
 using Gs2.Core.Util;
+/* diff --- start
 using Gs2.Core.Exception;
+ diff --- end */
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Schedule.Request;
 using Gs2.Gs2Schedule.Model.Cache;
@@ -52,6 +56,39 @@ namespace Gs2.Gs2Schedule.Domain.SpeculativeExecutor
 
         public static string Action() {
             return "Gs2Schedule:ExtendTriggerByUserId";
+/* diff +++ start */
+        }
+
+        private static long CurrentTimeMillis(AccessToken accessToken)
+        {
+            return UnixTime.ToUnixTime(DateTime.Now) +
+                   (long)(accessToken?.TimeOffset ?? 0) * 1000L;
+        }
+
+        public static Gs2.Gs2Schedule.Model.Trigger Transform(
+            Gs2.Core.Domain.Gs2 domain,
+            AccessToken accessToken,
+            ExtendTriggerByUserIdRequest request,
+            Gs2.Gs2Schedule.Model.Trigger item
+        ) {
+            return Transform(
+                domain,
+                accessToken,
+                request,
+                item,
+                CurrentTimeMillis(accessToken)
+            );
+        }
+
+        public static Gs2.Gs2Schedule.Model.Trigger Transform(
+            Gs2.Core.Domain.Gs2 domain,
+            AccessToken accessToken,
+            ExtendTriggerByUserIdRequest request,
+            Gs2.Gs2Schedule.Model.Trigger item,
+            long currentTimeMillis
+        ) {
+            return item.SpeculativeExtendAt(request, currentTimeMillis);
+/* diff +++ end */
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -71,6 +108,7 @@ namespace Gs2.Gs2Schedule.Domain.SpeculativeExecutor
             AccessToken accessToken,
             ExtendTriggerByUserIdRequest request
         ) {
+/* diff --- start
             var item = await domain.Schedule.Namespace(
                 request.NamespaceName
             ).AccessToken(
@@ -81,17 +119,124 @@ namespace Gs2.Gs2Schedule.Domain.SpeculativeExecutor
 
             if (item == null) {
                 return () => null;
+ diff --- end */
+/* diff +++ start */
+            var prepared = request == null ? null :
+                ExtendTriggerByUserIdRequest.FromJson(request.ToJson());
+            var preparedAccessToken = AccessToken.FromJson(accessToken?.ToJson());
+            if (prepared?.UserId == "#{userId}") {
+                prepared.UserId = preparedAccessToken?.UserId;
+/* diff +++ end */
             }
+/* diff --- start
             item = item.SpeculativeExecution(request);
+ diff --- end */
+/* diff +++ start */
+            if (domain?.RestSession == null ||
+                string.IsNullOrEmpty(preparedAccessToken?.UserId) ||
+                prepared?.UserId != preparedAccessToken.UserId ||
+                prepared.ExtendSeconds == null) {
+                return null;
+            }
+            var userId = preparedAccessToken.UserId;
+            var timeOffset = preparedAccessToken.TimeOffset;
+            var expectedTriggerId = string.Join(
+                ":",
+                "grn",
+                "gs2",
+                domain.RestSession.Region.DisplayName(),
+                domain.RestSession.OwnerId,
+                "schedule",
+                prepared.NamespaceName,
+                "user",
+                userId,
+                "trigger",
+                prepared.TriggerName
+            );
+            var (preparedItem, found) = ((Gs2.Gs2Schedule.Model.Trigger)null)
+                .GetCache(
+                    domain.Cache,
+                    prepared.NamespaceName,
+                    userId,
+                    prepared.TriggerName,
+                    timeOffset
+                );
+            bool IsExpected(Gs2.Gs2Schedule.Model.Trigger item) {
+                return item != null &&
+                       item.TriggerId == expectedTriggerId &&
+                       item.UserId == userId &&
+                       item.Name == prepared.TriggerName;
+            }
+            if (!found ||
+                (preparedItem != null && !IsExpected(preparedItem))) {
+                return null;
+            }
+            var preparedSnapshot = preparedItem?.ToJson().ToJson();
+            var currentTimeMillis = CurrentTimeMillis(preparedAccessToken);
+/* diff +++ end */
 
             return () =>
             {
+/* diff --- start
                 item.PutCache(
+ diff --- end */
+/* diff +++ start */
+                var (live, liveFound) =
+                    ((Gs2.Gs2Schedule.Model.Trigger)null).GetCache(
+                        domain.Cache,
+                        prepared.NamespaceName,
+                        userId,
+                        prepared.TriggerName,
+                        timeOffset
+                    );
+                if (!liveFound || (live != null && !IsExpected(live))) {
+                    return null;
+                }
+                if (preparedItem == null) {
+                    if (live != null && live.Revision != 0) {
+                        return null;
+                    }
+                }
+                else if (live == null ||
+                         (live.Revision != 0 &&
+                          live.ToJson().ToJson() != preparedSnapshot)) {
+                    return null;
+                }
+                Gs2.Gs2Schedule.Model.Trigger changed;
+                try {
+                    changed = Transform(
+                        domain,
+                        preparedAccessToken,
+                        prepared,
+                        live,
+                        currentTimeMillis
+                    );
+                }
+                catch (Exception) {
+                    return null;
+                }
+                if (changed == null) {
+                    return null;
+                }
+                changed.TriggerId = expectedTriggerId;
+                changed.UserId = userId;
+                changed.Name = prepared.TriggerName;
+                changed.Revision = 0;
+                changed.PutCache(
+/* diff +++ end */
                     domain.Cache,
+/* diff --- start
                     request.NamespaceName,
                     request.UserId,
                     request.TriggerName,
                     null
+ diff --- end */
+/* diff +++ start */
+                    prepared.NamespaceName,
+                    userId,
+                    prepared.TriggerName,
+                    timeOffset
+/* diff +++ end */
                 );
                 return null;
             };

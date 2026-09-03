@@ -32,9 +32,7 @@ using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
-/* diff +++ start */
 using Gs2.Core.Model;
-/* diff +++ end */
 using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
@@ -53,10 +51,86 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
 {
     public static class VerifySimpleItemByUserIdSpeculativeExecutor {
+        private sealed class PreparedVerification :
+            IPreparedSpeculativeVerification
+        {
+            private readonly Gs2.Core.Domain.Gs2 _domain;
+            private readonly AccessToken _accessToken;
+            private readonly VerifySimpleItemByUserIdRequest _request;
+            private readonly string _expectedId;
+
+            public PreparedVerification(
+                Gs2.Core.Domain.Gs2 domain,
+                AccessToken accessToken,
+                VerifySimpleItemByUserIdRequest request,
+                string expectedId
+            ) {
+                _domain = domain;
+                _accessToken = accessToken;
+                _request = request;
+                _expectedId = expectedId;
+            }
+
+            public bool IsStillSatisfied()
+            {
+                var (item, found) = ((Gs2.Gs2Inventory.Model.SimpleItem)null)
+                    .GetCache(
+                        _domain.Cache,
+                        _request.NamespaceName,
+                        _accessToken.UserId,
+                        _request.InventoryName,
+                        _request.ItemName,
+                        _accessToken.TimeOffset
+                    );
+                item ??= SimpleItemSpeculativeState.KnownZero(
+                    _expectedId, _accessToken.UserId, _request.ItemName
+                );
+                if (!found || item.ItemId != _expectedId ||
+                    item.UserId != _accessToken.UserId ||
+                    item.ItemName != _request.ItemName ||
+                    !item.Count.HasValue) {
+                    return false;
+                }
+                try {
+                    Transform(_domain, _accessToken, _request, item);
+                    return true;
+                }
+                catch (Gs2Exception) {
+                    return false;
+                }
+            }
+
+            public object Invoke()
+            {
+                return null;
+            }
+        }
 
         public static string Action() {
             return "Gs2Inventory:VerifySimpleItemByUserId";
-/* diff +++ start */
+        }
+
+#if GS2_ENABLE_UNITASK
+        public static async UniTask<Func<object>> ExecuteInverseAsync(
+#else
+        public static async Task<Func<object>> ExecuteInverseAsync(
+#endif
+            Gs2.Core.Domain.Gs2 domain,
+            AccessToken accessToken,
+            VerifySimpleItemByUserIdRequest request
+        ) {
+            var inverse = request == null ? null :
+                VerifySimpleItemByUserIdRequest.FromJson(request.ToJson());
+            switch (inverse?.VerifyType) {
+                case "less": inverse.VerifyType = "greaterEqual"; break;
+                case "lessEqual": inverse.VerifyType = "greater"; break;
+                case "greater": inverse.VerifyType = "lessEqual"; break;
+                case "greaterEqual": inverse.VerifyType = "less"; break;
+                case "equal": inverse.VerifyType = "notEqual"; break;
+                case "notEqual": inverse.VerifyType = "equal"; break;
+                default: return null;
+            }
+            return await ExecuteAsync(domain, accessToken, inverse);
         }
 
         public static Gs2.Gs2Inventory.Model.SimpleItem Transform(
@@ -65,52 +139,12 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             VerifySimpleItemByUserIdRequest request,
             Gs2.Gs2Inventory.Model.SimpleItem item
         ) {
-            switch (request.VerifyType) {
-                case "less":
-                    if (item.Count < request.Count) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
-                case "lessEqual":
-                    if (item.Count <= request.Count) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
-                case "greater":
-                    if (item.Count > request.Count) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
-                case "greaterEqual":
-                    if (item.Count >= request.Count) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
-                case "equal":
-                    if (item.Count == request.Count) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
-                case "notEqual":
-                    if (item.Count != request.Count) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
+            if (!item.IsExecutable(request)) {
+                throw new BadRequestException(new [] {
+                    new RequestError("count", "invalid"),
+                });
             }
             return item;
-/* diff +++ end */
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -130,28 +164,57 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             AccessToken accessToken,
             VerifySimpleItemByUserIdRequest request
         ) {
-            var item = await domain.Inventory.Namespace(
-                request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).SimpleInventory(
-                request.InventoryName
-            ).SimpleItem(
-                request.ItemName
-            ).ModelAsync();
-
-            if (item == null) {
-                return () => null;
-            }
-/* diff --- start
-            item = item.SpeculativeExecution(request);
- diff --- end */
-            item = Transform(domain, accessToken, request, item); /* diff +++ */
-
-            return () =>
-            {
+            var token = accessToken?.Clone() as AccessToken;
+            if (domain?.RestSession == null || request == null ||
+                string.IsNullOrEmpty(token?.UserId)) {
                 return null;
-            };
+            }
+            var prepared = VerifySimpleItemByUserIdRequest.FromJson(request.ToJson());
+            if (prepared.UserId == "#{userId}") {
+                prepared.UserId = token.UserId;
+            }
+            if (prepared.UserId != token.UserId ||
+                string.IsNullOrEmpty(prepared.NamespaceName) ||
+                string.IsNullOrEmpty(prepared.InventoryName) ||
+                string.IsNullOrEmpty(prepared.ItemName) ||
+                (prepared.VerifyType != "less" &&
+                 prepared.VerifyType != "lessEqual" &&
+                 prepared.VerifyType != "greater" &&
+                 prepared.VerifyType != "greaterEqual" &&
+                 prepared.VerifyType != "equal" &&
+                 prepared.VerifyType != "notEqual") ||
+                !prepared.Count.HasValue) {
+                return null;
+            }
+            var expectedId =
+                $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                $"{domain.RestSession.OwnerId}:inventory:{prepared.NamespaceName}:" +
+                $"user:{token.UserId}:simple:inventory:{prepared.InventoryName}:" +
+                $"item:{prepared.ItemName}";
+            var cached = ((Gs2.Gs2Inventory.Model.SimpleItem)null).GetCache(
+                domain.Cache,
+                prepared.NamespaceName,
+                token.UserId,
+                prepared.InventoryName,
+                prepared.ItemName,
+                token.TimeOffset
+            );
+            var item = cached.Item1 ?? SimpleItemSpeculativeState.KnownZero(
+                expectedId, token.UserId, prepared.ItemName
+            );
+            if (!cached.Item2 || item.ItemId != expectedId ||
+                item.UserId != token.UserId || item.ItemName != prepared.ItemName ||
+                !item.Count.HasValue) {
+                return null;
+            }
+            Transform(domain, token, prepared, item);
+
+            return new PreparedVerification(
+                domain,
+                token,
+                prepared,
+                expectedId
+            ).Invoke;
         }
     }
 }

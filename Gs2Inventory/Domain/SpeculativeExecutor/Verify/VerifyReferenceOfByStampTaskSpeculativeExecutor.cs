@@ -27,15 +27,13 @@
 #pragma warning disable 1998
 
 using System;
-using System.Numerics;
 using System.Collections;
-using System.Collections.Generic; /* diff +++ */
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
-/* diff +++ start */
 using Gs2.Core.Model;
-/* diff +++ end */
 using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
@@ -47,7 +45,6 @@ using UnityEngine;
 #endif
 #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.Linq; /* diff +++ */
 #else
 using System.Threading.Tasks;
 #endif
@@ -55,10 +52,53 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
 {
     public static class VerifyReferenceOfByUserIdSpeculativeExecutor {
+        private sealed class PreparedVerification :
+            IPreparedSpeculativeVerification
+        {
+            private readonly Gs2.Core.Domain.Gs2 _domain;
+            private readonly AccessToken _accessToken;
+            private readonly VerifyReferenceOfByUserIdRequest _request;
+            private readonly string _expectedId;
+
+            public PreparedVerification(
+                Gs2.Core.Domain.Gs2 domain,
+                AccessToken accessToken,
+                VerifyReferenceOfByUserIdRequest request,
+                string expectedId
+            ) {
+                _domain = domain;
+                _accessToken = accessToken;
+                _request = request;
+                _expectedId = expectedId;
+            }
+
+            public bool IsStillSatisfied()
+            {
+                if (!TryGetReferences(
+                        _domain,
+                        _accessToken,
+                        _request,
+                        _expectedId,
+                        out var references)) {
+                    return false;
+                }
+                try {
+                    Transform(_domain, _accessToken, _request, references);
+                    return true;
+                }
+                catch (Gs2Exception) {
+                    return false;
+                }
+            }
+
+            public object Invoke()
+            {
+                return null;
+            }
+        }
 
         public static string Action() {
             return "Gs2Inventory:VerifyReferenceOfByUserId";
-/* diff +++ start */
         }
 
         public static List<string> Transform(
@@ -67,38 +107,33 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             VerifyReferenceOfByUserIdRequest request,
             List<string> items
         ) {
-            switch (request.VerifyType) {
-                case "not_entry":
-                    if (items.Contains(request.ReferenceOf)) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
-                case "already_entry":
-                    if (!items.Contains(request.ReferenceOf)) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
-                case "empty":
-                    if (items.Count != 0) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
-                case "not_empty":
-                    if (items.Count == 0) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
+            if (!items.IsExecutable(request)) {
+                throw new BadRequestException(new [] {
+                    new RequestError("count", "invalid"),
+                });
             }
             return items;
-/* diff +++ end */
+        }
+
+#if GS2_ENABLE_UNITASK
+        public static async UniTask<Func<object>> ExecuteInverseAsync(
+#else
+        public static async Task<Func<object>> ExecuteInverseAsync(
+#endif
+            Gs2.Core.Domain.Gs2 domain,
+            AccessToken accessToken,
+            VerifyReferenceOfByUserIdRequest request
+        ) {
+            var inverse = request == null ? null :
+                VerifyReferenceOfByUserIdRequest.FromJson(request.ToJson());
+            switch (inverse?.VerifyType) {
+                case "not_entry": inverse.VerifyType = "already_entry"; break;
+                case "already_entry": inverse.VerifyType = "not_entry"; break;
+                case "empty": inverse.VerifyType = "not_empty"; break;
+                case "not_empty": inverse.VerifyType = "empty"; break;
+                default: return null;
+            }
+            return await ExecuteAsync(domain, accessToken, inverse);
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -118,43 +153,77 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             AccessToken accessToken,
             VerifyReferenceOfByUserIdRequest request
         ) {
-/* diff --- start
-            var item = await domain.Inventory.Namespace(
- diff --- end */
-            var items = await domain.Inventory.Namespace( /* diff +++ */
-                request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).Inventory(
-                request.InventoryName
-            ).ItemSet(
-                request.ItemName,
-                request.ItemSetName
-/* diff --- start
-            ).ReferenceOf(
-                request.ReferenceOf
-            ).ModelAsync();
- diff --- end */
-/* diff +++ start */
-            ).ReferenceOvesAsync(
-            ).ToListAsync();
-/* diff +++ end */
-
-/* diff --- start
-            if (item == null) {
- diff --- end */
-            if (items == null) { /* diff +++ */
-                return () => null;
-            }
-/* diff --- start
-            item = item.SpeculativeExecution(request);
- diff --- end */
-            items = Transform(domain, accessToken, request, items); /* diff +++ */
-
-            return () =>
-            {
+            var token = accessToken?.Clone() as AccessToken;
+            if (domain?.RestSession == null || request == null ||
+                string.IsNullOrEmpty(token?.UserId)) {
                 return null;
-            };
+            }
+            var prepared = VerifyReferenceOfByUserIdRequest.FromJson(request.ToJson());
+            if (prepared.UserId == "#{userId}") prepared.UserId = token.UserId;
+            if (prepared.UserId != token.UserId ||
+                string.IsNullOrEmpty(prepared.NamespaceName) ||
+                string.IsNullOrEmpty(prepared.InventoryName) ||
+                string.IsNullOrEmpty(prepared.ItemName) ||
+                string.IsNullOrEmpty(prepared.ItemSetName) ||
+                prepared.ReferenceOf == null ||
+                (prepared.VerifyType != "not_entry" &&
+                 prepared.VerifyType != "already_entry" &&
+                 prepared.VerifyType != "empty" &&
+                 prepared.VerifyType != "not_empty")) {
+                return null;
+            }
+            var expectedId =
+                $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                $"{domain.RestSession.OwnerId}:inventory:{prepared.NamespaceName}:" +
+                $"user:{token.UserId}:inventory:{prepared.InventoryName}:" +
+                $"item:{prepared.ItemName}:itemSet:{prepared.ItemSetName}";
+            if (!TryGetReferences(
+                    domain,
+                    token,
+                    prepared,
+                    expectedId,
+                    out var references)) {
+                return null;
+            }
+            if (!references.IsExecutable(prepared)) {
+                return null;
+            }
+            Transform(domain, token, prepared, references);
+
+            return new PreparedVerification(
+                domain,
+                token,
+                prepared,
+                expectedId
+            ).Invoke;
+        }
+
+        private static bool TryGetReferences(
+            Gs2.Core.Domain.Gs2 domain,
+            AccessToken accessToken,
+            VerifyReferenceOfByUserIdRequest request,
+            string expectedId,
+            out List<string> references
+        ) {
+            references = null;
+            var (item, found) = ((Gs2.Gs2Inventory.Model.ItemSet)null).GetCache(
+                domain.Cache,
+                request.NamespaceName,
+                accessToken.UserId,
+                request.InventoryName,
+                request.ItemName,
+                request.ItemSetName,
+                accessToken.TimeOffset
+            );
+            if (!found || item == null || item.ItemSetId != expectedId ||
+                item.UserId != accessToken.UserId ||
+                item.InventoryName != request.InventoryName ||
+                item.ItemName != request.ItemName ||
+                item.Name != request.ItemSetName || item.ReferenceOf == null) {
+                return false;
+            }
+            references = item.ReferenceOf.ToList();
+            return true;
         }
     }
 }

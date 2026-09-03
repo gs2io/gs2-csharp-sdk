@@ -22,8 +22,6 @@
 using System;
 using System.Linq;
 using System.Numerics;
-using Gs2.Core.Exception;
-using Gs2.Core.Util; /* diff +++ */
 using Gs2.Gs2Dictionary.Request;
 
 namespace Gs2.Gs2Dictionary.Model.Transaction
@@ -37,19 +35,11 @@ namespace Gs2.Gs2Dictionary.Model.Transaction
             this Entry[] self, /* diff +++ */
             DeleteEntriesByUserIdRequest request
         ) {
-            var changed = self.SpeculativeExecution(request);
             try {
-/* diff --- start
-                changed.Validate();
- diff --- end */
-/* diff +++ start */
-                foreach (var v in changed) {
-                    v.Validate();
-                }
-/* diff +++ end */
+                self.SpeculativeExecution(request);
                 return true;
             }
-            catch (Gs2Exception) {
+            catch (Exception) {
                 return false;
             }
         }
@@ -68,17 +58,13 @@ namespace Gs2.Gs2Dictionary.Model.Transaction
             return null;
  diff --- end */
 /* diff +++ start */
-            var items = self.ToList();
-            foreach (var entryModelName in request.EntryModelNames) {
-                if (!items.Select(v => v.Name).ToList().Contains(entryModelName)) {
-                    items.Add(new Entry {
-                        UserId = request.UserId,
-                        Name = entryModelName,
-                        AcquiredAt = UnixTime.ToUnixTime(DateTime.Now),
-                    });
-                }
+            if (self == null ||
+                request == null ||
+                self.Any(v => v?.Name == null)) {
+                throw new NullReferenceException();
             }
-            return items.ToArray();
+            var entryModelNames = (request.EntryModelNames ?? Array.Empty<string>()).ToHashSet();
+            return self.Where(v => !entryModelNames.Contains(v.Name)).ToArray();
 /* diff +++ end */
         }
 
@@ -86,7 +72,7 @@ namespace Gs2.Gs2Dictionary.Model.Transaction
             this DeleteEntriesByUserIdRequest request,
             double rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Dictionary:DeleteEntriesByUserId");
+            return request;
         }
     }
 
@@ -96,7 +82,7 @@ namespace Gs2.Gs2Dictionary.Model.Transaction
             this DeleteEntriesByUserIdRequest request,
             BigInteger rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Dictionary:DeleteEntriesByUserId");
+            return request;
         }
     }
 }

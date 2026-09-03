@@ -72,29 +72,9 @@ namespace Gs2.Gs2Script.Domain.SpeculativeExecutor
             AccessToken accessToken,
             InvokeScriptRequest request
         ) {
-/* diff --- start
-            var item = await domain.Script.Namespace(
-                request.NamespaceName
-            ).ModelAsync();
-
-            if (item == null) {
-                return () => null;
-            }
-            item = item.SpeculativeExecution(request);
-
- diff --- end */
-            return () =>
-            {
-/* diff --- start
-                item.PutCache(
-                    domain.Cache,
-                    request.NamespaceName,
-                    request.ScriptName,
-                    null
-                );
- diff --- end */
-                return null;
-            };
+            // The script runs only on the server and may produce arbitrary
+            // side effects. It cannot be represented by a successful no-op.
+            return null;
         }
     }
 }

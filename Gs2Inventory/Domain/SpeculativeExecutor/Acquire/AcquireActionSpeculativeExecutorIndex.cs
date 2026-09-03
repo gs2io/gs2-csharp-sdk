@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -104,10 +105,17 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                 );
             }
             if (AcquireItemSetWithGradeByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+/* diff +++ start */
+                if (rate != 1) {
+                    return null;
+                }
+/* diff +++ end */
                 var request = AcquireItemSetWithGradeByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+/* diff --- start
                 if (rate != 1) {
                     request = request.Rate(rate);
                 }
+ diff --- end */
                 return await AcquireItemSetWithGradeByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -116,9 +124,11 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             }
             if (AddReferenceOfByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = AddReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+/* diff --- start
                 if (rate != 1) {
                     request = request.Rate(rate);
                 }
+ diff --- end */
                 return await AddReferenceOfByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -127,9 +137,11 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             }
             if (DeleteReferenceOfByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = DeleteReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+/* diff --- start
                 if (rate != 1) {
                     request = request.Rate(rate);
                 }
+ diff --- end */
                 return await DeleteReferenceOfByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -72,9 +73,11 @@ namespace Gs2.Gs2LoginReward.Domain.SpeculativeExecutor
             acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (DeleteReceiveStatusByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = DeleteReceiveStatusByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+/* diff --- start
                 if (rate != 1) {
                     request = request.Rate(rate);
                 }
+ diff --- end */
                 return await DeleteReceiveStatusByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -83,9 +86,11 @@ namespace Gs2.Gs2LoginReward.Domain.SpeculativeExecutor
             }
             if (UnmarkReceivedByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = UnmarkReceivedByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+/* diff --- start
                 if (rate != 1) {
                     request = request.Rate(rate);
                 }
+ diff --- end */
                 return await UnmarkReceivedByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

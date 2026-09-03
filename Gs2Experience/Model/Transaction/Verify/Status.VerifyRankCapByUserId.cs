@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
@@ -32,19 +33,43 @@ namespace Gs2.Gs2Experience.Model.Transaction
             this Status self,
             VerifyRankCapByUserIdRequest request
         ) {
+/* diff +++ start */
+            if (self?.RankCapValue == null || request?.RankCapValue == null) {
+                return false;
+            }
+
+/* diff +++ end */
             switch (request.VerifyType) {
                 case "less":
+/* diff --- start
                     throw new NotImplementedException($"not implemented action Gs2Experience:VerifyRankCapByUserId");
+ diff --- end */
+                    return self.RankCapValue.Value < request.RankCapValue.Value; /* diff +++ */
                 case "lessEqual":
+/* diff --- start
                     throw new NotImplementedException($"not implemented action Gs2Experience:VerifyRankCapByUserId");
+ diff --- end */
+                    return self.RankCapValue.Value <= request.RankCapValue.Value; /* diff +++ */
                 case "greater":
+/* diff --- start
                     throw new NotImplementedException($"not implemented action Gs2Experience:VerifyRankCapByUserId");
+ diff --- end */
+                    return self.RankCapValue.Value > request.RankCapValue.Value; /* diff +++ */
                 case "greaterEqual":
+/* diff --- start
                     throw new NotImplementedException($"not implemented action Gs2Experience:VerifyRankCapByUserId");
+ diff --- end */
+                    return self.RankCapValue.Value >= request.RankCapValue.Value; /* diff +++ */
                 case "equal":
+/* diff --- start
                     throw new NotImplementedException($"not implemented action Gs2Experience:VerifyRankCapByUserId");
+ diff --- end */
+                    return self.RankCapValue.Value == request.RankCapValue.Value; /* diff +++ */
                 case "notEqual":
+/* diff --- start
                     throw new NotImplementedException($"not implemented action Gs2Experience:VerifyRankCapByUserId");
+ diff --- end */
+                    return self.RankCapValue.Value != request.RankCapValue.Value; /* diff +++ */
             }
             return false;
         }
@@ -60,7 +85,23 @@ namespace Gs2.Gs2Experience.Model.Transaction
             this VerifyRankCapByUserIdRequest request,
             double rate
         ) {
+/* diff --- start
             throw new NotSupportedException($"not supported rate action Gs2Experience:VerifyRankCapByUserId");
+ diff --- end */
+/* diff +++ start */
+            if (request?.MultiplyValueSpecifyingQuantity != true) {
+                return request;
+            }
+            if (!TryApplyServerRate(
+                    request.RankCapValue ?? 0L,
+                    rate,
+                    out var value
+                )) {
+                return request;
+            }
+            request.RankCapValue = value;
+            return request;
+/* diff +++ end */
         }
     }
 
@@ -70,7 +111,20 @@ namespace Gs2.Gs2Experience.Model.Transaction
             this VerifyRankCapByUserIdRequest request,
             BigInteger rate
         ) {
+/* diff --- start
             throw new NotSupportedException($"not supported rate action Gs2Experience:VerifyRankCapByUserId");
+ diff --- end */
+/* diff +++ start */
+            if (request?.MultiplyValueSpecifyingQuantity != true) {
+                return request;
+            }
+            var value = (request.RankCapValue ?? 0L) * rate;
+            if (value <= long.MinValue || value >= long.MaxValue) {
+                return request;
+            }
+            request.RankCapValue = (long)value;
+            return request;
+/* diff +++ end */
         }
     }
 }

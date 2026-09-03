@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -31,9 +32,11 @@ using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model; /* diff +++ */
 using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Money2.Model; /* diff +++ */
 using Gs2.Gs2Money2.Request;
 using Gs2.Gs2Money2.Model.Cache;
 using Gs2.Gs2Money2.Model.Transaction;
@@ -71,6 +74,7 @@ namespace Gs2.Gs2Money2.Domain.SpeculativeExecutor
             AccessToken accessToken,
             WithdrawByUserIdRequest request
         ) {
+/* diff --- start
             var item = await domain.Money2.Namespace(
                 request.NamespaceName
             ).AccessToken(
@@ -81,17 +85,157 @@ namespace Gs2.Gs2Money2.Domain.SpeculativeExecutor
 
             if (item == null) {
                 return () => null;
+ diff --- end */
+/* diff +++ start */
+            var preparedRequest = request == null
+                ? null
+                : new WithdrawByUserIdRequest()
+                    .WithNamespaceName(request.NamespaceName)
+                    .WithUserId(request.UserId)
+                    .WithSlot(request.Slot)
+                    .WithWithdrawCount(request.WithdrawCount)
+                    .WithPaidOnly(request.PaidOnly);
+            var preparedAccessToken = accessToken == null
+                ? null
+                : new AccessToken()
+                    .WithUserId(accessToken.UserId)
+                    .WithTimeOffset(accessToken.TimeOffset);
+            if (preparedRequest?.UserId == "#{userId}") {
+                preparedRequest.UserId = preparedAccessToken?.UserId;
+/* diff +++ end */
             }
+/* diff --- start
             item = item.SpeculativeExecution(request);
+ diff --- end */
+/* diff +++ start */
+            if (domain?.RestSession == null ||
+                string.IsNullOrEmpty(preparedAccessToken?.UserId) ||
+                preparedRequest?.UserId != preparedAccessToken.UserId ||
+                string.IsNullOrEmpty(preparedRequest.NamespaceName) ||
+                !preparedRequest.Slot.HasValue ||
+                !preparedRequest.WithdrawCount.HasValue) {
+                return null;
+            }
+            var userId = preparedAccessToken.UserId;
+            var timeOffset = preparedAccessToken.TimeOffset;
+            bool IsExpected(Wallet wallet, int? slot) {
+                var walletId = string.Join(
+                    ":", "grn", "gs2",
+                    domain.RestSession.Region.DisplayName(),
+                    domain.RestSession.OwnerId,
+                    "money2", preparedRequest.NamespaceName,
+                    "user", userId,
+                    "wallet", slot
+                );
+                return wallet != null &&
+                       wallet.WalletId == walletId &&
+                       wallet.UserId == userId && wallet.Slot == slot;
+            }
+            var (item, found) = ((Wallet)null).GetCache(
+                domain.Cache,
+                preparedRequest.NamespaceName,
+                userId,
+                preparedRequest.Slot,
+                timeOffset
+            );
+            if (!found || !IsExpected(item, preparedRequest.Slot)) {
+                return null;
+            }
+            DepositByUserIdSpeculativeExecutor
+                .SynchronizeSharedFree(
+                    domain,
+                    item,
+                    preparedRequest.NamespaceName,
+                    userId,
+                    preparedRequest.Slot,
+                    timeOffset,
+                    out var preparedSharedWallet,
+                    out var sharedFreeUnavailable
+                );
+            if (sharedFreeUnavailable && !(preparedRequest.PaidOnly ?? false) ||
+                preparedSharedWallet != null &&
+                !IsExpected(preparedSharedWallet, 0)) {
+                return null;
+            }
+/* diff +++ end */
 
             return () =>
             {
+/* diff --- start
                 item.PutCache(
+ diff --- end */
+                var (cachedItem, find) = ((Wallet)null).GetCache( /* diff +++ */
                     domain.Cache,
+/* diff --- start
                     request.NamespaceName,
                     accessToken.UserId,
                     request.Slot,
                     accessToken.TimeOffset
+ diff --- end */
+/* diff +++ start */
+                    preparedRequest.NamespaceName,
+                    userId,
+                    preparedRequest.Slot,
+                    timeOffset
+                );
+                if (!find || !IsExpected(cachedItem, preparedRequest.Slot)) {
+                    return null;
+                }
+                var sourceItem = DepositByUserIdSpeculativeExecutor
+                    .SynchronizeSharedFree(
+                        domain,
+                        cachedItem,
+                        preparedRequest.NamespaceName,
+                        userId,
+                        preparedRequest.Slot,
+                        timeOffset,
+                        out var sharedWallet,
+                        out sharedFreeUnavailable
+                    );
+                if (sharedFreeUnavailable && !(preparedRequest.PaidOnly ?? false)) {
+                    return null;
+                }
+                if (sharedWallet != null && !IsExpected(sharedWallet, 0)) {
+                    return null;
+                }
+                var previousFree = sourceItem?.Summary?.Free;
+                Wallet committedItem;
+                try {
+                    committedItem = sourceItem.SpeculativeExecution(
+                        preparedRequest
+                    );
+                }
+                catch (System.Exception) {
+                    return null;
+                }
+                Wallet committedSharedWallet = null;
+                if (sharedWallet != null &&
+                    previousFree != committedItem.Summary?.Free) {
+                    try {
+                        committedSharedWallet = sharedWallet
+                            .SpeculativeSyncFree(committedItem);
+                        committedSharedWallet.Revision = 0;
+                    }
+                    catch (System.Exception) {
+                        return null;
+                    }
+                }
+                if (committedSharedWallet != null) {
+                    committedSharedWallet.PutCache(
+                        domain.Cache,
+                        preparedRequest.NamespaceName,
+                        userId,
+                        0,
+                        timeOffset
+                    );
+                }
+                committedItem.PutCache(
+                    domain.Cache,
+                    preparedRequest.NamespaceName,
+                    userId,
+                    preparedRequest.Slot,
+                    timeOffset
+/* diff +++ end */
                 );
                 return null;
             };

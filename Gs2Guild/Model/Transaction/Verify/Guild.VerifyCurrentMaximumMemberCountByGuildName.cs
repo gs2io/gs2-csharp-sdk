@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
@@ -32,19 +33,43 @@ namespace Gs2.Gs2Guild.Model.Transaction
             this Guild self,
             VerifyCurrentMaximumMemberCountByGuildNameRequest request
         ) {
+/* diff +++ start */
+            if (self?.CurrentMaximumMemberCount == null || request?.Value == null) {
+                return false;
+            }
+
+/* diff +++ end */
             switch (request.VerifyType) {
                 case "less":
+/* diff --- start
                     throw new NotImplementedException($"not implemented action Gs2Guild:VerifyCurrentMaximumMemberCountByGuildName");
+ diff --- end */
+                    return self.CurrentMaximumMemberCount.Value < request.Value.Value; /* diff +++ */
                 case "lessEqual":
+/* diff --- start
                     throw new NotImplementedException($"not implemented action Gs2Guild:VerifyCurrentMaximumMemberCountByGuildName");
+ diff --- end */
+                    return self.CurrentMaximumMemberCount.Value <= request.Value.Value; /* diff +++ */
                 case "greater":
+/* diff --- start
                     throw new NotImplementedException($"not implemented action Gs2Guild:VerifyCurrentMaximumMemberCountByGuildName");
+ diff --- end */
+                    return self.CurrentMaximumMemberCount.Value > request.Value.Value; /* diff +++ */
                 case "greaterEqual":
+/* diff --- start
                     throw new NotImplementedException($"not implemented action Gs2Guild:VerifyCurrentMaximumMemberCountByGuildName");
+ diff --- end */
+                    return self.CurrentMaximumMemberCount.Value >= request.Value.Value; /* diff +++ */
                 case "equal":
+/* diff --- start
                     throw new NotImplementedException($"not implemented action Gs2Guild:VerifyCurrentMaximumMemberCountByGuildName");
+ diff --- end */
+                    return self.CurrentMaximumMemberCount.Value == request.Value.Value; /* diff +++ */
                 case "notEqual":
+/* diff --- start
                     throw new NotImplementedException($"not implemented action Gs2Guild:VerifyCurrentMaximumMemberCountByGuildName");
+ diff --- end */
+                    return self.CurrentMaximumMemberCount.Value != request.Value.Value; /* diff +++ */
             }
             return false;
         }
@@ -60,7 +85,18 @@ namespace Gs2.Gs2Guild.Model.Transaction
             this VerifyCurrentMaximumMemberCountByGuildNameRequest request,
             double rate
         ) {
+/* diff --- start
             throw new NotSupportedException($"not supported rate action Gs2Guild:VerifyCurrentMaximumMemberCountByGuildName");
+ diff --- end */
+/* diff +++ start */
+            if (request?.MultiplyValueSpecifyingQuantity != true ||
+                !Gs2.Gs2Inventory.Model.Transaction
+                    .SetCapacityByUserIdRequestExt.TryApplyRate(
+                        request.Value ?? 0, rate, out var value
+                    )) return request;
+            request.Value = value;
+            return request;
+/* diff +++ end */
         }
     }
 
@@ -70,7 +106,16 @@ namespace Gs2.Gs2Guild.Model.Transaction
             this VerifyCurrentMaximumMemberCountByGuildNameRequest request,
             BigInteger rate
         ) {
+/* diff --- start
             throw new NotSupportedException($"not supported rate action Gs2Guild:VerifyCurrentMaximumMemberCountByGuildName");
+ diff --- end */
+/* diff +++ start */
+            if (request?.MultiplyValueSpecifyingQuantity != true) return request;
+            var value = new BigInteger(request.Value ?? 0) * rate;
+            if (value <= int.MinValue || value > int.MaxValue) return request;
+            request.Value = (int)value;
+            return request;
+/* diff +++ end */
         }
     }
 }

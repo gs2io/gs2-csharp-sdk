@@ -33,22 +33,21 @@ namespace Gs2.Gs2Enchant.Model.Transaction
             this RarityParameterStatus self,
             VerifyRarityParameterStatusByUserIdRequest request
         ) {
+            if (self?.ParameterValues == null ||
+                request == null) {
+                return false;
+            }
+
             switch (request.VerifyType) {
                 case "havent":
-/* diff --- start
-                    return self.ParameterValues.Contains(request.ParameterName);
- diff --- end */
-                    return self.ParameterValues.Select(v => v.Name).Contains(request.ParameterName); /* diff +++ */
+                    return request.ParameterValueName != null &&
+                           !self.ParameterValues.Any(v => v?.Name == request.ParameterValueName);
                 case "have":
-/* diff --- start
-                    return !self.ParameterValues.Contains(request.ParameterName);
- diff --- end */
-                    return !self.ParameterValues.Select(v => v.Name).Contains(request.ParameterName); /* diff +++ */
+                    return request.ParameterValueName != null &&
+                           self.ParameterValues.Any(v => v?.Name == request.ParameterValueName);
                 case "count":
-/* diff --- start
-                    return self.ParameterValues.Length == request.ParameterName;
- diff --- end */
-                    return self.ParameterValues.Length == request.ParameterCount; /* diff +++ */
+                    return request.ParameterCount.HasValue &&
+                           self.ParameterValues.Length == request.ParameterCount.Value;
             }
             return false;
         }
@@ -64,7 +63,7 @@ namespace Gs2.Gs2Enchant.Model.Transaction
             this VerifyRarityParameterStatusByUserIdRequest request,
             double rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Enchant:VerifyRarityParameterStatusByUserId");
+            return request;
         }
     }
 
@@ -74,7 +73,7 @@ namespace Gs2.Gs2Enchant.Model.Transaction
             this VerifyRarityParameterStatusByUserIdRequest request,
             BigInteger rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Enchant:VerifyRarityParameterStatusByUserId");
+            return request;
         }
     }
 }

@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -72,9 +73,20 @@ namespace Gs2.Gs2Idle.Domain.SpeculativeExecutor
             acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (IncreaseMaximumIdleMinutesByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = IncreaseMaximumIdleMinutesByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+/* diff --- start
                 if (rate != 1) {
                     request = request.Rate(rate);
+ diff --- end */
+/* diff +++ start */
+                if (!MaximumIdleMinutesRate.TryApply(
+                        request?.IncreaseMinutes ?? 1,
+                        rate,
+                        out var value
+                    )) {
+                    return null;
+/* diff +++ end */
                 }
+                request.IncreaseMinutes = value; /* diff +++ */
                 return await IncreaseMaximumIdleMinutesByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -83,9 +95,11 @@ namespace Gs2.Gs2Idle.Domain.SpeculativeExecutor
             }
             if (SetMaximumIdleMinutesByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = SetMaximumIdleMinutesByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+/* diff --- start
                 if (rate != 1) {
                     request = request.Rate(rate);
                 }
+ diff --- end */
                 return await SetMaximumIdleMinutesByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

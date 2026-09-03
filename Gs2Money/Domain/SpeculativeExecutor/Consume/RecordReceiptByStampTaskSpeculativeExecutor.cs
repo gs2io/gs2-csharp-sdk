@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -71,7 +72,14 @@ namespace Gs2.Gs2Money.Domain.SpeculativeExecutor
             AccessToken accessToken,
             RecordReceiptRequest request
         ) {
+/* diff --- start
             return () => null;
+ diff --- end */
+/* diff +++ start */
+            // Receipt validation and replay protection depend on the store and
+            // server-side receipt records. A local no-op is not a valid commit.
+            return null;
+/* diff +++ end */
         }
     }
 }

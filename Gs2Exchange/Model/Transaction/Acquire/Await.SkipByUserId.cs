@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
@@ -58,7 +59,24 @@ namespace Gs2.Gs2Exchange.Model.Transaction
             this SkipByUserIdRequest request,
             double rate
         ) {
+/* diff --- start
             request.Minutes = (int?) (request.Minutes * rate);
+ diff --- end */
+/* diff +++ start */
+            if (request == null) return null;
+            if (request.SkipType == "minutes") {
+                var minutes = (request.Minutes ?? 1) * rate;
+                request.Minutes = double.IsNaN(minutes) ||
+                                  double.IsInfinity(minutes) ||
+                                  minutes < int.MinValue || minutes > int.MaxValue
+                    ? null
+                    : (int?)minutes;
+            }
+            else if (request.SkipType == "totalRate" ||
+                     request.SkipType == "remainRate") {
+                request.Rate = (float)Math.Min((request.Rate ?? 0) * rate, 1);
+            }
+/* diff +++ end */
             return request;
         }
     }
@@ -69,7 +87,25 @@ namespace Gs2.Gs2Exchange.Model.Transaction
             this SkipByUserIdRequest request,
             BigInteger rate
         ) {
+/* diff --- start
             request.Minutes = (int?) ((request.Minutes ?? 0) * rate);
+ diff --- end */
+/* diff +++ start */
+            if (request == null) return null;
+            if (request.SkipType == "minutes") {
+                var minutes = new BigInteger(request.Minutes ?? 1) * rate;
+                request.Minutes = minutes < int.MinValue || minutes > int.MaxValue
+                    ? null
+                    : (int?)minutes;
+            }
+            else if (request.SkipType == "totalRate" ||
+                     request.SkipType == "remainRate") {
+                request.Rate = (float)Math.Min(
+                    (request.Rate ?? 0) * (double)rate,
+                    1
+                );
+            }
+/* diff +++ end */
             return request;
         }
     }

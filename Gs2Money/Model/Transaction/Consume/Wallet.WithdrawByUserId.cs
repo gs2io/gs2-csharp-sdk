@@ -23,6 +23,7 @@ using System;
 using System.Linq;
 using System.Numerics;
 using Gs2.Core.Exception;
+using Gs2.Core.Model;
 using Gs2.Gs2Money.Request;
 
 namespace Gs2.Gs2Money.Model.Transaction
@@ -33,12 +34,25 @@ namespace Gs2.Gs2Money.Model.Transaction
             this Wallet self,
             WithdrawByUserIdRequest request
         ) {
-            var changed = self.SpeculativeExecution(request);
             try {
-                changed.Validate();
+                self.SpeculativeExecution(request);
                 return true;
             }
-            catch (Gs2Exception) {
+            catch (System.Exception) {
+                return false;
+            }
+        }
+
+        public static bool IsExecutable(
+            this Wallet self,
+            WithdrawByUserIdRequest request,
+            string priority
+        ) {
+            try {
+                self.SpeculativeExecution(request, priority);
+                return true;
+            }
+            catch (System.Exception) {
                 return false;
             }
         }
@@ -47,6 +61,20 @@ namespace Gs2.Gs2Money.Model.Transaction
             this Wallet self,
             WithdrawByUserIdRequest request
         ) {
+            return self.SpeculativeExecution(request, "free");
+        }
+
+        public static Wallet SpeculativeExecution(
+            this Wallet self,
+            WithdrawByUserIdRequest request,
+            string priority
+        ) {
+            if (request?.Count == null) {
+                throw new NullReferenceException();
+            }
+            if (priority != "free" && priority != "paid") {
+                throw new InvalidOperationException();
+            }
 /* diff --- start
             if (self.Clone() is not Wallet clone)
  diff --- end */
@@ -57,31 +85,56 @@ namespace Gs2.Gs2Money.Model.Transaction
             {
                 throw new NullReferenceException();
             }
-/* diff --- start
-            clone.Total -= request.Count;
- diff --- end */
-/* diff +++ start */
-            if (request.PaidOnly ?? false) {
-                clone.Paid -= request.Count;
-                if (clone.Paid < 0) {
-                    return clone;
-                }
+            if (request.Count <= 0) {
+                clone.Revision = 0;
+                return clone;
             }
-            else {
-                if (clone.Free + clone.Paid < request.Count) {
-                    if (clone.Free < 0) {
-                        return clone;
+            var details = (clone.Detail ?? Array.Empty<WalletDetail>())
+                .Select(detail => detail?.Clone() as WalletDetail)
+                .Where(detail => detail != null)
+                .ToList();
+            var remaining = request.Count.Value;
+            while (remaining > 0) {
+                WalletDetail target = null;
+                if (priority == "free" && !(request.PaidOnly ?? false)) {
+                    target = details.FirstOrDefault(detail =>
+                        detail.Price == 0 && detail.Count > 0
+                    );
+                }
+                target ??= details
+                    .Where(detail =>
+                        detail.Count > 0 &&
+                        (!(request.PaidOnly ?? false) || detail.Price > 0)
+                    )
+                    .OrderByDescending(detail => detail.Price)
+                    .FirstOrDefault();
+                if (target == null) {
+                    throw new BadRequestException(new[] {
+                        new RequestError(
+                            "count",
+                            "money.wallet.count.error.fewBalance"
+                        ),
+                    });
+                }
+                var consumed = Math.Min(target.Count.Value, remaining);
+                checked {
+                    target.Count -= consumed;
+                    remaining -= consumed;
+                    if (target.Price == 0) {
+                        clone.Free -= consumed;
+                    }
+                    else {
+                        clone.Paid -= consumed;
                     }
                 }
-                else {
-                    clone.Free -= request.Count;
-                    if (clone.Free < 0) {
-                        clone.Paid += clone.Free;
-                        clone.Free = 0;
-                    }
+                if (target.Count == 0) {
+                    details.Remove(target);
                 }
             }
-/* diff +++ end */
+            clone.Detail = details
+                .OrderByDescending(detail => detail.Price)
+                .ToArray();
+            clone.Revision = 0;
             return clone;
         }
 

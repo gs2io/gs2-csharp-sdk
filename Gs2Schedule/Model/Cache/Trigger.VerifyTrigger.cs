@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
@@ -46,6 +47,7 @@ namespace Gs2.Gs2Schedule.Model.Cache
             int? timeOffset,
             VerifyTriggerRequest request
         ) {
+/* diff --- start
             self.Item?.PutCache(
                 cache,
                 request.NamespaceName,
@@ -53,6 +55,27 @@ namespace Gs2.Gs2Schedule.Model.Cache
                 request.TriggerName,
                 timeOffset
             );
+ diff --- end */
+/* diff +++ start */
+            if (self?.Item != null) {
+                self.Item.PutCache(
+                    cache,
+                    request.NamespaceName,
+                    userId,
+                    request.TriggerName,
+                    timeOffset
+                );
+            }
+            else if (request?.VerifyType == "notTriggerd") {
+                ((Trigger)null).PutCache(
+                    cache,
+                    request.NamespaceName,
+                    userId,
+                    request.TriggerName,
+                    timeOffset
+                );
+            }
+/* diff +++ end */
         }
 
 #if UNITY_2017_1_OR_NEWER

@@ -22,7 +22,6 @@
 using System;
 using System.Linq;
 using System.Numerics;
-using Gs2.Core.Exception;
 using Gs2.Gs2Money.Request;
 
 namespace Gs2.Gs2Money.Model.Transaction
@@ -33,12 +32,11 @@ namespace Gs2.Gs2Money.Model.Transaction
             this Wallet self,
             DepositByUserIdRequest request
         ) {
-            var changed = self.SpeculativeExecution(request);
             try {
-                changed.Validate();
+                self.SpeculativeExecution(request);
                 return true;
             }
-            catch (Gs2Exception) {
+            catch (System.Exception) {
                 return false;
             }
         }
@@ -47,6 +45,9 @@ namespace Gs2.Gs2Money.Model.Transaction
             this Wallet self,
             DepositByUserIdRequest request
         ) {
+            if (request?.Count == null || request.Price == null) {
+                throw new NullReferenceException();
+            }
 /* diff --- start
             if (self.Clone() is not Wallet clone)
  diff --- end */
@@ -57,17 +58,65 @@ namespace Gs2.Gs2Money.Model.Transaction
             {
                 throw new NullReferenceException();
             }
+            var unitPrice = (float)(Math.Ceiling(
+                request.Price.Value * 10000f / request.Count.Value
+            ) / 10000d);
+            var details = (clone.Detail ?? Array.Empty<WalletDetail>())
+                .Select(detail => detail?.Clone() as WalletDetail)
+                .ToList();
+            var target = details.FirstOrDefault(detail =>
+                detail?.Price == unitPrice
+            );
+            if (target == null) {
+                target = new WalletDetail()
+                    .WithPrice(unitPrice)
+                    .WithCount(0);
+                details.Add(target);
+            }
+            checked {
+                target.Count += request.Count;
+                if (request.Price > 0) {
+                    clone.Paid += request.Count;
+                }
+                else {
+                    clone.Free += request.Count;
+                }
+            }
+            clone.Detail = details.ToArray();
 /* diff --- start
             clone.Total += request.Count;
  diff --- end */
 /* diff +++ start */
-            if (request.Price > 0) {
-                clone.Paid += request.Count;
-            }
-            else {
-                clone.Free += request.Count;
-            }
+            clone.Revision = 0;
 /* diff +++ end */
+            return clone;
+        }
+
+        internal static Wallet SpeculativeSyncFree(
+            this Wallet self,
+            Wallet source
+        ) {
+            if (self?.Clone() is not Wallet clone || source == null)
+            {
+                throw new NullReferenceException();
+            }
+            var details = (clone.Detail ?? Array.Empty<WalletDetail>())
+                .Select(detail => detail?.Clone() as WalletDetail)
+                .Where(detail => detail != null)
+                .ToList();
+            var freeDetail = details.FirstOrDefault(detail =>
+                detail.Price == 0
+            );
+            if (freeDetail == null) {
+                freeDetail = new WalletDetail().WithPrice(0);
+                details.Add(freeDetail);
+            }
+            freeDetail.Count = source.Detail?
+                .FirstOrDefault(detail => detail?.Price == 0)?.Count
+                ?? source.Free
+                ?? 0;
+            clone.Free = source.Free;
+            clone.Detail = details.ToArray();
             return clone;
         }
 

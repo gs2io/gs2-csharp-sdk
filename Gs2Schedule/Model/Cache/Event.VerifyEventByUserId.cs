@@ -47,14 +47,37 @@ namespace Gs2.Gs2Schedule.Model.Cache
             int? timeOffset,
             VerifyEventByUserIdRequest request
         ) {
-            self.Item?.PutCache(
+            if (self?.Item == null || self.InSchedule == null) {
+                return;
+            }
+            self.Item.PutCache(
                 cache,
                 request.NamespaceName,
-                request.UserId,
+                userId,
                 request.EventName,
-                true, /* diff +++ */
+                false,
                 timeOffset
             );
+            if (self.InSchedule == true) {
+                self.Item.PutCache(
+                    cache,
+                    request.NamespaceName,
+                    userId,
+                    request.EventName,
+                    true,
+                    timeOffset
+                );
+            }
+            else if (self.InSchedule == false) {
+                ((Event)null).PutCache(
+                    cache,
+                    request.NamespaceName,
+                    userId,
+                    request.EventName,
+                    true,
+                    timeOffset
+                );
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER

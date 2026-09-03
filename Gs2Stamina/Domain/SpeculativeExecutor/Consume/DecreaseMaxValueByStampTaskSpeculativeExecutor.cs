@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -31,6 +32,7 @@ using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model; /* diff +++ */
 using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
@@ -71,6 +73,7 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
             AccessToken accessToken,
             DecreaseMaxValueByUserIdRequest request
         ) {
+/* diff --- start
             var item = await domain.Stamina.Namespace(
                 request.NamespaceName
             ).AccessToken(
@@ -95,6 +98,48 @@ namespace Gs2.Gs2Stamina.Domain.SpeculativeExecutor
                 );
                 return null;
             };
+ diff --- end */
+/* diff +++ start */
+            var token = accessToken?.Clone() as AccessToken;
+            if (domain?.RestSession == null || request == null ||
+                string.IsNullOrEmpty(token?.UserId)) return null;
+            var prepared = DecreaseMaxValueByUserIdRequest.FromJson(
+                request.ToJson()
+            );
+            if (prepared.UserId == "#{userId}") prepared.UserId = token.UserId;
+            if (prepared.UserId != token.UserId ||
+                !prepared.DecreaseValue.HasValue) return null;
+            var expectedStaminaId =
+                $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                $"{domain.RestSession.OwnerId}:stamina:{prepared.NamespaceName}:" +
+                $"user:{token.UserId}:stamina:{prepared.StaminaName}";
+            var expectedModelId =
+                $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                $"{domain.RestSession.OwnerId}:stamina:{prepared.NamespaceName}:" +
+                $"model:{prepared.StaminaName}";
+            var cached = ((Gs2.Gs2Stamina.Model.Stamina)null).GetCache(
+                domain.Cache, prepared.NamespaceName, token.UserId,
+                prepared.StaminaName, token.TimeOffset
+            );
+            if (!cached.Item2 || cached.Item1 == null ||
+                cached.Item1.StaminaId != expectedStaminaId ||
+                cached.Item1.UserId != token.UserId ||
+                cached.Item1.StaminaName != prepared.StaminaName ||
+                !cached.Item1.MaxValue.HasValue) return null;
+            var decreaseValue = prepared.DecreaseValue.Value;
+            return new StaminaMutationSpeculativeCommit(
+                domain.Cache, prepared.NamespaceName, token.UserId,
+                prepared.StaminaName, token.TimeOffset, expectedStaminaId,
+                expectedModelId, cached.Item1.Revision,
+                true,
+                (current, cap) => {
+                    current.MaxValue = StaminaMutationSpeculativeCommit.Clamp(
+                        (long)current.MaxValue.Value - decreaseValue, cap
+                    );
+                    return true;
+                }
+            ).Invoke;
+/* diff +++ end */
         }
     }
 }

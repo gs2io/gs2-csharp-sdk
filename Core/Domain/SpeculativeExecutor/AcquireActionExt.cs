@@ -20,6 +20,9 @@ namespace Gs2.Core.SpeculativeExecutor
     public static class AcquireActionExt
     {
         public static AcquireAction ApplyConfig(this AcquireAction self, string key, string value) {
+            if (self?.Request == null || value == null) {
+                return null;
+            }
             return new AcquireAction()
                 .WithAction(self.Action)
                 .WithRequest(self.Request.Replace($"#{{{key}}}", System.Text.RegularExpressions.Regex.Replace(value, "(?<!\\\\)\"", "\\\"")));

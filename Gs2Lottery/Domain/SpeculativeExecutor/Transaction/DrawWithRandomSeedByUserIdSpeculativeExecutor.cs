@@ -69,53 +69,9 @@ namespace Gs2.Gs2Lottery.Domain.Transaction.SpeculativeExecutor
             AccessToken accessToken,
             DrawWithRandomSeedByUserIdRequest request
         ) {
-/* diff --- start
-            // TODO: Speculative execution not supported
- diff --- end */
-#if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
-#else
-            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
-#endif
-/* diff --- start
-
-            var item = await domain.Lottery.Namespace(
-                request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).Lottery(
-                request.LotteryName
-            ).ModelAsync();
-
-            var commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
-                item?.ConsumeActions.Select(v =>
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Lottery.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
-                    }
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.ConsumeAction[]{},
-                item?.AcquireActions.Select(v =>
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Lottery.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
-                    }
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.AcquireAction[]{},
-                1.0
-            ).ExecuteAsync(
-                domain,
-                accessToken
-            );
-
- diff --- end */
-            return () =>
-            {
-/* diff --- start
-                commit?.Invoke();
- diff --- end */
-                return null;
-            };
+            // This is still a gacha draw: the result and transaction IDs are
+            // intentionally left to the server even when a seed is supplied.
+            return null;
         }
     }
 }

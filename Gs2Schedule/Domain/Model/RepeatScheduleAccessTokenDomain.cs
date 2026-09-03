@@ -143,7 +143,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 this.NamespaceName,
                 this.UserId,
                 this.EventName,
-                this.InSchedule ?? true
+                this.InSchedule ?? true,
+                this.AccessToken?.TimeOffset
             );
             if (find) {
                 return value;
@@ -154,6 +155,7 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 this.UserId,
                 this.EventName,
                 this.InSchedule ?? true,
+                this.AccessToken?.TimeOffset,
                 () => this.GetAsync(
                     new GetEventRequest()
                 )
@@ -189,7 +191,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.EventName
+                this.EventName,
+                this.AccessToken?.TimeOffset
             );
         }
 
@@ -199,7 +202,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 (null as Gs2.Gs2Schedule.Model.RepeatSchedule).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.InSchedule ?? true
+                    this.InSchedule ?? true,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Schedule.Model.RepeatSchedule).CacheKey(
                     this.EventName
@@ -230,7 +234,8 @@ namespace Gs2.Gs2Schedule.Domain.Model
                 (null as Gs2.Gs2Schedule.Model.RepeatSchedule).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.InSchedule ?? true
+                    this.InSchedule ?? true,
+                    this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Schedule.Model.RepeatSchedule).CacheKey(
                     this.EventName

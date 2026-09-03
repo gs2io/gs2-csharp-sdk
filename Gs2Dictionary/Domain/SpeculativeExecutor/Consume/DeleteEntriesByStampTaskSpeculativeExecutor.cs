@@ -29,22 +29,20 @@
 using System;
 using System.Numerics;
 using System.Collections;
-using System.Collections.Generic; /* diff +++ */
+using System.Collections.Generic;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model;
 using Gs2.Core.Util;
-using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Dictionary.Request;
 using Gs2.Gs2Dictionary.Model.Cache;
-using Gs2.Gs2Dictionary.Model.Transaction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 #endif
 #if GS2_ENABLE_UNITASK
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.Linq; /* diff +++ */
 #else
 using System.Threading.Tasks;
 #endif
@@ -74,32 +72,68 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
             AccessToken accessToken,
             DeleteEntriesByUserIdRequest request
         ) {
-/* diff --- start
-            return () => null;
- diff --- end */
-/* diff +++ start */
-            var it = await domain.Dictionary.Namespace(
-                request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).EntriesAsync().ToListAsync();
+            var token = accessToken?.Clone() as AccessToken;
+            if (domain == null || request == null || string.IsNullOrEmpty(token?.UserId)) {
+                return null;
+            }
+            var prepared = DeleteEntriesByUserIdRequest.FromJson(request.ToJson());
+            if (prepared.UserId == "#{userId}") {
+                prepared.UserId = token.UserId;
+            }
+            if (prepared.UserId != token.UserId) {
+                return null;
+            }
 
-            var items_ = it.ToArray().SpeculativeExecution(request);
+            var entries = new List<Tuple<string, string>>();
+            var seen = new HashSet<string>();
+            foreach (var entryModelName in prepared.EntryModelNames ?? Array.Empty<string>()) {
+                if (entryModelName == null || !seen.Add(entryModelName)) {
+                    continue;
+                }
+                var cached = ((Gs2.Gs2Dictionary.Model.Entry)null).GetCache(
+                    domain.Cache,
+                    prepared.NamespaceName,
+                    token.UserId,
+                    entryModelName,
+                    token.TimeOffset
+                );
+                var item = cached.Item1;
+                var expectedId =
+                    $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                    $"{domain.RestSession.OwnerId}:dictionary:{prepared.NamespaceName}:" +
+                    $"user:{token.UserId}:entry:{entryModelName}";
+                if (cached.Item2 && item != null &&
+                    item.EntryId == expectedId && item.UserId == token.UserId &&
+                    item.Name == entryModelName) {
+                    entries.Add(Tuple.Create(entryModelName, item.ToJson().ToJson()));
+                }
+            }
+            if (entries.Count == 0) {
+                return null;
+            }
 
-            return () =>
-            {
-                foreach (var item in items_) {
-                    item.PutCache(
+            return () => {
+                foreach (var entry in entries) {
+                    var current = ((Gs2.Gs2Dictionary.Model.Entry)null).GetCache(
                         domain.Cache,
-                        request.NamespaceName,
-                        accessToken.UserId,
-                        item.Name,
-                        accessToken.TimeOffset
+                        prepared.NamespaceName,
+                        token.UserId,
+                        entry.Item1,
+                        token.TimeOffset
                     );
+                    if (current.Item2 && current.Item1 != null &&
+                        current.Item1.ToJson().ToJson() == entry.Item2) {
+                        (null as Gs2.Gs2Dictionary.Model.Entry).PutCache(
+                            domain.Cache,
+                            prepared.NamespaceName,
+                            token.UserId,
+                            entry.Item1,
+                            token.TimeOffset
+                        );
+                    }
                 }
                 return null;
             };
-/* diff +++ end */
         }
     }
 }

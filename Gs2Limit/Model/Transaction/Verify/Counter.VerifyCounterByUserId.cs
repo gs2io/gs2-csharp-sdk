@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
@@ -32,19 +33,44 @@ namespace Gs2.Gs2Limit.Model.Transaction
             this Counter self,
             VerifyCounterByUserIdRequest request
         ) {
+/* diff +++ start */
+            if (self?.Count == null || request == null) {
+                return false;
+            }
+            var count = request.Count ?? 0;
+
+/* diff +++ end */
             switch (request.VerifyType) {
                 case "less":
+/* diff --- start
                     throw new NotImplementedException($"not implemented action Gs2Limit:VerifyCounterByUserId");
+ diff --- end */
+                    return self.Count.Value < count; /* diff +++ */
                 case "lessEqual":
+/* diff --- start
                     throw new NotImplementedException($"not implemented action Gs2Limit:VerifyCounterByUserId");
+ diff --- end */
+                    return self.Count.Value <= count; /* diff +++ */
                 case "greater":
+/* diff --- start
                     throw new NotImplementedException($"not implemented action Gs2Limit:VerifyCounterByUserId");
+ diff --- end */
+                    return self.Count.Value > count; /* diff +++ */
                 case "greaterEqual":
+/* diff --- start
                     throw new NotImplementedException($"not implemented action Gs2Limit:VerifyCounterByUserId");
+ diff --- end */
+                    return self.Count.Value >= count; /* diff +++ */
                 case "equal":
+/* diff --- start
                     throw new NotImplementedException($"not implemented action Gs2Limit:VerifyCounterByUserId");
+ diff --- end */
+                    return self.Count.Value == count; /* diff +++ */
                 case "notEqual":
+/* diff --- start
                     throw new NotImplementedException($"not implemented action Gs2Limit:VerifyCounterByUserId");
+ diff --- end */
+                    return self.Count.Value != count; /* diff +++ */
             }
             return false;
         }
@@ -60,7 +86,17 @@ namespace Gs2.Gs2Limit.Model.Transaction
             this VerifyCounterByUserIdRequest request,
             double rate
         ) {
+/* diff --- start
             throw new NotSupportedException($"not supported rate action Gs2Limit:VerifyCounterByUserId");
+ diff --- end */
+/* diff +++ start */
+            if (request?.MultiplyValueSpecifyingQuantity != true ||
+                !CounterRate.TryApply(request.Count ?? 0, rate, out var value)) {
+                return request;
+            }
+            request.Count = value;
+            return request;
+/* diff +++ end */
         }
     }
 
@@ -70,7 +106,17 @@ namespace Gs2.Gs2Limit.Model.Transaction
             this VerifyCounterByUserIdRequest request,
             BigInteger rate
         ) {
+/* diff --- start
             throw new NotSupportedException($"not supported rate action Gs2Limit:VerifyCounterByUserId");
+ diff --- end */
+/* diff +++ start */
+            if (request?.MultiplyValueSpecifyingQuantity != true ||
+                !CounterRate.TryApply(request.Count ?? 0, rate, out var value)) {
+                return request;
+            }
+            request.Count = value;
+            return request;
+/* diff +++ end */
         }
     }
 }

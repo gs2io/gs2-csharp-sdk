@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -31,9 +32,11 @@ using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model; /* diff +++ */
 using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2LoginReward.Model; /* diff +++ */
 using Gs2.Gs2LoginReward.Request;
 using Gs2.Gs2LoginReward.Model.Cache;
 using Gs2.Gs2LoginReward.Model.Transaction;
@@ -71,6 +74,7 @@ namespace Gs2.Gs2LoginReward.Domain.SpeculativeExecutor
             AccessToken accessToken,
             UnmarkReceivedByUserIdRequest request
         ) {
+/* diff --- start
             var item = await domain.LoginReward.Namespace(
                 request.NamespaceName
             ).AccessToken(
@@ -81,7 +85,15 @@ namespace Gs2.Gs2LoginReward.Domain.SpeculativeExecutor
 
             if (item == null) {
                 return () => null;
+ diff --- end */
+/* diff +++ start */
+            var prepared = request == null ? null :
+                UnmarkReceivedByUserIdRequest.FromJson(request.ToJson());
+            if (prepared?.UserId == "#{userId}") {
+                prepared.UserId = accessToken?.UserId;
+/* diff +++ end */
             }
+/* diff --- start
             item = item.SpeculativeExecution(request);
 
             return () =>
@@ -93,8 +105,41 @@ namespace Gs2.Gs2LoginReward.Domain.SpeculativeExecutor
                     request.BonusModelName,
                     null
                 );
+ diff --- end */
+/* diff +++ start */
+            if (domain?.RestSession == null ||
+                string.IsNullOrEmpty(accessToken?.UserId) ||
+                prepared?.UserId != accessToken.UserId ||
+                prepared.StepNumber == null || prepared.StepNumber < 0) {
+/* diff +++ end */
                 return null;
+/* diff --- start
             };
+ diff --- end */
+/* diff +++ start */
+            }
+            var userId = accessToken.UserId;
+            var timeOffset = accessToken.TimeOffset;
+            var currentTimeMillis = UnixTime.ToUnixTime(DateTime.Now) +
+                                    (long)(timeOffset ?? 0) * 1000L;
+            var expectedId =
+                $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                $"{domain.RestSession.OwnerId}:loginReward:{prepared.NamespaceName}:" +
+                $"user:{userId}:status:{prepared.BonusModelName}";
+            var commit = new ReceiveStatusSpeculativeCommit(
+                domain.Cache,
+                prepared.NamespaceName,
+                userId,
+                prepared.BonusModelName,
+                timeOffset,
+                expectedId,
+                item => item.SpeculativeExecutionAt(
+                    prepared,
+                    currentTimeMillis
+                )
+            );
+            return commit.CanPrepare() ? commit.Invoke : null;
+/* diff +++ end */
         }
     }
 }

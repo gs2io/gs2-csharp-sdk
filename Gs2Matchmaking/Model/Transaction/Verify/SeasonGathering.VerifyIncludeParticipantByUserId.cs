@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
@@ -32,11 +33,23 @@ namespace Gs2.Gs2Matchmaking.Model.Transaction
             this SeasonGathering self,
             VerifyIncludeParticipantByUserIdRequest request
         ) {
+/* diff +++ start */
+            if (self?.Participants == null || request?.UserId == null) {
+                return false;
+            }
+            var included = self.Participants.Contains(request.UserId);
+/* diff +++ end */
             switch (request.VerifyType) {
                 case "include":
+/* diff --- start
                     throw new NotImplementedException($"not implemented action Gs2Matchmaking:VerifyIncludeParticipantByUserId");
+ diff --- end */
+                    return included; /* diff +++ */
                 case "notInclude":
+/* diff --- start
                     throw new NotImplementedException($"not implemented action Gs2Matchmaking:VerifyIncludeParticipantByUserId");
+ diff --- end */
+                    return !included; /* diff +++ */
             }
             return false;
         }
@@ -52,7 +65,10 @@ namespace Gs2.Gs2Matchmaking.Model.Transaction
             this VerifyIncludeParticipantByUserIdRequest request,
             double rate
         ) {
+/* diff --- start
             throw new NotSupportedException($"not supported rate action Gs2Matchmaking:VerifyIncludeParticipantByUserId");
+ diff --- end */
+            return request; /* diff +++ */
         }
     }
 
@@ -62,7 +78,10 @@ namespace Gs2.Gs2Matchmaking.Model.Transaction
             this VerifyIncludeParticipantByUserIdRequest request,
             BigInteger rate
         ) {
+/* diff --- start
             throw new NotSupportedException($"not supported rate action Gs2Matchmaking:VerifyIncludeParticipantByUserId");
+ diff --- end */
+            return request; /* diff +++ */
         }
     }
 }

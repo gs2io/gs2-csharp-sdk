@@ -32,9 +32,7 @@ using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
-/* diff +++ start */
 using Gs2.Core.Model;
-/* diff +++ end */
 using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
@@ -53,10 +51,84 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
 {
     public static class VerifyInventoryCurrentMaxCapacityByUserIdSpeculativeExecutor {
+        private sealed class PreparedVerification :
+            IPreparedSpeculativeVerification
+        {
+            private readonly Gs2.Core.Domain.Gs2 _domain;
+            private readonly AccessToken _accessToken;
+            private readonly VerifyInventoryCurrentMaxCapacityByUserIdRequest _request;
+            private readonly string _expectedId;
+
+            public PreparedVerification(
+                Gs2.Core.Domain.Gs2 domain,
+                AccessToken accessToken,
+                VerifyInventoryCurrentMaxCapacityByUserIdRequest request,
+                string expectedId
+            ) {
+                _domain = domain;
+                _accessToken = accessToken;
+                _request = request;
+                _expectedId = expectedId;
+            }
+
+            public bool IsStillSatisfied()
+            {
+                var (item, found) = ((Gs2.Gs2Inventory.Model.Inventory)null)
+                    .GetCache(
+                        _domain.Cache,
+                        _request.NamespaceName,
+                        _accessToken.UserId,
+                        _request.InventoryName,
+                        _accessToken.TimeOffset
+                    );
+                if (!found || item == null || item.InventoryId != _expectedId ||
+                    item.UserId != _accessToken.UserId ||
+                    item.InventoryName != _request.InventoryName ||
+                    !item.CurrentInventoryMaxCapacity.HasValue) {
+                    return false;
+                }
+                try {
+                    Transform(_domain, _accessToken, _request, item);
+                    return true;
+                }
+                catch (Gs2Exception) {
+                    return false;
+                }
+            }
+
+            public object Invoke()
+            {
+                return null;
+            }
+        }
 
         public static string Action() {
             return "Gs2Inventory:VerifyInventoryCurrentMaxCapacityByUserId";
-/* diff +++ start */
+        }
+
+#if GS2_ENABLE_UNITASK
+        public static async UniTask<Func<object>> ExecuteInverseAsync(
+#else
+        public static async Task<Func<object>> ExecuteInverseAsync(
+#endif
+            Gs2.Core.Domain.Gs2 domain,
+            AccessToken accessToken,
+            VerifyInventoryCurrentMaxCapacityByUserIdRequest request
+        ) {
+            var inverse = request == null ? null :
+                VerifyInventoryCurrentMaxCapacityByUserIdRequest.FromJson(
+                    request.ToJson()
+                );
+            switch (inverse?.VerifyType) {
+                case "less": inverse.VerifyType = "greaterEqual"; break;
+                case "lessEqual": inverse.VerifyType = "greater"; break;
+                case "greater": inverse.VerifyType = "lessEqual"; break;
+                case "greaterEqual": inverse.VerifyType = "less"; break;
+                case "equal": inverse.VerifyType = "notEqual"; break;
+                case "notEqual": inverse.VerifyType = "equal"; break;
+                default: return null;
+            }
+            return await ExecuteAsync(domain, accessToken, inverse);
         }
 
         public static Gs2.Gs2Inventory.Model.Inventory Transform(
@@ -65,52 +137,12 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             VerifyInventoryCurrentMaxCapacityByUserIdRequest request,
             Gs2.Gs2Inventory.Model.Inventory item
         ) {
-            switch (request.VerifyType) {
-                case "less":
-                    if (item.CurrentInventoryMaxCapacity < request.CurrentInventoryMaxCapacity) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
-                case "lessEqual":
-                    if (item.CurrentInventoryMaxCapacity <= request.CurrentInventoryMaxCapacity) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
-                case "greater":
-                    if (item.CurrentInventoryMaxCapacity > request.CurrentInventoryMaxCapacity) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
-                case "greaterEqual":
-                    if (item.CurrentInventoryMaxCapacity >= request.CurrentInventoryMaxCapacity) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
-                case "equal":
-                    if (item.CurrentInventoryMaxCapacity == request.CurrentInventoryMaxCapacity) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
-                case "notEqual":
-                    if (item.CurrentInventoryMaxCapacity != request.CurrentInventoryMaxCapacity) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
+            if (!item.IsExecutable(request)) {
+                throw new BadRequestException(new [] {
+                    new RequestError("count", "invalid"),
+                });
             }
             return item;
-/* diff +++ end */
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -130,26 +162,55 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             AccessToken accessToken,
             VerifyInventoryCurrentMaxCapacityByUserIdRequest request
         ) {
-            var item = await domain.Inventory.Namespace(
-                request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).Inventory(
-                request.InventoryName
-            ).ModelAsync();
-
-            if (item == null) {
-                return () => null;
-            }
-/* diff --- start
-            item = item.SpeculativeExecution(request);
- diff --- end */
-            item = Transform(domain, accessToken, request, item); /* diff +++ */
-
-            return () =>
-            {
+            var token = accessToken?.Clone() as AccessToken;
+            if (domain?.RestSession == null || request == null ||
+                string.IsNullOrEmpty(token?.UserId)) {
                 return null;
-            };
+            }
+            var prepared = VerifyInventoryCurrentMaxCapacityByUserIdRequest.FromJson(
+                request.ToJson()
+            );
+            if (prepared.UserId == "#{userId}") {
+                prepared.UserId = token.UserId;
+            }
+            if (prepared.UserId != token.UserId ||
+                string.IsNullOrEmpty(prepared.NamespaceName) ||
+                string.IsNullOrEmpty(prepared.InventoryName) ||
+                (prepared.VerifyType != "less" &&
+                 prepared.VerifyType != "lessEqual" &&
+                 prepared.VerifyType != "greater" &&
+                 prepared.VerifyType != "greaterEqual" &&
+                 prepared.VerifyType != "equal" &&
+                 prepared.VerifyType != "notEqual") ||
+                !prepared.CurrentInventoryMaxCapacity.HasValue) {
+                return null;
+            }
+            var expectedId =
+                $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                $"{domain.RestSession.OwnerId}:inventory:{prepared.NamespaceName}:" +
+                $"user:{token.UserId}:inventory:{prepared.InventoryName}";
+            var cached = ((Gs2.Gs2Inventory.Model.Inventory)null).GetCache(
+                domain.Cache,
+                prepared.NamespaceName,
+                token.UserId,
+                prepared.InventoryName,
+                token.TimeOffset
+            );
+            var item = cached.Item1;
+            if (!cached.Item2 || item == null || item.InventoryId != expectedId ||
+                item.UserId != token.UserId ||
+                item.InventoryName != prepared.InventoryName ||
+                !item.CurrentInventoryMaxCapacity.HasValue) {
+                return null;
+            }
+            Transform(domain, token, prepared, item);
+
+            return new PreparedVerification(
+                domain,
+                token,
+                prepared,
+                expectedId
+            ).Invoke;
         }
     }
 }

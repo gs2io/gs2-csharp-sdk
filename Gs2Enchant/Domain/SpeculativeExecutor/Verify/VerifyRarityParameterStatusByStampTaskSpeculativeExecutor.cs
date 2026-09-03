@@ -29,16 +29,14 @@
 using System;
 using System.Numerics;
 using System.Collections;
-using System.Linq; /* diff +++ */
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
-/* diff +++ start */
 using Gs2.Core.Model;
-/* diff +++ end */
 using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Enchant.Model;
 using Gs2.Gs2Enchant.Request;
 using Gs2.Gs2Enchant.Model.Cache;
 using Gs2.Gs2Enchant.Model.Transaction;
@@ -54,10 +52,92 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
 {
     public static class VerifyRarityParameterStatusByUserIdSpeculativeExecutor {
+        private static bool HasParameterValues(
+            RarityParameterStatus item
+        ) {
+            return item?.ParameterValues != null;
+        }
+
+        private sealed class PreparedVerification :
+            IPreparedSpeculativeVerification
+        {
+            private readonly Gs2.Core.Domain.Gs2 _domain;
+            private readonly AccessToken _accessToken;
+            private readonly VerifyRarityParameterStatusByUserIdRequest _request;
+            private readonly string _expectedStatusId;
+
+            public PreparedVerification(
+                Gs2.Core.Domain.Gs2 domain,
+                AccessToken accessToken,
+                VerifyRarityParameterStatusByUserIdRequest request,
+                string expectedStatusId
+            ) {
+                _domain = domain;
+                _accessToken = accessToken;
+                _request = request;
+                _expectedStatusId = expectedStatusId;
+            }
+
+            public bool IsStillSatisfied()
+            {
+                var (item, found) = ((RarityParameterStatus)null).GetCache(
+                    _domain.Cache,
+                    _request.NamespaceName,
+                    _accessToken.UserId,
+                    _request.ParameterName,
+                    _request.PropertyId,
+                    _accessToken.TimeOffset
+                );
+                if (!found || !HasParameterValues(item) ||
+                    item.RarityParameterStatusId != _expectedStatusId ||
+                    item.UserId != _accessToken.UserId ||
+                    item.ParameterName != _request.ParameterName ||
+                    item.PropertyId != _request.PropertyId) {
+                    return false;
+                }
+                try {
+                    Transform(_domain, _accessToken, _request, item);
+                    return true;
+                }
+                catch (Gs2Exception) {
+                    return false;
+                }
+            }
+
+            public object Invoke()
+            {
+                return null;
+            }
+        }
 
         public static string Action() {
             return "Gs2Enchant:VerifyRarityParameterStatusByUserId";
-/* diff +++ start */
+        }
+
+#if GS2_ENABLE_UNITASK
+        public static async UniTask<Func<object>> ExecuteInverseAsync(
+#else
+        public static async Task<Func<object>> ExecuteInverseAsync(
+#endif
+            Gs2.Core.Domain.Gs2 domain,
+            AccessToken accessToken,
+            VerifyRarityParameterStatusByUserIdRequest request
+        ) {
+            var inverse = request == null ? null :
+                VerifyRarityParameterStatusByUserIdRequest.FromJson(
+                    request.ToJson()
+                );
+            switch (inverse?.VerifyType) {
+                case "have":
+                    inverse.VerifyType = "havent";
+                    break;
+                case "havent":
+                    inverse.VerifyType = "have";
+                    break;
+                default:
+                    return null;
+            }
+            return await ExecuteAsync(domain, accessToken, inverse);
         }
 
         public static Gs2.Gs2Enchant.Model.RarityParameterStatus Transform(
@@ -66,31 +146,34 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
             VerifyRarityParameterStatusByUserIdRequest request,
             Gs2.Gs2Enchant.Model.RarityParameterStatus item
         ) {
-            switch (request.VerifyType) {
-                case "havent":
-                    if (item.ParameterValues.Count(v => v.Name == request.ParameterName) > 0) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
-                case "have":
-                    if (item.ParameterValues.Count(v => v.Name == request.ParameterName) == 0) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
-                case "count":
-                    if (item.ParameterValues.Length != request.ParameterCount) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
+            if (!item.IsExecutable(request)) {
+                throw new BadRequestException(new [] {
+                    new RequestError("count", "invalid"),
+                });
             }
             return item;
-/* diff +++ end */
+        }
+
+        private static bool IsValidRequest(
+            VerifyRarityParameterStatusByUserIdRequest request,
+            AccessToken accessToken
+        ) {
+            if (request == null || accessToken == null ||
+                string.IsNullOrEmpty(request.NamespaceName) ||
+                string.IsNullOrEmpty(request.ParameterName) ||
+                string.IsNullOrEmpty(request.UserId) ||
+                request.UserId != accessToken.UserId ||
+                string.IsNullOrEmpty(request.PropertyId) ||
+                (request.VerifyType != "havent" &&
+                 request.VerifyType != "have" &&
+                 request.VerifyType != "count")) {
+                return false;
+            }
+            if (request.VerifyType == "have" ||
+                request.VerifyType == "havent") {
+                return !string.IsNullOrEmpty(request.ParameterValueName);
+            }
+            return request.ParameterCount.HasValue;
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -110,29 +193,81 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
             AccessToken accessToken,
             VerifyRarityParameterStatusByUserIdRequest request
         ) {
-            var item = await domain.Enchant.Namespace(
-                request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).RarityParameterStatus(
-                request.ParameterName,
-                request.PropertyId
-            ).ModelAsync();
-
-            if (item == null) {
-                return () => null;
+            var preparedRequest = VerifyRarityParameterStatusByUserIdRequest
+                .FromJson(request?.ToJson());
+            var preparedAccessToken = AccessToken.FromJson(
+                accessToken?.ToJson()
+            );
+            if (preparedRequest?.UserId == "#{userId}") {
+                preparedRequest.UserId = preparedAccessToken?.UserId;
             }
-/* diff --- start
-            item = item.SpeculativeExecution(request);
- diff --- end */
-            item = Transform(domain, accessToken, request, item); /* diff +++ */
-
-            return () =>
-            {
+            if (preparedRequest != null &&
+                preparedRequest.MultiplyValueSpecifyingQuantity == null) {
+                preparedRequest.MultiplyValueSpecifyingQuantity = false;
+            }
+            if (domain?.RestSession == null ||
+                string.IsNullOrEmpty(preparedAccessToken?.UserId) ||
+                string.IsNullOrEmpty(preparedRequest?.PropertyId)) {
                 return null;
-            };
+            }
+            var statusDomain = domain.Enchant.Namespace(
+                preparedRequest.NamespaceName
+            ).AccessToken(
+                preparedAccessToken
+            ).RarityParameterStatus(
+                preparedRequest.ParameterName,
+                preparedRequest.PropertyId
+            );
+            preparedRequest.PropertyId = statusDomain.PropertyId;
+            if (!IsValidRequest(preparedRequest, preparedAccessToken)) {
+                return null;
+            }
+            var expectedStatusId = string.Join(
+                ":",
+                "grn",
+                "gs2",
+                domain.RestSession.Region.DisplayName(),
+                domain.RestSession.OwnerId,
+                "enchant",
+                preparedRequest.NamespaceName,
+                "user",
+                preparedAccessToken.UserId,
+                "rarity",
+                preparedRequest.ParameterName,
+                preparedRequest.PropertyId
+            );
+            var cached = ((Gs2.Gs2Enchant.Model.RarityParameterStatus)null)
+                .GetCache(
+                    domain.Cache,
+                    preparedRequest.NamespaceName,
+                    preparedAccessToken.UserId,
+                    preparedRequest.ParameterName,
+                    preparedRequest.PropertyId,
+                    preparedAccessToken.TimeOffset
+                );
+            var item = cached.Item1;
+            if (!cached.Item2 || !HasParameterValues(item) ||
+                item.RarityParameterStatusId != expectedStatusId ||
+                item.UserId != preparedAccessToken.UserId ||
+                item.ParameterName != preparedRequest.ParameterName ||
+                item.PropertyId != preparedRequest.PropertyId) {
+                return null;
+            }
+
+            Transform(
+                domain,
+                preparedAccessToken,
+                preparedRequest,
+                item
+            );
+
+            return new PreparedVerification(
+                domain,
+                preparedAccessToken,
+                preparedRequest,
+                expectedStatusId
+            ).Invoke;
         }
-/* diff +++ start */
 
         public static VerifyRarityParameterStatusByUserIdRequest Rate(
             VerifyRarityParameterStatusByUserIdRequest request,
@@ -147,6 +282,5 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
         ) {
             return request;
         }
-/* diff +++ end */
     }
 }

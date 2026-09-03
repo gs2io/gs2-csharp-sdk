@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
@@ -32,6 +33,7 @@ namespace Gs2.Gs2Limit.Model.Transaction
             this Counter self,
             DeleteCounterByUserIdRequest request
         ) {
+/* diff --- start
             var changed = self.SpeculativeExecution(request);
             try {
                 changed.Validate();
@@ -40,6 +42,8 @@ namespace Gs2.Gs2Limit.Model.Transaction
             catch (Gs2Exception) {
                 return false;
             }
+ diff --- end */
+            return request != null; /* diff +++ */
         }
 
         public static Counter SpeculativeExecution(
@@ -53,7 +57,10 @@ namespace Gs2.Gs2Limit.Model.Transaction
             this DeleteCounterByUserIdRequest request,
             double rate
         ) {
+/* diff --- start
             throw new NotSupportedException($"not supported rate action Gs2Limit:DeleteCounterByUserId");
+ diff --- end */
+            return request; /* diff +++ */
         }
     }
 
@@ -63,7 +70,10 @@ namespace Gs2.Gs2Limit.Model.Transaction
             this DeleteCounterByUserIdRequest request,
             BigInteger rate
         ) {
+/* diff --- start
             throw new NotSupportedException($"not supported rate action Gs2Limit:DeleteCounterByUserId");
+ diff --- end */
+            return request; /* diff +++ */
         }
     }
 }

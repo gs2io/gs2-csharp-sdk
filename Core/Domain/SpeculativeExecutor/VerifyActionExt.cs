@@ -20,6 +20,9 @@ namespace Gs2.Core.SpeculativeExecutor
     public static class VerifyActionExt
     {
         public static VerifyAction ApplyConfig(this VerifyAction self, string key, string value) {
+            if (self?.Request == null || value == null) {
+                return null;
+            }
             return new VerifyAction()
                 .WithAction(self.Action)
                 .WithRequest(self.Request.Replace($"#{{{key}}}", System.Text.RegularExpressions.Regex.Replace(value, "(?<!\\\\)\"", "\\\"")));

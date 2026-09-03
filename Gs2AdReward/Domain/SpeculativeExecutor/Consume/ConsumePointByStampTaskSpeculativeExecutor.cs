@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -31,9 +32,13 @@ using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model; /* diff +++ */
 using Gs2.Core.Util;
+/* diff --- start
 using Gs2.Core.Exception;
+ diff --- end */
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2AdReward.Model; /* diff +++ */
 using Gs2.Gs2AdReward.Request;
 using Gs2.Gs2AdReward.Model.Cache;
 using Gs2.Gs2AdReward.Model.Transaction;
@@ -71,16 +76,69 @@ namespace Gs2.Gs2AdReward.Domain.SpeculativeExecutor
             AccessToken accessToken,
             ConsumePointByUserIdRequest request
         ) {
+/* diff --- start
             var item = await domain.AdReward.Namespace(
                 request.NamespaceName
             ).AccessToken(
                 accessToken
             ).Point(
             ).ModelAsync();
+ diff --- end */
+/* diff +++ start */
+            var preparedRequest = request == null
+                ? null
+                : new ConsumePointByUserIdRequest()
+                    .WithNamespaceName(request.NamespaceName)
+                    .WithUserId(request.UserId)
+                    .WithPoint(request.Point);
+            var preparedAccessToken = accessToken == null
+                ? null
+                : new AccessToken()
+                    .WithUserId(accessToken.UserId)
+                    .WithTimeOffset(accessToken.TimeOffset);
+            if (preparedRequest?.UserId == "#{userId}") {
+                preparedRequest.UserId = preparedAccessToken?.UserId;
+            }
+            if (domain?.RestSession == null ||
+                string.IsNullOrEmpty(preparedAccessToken?.UserId) ||
+                preparedRequest?.UserId != preparedAccessToken.UserId ||
+                string.IsNullOrEmpty(preparedRequest.NamespaceName) ||
+                !preparedRequest.Point.HasValue) return null;
+            var userId = preparedAccessToken.UserId;
+            var timeOffset = preparedAccessToken.TimeOffset;
+            var currentTimeMillis = UnixTime.ToUnixTime(DateTime.Now) +
+                                    (long)(timeOffset ?? 0) * 1000L;
+            var expectedPointId = string.Join(
+                ":",
+                "grn",
+                "gs2",
+                domain.RestSession.Region.DisplayName(),
+                domain.RestSession.OwnerId,
+                "adReward",
+                preparedRequest.NamespaceName,
+                "user",
+                userId,
+                "point"
+            );
+            var (item, find) = ((Point)null).GetCache(
+                domain.Cache,
+                preparedRequest.NamespaceName,
+                userId,
+                timeOffset
+            );
+/* diff +++ end */
 
+/* diff --- start
             if (item == null) {
                 return () => null;
+ diff --- end */
+/* diff +++ start */
+            if (!find || item == null || item.PointId != expectedPointId ||
+                item.UserId != userId) {
+                return null;
+/* diff +++ end */
             }
+/* diff --- start
             item = item.SpeculativeExecution(request);
 
             return () =>
@@ -93,6 +151,22 @@ namespace Gs2.Gs2AdReward.Domain.SpeculativeExecutor
                 );
                 return null;
             };
+ diff --- end */
+/* diff +++ start */
+            var speculativeCommit = new PointSpeculativeCommit(
+                domain.Cache,
+                preparedRequest.NamespaceName,
+                userId,
+                timeOffset,
+                expectedPointId,
+                item.Revision,
+                cachedItem => cachedItem.SpeculativeExecutionAt(
+                        preparedRequest,
+                        currentTimeMillis
+                    )
+            );
+            return speculativeCommit.Invoke;
+/* diff +++ end */
         }
     }
 }

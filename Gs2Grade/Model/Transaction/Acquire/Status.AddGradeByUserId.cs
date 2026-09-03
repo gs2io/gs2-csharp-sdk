@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
@@ -32,12 +33,20 @@ namespace Gs2.Gs2Grade.Model.Transaction
             this Status self,
             AddGradeByUserIdRequest request
         ) {
+/* diff --- start
             var changed = self.SpeculativeExecution(request);
+ diff --- end */
             try {
+/* diff --- start
                 changed.Validate();
+ diff --- end */
+                self.SpeculativeExecution(request); /* diff +++ */
                 return true;
             }
+/* diff --- start
             catch (Gs2Exception) {
+ diff --- end */
+            catch (Exception) { /* diff +++ */
                 return false;
             }
         }
@@ -50,7 +59,24 @@ namespace Gs2.Gs2Grade.Model.Transaction
             {
                 throw new NullReferenceException();
             }
+/* diff --- start
             clone.GradeValue += request.GradeValue;
+ diff --- end */
+/* diff +++ start */
+            if (clone.GradeValue == null ||
+                request?.GradeValue == null ||
+                request.GradeValue < 0) {
+                throw new ArgumentOutOfRangeException(nameof(request));
+            }
+            var changed = checked(
+                clone.GradeValue.Value + request.GradeValue.Value
+            );
+            if (changed < 1) {
+                throw new ArgumentOutOfRangeException(nameof(request));
+            }
+            clone.GradeValue = changed;
+            clone.Revision = 0;
+/* diff +++ end */
             return clone;
         }
 

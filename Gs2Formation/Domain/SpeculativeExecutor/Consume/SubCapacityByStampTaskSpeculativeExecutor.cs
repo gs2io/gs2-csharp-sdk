@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -31,6 +32,7 @@ using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model; /* diff +++ */
 using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
@@ -71,6 +73,7 @@ namespace Gs2.Gs2Formation.Domain.SpeculativeExecutor
             AccessToken accessToken,
             SubMoldCapacityByUserIdRequest request
         ) {
+/* diff --- start
             var item = await domain.Formation.Namespace(
                 request.NamespaceName
             ).AccessToken(
@@ -78,12 +81,76 @@ namespace Gs2.Gs2Formation.Domain.SpeculativeExecutor
             ).Mold(
                 request.MoldModelName
             ).ModelAsync();
+ diff --- end */
+/* diff +++ start */
+            var token = accessToken?.Clone() as AccessToken;
+            if (domain == null || request == null ||
+                string.IsNullOrEmpty(token?.UserId)) {
+                return null;
+            }
+            var prepared = SubMoldCapacityByUserIdRequest.FromJson(request.ToJson());
+            if (prepared.UserId == "#{userId}") prepared.UserId = token.UserId;
+            if (prepared.UserId != token.UserId ||
+                !prepared.Capacity.HasValue) {
+                return null;
+            }
+            var expectedMoldId =
+                $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                $"{domain.RestSession.OwnerId}:formation:{prepared.NamespaceName}:" +
+                $"user:{token.UserId}:mold:{prepared.MoldModelName}";
+            var expectedModelId =
+                $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                $"{domain.RestSession.OwnerId}:formation:{prepared.NamespaceName}:" +
+                $"model:mold:{prepared.MoldModelName}";
+            var moldCache = ((Gs2.Gs2Formation.Model.Mold)null).GetCache(
+                domain.Cache, prepared.NamespaceName, token.UserId,
+                prepared.MoldModelName, token.TimeOffset
+            );
+            var modelCache = ((Gs2.Gs2Formation.Model.MoldModel)null).GetCache(
+                domain.Cache, prepared.NamespaceName, prepared.MoldModelName, null
+            );
+            if (!IsUsable(
+                    moldCache.Item1, modelCache.Item1,
+                    moldCache.Item2, modelCache.Item2,
+                    expectedMoldId, expectedModelId, token.UserId,
+                    prepared.MoldModelName
+                )) {
+                return null;
+            }
+/* diff +++ end */
 
+/* diff --- start
             if (item == null) {
                 return () => null;
             }
             item = item.SpeculativeExecution(request);
+ diff --- end */
+/* diff +++ start */
+            return new MoldCapacityMutationSpeculativeCommit(
+                domain.Cache,
+                prepared.NamespaceName,
+                token.UserId,
+                prepared.MoldModelName,
+                token.TimeOffset,
+                expectedMoldId,
+                expectedModelId,
+                moldCache.Item1.Revision,
+                modelCache.Item1.MaxCapacity,
+                current => {
+                    if (!current.Capacity.HasValue) return null;
+                    var value = (long)current.Capacity.Value -
+                                prepared.Capacity.Value;
+                    if (value <= 0) return null;
+                    var changed = current.Clone() as
+                        Gs2.Gs2Formation.Model.Mold;
+                    changed.Capacity = (int)value;
+                    return changed;
+                }
+            ).Invoke;
+        }
+/* diff +++ end */
 
+/* diff --- start
             return () =>
             {
                 item.PutCache(
@@ -95,6 +162,24 @@ namespace Gs2.Gs2Formation.Domain.SpeculativeExecutor
                 );
                 return null;
             };
+ diff --- end */
+/* diff +++ start */
+        private static bool IsUsable(
+            Gs2.Gs2Formation.Model.Mold mold,
+            Gs2.Gs2Formation.Model.MoldModel model,
+            bool foundMold,
+            bool foundModel,
+            string expectedMoldId,
+            string expectedModelId,
+            string userId,
+            string moldModelName
+        ) {
+            return foundMold && foundModel && mold != null && model != null &&
+                   mold.MoldId == expectedMoldId && mold.Name == moldModelName &&
+                   mold.UserId == userId && mold.Capacity.HasValue &&
+                   model.MoldModelId == expectedModelId &&
+                   model.Name == moldModelName && model.MaxCapacity.HasValue;
+/* diff +++ end */
         }
     }
 }

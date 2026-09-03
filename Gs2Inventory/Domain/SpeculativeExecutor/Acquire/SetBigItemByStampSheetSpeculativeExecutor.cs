@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -31,6 +32,7 @@ using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model; /* diff +++ */
 using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
@@ -71,6 +73,7 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             AccessToken accessToken,
             SetBigItemByUserIdRequest request
         ) {
+/* diff --- start
             var item = await domain.Inventory.Namespace(
                 request.NamespaceName
             ).AccessToken(
@@ -80,12 +83,74 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             ).BigItem(
                 request.ItemName
             ).ModelAsync();
+ diff --- end */
+/* diff +++ start */
+            var token = accessToken?.Clone() as AccessToken;
+            if (domain?.RestSession == null || request == null ||
+                string.IsNullOrEmpty(token?.UserId)) {
+                return null;
+            }
+            var prepared = SetBigItemByUserIdRequest.FromJson(request.ToJson());
+            if (prepared.UserId == "#{userId}") prepared.UserId = token.UserId;
+            if (prepared.UserId != token.UserId ||
+                prepared.NamespaceName == null ||
+                prepared.InventoryName == null ||
+                prepared.ItemName == null ||
+                prepared.Count == null) {
+                return null;
+            }
+            var expectedId =
+                $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                $"{domain.RestSession.OwnerId}:inventory:{prepared.NamespaceName}:" +
+                $"user:{token.UserId}:big:inventory:{prepared.InventoryName}:" +
+                $"item:{prepared.ItemName}";
+            var cached = ((Gs2.Gs2Inventory.Model.BigItem)null).GetCache(
+                domain.Cache,
+                prepared.NamespaceName,
+                token.UserId,
+                prepared.InventoryName,
+                prepared.ItemName,
+                token.TimeOffset
+            );
+            var preparedWasTombstone = cached.Item1 == null;
+            var item = cached.Item1 ?? BigItemSpeculativeState.KnownZero(
+                expectedId, token.UserId, prepared.ItemName
+            );
+            if (!IsUsable(item, cached.Item2, expectedId, token.UserId,
+                    prepared.ItemName)) {
+                return null;
+            }
+            var preparedRevision = item.Revision;
+/* diff +++ end */
 
+/* diff --- start
             if (item == null) {
                 return () => null;
             }
             item = item.SpeculativeExecution(request);
+ diff --- end */
+/* diff +++ start */
+            return new BigItemMutationSpeculativeCommit(
+                domain.Cache,
+                prepared.NamespaceName,
+                token.UserId,
+                prepared.InventoryName,
+                prepared.ItemName,
+                token.TimeOffset,
+                expectedId,
+                preparedRevision,
+                preparedWasTombstone,
+                current => {
+                    var changed = current.Clone() as Gs2.Gs2Inventory.Model.BigItem;
+                    changed.Count = prepared.Count;
+                    changed.Revision = 0;
+                    return changed;
+                }
+            ).Invoke;
+        }
+/* diff +++ end */
 
+/* diff --- start
             return () =>
             {
                 item.PutCache(
@@ -98,6 +163,19 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                 );
                 return null;
             };
+ diff --- end */
+/* diff +++ start */
+        private static bool IsUsable(
+            Gs2.Gs2Inventory.Model.BigItem item,
+            bool found,
+            string expectedId,
+            string userId,
+            string itemName
+        ) {
+            return found && item != null && item.ItemId == expectedId &&
+                   item.UserId == userId &&
+                   item.ItemName == itemName;
+/* diff +++ end */
         }
     }
 }

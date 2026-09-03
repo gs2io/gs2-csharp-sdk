@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -82,10 +83,17 @@ namespace Gs2.Gs2SerialKey.Domain.SpeculativeExecutor
                 );
             }
             if (IssueOnceSpeculativeExecutor.Action() == acquireAction.Action) {
+/* diff +++ start */
+                if (rate != 1) {
+                    return null;
+                }
+/* diff +++ end */
                 var request = IssueOnceRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
+/* diff --- start
                 if (rate != 1) {
                     request = request.Rate(rate);
                 }
+ diff --- end */
                 return await IssueOnceSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

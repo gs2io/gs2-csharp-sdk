@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
@@ -32,12 +33,20 @@ namespace Gs2.Gs2Experience.Model.Transaction
             this Status self,
             AddRankCapByUserIdRequest request
         ) {
+/* diff --- start
             var changed = self.SpeculativeExecution(request);
+ diff --- end */
             try {
+/* diff --- start
                 changed.Validate();
+ diff --- end */
+                self.SpeculativeExecution(request); /* diff +++ */
                 return true;
             }
+/* diff --- start
             catch (Gs2Exception) {
+ diff --- end */
+            catch (Exception) { /* diff +++ */
                 return false;
             }
         }
@@ -46,19 +55,65 @@ namespace Gs2.Gs2Experience.Model.Transaction
             this Status self,
             AddRankCapByUserIdRequest request
         ) {
+/* diff --- start
             if (self.Clone() is not Status clone)
             {
+ diff --- end */
+/* diff +++ start */
+            if (self?.RankCapValue == null ||
+                request?.RankCapValue == null ||
+                self.Clone() is not Status clone) {
+/* diff +++ end */
                 throw new NullReferenceException();
             }
+/* diff --- start
             clone.RankCapValue += request.RankCapValue;
+ diff --- end */
+/* diff +++ start */
+            clone.RankCapValue = checked(
+                self.RankCapValue.Value + request.RankCapValue.Value
+            );
+            clone.Revision = 0;
+/* diff +++ end */
             return clone;
+/* diff +++ start */
+        }
+
+        public static Status SpeculativeExecution(
+            this Status self,
+            AddRankCapByUserIdRequest request,
+            ExperienceModel model
+        ) {
+            if (self?.ExperienceValue == null ||
+                self.RankCapValue == null ||
+                request?.RankCapValue == null || model == null) {
+                throw new NullReferenceException();
+            }
+            return model.RecalculateStatus(
+                self,
+                self.ExperienceValue.Value,
+                checked(self.RankCapValue.Value + request.RankCapValue.Value)
+            );
+/* diff +++ end */
         }
 
         public static AddRankCapByUserIdRequest Rate(
             this AddRankCapByUserIdRequest request,
             double rate
         ) {
+/* diff --- start
             request.RankCapValue = (long?) (request.RankCapValue * rate);
+ diff --- end */
+/* diff +++ start */
+            if (request == null || !TryApplyServerRate(
+                    request.RankCapValue ?? 1L,
+                    rate,
+                    out var value
+                )) {
+                return null;
+            }
+            request.RankCapValue = value;
+/* diff +++ end */
             return request;
         }
     }
@@ -69,7 +124,19 @@ namespace Gs2.Gs2Experience.Model.Transaction
             this AddRankCapByUserIdRequest request,
             BigInteger rate
         ) {
+/* diff --- start
             request.RankCapValue = (long?) ((request.RankCapValue ?? 0) * rate);
+ diff --- end */
+/* diff +++ start */
+            if (request == null || !StatusExt.TryApplyServerRate(
+                    request.RankCapValue ?? 1L,
+                    rate,
+                    out var value
+                )) {
+                return null;
+            }
+            request.RankCapValue = value;
+/* diff +++ end */
             return request;
         }
     }

@@ -20,9 +20,7 @@
 #pragma warning disable CS1522 // Empty switch block
 
 using System;
-using System.Linq;
 using System.Numerics;
-using Gs2.Core.Exception;
 using Gs2.Gs2Inventory.Request;
 
 namespace Gs2.Gs2Inventory.Model.Transaction
@@ -36,19 +34,11 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this SimpleItem[] self, /* diff +++ */
             ConsumeSimpleItemsByUserIdRequest request
         ) {
-            var changed = self.SpeculativeExecution(request);
             try {
-/* diff --- start
-                changed.Validate();
- diff --- end */
-/* diff +++ start */
-                foreach (var v in changed) {
-                    v.Validate();
-                }
-/* diff +++ end */
+                self.SpeculativeExecution(request);
                 return true;
             }
-            catch (Gs2Exception) {
+            catch (System.Exception) {
                 return false;
             }
         }
@@ -58,7 +48,7 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this SimpleItem self,
  diff --- end */
 /* diff +++ start */
-        public static SimpleItem[]SpeculativeExecution(
+        public static SimpleItem[] SpeculativeExecution(
             this SimpleItem[] self,
 /* diff +++ end */
             ConsumeSimpleItemsByUserIdRequest request
@@ -72,12 +62,24 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             return self.Clone() as SimpleItem;
  diff --- end */
 /* diff +++ start */
-            var clone = self.Clone() as SimpleItem[];
-            if (clone == null) {
+            if (self == null || request?.ConsumeCounts == null) {
                 throw new NullReferenceException();
             }
-            foreach (var v in clone) {
-                v.Count -= request.ConsumeCounts.FirstOrDefault(i => i.ItemName == v.ItemName)?.Count ?? 0;
+            var clone = new SimpleItem[self.Length];
+            for (var i = 0; i < self.Length; i++) {
+                clone[i] = self[i]?.Clone() as SimpleItem;
+                var item = clone[i];
+                if (item == null || !item.Count.HasValue) continue;
+                var changed = false;
+                foreach (var consumeCount in request.ConsumeCounts) {
+                    if (consumeCount?.ItemName != item.ItemName ||
+                        !consumeCount.Count.HasValue) continue;
+                    var count = checked(item.Count.Value - consumeCount.Count.Value);
+                    if (count < 0) throw new InvalidOperationException();
+                    item.Count = count;
+                    changed = true;
+                }
+                if (changed) item.Revision = 0;
             }
             return clone;
 /* diff +++ end */
@@ -87,15 +89,15 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this ConsumeSimpleItemsByUserIdRequest request,
             double rate
         ) {
-/* diff --- start
-            throw new NotSupportedException($"not supported rate action Gs2Inventory:ConsumeSimpleItemsByUserId");
- diff --- end */
-/* diff +++ start */
+            if (request?.ConsumeCounts == null) return null;
             foreach (var consumeCount in request.ConsumeCounts) {
-                consumeCount.Count = (long?) (consumeCount.Count * rate);
+                if (consumeCount?.Count == null) continue;
+                if (!SimpleItemCountRate.TryApply(
+                        consumeCount.Count.Value, rate, out var value
+                    )) return null;
+                consumeCount.Count = value;
             }
             return request;
-/* diff +++ end */
         }
     }
 
@@ -105,15 +107,16 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this ConsumeSimpleItemsByUserIdRequest request,
             BigInteger rate
         ) {
-/* diff --- start
-            throw new NotSupportedException($"not supported rate action Gs2Inventory:ConsumeSimpleItemsByUserId");
- diff --- end */
-/* diff +++ start */
+            if (request?.ConsumeCounts == null) return null;
             foreach (var consumeCount in request.ConsumeCounts) {
-                consumeCount.Count = (long?) (consumeCount.Count * rate);
+                if (consumeCount?.Count != null) {
+                    consumeCount.Count = SimpleItemCountRate.Apply(
+                        consumeCount.Count.Value,
+                        rate
+                    );
+                }
             }
             return request;
-/* diff +++ end */
         }
     }
 }

@@ -22,7 +22,6 @@
 using System;
 using System.Linq;
 using System.Numerics;
-using Gs2.Core.Exception;
 using Gs2.Gs2Experience.Request;
 
 namespace Gs2.Gs2Experience.Model.Transaction
@@ -42,12 +41,11 @@ namespace Gs2.Gs2Experience.Model.Transaction
 /* diff --- start
             var changed = self.SpeculativeExecution(request);
  diff --- end */
-            var changed = self.SpeculativeExecution(request, model); /* diff +++ */
             try {
-                changed.Validate();
+                self.SpeculativeExecution(request, model); /* diff +++ */
                 return true;
             }
-            catch (Gs2Exception) {
+            catch (Exception) {
                 return false;
             }
         }
@@ -62,32 +60,36 @@ namespace Gs2.Gs2Experience.Model.Transaction
             ExperienceModel model
 /* diff +++ end */
         ) {
-/* diff --- start
-            if (self.Clone() is not Status clone)
- diff --- end */
-/* diff +++ start */
-            var clone = self.Clone() as Status;
-            if (clone == null)
-/* diff +++ end */
-            {
+            if (self?.ExperienceValue == null ||
+                self.RankCapValue == null ||
+                request?.ExperienceValue == null || model == null) {
                 throw new NullReferenceException();
             }
-/* diff --- start
-            clone.ExperienceValue -= request.ExperienceValue;
- diff --- end */
-/* diff +++ start */
-            self.ExperienceValue -= self.ExperienceValue;
-            self.RankValue = model.Rank(self);
-            self.NextRankUpExperienceValue = model.NextRankExperienceValue(self);
-/* diff +++ end */
-            return clone;
+            var experienceValue = checked(
+                self.ExperienceValue.Value - request.ExperienceValue.Value
+            );
+            if (experienceValue < 0) {
+                throw new ArgumentOutOfRangeException(nameof(request.ExperienceValue));
+            }
+            return model.RecalculateStatus(
+                self,
+                experienceValue,
+                self.RankCapValue.Value
+            );
         }
 
         public static SubExperienceByUserIdRequest Rate(
             this SubExperienceByUserIdRequest request,
             double rate
         ) {
-            request.ExperienceValue = (long?) (request.ExperienceValue * rate);
+            if (request == null || !TryApplyServerRate(
+                    request.ExperienceValue ?? 1L,
+                    rate,
+                    out var value
+                )) {
+                return null;
+            }
+            request.ExperienceValue = value;
             return request;
         }
     }
@@ -98,7 +100,14 @@ namespace Gs2.Gs2Experience.Model.Transaction
             this SubExperienceByUserIdRequest request,
             BigInteger rate
         ) {
-            request.ExperienceValue = (long?) ((request.ExperienceValue ?? 0) * rate);
+            if (request == null || !StatusExt.TryApplyServerRate(
+                    request.ExperienceValue ?? 1L,
+                    rate,
+                    out var value
+                )) {
+                return null;
+            }
+            request.ExperienceValue = value;
             return request;
         }
     }

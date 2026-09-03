@@ -27,14 +27,12 @@
 #pragma warning disable 1998
 
 using System;
-using System.Numerics;
 using System.Collections;
+using System.Numerics;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
-/* diff +++ start */
 using Gs2.Core.Model;
-/* diff +++ end */
 using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
@@ -53,10 +51,94 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
 {
     public static class VerifyBigItemByUserIdSpeculativeExecutor {
+        private sealed class PreparedVerification :
+            IPreparedSpeculativeVerification
+        {
+            private readonly Gs2.Core.Domain.Gs2 _domain;
+            private readonly AccessToken _accessToken;
+            private readonly VerifyBigItemByUserIdRequest _request;
+            private readonly string _expectedId;
+
+            public PreparedVerification(
+                Gs2.Core.Domain.Gs2 domain,
+                AccessToken accessToken,
+                VerifyBigItemByUserIdRequest request,
+                string expectedId
+            ) {
+                _domain = domain;
+                _accessToken = accessToken;
+                _request = request;
+                _expectedId = expectedId;
+            }
+
+            public bool IsStillSatisfied()
+            {
+                var (item, found) = ((Gs2.Gs2Inventory.Model.BigItem)null)
+                    .GetCache(
+                        _domain.Cache,
+                        _request.NamespaceName,
+                        _accessToken.UserId,
+                        _request.InventoryName,
+                        _request.ItemName,
+                        _accessToken.TimeOffset
+                    );
+                item ??= BigItemSpeculativeState.KnownZero(
+                    _expectedId, _accessToken.UserId, _request.ItemName
+                );
+                if (!found || item.ItemId != _expectedId ||
+                    item.UserId != _accessToken.UserId ||
+                    item.ItemName != _request.ItemName ||
+                    !CanEvaluate(item, _request)) {
+                    return false;
+                }
+                try {
+                    Transform(_domain, _accessToken, _request, item);
+                    return true;
+                }
+                catch (Gs2Exception) {
+                    return false;
+                }
+            }
+
+            public object Invoke()
+            {
+                return null;
+            }
+        }
 
         public static string Action() {
             return "Gs2Inventory:VerifyBigItemByUserId";
-/* diff +++ start */
+        }
+
+        private static bool CanEvaluate(
+            Gs2.Gs2Inventory.Model.BigItem item,
+            VerifyBigItemByUserIdRequest request
+        ) {
+            return BigInteger.TryParse(item?.Count, out _) &&
+                   BigInteger.TryParse(request?.Count, out _);
+        }
+
+#if GS2_ENABLE_UNITASK
+        public static async UniTask<Func<object>> ExecuteInverseAsync(
+#else
+        public static async Task<Func<object>> ExecuteInverseAsync(
+#endif
+            Gs2.Core.Domain.Gs2 domain,
+            AccessToken accessToken,
+            VerifyBigItemByUserIdRequest request
+        ) {
+            var inverse = request == null ? null :
+                VerifyBigItemByUserIdRequest.FromJson(request.ToJson());
+            switch (inverse?.VerifyType) {
+                case "less": inverse.VerifyType = "greaterEqual"; break;
+                case "lessEqual": inverse.VerifyType = "greater"; break;
+                case "greater": inverse.VerifyType = "lessEqual"; break;
+                case "greaterEqual": inverse.VerifyType = "less"; break;
+                case "equal": inverse.VerifyType = "notEqual"; break;
+                case "notEqual": inverse.VerifyType = "equal"; break;
+                default: return null;
+            }
+            return await ExecuteAsync(domain, accessToken, inverse);
         }
 
         public static Gs2.Gs2Inventory.Model.BigItem Transform(
@@ -65,54 +147,12 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             VerifyBigItemByUserIdRequest request,
             Gs2.Gs2Inventory.Model.BigItem item
         ) {
-            BigInteger.TryParse(item.Count, out var v1);
-            BigInteger.TryParse(request.Count, out var v2);
-            switch (request.VerifyType) {
-                case "less":
-                    if (v1 < v2) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
-                case "lessEqual":
-                    if (v1 <= v2) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
-                case "greater":
-                    if (v1 > v2) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
-                case "greaterEqual":
-                    if (v1 >= v2) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
-                case "equal":
-                    if (v1 == v2) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
-                case "notEqual":
-                    if (v1 != v2) {
-                        throw new BadRequestException(new [] {
-                            new RequestError("count", "invalid"),
-                        });
-                    }
-                    break;
+            if (!item.IsExecutable(request)) {
+                throw new BadRequestException(new [] {
+                    new RequestError("count", "invalid"),
+                });
             }
             return item;
-/* diff +++ end */
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -132,28 +172,56 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             AccessToken accessToken,
             VerifyBigItemByUserIdRequest request
         ) {
-            var item = await domain.Inventory.Namespace(
-                request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).BigInventory(
-                request.InventoryName
-            ).BigItem(
-                request.ItemName
-            ).ModelAsync();
-
-            if (item == null) {
-                return () => null;
-            }
-/* diff --- start
-            item = item.SpeculativeExecution(request);
- diff --- end */
-            item = Transform(domain, accessToken, request, item); /* diff +++ */
-
-            return () =>
-            {
+            var token = accessToken?.Clone() as AccessToken;
+            if (domain?.RestSession == null || request == null ||
+                string.IsNullOrEmpty(token?.UserId)) {
                 return null;
-            };
+            }
+            var prepared = VerifyBigItemByUserIdRequest.FromJson(request.ToJson());
+            if (prepared.UserId == "#{userId}") {
+                prepared.UserId = token.UserId;
+            }
+            if (prepared.UserId != token.UserId ||
+                string.IsNullOrEmpty(prepared.NamespaceName) ||
+                string.IsNullOrEmpty(prepared.InventoryName) ||
+                string.IsNullOrEmpty(prepared.ItemName) ||
+                (prepared.VerifyType != "less" &&
+                 prepared.VerifyType != "lessEqual" &&
+                 prepared.VerifyType != "greater" &&
+                 prepared.VerifyType != "greaterEqual" &&
+                 prepared.VerifyType != "equal" &&
+                 prepared.VerifyType != "notEqual")) {
+                return null;
+            }
+            var expectedId =
+                $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                $"{domain.RestSession.OwnerId}:inventory:{prepared.NamespaceName}:" +
+                $"user:{token.UserId}:big:inventory:{prepared.InventoryName}:" +
+                $"item:{prepared.ItemName}";
+            var cached = ((Gs2.Gs2Inventory.Model.BigItem)null).GetCache(
+                domain.Cache,
+                prepared.NamespaceName,
+                token.UserId,
+                prepared.InventoryName,
+                prepared.ItemName,
+                token.TimeOffset
+            );
+            var item = cached.Item1 ?? BigItemSpeculativeState.KnownZero(
+                expectedId, token.UserId, prepared.ItemName
+            );
+            if (!cached.Item2 || item.ItemId != expectedId ||
+                item.UserId != token.UserId || item.ItemName != prepared.ItemName ||
+                !CanEvaluate(item, prepared)) {
+                return null;
+            }
+            Transform(domain, token, prepared, item);
+
+            return new PreparedVerification(
+                domain,
+                token,
+                prepared,
+                expectedId
+            ).Invoke;
         }
     }
 }

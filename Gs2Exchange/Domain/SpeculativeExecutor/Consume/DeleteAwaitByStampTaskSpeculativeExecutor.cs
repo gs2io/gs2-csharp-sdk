@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -31,8 +32,11 @@ using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model; /* diff +++ */
 using Gs2.Core.Util;
+/* diff --- start
 using Gs2.Core.Exception;
+ diff --- end */
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Exchange.Request;
 using Gs2.Gs2Exchange.Model.Cache;
@@ -71,6 +75,7 @@ namespace Gs2.Gs2Exchange.Domain.SpeculativeExecutor
             AccessToken accessToken,
             DeleteAwaitByUserIdRequest request
         ) {
+/* diff --- start
             var item = await domain.Exchange.Namespace(
                 request.NamespaceName
             ).AccessToken(
@@ -78,7 +83,44 @@ namespace Gs2.Gs2Exchange.Domain.SpeculativeExecutor
             ).Await(
                 request.AwaitName
             ).ModelAsync();
+ diff --- end */
+/* diff +++ start */
+            var token = accessToken?.Clone() as AccessToken;
+            if (domain?.RestSession == null || request == null ||
+                string.IsNullOrEmpty(token?.UserId)) {
+                return null;
+            }
+            var prepared = DeleteAwaitByUserIdRequest.FromJson(request.ToJson());
+            if (prepared.UserId == "#{userId}") {
+                prepared.UserId = token.UserId;
+            }
+            if (prepared.UserId != token.UserId ||
+                string.IsNullOrEmpty(prepared.NamespaceName) ||
+                string.IsNullOrEmpty(prepared.AwaitName)) {
+                return null;
+            }
+            var userId = token.UserId;
+            var timeOffset = token.TimeOffset;
+            var expectedId =
+                $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                $"{domain.RestSession.OwnerId}:exchange:{prepared.NamespaceName}:" +
+                $"user:{userId}:await:{prepared.AwaitName}";
+            var cached = ((Gs2.Gs2Exchange.Model.Await)null).GetCache(
+                domain.Cache,
+                prepared.NamespaceName,
+                userId,
+                prepared.AwaitName,
+                timeOffset
+            );
+            var item = cached.Item1;
+            if (!cached.Item2 || item == null || item.AwaitId != expectedId ||
+                item.UserId != userId || item.Name != prepared.AwaitName) {
+                return null;
+            }
+            var expected = item.Clone() as Gs2.Gs2Exchange.Model.Await;
+/* diff +++ end */
 
+/* diff --- start
             if (item == null) {
                 return () => null;
             }
@@ -87,12 +129,37 @@ namespace Gs2.Gs2Exchange.Domain.SpeculativeExecutor
             return () =>
             {
                 item.PutCache(
+ diff --- end */
+/* diff +++ start */
+            return () => {
+                var current = ((Gs2.Gs2Exchange.Model.Await)null).GetCache(
+/* diff +++ end */
                     domain.Cache,
+/* diff --- start
                     request.NamespaceName,
                     accessToken.UserId,
                     request.AwaitName,
                     accessToken.TimeOffset
+ diff --- end */
+/* diff +++ start */
+                    prepared.NamespaceName,
+                    userId,
+                    prepared.AwaitName,
+                    timeOffset
+/* diff +++ end */
                 );
+/* diff +++ start */
+                if (current.Item2 && current.Item1 != null &&
+                    current.Item1.ToJson().ToJson() == expected.ToJson().ToJson()) {
+                    (null as Gs2.Gs2Exchange.Model.Await).PutCache(
+                        domain.Cache,
+                        prepared.NamespaceName,
+                        userId,
+                        prepared.AwaitName,
+                        timeOffset
+                    );
+                }
+/* diff +++ end */
                 return null;
             };
         }

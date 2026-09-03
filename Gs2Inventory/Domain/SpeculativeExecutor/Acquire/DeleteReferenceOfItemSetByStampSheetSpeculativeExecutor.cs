@@ -72,41 +72,36 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             AccessToken accessToken,
             DeleteReferenceOfByUserIdRequest request
         ) {
-/* diff --- start
-            var item = await domain.Inventory.Namespace(
-                request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).Inventory(
-                request.InventoryName
-            ).ItemSet(
-                request.ItemName,
-                request.ItemSetName
-            ).ReferenceOf(
-                request.ReferenceOf
-            ).ModelAsync();
-
-            if (item == null) {
-                return () => null;
+            var prepared = request == null ? null : new DeleteReferenceOfByUserIdRequest()
+                .WithNamespaceName(request.NamespaceName)
+                .WithInventoryName(request.InventoryName)
+                .WithUserId(request.UserId)
+                .WithItemName(request.ItemName)
+                .WithItemSetName(request.ItemSetName)
+                .WithReferenceOf(request.ReferenceOf)
+                .WithTimeOffsetToken(request.TimeOffsetToken)
+                .WithDuplicationAvoider(request.DuplicationAvoider);
+            var token = AccessToken.FromJson(accessToken?.ToJson());
+            if (prepared?.UserId == "#{userId}") {
+                prepared.UserId = token?.UserId;
             }
-            item = item.SpeculativeExecution(request);
-
-            return () =>
-            {
-                item.PutCache(
-                    domain.Cache,
-                    request.NamespaceName,
-                    request.UserId,
-                    request.InventoryName,
-                    request.ItemName,
-                    request.ItemSetName,
-                    request.ReferenceOf,
-                    null
-                );
-                return null;
-            };
- diff --- end */
-            return () => null; /* diff +++ */
+            var now = UnixTime.ToUnixTime(DateTime.Now) +
+                      (long)(token?.TimeOffset ?? 0) * 1000L;
+            return ReferenceOfMutationSpeculativeExecutor.Prepare(
+                domain,
+                token,
+                prepared?.NamespaceName,
+                prepared?.UserId,
+                prepared?.InventoryName,
+                prepared?.ItemName,
+                prepared?.ItemSetName,
+                prepared?.ReferenceOf,
+                item => {
+                    var changed = item.SpeculativeExecution(prepared);
+                    changed.UpdatedAt = now;
+                    return changed;
+                }
+            );
         }
     }
 }

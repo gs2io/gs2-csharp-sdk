@@ -61,6 +61,16 @@ namespace Gs2.Gs2Ranking2.Model.Cache
 /* diff +++ end */
                 timeOffset
             );
+            if (request.Season == null) {
+                self.Item?.PutCache(
+                    cache,
+                    request.NamespaceName,
+                    self.Item.RankingName,
+                    null,
+                    userId,
+                    timeOffset
+                );
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER

@@ -72,49 +72,32 @@ namespace Gs2.Gs2Experience.Domain.SpeculativeExecutor
             AccessToken accessToken,
             AddExperienceByUserIdRequest request
         ) {
-/* diff +++ start */
-            var model = await domain.Experience.Namespace(
-                request.NamespaceName
-            ).ExperienceModel(
-                request.ExperienceName
-            ).ModelAsync();
-
-/* diff +++ end */
-            var item = await domain.Experience.Namespace(
-                request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).Status(
-                request.ExperienceName,
-                request.PropertyId
-            ).ModelAsync();
-
-            if (item == null) {
-                return () => null;
+            var preparedRequest = AddExperienceByUserIdRequest.FromJson(
+                request?.ToJson()
+            );
+            var preparedAccessToken = AccessToken.FromJson(accessToken?.ToJson());
+            if (preparedRequest?.UserId == "#{userId}") {
+                preparedRequest.UserId = preparedAccessToken?.UserId;
             }
-/* diff --- start
-            item = item.SpeculativeExecution(request);
- diff --- end */
-            item = item.SpeculativeExecution(request, model); /* diff +++ */
-
-            return () =>
-            {
-                item.PutCache(
-                    domain.Cache,
-                    request.NamespaceName,
-/* diff --- start
-                    request.UserId,
- diff --- end */
-                    accessToken.UserId, /* diff +++ */
-                    request.ExperienceName,
-                    request.PropertyId,
-/* diff --- start
-                    null
- diff --- end */
-                    accessToken.TimeOffset /* diff +++ */
-                );
-                return null;
-            };
+            return await StatusSpeculativeExecutor.PrepareAsync(
+                domain,
+                preparedAccessToken,
+                preparedRequest?.NamespaceName,
+                preparedRequest?.UserId,
+                preparedRequest?.ExperienceName,
+                preparedRequest?.PropertyId,
+                (item, model) => StatusSpeculativeExecutor.WithAddedExperience(
+                    item,
+                    model,
+                    preparedRequest.ExperienceValue.Value,
+                    preparedRequest.TruncateExperienceWhenRankUp ?? false
+                ),
+                item => StatusSpeculativeExecutor.WithAddedExperience(
+                    item,
+                    preparedRequest.ExperienceValue.Value,
+                    preparedRequest.TruncateExperienceWhenRankUp ?? false
+                )
+            );
         }
     }
 }

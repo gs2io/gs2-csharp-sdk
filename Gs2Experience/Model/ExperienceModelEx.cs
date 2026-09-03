@@ -20,6 +20,51 @@ namespace Gs2.Gs2Experience.Model
 {
     public static class ExperienceModelEx
     {
+        public static Status RecalculateStatus(
+            this ExperienceModel self,
+            Status source,
+            long experienceValue,
+            long rankCapValue
+        ) {
+            if (self?.MaxRankCap == null || source?.Clone() is not Status clone) {
+                throw new NullReferenceException();
+            }
+
+            var values = self.RankThreshold?.Values ?? Array.Empty<long>();
+            if (rankCapValue <= 1 || values.Length == 0) {
+                experienceValue = 0;
+            }
+            else {
+                var rankCapExperienceValue = values[values.Length - 1];
+                if (rankCapValue - 1 < values.Length) {
+                    rankCapExperienceValue = values[(int)rankCapValue - 2];
+                }
+                if (experienceValue > rankCapExperienceValue) {
+                    experienceValue = rankCapExperienceValue;
+                }
+            }
+
+            rankCapValue = Math.Min(rankCapValue, self.MaxRankCap.Value);
+            long rankValue = 1;
+            long nextRankUpExperienceValue = 0;
+            foreach (var thresholdValue in values) {
+                if (experienceValue < thresholdValue) {
+                    if (rankCapValue > rankValue) {
+                        nextRankUpExperienceValue = thresholdValue;
+                    }
+                    break;
+                }
+                rankValue++;
+            }
+
+            clone.ExperienceValue = experienceValue;
+            clone.RankValue = rankValue;
+            clone.RankCapValue = rankCapValue;
+            clone.NextRankUpExperienceValue = nextRankUpExperienceValue;
+            clone.Revision = 0;
+            return clone;
+        }
+
         public static long Rank(this ExperienceModel self, Status status) {
             return Math.Min(self.RankThreshold.Values.Count(v => v <= (status.ExperienceValue ?? 0)) + 1, status.RankCapValue ?? 0);
         }

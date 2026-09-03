@@ -22,7 +22,6 @@
 using System;
 using System.Linq;
 using System.Numerics;
-using Gs2.Core.Exception;
 using Gs2.Gs2Mission.Request;
 
 namespace Gs2.Gs2Mission.Model.Transaction
@@ -33,12 +32,11 @@ namespace Gs2.Gs2Mission.Model.Transaction
             this Complete self,
             RevertReceiveByUserIdRequest request
         ) {
-            var changed = self.SpeculativeExecution(request);
             try {
-                changed.Validate();
+                self.SpeculativeExecution(request);
                 return true;
             }
-            catch (Gs2Exception) {
+            catch (System.Exception) {
                 return false;
             }
         }
@@ -56,12 +54,18 @@ namespace Gs2.Gs2Mission.Model.Transaction
             return self.Clone() as Complete;
  diff --- end */
 /* diff +++ start */
-            var clone = self.Clone() as Complete;
-            if (clone == null)
-            {
+            if (self?.ReceivedMissionTaskNames == null || request == null) {
                 throw new NullReferenceException();
             }
-            clone.ReceivedMissionTaskNames = clone.ReceivedMissionTaskNames.Where(v => v == request.MissionTaskName).ToArray();
+            if (!self.ReceivedMissionTaskNames.Contains(request.MissionTaskName)) {
+                throw new InvalidOperationException("mission task is not received");
+            }
+
+            var clone = self.Clone() as Complete;
+            clone.ReceivedMissionTaskNames = clone.ReceivedMissionTaskNames
+                .Where(v => v != request.MissionTaskName)
+                .ToArray();
+            clone.Revision = 0;
             return clone;
 /* diff +++ end */
         }
@@ -70,7 +74,7 @@ namespace Gs2.Gs2Mission.Model.Transaction
             this RevertReceiveByUserIdRequest request,
             double rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Mission:RevertReceiveByUserId");
+            return request;
         }
     }
 
@@ -80,7 +84,7 @@ namespace Gs2.Gs2Mission.Model.Transaction
             this RevertReceiveByUserIdRequest request,
             BigInteger rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Mission:RevertReceiveByUserId");
+            return request;
         }
     }
 }

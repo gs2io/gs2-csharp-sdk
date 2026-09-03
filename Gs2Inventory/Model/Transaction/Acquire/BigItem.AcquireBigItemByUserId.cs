@@ -20,9 +20,7 @@
 #pragma warning disable CS1522 // Empty switch block
 
 using System;
-using System.Linq;
 using System.Numerics;
-using Gs2.Core.Exception;
 using Gs2.Gs2Inventory.Request;
 
 namespace Gs2.Gs2Inventory.Model.Transaction
@@ -33,12 +31,11 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this BigItem self,
             AcquireBigItemByUserIdRequest request
         ) {
-            var changed = self.SpeculativeExecution(request);
             try {
-                changed.Validate();
+                self.SpeculativeExecution(request);
                 return true;
             }
-            catch (Gs2Exception) {
+            catch (System.Exception) {
                 return false;
             }
         }
@@ -61,9 +58,12 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             clone.Count += request.AcquireCount;
  diff --- end */
 /* diff +++ start */
-            BigInteger.TryParse(self.Count, out var v1);
-            BigInteger.TryParse(request.AcquireCount, out var v2);
-            clone.Count = BigInteger.Add(v1, v2).ToString();
+            if (!BigInteger.TryParse(self.Count, out var v1) ||
+                !BigInteger.TryParse(request?.AcquireCount, out var v2)) {
+                throw new FormatException();
+            }
+            clone.Count = BigInteger.Add(v1, v2).ToString("D");
+            clone.Revision = 0;
 /* diff +++ end */
             return clone;
         }
@@ -76,7 +76,14 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             throw new NotSupportedException($"not supported rate action Gs2Inventory:AcquireBigItemByUserId");
  diff --- end */
 /* diff +++ start */
-            request.AcquireCount = BigInteger.Multiply(BigInteger.Parse(request.AcquireCount), new BigInteger(rate)).ToString("D");
+            if (request == null ||
+                !VerifyBigItemByUserIdRequestExt.TryApplyRate(
+                    SetBigItemByUserIdRequestExt.ParseCountOrOne(request.AcquireCount),
+                    rate, out var value
+                )) {
+                return null;
+            }
+            request.AcquireCount = value.ToString("D");
             return request;
 /* diff +++ end */
         }
@@ -92,7 +99,11 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             throw new NotSupportedException($"not supported rate action Gs2Inventory:AcquireBigItemByUserId");
  diff --- end */
 /* diff +++ start */
-            request.AcquireCount = BigInteger.Multiply(BigInteger.Parse(request.AcquireCount), rate).ToString("D");
+            if (request == null) return null;
+            request.AcquireCount = BigInteger.Multiply(
+                SetBigItemByUserIdRequestExt.ParseCountOrOne(request.AcquireCount),
+                rate
+            ).ToString("D");
             return request;
 /* diff +++ end */
         }

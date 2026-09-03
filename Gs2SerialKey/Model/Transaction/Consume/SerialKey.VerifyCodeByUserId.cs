@@ -32,11 +32,21 @@ namespace Gs2.Gs2SerialKey.Model.Transaction
             this SerialKey self,
             VerifyCodeByUserIdRequest request
         ) {
+            if (self == null ||
+                request == null ||
+                string.IsNullOrEmpty(request.UserId) ||
+                string.IsNullOrEmpty(request.Code) ||
+                string.IsNullOrEmpty(self.Code) ||
+                self.Code != request.Code ||
+                request.CampaignModelName != null &&
+                self.CampaignModelName != request.CampaignModelName) {
+                return false;
+            }
             switch (request.VerifyType) {
                 case "active":
-                    throw new NotImplementedException($"not implemented action Gs2SerialKey:VerifyCodeByUserId");
+                    return self.Status == "ACTIVE";
                 case "inactive":
-                    throw new NotImplementedException($"not implemented action Gs2SerialKey:VerifyCodeByUserId");
+                    return self.Status != "ACTIVE";
             }
             return false;
         }
@@ -52,7 +62,7 @@ namespace Gs2.Gs2SerialKey.Model.Transaction
             this VerifyCodeByUserIdRequest request,
             double rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2SerialKey:VerifyCodeByUserId");
+            return request;
         }
     }
 
@@ -62,7 +72,7 @@ namespace Gs2.Gs2SerialKey.Model.Transaction
             this VerifyCodeByUserIdRequest request,
             BigInteger rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2SerialKey:VerifyCodeByUserId");
+            return request;
         }
     }
 }

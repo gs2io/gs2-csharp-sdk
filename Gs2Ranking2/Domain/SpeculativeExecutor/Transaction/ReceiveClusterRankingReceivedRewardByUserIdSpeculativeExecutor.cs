@@ -69,56 +69,9 @@ namespace Gs2.Gs2Ranking2.Domain.Transaction.SpeculativeExecutor
             AccessToken accessToken,
             ReceiveClusterRankingReceivedRewardByUserIdRequest request
         ) {
-/* diff --- start
-            // TODO: Speculative execution not supported
- diff --- end */
-#if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
-#else
-            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
-#endif
-
-/* diff --- start
-            var item = await domain.Ranking2.Namespace(
-                request.NamespaceName
-            ).ClusterRankingModel(
-                request.RankingName
-            ).ClusterRankingSeason(
-                request.ClusterName,
-                request.Season,
-                request.UserId
-            ).ClusterRankingReceivedReward(
-            ).ModelAsync();
-
-            var commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
-                item?.ConsumeActions.Select(v =>
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Ranking2.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
-                    }
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.ConsumeAction[]{},
-                item?.AcquireActions.Select(v =>
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Ranking2.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
-                    }
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.AcquireAction[]{},
-                1.0
-            ).ExecuteAsync(
-                domain,
-                accessToken
-            );
-
- diff --- end */
-            return () =>
-            {
-/* diff --- start
-                commit?.Invoke();
- diff --- end */
-                return null;
-            };
+            // Ranking placement, receipt state, and reward actions are determined by
+            // the server. A no-op commit would falsely claim a prepared cache update.
+            return null;
         }
     }
 }

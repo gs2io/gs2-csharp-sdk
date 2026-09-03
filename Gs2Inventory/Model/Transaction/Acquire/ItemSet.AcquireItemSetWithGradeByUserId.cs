@@ -79,7 +79,7 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this AcquireItemSetWithGradeByUserIdRequest request,
             double rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Inventory:AcquireItemSetWithGradeByUserId");
+            return request;
         }
     }
 
@@ -89,7 +89,7 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this AcquireItemSetWithGradeByUserIdRequest request,
             BigInteger rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Inventory:AcquireItemSetWithGradeByUserId");
+            return request;
         }
     }
 }

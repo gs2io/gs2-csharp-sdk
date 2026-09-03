@@ -20,9 +20,7 @@
 #pragma warning disable CS1522 // Empty switch block
 
 using System;
-using System.Linq;
 using System.Numerics;
-using Gs2.Core.Exception;
 using Gs2.Gs2Inventory.Request;
 
 namespace Gs2.Gs2Inventory.Model.Transaction
@@ -33,12 +31,11 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this BigItem self,
             ConsumeBigItemByUserIdRequest request
         ) {
-            var changed = self.SpeculativeExecution(request);
             try {
-                changed.Validate();
+                self.SpeculativeExecution(request);
                 return true;
             }
-            catch (Gs2Exception) {
+            catch (System.Exception) {
                 return false;
             }
         }
@@ -60,7 +57,16 @@ namespace Gs2.Gs2Inventory.Model.Transaction
 /* diff --- start
             clone.Count -= request.ConsumeCount;
  diff --- end */
-            clone.Count = BigInteger.Subtract(BigInteger.Parse(clone.Count), BigInteger.Parse(request.ConsumeCount)).ToString("D"); /* diff +++ */
+            if (!BigInteger.TryParse(clone.Count, out var currentCount) ||
+                !BigInteger.TryParse(request?.ConsumeCount, out var consumeCount)) {
+                throw new FormatException();
+            }
+            var changedCount = BigInteger.Subtract(currentCount, consumeCount);
+            if (changedCount < BigInteger.Zero) {
+                throw new InvalidOperationException();
+            }
+            clone.Count = changedCount.ToString("D"); /* diff +++ */
+            clone.Revision = 0;
             return clone;
         }
 
@@ -72,7 +78,14 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             throw new NotSupportedException($"not supported rate action Gs2Inventory:ConsumeBigItemByUserId");
  diff --- end */
 /* diff +++ start */
-            request.ConsumeCount = BigInteger.Multiply(BigInteger.Parse(request.ConsumeCount), new BigInteger(rate)).ToString("D");
+            if (request == null ||
+                !VerifyBigItemByUserIdRequestExt.TryApplyRate(
+                    SetBigItemByUserIdRequestExt.ParseCountOrOne(request.ConsumeCount),
+                    rate, out var value
+                )) {
+                return null;
+            }
+            request.ConsumeCount = value.ToString("D");
             return request;
 /* diff +++ end */
         }
@@ -88,7 +101,11 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             throw new NotSupportedException($"not supported rate action Gs2Inventory:ConsumeBigItemByUserId");
  diff --- end */
 /* diff +++ start */
-            request.ConsumeCount = BigInteger.Multiply(BigInteger.Parse(request.ConsumeCount), rate).ToString("D");
+            if (request == null) return null;
+            request.ConsumeCount = BigInteger.Multiply(
+                SetBigItemByUserIdRequestExt.ParseCountOrOne(request.ConsumeCount),
+                rate
+            ).ToString("D");
             return request;
 /* diff +++ end */
         }

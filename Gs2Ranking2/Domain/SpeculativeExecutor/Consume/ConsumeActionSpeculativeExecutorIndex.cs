@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -72,9 +73,11 @@ namespace Gs2.Gs2Ranking2.Domain.SpeculativeExecutor
             consumeAction.Action = consumeAction.Action.Replace("{userId}", accessToken.UserId);
             if (CreateGlobalRankingReceivedRewardByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = CreateGlobalRankingReceivedRewardByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
+/* diff --- start
                 if (rate != 1) {
                     request = request.Rate(rate);
                 }
+ diff --- end */
                 return await CreateGlobalRankingReceivedRewardByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
@@ -83,9 +86,11 @@ namespace Gs2.Gs2Ranking2.Domain.SpeculativeExecutor
             }
             if (CreateClusterRankingReceivedRewardByUserIdSpeculativeExecutor.Action() == consumeAction.Action) {
                 var request = CreateClusterRankingReceivedRewardByUserIdRequest.FromJson(JsonMapper.ToObject(consumeAction.Request));
+/* diff --- start
                 if (rate != 1) {
                     request = request.Rate(rate);
                 }
+ diff --- end */
                 return await CreateClusterRankingReceivedRewardByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,

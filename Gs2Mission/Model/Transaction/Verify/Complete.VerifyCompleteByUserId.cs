@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
@@ -32,17 +33,42 @@ namespace Gs2.Gs2Mission.Model.Transaction
             this Complete self,
             VerifyCompleteByUserIdRequest request
         ) {
+/* diff +++ start */
+            if (self?.CompletedMissionTaskNames == null ||
+                self.ReceivedMissionTaskNames == null ||
+                request?.MissionTaskName == null) {
+                return false;
+            }
+
+            var completed = self.CompletedMissionTaskNames.Contains(request.MissionTaskName);
+            var received = self.ReceivedMissionTaskNames.Contains(request.MissionTaskName);
+/* diff +++ end */
             switch (request.VerifyType) {
                 case "completed":
+/* diff --- start
                     throw new NotImplementedException($"not implemented action Gs2Mission:VerifyCompleteByUserId");
+ diff --- end */
+                    return completed; /* diff +++ */
                 case "notCompleted":
+/* diff --- start
                     throw new NotImplementedException($"not implemented action Gs2Mission:VerifyCompleteByUserId");
+ diff --- end */
+                    return !completed; /* diff +++ */
                 case "received":
+/* diff --- start
                     throw new NotImplementedException($"not implemented action Gs2Mission:VerifyCompleteByUserId");
+ diff --- end */
+                    return received; /* diff +++ */
                 case "notReceived":
+/* diff --- start
                     throw new NotImplementedException($"not implemented action Gs2Mission:VerifyCompleteByUserId");
+ diff --- end */
+                    return !received; /* diff +++ */
                 case "completedAndNotReceived":
+/* diff --- start
                     throw new NotImplementedException($"not implemented action Gs2Mission:VerifyCompleteByUserId");
+ diff --- end */
+                    return completed && !received; /* diff +++ */
             }
             return false;
         }
@@ -58,7 +84,10 @@ namespace Gs2.Gs2Mission.Model.Transaction
             this VerifyCompleteByUserIdRequest request,
             double rate
         ) {
+/* diff --- start
             throw new NotSupportedException($"not supported rate action Gs2Mission:VerifyCompleteByUserId");
+ diff --- end */
+            return request; /* diff +++ */
         }
     }
 
@@ -68,7 +97,10 @@ namespace Gs2.Gs2Mission.Model.Transaction
             this VerifyCompleteByUserIdRequest request,
             BigInteger rate
         ) {
+/* diff --- start
             throw new NotSupportedException($"not supported rate action Gs2Mission:VerifyCompleteByUserId");
+ diff --- end */
+            return request; /* diff +++ */
         }
     }
 }

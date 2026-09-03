@@ -61,7 +61,8 @@ namespace Gs2.Gs2Schedule.Model.Cache
                 request.NamespaceName,
                 userId,
                 request.EventName,
-                request.IsInSchedule ?? true
+                request.IsInSchedule ?? true,
+                timeOffset
 /* diff +++ end */
             );
         }

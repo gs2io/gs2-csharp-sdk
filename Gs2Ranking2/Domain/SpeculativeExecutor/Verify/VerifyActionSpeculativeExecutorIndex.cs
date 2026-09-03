@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -48,6 +49,57 @@ namespace Gs2.Gs2Ranking2.Domain.SpeculativeExecutor
 {
     public static class VerifyActionSpeculativeExecutorIndex
     {
+/* diff +++ start */
+#if GS2_ENABLE_UNITASK
+        public static async UniTask<Func<object>> ExecuteInverseAsync(
+#else
+        public static async Task<Func<object>> ExecuteInverseAsync(
+#endif
+            Core.Domain.Gs2 domain,
+            AccessToken accessToken,
+            VerifyAction verifyAction,
+            BigInteger rate
+        ) {
+            verifyAction.Action = verifyAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            verifyAction.Action = verifyAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            verifyAction.Action = verifyAction.Action.Replace("{userId}", accessToken.UserId);
+            if (VerifyGlobalRankingScoreByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                var request = VerifyGlobalRankingScoreByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
+                return await VerifyGlobalRankingScoreByUserIdSpeculativeExecutor.ExecuteInverseAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
+            if (VerifyClusterRankingScoreByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                var request = VerifyClusterRankingScoreByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
+                return await VerifyClusterRankingScoreByUserIdSpeculativeExecutor.ExecuteInverseAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
+            if (VerifySubscribeRankingScoreByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                var request = VerifySubscribeRankingScoreByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
+                return await VerifySubscribeRankingScoreByUserIdSpeculativeExecutor.ExecuteInverseAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
+            return null;
+        }
+
+/* diff +++ end */
 #if UNITY_2017_1_OR_NEWER
         public static Gs2Future<Func<object>> ExecuteFuture(
             Core.Domain.Gs2 domain,

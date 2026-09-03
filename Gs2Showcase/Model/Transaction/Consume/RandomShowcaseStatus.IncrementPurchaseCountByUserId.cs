@@ -39,12 +39,11 @@ namespace Gs2.Gs2Showcase.Model.Transaction
             this RandomDisplayItem self, /* diff +++ */
             IncrementPurchaseCountByUserIdRequest request
         ) {
-            var changed = self.SpeculativeExecution(request);
             try {
-                changed.Validate();
+                self.SpeculativeExecution(request);
                 return true;
             }
-            catch (Gs2Exception) {
+            catch (Exception) {
                 return false;
             }
         }
@@ -69,7 +68,18 @@ namespace Gs2.Gs2Showcase.Model.Transaction
             {
                 throw new NullReferenceException();
             }
-            clone.CurrentPurchaseCount += request.Count;
+            if (request == null || clone.CurrentPurchaseCount == null ||
+                clone.MaximumPurchaseCount == null) {
+                throw new InvalidOperationException();
+            }
+            var changed = checked(
+                clone.CurrentPurchaseCount.Value +
+                request.Count.GetValueOrDefault(1)
+            );
+            if (changed > clone.MaximumPurchaseCount) {
+                throw new InvalidOperationException();
+            }
+            clone.CurrentPurchaseCount = changed;
             return clone;
         }
 
@@ -77,7 +87,14 @@ namespace Gs2.Gs2Showcase.Model.Transaction
             this IncrementPurchaseCountByUserIdRequest request,
             double rate
         ) {
-            request.Count = (int?) (request.Count * rate);
+            if (request == null || !PurchaseCountRate.TryApply(
+                    request.Count ?? 1,
+                    rate,
+                    out var value
+                )) {
+                return null;
+            }
+            request.Count = value;
             return request;
         }
     }
@@ -88,8 +105,65 @@ namespace Gs2.Gs2Showcase.Model.Transaction
             this IncrementPurchaseCountByUserIdRequest request,
             BigInteger rate
         ) {
-            request.Count = (int?) ((request.Count ?? 0) * rate);
+            if (request == null || !PurchaseCountRate.TryApply(
+                    request.Count ?? 1,
+                    rate,
+                    out var value
+                )) {
+                return null;
+            }
+            request.Count = value;
             return request;
+        }
+    }
+
+    internal static class PurchaseCountRate
+    {
+        internal static bool TryApply(
+            int count,
+            double rate,
+            out int value
+        ) {
+            value = count;
+            if (double.IsNaN(rate) || double.IsInfinity(rate)) {
+                return false;
+            }
+
+            var bits = (ulong)BitConverter.DoubleToInt64Bits(rate);
+            var exponentBits = (int)((bits >> 52) & 0x7ffUL);
+            var fraction = bits & 0x000fffffffffffffUL;
+            var significand = exponentBits == 0
+                ? new BigInteger(fraction)
+                : new BigInteger(fraction | 0x0010000000000000UL);
+            if ((bits & 0x8000000000000000UL) != 0) {
+                significand = BigInteger.Negate(significand);
+            }
+            var exponent = exponentBits == 0
+                ? -1074
+                : exponentBits - 1075;
+
+            var product = new BigInteger(count) * significand;
+            var scaled = exponent >= 0
+                ? product << exponent
+                : product / (BigInteger.One << -exponent);
+            return TryConvert(scaled, out value);
+        }
+
+        internal static bool TryApply(
+            int count,
+            BigInteger rate,
+            out int value
+        ) {
+            return TryConvert(new BigInteger(count) * rate, out value);
+        }
+
+        private static bool TryConvert(BigInteger value, out int result) {
+            result = 0;
+            if (value < int.MinValue || value > int.MaxValue) {
+                return false;
+            }
+            result = (int)value;
+            return true;
         }
     }
 }

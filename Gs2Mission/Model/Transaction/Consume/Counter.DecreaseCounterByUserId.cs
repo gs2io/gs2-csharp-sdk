@@ -22,7 +22,6 @@
 using System;
 using System.Linq;
 using System.Numerics;
-using Gs2.Core.Exception;
 using Gs2.Gs2Mission.Request;
 
 namespace Gs2.Gs2Mission.Model.Transaction
@@ -33,12 +32,11 @@ namespace Gs2.Gs2Mission.Model.Transaction
             this Counter self,
             DecreaseCounterByUserIdRequest request
         ) {
-            var changed = self.SpeculativeExecution(request);
             try {
-                changed.Validate();
+                self.SpeculativeExecution(request);
                 return true;
             }
-            catch (Gs2Exception) {
+            catch (System.Exception) {
                 return false;
             }
         }
@@ -47,28 +45,23 @@ namespace Gs2.Gs2Mission.Model.Transaction
             this Counter self,
             DecreaseCounterByUserIdRequest request
         ) {
-/* diff --- start
-            if (self.Clone() is not Counter clone)
- diff --- end */
-/* diff +++ start */
-            var clone = self.Clone() as Counter;
-            if (clone == null)
-/* diff +++ end */
-            {
+            if (self?.Values == null || request?.Value == null) {
                 throw new NullReferenceException();
             }
-/* diff --- start
-            clone.Values -= request.Value;
- diff --- end */
-/* diff +++ start */
-            self.Values = self.Values?.Select(v =>
-            {
-                if (v.Value != null) {
-                    v.Value -= request.Value;
-                }
-                return v;
-            }).ToArray() ?? Array.Empty<ScopedValue>();
-/* diff +++ end */
+            var clone = self.Clone() as Counter;
+            clone.Values = self.Values
+                .Where(value => value != null)
+                .Select(value => value.Clone() as ScopedValue)
+                .Where(value => value != null)
+                .Select(value => {
+                    if (!value.Value.HasValue) return value;
+                    var decreased = new BigInteger(value.Value.Value) -
+                                    request.Value.Value;
+                    value.Value = decreased < 0 ? 0 : (long)decreased;
+                    return value;
+                })
+                .ToArray();
+            clone.Revision = 0;
             return clone;
         }
 

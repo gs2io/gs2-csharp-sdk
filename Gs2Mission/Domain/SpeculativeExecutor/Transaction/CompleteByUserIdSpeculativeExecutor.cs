@@ -28,14 +28,20 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Mission.Domain.SpeculativeExecutor;
+using Gs2.Gs2Mission.Model;
+using Gs2.Gs2Mission.Model.Cache;
 using Gs2.Gs2Mission.Request;
-using Gs2.Core.Model; /* diff +++ */
+using Gs2.Core.Model;
+using AcquireAction = Gs2.Core.Model.AcquireAction;
+using ConsumeAction = Gs2.Core.Model.ConsumeAction;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 #endif
@@ -51,6 +57,78 @@ namespace Gs2.Gs2Mission.Domain.Transaction.SpeculativeExecutor
 
         public static string Action() {
             return "Gs2Mission:CompleteByUserId";
+        }
+
+        private static bool IsKnownReceiveFailure(
+            Complete complete,
+            MissionTaskModel model,
+            string missionTaskName
+        ) {
+            if (complete?.ReceivedMissionTaskNames == null) {
+                return false;
+            }
+            if (complete.ReceivedMissionTaskNames.Contains(missionTaskName)) {
+                return true;
+            }
+            return model.VerifyCompleteType != "consumeActions" &&
+                   model.VerifyCompleteType != "verifyActions" &&
+                   complete.CompletedMissionTaskNames != null &&
+                   !complete.CompletedMissionTaskNames.Contains(
+                       missionTaskName
+                   );
+        }
+
+        private static bool HasKnownReceiveFailure(
+            Gs2.Core.Domain.Gs2 domain,
+            AccessToken token,
+            CompleteByUserIdRequest request,
+            MissionTaskModel model
+        ) {
+            var cached = ((Complete)null).GetCache(
+                domain.Cache,
+                request.NamespaceName,
+                token.UserId,
+                request.MissionGroupName,
+                token.TimeOffset
+            );
+            var expectedId =
+                $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                $"{domain.RestSession.OwnerId}:mission:{request.NamespaceName}:" +
+                $"user:{token.UserId}:group:{request.MissionGroupName}:complete";
+            var complete = cached.Item1;
+            return cached.Item2 && complete != null &&
+                   complete.CompleteId == expectedId &&
+                   complete.UserId == token.UserId &&
+                   complete.MissionGroupName == request.MissionGroupName &&
+                   model != null && IsKnownReceiveFailure(
+                       complete,
+                       model,
+                       request.MissionTaskName
+                   );
+        }
+
+        private static bool IsPreparedModelCurrent(
+            Gs2.Core.Domain.Gs2 domain,
+            CompleteByUserIdRequest request,
+            string expectedId,
+            string preparedSnapshot
+        ) {
+            var cached = ((MissionTaskModel)null).GetCache(
+                domain.Cache,
+                request.NamespaceName,
+                request.MissionGroupName,
+                request.MissionTaskName,
+                null
+            );
+            var current = cached.Item1;
+            return cached.Item2 && current != null &&
+                   current.MissionTaskId == expectedId &&
+                   current.Name == request.MissionTaskName &&
+                   string.Equals(
+                       current.ToJson().ToJson(),
+                       preparedSnapshot,
+                       StringComparison.Ordinal
+                   );
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -70,74 +148,112 @@ namespace Gs2.Gs2Mission.Domain.Transaction.SpeculativeExecutor
             AccessToken accessToken,
             CompleteByUserIdRequest request
         ) {
-/* diff --- start
-            // TODO: Speculative execution not supported
-//#if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
-//#else
-            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
-//#endif
-
- diff --- end */
-            var item = await domain.Mission.Namespace(
-                request.NamespaceName
-/* diff --- start
-            ).AccessToken(
-                accessToken
-            ).Complete(
- diff --- end */
-            ).MissionGroupModel( /* diff +++ */
-                request.MissionGroupName
-/* diff +++ start */
-            ).MissionTaskModel(
-                request.MissionTaskName
-/* diff +++ end */
-            ).ModelAsync();
-
-            var commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
-/* diff --- start
-                item?.ConsumeActions.Select(v =>
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Mission.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
- diff --- end */
-/* diff +++ start */
-                new ConsumeAction[] {
-                    new ConsumeAction {
-                        Action = "Gs2Mission:ReceiveByUserId",
-                        Request = new ReceiveByUserIdRequest {
-                            NamespaceName = request.NamespaceName,
-                            MissionGroupName = request.MissionGroupName,
-                            MissionTaskName = request.MissionTaskName,
-                            UserId = request.UserId,
-                        }.ToJson().ToJson()
-/* diff +++ end */
-                    }
-/* diff --- start
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.ConsumeAction[]{},
-                item?.AcquireActions.Select(v =>
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Mission.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
-                    }
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.AcquireAction[]{},
- diff --- end */
-/* diff +++ start */
-                },
-                item.CompleteAcquireActions,
-/* diff +++ end */
-                1.0
-            ).ExecuteAsync(
-                domain,
-                accessToken
-            );
-
-            return () =>
-            {
-                commit?.Invoke();
+            var token = accessToken == null
+                ? null
+                : new AccessToken()
+                    .WithUserId(accessToken.UserId)
+                    .WithTimeOffset(accessToken.TimeOffset);
+            var prepared = request == null
+                ? null
+                : new CompleteByUserIdRequest()
+                    .WithNamespaceName(request.NamespaceName)
+                    .WithMissionGroupName(request.MissionGroupName)
+                    .WithMissionTaskName(request.MissionTaskName)
+                    .WithUserId(request.UserId)
+                    .WithConfig((request.Config ?? Array.Empty<Config>())
+                        .Where(config => config != null)
+                        .Select(config => new Config()
+                            .WithKey(config.Key)
+                            .WithValue(config.Value)
+                        ).ToArray());
+            if (prepared?.UserId == "#{userId}") prepared.UserId = token?.UserId;
+            if (domain?.RestSession == null || string.IsNullOrEmpty(token?.UserId) ||
+                prepared?.UserId != token.UserId ||
+                string.IsNullOrEmpty(prepared.NamespaceName) ||
+                string.IsNullOrEmpty(prepared.MissionGroupName) ||
+                string.IsNullOrEmpty(prepared.MissionTaskName)) {
                 return null;
+            }
+
+            var acquireActions = new List<AcquireAction>();
+            var cached = ((MissionTaskModel)null).GetCache(
+                domain.Cache,
+                prepared.NamespaceName,
+                prepared.MissionGroupName,
+                prepared.MissionTaskName,
+                null
+            );
+            var expectedId =
+                $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                $"{domain.RestSession.OwnerId}:mission:{prepared.NamespaceName}:" +
+                $"group:{prepared.MissionGroupName}:missionTaskModel:" +
+                prepared.MissionTaskName;
+            var model = cached.Item1;
+            if (!cached.Item2 || model == null ||
+                model.MissionTaskId != expectedId ||
+                model.Name != prepared.MissionTaskName) {
+                return null;
+            }
+            if (model?.CompleteAcquireActions != null) {
+                foreach (var action in model.CompleteAcquireActions) {
+                    var snapshot = action?.Clone() as AcquireAction;
+                    foreach (var config in prepared.Config) {
+                        snapshot = snapshot?.ApplyConfig(config.Key, config.Value);
+                    }
+                    if (snapshot != null) acquireActions.Add(snapshot);
+                }
+            }
+
+            var verification = await CompleteSpeculativeExecutor
+                .PrepareVerifyCompleteConsumeActionsAsync(
+                    domain,
+                    token,
+                    model.VerifyCompleteConsumeActions,
+                    prepared.Config
+                );
+            if (verification.KnownFalse) {
+                return null;
+            }
+            var modelSnapshot = model?.ToJson().ToJson();
+            if (HasKnownReceiveFailure(domain, token, prepared, model)) {
+                return null;
+            }
+
+            var receive = new ConsumeAction()
+                .WithAction(ReceiveByUserIdSpeculativeExecutor.Action())
+                .WithRequest(new ReceiveByUserIdRequest()
+                    .WithNamespaceName(prepared.NamespaceName)
+                    .WithMissionGroupName(prepared.MissionGroupName)
+                    .WithMissionTaskName(prepared.MissionTaskName)
+                    .WithUserId(token.UserId)
+                    .ToJson().ToJson());
+            var commit = await new Gs2.Core.SpeculativeExecutor.SpeculativeExecutor(
+                new[] { receive },
+                acquireActions.ToArray(),
+                1.0
+            ).ExecuteAsync(domain, token);
+            if (commit == null) return null;
+            return () => {
+                if (!IsPreparedModelCurrent(
+                        domain,
+                        prepared,
+                        expectedId,
+                        modelSnapshot
+                    ) || HasKnownReceiveFailure(
+                        domain,
+                        token,
+                        prepared,
+                        model
+                    )) {
+                    return null;
+                }
+                if (verification.Commit?.Target is
+                        IPreparedSpeculativeVerification guard &&
+                    !guard.IsStillSatisfied()) {
+                    return null;
+                }
+                verification.Commit?.Invoke();
+                return commit();
             };
         }
     }

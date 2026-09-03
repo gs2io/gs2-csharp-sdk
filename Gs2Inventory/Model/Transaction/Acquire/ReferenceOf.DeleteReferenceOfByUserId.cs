@@ -36,12 +36,11 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this ItemSet self, /* diff +++ */
             DeleteReferenceOfByUserIdRequest request
         ) {
-            var changed = self.SpeculativeExecution(request);
             try {
-                changed.Validate();
+                self.SpeculativeExecution(request);
                 return true;
             }
-            catch (Gs2Exception) {
+            catch (System.Exception) {
                 return false;
             }
         }
@@ -56,6 +55,15 @@ namespace Gs2.Gs2Inventory.Model.Transaction
 /* diff +++ end */
             DeleteReferenceOfByUserIdRequest request
         ) {
+            if (self?.ReferenceOf == null || request == null ||
+                request.ReferenceOf == null) {
+                throw new InvalidOperationException();
+            }
+            if (!self.ReferenceOf.Contains(request.ReferenceOf)) {
+                throw new NotFoundException(new [] {
+                    new Gs2.Core.Model.RequestError("referenceOf", "notFound"),
+                });
+            }
 /* diff --- start
             return null;
  diff --- end */
@@ -73,7 +81,7 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this DeleteReferenceOfByUserIdRequest request,
             double rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Inventory:DeleteReferenceOfByUserId");
+            return request;
         }
     }
 
@@ -83,7 +91,7 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this DeleteReferenceOfByUserIdRequest request,
             BigInteger rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Inventory:DeleteReferenceOfByUserId");
+            return request;
         }
     }
 }

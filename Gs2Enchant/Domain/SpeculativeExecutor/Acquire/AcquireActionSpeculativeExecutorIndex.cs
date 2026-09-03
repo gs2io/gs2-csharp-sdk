@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -71,6 +72,7 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
             acquireAction.Action = acquireAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
             acquireAction.Action = acquireAction.Action.Replace("{userId}", accessToken.UserId);
             if (ReDrawBalanceParameterStatusByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+/* diff --- start
                 var request = ReDrawBalanceParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
                 if (rate != 1) {
                     request = request.Rate(rate);
@@ -80,6 +82,8 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
                     accessToken,
                     request
                 );
+ diff --- end */
+                return null; /* diff +++ */
             }
             if (SetBalanceParameterStatusByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = SetBalanceParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
@@ -93,6 +97,7 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
                 );
             }
             if (ReDrawRarityParameterStatusByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+/* diff --- start
                 var request = ReDrawRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
                 if (rate != 1) {
                     request = request.Rate(rate);
@@ -102,8 +107,11 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
                     accessToken,
                     request
                 );
+ diff --- end */
+                return null; /* diff +++ */
             }
             if (AddRarityParameterStatusByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
+/* diff --- start
                 var request = AddRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));
                 if (rate != 1) {
                     request = request.Rate(rate);
@@ -113,6 +121,8 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
                     accessToken,
                     request
                 );
+ diff --- end */
+                return null; /* diff +++ */
             }
             if (SetRarityParameterStatusByUserIdSpeculativeExecutor.Action() == acquireAction.Action) {
                 var request = SetRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(acquireAction.Request));

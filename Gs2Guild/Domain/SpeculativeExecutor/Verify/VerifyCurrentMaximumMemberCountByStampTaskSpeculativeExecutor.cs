@@ -32,6 +32,7 @@ using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model;
 using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
@@ -51,8 +52,117 @@ namespace Gs2.Gs2Guild.Domain.SpeculativeExecutor
 {
     public static class VerifyCurrentMaximumMemberCountByGuildNameSpeculativeExecutor {
 
+        private sealed class PreparedVerification :
+            IPreparedSpeculativeVerification
+        {
+            private readonly Gs2.Core.Domain.Gs2 _domain;
+            private readonly AccessToken _accessToken;
+            private readonly VerifyCurrentMaximumMemberCountByGuildNameRequest _request;
+            private readonly string _expectedId;
+
+            public PreparedVerification(
+                Gs2.Core.Domain.Gs2 domain,
+                AccessToken accessToken,
+                VerifyCurrentMaximumMemberCountByGuildNameRequest request,
+                string expectedId
+            ) {
+                _domain = domain;
+                _accessToken = accessToken;
+                _request = request;
+                _expectedId = expectedId;
+            }
+
+            public bool IsStillSatisfied()
+            {
+                var (item, found) = ((Gs2.Gs2Guild.Model.Guild)null)
+                    .GetCache(
+                        _domain.Cache,
+                        _request.NamespaceName,
+                        _request.GuildModelName,
+                        _request.GuildName,
+                        _accessToken.TimeOffset
+                    );
+                if (!found || item == null || item.GuildId != _expectedId ||
+                    item.GuildModelName != _request.GuildModelName ||
+                    item.Name != _request.GuildName ||
+                    !item.CurrentMaximumMemberCount.HasValue) {
+                    return false;
+                }
+                try {
+                    Transform(_domain, _accessToken, _request, item);
+                    return true;
+                }
+                catch (Gs2Exception) {
+                    return false;
+                }
+            }
+
+            public object Invoke()
+            {
+                return null;
+            }
+        }
+
         public static string Action() {
             return "Gs2Guild:VerifyCurrentMaximumMemberCountByGuildName";
+        }
+
+#if GS2_ENABLE_UNITASK
+        public static async UniTask<Func<object>> ExecuteInverseAsync(
+#else
+        public static async Task<Func<object>> ExecuteInverseAsync(
+#endif
+            Gs2.Core.Domain.Gs2 domain,
+            AccessToken accessToken,
+            VerifyCurrentMaximumMemberCountByGuildNameRequest request
+        ) {
+            var inverse = request == null ? null :
+                VerifyCurrentMaximumMemberCountByGuildNameRequest.FromJson(
+                    request.ToJson()
+                );
+            switch (inverse?.VerifyType) {
+                case "less": inverse.VerifyType = "greaterEqual"; break;
+                case "lessEqual": inverse.VerifyType = "greater"; break;
+                case "greater": inverse.VerifyType = "lessEqual"; break;
+                case "greaterEqual": inverse.VerifyType = "less"; break;
+                case "equal": inverse.VerifyType = "notEqual"; break;
+                case "notEqual": inverse.VerifyType = "equal"; break;
+                default: return null;
+            }
+            return await ExecuteAsync(domain, accessToken, inverse);
+        }
+
+        private static void ValidateVerifyType(
+            VerifyCurrentMaximumMemberCountByGuildNameRequest request
+        ) {
+            switch (request?.VerifyType) {
+                case "less":
+                case "lessEqual":
+                case "greater":
+                case "greaterEqual":
+                case "equal":
+                case "notEqual":
+                    return;
+                default:
+                    throw new BadRequestException(new [] {
+                        new RequestError("verifyType", "invalid"),
+                    });
+            }
+        }
+
+        public static Gs2.Gs2Guild.Model.Guild Transform(
+            Gs2.Core.Domain.Gs2 domain,
+            AccessToken accessToken,
+            VerifyCurrentMaximumMemberCountByGuildNameRequest request,
+            Gs2.Gs2Guild.Model.Guild item
+        ) {
+            ValidateVerifyType(request);
+            if (!item.IsExecutable(request)) {
+                throw new BadRequestException(new [] {
+                    new RequestError("value", "invalid"),
+                });
+            }
+            return item;
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -72,29 +182,53 @@ namespace Gs2.Gs2Guild.Domain.SpeculativeExecutor
             AccessToken accessToken,
             VerifyCurrentMaximumMemberCountByGuildNameRequest request
         ) {
-            var item = await domain.Guild.Namespace(
-                request.NamespaceName
-            ).Guild(
-                request.GuildModelName,
-/* diff --- start
-                request.GuildName,
-                request.UserId
-            ).ModelAsync();
- diff --- end */
-/* diff +++ start */
-                request.GuildName
-            ).ModelAsync(accessToken);
-/* diff +++ end */
-
-            if (item == null) {
-                return () => null;
-            }
-            item = item.SpeculativeExecution(request);
-
-            return () =>
-            {
+            if (domain?.RestSession == null || accessToken == null ||
+                request == null) {
                 return null;
-            };
+            }
+            var prepared = VerifyCurrentMaximumMemberCountByGuildNameRequest
+                .FromJson(request.ToJson());
+            var preparedAccessToken = AccessToken.FromJson(accessToken.ToJson());
+            if (string.IsNullOrEmpty(prepared.NamespaceName) ||
+                string.IsNullOrEmpty(prepared.GuildModelName) ||
+                string.IsNullOrEmpty(prepared.GuildName) ||
+                !prepared.Value.HasValue ||
+                (prepared.VerifyType != "less" &&
+                 prepared.VerifyType != "lessEqual" &&
+                 prepared.VerifyType != "greater" &&
+                 prepared.VerifyType != "greaterEqual" &&
+                 prepared.VerifyType != "equal" &&
+                 prepared.VerifyType != "notEqual")) {
+                return null;
+            }
+            var cached = ((Gs2.Gs2Guild.Model.Guild)null).GetCache(
+                domain.Cache,
+                prepared.NamespaceName,
+                prepared.GuildModelName,
+                prepared.GuildName,
+                preparedAccessToken.TimeOffset
+            );
+            var item = cached.Item1;
+            var expectedId =
+                $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                $"{domain.RestSession.OwnerId}:guild:{prepared.NamespaceName}:" +
+                $"guild:{prepared.GuildModelName}:{prepared.GuildName}";
+            if (!cached.Item2 || item == null || item.GuildId != expectedId ||
+                item.GuildModelName != prepared.GuildModelName ||
+                item.Name != prepared.GuildName ||
+                !item.CurrentMaximumMemberCount.HasValue) {
+                return null;
+            }
+
+            Transform(domain, preparedAccessToken, prepared, item);
+
+            return new PreparedVerification(
+                domain,
+                preparedAccessToken,
+                prepared,
+                expectedId
+            ).Invoke;
         }
+
     }
 }

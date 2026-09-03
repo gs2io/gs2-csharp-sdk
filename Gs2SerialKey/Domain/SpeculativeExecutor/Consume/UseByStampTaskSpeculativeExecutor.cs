@@ -32,8 +32,8 @@ using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model;
 using Gs2.Core.Util;
-using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2SerialKey.Request;
 using Gs2.Gs2SerialKey.Model.Cache;
@@ -49,10 +49,144 @@ using System.Threading.Tasks;
 
 namespace Gs2.Gs2SerialKey.Domain.SpeculativeExecutor
 {
+    internal sealed class SerialKeySpeculativeCommit :
+        IComposableSpeculativeCommit
+    {
+        private readonly CacheDatabase _cache;
+        private readonly string _namespaceName;
+        private readonly string _userId;
+        private readonly string _code;
+        private readonly int? _timeOffset;
+        private readonly string _expectedSerialKeyId;
+        private readonly Func<Gs2.Gs2SerialKey.Model.SerialKey,
+            Gs2.Gs2SerialKey.Model.SerialKey> _transform;
+
+        internal SerialKeySpeculativeCommit(
+            CacheDatabase cache,
+            string namespaceName,
+            string userId,
+            string code,
+            int? timeOffset,
+            string expectedSerialKeyId,
+            Func<Gs2.Gs2SerialKey.Model.SerialKey,
+                Gs2.Gs2SerialKey.Model.SerialKey> transform
+        ) {
+            _cache = cache;
+            _namespaceName = namespaceName;
+            _userId = userId;
+            _code = code;
+            _timeOffset = timeOffset;
+            _expectedSerialKeyId = expectedSerialKeyId;
+            _transform = transform;
+        }
+
+        public string CompositionKey => string.Join(
+            ":", "serialKey", _namespaceName, "SerialKey", _code
+        );
+
+        private bool IsExpected(
+            Gs2.Gs2SerialKey.Model.SerialKey item
+        ) {
+            return item != null &&
+                   item.SerialKeyId == _expectedSerialKeyId &&
+                   item.Code == _code;
+        }
+
+        public bool TryCompose(
+            object current,
+            bool hasCurrent,
+            out object next
+        ) {
+            try {
+                var (campaign, campaignFound) =
+                    ((Gs2.Gs2SerialKey.Model.CampaignModel)null).GetCache(
+                        _cache,
+                        _namespaceName,
+                        _code,
+                        null
+                    );
+                if (!campaignFound || campaign != null) {
+                    next = null;
+                    return false;
+                }
+                var item = hasCurrent
+                    ? current as Gs2.Gs2SerialKey.Model.SerialKey
+                    : ((Gs2.Gs2SerialKey.Model.SerialKey)null).GetCache(
+                        _cache,
+                        _namespaceName,
+                        _userId,
+                        _code,
+                        _timeOffset
+                    ).Item1;
+                if (!IsExpected(item)) {
+                    next = null;
+                    return false;
+                }
+                next = _transform(item);
+                return true;
+            }
+            catch (System.Exception) {
+                next = null;
+                return false;
+            }
+        }
+
+        public object Commit(object value) {
+            if (value is Gs2.Gs2SerialKey.Model.SerialKey item &&
+                IsExpected(item)) {
+                item.PutCache(
+                    _cache,
+                    _namespaceName,
+                    _userId,
+                    _code,
+                    _timeOffset
+                );
+            }
+            return null;
+        }
+
+        public object Invoke() {
+            return TryCompose(null, false, out var next)
+                ? Commit(next)
+                : null;
+        }
+    }
+
     public static class UseByUserIdSpeculativeExecutor {
 
         public static string Action() {
             return "Gs2SerialKey:UseByUserId";
+        }
+
+        private static long CurrentTimeMillis(AccessToken accessToken)
+        {
+            return UnixTime.ToUnixTime(DateTime.Now) +
+                   (long)(accessToken?.TimeOffset ?? 0) * 1000L;
+        }
+
+        public static Gs2.Gs2SerialKey.Model.SerialKey Transform(
+            Gs2.Core.Domain.Gs2 domain,
+            AccessToken accessToken,
+            UseByUserIdRequest request,
+            Gs2.Gs2SerialKey.Model.SerialKey item
+        ) {
+            return Transform(
+                domain,
+                accessToken,
+                request,
+                item,
+                CurrentTimeMillis(accessToken)
+            );
+        }
+
+        public static Gs2.Gs2SerialKey.Model.SerialKey Transform(
+            Gs2.Core.Domain.Gs2 domain,
+            AccessToken accessToken,
+            UseByUserIdRequest request,
+            Gs2.Gs2SerialKey.Model.SerialKey item,
+            long currentTimeMillis
+        ) {
+            return item.SpeculativeUseAt(request, currentTimeMillis);
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -72,39 +206,84 @@ namespace Gs2.Gs2SerialKey.Domain.SpeculativeExecutor
             AccessToken accessToken,
             UseByUserIdRequest request
         ) {
-            var item = await domain.SerialKey.Namespace(
-                request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).SerialKey(
-/* diff --- start
-                request.SerialKeyCode
- diff --- end */
-                request.Code /* diff +++ */
-            ).ModelAsync();
-
-            if (item == null) {
+            var preparedRequest = UseByUserIdRequest.FromJson(
+                request?.ToJson()
+            );
+            var preparedAccessToken = AccessToken.FromJson(
+                accessToken?.ToJson()
+            );
+            if (preparedRequest?.UserId == "#{userId}") {
+                preparedRequest.UserId = preparedAccessToken?.UserId;
+            }
+            if (domain?.RestSession == null ||
+                string.IsNullOrEmpty(preparedAccessToken?.UserId) ||
+                preparedRequest?.UserId != preparedAccessToken.UserId ||
+                string.IsNullOrEmpty(preparedRequest.NamespaceName) ||
+                string.IsNullOrEmpty(preparedRequest.Code)) {
+                return null;
+            }
+            var timeOffset = preparedAccessToken?.TimeOffset;
+            var (campaignModel, campaignFound) =
+                ((Gs2.Gs2SerialKey.Model.CampaignModel)null).GetCache(
+                    domain.Cache,
+                    preparedRequest.NamespaceName,
+                    preparedRequest.Code,
+                    null
+                );
+            if (!campaignFound) {
+                return null;
+            }
+            if (campaignModel != null) {
+                var expectedCampaignId = string.Join(
+                    ":", "grn", "gs2",
+                    domain.RestSession.Region.DisplayName(),
+                    domain.RestSession.OwnerId ?? "",
+                    "serialKey", preparedRequest.NamespaceName,
+                    "model", "campaign", preparedRequest.Code
+                );
+                if (campaignModel.CampaignId != expectedCampaignId ||
+                    campaignModel.Name != preparedRequest.Code) {
+                    return null;
+                }
                 return () => null;
             }
-            item = item.SpeculativeExecution(request);
-
-            return () =>
-            {
-                item.PutCache(
+            var (item, serialKeyFound) =
+                ((Gs2.Gs2SerialKey.Model.SerialKey)null).GetCache(
                     domain.Cache,
-                    request.NamespaceName,
-                    accessToken.UserId,
-/* diff --- start
-                    request.SerialKeyCode,
-                    accessToken.TimeOffset
- diff --- end */
-/* diff +++ start */
-                    request.Code,
-                    accessToken?.TimeOffset
-/* diff +++ end */
+                    preparedRequest.NamespaceName,
+                    preparedRequest.UserId,
+                    preparedRequest.Code,
+                    timeOffset
                 );
+            var expectedSerialKeyId = string.Join(
+                ":", "grn", "gs2",
+                domain.RestSession.Region.DisplayName(),
+                domain.RestSession.OwnerId ?? "",
+                "serialKey", preparedRequest.NamespaceName,
+                "serialKey", preparedRequest.Code
+            );
+            if (!serialKeyFound || item == null ||
+                item.SerialKeyId != expectedSerialKeyId ||
+                item.Code != preparedRequest.Code) {
                 return null;
-            };
+            }
+            var currentTimeMillis = CurrentTimeMillis(preparedAccessToken);
+            var commit = new SerialKeySpeculativeCommit(
+                domain.Cache,
+                preparedRequest.NamespaceName,
+                preparedRequest.UserId,
+                preparedRequest.Code,
+                timeOffset,
+                expectedSerialKeyId,
+                current => Transform(
+                    domain,
+                    preparedAccessToken,
+                    preparedRequest,
+                    current,
+                    currentTimeMillis
+                )
+            );
+            return commit.Invoke;
         }
     }
 }

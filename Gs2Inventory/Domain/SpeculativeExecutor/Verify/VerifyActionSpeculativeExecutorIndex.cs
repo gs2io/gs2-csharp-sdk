@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -48,6 +49,79 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
 {
     public static class VerifyActionSpeculativeExecutorIndex
     {
+/* diff +++ start */
+#if GS2_ENABLE_UNITASK
+        public static async UniTask<Func<object>> ExecuteInverseAsync(
+#else
+        public static async Task<Func<object>> ExecuteInverseAsync(
+#endif
+            Core.Domain.Gs2 domain,
+            AccessToken accessToken,
+            VerifyAction verifyAction,
+            BigInteger rate
+        ) {
+            verifyAction.Action = verifyAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
+            verifyAction.Action = verifyAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
+            verifyAction.Action = verifyAction.Action.Replace("{userId}", accessToken.UserId);
+            if (VerifyInventoryCurrentMaxCapacityByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                var request = VerifyInventoryCurrentMaxCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
+                return await VerifyInventoryCurrentMaxCapacityByUserIdSpeculativeExecutor.ExecuteInverseAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
+            if (VerifyItemSetByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                var request = VerifyItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
+                return await VerifyItemSetByUserIdSpeculativeExecutor.ExecuteInverseAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
+            if (VerifyReferenceOfByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                var request = VerifyReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
+                return await VerifyReferenceOfByUserIdSpeculativeExecutor.ExecuteInverseAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
+            if (VerifySimpleItemByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                var request = VerifySimpleItemByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
+                return await VerifySimpleItemByUserIdSpeculativeExecutor.ExecuteInverseAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
+            if (VerifyBigItemByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                var request = VerifyBigItemByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
+                return await VerifyBigItemByUserIdSpeculativeExecutor.ExecuteInverseAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
+            return null;
+        }
+
+/* diff +++ end */
 #if UNITY_2017_1_OR_NEWER
         public static Gs2Future<Func<object>> ExecuteFuture(
             Core.Domain.Gs2 domain,

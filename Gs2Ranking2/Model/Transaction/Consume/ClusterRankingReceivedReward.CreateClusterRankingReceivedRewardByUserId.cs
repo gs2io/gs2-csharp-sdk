@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
@@ -32,6 +33,7 @@ namespace Gs2.Gs2Ranking2.Model.Transaction
             this ClusterRankingReceivedReward self,
             CreateClusterRankingReceivedRewardByUserIdRequest request
         ) {
+/* diff --- start
             var changed = self.SpeculativeExecution(request);
             try {
                 changed.Validate();
@@ -40,18 +42,23 @@ namespace Gs2.Gs2Ranking2.Model.Transaction
             catch (Gs2Exception) {
                 return false;
             }
+ diff --- end */
+            return false; /* diff +++ */
         }
 
         public static ClusterRankingReceivedReward SpeculativeExecution(
             this ClusterRankingReceivedReward self,
             CreateClusterRankingReceivedRewardByUserIdRequest request
         ) {
-#if UNITY_2017_1_OR_NEWER
+/* diff --- start
+//#if UNITY_2017_1_OR_NEWER
             UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: Gs2Ranking2:CreateClusterRankingReceivedRewardByUserId");
-#else
+//#else
             System.Console.WriteLine("Speculative execution not supported on this action: Gs2Ranking2:CreateClusterRankingReceivedRewardByUserId");
-#endif
+//#endif
             return self.Clone() as ClusterRankingReceivedReward;
+ diff --- end */
+            return null; /* diff +++ */
         }
 
         public static CreateClusterRankingReceivedRewardByUserIdRequest Rate(

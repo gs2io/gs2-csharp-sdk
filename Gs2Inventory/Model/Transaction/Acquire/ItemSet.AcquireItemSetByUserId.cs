@@ -20,9 +20,7 @@
 #pragma warning disable CS1522 // Empty switch block
 
 using System;
-using System.Linq;
 using System.Numerics;
-using Gs2.Core.Exception;
 using Gs2.Gs2Inventory.Request;
 
 namespace Gs2.Gs2Inventory.Model.Transaction
@@ -33,12 +31,11 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this ItemSet self,
             AcquireItemSetByUserIdRequest request
         ) {
-            var changed = self.SpeculativeExecution(request);
             try {
-                changed.Validate();
+                self.SpeculativeExecution(request);
                 return true;
             }
-            catch (Gs2Exception) {
+            catch (System.Exception) {
                 return false;
             }
         }
@@ -57,7 +54,11 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             {
                 throw new NullReferenceException();
             }
-            clone.Count += request.AcquireCount;
+            if (!clone.Count.HasValue || request == null ||
+                !request.AcquireCount.HasValue) {
+                throw new NullReferenceException();
+            }
+            clone.Count = checked(clone.Count.Value + request.AcquireCount.Value);
 /* diff +++ start */
             return clone;
         }
@@ -66,13 +67,34 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this ItemSet[] self,
             AcquireItemSetByUserIdRequest request
         ) {
-            var clone = self.Clone() as ItemSet[];
-            if (clone == null)
-            {
+            if (self == null || request == null) {
                 throw new NullReferenceException();
             }
-            if (clone.Length > 0) {
-                clone[clone.Length - 1].Count += request.AcquireCount;
+            var clone = new ItemSet[self.Length];
+            for (var i = 0; i < self.Length; i++) {
+                clone[i] = self[i]?.Clone() as ItemSet;
+            }
+            if (request.CreateNewItemSet == true ||
+                !request.AcquireCount.HasValue) {
+                return clone;
+            }
+            var target = -1;
+            for (var i = clone.Length - 1; i >= 0; i--) {
+                if (clone[i] == null) continue;
+                if (request.ItemSetName != null) {
+                    if (clone[i].Name == request.ItemSetName) {
+                        target = i;
+                        break;
+                    }
+                }
+                else if (clone.Length == 1) {
+                    target = i;
+                }
+            }
+            if (target >= 0 && clone[target].Count.HasValue) {
+                clone[target].Count = checked(
+                    clone[target].Count.Value + request.AcquireCount.Value
+                );
             }
 /* diff +++ end */
             return clone;
@@ -82,7 +104,11 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this AcquireItemSetByUserIdRequest request,
             double rate
         ) {
-            request.AcquireCount = (long?) (request.AcquireCount * rate);
+            if (request == null || !request.AcquireCount.HasValue ||
+                !SimpleItemCountRate.TryApply(
+                    request.AcquireCount.Value, rate, out var value
+                )) return null;
+            request.AcquireCount = value;
             return request;
         }
     }
@@ -93,7 +119,10 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this AcquireItemSetByUserIdRequest request,
             BigInteger rate
         ) {
-            request.AcquireCount = (long?) ((request.AcquireCount ?? 0) * rate);
+            if (request == null || !request.AcquireCount.HasValue) return null;
+            request.AcquireCount = SimpleItemCountRate.Apply(
+                request.AcquireCount.Value, rate
+            );
             return request;
         }
     }

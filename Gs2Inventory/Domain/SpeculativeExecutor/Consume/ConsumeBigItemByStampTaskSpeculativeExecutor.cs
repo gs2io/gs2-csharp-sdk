@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -31,6 +32,7 @@ using System.Collections;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model; /* diff +++ */
 using Gs2.Core.Util;
 using Gs2.Core.Exception;
 using Gs2.Gs2Auth.Model;
@@ -71,6 +73,7 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             AccessToken accessToken,
             ConsumeBigItemByUserIdRequest request
         ) {
+/* diff --- start
             var item = await domain.Inventory.Namespace(
                 request.NamespaceName
             ).AccessToken(
@@ -80,10 +83,92 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
             ).BigItem(
                 request.ItemName
             ).ModelAsync();
+ diff --- end */
+/* diff +++ start */
+            var token = accessToken?.Clone() as AccessToken;
+            if (domain?.RestSession == null || request == null ||
+                string.IsNullOrEmpty(token?.UserId)) {
+                return null;
+            }
+            var prepared = ConsumeBigItemByUserIdRequest.FromJson(request.ToJson());
+            if (prepared.UserId == "#{userId}") prepared.UserId = token.UserId;
+            if (prepared.UserId != token.UserId ||
+                prepared.NamespaceName == null ||
+                prepared.InventoryName == null ||
+                prepared.ItemName == null ||
+                prepared.ConsumeCount == null) {
+                return null;
+            }
+            var expectedId =
+                $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                $"{domain.RestSession.OwnerId}:inventory:{prepared.NamespaceName}:" +
+                $"user:{token.UserId}:big:inventory:{prepared.InventoryName}:" +
+                $"item:{prepared.ItemName}";
+            var cached = ((Gs2.Gs2Inventory.Model.BigItem)null).GetCache(
+                domain.Cache,
+                prepared.NamespaceName,
+                token.UserId,
+                prepared.InventoryName,
+                prepared.ItemName,
+                token.TimeOffset
+            );
+            var item = cached.Item1;
+            if (!IsUsable(item, cached.Item2, expectedId, token.UserId,
+                    prepared.ItemName) || item.Count == null ||
+                !TrySubtract(item.Count, prepared.ConsumeCount, out _)) {
+                return null;
+            }
+            var preparedRevision = item.Revision;
+/* diff +++ end */
 
+/* diff --- start
             if (item == null) {
                 return () => null;
+ diff --- end */
+/* diff +++ start */
+            return new BigItemMutationSpeculativeCommit(
+                domain.Cache,
+                prepared.NamespaceName,
+                token.UserId,
+                prepared.InventoryName,
+                prepared.ItemName,
+                token.TimeOffset,
+                expectedId,
+                preparedRevision,
+                false,
+                current => {
+                    if (!TrySubtract(
+                            current.Count,
+                            prepared.ConsumeCount,
+                            out var count
+                        )) return null;
+                    var changed = current.Clone() as Gs2.Gs2Inventory.Model.BigItem;
+                    changed.Count = count;
+                    changed.Revision = 0;
+                    return changed;
+                }
+            ).Invoke;
+        }
+
+        private static bool IsUsable(
+            Gs2.Gs2Inventory.Model.BigItem item,
+            bool found,
+            string expectedId,
+            string userId,
+            string itemName
+        ) {
+            return found && item != null && item.ItemId == expectedId &&
+                   item.UserId == userId && item.ItemName == itemName;
+        }
+
+        private static bool TrySubtract(string left, string right, out string result) {
+            result = null;
+            if (!BigInteger.TryParse(left, out var leftValue) ||
+                !BigInteger.TryParse(right, out var rightValue)) {
+                return false;
+/* diff +++ end */
             }
+/* diff --- start
             item = item.SpeculativeExecution(request);
 
             return () =>
@@ -98,6 +183,12 @@ namespace Gs2.Gs2Inventory.Domain.SpeculativeExecutor
                 );
                 return null;
             };
+ diff --- end */
+/* diff +++ start */
+            var value = leftValue - rightValue;
+            result = value.ToString("D");
+            return value >= BigInteger.Zero;
+/* diff +++ end */
         }
     }
 }

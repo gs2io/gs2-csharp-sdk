@@ -20,9 +20,7 @@
 #pragma warning disable CS1522 // Empty switch block
 
 using System;
-using System.Linq;
 using System.Numerics;
-using Gs2.Core.Exception;
 using Gs2.Gs2Inventory.Request;
 
 namespace Gs2.Gs2Inventory.Model.Transaction
@@ -33,12 +31,11 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this ItemSet self,
             ConsumeItemSetByUserIdRequest request
         ) {
-            var changed = self.SpeculativeExecution(request);
             try {
-                changed.Validate();
+                self.SpeculativeExecution(request);
                 return true;
             }
-            catch (Gs2Exception) {
+            catch (System.Exception) {
                 return false;
             }
         }
@@ -61,7 +58,16 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             clone.Count -= request.ConsumeCount;
  diff --- end */
 /* diff +++ start */
-            clone.Count += request.ConsumeCount;
+            if (!clone.Count.HasValue || request == null ||
+                !request.ConsumeCount.HasValue) {
+                throw new NullReferenceException();
+            }
+            if (request.ConsumeCount.Value <= 0) {
+                return clone;
+            }
+            var count = checked(clone.Count.Value - request.ConsumeCount.Value);
+            if (count < 0) throw new InvalidOperationException();
+            clone.Count = count;
             return clone;
         }
 
@@ -69,15 +75,39 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this ItemSet[] self,
             ConsumeItemSetByUserIdRequest request
         ) {
-            var clone = self.Clone() as ItemSet[];
-            if (clone == null)
-            {
+            if (self == null || request == null) {
                 throw new NullReferenceException();
             }
-            if (clone.Length == 0) {
+            var clone = new ItemSet[self.Length];
+            for (var i = 0; i < self.Length; i++) {
+                clone[i] = self[i]?.Clone() as ItemSet;
+            }
+            if (!request.ConsumeCount.HasValue || clone.Length == 0) {
                 return clone;
             }
-            clone[clone.Length - 1].Count -= request.ConsumeCount;
+            if (request.ConsumeCount.Value <= 0) {
+                return clone;
+            }
+            var target = -1;
+            for (var i = clone.Length - 1; i >= 0; i--) {
+                if (clone[i] == null) continue;
+                if (request.ItemSetName != null) {
+                    if (clone[i].Name == request.ItemSetName) {
+                        target = i;
+                        break;
+                    }
+                }
+                else if (clone.Length == 1) {
+                    target = i;
+                }
+            }
+            if (target >= 0 && clone[target].Count.HasValue) {
+                var count = checked(
+                    clone[target].Count.Value - request.ConsumeCount.Value
+                );
+                if (count < 0) throw new InvalidOperationException();
+                clone[target].Count = count;
+            }
 /* diff +++ end */
             return clone;
         }
@@ -86,7 +116,11 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this ConsumeItemSetByUserIdRequest request,
             double rate
         ) {
-            request.ConsumeCount = (long?) (request.ConsumeCount * rate);
+            if (request == null || !request.ConsumeCount.HasValue ||
+                !VerifySimpleItemByUserIdRequestExt.TryApplyRate(
+                    request.ConsumeCount.Value, rate, out var value
+                )) return null;
+            request.ConsumeCount = value;
             return request;
         }
     }
@@ -97,7 +131,10 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this ConsumeItemSetByUserIdRequest request,
             BigInteger rate
         ) {
-            request.ConsumeCount = (long?) ((request.ConsumeCount ?? 0) * rate);
+            if (request == null || !request.ConsumeCount.HasValue) return null;
+            var value = new BigInteger(request.ConsumeCount.Value) * rate;
+            if (value < long.MinValue || value > long.MaxValue) return null;
+            request.ConsumeCount = (long)value;
             return request;
         }
     }

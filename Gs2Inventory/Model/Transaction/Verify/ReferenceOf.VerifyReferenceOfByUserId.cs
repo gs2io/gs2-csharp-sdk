@@ -20,6 +20,7 @@
 #pragma warning disable CS1522 // Empty switch block
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Gs2.Core.Exception;
@@ -30,35 +31,34 @@ namespace Gs2.Gs2Inventory.Model.Transaction
     public static partial class ReferenceOfExt
     {
         public static bool IsExecutable(
+            this IEnumerable<string> self,
+            VerifyReferenceOfByUserIdRequest request
+        ) {
+            if (self == null || request?.ReferenceOf == null) {
+                return false;
+            }
+
+            switch (request.VerifyType) {
+                case "not_entry":
+                    return !self.Contains(request.ReferenceOf);
+                case "already_entry":
+                    return self.Contains(request.ReferenceOf);
+                case "empty":
+                    return !self.Any();
+                case "not_empty":
+                    return self.Any();
+            }
+            return false;
+        }
+
+        public static bool IsExecutable(
 /* diff --- start
             this ReferenceOf self,
  diff --- end */
             this ItemSet self, /* diff +++ */
             VerifyReferenceOfByUserIdRequest request
         ) {
-            switch (request.VerifyType) {
-                case "not_entry":
-/* diff --- start
-                    return self.Name.Contains(request.ReferenceOf);
- diff --- end */
-                    return self.ReferenceOf.Contains(request.ReferenceOf); /* diff +++ */
-                case "already_entry":
-/* diff --- start
-                    return !self.Name.Contains(request.ReferenceOf);
- diff --- end */
-                    return !self.ReferenceOf.Contains(request.ReferenceOf); /* diff +++ */
-                case "empty":
-/* diff --- start
-                    return self.Name.Length != 0;
- diff --- end */
-                    return self.ReferenceOf.Length != 0; /* diff +++ */
-                case "not_empty":
-/* diff --- start
-                    return self.Name.Length != 0;
- diff --- end */
-                    return self.ReferenceOf.Length != 0; /* diff +++ */
-            }
-            return false;
+            return self?.ReferenceOf?.IsExecutable(request) ?? false;
         }
 
         public static ReferenceOf SpeculativeExecution(
@@ -72,7 +72,7 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this VerifyReferenceOfByUserIdRequest request,
             double rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Inventory:VerifyReferenceOfByUserId");
+            return request;
         }
     }
 
@@ -82,7 +82,7 @@ namespace Gs2.Gs2Inventory.Model.Transaction
             this VerifyReferenceOfByUserIdRequest request,
             BigInteger rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2Inventory:VerifyReferenceOfByUserId");
+            return request;
         }
     }
 }

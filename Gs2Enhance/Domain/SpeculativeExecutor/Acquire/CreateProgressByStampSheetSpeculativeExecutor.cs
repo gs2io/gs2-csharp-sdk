@@ -72,31 +72,7 @@ namespace Gs2.Gs2Enhance.Domain.SpeculativeExecutor
             AccessToken accessToken,
             CreateProgressByUserIdRequest request
         ) {
-/* diff --- start
-            var item = await domain.Enhance.Namespace(
-                request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).Progress(
-            ).ModelAsync();
-
-            if (item == null) {
-                return () => null;
-            }
-            item = item.SpeculativeExecution(request);
-
-            return () =>
-            {
-                item.PutCache(
-                    domain.Cache,
-                    request.NamespaceName,
-                    request.UserId,
-                    null
-                );
-                return null;
-            };
- diff --- end */
-            return () => null; /* diff +++ */
+            return null;
         }
     }
 }

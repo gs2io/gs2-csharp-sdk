@@ -28,11 +28,13 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
 using Gs2.Core.Util;
+using Gs2.Core.Model;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Inbox.Request;
 #if UNITY_2017_1_OR_NEWER
@@ -52,6 +54,32 @@ namespace Gs2.Gs2Inbox.Domain.Transaction.SpeculativeExecutor
             return "Gs2Inbox:BatchReadMessagesByUserId";
         }
 
+        private static ReadMessageByUserIdRequest BuildReadRequest(
+            BatchReadMessagesByUserIdRequest request,
+            string messageName,
+            Gs2.Gs2Inbox.Model.Config[] configs
+        ) {
+            return new ReadMessageByUserIdRequest()
+                .WithNamespaceName(request.NamespaceName)
+                .WithUserId(request.UserId)
+                .WithMessageName(messageName)
+                .WithConfig(configs)
+                .WithTimeOffsetToken(request.TimeOffsetToken);
+        }
+
+        public static ReadMessageByUserIdRequest[] BuildReadRequests(
+            BatchReadMessagesByUserIdRequest request
+        ) {
+            var configs = (request.Config ?? Array.Empty<Gs2.Gs2Inbox.Model.Config>())
+                .Where(config => config != null)
+                .Select(config => config?.Clone() as Gs2.Gs2Inbox.Model.Config)
+                .ToArray();
+            return (request.MessageNames ?? Array.Empty<string>())
+                .Where(messageName => !string.IsNullOrEmpty(messageName))
+                .Select(messageName => BuildReadRequest(request, messageName, configs))
+                .ToArray();
+        }
+
 #if UNITY_2017_1_OR_NEWER
         public static Gs2Future<Func<object>> ExecuteFuture(
             Gs2.Core.Domain.Gs2 domain,
@@ -69,47 +97,44 @@ namespace Gs2.Gs2Inbox.Domain.Transaction.SpeculativeExecutor
             AccessToken accessToken,
             BatchReadMessagesByUserIdRequest request
         ) {
-            // TODO: Speculative execution not supported
-#if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
-#else
-            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
-#endif
-
-/* diff --- start
-            var item = await domain.Inbox.Namespace(
-                request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).ModelAsync();
-
-            var commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
-                item?.ConsumeActions.Select(v =>
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Inbox.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
-                    }
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.ConsumeAction[]{},
-                item?.AcquireActions.Select(v =>
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Inbox.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
-                    }
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.AcquireAction[]{},
-                1.0
-            ).ExecuteAsync(
-                domain,
-                accessToken
-            );
-
- diff --- end */
-            return () =>
-            {
-/* diff --- start
-                commit?.Invoke();
- diff --- end */
+            var token = accessToken?.Clone() as AccessToken;
+            var prepared = request == null ? null :
+                new BatchReadMessagesByUserIdRequest()
+                    .WithNamespaceName(request.NamespaceName)
+                    .WithUserId(request.UserId)
+                    .WithMessageNames(request.MessageNames?.ToArray())
+                    .WithConfig(request.Config?
+                        .Where(config => config != null)
+                        .Select(config => config.Clone() as
+                            Gs2.Gs2Inbox.Model.Config)
+                        .ToArray())
+                    .WithTimeOffsetToken(request.TimeOffsetToken);
+            if (prepared?.UserId == "#{userId}") {
+                prepared.UserId = token?.UserId;
+            }
+            if (domain?.RestSession == null ||
+                string.IsNullOrEmpty(token?.UserId) ||
+                prepared?.UserId != token.UserId ||
+                string.IsNullOrEmpty(prepared.NamespaceName) ||
+                prepared.MessageNames == null) {
+                return null;
+            }
+            var readRequests = BuildReadRequests(prepared);
+            var commits = new List<Func<object>>();
+            foreach (var readRequest in readRequests) {
+                var commit = await ReadMessageByUserIdSpeculativeExecutor
+                    .ExecuteAsync(domain, token, readRequest);
+                if (commit != null) {
+                    commits.Add(commit);
+                }
+            }
+            if (commits.Count == 0) {
+                return null;
+            }
+            return () => {
+                foreach (var commit in commits) {
+                    commit();
+                }
                 return null;
             };
         }

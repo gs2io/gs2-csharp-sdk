@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -71,7 +72,14 @@ namespace Gs2.Gs2Lottery.Domain.SpeculativeExecutor
             AccessToken accessToken,
             DrawByUserIdRequest request
         ) {
+/* diff --- start
             return () => null;
+ diff --- end */
+/* diff +++ start */
+            // The server performs the lottery and may also update box state.
+            // Without its draw result, a local no-op is not a prepared action.
+            return null;
+/* diff +++ end */
         }
     }
 }

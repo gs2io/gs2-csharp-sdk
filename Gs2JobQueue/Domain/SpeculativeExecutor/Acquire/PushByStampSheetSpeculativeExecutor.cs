@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -71,7 +72,15 @@ namespace Gs2.Gs2JobQueue.Domain.SpeculativeExecutor
             AccessToken accessToken,
             PushByUserIdRequest request
         ) {
+/* diff --- start
             return () => null;
+ diff --- end */
+/* diff +++ start */
+            // Enqueuing creates server-owned job state that cannot be reproduced
+            // in the local cache. Propagate an unsupported result so the whole
+            // transaction falls back to the server.
+            return null;
+/* diff +++ end */
         }
     }
 }

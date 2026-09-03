@@ -32,14 +32,14 @@ using System.Linq;
 using System.Reflection;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
 using Gs2.Gs2Quest.Request;
-/* diff +++ start */
 using Gs2.Gs2Quest.Model;
+using Gs2.Gs2Quest.Model.Cache;
 using Gs2.Util.LitJson;
 using AcquireAction = Gs2.Core.Model.AcquireAction;
-/* diff +++ end */
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
 #endif
@@ -74,72 +74,63 @@ namespace Gs2.Gs2Quest.Domain.Transaction.SpeculativeExecutor
             AccessToken accessToken,
             StartByUserIdRequest request
         ) {
-/* diff --- start
-            // TODO: Speculative execution not supported
-//#if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
-//#else
-            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
-//#endif
+            var token = accessToken?.Clone() as AccessToken;
+            if (domain == null || request == null || string.IsNullOrEmpty(token?.UserId)) {
+                return null;
+            }
+            var prepared = StartByUserIdRequest.FromJson(request.ToJson());
+            if (prepared.UserId == "#{userId}") {
+                prepared.UserId = token.UserId;
+            }
+            if (prepared.UserId != token.UserId) {
+                return null;
+            }
+            var cached = ((QuestModel)null).GetCache(
+                domain.Cache,
+                prepared.NamespaceName,
+                prepared.QuestGroupName,
+                prepared.QuestName,
+                null
+            );
+            var item = cached.Item1;
+            var expectedId =
+                $"grn:gs2:{domain.RestSession.Region.DisplayName()}:" +
+                $"{domain.RestSession.OwnerId}:quest:{prepared.NamespaceName}:" +
+                $"group:{prepared.QuestGroupName}:quest:{prepared.QuestName}";
+            if (!cached.Item2 || item == null ||
+                item.QuestModelId != expectedId || item.Name != prepared.QuestName) {
+                return null;
+            }
 
- diff --- end */
-            var item = await domain.Quest.Namespace(
-                request.NamespaceName
-/* diff --- start
-            ).AccessToken(
-                accessToken
- diff --- end */
-/* diff +++ start */
-            ).QuestGroupModel(
-                request.QuestGroupName
-            ).QuestModel(
-                request.QuestName
-/* diff +++ end */
-            ).ModelAsync();
+            var consumeActions = item.ConsumeActions?.Select(v =>
+            {
+                var action = v?.Clone() as Gs2.Core.Model.ConsumeAction;
+                foreach (var config in prepared.Config ?? Array.Empty<Config>()) {
+                    action = action?.ApplyConfig(config.Key, config.Value);
+                }
+                return action;
+            }).Where(v => v != null).ToArray() ?? Array.Empty<Gs2.Core.Model.ConsumeAction>();
 
             var commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
-/* diff --- start
-                item?.ConsumeActions.Select(v =>
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Quest.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
- diff --- end */
-/* diff +++ start */
-                item.ConsumeActions,
+                consumeActions,
                 new [] {
                     new AcquireAction {
                         Action = "Gs2Quest:CreateProgressByUserId",
                         Request = new CreateProgressByUserIdRequest {
-                            NamespaceName = request.NamespaceName,
-                            UserId = accessToken.UserId,
-                            Force = request.Force,
-                            Config = request.Config,
+                            NamespaceName = prepared.NamespaceName,
+                            UserId = token.UserId,
+                            Force = prepared.Force,
+                            Config = prepared.Config,
                         }.ToJson().ToJson()
-/* diff +++ end */
                     }
-/* diff --- start
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.ConsumeAction[]{},
-                item?.AcquireActions.Select(v =>
-                {
-                    foreach (var config in request.Config ?? Array.Empty<Gs2.Gs2Quest.Model.Config>()) {
-                        v = v.ApplyConfig(config.Key, config.Value);
-                    }
-                    return v;
-                }).ToArray() ?? new Gs2.Core.Model.AcquireAction[]{},
- diff --- end */
-                }, /* diff +++ */
+                },
                 1.0
             ).ExecuteAsync(
                 domain,
-                accessToken
+                token
             );
 
-            return () =>
-            {
-                commit?.Invoke();
-                return null;
-            };
+            return commit;
         }
     }
 }

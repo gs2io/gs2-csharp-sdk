@@ -24,6 +24,7 @@ using System.Linq;
 using System.Numerics;
 using Gs2.Core.Exception;
 using Gs2.Core.Model; /* diff +++ */
+using Gs2.Core.Util;
 using Gs2.Gs2LoginReward.Request;
 
 namespace Gs2.Gs2LoginReward.Model.Transaction
@@ -34,12 +35,11 @@ namespace Gs2.Gs2LoginReward.Model.Transaction
             this ReceiveStatus self,
             MarkReceivedByUserIdRequest request
         ) {
-            var changed = self.SpeculativeExecution(request);
             try {
-                changed.Validate();
+                self.SpeculativeExecution(request);
                 return true;
             }
-            catch (Gs2Exception) {
+            catch (System.Exception) {
                 return false;
             }
         }
@@ -48,35 +48,53 @@ namespace Gs2.Gs2LoginReward.Model.Transaction
             this ReceiveStatus self,
             MarkReceivedByUserIdRequest request
         ) {
-/* diff --- start
-//#if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: Gs2LoginReward:MarkReceivedByUserId");
-//#else
-            System.Console.WriteLine("Speculative execution not supported on this action: Gs2LoginReward:MarkReceivedByUserId");
-//#endif
-            return self.Clone() as ReceiveStatus;
- diff --- end */
-/* diff +++ start */
+            return self.SpeculativeExecutionAt(
+                request,
+                UnixTime.ToUnixTime(DateTime.Now)
+            );
+        }
+
+        public static ReceiveStatus SpeculativeExecutionAt(
+            this ReceiveStatus self,
+            MarkReceivedByUserIdRequest request,
+            long currentTimeMillis
+        ) {
+            if (self == null || request?.StepNumber == null ||
+                request.StepNumber < 0) {
+                throw new InvalidOperationException();
+            }
+            var stepNumber = request.StepNumber.Value;
+            if (stepNumber < (self.ReceivedSteps?.Length ?? 0) && self.ReceivedSteps[stepNumber]) {
+                throw new BadRequestException(new [] {
+                    new RequestError(
+                        "receivedStep",
+                        "loginReward.receiveStatus.receivedStep.error.alreadyReceived"
+                    ),
+                });
+            }
+
             var clone = self.Clone() as ReceiveStatus;
             if (clone == null) {
                 throw new NullReferenceException();
             }
-            if (self.ReceivedSteps[request.StepNumber ?? 0]) {
-                return clone;
+
+            var receivedSteps = clone.ReceivedSteps ?? Array.Empty<bool>();
+            if (stepNumber >= receivedSteps.Length) {
+                Array.Resize(ref receivedSteps, stepNumber + 1);
             }
-            if ((request.StepNumber ?? 0) >= self.ReceivedSteps.Length) {
-                self.ReceivedSteps = self.ReceivedSteps.Concat(new bool[request.StepNumber ?? 0 - self.ReceivedSteps.Length]).ToArray();
-            }
-            self.ReceivedSteps[request.StepNumber ?? 0] = true;
+            receivedSteps[stepNumber] = true;
+            clone.ReceivedSteps = receivedSteps;
+            clone.LastReceivedAt = currentTimeMillis;
+            clone.UpdatedAt = currentTimeMillis;
+            clone.Revision = 0;
             return clone;
-/* diff +++ end */
         }
 
         public static MarkReceivedByUserIdRequest Rate(
             this MarkReceivedByUserIdRequest request,
             double rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2LoginReward:MarkReceivedByUserId");
+            return request;
         }
     }
 
@@ -86,7 +104,7 @@ namespace Gs2.Gs2LoginReward.Model.Transaction
             this MarkReceivedByUserIdRequest request,
             BigInteger rate
         ) {
-            throw new NotSupportedException($"not supported rate action Gs2LoginReward:MarkReceivedByUserId");
+            return request;
         }
     }
 }

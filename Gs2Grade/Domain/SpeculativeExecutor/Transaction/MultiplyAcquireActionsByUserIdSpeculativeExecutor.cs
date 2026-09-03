@@ -28,11 +28,15 @@
 
 using System;
 using System.Collections;
-using System.Reflection;
+using System.Linq;
+using System.Numerics;
 using Gs2.Core.SpeculativeExecutor;
 using Gs2.Core.Domain;
+using Gs2.Core.Model;
 using Gs2.Core.Util;
 using Gs2.Gs2Auth.Model;
+using Gs2.Gs2Grade.Model;
+using Gs2.Gs2Grade.Model.Cache;
 using Gs2.Gs2Grade.Request;
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine;
@@ -68,40 +72,158 @@ namespace Gs2.Gs2Grade.Domain.Transaction.SpeculativeExecutor
             AccessToken accessToken,
             MultiplyAcquireActionsByUserIdRequest request
         ) {
-            // TODO: Speculative execution not supported
-#if UNITY_2017_1_OR_NEWER
-            UnityEngine.Debug.LogWarning("Speculative execution not supported on this action: " + Action());
-#else
-            System.Console.WriteLine("Speculative execution not supported on this action: " + Action());
-#endif
-/* diff --- start
+            try {
+                var token = accessToken?.Clone() as AccessToken;
+                var prepared = MultiplyAcquireActionsByUserIdRequest.FromJson(
+                    request?.ToJson()
+                );
+                if (domain == null || prepared == null ||
+                    string.IsNullOrEmpty(token?.UserId)) {
+                    return null;
+                }
+                if (prepared.UserId == "#{userId}") {
+                    prepared.UserId = token.UserId;
+                }
+                if (prepared.UserId != token.UserId) {
+                    return null;
+                }
 
-            var item = await domain.Grade.Namespace(
-                request.NamespaceName
-            ).AccessToken(
-                accessToken
-            ).Status(
-                request.GradeName,
-                request.PropertyId
-            ).ModelAsync();
+                var propertyId = prepared.PropertyId
+                    ?.Replace("{region}", domain.RestSession.Region.DisplayName())
+                    .Replace("{ownerId}", domain.RestSession.OwnerId ?? "")
+                    .Replace("{userId}", token.UserId);
+                var expectedModelId = string.Join(
+                    ":",
+                    "grn",
+                    "gs2",
+                    domain.RestSession.Region.DisplayName(),
+                    domain.RestSession.OwnerId,
+                    "grade",
+                    prepared.NamespaceName,
+                    "model",
+                    prepared.GradeName
+                );
+                var expectedStatusId = string.Join(
+                    ":",
+                    "grn",
+                    "gs2",
+                    domain.RestSession.Region.DisplayName(),
+                    domain.RestSession.OwnerId,
+                    "grade",
+                    prepared.NamespaceName,
+                    "user",
+                    token.UserId,
+                    "gradeModel",
+                    prepared.GradeName,
+                    "property",
+                    propertyId
+                );
 
-            var commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
-                item.ConsumeActions,
-                item.AcquireActions,
-                1.0
-            ).ExecuteAsync(
-                domain,
-                accessToken
-            );
+                var modelCache = ((GradeModel)null).GetCache(
+                    domain.Cache,
+                    prepared.NamespaceName,
+                    prepared.GradeName,
+                    null
+                );
+                var statusCache = ((Status)null).GetCache(
+                    domain.Cache,
+                    prepared.NamespaceName,
+                    token.UserId,
+                    prepared.GradeName,
+                    propertyId,
+                    token.TimeOffset
+                );
+                var model = modelCache.Item1;
+                var status = statusCache.Item1;
+                if (!modelCache.Item2 || model == null ||
+                    model.GradeModelId != expectedModelId ||
+                    model.Name != prepared.GradeName ||
+                    !statusCache.Item2 || status == null ||
+                    status.StatusId != expectedStatusId ||
+                    status.UserId != token.UserId ||
+                    status.GradeName != prepared.GradeName ||
+                    status.PropertyId != propertyId ||
+                    status.GradeValue == null || status.GradeValue <= 0 ||
+                    status.GradeValue > int.MaxValue) {
+                    return null;
+                }
 
- diff --- end */
-            return () =>
-            {
-/* diff --- start
-                commit?.Invoke();
- diff --- end */
+                var definition = model.AcquireActionRates?.FirstOrDefault(
+                    value => value?.Name == prepared.RateName
+                );
+                if (!IsUnitRate(
+                        definition,
+                        (int)status.GradeValue.Value - 1
+                    )) {
+                    return null;
+                }
+
+                var actions = (prepared.AcquireActions ??
+                               Array.Empty<Gs2.Core.Model.AcquireAction>())
+                    .Select(action =>
+                        (action?.Clone() as Gs2.Core.Model.AcquireAction)
+                        ?.ApplyConfig("userId", token.UserId))
+                    .Where(action => action != null)
+                    .ToArray();
+                if (actions.Length == 0) {
+                    return null;
+                }
+                var commit = await new Core.SpeculativeExecutor.SpeculativeExecutor(
+                    Array.Empty<ConsumeAction>(),
+                    actions,
+                    BigInteger.One
+                ).ExecuteAsync(domain, token);
+                if (commit == null) {
+                    return null;
+                }
+
+                var expectedModel = model.ToJson().ToJson();
+                var expectedStatus = status.ToJson().ToJson();
+                return () => {
+                    var currentModel = ((GradeModel)null).GetCache(
+                        domain.Cache,
+                        prepared.NamespaceName,
+                        prepared.GradeName,
+                        null
+                    );
+                    var currentStatus = ((Status)null).GetCache(
+                        domain.Cache,
+                        prepared.NamespaceName,
+                        token.UserId,
+                        prepared.GradeName,
+                        propertyId,
+                        token.TimeOffset
+                    );
+                    if (currentModel.Item2 && currentModel.Item1 != null &&
+                        currentModel.Item1.ToJson().ToJson() == expectedModel &&
+                        currentStatus.Item2 && currentStatus.Item1 != null &&
+                        currentStatus.Item1.ToJson().ToJson() == expectedStatus) {
+                        commit();
+                    }
+                    return null;
+                };
+            }
+            catch (Exception) {
                 return null;
-            };
+            }
+        }
+
+        private static bool IsUnitRate(
+            AcquireActionRate definition,
+            int gradeIndex
+        ) {
+            if (definition == null || gradeIndex < 0) {
+                return false;
+            }
+            if (definition.Mode == "double") {
+                return definition.Rates != null &&
+                       gradeIndex < definition.Rates.Length &&
+                       definition.Rates[gradeIndex] == 1d;
+            }
+            return definition.Mode == "big" &&
+                   definition.BigRates != null &&
+                   gradeIndex < definition.BigRates.Length &&
+                   definition.BigRates[gradeIndex] == "1";
         }
     }
 }

@@ -12,6 +12,7 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
+ * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -71,6 +72,7 @@ namespace Gs2.Gs2Ranking2.Domain.SpeculativeExecutor
             AccessToken accessToken,
             CreateGlobalRankingReceivedRewardByUserIdRequest request
         ) {
+/* diff --- start
             var item = await domain.Ranking2.Namespace(
                 request.NamespaceName
             ).GlobalRankingModel(
@@ -98,6 +100,12 @@ namespace Gs2.Gs2Ranking2.Domain.SpeculativeExecutor
                 );
                 return null;
             };
+ diff --- end */
+/* diff +++ start */
+            // Reward receipt records are created by the server after it resolves the
+            // ranking result. A local clone or no-op commit cannot represent that state.
+            return null;
+/* diff +++ end */
         }
     }
 }

@@ -39,12 +39,11 @@ namespace Gs2.Gs2Showcase.Model.Transaction
             this RandomDisplayItem self, /* diff +++ */
             DecrementPurchaseCountByUserIdRequest request
         ) {
-            var changed = self.SpeculativeExecution(request);
             try {
-                changed.Validate();
+                self.SpeculativeExecution(request);
                 return true;
             }
-            catch (Gs2Exception) {
+            catch (Exception) {
                 return false;
             }
         }
@@ -69,7 +68,17 @@ namespace Gs2.Gs2Showcase.Model.Transaction
             {
                 throw new NullReferenceException();
             }
-            clone.CurrentPurchaseCount -= request.Count;
+            if (request == null || clone.CurrentPurchaseCount == null) {
+                throw new InvalidOperationException();
+            }
+            var changed = checked(
+                clone.CurrentPurchaseCount.Value -
+                request.Count.GetValueOrDefault(1)
+            );
+            if (changed < 0) {
+                throw new InvalidOperationException();
+            }
+            clone.CurrentPurchaseCount = changed;
             return clone;
         }
 
@@ -77,7 +86,14 @@ namespace Gs2.Gs2Showcase.Model.Transaction
             this DecrementPurchaseCountByUserIdRequest request,
             double rate
         ) {
-            request.Count = (int?) (request.Count * rate);
+            if (request == null || !PurchaseCountRate.TryApply(
+                    request.Count ?? 1,
+                    rate,
+                    out var value
+                )) {
+                return null;
+            }
+            request.Count = value;
             return request;
         }
     }
@@ -88,7 +104,14 @@ namespace Gs2.Gs2Showcase.Model.Transaction
             this DecrementPurchaseCountByUserIdRequest request,
             BigInteger rate
         ) {
-            request.Count = (int?) ((request.Count ?? 0) * rate);
+            if (request == null || !PurchaseCountRate.TryApply(
+                    request.Count ?? 1,
+                    rate,
+                    out var value
+                )) {
+                return null;
+            }
+            request.Count = value;
             return request;
         }
     }
