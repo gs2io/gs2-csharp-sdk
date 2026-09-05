@@ -230,60 +230,46 @@ namespace Gs2.Gs2Chat.Model
         public int CompareTo(object obj)
         {
             var other = obj as Subscribe;
-            var diff = 0;
-            if (SubscribeId == null && SubscribeId == other.SubscribeId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += SubscribeId.CompareTo(other.SubscribeId);
-            }
-            if (UserId == null && UserId == other.UserId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UserId.CompareTo(other.UserId);
-            }
-            if (RoomName == null && RoomName == other.RoomName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += RoomName.CompareTo(other.RoomName);
-            }
-            if (NotificationTypes == null && NotificationTypes == other.NotificationTypes)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += NotificationTypes.Length - other.NotificationTypes.Length;
-                for (var i = 0; i < NotificationTypes.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += NotificationTypes[i].CompareTo(other.NotificationTypes[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type Subscribe.", nameof(obj));
             }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
+            var diff = 0;
+            diff = ModelComparer.Compare(SubscribeId, other.SubscribeId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += (int)(CreatedAt - other.CreatedAt);
+                return diff;
             }
-            if (Revision == null && Revision == other.Revision)
+            diff = ModelComparer.Compare(RoomName, other.RoomName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(NotificationTypes, other.NotificationTypes);
+            if (diff != 0)
             {
-                diff += (int)(Revision - other.Revision);
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

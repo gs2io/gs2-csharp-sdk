@@ -354,184 +354,126 @@ namespace Gs2.Gs2Guild.Model
         public int CompareTo(object obj)
         {
             var other = obj as Namespace;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Namespace.", nameof(obj));
+            }
             var diff = 0;
-            if (NamespaceId == null && NamespaceId == other.NamespaceId)
+            diff = ModelComparer.Compare(NamespaceId, other.NamespaceId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += NamespaceId.CompareTo(other.NamespaceId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TransactionSetting, other.TransactionSetting);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Description == null && Description == other.Description)
+            diff = ModelComparer.Compare(ChangeNotification, other.ChangeNotification);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(JoinNotification, other.JoinNotification);
+            if (diff != 0)
             {
-                diff += Description.CompareTo(other.Description);
+                return diff;
             }
-            if (TransactionSetting == null && TransactionSetting == other.TransactionSetting)
+            diff = ModelComparer.Compare(LeaveNotification, other.LeaveNotification);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ChangeMemberNotification, other.ChangeMemberNotification);
+            if (diff != 0)
             {
-                diff += TransactionSetting.CompareTo(other.TransactionSetting);
+                return diff;
             }
-            if (ChangeNotification == null && ChangeNotification == other.ChangeNotification)
+            diff = ModelComparer.Compare(ChangeMemberNotificationIgnoreChangeMetadata, other.ChangeMemberNotificationIgnoreChangeMetadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ReceiveRequestNotification, other.ReceiveRequestNotification);
+            if (diff != 0)
             {
-                diff += ChangeNotification.CompareTo(other.ChangeNotification);
+                return diff;
             }
-            if (JoinNotification == null && JoinNotification == other.JoinNotification)
+            diff = ModelComparer.Compare(RemoveRequestNotification, other.RemoveRequestNotification);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreateGuildScript, other.CreateGuildScript);
+            if (diff != 0)
             {
-                diff += JoinNotification.CompareTo(other.JoinNotification);
+                return diff;
             }
-            if (LeaveNotification == null && LeaveNotification == other.LeaveNotification)
+            diff = ModelComparer.Compare(UpdateGuildScript, other.UpdateGuildScript);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(JoinGuildScript, other.JoinGuildScript);
+            if (diff != 0)
             {
-                diff += LeaveNotification.CompareTo(other.LeaveNotification);
+                return diff;
             }
-            if (ChangeMemberNotification == null && ChangeMemberNotification == other.ChangeMemberNotification)
+            diff = ModelComparer.Compare(ReceiveJoinRequestScript, other.ReceiveJoinRequestScript);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(LeaveGuildScript, other.LeaveGuildScript);
+            if (diff != 0)
             {
-                diff += ChangeMemberNotification.CompareTo(other.ChangeMemberNotification);
+                return diff;
             }
-            if (ChangeMemberNotificationIgnoreChangeMetadata == null && ChangeMemberNotificationIgnoreChangeMetadata == other.ChangeMemberNotificationIgnoreChangeMetadata)
+            diff = ModelComparer.Compare(ChangeRoleScript, other.ChangeRoleScript);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(DeleteGuildScript, other.DeleteGuildScript);
+            if (diff != 0)
             {
-                diff += ChangeMemberNotificationIgnoreChangeMetadata == other.ChangeMemberNotificationIgnoreChangeMetadata ? 0 : 1;
+                return diff;
             }
-            if (ReceiveRequestNotification == null && ReceiveRequestNotification == other.ReceiveRequestNotification)
+            diff = ModelComparer.Compare(LogSetting, other.LogSetting);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += ReceiveRequestNotification.CompareTo(other.ReceiveRequestNotification);
+                return diff;
             }
-            if (RemoveRequestNotification == null && RemoveRequestNotification == other.RemoveRequestNotification)
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += RemoveRequestNotification.CompareTo(other.RemoveRequestNotification);
+                return diff;
             }
-            if (CreateGuildScript == null && CreateGuildScript == other.CreateGuildScript)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += CreateGuildScript.CompareTo(other.CreateGuildScript);
-            }
-            if (UpdateGuildScript == null && UpdateGuildScript == other.UpdateGuildScript)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UpdateGuildScript.CompareTo(other.UpdateGuildScript);
-            }
-            if (JoinGuildScript == null && JoinGuildScript == other.JoinGuildScript)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += JoinGuildScript.CompareTo(other.JoinGuildScript);
-            }
-            if (ReceiveJoinRequestScript == null && ReceiveJoinRequestScript == other.ReceiveJoinRequestScript)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ReceiveJoinRequestScript.CompareTo(other.ReceiveJoinRequestScript);
-            }
-            if (LeaveGuildScript == null && LeaveGuildScript == other.LeaveGuildScript)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += LeaveGuildScript.CompareTo(other.LeaveGuildScript);
-            }
-            if (ChangeRoleScript == null && ChangeRoleScript == other.ChangeRoleScript)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ChangeRoleScript.CompareTo(other.ChangeRoleScript);
-            }
-            if (DeleteGuildScript == null && DeleteGuildScript == other.DeleteGuildScript)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += DeleteGuildScript.CompareTo(other.DeleteGuildScript);
-            }
-            if (LogSetting == null && LogSetting == other.LogSetting)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += LogSetting.CompareTo(other.LogSetting);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

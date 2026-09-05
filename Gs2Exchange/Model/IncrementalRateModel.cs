@@ -268,100 +268,71 @@ namespace Gs2.Gs2Exchange.Model
         public int CompareTo(object obj)
         {
             var other = obj as IncrementalRateModel;
-            var diff = 0;
-            if (IncrementalRateModelId == null && IncrementalRateModelId == other.IncrementalRateModelId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += IncrementalRateModelId.CompareTo(other.IncrementalRateModelId);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (ConsumeAction == null && ConsumeAction == other.ConsumeAction)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ConsumeAction.CompareTo(other.ConsumeAction);
-            }
-            if (CalculateType == null && CalculateType == other.CalculateType)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += CalculateType.CompareTo(other.CalculateType);
-            }
-            if (BaseValue == null && BaseValue == other.BaseValue)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(BaseValue - other.BaseValue);
-            }
-            if (CoefficientValue == null && CoefficientValue == other.CoefficientValue)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CoefficientValue - other.CoefficientValue);
-            }
-            if (CalculateScriptId == null && CalculateScriptId == other.CalculateScriptId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += CalculateScriptId.CompareTo(other.CalculateScriptId);
-            }
-            if (ExchangeCountId == null && ExchangeCountId == other.ExchangeCountId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ExchangeCountId.CompareTo(other.ExchangeCountId);
-            }
-            if (MaximumExchangeCount == null && MaximumExchangeCount == other.MaximumExchangeCount)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(MaximumExchangeCount - other.MaximumExchangeCount);
-            }
-            if (AcquireActions == null && AcquireActions == other.AcquireActions)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += AcquireActions.Length - other.AcquireActions.Length;
-                for (var i = 0; i < AcquireActions.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += AcquireActions[i].CompareTo(other.AcquireActions[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type IncrementalRateModel.", nameof(obj));
             }
-            return diff;
+            var diff = 0;
+            diff = ModelComparer.Compare(IncrementalRateModelId, other.IncrementalRateModelId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(ConsumeAction, other.ConsumeAction);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(CalculateType, other.CalculateType);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(BaseValue, other.BaseValue);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(CoefficientValue, other.CoefficientValue);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(CalculateScriptId, other.CalculateScriptId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(ExchangeCountId, other.ExchangeCountId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(MaximumExchangeCount, other.MaximumExchangeCount);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(AcquireActions, other.AcquireActions);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

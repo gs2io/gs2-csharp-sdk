@@ -94,32 +94,31 @@ namespace Gs2.Gs2Money2.Model
         public int CompareTo(object obj)
         {
             var other = obj as WalletSummary;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type WalletSummary.", nameof(obj));
+            }
             var diff = 0;
-            if (Paid == null && Paid == other.Paid)
+            diff = ModelComparer.Compare(Paid, other.Paid);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Free, other.Free);
+            if (diff != 0)
             {
-                diff += (int)(Paid - other.Paid);
+                return diff;
             }
-            if (Free == null && Free == other.Free)
+            diff = ModelComparer.Compare(Total, other.Total);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += (int)(Free - other.Free);
-            }
-            if (Total == null && Total == other.Total)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Total - other.Total);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

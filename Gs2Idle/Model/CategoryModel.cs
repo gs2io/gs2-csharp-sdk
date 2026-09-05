@@ -246,84 +246,61 @@ namespace Gs2.Gs2Idle.Model
         public int CompareTo(object obj)
         {
             var other = obj as CategoryModel;
-            var diff = 0;
-            if (CategoryModelId == null && CategoryModelId == other.CategoryModelId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += CategoryModelId.CompareTo(other.CategoryModelId);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (RewardIntervalMinutes == null && RewardIntervalMinutes == other.RewardIntervalMinutes)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(RewardIntervalMinutes - other.RewardIntervalMinutes);
-            }
-            if (DefaultMaximumIdleMinutes == null && DefaultMaximumIdleMinutes == other.DefaultMaximumIdleMinutes)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(DefaultMaximumIdleMinutes - other.DefaultMaximumIdleMinutes);
-            }
-            if (RewardResetMode == null && RewardResetMode == other.RewardResetMode)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += RewardResetMode.CompareTo(other.RewardResetMode);
-            }
-            if (AcquireActions == null && AcquireActions == other.AcquireActions)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += AcquireActions.Length - other.AcquireActions.Length;
-                for (var i = 0; i < AcquireActions.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += AcquireActions[i].CompareTo(other.AcquireActions[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type CategoryModel.", nameof(obj));
             }
-            if (IdlePeriodScheduleId == null && IdlePeriodScheduleId == other.IdlePeriodScheduleId)
+            var diff = 0;
+            diff = ModelComparer.Compare(CategoryModelId, other.CategoryModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += IdlePeriodScheduleId.CompareTo(other.IdlePeriodScheduleId);
+                return diff;
             }
-            if (ReceivePeriodScheduleId == null && ReceivePeriodScheduleId == other.ReceivePeriodScheduleId)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(RewardIntervalMinutes, other.RewardIntervalMinutes);
+            if (diff != 0)
             {
-                diff += ReceivePeriodScheduleId.CompareTo(other.ReceivePeriodScheduleId);
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.Compare(DefaultMaximumIdleMinutes, other.DefaultMaximumIdleMinutes);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(RewardResetMode, other.RewardResetMode);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(AcquireActions, other.AcquireActions);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(IdlePeriodScheduleId, other.IdlePeriodScheduleId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(ReceivePeriodScheduleId, other.ReceivePeriodScheduleId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

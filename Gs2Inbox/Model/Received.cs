@@ -213,60 +213,46 @@ namespace Gs2.Gs2Inbox.Model
         public int CompareTo(object obj)
         {
             var other = obj as Received;
-            var diff = 0;
-            if (ReceivedId == null && ReceivedId == other.ReceivedId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += ReceivedId.CompareTo(other.ReceivedId);
-            }
-            if (UserId == null && UserId == other.UserId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UserId.CompareTo(other.UserId);
-            }
-            if (ReceivedGlobalMessageNames == null && ReceivedGlobalMessageNames == other.ReceivedGlobalMessageNames)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ReceivedGlobalMessageNames.Length - other.ReceivedGlobalMessageNames.Length;
-                for (var i = 0; i < ReceivedGlobalMessageNames.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += ReceivedGlobalMessageNames[i].CompareTo(other.ReceivedGlobalMessageNames[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type Received.", nameof(obj));
             }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
+            var diff = 0;
+            diff = ModelComparer.Compare(ReceivedId, other.ReceivedId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += (int)(CreatedAt - other.CreatedAt);
+                return diff;
             }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
+            diff = ModelComparer.CompareArray(ReceivedGlobalMessageNames, other.ReceivedGlobalMessageNames);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
+                return diff;
             }
-            if (Revision == null && Revision == other.Revision)
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += (int)(Revision - other.Revision);
+                return diff;
             }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

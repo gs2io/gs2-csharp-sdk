@@ -208,44 +208,36 @@ namespace Gs2.Gs2Lottery.Model
         public int CompareTo(object obj)
         {
             var other = obj as BoxItems;
-            var diff = 0;
-            if (BoxId == null && BoxId == other.BoxId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += BoxId.CompareTo(other.BoxId);
-            }
-            if (PrizeTableName == null && PrizeTableName == other.PrizeTableName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += PrizeTableName.CompareTo(other.PrizeTableName);
-            }
-            if (UserId == null && UserId == other.UserId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UserId.CompareTo(other.UserId);
-            }
-            if (Items == null && Items == other.Items)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Items.Length - other.Items.Length;
-                for (var i = 0; i < Items.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += Items[i].CompareTo(other.Items[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type BoxItems.", nameof(obj));
             }
-            return diff;
+            var diff = 0;
+            diff = ModelComparer.Compare(BoxId, other.BoxId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(PrizeTableName, other.PrizeTableName);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(Items, other.Items);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

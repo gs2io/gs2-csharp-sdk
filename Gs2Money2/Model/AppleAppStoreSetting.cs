@@ -116,48 +116,41 @@ namespace Gs2.Gs2Money2.Model
         public int CompareTo(object obj)
         {
             var other = obj as AppleAppStoreSetting;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type AppleAppStoreSetting.", nameof(obj));
+            }
             var diff = 0;
-            if (BundleId == null && BundleId == other.BundleId)
+            diff = ModelComparer.Compare(BundleId, other.BundleId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(SharedSecretKey, other.SharedSecretKey);
+            if (diff != 0)
             {
-                diff += BundleId.CompareTo(other.BundleId);
+                return diff;
             }
-            if (SharedSecretKey == null && SharedSecretKey == other.SharedSecretKey)
+            diff = ModelComparer.Compare(IssuerId, other.IssuerId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(KeyId, other.KeyId);
+            if (diff != 0)
             {
-                diff += SharedSecretKey.CompareTo(other.SharedSecretKey);
+                return diff;
             }
-            if (IssuerId == null && IssuerId == other.IssuerId)
+            diff = ModelComparer.Compare(PrivateKeyPem, other.PrivateKeyPem);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += IssuerId.CompareTo(other.IssuerId);
-            }
-            if (KeyId == null && KeyId == other.KeyId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += KeyId.CompareTo(other.KeyId);
-            }
-            if (PrivateKeyPem == null && PrivateKeyPem == other.PrivateKeyPem)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += PrivateKeyPem.CompareTo(other.PrivateKeyPem);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

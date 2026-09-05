@@ -83,24 +83,26 @@ namespace Gs2.Gs2Money2.Model
         public int CompareTo(object obj)
         {
             var other = obj as GooglePlaySetting;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type GooglePlaySetting.", nameof(obj));
+            }
             var diff = 0;
-            if (PackageName == null && PackageName == other.PackageName)
+            diff = ModelComparer.Compare(PackageName, other.PackageName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(PublicKey, other.PublicKey);
+            if (diff != 0)
             {
-                diff += PackageName.CompareTo(other.PackageName);
+                return diff;
             }
-            if (PublicKey == null && PublicKey == other.PublicKey)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += PublicKey.CompareTo(other.PublicKey);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

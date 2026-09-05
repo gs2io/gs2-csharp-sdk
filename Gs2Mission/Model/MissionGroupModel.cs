@@ -268,100 +268,71 @@ namespace Gs2.Gs2Mission.Model
         public int CompareTo(object obj)
         {
             var other = obj as MissionGroupModel;
-            var diff = 0;
-            if (MissionGroupId == null && MissionGroupId == other.MissionGroupId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += MissionGroupId.CompareTo(other.MissionGroupId);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (Tasks == null && Tasks == other.Tasks)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Tasks.Length - other.Tasks.Length;
-                for (var i = 0; i < Tasks.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += Tasks[i].CompareTo(other.Tasks[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type MissionGroupModel.", nameof(obj));
             }
-            if (ResetType == null && ResetType == other.ResetType)
+            var diff = 0;
+            diff = ModelComparer.Compare(MissionGroupId, other.MissionGroupId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += ResetType.CompareTo(other.ResetType);
+                return diff;
             }
-            if (ResetDayOfMonth == null && ResetDayOfMonth == other.ResetDayOfMonth)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(Tasks, other.Tasks);
+            if (diff != 0)
             {
-                diff += (int)(ResetDayOfMonth - other.ResetDayOfMonth);
+                return diff;
             }
-            if (ResetDayOfWeek == null && ResetDayOfWeek == other.ResetDayOfWeek)
+            diff = ModelComparer.Compare(ResetType, other.ResetType);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ResetDayOfMonth, other.ResetDayOfMonth);
+            if (diff != 0)
             {
-                diff += ResetDayOfWeek.CompareTo(other.ResetDayOfWeek);
+                return diff;
             }
-            if (ResetHour == null && ResetHour == other.ResetHour)
+            diff = ModelComparer.Compare(ResetDayOfWeek, other.ResetDayOfWeek);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ResetHour, other.ResetHour);
+            if (diff != 0)
             {
-                diff += (int)(ResetHour - other.ResetHour);
+                return diff;
             }
-            if (CompleteNotificationNamespaceId == null && CompleteNotificationNamespaceId == other.CompleteNotificationNamespaceId)
+            diff = ModelComparer.Compare(CompleteNotificationNamespaceId, other.CompleteNotificationNamespaceId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(AnchorTimestamp, other.AnchorTimestamp);
+            if (diff != 0)
             {
-                diff += CompleteNotificationNamespaceId.CompareTo(other.CompleteNotificationNamespaceId);
+                return diff;
             }
-            if (AnchorTimestamp == null && AnchorTimestamp == other.AnchorTimestamp)
+            diff = ModelComparer.Compare(Days, other.Days);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += (int)(AnchorTimestamp - other.AnchorTimestamp);
-            }
-            if (Days == null && Days == other.Days)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Days - other.Days);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

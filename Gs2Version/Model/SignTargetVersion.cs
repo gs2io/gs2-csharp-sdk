@@ -105,40 +105,36 @@ namespace Gs2.Gs2Version.Model
         public int CompareTo(object obj)
         {
             var other = obj as SignTargetVersion;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type SignTargetVersion.", nameof(obj));
+            }
             var diff = 0;
-            if (Region == null && Region == other.Region)
+            diff = ModelComparer.Compare(Region, other.Region);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(NamespaceName, other.NamespaceName);
+            if (diff != 0)
             {
-                diff += Region.CompareTo(other.Region);
+                return diff;
             }
-            if (NamespaceName == null && NamespaceName == other.NamespaceName)
+            diff = ModelComparer.Compare(VersionName, other.VersionName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Version, other.Version);
+            if (diff != 0)
             {
-                diff += NamespaceName.CompareTo(other.NamespaceName);
+                return diff;
             }
-            if (VersionName == null && VersionName == other.VersionName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += VersionName.CompareTo(other.VersionName);
-            }
-            if (Version == null && Version == other.Version)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Version.CompareTo(other.Version);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

@@ -83,24 +83,26 @@ namespace Gs2.Gs2Ranking.Model
         public int CompareTo(object obj)
         {
             var other = obj as FixedTiming;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type FixedTiming.", nameof(obj));
+            }
             var diff = 0;
-            if (Hour == null && Hour == other.Hour)
+            diff = ModelComparer.Compare(Hour, other.Hour);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Minute, other.Minute);
+            if (diff != 0)
             {
-                diff += (int)(Hour - other.Hour);
+                return diff;
             }
-            if (Minute == null && Minute == other.Minute)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Minute - other.Minute);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

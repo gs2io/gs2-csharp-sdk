@@ -288,136 +288,96 @@ namespace Gs2.Gs2Account.Model
         public int CompareTo(object obj)
         {
             var other = obj as Namespace;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Namespace.", nameof(obj));
+            }
             var diff = 0;
-            if (NamespaceId == null && NamespaceId == other.NamespaceId)
+            diff = ModelComparer.Compare(NamespaceId, other.NamespaceId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += NamespaceId.CompareTo(other.NamespaceId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TransactionSetting, other.TransactionSetting);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Description == null && Description == other.Description)
+            diff = ModelComparer.Compare(ChangePasswordIfTakeOver, other.ChangePasswordIfTakeOver);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(DifferentUserIdForLoginAndDataRetention, other.DifferentUserIdForLoginAndDataRetention);
+            if (diff != 0)
             {
-                diff += Description.CompareTo(other.Description);
+                return diff;
             }
-            if (TransactionSetting == null && TransactionSetting == other.TransactionSetting)
+            diff = ModelComparer.Compare(CreateAccountScript, other.CreateAccountScript);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(AuthenticationScript, other.AuthenticationScript);
+            if (diff != 0)
             {
-                diff += TransactionSetting.CompareTo(other.TransactionSetting);
+                return diff;
             }
-            if (ChangePasswordIfTakeOver == null && ChangePasswordIfTakeOver == other.ChangePasswordIfTakeOver)
+            diff = ModelComparer.Compare(CreateTakeOverScript, other.CreateTakeOverScript);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(DoTakeOverScript, other.DoTakeOverScript);
+            if (diff != 0)
             {
-                diff += ChangePasswordIfTakeOver == other.ChangePasswordIfTakeOver ? 0 : 1;
+                return diff;
             }
-            if (DifferentUserIdForLoginAndDataRetention == null && DifferentUserIdForLoginAndDataRetention == other.DifferentUserIdForLoginAndDataRetention)
+            diff = ModelComparer.Compare(BanScript, other.BanScript);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UnBanScript, other.UnBanScript);
+            if (diff != 0)
             {
-                diff += DifferentUserIdForLoginAndDataRetention == other.DifferentUserIdForLoginAndDataRetention ? 0 : 1;
+                return diff;
             }
-            if (CreateAccountScript == null && CreateAccountScript == other.CreateAccountScript)
+            diff = ModelComparer.Compare(LogSetting, other.LogSetting);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += CreateAccountScript.CompareTo(other.CreateAccountScript);
+                return diff;
             }
-            if (AuthenticationScript == null && AuthenticationScript == other.AuthenticationScript)
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += AuthenticationScript.CompareTo(other.AuthenticationScript);
+                return diff;
             }
-            if (CreateTakeOverScript == null && CreateTakeOverScript == other.CreateTakeOverScript)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += CreateTakeOverScript.CompareTo(other.CreateTakeOverScript);
-            }
-            if (DoTakeOverScript == null && DoTakeOverScript == other.DoTakeOverScript)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += DoTakeOverScript.CompareTo(other.DoTakeOverScript);
-            }
-            if (BanScript == null && BanScript == other.BanScript)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += BanScript.CompareTo(other.BanScript);
-            }
-            if (UnBanScript == null && UnBanScript == other.UnBanScript)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UnBanScript.CompareTo(other.UnBanScript);
-            }
-            if (LogSetting == null && LogSetting == other.LogSetting)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += LogSetting.CompareTo(other.LogSetting);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

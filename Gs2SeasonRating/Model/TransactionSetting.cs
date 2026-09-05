@@ -127,56 +127,46 @@ namespace Gs2.Gs2SeasonRating.Model
         public int CompareTo(object obj)
         {
             var other = obj as TransactionSetting;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type TransactionSetting.", nameof(obj));
+            }
             var diff = 0;
-            if (EnableAtomicCommit == null && EnableAtomicCommit == other.EnableAtomicCommit)
+            diff = ModelComparer.Compare(EnableAtomicCommit, other.EnableAtomicCommit);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TransactionUseDistributor, other.TransactionUseDistributor);
+            if (diff != 0)
             {
-                diff += EnableAtomicCommit == other.EnableAtomicCommit ? 0 : 1;
+                return diff;
             }
-            if (TransactionUseDistributor == null && TransactionUseDistributor == other.TransactionUseDistributor)
+            diff = ModelComparer.Compare(CommitScriptResultInUseDistributor, other.CommitScriptResultInUseDistributor);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(AcquireActionUseJobQueue, other.AcquireActionUseJobQueue);
+            if (diff != 0)
             {
-                diff += TransactionUseDistributor == other.TransactionUseDistributor ? 0 : 1;
+                return diff;
             }
-            if (CommitScriptResultInUseDistributor == null && CommitScriptResultInUseDistributor == other.CommitScriptResultInUseDistributor)
+            diff = ModelComparer.Compare(DistributorNamespaceId, other.DistributorNamespaceId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(QueueNamespaceId, other.QueueNamespaceId);
+            if (diff != 0)
             {
-                diff += CommitScriptResultInUseDistributor == other.CommitScriptResultInUseDistributor ? 0 : 1;
+                return diff;
             }
-            if (AcquireActionUseJobQueue == null && AcquireActionUseJobQueue == other.AcquireActionUseJobQueue)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += AcquireActionUseJobQueue == other.AcquireActionUseJobQueue ? 0 : 1;
-            }
-            if (DistributorNamespaceId == null && DistributorNamespaceId == other.DistributorNamespaceId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += DistributorNamespaceId.CompareTo(other.DistributorNamespaceId);
-            }
-            if (QueueNamespaceId == null && QueueNamespaceId == other.QueueNamespaceId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += QueueNamespaceId.CompareTo(other.QueueNamespaceId);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

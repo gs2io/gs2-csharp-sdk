@@ -195,56 +195,46 @@ namespace Gs2.Gs2Formation.Model
         public int CompareTo(object obj)
         {
             var other = obj as MoldModel;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type MoldModel.", nameof(obj));
+            }
             var diff = 0;
-            if (MoldModelId == null && MoldModelId == other.MoldModelId)
+            diff = ModelComparer.Compare(MoldModelId, other.MoldModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += MoldModelId.CompareTo(other.MoldModelId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(InitialMaxCapacity, other.InitialMaxCapacity);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
+            diff = ModelComparer.Compare(MaxCapacity, other.MaxCapacity);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(FormModel, other.FormModel);
+            if (diff != 0)
             {
-                diff += Metadata.CompareTo(other.Metadata);
+                return diff;
             }
-            if (InitialMaxCapacity == null && InitialMaxCapacity == other.InitialMaxCapacity)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(InitialMaxCapacity - other.InitialMaxCapacity);
-            }
-            if (MaxCapacity == null && MaxCapacity == other.MaxCapacity)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(MaxCapacity - other.MaxCapacity);
-            }
-            if (FormModel == null && FormModel == other.FormModel)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += FormModel.CompareTo(other.FormModel);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

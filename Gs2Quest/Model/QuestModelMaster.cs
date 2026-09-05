@@ -419,152 +419,91 @@ namespace Gs2.Gs2Quest.Model
         public int CompareTo(object obj)
         {
             var other = obj as QuestModelMaster;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type QuestModelMaster.", nameof(obj));
+            }
             var diff = 0;
-            if (QuestModelId == null && QuestModelId == other.QuestModelId)
+            diff = ModelComparer.Compare(QuestModelId, other.QuestModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(QuestGroupName, other.QuestGroupName);
+            if (diff != 0)
             {
-                diff += QuestModelId.CompareTo(other.QuestModelId);
+                return diff;
             }
-            if (QuestGroupName == null && QuestGroupName == other.QuestGroupName)
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                diff += QuestGroupName.CompareTo(other.QuestGroupName);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(Contents, other.Contents);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Description == null && Description == other.Description)
+            diff = ModelComparer.Compare(ChallengePeriodEventId, other.ChallengePeriodEventId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(FirstCompleteAcquireActions, other.FirstCompleteAcquireActions);
+            if (diff != 0)
             {
-                diff += Description.CompareTo(other.Description);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
+            diff = ModelComparer.CompareArray(VerifyActions, other.VerifyActions);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(ConsumeActions, other.ConsumeActions);
+            if (diff != 0)
             {
-                diff += Metadata.CompareTo(other.Metadata);
+                return diff;
             }
-            if (Contents == null && Contents == other.Contents)
+            diff = ModelComparer.CompareArray(FailedAcquireActions, other.FailedAcquireActions);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(PremiseQuestNames, other.PremiseQuestNames);
+            if (diff != 0)
             {
-                diff += Contents.Length - other.Contents.Length;
-                for (var i = 0; i < Contents.Length; i++)
-                {
-                    diff += Contents[i].CompareTo(other.Contents[i]);
-                }
+                return diff;
             }
-            if (ChallengePeriodEventId == null && ChallengePeriodEventId == other.ChallengePeriodEventId)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += ChallengePeriodEventId.CompareTo(other.ChallengePeriodEventId);
+                return diff;
             }
-            if (FirstCompleteAcquireActions == null && FirstCompleteAcquireActions == other.FirstCompleteAcquireActions)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += FirstCompleteAcquireActions.Length - other.FirstCompleteAcquireActions.Length;
-                for (var i = 0; i < FirstCompleteAcquireActions.Length; i++)
-                {
-                    diff += FirstCompleteAcquireActions[i].CompareTo(other.FirstCompleteAcquireActions[i]);
-                }
-            }
-            if (VerifyActions == null && VerifyActions == other.VerifyActions)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += VerifyActions.Length - other.VerifyActions.Length;
-                for (var i = 0; i < VerifyActions.Length; i++)
-                {
-                    diff += VerifyActions[i].CompareTo(other.VerifyActions[i]);
-                }
-            }
-            if (ConsumeActions == null && ConsumeActions == other.ConsumeActions)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ConsumeActions.Length - other.ConsumeActions.Length;
-                for (var i = 0; i < ConsumeActions.Length; i++)
-                {
-                    diff += ConsumeActions[i].CompareTo(other.ConsumeActions[i]);
-                }
-            }
-            if (FailedAcquireActions == null && FailedAcquireActions == other.FailedAcquireActions)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += FailedAcquireActions.Length - other.FailedAcquireActions.Length;
-                for (var i = 0; i < FailedAcquireActions.Length; i++)
-                {
-                    diff += FailedAcquireActions[i].CompareTo(other.FailedAcquireActions[i]);
-                }
-            }
-            if (PremiseQuestNames == null && PremiseQuestNames == other.PremiseQuestNames)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += PremiseQuestNames.Length - other.PremiseQuestNames.Length;
-                for (var i = 0; i < PremiseQuestNames.Length; i++)
-                {
-                    diff += PremiseQuestNames[i].CompareTo(other.PremiseQuestNames[i]);
-                }
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

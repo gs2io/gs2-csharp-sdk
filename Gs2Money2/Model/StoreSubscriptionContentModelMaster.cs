@@ -283,120 +283,86 @@ namespace Gs2.Gs2Money2.Model
         public int CompareTo(object obj)
         {
             var other = obj as StoreSubscriptionContentModelMaster;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type StoreSubscriptionContentModelMaster.", nameof(obj));
+            }
             var diff = 0;
-            if (StoreSubscriptionContentModelId == null && StoreSubscriptionContentModelId == other.StoreSubscriptionContentModelId)
+            diff = ModelComparer.Compare(StoreSubscriptionContentModelId, other.StoreSubscriptionContentModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += StoreSubscriptionContentModelId.CompareTo(other.StoreSubscriptionContentModelId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Description == null && Description == other.Description)
+            diff = ModelComparer.Compare(ScheduleNamespaceId, other.ScheduleNamespaceId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TriggerName, other.TriggerName);
+            if (diff != 0)
             {
-                diff += Description.CompareTo(other.Description);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
+            diff = ModelComparer.Compare(ReallocateSpanDays, other.ReallocateSpanDays);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TriggerExtendMode, other.TriggerExtendMode);
+            if (diff != 0)
             {
-                diff += Metadata.CompareTo(other.Metadata);
+                return diff;
             }
-            if (ScheduleNamespaceId == null && ScheduleNamespaceId == other.ScheduleNamespaceId)
+            diff = ModelComparer.Compare(RollupHour, other.RollupHour);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(AppleAppStore, other.AppleAppStore);
+            if (diff != 0)
             {
-                diff += ScheduleNamespaceId.CompareTo(other.ScheduleNamespaceId);
+                return diff;
             }
-            if (TriggerName == null && TriggerName == other.TriggerName)
+            diff = ModelComparer.Compare(GooglePlay, other.GooglePlay);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += TriggerName.CompareTo(other.TriggerName);
+                return diff;
             }
-            if (ReallocateSpanDays == null && ReallocateSpanDays == other.ReallocateSpanDays)
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += (int)(ReallocateSpanDays - other.ReallocateSpanDays);
+                return diff;
             }
-            if (TriggerExtendMode == null && TriggerExtendMode == other.TriggerExtendMode)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += TriggerExtendMode.CompareTo(other.TriggerExtendMode);
-            }
-            if (RollupHour == null && RollupHour == other.RollupHour)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(RollupHour - other.RollupHour);
-            }
-            if (AppleAppStore == null && AppleAppStore == other.AppleAppStore)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += AppleAppStore.CompareTo(other.AppleAppStore);
-            }
-            if (GooglePlay == null && GooglePlay == other.GooglePlay)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += GooglePlay.CompareTo(other.GooglePlay);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

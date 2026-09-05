@@ -94,32 +94,31 @@ namespace Gs2.Gs2Friend.Model
         public int CompareTo(object obj)
         {
             var other = obj as SendFriendRequest;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type SendFriendRequest.", nameof(obj));
+            }
             var diff = 0;
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TargetUserId, other.TargetUserId);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (TargetUserId == null && TargetUserId == other.TargetUserId)
+            diff = ModelComparer.Compare(PublicProfile, other.PublicProfile);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += TargetUserId.CompareTo(other.TargetUserId);
-            }
-            if (PublicProfile == null && PublicProfile == other.PublicProfile)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += PublicProfile.CompareTo(other.PublicProfile);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

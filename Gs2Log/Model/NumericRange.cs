@@ -83,24 +83,26 @@ namespace Gs2.Gs2Log.Model
         public int CompareTo(object obj)
         {
             var other = obj as NumericRange;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type NumericRange.", nameof(obj));
+            }
             var diff = 0;
-            if (Min == null && Min == other.Min)
+            diff = ModelComparer.Compare(Min, other.Min);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Max, other.Max);
+            if (diff != 0)
             {
-                diff += (int)(Min - other.Min);
+                return diff;
             }
-            if (Max == null && Max == other.Max)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Max - other.Max);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

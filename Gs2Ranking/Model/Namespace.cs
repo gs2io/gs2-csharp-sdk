@@ -229,84 +229,61 @@ namespace Gs2.Gs2Ranking.Model
         public int CompareTo(object obj)
         {
             var other = obj as Namespace;
-            var diff = 0;
-            if (NamespaceId == null && NamespaceId == other.NamespaceId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += NamespaceId.CompareTo(other.NamespaceId);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (Description == null && Description == other.Description)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Description.CompareTo(other.Description);
-            }
-            if (TransactionSetting == null && TransactionSetting == other.TransactionSetting)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += TransactionSetting.CompareTo(other.TransactionSetting);
-            }
-            if (LastCalculatedAts == null && LastCalculatedAts == other.LastCalculatedAts)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += LastCalculatedAts.Length - other.LastCalculatedAts.Length;
-                for (var i = 0; i < LastCalculatedAts.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += LastCalculatedAts[i].CompareTo(other.LastCalculatedAts[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type Namespace.", nameof(obj));
             }
-            if (LogSetting == null && LogSetting == other.LogSetting)
+            var diff = 0;
+            diff = ModelComparer.Compare(NamespaceId, other.NamespaceId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += LogSetting.CompareTo(other.LogSetting);
+                return diff;
             }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TransactionSetting, other.TransactionSetting);
+            if (diff != 0)
             {
-                diff += (int)(CreatedAt - other.CreatedAt);
+                return diff;
             }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
+            diff = ModelComparer.CompareArray(LastCalculatedAts, other.LastCalculatedAts);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(LogSetting, other.LogSetting);
+            if (diff != 0)
             {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
+                return diff;
             }
-            if (Revision == null && Revision == other.Revision)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += (int)(Revision - other.Revision);
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

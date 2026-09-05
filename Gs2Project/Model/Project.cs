@@ -256,116 +256,81 @@ namespace Gs2.Gs2Project.Model
         public int CompareTo(object obj)
         {
             var other = obj as Project;
-            var diff = 0;
-            if (ProjectId == null && ProjectId == other.ProjectId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += ProjectId.CompareTo(other.ProjectId);
-            }
-            if (AccountName == null && AccountName == other.AccountName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += AccountName.CompareTo(other.AccountName);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (Description == null && Description == other.Description)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Description.CompareTo(other.Description);
-            }
-            if (Plan == null && Plan == other.Plan)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Plan.CompareTo(other.Plan);
-            }
-            if (Regions == null && Regions == other.Regions)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Regions.Length - other.Regions.Length;
-                for (var i = 0; i < Regions.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += Regions[i].CompareTo(other.Regions[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type Project.", nameof(obj));
             }
-            if (BillingMethodName == null && BillingMethodName == other.BillingMethodName)
+            var diff = 0;
+            diff = ModelComparer.Compare(ProjectId, other.ProjectId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(AccountName, other.AccountName);
+            if (diff != 0)
             {
-                diff += BillingMethodName.CompareTo(other.BillingMethodName);
+                return diff;
             }
-            if (EnableEventBridge == null && EnableEventBridge == other.EnableEventBridge)
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                diff += EnableEventBridge.CompareTo(other.EnableEventBridge);
+                return diff;
             }
-            if (Currency == null && Currency == other.Currency)
+            diff = ModelComparer.Compare(Plan, other.Plan);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(Regions, other.Regions);
+            if (diff != 0)
             {
-                diff += Currency.CompareTo(other.Currency);
+                return diff;
             }
-            if (EventBridgeAwsAccountId == null && EventBridgeAwsAccountId == other.EventBridgeAwsAccountId)
+            diff = ModelComparer.Compare(BillingMethodName, other.BillingMethodName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(EnableEventBridge, other.EnableEventBridge);
+            if (diff != 0)
             {
-                diff += EventBridgeAwsAccountId.CompareTo(other.EventBridgeAwsAccountId);
+                return diff;
             }
-            if (EventBridgeAwsRegion == null && EventBridgeAwsRegion == other.EventBridgeAwsRegion)
+            diff = ModelComparer.Compare(Currency, other.Currency);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(EventBridgeAwsAccountId, other.EventBridgeAwsAccountId);
+            if (diff != 0)
             {
-                diff += EventBridgeAwsRegion.CompareTo(other.EventBridgeAwsRegion);
+                return diff;
             }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
+            diff = ModelComparer.Compare(EventBridgeAwsRegion, other.EventBridgeAwsRegion);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += (int)(CreatedAt - other.CreatedAt);
+                return diff;
             }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

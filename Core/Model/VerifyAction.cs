@@ -40,8 +40,14 @@ namespace Gs2.Core.Model
             if (Action.StartsWith("Gs2Account:")) {
                 return Gs2.Gs2Account.Model.StampAction.ToRequest(this);
             }
+            if (Action.StartsWith("Gs2AdReward:")) {
+                return Gs2.Gs2AdReward.Model.StampAction.ToRequest(this);
+            }
             if (Action.StartsWith("Gs2Auth:")) {
                 return Gs2.Gs2Auth.Model.StampAction.ToRequest(this);
+            }
+            if (Action.StartsWith("Gs2Buff:")) {
+                return Gs2.Gs2Buff.Model.StampAction.ToRequest(this);
             }
             if (Action.StartsWith("Gs2Chat:")) {
                 return Gs2.Gs2Chat.Model.StampAction.ToRequest(this);
@@ -49,11 +55,17 @@ namespace Gs2.Core.Model
             if (Action.StartsWith("Gs2Datastore:")) {
                 return Gs2.Gs2Datastore.Model.StampAction.ToRequest(this);
             }
+            if (Action.StartsWith("Gs2Deploy:")) {
+                return Gs2.Gs2Deploy.Model.StampAction.ToRequest(this);
+            }
             if (Action.StartsWith("Gs2Dictionary:")) {
                 return Gs2.Gs2Dictionary.Model.StampAction.ToRequest(this);
             }
             if (Action.StartsWith("Gs2Distributor:")) {
                 return Gs2.Gs2Distributor.Model.StampAction.ToRequest(this);
+            }
+            if (Action.StartsWith("Gs2Enchant:")) {
+                return Gs2.Gs2Enchant.Model.StampAction.ToRequest(this);
             }
             if (Action.StartsWith("Gs2Enhance:")) {
                 return Gs2.Gs2Enhance.Model.StampAction.ToRequest(this);
@@ -67,11 +79,29 @@ namespace Gs2.Core.Model
             if (Action.StartsWith("Gs2Formation:")) {
                 return Gs2.Gs2Formation.Model.StampAction.ToRequest(this);
             }
+            if (Action.StartsWith("Gs2Freeze:")) {
+                return Gs2.Gs2Freeze.Model.StampAction.ToRequest(this);
+            }
             if (Action.StartsWith("Gs2Friend:")) {
                 return Gs2.Gs2Friend.Model.StampAction.ToRequest(this);
             }
             if (Action.StartsWith("Gs2Gateway:")) {
                 return Gs2.Gs2Gateway.Model.StampAction.ToRequest(this);
+            }
+            if (Action.StartsWith("Gs2Grade:")) {
+                return Gs2.Gs2Grade.Model.StampAction.ToRequest(this);
+            }
+            if (Action.StartsWith("Gs2Guard:")) {
+                return Gs2.Gs2Guard.Model.StampAction.ToRequest(this);
+            }
+            if (Action.StartsWith("Gs2Guild:")) {
+                return Gs2.Gs2Guild.Model.StampAction.ToRequest(this);
+            }
+            if (Action.StartsWith("Gs2Identifier:")) {
+                return Gs2.Gs2Identifier.Model.StampAction.ToRequest(this);
+            }
+            if (Action.StartsWith("Gs2Idle:")) {
+                return Gs2.Gs2Idle.Model.StampAction.ToRequest(this);
             }
             if (Action.StartsWith("Gs2Inbox:")) {
                 return Gs2.Gs2Inbox.Model.StampAction.ToRequest(this);
@@ -91,6 +121,12 @@ namespace Gs2.Core.Model
             if (Action.StartsWith("Gs2Lock:")) {
                 return Gs2.Gs2Lock.Model.StampAction.ToRequest(this);
             }
+            if (Action.StartsWith("Gs2Log:")) {
+                return Gs2.Gs2Log.Model.StampAction.ToRequest(this);
+            }
+            if (Action.StartsWith("Gs2LoginReward:")) {
+                return Gs2.Gs2LoginReward.Model.StampAction.ToRequest(this);
+            }
             if (Action.StartsWith("Gs2Lottery:")) {
                 return Gs2.Gs2Lottery.Model.StampAction.ToRequest(this);
             }
@@ -106,14 +142,23 @@ namespace Gs2.Core.Model
             if (Action.StartsWith("Gs2Money:")) {
                 return Gs2.Gs2Money.Model.StampAction.ToRequest(this);
             }
+            if (Action.StartsWith("Gs2Money2:")) {
+                return Gs2.Gs2Money2.Model.StampAction.ToRequest(this);
+            }
             if (Action.StartsWith("Gs2News:")) {
                 return Gs2.Gs2News.Model.StampAction.ToRequest(this);
+            }
+            if (Action.StartsWith("Gs2Project:")) {
+                return Gs2.Gs2Project.Model.StampAction.ToRequest(this);
             }
             if (Action.StartsWith("Gs2Quest:")) {
                 return Gs2.Gs2Quest.Model.StampAction.ToRequest(this);
             }
             if (Action.StartsWith("Gs2Ranking:")) {
                 return Gs2.Gs2Ranking.Model.StampAction.ToRequest(this);
+            }
+            if (Action.StartsWith("Gs2Ranking2:")) {
+                return Gs2.Gs2Ranking2.Model.StampAction.ToRequest(this);
             }
             if (Action.StartsWith("Gs2Realtime:")) {
                 return Gs2.Gs2Realtime.Model.StampAction.ToRequest(this);
@@ -124,14 +169,23 @@ namespace Gs2.Core.Model
             if (Action.StartsWith("Gs2Script:")) {
                 return Gs2.Gs2Script.Model.StampAction.ToRequest(this);
             }
+            if (Action.StartsWith("Gs2SeasonRating:")) {
+                return Gs2.Gs2SeasonRating.Model.StampAction.ToRequest(this);
+            }
             if (Action.StartsWith("Gs2SerialKey:")) {
                 return Gs2.Gs2SerialKey.Model.StampAction.ToRequest(this);
             }
             if (Action.StartsWith("Gs2Showcase:")) {
                 return Gs2.Gs2Showcase.Model.StampAction.ToRequest(this);
             }
+            if (Action.StartsWith("Gs2SkillTree:")) {
+                return Gs2.Gs2SkillTree.Model.StampAction.ToRequest(this);
+            }
             if (Action.StartsWith("Gs2Stamina:")) {
                 return Gs2.Gs2Stamina.Model.StampAction.ToRequest(this);
+            }
+            if (Action.StartsWith("Gs2StateMachine:")) {
+                return Gs2.Gs2StateMachine.Model.StampAction.ToRequest(this);
             }
             if (Action.StartsWith("Gs2Version:")) {
                 return Gs2.Gs2Version.Model.StampAction.ToRequest(this);
@@ -177,24 +231,26 @@ namespace Gs2.Core.Model
         public int CompareTo(object obj)
         {
             var other = obj as VerifyAction;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type VerifyAction.", nameof(obj));
+            }
             var diff = 0;
-            if (Action == null && Action == other.Action)
+            diff = ModelComparer.Compare(Action, other.Action);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Request, other.Request);
+            if (diff != 0)
             {
-                diff += Action.CompareTo(other.Action);
+                return diff;
             }
-            if (Request == null && Request == other.Request)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Request.CompareTo(other.Request);
-            }
-            return diff;
+            return 0;
         }
 
         public object Clone() {

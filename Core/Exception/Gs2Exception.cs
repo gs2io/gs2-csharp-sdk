@@ -73,7 +73,10 @@ namespace Gs2.Core.Exception
 		public abstract bool RecommendAutoRetry { get; }
 
 		public override string ToString() {
-			return string.Join(", ", this.errors.Select(v => v.ToString()).ToArray());
+			if (this.errors != null && this.errors.Length > 0) {
+				return string.Join(", ", this.errors.Select(v => v.ToString()).ToArray());
+			}
+			return base.ToString();
 		}
 
 		public static Gs2Exception ExtractError(string message, long statusCode)

@@ -218,48 +218,41 @@ namespace Gs2.Gs2Inventory.Model
         public int CompareTo(object obj)
         {
             var other = obj as SimpleItem;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type SimpleItem.", nameof(obj));
+            }
             var diff = 0;
-            if (ItemId == null && ItemId == other.ItemId)
+            diff = ModelComparer.Compare(ItemId, other.ItemId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += ItemId.CompareTo(other.ItemId);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(ItemName, other.ItemName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Count, other.Count);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (ItemName == null && ItemName == other.ItemName)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += ItemName.CompareTo(other.ItemName);
-            }
-            if (Count == null && Count == other.Count)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Count - other.Count);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

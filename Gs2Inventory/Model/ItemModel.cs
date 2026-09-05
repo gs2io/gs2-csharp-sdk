@@ -212,56 +212,46 @@ namespace Gs2.Gs2Inventory.Model
         public int CompareTo(object obj)
         {
             var other = obj as ItemModel;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type ItemModel.", nameof(obj));
+            }
             var diff = 0;
-            if (ItemModelId == null && ItemModelId == other.ItemModelId)
+            diff = ModelComparer.Compare(ItemModelId, other.ItemModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += ItemModelId.CompareTo(other.ItemModelId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(StackingLimit, other.StackingLimit);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
+            diff = ModelComparer.Compare(AllowMultipleStacks, other.AllowMultipleStacks);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(SortValue, other.SortValue);
+            if (diff != 0)
             {
-                diff += Metadata.CompareTo(other.Metadata);
+                return diff;
             }
-            if (StackingLimit == null && StackingLimit == other.StackingLimit)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(StackingLimit - other.StackingLimit);
-            }
-            if (AllowMultipleStacks == null && AllowMultipleStacks == other.AllowMultipleStacks)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += AllowMultipleStacks == other.AllowMultipleStacks ? 0 : 1;
-            }
-            if (SortValue == null && SortValue == other.SortValue)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(SortValue - other.SortValue);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

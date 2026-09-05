@@ -200,72 +200,56 @@ namespace Gs2.Gs2Project.Model
         public int CompareTo(object obj)
         {
             var other = obj as ImportProgress;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type ImportProgress.", nameof(obj));
+            }
             var diff = 0;
-            if (ImportProgressId == null && ImportProgressId == other.ImportProgressId)
+            diff = ModelComparer.Compare(ImportProgressId, other.ImportProgressId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TransactionId, other.TransactionId);
+            if (diff != 0)
             {
-                diff += ImportProgressId.CompareTo(other.ImportProgressId);
+                return diff;
             }
-            if (TransactionId == null && TransactionId == other.TransactionId)
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Imported, other.Imported);
+            if (diff != 0)
             {
-                diff += TransactionId.CompareTo(other.TransactionId);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(MicroserviceCount, other.MicroserviceCount);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (Imported == null && Imported == other.Imported)
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += (int)(Imported - other.Imported);
+                return diff;
             }
-            if (MicroserviceCount == null && MicroserviceCount == other.MicroserviceCount)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(MicroserviceCount - other.MicroserviceCount);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

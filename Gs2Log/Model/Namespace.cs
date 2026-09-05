@@ -288,136 +288,96 @@ namespace Gs2.Gs2Log.Model
         public int CompareTo(object obj)
         {
             var other = obj as Namespace;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Namespace.", nameof(obj));
+            }
             var diff = 0;
-            if (NamespaceId == null && NamespaceId == other.NamespaceId)
+            diff = ModelComparer.Compare(NamespaceId, other.NamespaceId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += NamespaceId.CompareTo(other.NamespaceId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Type, other.Type);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Description == null && Description == other.Description)
+            diff = ModelComparer.Compare(GcpCredentialJson, other.GcpCredentialJson);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(BigQueryDatasetName, other.BigQueryDatasetName);
+            if (diff != 0)
             {
-                diff += Description.CompareTo(other.Description);
+                return diff;
             }
-            if (Type == null && Type == other.Type)
+            diff = ModelComparer.Compare(LogExpireDays, other.LogExpireDays);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(AwsRegion, other.AwsRegion);
+            if (diff != 0)
             {
-                diff += Type.CompareTo(other.Type);
+                return diff;
             }
-            if (GcpCredentialJson == null && GcpCredentialJson == other.GcpCredentialJson)
+            diff = ModelComparer.Compare(AwsAccessKeyId, other.AwsAccessKeyId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(AwsSecretAccessKey, other.AwsSecretAccessKey);
+            if (diff != 0)
             {
-                diff += GcpCredentialJson.CompareTo(other.GcpCredentialJson);
+                return diff;
             }
-            if (BigQueryDatasetName == null && BigQueryDatasetName == other.BigQueryDatasetName)
+            diff = ModelComparer.Compare(FirehoseStreamName, other.FirehoseStreamName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(FirehoseCompressData, other.FirehoseCompressData);
+            if (diff != 0)
             {
-                diff += BigQueryDatasetName.CompareTo(other.BigQueryDatasetName);
+                return diff;
             }
-            if (LogExpireDays == null && LogExpireDays == other.LogExpireDays)
+            diff = ModelComparer.Compare(Status, other.Status);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += (int)(LogExpireDays - other.LogExpireDays);
+                return diff;
             }
-            if (AwsRegion == null && AwsRegion == other.AwsRegion)
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += AwsRegion.CompareTo(other.AwsRegion);
+                return diff;
             }
-            if (AwsAccessKeyId == null && AwsAccessKeyId == other.AwsAccessKeyId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += AwsAccessKeyId.CompareTo(other.AwsAccessKeyId);
-            }
-            if (AwsSecretAccessKey == null && AwsSecretAccessKey == other.AwsSecretAccessKey)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += AwsSecretAccessKey.CompareTo(other.AwsSecretAccessKey);
-            }
-            if (FirehoseStreamName == null && FirehoseStreamName == other.FirehoseStreamName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += FirehoseStreamName.CompareTo(other.FirehoseStreamName);
-            }
-            if (FirehoseCompressData == null && FirehoseCompressData == other.FirehoseCompressData)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += FirehoseCompressData.CompareTo(other.FirehoseCompressData);
-            }
-            if (Status == null && Status == other.Status)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Status.CompareTo(other.Status);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

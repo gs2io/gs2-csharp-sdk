@@ -138,64 +138,51 @@ namespace Gs2.Gs2Limit.Model
         public int CompareTo(object obj)
         {
             var other = obj as GitHubCheckoutSetting;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type GitHubCheckoutSetting.", nameof(obj));
+            }
             var diff = 0;
-            if (ApiKeyId == null && ApiKeyId == other.ApiKeyId)
+            diff = ModelComparer.Compare(ApiKeyId, other.ApiKeyId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(RepositoryName, other.RepositoryName);
+            if (diff != 0)
             {
-                diff += ApiKeyId.CompareTo(other.ApiKeyId);
+                return diff;
             }
-            if (RepositoryName == null && RepositoryName == other.RepositoryName)
+            diff = ModelComparer.Compare(SourcePath, other.SourcePath);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ReferenceType, other.ReferenceType);
+            if (diff != 0)
             {
-                diff += RepositoryName.CompareTo(other.RepositoryName);
+                return diff;
             }
-            if (SourcePath == null && SourcePath == other.SourcePath)
+            diff = ModelComparer.Compare(CommitHash, other.CommitHash);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(BranchName, other.BranchName);
+            if (diff != 0)
             {
-                diff += SourcePath.CompareTo(other.SourcePath);
+                return diff;
             }
-            if (ReferenceType == null && ReferenceType == other.ReferenceType)
+            diff = ModelComparer.Compare(TagName, other.TagName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += ReferenceType.CompareTo(other.ReferenceType);
-            }
-            if (CommitHash == null && CommitHash == other.CommitHash)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += CommitHash.CompareTo(other.CommitHash);
-            }
-            if (BranchName == null && BranchName == other.BranchName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += BranchName.CompareTo(other.BranchName);
-            }
-            if (TagName == null && TagName == other.TagName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += TagName.CompareTo(other.TagName);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

@@ -269,132 +269,86 @@ namespace Gs2.Gs2Guard.Model
         public int CompareTo(object obj)
         {
             var other = obj as BlockingPolicyModel;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type BlockingPolicyModel.", nameof(obj));
+            }
             var diff = 0;
-            if (PassServices == null && PassServices == other.PassServices)
+            diff = ModelComparer.CompareArray(PassServices, other.PassServices);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(DefaultRestriction, other.DefaultRestriction);
+            if (diff != 0)
             {
-                diff += PassServices.Length - other.PassServices.Length;
-                for (var i = 0; i < PassServices.Length; i++)
-                {
-                    diff += PassServices[i].CompareTo(other.PassServices[i]);
-                }
+                return diff;
             }
-            if (DefaultRestriction == null && DefaultRestriction == other.DefaultRestriction)
+            diff = ModelComparer.Compare(LocationDetection, other.LocationDetection);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(Locations, other.Locations);
+            if (diff != 0)
             {
-                diff += DefaultRestriction.CompareTo(other.DefaultRestriction);
+                return diff;
             }
-            if (LocationDetection == null && LocationDetection == other.LocationDetection)
+            diff = ModelComparer.Compare(LocationRestriction, other.LocationRestriction);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(AnonymousIpDetection, other.AnonymousIpDetection);
+            if (diff != 0)
             {
-                diff += LocationDetection.CompareTo(other.LocationDetection);
+                return diff;
             }
-            if (Locations == null && Locations == other.Locations)
+            diff = ModelComparer.Compare(AnonymousIpRestriction, other.AnonymousIpRestriction);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(HostingProviderIpDetection, other.HostingProviderIpDetection);
+            if (diff != 0)
             {
-                diff += Locations.Length - other.Locations.Length;
-                for (var i = 0; i < Locations.Length; i++)
-                {
-                    diff += Locations[i].CompareTo(other.Locations[i]);
-                }
+                return diff;
             }
-            if (LocationRestriction == null && LocationRestriction == other.LocationRestriction)
+            diff = ModelComparer.Compare(HostingProviderIpRestriction, other.HostingProviderIpRestriction);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ReputationIpDetection, other.ReputationIpDetection);
+            if (diff != 0)
             {
-                diff += LocationRestriction.CompareTo(other.LocationRestriction);
+                return diff;
             }
-            if (AnonymousIpDetection == null && AnonymousIpDetection == other.AnonymousIpDetection)
+            diff = ModelComparer.Compare(ReputationIpRestriction, other.ReputationIpRestriction);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(IpAddressesDetection, other.IpAddressesDetection);
+            if (diff != 0)
             {
-                diff += AnonymousIpDetection.CompareTo(other.AnonymousIpDetection);
+                return diff;
             }
-            if (AnonymousIpRestriction == null && AnonymousIpRestriction == other.AnonymousIpRestriction)
+            diff = ModelComparer.CompareArray(IpAddresses, other.IpAddresses);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(IpAddressRestriction, other.IpAddressRestriction);
+            if (diff != 0)
             {
-                diff += AnonymousIpRestriction.CompareTo(other.AnonymousIpRestriction);
+                return diff;
             }
-            if (HostingProviderIpDetection == null && HostingProviderIpDetection == other.HostingProviderIpDetection)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += HostingProviderIpDetection.CompareTo(other.HostingProviderIpDetection);
-            }
-            if (HostingProviderIpRestriction == null && HostingProviderIpRestriction == other.HostingProviderIpRestriction)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += HostingProviderIpRestriction.CompareTo(other.HostingProviderIpRestriction);
-            }
-            if (ReputationIpDetection == null && ReputationIpDetection == other.ReputationIpDetection)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ReputationIpDetection.CompareTo(other.ReputationIpDetection);
-            }
-            if (ReputationIpRestriction == null && ReputationIpRestriction == other.ReputationIpRestriction)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ReputationIpRestriction.CompareTo(other.ReputationIpRestriction);
-            }
-            if (IpAddressesDetection == null && IpAddressesDetection == other.IpAddressesDetection)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += IpAddressesDetection.CompareTo(other.IpAddressesDetection);
-            }
-            if (IpAddresses == null && IpAddresses == other.IpAddresses)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += IpAddresses.Length - other.IpAddresses.Length;
-                for (var i = 0; i < IpAddresses.Length; i++)
-                {
-                    diff += IpAddresses[i].CompareTo(other.IpAddresses[i]);
-                }
-            }
-            if (IpAddressRestriction == null && IpAddressRestriction == other.IpAddressRestriction)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += IpAddressRestriction.CompareTo(other.IpAddressRestriction);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

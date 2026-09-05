@@ -256,88 +256,66 @@ namespace Gs2.Gs2Idle.Model
         public int CompareTo(object obj)
         {
             var other = obj as Status;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Status.", nameof(obj));
+            }
             var diff = 0;
-            if (StatusId == null && StatusId == other.StatusId)
+            diff = ModelComparer.Compare(StatusId, other.StatusId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CategoryName, other.CategoryName);
+            if (diff != 0)
             {
-                diff += StatusId.CompareTo(other.StatusId);
+                return diff;
             }
-            if (CategoryName == null && CategoryName == other.CategoryName)
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(RandomSeed, other.RandomSeed);
+            if (diff != 0)
             {
-                diff += CategoryName.CompareTo(other.CategoryName);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(IdleMinutes, other.IdleMinutes);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(NextRewardsAt, other.NextRewardsAt);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (RandomSeed == null && RandomSeed == other.RandomSeed)
+            diff = ModelComparer.Compare(MaximumIdleMinutes, other.MaximumIdleMinutes);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += (int)(RandomSeed - other.RandomSeed);
+                return diff;
             }
-            if (IdleMinutes == null && IdleMinutes == other.IdleMinutes)
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += (int)(IdleMinutes - other.IdleMinutes);
+                return diff;
             }
-            if (NextRewardsAt == null && NextRewardsAt == other.NextRewardsAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(NextRewardsAt - other.NextRewardsAt);
-            }
-            if (MaximumIdleMinutes == null && MaximumIdleMinutes == other.MaximumIdleMinutes)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(MaximumIdleMinutes - other.MaximumIdleMinutes);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

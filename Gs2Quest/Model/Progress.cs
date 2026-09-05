@@ -286,104 +286,71 @@ namespace Gs2.Gs2Quest.Model
         public int CompareTo(object obj)
         {
             var other = obj as Progress;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Progress.", nameof(obj));
+            }
             var diff = 0;
-            if (ProgressId == null && ProgressId == other.ProgressId)
+            diff = ModelComparer.Compare(ProgressId, other.ProgressId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += ProgressId.CompareTo(other.ProgressId);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(TransactionId, other.TransactionId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(QuestModelId, other.QuestModelId);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (TransactionId == null && TransactionId == other.TransactionId)
+            diff = ModelComparer.Compare(RandomSeed, other.RandomSeed);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(Rewards, other.Rewards);
+            if (diff != 0)
             {
-                diff += TransactionId.CompareTo(other.TransactionId);
+                return diff;
             }
-            if (QuestModelId == null && QuestModelId == other.QuestModelId)
+            diff = ModelComparer.CompareArray(FailedRewards, other.FailedRewards);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                diff += QuestModelId.CompareTo(other.QuestModelId);
+                return diff;
             }
-            if (RandomSeed == null && RandomSeed == other.RandomSeed)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += (int)(RandomSeed - other.RandomSeed);
+                return diff;
             }
-            if (Rewards == null && Rewards == other.Rewards)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += Rewards.Length - other.Rewards.Length;
-                for (var i = 0; i < Rewards.Length; i++)
-                {
-                    diff += Rewards[i].CompareTo(other.Rewards[i]);
-                }
-            }
-            if (FailedRewards == null && FailedRewards == other.FailedRewards)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += FailedRewards.Length - other.FailedRewards.Length;
-                for (var i = 0; i < FailedRewards.Length; i++)
-                {
-                    diff += FailedRewards[i].CompareTo(other.FailedRewards[i]);
-                }
-            }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

@@ -202,52 +202,41 @@ namespace Gs2.Gs2Mission.Model
         public int CompareTo(object obj)
         {
             var other = obj as CounterModel;
-            var diff = 0;
-            if (CounterId == null && CounterId == other.CounterId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += CounterId.CompareTo(other.CounterId);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (Scopes == null && Scopes == other.Scopes)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Scopes.Length - other.Scopes.Length;
-                for (var i = 0; i < Scopes.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += Scopes[i].CompareTo(other.Scopes[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type CounterModel.", nameof(obj));
             }
-            if (ChallengePeriodEventId == null && ChallengePeriodEventId == other.ChallengePeriodEventId)
+            var diff = 0;
+            diff = ModelComparer.Compare(CounterId, other.CounterId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += ChallengePeriodEventId.CompareTo(other.ChallengePeriodEventId);
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(Scopes, other.Scopes);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(ChallengePeriodEventId, other.ChallengePeriodEventId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

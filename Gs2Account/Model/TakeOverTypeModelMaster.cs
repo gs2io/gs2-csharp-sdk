@@ -217,72 +217,56 @@ namespace Gs2.Gs2Account.Model
         public int CompareTo(object obj)
         {
             var other = obj as TakeOverTypeModelMaster;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type TakeOverTypeModelMaster.", nameof(obj));
+            }
             var diff = 0;
-            if (TakeOverTypeModelId == null && TakeOverTypeModelId == other.TakeOverTypeModelId)
+            diff = ModelComparer.Compare(TakeOverTypeModelId, other.TakeOverTypeModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Type, other.Type);
+            if (diff != 0)
             {
-                diff += TakeOverTypeModelId.CompareTo(other.TakeOverTypeModelId);
+                return diff;
             }
-            if (Type == null && Type == other.Type)
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                diff += (int)(Type - other.Type);
+                return diff;
             }
-            if (Description == null && Description == other.Description)
+            diff = ModelComparer.Compare(OpenIdConnectSetting, other.OpenIdConnectSetting);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += Description.CompareTo(other.Description);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += Metadata.CompareTo(other.Metadata);
+                return diff;
             }
-            if (OpenIdConnectSetting == null && OpenIdConnectSetting == other.OpenIdConnectSetting)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += OpenIdConnectSetting.CompareTo(other.OpenIdConnectSetting);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

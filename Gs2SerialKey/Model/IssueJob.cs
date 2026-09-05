@@ -234,72 +234,56 @@ namespace Gs2.Gs2SerialKey.Model
         public int CompareTo(object obj)
         {
             var other = obj as IssueJob;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type IssueJob.", nameof(obj));
+            }
             var diff = 0;
-            if (IssueJobId == null && IssueJobId == other.IssueJobId)
+            diff = ModelComparer.Compare(IssueJobId, other.IssueJobId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += IssueJobId.CompareTo(other.IssueJobId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(IssuedCount, other.IssuedCount);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
+            diff = ModelComparer.Compare(IssueRequestCount, other.IssueRequestCount);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Status, other.Status);
+            if (diff != 0)
             {
-                diff += Metadata.CompareTo(other.Metadata);
+                return diff;
             }
-            if (IssuedCount == null && IssuedCount == other.IssuedCount)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += (int)(IssuedCount - other.IssuedCount);
+                return diff;
             }
-            if (IssueRequestCount == null && IssueRequestCount == other.IssueRequestCount)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(IssueRequestCount - other.IssueRequestCount);
-            }
-            if (Status == null && Status == other.Status)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Status.CompareTo(other.Status);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

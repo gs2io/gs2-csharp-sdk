@@ -171,88 +171,66 @@ namespace Gs2.Gs2Schedule.Model
         public int CompareTo(object obj)
         {
             var other = obj as RepeatSetting;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type RepeatSetting.", nameof(obj));
+            }
             var diff = 0;
-            if (RepeatType == null && RepeatType == other.RepeatType)
+            diff = ModelComparer.Compare(RepeatType, other.RepeatType);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(BeginDayOfMonth, other.BeginDayOfMonth);
+            if (diff != 0)
             {
-                diff += RepeatType.CompareTo(other.RepeatType);
+                return diff;
             }
-            if (BeginDayOfMonth == null && BeginDayOfMonth == other.BeginDayOfMonth)
+            diff = ModelComparer.Compare(EndDayOfMonth, other.EndDayOfMonth);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(BeginDayOfWeek, other.BeginDayOfWeek);
+            if (diff != 0)
             {
-                diff += (int)(BeginDayOfMonth - other.BeginDayOfMonth);
+                return diff;
             }
-            if (EndDayOfMonth == null && EndDayOfMonth == other.EndDayOfMonth)
+            diff = ModelComparer.Compare(EndDayOfWeek, other.EndDayOfWeek);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(BeginHour, other.BeginHour);
+            if (diff != 0)
             {
-                diff += (int)(EndDayOfMonth - other.EndDayOfMonth);
+                return diff;
             }
-            if (BeginDayOfWeek == null && BeginDayOfWeek == other.BeginDayOfWeek)
+            diff = ModelComparer.Compare(EndHour, other.EndHour);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(AnchorTimestamp, other.AnchorTimestamp);
+            if (diff != 0)
             {
-                diff += BeginDayOfWeek.CompareTo(other.BeginDayOfWeek);
+                return diff;
             }
-            if (EndDayOfWeek == null && EndDayOfWeek == other.EndDayOfWeek)
+            diff = ModelComparer.Compare(ActiveDays, other.ActiveDays);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(InactiveDays, other.InactiveDays);
+            if (diff != 0)
             {
-                diff += EndDayOfWeek.CompareTo(other.EndDayOfWeek);
+                return diff;
             }
-            if (BeginHour == null && BeginHour == other.BeginHour)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(BeginHour - other.BeginHour);
-            }
-            if (EndHour == null && EndHour == other.EndHour)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(EndHour - other.EndHour);
-            }
-            if (AnchorTimestamp == null && AnchorTimestamp == other.AnchorTimestamp)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(AnchorTimestamp - other.AnchorTimestamp);
-            }
-            if (ActiveDays == null && ActiveDays == other.ActiveDays)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(ActiveDays - other.ActiveDays);
-            }
-            if (InactiveDays == null && InactiveDays == other.InactiveDays)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(InactiveDays - other.InactiveDays);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

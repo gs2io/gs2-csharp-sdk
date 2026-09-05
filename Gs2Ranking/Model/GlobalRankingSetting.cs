@@ -163,64 +163,46 @@ namespace Gs2.Gs2Ranking.Model
         public int CompareTo(object obj)
         {
             var other = obj as GlobalRankingSetting;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type GlobalRankingSetting.", nameof(obj));
+            }
             var diff = 0;
-            if (UniqueByUserId == null && UniqueByUserId == other.UniqueByUserId)
+            diff = ModelComparer.Compare(UniqueByUserId, other.UniqueByUserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CalculateIntervalMinutes, other.CalculateIntervalMinutes);
+            if (diff != 0)
             {
-                diff += UniqueByUserId == other.UniqueByUserId ? 0 : 1;
+                return diff;
             }
-            if (CalculateIntervalMinutes == null && CalculateIntervalMinutes == other.CalculateIntervalMinutes)
+            diff = ModelComparer.Compare(CalculateFixedTiming, other.CalculateFixedTiming);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(AdditionalScopes, other.AdditionalScopes);
+            if (diff != 0)
             {
-                diff += (int)(CalculateIntervalMinutes - other.CalculateIntervalMinutes);
+                return diff;
             }
-            if (CalculateFixedTiming == null && CalculateFixedTiming == other.CalculateFixedTiming)
+            diff = ModelComparer.CompareArray(IgnoreUserIds, other.IgnoreUserIds);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Generation, other.Generation);
+            if (diff != 0)
             {
-                diff += CalculateFixedTiming.CompareTo(other.CalculateFixedTiming);
+                return diff;
             }
-            if (AdditionalScopes == null && AdditionalScopes == other.AdditionalScopes)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += AdditionalScopes.Length - other.AdditionalScopes.Length;
-                for (var i = 0; i < AdditionalScopes.Length; i++)
-                {
-                    diff += AdditionalScopes[i].CompareTo(other.AdditionalScopes[i]);
-                }
-            }
-            if (IgnoreUserIds == null && IgnoreUserIds == other.IgnoreUserIds)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += IgnoreUserIds.Length - other.IgnoreUserIds.Length;
-                for (var i = 0; i < IgnoreUserIds.Length; i++)
-                {
-                    diff += IgnoreUserIds[i].CompareTo(other.IgnoreUserIds[i]);
-                }
-            }
-            if (Generation == null && Generation == other.Generation)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Generation.CompareTo(other.Generation);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

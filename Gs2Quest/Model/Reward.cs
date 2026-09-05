@@ -105,40 +105,36 @@ namespace Gs2.Gs2Quest.Model
         public int CompareTo(object obj)
         {
             var other = obj as Reward;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Reward.", nameof(obj));
+            }
             var diff = 0;
-            if (Action == null && Action == other.Action)
+            diff = ModelComparer.Compare(Action, other.Action);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Request, other.Request);
+            if (diff != 0)
             {
-                diff += Action.CompareTo(other.Action);
+                return diff;
             }
-            if (Request == null && Request == other.Request)
+            diff = ModelComparer.Compare(ItemId, other.ItemId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Value, other.Value);
+            if (diff != 0)
             {
-                diff += Request.CompareTo(other.Request);
+                return diff;
             }
-            if (ItemId == null && ItemId == other.ItemId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ItemId.CompareTo(other.ItemId);
-            }
-            if (Value == null && Value == other.Value)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Value - other.Value);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

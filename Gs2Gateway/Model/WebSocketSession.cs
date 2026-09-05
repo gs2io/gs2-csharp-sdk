@@ -234,72 +234,56 @@ namespace Gs2.Gs2Gateway.Model
         public int CompareTo(object obj)
         {
             var other = obj as WebSocketSession;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type WebSocketSession.", nameof(obj));
+            }
             var diff = 0;
-            if (WebSocketSessionId == null && WebSocketSessionId == other.WebSocketSessionId)
+            diff = ModelComparer.Compare(WebSocketSessionId, other.WebSocketSessionId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ConnectionId, other.ConnectionId);
+            if (diff != 0)
             {
-                diff += WebSocketSessionId.CompareTo(other.WebSocketSessionId);
+                return diff;
             }
-            if (ConnectionId == null && ConnectionId == other.ConnectionId)
+            diff = ModelComparer.Compare(NamespaceName, other.NamespaceName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += ConnectionId.CompareTo(other.ConnectionId);
+                return diff;
             }
-            if (NamespaceName == null && NamespaceName == other.NamespaceName)
+            diff = ModelComparer.Compare(SessionId, other.SessionId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += NamespaceName.CompareTo(other.NamespaceName);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (SessionId == null && SessionId == other.SessionId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += SessionId.CompareTo(other.SessionId);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

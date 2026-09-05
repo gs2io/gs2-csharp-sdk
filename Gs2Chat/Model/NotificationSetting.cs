@@ -105,40 +105,36 @@ namespace Gs2.Gs2Chat.Model
         public int CompareTo(object obj)
         {
             var other = obj as NotificationSetting;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type NotificationSetting.", nameof(obj));
+            }
             var diff = 0;
-            if (GatewayNamespaceId == null && GatewayNamespaceId == other.GatewayNamespaceId)
+            diff = ModelComparer.Compare(GatewayNamespaceId, other.GatewayNamespaceId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(EnableTransferMobileNotification, other.EnableTransferMobileNotification);
+            if (diff != 0)
             {
-                diff += GatewayNamespaceId.CompareTo(other.GatewayNamespaceId);
+                return diff;
             }
-            if (EnableTransferMobileNotification == null && EnableTransferMobileNotification == other.EnableTransferMobileNotification)
+            diff = ModelComparer.Compare(Sound, other.Sound);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Enable, other.Enable);
+            if (diff != 0)
             {
-                diff += EnableTransferMobileNotification == other.EnableTransferMobileNotification ? 0 : 1;
+                return diff;
             }
-            if (Sound == null && Sound == other.Sound)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Sound.CompareTo(other.Sound);
-            }
-            if (Enable == null && Enable == other.Enable)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Enable.CompareTo(other.Enable);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

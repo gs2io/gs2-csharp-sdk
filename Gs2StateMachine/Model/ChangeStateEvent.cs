@@ -94,32 +94,31 @@ namespace Gs2.Gs2StateMachine.Model
         public int CompareTo(object obj)
         {
             var other = obj as ChangeStateEvent;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type ChangeStateEvent.", nameof(obj));
+            }
             var diff = 0;
-            if (TaskName == null && TaskName == other.TaskName)
+            diff = ModelComparer.Compare(TaskName, other.TaskName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Hash, other.Hash);
+            if (diff != 0)
             {
-                diff += TaskName.CompareTo(other.TaskName);
+                return diff;
             }
-            if (Hash == null && Hash == other.Hash)
+            diff = ModelComparer.Compare(Timestamp, other.Timestamp);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += Hash.CompareTo(other.Hash);
-            }
-            if (Timestamp == null && Timestamp == other.Timestamp)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Timestamp - other.Timestamp);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

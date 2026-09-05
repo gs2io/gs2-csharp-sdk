@@ -138,64 +138,51 @@ namespace Gs2.Gs2Log.Model
         public int CompareTo(object obj)
         {
             var other = obj as ExecuteStampTaskLog;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type ExecuteStampTaskLog.", nameof(obj));
+            }
             var diff = 0;
-            if (Timestamp == null && Timestamp == other.Timestamp)
+            diff = ModelComparer.Compare(Timestamp, other.Timestamp);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TaskId, other.TaskId);
+            if (diff != 0)
             {
-                diff += (int)(Timestamp - other.Timestamp);
+                return diff;
             }
-            if (TaskId == null && TaskId == other.TaskId)
+            diff = ModelComparer.Compare(Service, other.Service);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Method, other.Method);
+            if (diff != 0)
             {
-                diff += TaskId.CompareTo(other.TaskId);
+                return diff;
             }
-            if (Service == null && Service == other.Service)
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Action, other.Action);
+            if (diff != 0)
             {
-                diff += Service.CompareTo(other.Service);
+                return diff;
             }
-            if (Method == null && Method == other.Method)
+            diff = ModelComparer.Compare(Args, other.Args);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += Method.CompareTo(other.Method);
-            }
-            if (UserId == null && UserId == other.UserId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UserId.CompareTo(other.UserId);
-            }
-            if (Action == null && Action == other.Action)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Action.CompareTo(other.Action);
-            }
-            if (Args == null && Args == other.Args)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Args.CompareTo(other.Args);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

@@ -166,6 +166,7 @@ namespace Gs2.Core.Util
         {
             var awaiter = task.GetAwaiter();
             while (!awaiter.IsCompleted) yield return null;
+            awaiter.GetResult();
             callback?.Invoke();
         }
 
@@ -173,11 +174,19 @@ namespace Gs2.Core.Util
         {
             var awaiter = task.GetAwaiter();
             while (!awaiter.IsCompleted) yield return null;
-            var exception = task.Exception?.GetBaseException();
-            callback?.Invoke(exception == null
-                ? new AsyncResult<T>(task.Result, null)
-                : new AsyncResult<T>(default, exception as Gs2Exception ?? new UnknownException(exception.Message))
-            );
+            AsyncResult<T> result;
+            try
+            {
+                result = new AsyncResult<T>(awaiter.GetResult(), null);
+            }
+            catch (System.Exception exception)
+            {
+                result = new AsyncResult<T>(
+                    default,
+                    exception as Gs2Exception ?? new UnknownException(exception.Message, exception)
+                );
+            }
+            callback?.Invoke(result);
         }
 
 #if UNITY_2018_3_OR_NEWER
@@ -192,6 +201,7 @@ namespace Gs2.Core.Util
         {
             var awaiter = task.GetAwaiter();
             while (!awaiter.IsCompleted) yield return null;
+            awaiter.GetResult();
             callback?.Invoke();
         }
 
@@ -199,14 +209,19 @@ namespace Gs2.Core.Util
         {
             var awaiter = task.GetAwaiter();
             while (!awaiter.IsCompleted) yield return null;
+            AsyncResult<T> result;
             try
             {
-                callback?.Invoke(new AsyncResult<T>(awaiter.GetResult(), null));
+                result = new AsyncResult<T>(awaiter.GetResult(), null);
             }
             catch (System.Exception exception)
             {
-                callback?.Invoke(new AsyncResult<T>(default, exception as Gs2Exception ?? new UnknownException(exception.Message)));
+                result = new AsyncResult<T>(
+                    default,
+                    exception as Gs2Exception ?? new UnknownException(exception.Message, exception)
+                );
             }
+            callback?.Invoke(result);
         }
 
         public static IEnumerator ToCoroutine(this UniTask task, UnityAction callback) =>
@@ -223,14 +238,16 @@ namespace Gs2.Core.Util
             {
                 var awaiter = task.GetAwaiter();
                 while (!awaiter.IsCompleted) yield return null;
-                var exception = task.Exception?.GetBaseException();
-                if (exception != null)
+                try
                 {
-                    future.OnError(exception as Gs2Exception ?? new UnknownException(exception.Message));
-                }
-                else
-                {
+                    awaiter.GetResult();
                     future.OnComplete(null);
+                }
+                catch (System.Exception exception)
+                {
+                    future.OnError(
+                        exception as Gs2Exception ?? new UnknownException(exception.Message, exception)
+                    );
                 }
             }
 
@@ -243,14 +260,15 @@ namespace Gs2.Core.Util
             {
                 var awaiter = task.GetAwaiter();
                 while (!awaiter.IsCompleted) yield return null;
-                var exception = task.Exception?.GetBaseException();
-                if (exception != null)
+                try
                 {
-                    future.OnError(exception as Gs2Exception ?? new UnknownException(exception.Message));
+                    future.OnComplete(awaiter.GetResult());
                 }
-                else
+                catch (System.Exception exception)
                 {
-                    future.OnComplete(task.Result);
+                    future.OnError(
+                        exception as Gs2Exception ?? new UnknownException(exception.Message, exception)
+                    );
                 }
             }
 
@@ -271,7 +289,9 @@ namespace Gs2.Core.Util
                 }
                 catch (System.Exception exception)
                 {
-                    future.OnError(exception as Gs2Exception ?? new UnknownException(exception.Message));
+                    future.OnError(
+                        exception as Gs2Exception ?? new UnknownException(exception.Message, exception)
+                    );
                 }
             }
 
@@ -290,7 +310,9 @@ namespace Gs2.Core.Util
                 }
                 catch (System.Exception exception)
                 {
-                    future.OnError(exception as Gs2Exception ?? new UnknownException(exception.Message));
+                    future.OnError(
+                        exception as Gs2Exception ?? new UnknownException(exception.Message, exception)
+                    );
                 }
             }
 

@@ -105,40 +105,36 @@ namespace Gs2.Gs2Version.Model
         public int CompareTo(object obj)
         {
             var other = obj as TargetVersion;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type TargetVersion.", nameof(obj));
+            }
             var diff = 0;
-            if (VersionName == null && VersionName == other.VersionName)
+            diff = ModelComparer.Compare(VersionName, other.VersionName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Body, other.Body);
+            if (diff != 0)
             {
-                diff += VersionName.CompareTo(other.VersionName);
+                return diff;
             }
-            if (Body == null && Body == other.Body)
+            diff = ModelComparer.Compare(Signature, other.Signature);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Version, other.Version);
+            if (diff != 0)
             {
-                diff += Body.CompareTo(other.Body);
+                return diff;
             }
-            if (Signature == null && Signature == other.Signature)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Signature.CompareTo(other.Signature);
-            }
-            if (Version == null && Version == other.Version)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Version.CompareTo(other.Version);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

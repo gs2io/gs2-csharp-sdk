@@ -202,52 +202,41 @@ namespace Gs2.Gs2Quest.Model
         public int CompareTo(object obj)
         {
             var other = obj as QuestGroupModel;
-            var diff = 0;
-            if (QuestGroupModelId == null && QuestGroupModelId == other.QuestGroupModelId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += QuestGroupModelId.CompareTo(other.QuestGroupModelId);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (Quests == null && Quests == other.Quests)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Quests.Length - other.Quests.Length;
-                for (var i = 0; i < Quests.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += Quests[i].CompareTo(other.Quests[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type QuestGroupModel.", nameof(obj));
             }
-            if (ChallengePeriodEventId == null && ChallengePeriodEventId == other.ChallengePeriodEventId)
+            var diff = 0;
+            diff = ModelComparer.Compare(QuestGroupModelId, other.QuestGroupModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += ChallengePeriodEventId.CompareTo(other.ChallengePeriodEventId);
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(Quests, other.Quests);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(ChallengePeriodEventId, other.ChallengePeriodEventId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

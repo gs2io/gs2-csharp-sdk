@@ -191,44 +191,36 @@ namespace Gs2.Gs2Inventory.Model
         public int CompareTo(object obj)
         {
             var other = obj as SimpleInventoryModel;
-            var diff = 0;
-            if (InventoryModelId == null && InventoryModelId == other.InventoryModelId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += InventoryModelId.CompareTo(other.InventoryModelId);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (SimpleItemModels == null && SimpleItemModels == other.SimpleItemModels)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += SimpleItemModels.Length - other.SimpleItemModels.Length;
-                for (var i = 0; i < SimpleItemModels.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += SimpleItemModels[i].CompareTo(other.SimpleItemModels[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type SimpleInventoryModel.", nameof(obj));
             }
-            return diff;
+            var diff = 0;
+            diff = ModelComparer.Compare(InventoryModelId, other.InventoryModelId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(SimpleItemModels, other.SimpleItemModels);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

@@ -241,68 +241,51 @@ namespace Gs2.Gs2SkillTree.Model
         public int CompareTo(object obj)
         {
             var other = obj as Status;
-            var diff = 0;
-            if (StatusId == null && StatusId == other.StatusId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += StatusId.CompareTo(other.StatusId);
-            }
-            if (UserId == null && UserId == other.UserId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UserId.CompareTo(other.UserId);
-            }
-            if (PropertyId == null && PropertyId == other.PropertyId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += PropertyId.CompareTo(other.PropertyId);
-            }
-            if (ReleasedNodeNames == null && ReleasedNodeNames == other.ReleasedNodeNames)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ReleasedNodeNames.Length - other.ReleasedNodeNames.Length;
-                for (var i = 0; i < ReleasedNodeNames.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += ReleasedNodeNames[i].CompareTo(other.ReleasedNodeNames[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type Status.", nameof(obj));
             }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
+            var diff = 0;
+            diff = ModelComparer.Compare(StatusId, other.StatusId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += (int)(CreatedAt - other.CreatedAt);
+                return diff;
             }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
+            diff = ModelComparer.Compare(PropertyId, other.PropertyId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(ReleasedNodeNames, other.ReleasedNodeNames);
+            if (diff != 0)
             {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
+                return diff;
             }
-            if (Revision == null && Revision == other.Revision)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += (int)(Revision - other.Revision);
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

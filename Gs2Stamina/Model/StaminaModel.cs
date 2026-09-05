@@ -254,96 +254,71 @@ namespace Gs2.Gs2Stamina.Model
         public int CompareTo(object obj)
         {
             var other = obj as StaminaModel;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type StaminaModel.", nameof(obj));
+            }
             var diff = 0;
-            if (StaminaModelId == null && StaminaModelId == other.StaminaModelId)
+            diff = ModelComparer.Compare(StaminaModelId, other.StaminaModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += StaminaModelId.CompareTo(other.StaminaModelId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(RecoverIntervalMinutes, other.RecoverIntervalMinutes);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
+            diff = ModelComparer.Compare(RecoverValue, other.RecoverValue);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(InitialCapacity, other.InitialCapacity);
+            if (diff != 0)
             {
-                diff += Metadata.CompareTo(other.Metadata);
+                return diff;
             }
-            if (RecoverIntervalMinutes == null && RecoverIntervalMinutes == other.RecoverIntervalMinutes)
+            diff = ModelComparer.Compare(IsOverflow, other.IsOverflow);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(MaxCapacity, other.MaxCapacity);
+            if (diff != 0)
             {
-                diff += (int)(RecoverIntervalMinutes - other.RecoverIntervalMinutes);
+                return diff;
             }
-            if (RecoverValue == null && RecoverValue == other.RecoverValue)
+            diff = ModelComparer.Compare(MaxStaminaTable, other.MaxStaminaTable);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(RecoverIntervalTable, other.RecoverIntervalTable);
+            if (diff != 0)
             {
-                diff += (int)(RecoverValue - other.RecoverValue);
+                return diff;
             }
-            if (InitialCapacity == null && InitialCapacity == other.InitialCapacity)
+            diff = ModelComparer.Compare(RecoverValueTable, other.RecoverValueTable);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += (int)(InitialCapacity - other.InitialCapacity);
-            }
-            if (IsOverflow == null && IsOverflow == other.IsOverflow)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += IsOverflow == other.IsOverflow ? 0 : 1;
-            }
-            if (MaxCapacity == null && MaxCapacity == other.MaxCapacity)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(MaxCapacity - other.MaxCapacity);
-            }
-            if (MaxStaminaTable == null && MaxStaminaTable == other.MaxStaminaTable)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += MaxStaminaTable.CompareTo(other.MaxStaminaTable);
-            }
-            if (RecoverIntervalTable == null && RecoverIntervalTable == other.RecoverIntervalTable)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += RecoverIntervalTable.CompareTo(other.RecoverIntervalTable);
-            }
-            if (RecoverValueTable == null && RecoverValueTable == other.RecoverValueTable)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += RecoverValueTable.CompareTo(other.RecoverValueTable);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

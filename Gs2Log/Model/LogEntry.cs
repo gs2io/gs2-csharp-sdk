@@ -134,52 +134,41 @@ namespace Gs2.Gs2Log.Model
         public int CompareTo(object obj)
         {
             var other = obj as LogEntry;
-            var diff = 0;
-            if (Timestamp == null && Timestamp == other.Timestamp)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Timestamp - other.Timestamp);
-            }
-            if (Status == null && Status == other.Status)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Status.CompareTo(other.Status);
-            }
-            if (Duration == null && Duration == other.Duration)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Duration - other.Duration);
-            }
-            if (Line == null && Line == other.Line)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Line.CompareTo(other.Line);
-            }
-            if (Labels == null && Labels == other.Labels)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Labels.Length - other.Labels.Length;
-                for (var i = 0; i < Labels.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += Labels[i].CompareTo(other.Labels[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type LogEntry.", nameof(obj));
             }
-            return diff;
+            var diff = 0;
+            diff = ModelComparer.Compare(Timestamp, other.Timestamp);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Status, other.Status);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Duration, other.Duration);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Line, other.Line);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(Labels, other.Labels);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

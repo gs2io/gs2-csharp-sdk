@@ -112,36 +112,31 @@ namespace Gs2.Gs2Money2.Model
         public int CompareTo(object obj)
         {
             var other = obj as WithdrawEvent;
-            var diff = 0;
-            if (Slot == null && Slot == other.Slot)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Slot - other.Slot);
-            }
-            if (WithdrawDetails == null && WithdrawDetails == other.WithdrawDetails)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += WithdrawDetails.Length - other.WithdrawDetails.Length;
-                for (var i = 0; i < WithdrawDetails.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += WithdrawDetails[i].CompareTo(other.WithdrawDetails[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type WithdrawEvent.", nameof(obj));
             }
-            if (Status == null && Status == other.Status)
+            var diff = 0;
+            diff = ModelComparer.Compare(Slot, other.Slot);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(WithdrawDetails, other.WithdrawDetails);
+            if (diff != 0)
             {
-                diff += Status.CompareTo(other.Status);
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.Compare(Status, other.Status);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

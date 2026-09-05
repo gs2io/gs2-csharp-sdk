@@ -212,56 +212,46 @@ namespace Gs2.Gs2MegaField.Model
         public int CompareTo(object obj)
         {
             var other = obj as Layer;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Layer.", nameof(obj));
+            }
             var diff = 0;
-            if (LayerId == null && LayerId == other.LayerId)
+            diff = ModelComparer.Compare(LayerId, other.LayerId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(AreaModelName, other.AreaModelName);
+            if (diff != 0)
             {
-                diff += LayerId.CompareTo(other.LayerId);
+                return diff;
             }
-            if (AreaModelName == null && AreaModelName == other.AreaModelName)
+            diff = ModelComparer.Compare(LayerModelName, other.LayerModelName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(NumberOfMinEntries, other.NumberOfMinEntries);
+            if (diff != 0)
             {
-                diff += AreaModelName.CompareTo(other.AreaModelName);
+                return diff;
             }
-            if (LayerModelName == null && LayerModelName == other.LayerModelName)
+            diff = ModelComparer.Compare(NumberOfMaxEntries, other.NumberOfMaxEntries);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += LayerModelName.CompareTo(other.LayerModelName);
+                return diff;
             }
-            if (NumberOfMinEntries == null && NumberOfMinEntries == other.NumberOfMinEntries)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(NumberOfMinEntries - other.NumberOfMinEntries);
-            }
-            if (NumberOfMaxEntries == null && NumberOfMaxEntries == other.NumberOfMaxEntries)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(NumberOfMaxEntries - other.NumberOfMaxEntries);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

@@ -90,20 +90,21 @@ namespace Gs2.Gs2AdReward.Model
         public int CompareTo(object obj)
         {
             var other = obj as UnityAd;
-            var diff = 0;
-            if (Keys == null && Keys == other.Keys)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += Keys.Length - other.Keys.Length;
-                for (var i = 0; i < Keys.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += Keys[i].CompareTo(other.Keys[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type UnityAd.", nameof(obj));
             }
-            return diff;
+            var diff = 0;
+            diff = ModelComparer.CompareArray(Keys, other.Keys);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

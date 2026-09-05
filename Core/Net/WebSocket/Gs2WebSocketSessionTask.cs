@@ -19,11 +19,20 @@ namespace Gs2.Core.Net
             string component,
             string function,
             JsonWriter jsonWriter
+        ) => AddHeader(credential, service, component, function, jsonWriter, true);
+
+        protected void AddHeader(
+            IGs2Credential credential,
+            string service,
+            string component,
+            string function,
+            JsonWriter jsonWriter,
+            bool includeProjectToken
         )
         {
             jsonWriter.WritePropertyName("xGs2ClientId");
             jsonWriter.Write(credential.ClientId);
-            if (credential.ProjectToken != null)
+            if (includeProjectToken && credential.ProjectToken != null)
             {
                 jsonWriter.WritePropertyName("xGs2ProjectToken");
                 jsonWriter.Write(credential.ProjectToken);

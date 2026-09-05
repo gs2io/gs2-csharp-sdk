@@ -17,6 +17,8 @@
 #if UNITY_2017_1_OR_NEWER
 using UnityEngine.Scripting;
 #endif
+using System.Text;
+using Gs2.Util.LitJson;
 
 namespace Gs2.Core.Model
 {
@@ -74,7 +76,15 @@ namespace Gs2.Core.Model
 		}
 
 		public override string ToString() {
-			return $"{{\"component\": \"{this.component}\", \"message\": \"{this.message}\"}}";
+			var stringBuilder = new StringBuilder();
+			var writer = new JsonWriter(stringBuilder);
+			writer.WriteObjectStart();
+			writer.WritePropertyName("component");
+			writer.Write(this.component ?? string.Empty);
+			writer.WritePropertyName("message");
+			writer.Write(this.message ?? string.Empty);
+			writer.WriteObjectEnd();
+			return stringBuilder.ToString();
 		}
 	}
 }

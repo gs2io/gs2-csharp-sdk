@@ -116,48 +116,41 @@ namespace Gs2.Gs2Schedule.Model
         public int CompareTo(object obj)
         {
             var other = obj as RepeatSchedule;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type RepeatSchedule.", nameof(obj));
+            }
             var diff = 0;
-            if (RepeatCount == null && RepeatCount == other.RepeatCount)
+            diff = ModelComparer.Compare(RepeatCount, other.RepeatCount);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CurrentRepeatStartAt, other.CurrentRepeatStartAt);
+            if (diff != 0)
             {
-                diff += (int)(RepeatCount - other.RepeatCount);
+                return diff;
             }
-            if (CurrentRepeatStartAt == null && CurrentRepeatStartAt == other.CurrentRepeatStartAt)
+            diff = ModelComparer.Compare(CurrentRepeatEndAt, other.CurrentRepeatEndAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(LastRepeatEndAt, other.LastRepeatEndAt);
+            if (diff != 0)
             {
-                diff += (int)(CurrentRepeatStartAt - other.CurrentRepeatStartAt);
+                return diff;
             }
-            if (CurrentRepeatEndAt == null && CurrentRepeatEndAt == other.CurrentRepeatEndAt)
+            diff = ModelComparer.Compare(NextRepeatStartAt, other.NextRepeatStartAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += (int)(CurrentRepeatEndAt - other.CurrentRepeatEndAt);
-            }
-            if (LastRepeatEndAt == null && LastRepeatEndAt == other.LastRepeatEndAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(LastRepeatEndAt - other.LastRepeatEndAt);
-            }
-            if (NextRepeatStartAt == null && NextRepeatStartAt == other.NextRepeatStartAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(NextRepeatStartAt - other.NextRepeatStartAt);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

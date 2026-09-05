@@ -16,6 +16,7 @@ namespace Gs2.Core.Net
         public string Body { get; set; }
         public bool EnableRequestCompression { get; set; } = true;
         public bool EnableResponseDecompression { get; set; } = true;
+        internal object SessionOpenToken { get; set; }
 
         public void AddHeader(string key, string value)
         {
@@ -28,5 +29,9 @@ namespace Gs2.Core.Net
         }
 
         public abstract Task<RestResult> Invoke();
+
+        public virtual void Abort()
+        {
+        }
     }
 }

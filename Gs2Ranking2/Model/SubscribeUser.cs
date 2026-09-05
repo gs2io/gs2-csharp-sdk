@@ -94,32 +94,31 @@ namespace Gs2.Gs2Ranking2.Model
         public int CompareTo(object obj)
         {
             var other = obj as SubscribeUser;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type SubscribeUser.", nameof(obj));
+            }
             var diff = 0;
-            if (RankingName == null && RankingName == other.RankingName)
+            diff = ModelComparer.Compare(RankingName, other.RankingName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += RankingName.CompareTo(other.RankingName);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(TargetUserId, other.TargetUserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += UserId.CompareTo(other.UserId);
-            }
-            if (TargetUserId == null && TargetUserId == other.TargetUserId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += TargetUserId.CompareTo(other.TargetUserId);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

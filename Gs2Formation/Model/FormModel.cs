@@ -191,44 +191,36 @@ namespace Gs2.Gs2Formation.Model
         public int CompareTo(object obj)
         {
             var other = obj as FormModel;
-            var diff = 0;
-            if (FormModelId == null && FormModelId == other.FormModelId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += FormModelId.CompareTo(other.FormModelId);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (Slots == null && Slots == other.Slots)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Slots.Length - other.Slots.Length;
-                for (var i = 0; i < Slots.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += Slots[i].CompareTo(other.Slots[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type FormModel.", nameof(obj));
             }
-            return diff;
+            var diff = 0;
+            diff = ModelComparer.Compare(FormModelId, other.FormModelId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(Slots, other.Slots);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

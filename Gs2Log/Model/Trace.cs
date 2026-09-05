@@ -112,36 +112,31 @@ namespace Gs2.Gs2Log.Model
         public int CompareTo(object obj)
         {
             var other = obj as Trace;
-            var diff = 0;
-            if (TraceId == null && TraceId == other.TraceId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += TraceId.CompareTo(other.TraceId);
-            }
-            if (Spans == null && Spans == other.Spans)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Spans.Length - other.Spans.Length;
-                for (var i = 0; i < Spans.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += Spans[i].CompareTo(other.Spans[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type Trace.", nameof(obj));
             }
-            if (Truncated == null && Truncated == other.Truncated)
+            var diff = 0;
+            diff = ModelComparer.Compare(TraceId, other.TraceId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(Spans, other.Spans);
+            if (diff != 0)
             {
-                diff += Truncated == other.Truncated ? 0 : 1;
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.Compare(Truncated, other.Truncated);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

@@ -198,48 +198,41 @@ namespace Gs2.Gs2Ranking2.Model
         public int CompareTo(object obj)
         {
             var other = obj as GlobalRankingBorder;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type GlobalRankingBorder.", nameof(obj));
+            }
             var diff = 0;
-            if (GlobalRankingBoarderId == null && GlobalRankingBoarderId == other.GlobalRankingBoarderId)
+            diff = ModelComparer.Compare(GlobalRankingBoarderId, other.GlobalRankingBoarderId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(RankingName, other.RankingName);
+            if (diff != 0)
             {
-                diff += GlobalRankingBoarderId.CompareTo(other.GlobalRankingBoarderId);
+                return diff;
             }
-            if (RankingName == null && RankingName == other.RankingName)
+            diff = ModelComparer.Compare(Season, other.Season);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Score, other.Score);
+            if (diff != 0)
             {
-                diff += RankingName.CompareTo(other.RankingName);
+                return diff;
             }
-            if (Season == null && Season == other.Season)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += (int)(Season - other.Season);
-            }
-            if (Score == null && Score == other.Score)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Score - other.Score);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

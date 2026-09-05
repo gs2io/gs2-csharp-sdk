@@ -30,6 +30,7 @@ namespace Gs2.Core.Net
         }
     }
 
+    [Obsolete("This handler accepts every certificate and must not be used in production.")]
     public class DisabledCertificateHandler : CertificateHandler {
         protected override bool ValidateCertificate(byte[] certificateData)
         {
@@ -40,7 +41,8 @@ namespace Gs2.Core.Net
     public class UnityRestSessionRequest : RestSessionRequest
     {
         private readonly CertificateHandler _certificateHandler;
-        private readonly bool _checkCertificateRevocation;
+        private readonly object _requestLock = new object();
+        private UnityWebRequest _inflightRequest;
 
         public UnityRestSessionRequest()
         {
@@ -48,13 +50,17 @@ namespace Gs2.Core.Net
 
         public UnityRestSessionRequest(bool checkCertificateRevocation = true)
         {
-            this._checkCertificateRevocation = checkCertificateRevocation;
+#if !UNITY_WEBGL || UNITY_EDITOR
+            Gs2RestSession.ValidateCertificateRevocationConfiguration(
+                checkCertificateRevocation,
+                false
+            );
+#endif
         }
 
         public UnityRestSessionRequest(CertificateHandler certificateHandler = null)
         {
             this._certificateHandler = certificateHandler;
-            this._checkCertificateRevocation = true;
         }
 
         private static byte[] Compress(byte[] data)
@@ -78,6 +84,12 @@ namespace Gs2.Core.Net
                 uri,
                 Method.TransformUnity()
             );
+            lock (_requestLock)
+            {
+                _inflightRequest = request;
+            }
+            try
+            {
             request.downloadHandler = new DownloadHandlerBuffer();
             foreach (var item in Headers.Where(item => (Method != HttpMethod.Post && Method != HttpMethod.Put) || item.Key.ToLower() != "content-type")) {
                 request.SetRequestHeader(item.Key, item.Value);
@@ -102,9 +114,10 @@ namespace Gs2.Core.Net
             }
 
             if (this._certificateHandler != null)
+            {
                 request.certificateHandler = this._certificateHandler;
-            else if (!this._checkCertificateRevocation)
-                request.certificateHandler = new DisabledCertificateHandler();
+                request.disposeCertificateHandlerOnDispose = false;
+            }
 
             try {
                 await request.SendWebRequest();
@@ -136,13 +149,29 @@ namespace Gs2.Core.Net
                     break;
             }
 
-            // ReSharper disable once DisposeOnUsingVariable
-            request.Dispose();
-
             return result;
+            }
+            finally
+            {
+                lock (_requestLock)
+                {
+                    if (ReferenceEquals(_inflightRequest, request))
+                    {
+                        _inflightRequest = null;
+                    }
+                }
+            }
 #else
             throw new NotImplementedException();
 #endif
+        }
+
+        public override void Abort()
+        {
+            lock (_requestLock)
+            {
+                _inflightRequest?.Abort();
+            }
         }
     }
 }

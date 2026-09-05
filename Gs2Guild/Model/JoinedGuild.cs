@@ -229,56 +229,46 @@ namespace Gs2.Gs2Guild.Model
         public int CompareTo(object obj)
         {
             var other = obj as JoinedGuild;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type JoinedGuild.", nameof(obj));
+            }
             var diff = 0;
-            if (JoinedGuildId == null && JoinedGuildId == other.JoinedGuildId)
+            diff = ModelComparer.Compare(JoinedGuildId, other.JoinedGuildId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(GuildModelName, other.GuildModelName);
+            if (diff != 0)
             {
-                diff += JoinedGuildId.CompareTo(other.JoinedGuildId);
+                return diff;
             }
-            if (GuildModelName == null && GuildModelName == other.GuildModelName)
+            diff = ModelComparer.Compare(GuildName, other.GuildName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += GuildModelName.CompareTo(other.GuildModelName);
+                return diff;
             }
-            if (GuildName == null && GuildName == other.GuildName)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += GuildName.CompareTo(other.GuildName);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UserId.CompareTo(other.UserId);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

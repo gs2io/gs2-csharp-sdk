@@ -262,80 +262,61 @@ namespace Gs2.Gs2Limit.Model
         public int CompareTo(object obj)
         {
             var other = obj as Counter;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Counter.", nameof(obj));
+            }
             var diff = 0;
-            if (CounterId == null && CounterId == other.CounterId)
+            diff = ModelComparer.Compare(CounterId, other.CounterId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(LimitName, other.LimitName);
+            if (diff != 0)
             {
-                diff += CounterId.CompareTo(other.CounterId);
+                return diff;
             }
-            if (LimitName == null && LimitName == other.LimitName)
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += LimitName.CompareTo(other.LimitName);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Count, other.Count);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(NextResetAt, other.NextResetAt);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (Count == null && Count == other.Count)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += (int)(Count - other.Count);
-            }
-            if (NextResetAt == null && NextResetAt == other.NextResetAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(NextResetAt - other.NextResetAt);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

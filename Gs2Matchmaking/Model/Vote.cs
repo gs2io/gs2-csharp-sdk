@@ -230,60 +230,46 @@ namespace Gs2.Gs2Matchmaking.Model
         public int CompareTo(object obj)
         {
             var other = obj as Vote;
-            var diff = 0;
-            if (VoteId == null && VoteId == other.VoteId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += VoteId.CompareTo(other.VoteId);
-            }
-            if (RatingName == null && RatingName == other.RatingName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += RatingName.CompareTo(other.RatingName);
-            }
-            if (GatheringName == null && GatheringName == other.GatheringName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += GatheringName.CompareTo(other.GatheringName);
-            }
-            if (WrittenBallots == null && WrittenBallots == other.WrittenBallots)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += WrittenBallots.Length - other.WrittenBallots.Length;
-                for (var i = 0; i < WrittenBallots.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += WrittenBallots[i].CompareTo(other.WrittenBallots[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type Vote.", nameof(obj));
             }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
+            var diff = 0;
+            diff = ModelComparer.Compare(VoteId, other.VoteId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(RatingName, other.RatingName);
+            if (diff != 0)
             {
-                diff += (int)(CreatedAt - other.CreatedAt);
+                return diff;
             }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
+            diff = ModelComparer.Compare(GatheringName, other.GatheringName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(WrittenBallots, other.WrittenBallots);
+            if (diff != 0)
             {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

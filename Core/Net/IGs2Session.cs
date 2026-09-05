@@ -15,6 +15,19 @@ using System.Threading.Tasks;
 
 namespace Gs2.Core.Net
 {
+    internal enum RequestTrackingState
+    {
+        Pending,
+        Completed,
+        Abandoned,
+    }
+
+    internal interface IRequestTrackingSession
+    {
+        RequestTrackingState GetRequestTrackingState(IGs2SessionRequest request);
+        void Forget(IGs2SessionRequest request);
+    }
+
     public interface IGs2Session
     {
         IGs2Credential Credential { get; }

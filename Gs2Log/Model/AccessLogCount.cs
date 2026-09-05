@@ -105,40 +105,36 @@ namespace Gs2.Gs2Log.Model
         public int CompareTo(object obj)
         {
             var other = obj as AccessLogCount;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type AccessLogCount.", nameof(obj));
+            }
             var diff = 0;
-            if (Service == null && Service == other.Service)
+            diff = ModelComparer.Compare(Service, other.Service);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Method, other.Method);
+            if (diff != 0)
             {
-                diff += Service.CompareTo(other.Service);
+                return diff;
             }
-            if (Method == null && Method == other.Method)
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Count, other.Count);
+            if (diff != 0)
             {
-                diff += Method.CompareTo(other.Method);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UserId.CompareTo(other.UserId);
-            }
-            if (Count == null && Count == other.Count)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Count - other.Count);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

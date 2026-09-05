@@ -257,64 +257,51 @@ namespace Gs2.Gs2Ranking2.Model
         public int CompareTo(object obj)
         {
             var other = obj as ClusterRankingReceivedReward;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type ClusterRankingReceivedReward.", nameof(obj));
+            }
             var diff = 0;
-            if (ClusterRankingReceivedRewardId == null && ClusterRankingReceivedRewardId == other.ClusterRankingReceivedRewardId)
+            diff = ModelComparer.Compare(ClusterRankingReceivedRewardId, other.ClusterRankingReceivedRewardId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(RankingName, other.RankingName);
+            if (diff != 0)
             {
-                diff += ClusterRankingReceivedRewardId.CompareTo(other.ClusterRankingReceivedRewardId);
+                return diff;
             }
-            if (RankingName == null && RankingName == other.RankingName)
+            diff = ModelComparer.Compare(ClusterName, other.ClusterName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Season, other.Season);
+            if (diff != 0)
             {
-                diff += RankingName.CompareTo(other.RankingName);
+                return diff;
             }
-            if (ClusterName == null && ClusterName == other.ClusterName)
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ReceivedAt, other.ReceivedAt);
+            if (diff != 0)
             {
-                diff += ClusterName.CompareTo(other.ClusterName);
+                return diff;
             }
-            if (Season == null && Season == other.Season)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += (int)(Season - other.Season);
-            }
-            if (UserId == null && UserId == other.UserId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UserId.CompareTo(other.UserId);
-            }
-            if (ReceivedAt == null && ReceivedAt == other.ReceivedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(ReceivedAt - other.ReceivedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

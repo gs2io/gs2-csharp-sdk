@@ -235,76 +235,56 @@ namespace Gs2.Gs2Showcase.Model
         public int CompareTo(object obj)
         {
             var other = obj as RandomShowcase;
-            var diff = 0;
-            if (RandomShowcaseId == null && RandomShowcaseId == other.RandomShowcaseId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += RandomShowcaseId.CompareTo(other.RandomShowcaseId);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (MaximumNumberOfChoice == null && MaximumNumberOfChoice == other.MaximumNumberOfChoice)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(MaximumNumberOfChoice - other.MaximumNumberOfChoice);
-            }
-            if (DisplayItems == null && DisplayItems == other.DisplayItems)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += DisplayItems.Length - other.DisplayItems.Length;
-                for (var i = 0; i < DisplayItems.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += DisplayItems[i].CompareTo(other.DisplayItems[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type RandomShowcase.", nameof(obj));
             }
-            if (BaseTimestamp == null && BaseTimestamp == other.BaseTimestamp)
+            var diff = 0;
+            diff = ModelComparer.Compare(RandomShowcaseId, other.RandomShowcaseId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += (int)(BaseTimestamp - other.BaseTimestamp);
+                return diff;
             }
-            if (ResetIntervalHours == null && ResetIntervalHours == other.ResetIntervalHours)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(MaximumNumberOfChoice, other.MaximumNumberOfChoice);
+            if (diff != 0)
             {
-                diff += (int)(ResetIntervalHours - other.ResetIntervalHours);
+                return diff;
             }
-            if (SalesPeriodEventId == null && SalesPeriodEventId == other.SalesPeriodEventId)
+            diff = ModelComparer.CompareArray(DisplayItems, other.DisplayItems);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(BaseTimestamp, other.BaseTimestamp);
+            if (diff != 0)
             {
-                diff += SalesPeriodEventId.CompareTo(other.SalesPeriodEventId);
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.Compare(ResetIntervalHours, other.ResetIntervalHours);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(SalesPeriodEventId, other.SalesPeriodEventId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

@@ -83,24 +83,26 @@ namespace Gs2.Gs2Enhance.Model
         public int CompareTo(object obj)
         {
             var other = obj as Material;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Material.", nameof(obj));
+            }
             var diff = 0;
-            if (MaterialItemSetId == null && MaterialItemSetId == other.MaterialItemSetId)
+            diff = ModelComparer.Compare(MaterialItemSetId, other.MaterialItemSetId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Count, other.Count);
+            if (diff != 0)
             {
-                diff += MaterialItemSetId.CompareTo(other.MaterialItemSetId);
+                return diff;
             }
-            if (Count == null && Count == other.Count)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Count - other.Count);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

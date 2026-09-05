@@ -94,32 +94,31 @@ namespace Gs2.Gs2Deploy.Model
         public int CompareTo(object obj)
         {
             var other = obj as ChangeSet;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type ChangeSet.", nameof(obj));
+            }
             var diff = 0;
-            if (ResourceName == null && ResourceName == other.ResourceName)
+            diff = ModelComparer.Compare(ResourceName, other.ResourceName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ResourceType, other.ResourceType);
+            if (diff != 0)
             {
-                diff += ResourceName.CompareTo(other.ResourceName);
+                return diff;
             }
-            if (ResourceType == null && ResourceType == other.ResourceType)
+            diff = ModelComparer.Compare(Operation, other.Operation);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += ResourceType.CompareTo(other.ResourceType);
-            }
-            if (Operation == null && Operation == other.Operation)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Operation.CompareTo(other.Operation);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

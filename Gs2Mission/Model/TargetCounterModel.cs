@@ -116,48 +116,41 @@ namespace Gs2.Gs2Mission.Model
         public int CompareTo(object obj)
         {
             var other = obj as TargetCounterModel;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type TargetCounterModel.", nameof(obj));
+            }
             var diff = 0;
-            if (CounterName == null && CounterName == other.CounterName)
+            diff = ModelComparer.Compare(CounterName, other.CounterName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ScopeType, other.ScopeType);
+            if (diff != 0)
             {
-                diff += CounterName.CompareTo(other.CounterName);
+                return diff;
             }
-            if (ScopeType == null && ScopeType == other.ScopeType)
+            diff = ModelComparer.Compare(ResetType, other.ResetType);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ConditionName, other.ConditionName);
+            if (diff != 0)
             {
-                diff += ScopeType.CompareTo(other.ScopeType);
+                return diff;
             }
-            if (ResetType == null && ResetType == other.ResetType)
+            diff = ModelComparer.Compare(Value, other.Value);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += ResetType.CompareTo(other.ResetType);
-            }
-            if (ConditionName == null && ConditionName == other.ConditionName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ConditionName.CompareTo(other.ConditionName);
-            }
-            if (Value == null && Value == other.Value)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Value - other.Value);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

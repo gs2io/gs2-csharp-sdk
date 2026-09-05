@@ -647,7 +647,7 @@ namespace Gs2.Gs2Mission.Domain
         ) {
             switch (action) {
                 case "Complete": {
-                    var notification = CompleteNotification.FromJson(JsonMapper.ToObject(payload));
+                    var notification = NotificationPayload.Parse(payload, CompleteNotification.FromJson);
                     _gs2.Cache.Delete<Gs2.Gs2Mission.Model.Complete>(
                         (null as Gs2.Gs2Mission.Model.Complete).CacheParentKey(
                             notification.NamespaceName,

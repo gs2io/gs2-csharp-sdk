@@ -105,40 +105,36 @@ namespace Gs2.Gs2Version.Model
         public int CompareTo(object obj)
         {
             var other = obj as ScheduleVersion;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type ScheduleVersion.", nameof(obj));
+            }
             var diff = 0;
-            if (CurrentVersion == null && CurrentVersion == other.CurrentVersion)
+            diff = ModelComparer.Compare(CurrentVersion, other.CurrentVersion);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(WarningVersion, other.WarningVersion);
+            if (diff != 0)
             {
-                diff += CurrentVersion.CompareTo(other.CurrentVersion);
+                return diff;
             }
-            if (WarningVersion == null && WarningVersion == other.WarningVersion)
+            diff = ModelComparer.Compare(ErrorVersion, other.ErrorVersion);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ScheduleEventId, other.ScheduleEventId);
+            if (diff != 0)
             {
-                diff += WarningVersion.CompareTo(other.WarningVersion);
+                return diff;
             }
-            if (ErrorVersion == null && ErrorVersion == other.ErrorVersion)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ErrorVersion.CompareTo(other.ErrorVersion);
-            }
-            if (ScheduleEventId == null && ScheduleEventId == other.ScheduleEventId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ScheduleEventId.CompareTo(other.ScheduleEventId);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

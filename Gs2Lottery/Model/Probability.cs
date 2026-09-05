@@ -83,24 +83,26 @@ namespace Gs2.Gs2Lottery.Model
         public int CompareTo(object obj)
         {
             var other = obj as Probability;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Probability.", nameof(obj));
+            }
             var diff = 0;
-            if (Prize == null && Prize == other.Prize)
+            diff = ModelComparer.Compare(Prize, other.Prize);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Rate, other.Rate);
+            if (diff != 0)
             {
-                diff += Prize.CompareTo(other.Prize);
+                return diff;
             }
-            if (Rate == null && Rate == other.Rate)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Rate - other.Rate);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

@@ -279,72 +279,56 @@ namespace Gs2.Gs2JobQueue.Model
         public int CompareTo(object obj)
         {
             var other = obj as JobResult;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type JobResult.", nameof(obj));
+            }
             var diff = 0;
-            if (JobResultId == null && JobResultId == other.JobResultId)
+            diff = ModelComparer.Compare(JobResultId, other.JobResultId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(JobId, other.JobId);
+            if (diff != 0)
             {
-                diff += JobResultId.CompareTo(other.JobResultId);
+                return diff;
             }
-            if (JobId == null && JobId == other.JobId)
+            diff = ModelComparer.Compare(ScriptId, other.ScriptId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Args, other.Args);
+            if (diff != 0)
             {
-                diff += JobId.CompareTo(other.JobId);
+                return diff;
             }
-            if (ScriptId == null && ScriptId == other.ScriptId)
+            diff = ModelComparer.Compare(TryNumber, other.TryNumber);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(StatusCode, other.StatusCode);
+            if (diff != 0)
             {
-                diff += ScriptId.CompareTo(other.ScriptId);
+                return diff;
             }
-            if (Args == null && Args == other.Args)
+            diff = ModelComparer.Compare(Result, other.Result);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TryAt, other.TryAt);
+            if (diff != 0)
             {
-                diff += Args.CompareTo(other.Args);
+                return diff;
             }
-            if (TryNumber == null && TryNumber == other.TryNumber)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(TryNumber - other.TryNumber);
-            }
-            if (StatusCode == null && StatusCode == other.StatusCode)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(StatusCode - other.StatusCode);
-            }
-            if (Result == null && Result == other.Result)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Result.CompareTo(other.Result);
-            }
-            if (TryAt == null && TryAt == other.TryAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(TryAt - other.TryAt);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

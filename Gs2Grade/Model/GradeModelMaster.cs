@@ -304,108 +304,71 @@ namespace Gs2.Gs2Grade.Model
         public int CompareTo(object obj)
         {
             var other = obj as GradeModelMaster;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type GradeModelMaster.", nameof(obj));
+            }
             var diff = 0;
-            if (GradeModelId == null && GradeModelId == other.GradeModelId)
+            diff = ModelComparer.Compare(GradeModelId, other.GradeModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += GradeModelId.CompareTo(other.GradeModelId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Description == null && Description == other.Description)
+            diff = ModelComparer.CompareArray(DefaultGrades, other.DefaultGrades);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ExperienceModelId, other.ExperienceModelId);
+            if (diff != 0)
             {
-                diff += Description.CompareTo(other.Description);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
+            diff = ModelComparer.CompareArray(GradeEntries, other.GradeEntries);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(AcquireActionRates, other.AcquireActionRates);
+            if (diff != 0)
             {
-                diff += Metadata.CompareTo(other.Metadata);
+                return diff;
             }
-            if (DefaultGrades == null && DefaultGrades == other.DefaultGrades)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += DefaultGrades.Length - other.DefaultGrades.Length;
-                for (var i = 0; i < DefaultGrades.Length; i++)
-                {
-                    diff += DefaultGrades[i].CompareTo(other.DefaultGrades[i]);
-                }
+                return diff;
             }
-            if (ExperienceModelId == null && ExperienceModelId == other.ExperienceModelId)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += ExperienceModelId.CompareTo(other.ExperienceModelId);
-            }
-            if (GradeEntries == null && GradeEntries == other.GradeEntries)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += GradeEntries.Length - other.GradeEntries.Length;
-                for (var i = 0; i < GradeEntries.Length; i++)
-                {
-                    diff += GradeEntries[i].CompareTo(other.GradeEntries[i]);
-                }
-            }
-            if (AcquireActionRates == null && AcquireActionRates == other.AcquireActionRates)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += AcquireActionRates.Length - other.AcquireActionRates.Length;
-                for (var i = 0; i < AcquireActionRates.Length; i++)
-                {
-                    diff += AcquireActionRates[i].CompareTo(other.AcquireActionRates[i]);
-                }
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

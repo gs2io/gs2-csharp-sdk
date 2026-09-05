@@ -162,32 +162,31 @@ namespace Gs2.Gs2Chat.Model
         public int CompareTo(object obj)
         {
             var other = obj as CategoryModel;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type CategoryModel.", nameof(obj));
+            }
             var diff = 0;
-            if (CategoryModelId == null && CategoryModelId == other.CategoryModelId)
+            diff = ModelComparer.Compare(CategoryModelId, other.CategoryModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Category, other.Category);
+            if (diff != 0)
             {
-                diff += CategoryModelId.CompareTo(other.CategoryModelId);
+                return diff;
             }
-            if (Category == null && Category == other.Category)
+            diff = ModelComparer.Compare(RejectAccessTokenPost, other.RejectAccessTokenPost);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += (int)(Category - other.Category);
-            }
-            if (RejectAccessTokenPost == null && RejectAccessTokenPost == other.RejectAccessTokenPost)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += RejectAccessTokenPost.CompareTo(other.RejectAccessTokenPost);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

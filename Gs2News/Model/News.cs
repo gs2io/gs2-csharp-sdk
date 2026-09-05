@@ -127,56 +127,46 @@ namespace Gs2.Gs2News.Model
         public int CompareTo(object obj)
         {
             var other = obj as News;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type News.", nameof(obj));
+            }
             var diff = 0;
-            if (Section == null && Section == other.Section)
+            diff = ModelComparer.Compare(Section, other.Section);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Content, other.Content);
+            if (diff != 0)
             {
-                diff += Section.CompareTo(other.Section);
+                return diff;
             }
-            if (Content == null && Content == other.Content)
+            diff = ModelComparer.Compare(Title, other.Title);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ScheduleEventId, other.ScheduleEventId);
+            if (diff != 0)
             {
-                diff += Content.CompareTo(other.Content);
+                return diff;
             }
-            if (Title == null && Title == other.Title)
+            diff = ModelComparer.Compare(Timestamp, other.Timestamp);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(FrontMatter, other.FrontMatter);
+            if (diff != 0)
             {
-                diff += Title.CompareTo(other.Title);
+                return diff;
             }
-            if (ScheduleEventId == null && ScheduleEventId == other.ScheduleEventId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ScheduleEventId.CompareTo(other.ScheduleEventId);
-            }
-            if (Timestamp == null && Timestamp == other.Timestamp)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Timestamp - other.Timestamp);
-            }
-            if (FrontMatter == null && FrontMatter == other.FrontMatter)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += FrontMatter.CompareTo(other.FrontMatter);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

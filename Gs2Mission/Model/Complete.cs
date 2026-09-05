@@ -281,88 +281,61 @@ namespace Gs2.Gs2Mission.Model
         public int CompareTo(object obj)
         {
             var other = obj as Complete;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Complete.", nameof(obj));
+            }
             var diff = 0;
-            if (CompleteId == null && CompleteId == other.CompleteId)
+            diff = ModelComparer.Compare(CompleteId, other.CompleteId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += CompleteId.CompareTo(other.CompleteId);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(MissionGroupName, other.MissionGroupName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(CompletedMissionTaskNames, other.CompletedMissionTaskNames);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (MissionGroupName == null && MissionGroupName == other.MissionGroupName)
+            diff = ModelComparer.CompareArray(ReceivedMissionTaskNames, other.ReceivedMissionTaskNames);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(NextResetAt, other.NextResetAt);
+            if (diff != 0)
             {
-                diff += MissionGroupName.CompareTo(other.MissionGroupName);
+                return diff;
             }
-            if (CompletedMissionTaskNames == null && CompletedMissionTaskNames == other.CompletedMissionTaskNames)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += CompletedMissionTaskNames.Length - other.CompletedMissionTaskNames.Length;
-                for (var i = 0; i < CompletedMissionTaskNames.Length; i++)
-                {
-                    diff += CompletedMissionTaskNames[i].CompareTo(other.CompletedMissionTaskNames[i]);
-                }
+                return diff;
             }
-            if (ReceivedMissionTaskNames == null && ReceivedMissionTaskNames == other.ReceivedMissionTaskNames)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += ReceivedMissionTaskNames.Length - other.ReceivedMissionTaskNames.Length;
-                for (var i = 0; i < ReceivedMissionTaskNames.Length; i++)
-                {
-                    diff += ReceivedMissionTaskNames[i].CompareTo(other.ReceivedMissionTaskNames[i]);
-                }
-            }
-            if (NextResetAt == null && NextResetAt == other.NextResetAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(NextResetAt - other.NextResetAt);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

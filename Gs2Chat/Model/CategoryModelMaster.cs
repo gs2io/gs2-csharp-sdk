@@ -206,64 +206,51 @@ namespace Gs2.Gs2Chat.Model
         public int CompareTo(object obj)
         {
             var other = obj as CategoryModelMaster;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type CategoryModelMaster.", nameof(obj));
+            }
             var diff = 0;
-            if (CategoryModelId == null && CategoryModelId == other.CategoryModelId)
+            diff = ModelComparer.Compare(CategoryModelId, other.CategoryModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Category, other.Category);
+            if (diff != 0)
             {
-                diff += CategoryModelId.CompareTo(other.CategoryModelId);
+                return diff;
             }
-            if (Category == null && Category == other.Category)
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(RejectAccessTokenPost, other.RejectAccessTokenPost);
+            if (diff != 0)
             {
-                diff += (int)(Category - other.Category);
+                return diff;
             }
-            if (Description == null && Description == other.Description)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += Description.CompareTo(other.Description);
+                return diff;
             }
-            if (RejectAccessTokenPost == null && RejectAccessTokenPost == other.RejectAccessTokenPost)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += RejectAccessTokenPost.CompareTo(other.RejectAccessTokenPost);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

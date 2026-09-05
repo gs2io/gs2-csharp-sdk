@@ -134,52 +134,41 @@ namespace Gs2.Gs2Log.Model
         public int CompareTo(object obj)
         {
             var other = obj as InGameLog;
-            var diff = 0;
-            if (Timestamp == null && Timestamp == other.Timestamp)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Timestamp - other.Timestamp);
-            }
-            if (RequestId == null && RequestId == other.RequestId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += RequestId.CompareTo(other.RequestId);
-            }
-            if (UserId == null && UserId == other.UserId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UserId.CompareTo(other.UserId);
-            }
-            if (Tags == null && Tags == other.Tags)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Tags.Length - other.Tags.Length;
-                for (var i = 0; i < Tags.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += Tags[i].CompareTo(other.Tags[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type InGameLog.", nameof(obj));
             }
-            if (Payload == null && Payload == other.Payload)
+            var diff = 0;
+            diff = ModelComparer.Compare(Timestamp, other.Timestamp);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(RequestId, other.RequestId);
+            if (diff != 0)
             {
-                diff += Payload.CompareTo(other.Payload);
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(Tags, other.Tags);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Payload, other.Payload);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

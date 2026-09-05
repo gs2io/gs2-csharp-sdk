@@ -319,100 +319,71 @@ namespace Gs2.Gs2Inventory.Model
         public int CompareTo(object obj)
         {
             var other = obj as ItemSet;
-            var diff = 0;
-            if (ItemSetId == null && ItemSetId == other.ItemSetId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += ItemSetId.CompareTo(other.ItemSetId);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (InventoryName == null && InventoryName == other.InventoryName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += InventoryName.CompareTo(other.InventoryName);
-            }
-            if (UserId == null && UserId == other.UserId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UserId.CompareTo(other.UserId);
-            }
-            if (ItemName == null && ItemName == other.ItemName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ItemName.CompareTo(other.ItemName);
-            }
-            if (Count == null && Count == other.Count)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Count - other.Count);
-            }
-            if (ReferenceOf == null && ReferenceOf == other.ReferenceOf)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ReferenceOf.Length - other.ReferenceOf.Length;
-                for (var i = 0; i < ReferenceOf.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += ReferenceOf[i].CompareTo(other.ReferenceOf[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type ItemSet.", nameof(obj));
             }
-            if (SortValue == null && SortValue == other.SortValue)
+            var diff = 0;
+            diff = ModelComparer.Compare(ItemSetId, other.ItemSetId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += (int)(SortValue - other.SortValue);
+                return diff;
             }
-            if (ExpiresAt == null && ExpiresAt == other.ExpiresAt)
+            diff = ModelComparer.Compare(InventoryName, other.InventoryName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += (int)(ExpiresAt - other.ExpiresAt);
+                return diff;
             }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
+            diff = ModelComparer.Compare(ItemName, other.ItemName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Count, other.Count);
+            if (diff != 0)
             {
-                diff += (int)(CreatedAt - other.CreatedAt);
+                return diff;
             }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
+            diff = ModelComparer.CompareArray(ReferenceOf, other.ReferenceOf);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(SortValue, other.SortValue);
+            if (diff != 0)
             {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.Compare(ExpiresAt, other.ExpiresAt);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

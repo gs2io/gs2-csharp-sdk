@@ -239,88 +239,66 @@ namespace Gs2.Gs2Inventory.Model
         public int CompareTo(object obj)
         {
             var other = obj as InventoryModelMaster;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type InventoryModelMaster.", nameof(obj));
+            }
             var diff = 0;
-            if (InventoryModelId == null && InventoryModelId == other.InventoryModelId)
+            diff = ModelComparer.Compare(InventoryModelId, other.InventoryModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += InventoryModelId.CompareTo(other.InventoryModelId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
+            diff = ModelComparer.Compare(InitialCapacity, other.InitialCapacity);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(MaxCapacity, other.MaxCapacity);
+            if (diff != 0)
             {
-                diff += Metadata.CompareTo(other.Metadata);
+                return diff;
             }
-            if (Description == null && Description == other.Description)
+            diff = ModelComparer.Compare(ProtectReferencedItem, other.ProtectReferencedItem);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += Description.CompareTo(other.Description);
+                return diff;
             }
-            if (InitialCapacity == null && InitialCapacity == other.InitialCapacity)
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += (int)(InitialCapacity - other.InitialCapacity);
+                return diff;
             }
-            if (MaxCapacity == null && MaxCapacity == other.MaxCapacity)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(MaxCapacity - other.MaxCapacity);
-            }
-            if (ProtectReferencedItem == null && ProtectReferencedItem == other.ProtectReferencedItem)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ProtectReferencedItem == other.ProtectReferencedItem ? 0 : 1;
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

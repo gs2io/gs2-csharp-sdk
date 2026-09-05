@@ -262,80 +262,61 @@ namespace Gs2.Gs2MegaField.Model
         public int CompareTo(object obj)
         {
             var other = obj as Spatial;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Spatial.", nameof(obj));
+            }
             var diff = 0;
-            if (SpatialId == null && SpatialId == other.SpatialId)
+            diff = ModelComparer.Compare(SpatialId, other.SpatialId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += SpatialId.CompareTo(other.SpatialId);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(AreaModelName, other.AreaModelName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(LayerModelName, other.LayerModelName);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (AreaModelName == null && AreaModelName == other.AreaModelName)
+            diff = ModelComparer.Compare(Position, other.Position);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Vector, other.Vector);
+            if (diff != 0)
             {
-                diff += AreaModelName.CompareTo(other.AreaModelName);
+                return diff;
             }
-            if (LayerModelName == null && LayerModelName == other.LayerModelName)
+            diff = ModelComparer.Compare(R, other.R);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(LastSyncAt, other.LastSyncAt);
+            if (diff != 0)
             {
-                diff += LayerModelName.CompareTo(other.LayerModelName);
+                return diff;
             }
-            if (Position == null && Position == other.Position)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += Position.CompareTo(other.Position);
-            }
-            if (Vector == null && Vector == other.Vector)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Vector.CompareTo(other.Vector);
-            }
-            if (R == null && R == other.R)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(R - other.R);
-            }
-            if (LastSyncAt == null && LastSyncAt == other.LastSyncAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(LastSyncAt - other.LastSyncAt);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

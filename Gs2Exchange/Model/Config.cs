@@ -83,24 +83,26 @@ namespace Gs2.Gs2Exchange.Model
         public int CompareTo(object obj)
         {
             var other = obj as Config;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Config.", nameof(obj));
+            }
             var diff = 0;
-            if (Key == null && Key == other.Key)
+            diff = ModelComparer.Compare(Key, other.Key);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Value, other.Value);
+            if (diff != 0)
             {
-                diff += Key.CompareTo(other.Key);
+                return diff;
             }
-            if (Value == null && Value == other.Value)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Value.CompareTo(other.Value);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

@@ -206,64 +206,51 @@ namespace Gs2.Gs2News.Model
         public int CompareTo(object obj)
         {
             var other = obj as Progress;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Progress.", nameof(obj));
+            }
             var diff = 0;
-            if (ProgressId == null && ProgressId == other.ProgressId)
+            diff = ModelComparer.Compare(ProgressId, other.ProgressId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UploadToken, other.UploadToken);
+            if (diff != 0)
             {
-                diff += ProgressId.CompareTo(other.ProgressId);
+                return diff;
             }
-            if (UploadToken == null && UploadToken == other.UploadToken)
+            diff = ModelComparer.Compare(Generated, other.Generated);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(PatternCount, other.PatternCount);
+            if (diff != 0)
             {
-                diff += UploadToken.CompareTo(other.UploadToken);
+                return diff;
             }
-            if (Generated == null && Generated == other.Generated)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += (int)(Generated - other.Generated);
+                return diff;
             }
-            if (PatternCount == null && PatternCount == other.PatternCount)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += (int)(PatternCount - other.PatternCount);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

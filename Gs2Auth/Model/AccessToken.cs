@@ -116,48 +116,41 @@ namespace Gs2.Gs2Auth.Model
         public int CompareTo(object obj)
         {
             var other = obj as AccessToken;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type AccessToken.", nameof(obj));
+            }
             var diff = 0;
-            if (Token == null && Token == other.Token)
+            diff = ModelComparer.Compare(Token, other.Token);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += Token.CompareTo(other.Token);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(FederationFromUserId, other.FederationFromUserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Expire, other.Expire);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (FederationFromUserId == null && FederationFromUserId == other.FederationFromUserId)
+            diff = ModelComparer.Compare(TimeOffset, other.TimeOffset);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += FederationFromUserId.CompareTo(other.FederationFromUserId);
-            }
-            if (Expire == null && Expire == other.Expire)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Expire - other.Expire);
-            }
-            if (TimeOffset == null && TimeOffset == other.TimeOffset)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(TimeOffset - other.TimeOffset);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

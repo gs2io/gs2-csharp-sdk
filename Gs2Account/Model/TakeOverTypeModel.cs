@@ -173,40 +173,36 @@ namespace Gs2.Gs2Account.Model
         public int CompareTo(object obj)
         {
             var other = obj as TakeOverTypeModel;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type TakeOverTypeModel.", nameof(obj));
+            }
             var diff = 0;
-            if (TakeOverTypeModelId == null && TakeOverTypeModelId == other.TakeOverTypeModelId)
+            diff = ModelComparer.Compare(TakeOverTypeModelId, other.TakeOverTypeModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Type, other.Type);
+            if (diff != 0)
             {
-                diff += TakeOverTypeModelId.CompareTo(other.TakeOverTypeModelId);
+                return diff;
             }
-            if (Type == null && Type == other.Type)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(OpenIdConnectSetting, other.OpenIdConnectSetting);
+            if (diff != 0)
             {
-                diff += (int)(Type - other.Type);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (OpenIdConnectSetting == null && OpenIdConnectSetting == other.OpenIdConnectSetting)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += OpenIdConnectSetting.CompareTo(other.OpenIdConnectSetting);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

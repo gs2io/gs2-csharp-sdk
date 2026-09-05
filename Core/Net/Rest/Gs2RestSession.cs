@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Concurrent;
 #endif
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Gs2.Core.Domain;
@@ -29,8 +31,14 @@ namespace Gs2.Core.Net
         public static int CloseTimeoutSec = 3;
 
         // ReSharper disable once MemberCanBePrivate.Global
-        public State State;
+        public volatile State State;
         private readonly SemaphoreSlim _semaphore  = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _closeSemaphore = new SemaphoreSlim(1, 1);
+        private readonly object _stateLock = new object();
+        private long _sessionGeneration;
+        private object _sessionOpenToken;
+        private bool _sessionOpenRequestClaimed;
+        internal int InflightRequestCount => GetInflightRequestCount();
 
 #if UNITY_2017_1_OR_NEWER
         private Dictionary<Gs2SessionTaskId, RestSessionRequest> _inflightRequest = new Dictionary<Gs2SessionTaskId, RestSessionRequest>();
@@ -54,6 +62,9 @@ namespace Gs2.Core.Net
 
         public Gs2RestSession(IGs2Credential basicGs2Credential, string region, bool checkCertificateRevocation = true)
         {
+#if UNITY_2017_1_OR_NEWER && (!UNITY_WEBGL || UNITY_EDITOR)
+            ValidateCertificateRevocationConfiguration(checkCertificateRevocation, false);
+#endif
             Credential = basicGs2Credential;
             Region = RegionExt.ValueOf(region);
 
@@ -61,8 +72,21 @@ namespace Gs2.Core.Net
             this.State = State.Idle;
         }
 
+        internal static void ValidateCertificateRevocationConfiguration(
+            bool checkCertificateRevocation,
+            bool canSafelyDisableCertificateRevocation
+        )
+        {
+            if (!checkCertificateRevocation && !canSafelyDisableCertificateRevocation)
+            {
+                throw new PlatformNotSupportedException(
+                    "Disabling certificate revocation checks is not supported on this platform without disabling certificate validation."
+                );
+            }
+        }
+
 #if UNITY_2017_1_OR_NEWER
-        public RestSessionRequestFactory CreateRestSessionRequestFactory(UnityEngine.Networking.CertificateHandler certificateHandler = null)
+        public virtual RestSessionRequestFactory CreateRestSessionRequestFactory(UnityEngine.Networking.CertificateHandler certificateHandler = null)
         {
             return new RestSessionRequestFactory(
                 () => certificateHandler != null
@@ -73,10 +97,10 @@ namespace Gs2.Core.Net
             );
         }
 #else
-        public RestSessionRequestFactory CreateRestSessionRequestFactory()
+        public virtual RestSessionRequestFactory CreateRestSessionRequestFactory()
         {
             return new RestSessionRequestFactory(
-                () => new DotNetRestSessionRequest(),
+                () => new DotNetRestSessionRequest(_checkCertificateRevocation),
                 EnableRequestCompression,
                 EnableResponseDecompression
             );
@@ -92,22 +116,37 @@ namespace Gs2.Core.Net
 #endif
         {
             await TaskUtilities.WaitAsync(this._semaphore);
+            long generation;
             try {
-                if (this.State == State.Available) {
-                    return new OpenResult();
+                lock (_stateLock)
+                {
+                    if (this.State == State.Available) {
+                        return new OpenResult();
+                    }
+
+                    if (this.State != State.Idle && this.State != State.Closed) {
+                        throw new InvalidOperationException("invalid state: " + this.State);
+                    }
+
+                    this._result.Clear();
+                    this._inflightRequest.Clear();
+                    this._sessionOpenToken = new object();
+                    this._sessionOpenRequestClaimed = false;
+                    this.State = State.Opening;
+                    generation = ++_sessionGeneration;
                 }
 
-                if (this.State != State.Idle && this.State != State.Closed) {
-                    throw new InvalidOperationException("invalid state: " + this.State);
-                }
-
-                this._result.Clear();
-                this._inflightRequest.Clear();
-                this.State = State.Opening;
-                if (Credential is ProjectTokenGs2Credential) {
-                    OwnerId = Credential.ClientId;
-                } else {
-                    try
+                try
+                {
+                    if (Credential is ProjectTokenGs2Credential)
+                    {
+                        lock (_stateLock)
+                        {
+                            ThrowIfOpenWasInvalidated(generation);
+                            OwnerId = Credential.ClientId;
+                        }
+                    }
+                    else
                     {
                         var result = await new RestOpenTask(
                             this,
@@ -115,19 +154,45 @@ namespace Gs2.Core.Net
                             new LoginRequest {
                                 ClientId = Credential.ClientId,
                                 ClientSecret = Credential.ClientSecret,
-                            }
+                            },
+                            this._sessionOpenToken
                         ).Invoke();
 
-                        Credential.ProjectToken = result.AccessToken;
-                        OwnerId = result.OwnerId;
+                        var projectToken = result?.AccessToken;
+                        if (projectToken == null)
+                        {
+                            var exception = new InvalidOperationException(
+                                "Login response did not contain an access token."
+                            );
+                            throw new Gs2.Core.Exception.UnknownException(exception.Message, exception);
+                        }
+
+                        lock (_stateLock)
+                        {
+                            ThrowIfOpenWasInvalidated(generation);
+                            Credential.ProjectToken = projectToken;
+                            OwnerId = result.OwnerId;
+                        }
                     }
-                    catch
+
+                    lock (_stateLock)
                     {
-                        this.State = State.Closed;
-                        throw;
+                        ThrowIfOpenWasInvalidated(generation);
+                        this._sessionOpenToken = null;
+                        this.State = State.Available;
                     }
                 }
-                this.State = State.Available;
+                catch
+                {
+                    lock (_stateLock)
+                    {
+                        if (_sessionGeneration == generation)
+                        {
+                            this.State = State.Closed;
+                        }
+                    }
+                    throw;
+                }
 
                 return new OpenResult();
             }
@@ -153,10 +218,10 @@ namespace Gs2.Core.Net
         public async Task<OpenResult> ReOpenAsync()
 #endif
         {
-            if (this.State == State.Opening || this.State == State.LoggingIn) {
-                var begin = DateTime.Now;
-                while (this.State != State.Available) {
-                    if ((DateTime.Now - begin).Seconds > OpenTimeoutSec) {
+            if (IsReOpenWaitingForTransition()) {
+                var timer = Stopwatch.StartNew();
+                while (IsReOpenWaitingForTransition()) {
+                    if (timer.Elapsed.TotalSeconds >= OpenTimeoutSec) {
                         throw new RequestTimeoutException(Array.Empty<RequestError>());
                     }
 
@@ -165,6 +230,14 @@ namespace Gs2.Core.Net
             }
 
             return await OpenAsync();
+        }
+
+        private bool IsReOpenWaitingForTransition()
+        {
+            lock (_stateLock)
+            {
+                return this.State is State.Opening or State.LoggingIn or State.CancellingTasks or State.Closing;
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -184,17 +257,49 @@ namespace Gs2.Core.Net
         public async Task CloseAsync()
 #endif
         {
-            if (this.State == State.Idle) {
-                this.State = State.Closed;
+            long expectedGeneration;
+            lock (_stateLock)
+            {
+                expectedGeneration = _sessionGeneration;
             }
-            else {
-                this.State = State.CancellingTasks;
+            await TaskUtilities.WaitAsync(this._closeSemaphore);
+            try
+            {
+                lock (_stateLock)
+                {
+                    if (_sessionGeneration != expectedGeneration)
+                    {
+                        return;
+                    }
+                    if (this.State == State.Closed)
+                    {
+                        return;
+                    }
+
+                    ++_sessionGeneration;
+                    if (this.State == State.Idle)
+                    {
+                        this.State = State.Closed;
+                        return;
+                    }
+
+                    this.State = State.CancellingTasks;
+                }
 
                 {
-                    var begin = DateTime.Now;
-                    while (this._inflightRequest.Count > 0) {
-                        if ((DateTime.Now - begin).Seconds > CloseTimeoutSec) {
-                            this._inflightRequest.Clear();
+                    var timer = Stopwatch.StartNew();
+                    while (GetInflightRequestCount() > 0) {
+                        if (timer.Elapsed.TotalSeconds >= CloseTimeoutSec) {
+                            RestSessionRequest[] requestsToAbort;
+                            lock (_stateLock)
+                            {
+                                requestsToAbort = this._inflightRequest.Values.ToArray();
+                                this._inflightRequest.Clear();
+                            }
+                            foreach (var request in requestsToAbort)
+                            {
+                                TryAbort(request);
+                            }
                             break;
                         }
 
@@ -202,9 +307,17 @@ namespace Gs2.Core.Net
                     }
                 }
 
-                this.State = State.Closing;
-
-                this.State = State.Closed;
+                lock (_stateLock)
+                {
+                    this.State = State.Closing;
+                    this._inflightRequest.Clear();
+                    this._result.Clear();
+                    this.State = State.Closed;
+                }
+            }
+            finally
+            {
+                this._closeSemaphore.Release();
             }
         }
         
@@ -224,10 +337,86 @@ namespace Gs2.Core.Net
         public virtual async Task SendAsync(IGs2SessionRequest request)
 #endif
         {
-            if (request is RestSessionRequest sessionRequest) {
-                this._inflightRequest[sessionRequest.TaskId] = sessionRequest;
+            if (request is not RestSessionRequest sessionRequest)
+            {
+                throw new ArgumentException("The request is not a REST session request.", nameof(request));
+            }
+            else
+            {
+                sessionRequest.EnableRequestCompression = this.EnableRequestCompression;
+                sessionRequest.EnableResponseDecompression = this.EnableResponseDecompression;
+#if !UNITY_2017_1_OR_NEWER
+                if (sessionRequest is DotNetRestSessionRequest dotNetRequest)
+                {
+                    dotNetRequest.ConfigureCertificateRevocation(this._checkCertificateRevocation);
+                }
+#endif
+                long generation;
+                int timeoutSec;
+                lock (_stateLock)
+                {
+                    if (this.State == State.Opening)
+                    {
+                        if (this._sessionOpenToken == null ||
+                            this._sessionOpenRequestClaimed ||
+                            !ReferenceEquals(sessionRequest.SessionOpenToken, this._sessionOpenToken))
+                        {
+                            throw new SessionNotOpenException("Session no longer open.");
+                        }
+                        this._sessionOpenRequestClaimed = true;
+                    }
+                    else if (this.State != State.Available)
+                    {
+                        throw new SessionNotOpenException("Session no longer open.");
+                    }
 
-                this._result[sessionRequest.TaskId] = await sessionRequest.Invoke();
+                    generation = _sessionGeneration;
+                    timeoutSec = this.State == State.Opening
+                        ? OpenTimeoutSec
+                        : 10;
+                    this._inflightRequest[sessionRequest.TaskId] = sessionRequest;
+                }
+
+                RestResult result;
+                try
+                {
+                    var invokeTask = InvokeRequestAsync(sessionRequest);
+                    using var timeoutCancellation = new CancellationTokenSource();
+                    var timeoutTask = timeoutSec <= 0
+                        ? Task.CompletedTask
+                        : Task.Delay(TimeSpan.FromSeconds(timeoutSec), timeoutCancellation.Token);
+                    if (await Task.WhenAny(invokeTask, timeoutTask) != invokeTask)
+                    {
+                        TryAbort(sessionRequest);
+                        invokeTask.Forget();
+                        throw new RequestTimeoutException(Array.Empty<RequestError>());
+                    }
+                    timeoutCancellation.Cancel();
+                    result = await invokeTask;
+                }
+                catch
+                {
+                    lock (_stateLock)
+                    {
+                        RemoveInflightRequest(sessionRequest);
+                    }
+                    throw;
+                }
+
+                lock (_stateLock)
+                {
+                    if (generation != _sessionGeneration ||
+                        this.State == State.CancellingTasks ||
+                        this.State == State.Closing ||
+                        this.State == State.Closed ||
+                        this.State == State.Idle)
+                    {
+                        RemoveInflightRequest(sessionRequest);
+                        throw new SessionNotOpenException("Session no longer open.");
+                    }
+
+                    this._result[sessionRequest.TaskId] = result;
+                }
             }
         }
 
@@ -245,7 +434,10 @@ namespace Gs2.Core.Net
 
         public bool IsCompleted(IGs2SessionRequest request)
         {
-            return this._result.ContainsKey(request.TaskId);
+            lock (_stateLock)
+            {
+                return this._result.ContainsKey(request.TaskId);
+            }
         }
 
         public bool IsDisconnected()
@@ -255,15 +447,66 @@ namespace Gs2.Core.Net
 
         public IGs2SessionResult MarkRead(IGs2SessionRequest request)
         {
-            var result = _result[request.TaskId];
+            lock (_stateLock)
+            {
+                _result.TryGetValue(request.TaskId, out var result);
 #if UNITY_2017_1_OR_NEWER
-            this._inflightRequest.Remove(request.TaskId);
-            this._result.Remove(request.TaskId);
+                this._inflightRequest.Remove(request.TaskId);
+                this._result.Remove(request.TaskId);
 #else
-            this._inflightRequest.Remove(request.TaskId, out var inflightRequestvalue);
-            this._result.Remove(request.TaskId, out var resultValue);
+                this._inflightRequest.TryRemove(request.TaskId, out _);
+                this._result.TryRemove(request.TaskId, out _);
 #endif
-            return result;
+                return result;
+            }
+        }
+
+        private void ThrowIfOpenWasInvalidated(long generation)
+        {
+            if (_sessionGeneration != generation || this.State != State.Opening)
+            {
+                throw new SessionNotOpenException("Session no longer open.");
+            }
+        }
+
+        private int GetInflightRequestCount()
+        {
+            lock (_stateLock)
+            {
+                return _inflightRequest.Count;
+            }
+        }
+
+        private void RemoveInflightRequest(RestSessionRequest request)
+        {
+            if (!_inflightRequest.TryGetValue(request.TaskId, out var currentRequest) ||
+                !ReferenceEquals(currentRequest, request))
+            {
+                return;
+            }
+
+#if UNITY_2017_1_OR_NEWER
+            _inflightRequest.Remove(request.TaskId);
+#else
+            _inflightRequest.TryRemove(request.TaskId, out _);
+#endif
+        }
+
+        private static void TryAbort(RestSessionRequest request)
+        {
+            try
+            {
+                request.Abort();
+            }
+            catch (System.Exception)
+            {
+                // Preserve the timeout/close result even if transport cleanup fails.
+            }
+        }
+
+        protected virtual Task<RestResult> InvokeRequestAsync(RestSessionRequest request)
+        {
+            return request.Invoke();
         }
     }
 }

@@ -200,72 +200,56 @@ namespace Gs2.Gs2Freeze.Model
         public int CompareTo(object obj)
         {
             var other = obj as Stage;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Stage.", nameof(obj));
+            }
             var diff = 0;
-            if (StageId == null && StageId == other.StageId)
+            diff = ModelComparer.Compare(StageId, other.StageId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += StageId.CompareTo(other.StageId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(SourceStageName, other.SourceStageName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(SortNumber, other.SortNumber);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (SourceStageName == null && SourceStageName == other.SourceStageName)
+            diff = ModelComparer.Compare(Status, other.Status);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += SourceStageName.CompareTo(other.SourceStageName);
+                return diff;
             }
-            if (SortNumber == null && SortNumber == other.SortNumber)
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += (int)(SortNumber - other.SortNumber);
+                return diff;
             }
-            if (Status == null && Status == other.Status)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Status.CompareTo(other.Status);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

@@ -138,64 +138,51 @@ namespace Gs2.Gs2Ranking.Model
         public int CompareTo(object obj)
         {
             var other = obj as Ranking;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Ranking.", nameof(obj));
+            }
             var diff = 0;
-            if (Rank == null && Rank == other.Rank)
+            diff = ModelComparer.Compare(Rank, other.Rank);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Index, other.Index);
+            if (diff != 0)
             {
-                diff += (int)(Rank - other.Rank);
+                return diff;
             }
-            if (Index == null && Index == other.Index)
+            diff = ModelComparer.Compare(CategoryName, other.CategoryName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += (int)(Index - other.Index);
+                return diff;
             }
-            if (CategoryName == null && CategoryName == other.CategoryName)
+            diff = ModelComparer.Compare(Score, other.Score);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                diff += CategoryName.CompareTo(other.CategoryName);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += UserId.CompareTo(other.UserId);
-            }
-            if (Score == null && Score == other.Score)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Score - other.Score);
-            }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

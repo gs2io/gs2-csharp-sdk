@@ -65,7 +65,10 @@ namespace Gs2.Core.Domain
             }
             else {
                 foreach (var job in result.Items) {
-                    gs2.PushJobQueue(Job.GetNamespaceNameFromGrn(job.JobId));
+                    gs2.JobQueueDomain.PushForUser(
+                        Job.GetNamespaceNameFromGrn(job.JobId),
+                        accessToken?.UserId
+                    );
                 }
                 return new TransactionAccessTokenDomain(
                     gs2,
@@ -99,7 +102,10 @@ namespace Gs2.Core.Domain
             }
             else {
                 foreach (var job in result.Items) {
-                    gs2.PushJobQueue(Job.GetNamespaceNameFromGrn(job.JobId));
+                    gs2.JobQueueDomain.PushForUser(
+                        Job.GetNamespaceNameFromGrn(job.JobId),
+                        userId
+                    );
                 }
                 return new TransactionDomain(
                     gs2,

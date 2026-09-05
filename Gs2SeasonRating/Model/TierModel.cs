@@ -116,48 +116,41 @@ namespace Gs2.Gs2SeasonRating.Model
         public int CompareTo(object obj)
         {
             var other = obj as TierModel;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type TierModel.", nameof(obj));
+            }
             var diff = 0;
-            if (Metadata == null && Metadata == other.Metadata)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(RaiseRankBonus, other.RaiseRankBonus);
+            if (diff != 0)
             {
-                diff += Metadata.CompareTo(other.Metadata);
+                return diff;
             }
-            if (RaiseRankBonus == null && RaiseRankBonus == other.RaiseRankBonus)
+            diff = ModelComparer.Compare(EntryFee, other.EntryFee);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(MinimumChangePoint, other.MinimumChangePoint);
+            if (diff != 0)
             {
-                diff += (int)(RaiseRankBonus - other.RaiseRankBonus);
+                return diff;
             }
-            if (EntryFee == null && EntryFee == other.EntryFee)
+            diff = ModelComparer.Compare(MaximumChangePoint, other.MaximumChangePoint);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += (int)(EntryFee - other.EntryFee);
-            }
-            if (MinimumChangePoint == null && MinimumChangePoint == other.MinimumChangePoint)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(MinimumChangePoint - other.MinimumChangePoint);
-            }
-            if (MaximumChangePoint == null && MaximumChangePoint == other.MaximumChangePoint)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(MaximumChangePoint - other.MaximumChangePoint);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

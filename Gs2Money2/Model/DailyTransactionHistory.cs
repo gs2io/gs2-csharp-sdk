@@ -301,96 +301,71 @@ namespace Gs2.Gs2Money2.Model
         public int CompareTo(object obj)
         {
             var other = obj as DailyTransactionHistory;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type DailyTransactionHistory.", nameof(obj));
+            }
             var diff = 0;
-            if (DailyTransactionHistoryId == null && DailyTransactionHistoryId == other.DailyTransactionHistoryId)
+            diff = ModelComparer.Compare(DailyTransactionHistoryId, other.DailyTransactionHistoryId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Year, other.Year);
+            if (diff != 0)
             {
-                diff += DailyTransactionHistoryId.CompareTo(other.DailyTransactionHistoryId);
+                return diff;
             }
-            if (Year == null && Year == other.Year)
+            diff = ModelComparer.Compare(Month, other.Month);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Day, other.Day);
+            if (diff != 0)
             {
-                diff += (int)(Year - other.Year);
+                return diff;
             }
-            if (Month == null && Month == other.Month)
+            diff = ModelComparer.Compare(Currency, other.Currency);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(DepositAmount, other.DepositAmount);
+            if (diff != 0)
             {
-                diff += (int)(Month - other.Month);
+                return diff;
             }
-            if (Day == null && Day == other.Day)
+            diff = ModelComparer.Compare(WithdrawAmount, other.WithdrawAmount);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(IssueCount, other.IssueCount);
+            if (diff != 0)
             {
-                diff += (int)(Day - other.Day);
+                return diff;
             }
-            if (Currency == null && Currency == other.Currency)
+            diff = ModelComparer.Compare(ConsumeCount, other.ConsumeCount);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += Currency.CompareTo(other.Currency);
+                return diff;
             }
-            if (DepositAmount == null && DepositAmount == other.DepositAmount)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += (int)(DepositAmount - other.DepositAmount);
-            }
-            if (WithdrawAmount == null && WithdrawAmount == other.WithdrawAmount)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(WithdrawAmount - other.WithdrawAmount);
-            }
-            if (IssueCount == null && IssueCount == other.IssueCount)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(IssueCount - other.IssueCount);
-            }
-            if (ConsumeCount == null && ConsumeCount == other.ConsumeCount)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(ConsumeCount - other.ConsumeCount);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

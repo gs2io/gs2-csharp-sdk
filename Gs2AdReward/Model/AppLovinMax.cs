@@ -83,24 +83,26 @@ namespace Gs2.Gs2AdReward.Model
         public int CompareTo(object obj)
         {
             var other = obj as AppLovinMax;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type AppLovinMax.", nameof(obj));
+            }
             var diff = 0;
-            if (AllowAdUnitId == null && AllowAdUnitId == other.AllowAdUnitId)
+            diff = ModelComparer.Compare(AllowAdUnitId, other.AllowAdUnitId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(EventKey, other.EventKey);
+            if (diff != 0)
             {
-                diff += AllowAdUnitId.CompareTo(other.AllowAdUnitId);
+                return diff;
             }
-            if (EventKey == null && EventKey == other.EventKey)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += EventKey.CompareTo(other.EventKey);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

@@ -90,20 +90,21 @@ namespace Gs2.Gs2Idle.Model
         public int CompareTo(object obj)
         {
             var other = obj as AcquireActionList;
-            var diff = 0;
-            if (AcquireActions == null && AcquireActions == other.AcquireActions)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += AcquireActions.Length - other.AcquireActions.Length;
-                for (var i = 0; i < AcquireActions.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += AcquireActions[i].CompareTo(other.AcquireActions[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type AcquireActionList.", nameof(obj));
             }
-            return diff;
+            var diff = 0;
+            diff = ModelComparer.CompareArray(AcquireActions, other.AcquireActions);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

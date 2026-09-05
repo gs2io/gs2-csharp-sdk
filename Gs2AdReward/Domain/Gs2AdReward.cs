@@ -504,7 +504,7 @@ namespace Gs2.Gs2AdReward.Domain
         ) {
             switch (action) {
                 case "ChangePointNotification": {
-                    var notification = ChangePointNotification.FromJson(JsonMapper.ToObject(payload));
+                    var notification = NotificationPayload.Parse(payload, ChangePointNotification.FromJson);
                     (null as Gs2.Gs2AdReward.Model.Point).DeleteCache(
                         _gs2.Cache,
                         notification.NamespaceName,

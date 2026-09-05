@@ -105,40 +105,36 @@ namespace Gs2.Gs2Distributor.Model
         public int CompareTo(object obj)
         {
             var other = obj as ConsumeActionResult;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type ConsumeActionResult.", nameof(obj));
+            }
             var diff = 0;
-            if (Action == null && Action == other.Action)
+            diff = ModelComparer.Compare(Action, other.Action);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ConsumeRequest, other.ConsumeRequest);
+            if (diff != 0)
             {
-                diff += Action.CompareTo(other.Action);
+                return diff;
             }
-            if (ConsumeRequest == null && ConsumeRequest == other.ConsumeRequest)
+            diff = ModelComparer.Compare(StatusCode, other.StatusCode);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ConsumeResult, other.ConsumeResult);
+            if (diff != 0)
             {
-                diff += ConsumeRequest.CompareTo(other.ConsumeRequest);
+                return diff;
             }
-            if (StatusCode == null && StatusCode == other.StatusCode)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(StatusCode - other.StatusCode);
-            }
-            if (ConsumeResult == null && ConsumeResult == other.ConsumeResult)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ConsumeResult.CompareTo(other.ConsumeResult);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

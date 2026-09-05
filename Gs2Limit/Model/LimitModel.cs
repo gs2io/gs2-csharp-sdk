@@ -228,80 +228,61 @@ namespace Gs2.Gs2Limit.Model
         public int CompareTo(object obj)
         {
             var other = obj as LimitModel;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type LimitModel.", nameof(obj));
+            }
             var diff = 0;
-            if (LimitModelId == null && LimitModelId == other.LimitModelId)
+            diff = ModelComparer.Compare(LimitModelId, other.LimitModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += LimitModelId.CompareTo(other.LimitModelId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ResetType, other.ResetType);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
+            diff = ModelComparer.Compare(ResetDayOfMonth, other.ResetDayOfMonth);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ResetDayOfWeek, other.ResetDayOfWeek);
+            if (diff != 0)
             {
-                diff += Metadata.CompareTo(other.Metadata);
+                return diff;
             }
-            if (ResetType == null && ResetType == other.ResetType)
+            diff = ModelComparer.Compare(ResetHour, other.ResetHour);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(AnchorTimestamp, other.AnchorTimestamp);
+            if (diff != 0)
             {
-                diff += ResetType.CompareTo(other.ResetType);
+                return diff;
             }
-            if (ResetDayOfMonth == null && ResetDayOfMonth == other.ResetDayOfMonth)
+            diff = ModelComparer.Compare(Days, other.Days);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += (int)(ResetDayOfMonth - other.ResetDayOfMonth);
-            }
-            if (ResetDayOfWeek == null && ResetDayOfWeek == other.ResetDayOfWeek)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ResetDayOfWeek.CompareTo(other.ResetDayOfWeek);
-            }
-            if (ResetHour == null && ResetHour == other.ResetHour)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(ResetHour - other.ResetHour);
-            }
-            if (AnchorTimestamp == null && AnchorTimestamp == other.AnchorTimestamp)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(AnchorTimestamp - other.AnchorTimestamp);
-            }
-            if (Days == null && Days == other.Days)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Days - other.Days);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

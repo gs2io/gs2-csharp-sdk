@@ -184,48 +184,41 @@ namespace Gs2.Gs2Log.Model
         public int CompareTo(object obj)
         {
             var other = obj as FacetModel;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type FacetModel.", nameof(obj));
+            }
             var diff = 0;
-            if (FacetModelId == null && FacetModelId == other.FacetModelId)
+            diff = ModelComparer.Compare(FacetModelId, other.FacetModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Field, other.Field);
+            if (diff != 0)
             {
-                diff += FacetModelId.CompareTo(other.FacetModelId);
+                return diff;
             }
-            if (Field == null && Field == other.Field)
+            diff = ModelComparer.Compare(Type, other.Type);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(DisplayName, other.DisplayName);
+            if (diff != 0)
             {
-                diff += Field.CompareTo(other.Field);
+                return diff;
             }
-            if (Type == null && Type == other.Type)
+            diff = ModelComparer.Compare(Order, other.Order);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += Type.CompareTo(other.Type);
-            }
-            if (DisplayName == null && DisplayName == other.DisplayName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += DisplayName.CompareTo(other.DisplayName);
-            }
-            if (Order == null && Order == other.Order)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Order - other.Order);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

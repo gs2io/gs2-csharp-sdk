@@ -90,20 +90,21 @@ namespace Gs2.Gs2AdReward.Model
         public int CompareTo(object obj)
         {
             var other = obj as AdMob;
-            var diff = 0;
-            if (AllowAdUnitIds == null && AllowAdUnitIds == other.AllowAdUnitIds)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += AllowAdUnitIds.Length - other.AllowAdUnitIds.Length;
-                for (var i = 0; i < AllowAdUnitIds.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += AllowAdUnitIds[i].CompareTo(other.AllowAdUnitIds[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type AdMob.", nameof(obj));
             }
-            return diff;
+            var diff = 0;
+            diff = ModelComparer.CompareArray(AllowAdUnitIds, other.AllowAdUnitIds);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

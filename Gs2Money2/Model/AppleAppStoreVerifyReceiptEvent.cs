@@ -72,16 +72,21 @@ namespace Gs2.Gs2Money2.Model
         public int CompareTo(object obj)
         {
             var other = obj as AppleAppStoreVerifyReceiptEvent;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type AppleAppStoreVerifyReceiptEvent.", nameof(obj));
+            }
             var diff = 0;
-            if (Environment == null && Environment == other.Environment)
+            diff = ModelComparer.Compare(Environment, other.Environment);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += Environment.CompareTo(other.Environment);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

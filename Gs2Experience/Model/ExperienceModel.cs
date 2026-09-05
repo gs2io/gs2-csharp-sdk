@@ -235,76 +235,56 @@ namespace Gs2.Gs2Experience.Model
         public int CompareTo(object obj)
         {
             var other = obj as ExperienceModel;
-            var diff = 0;
-            if (ExperienceModelId == null && ExperienceModelId == other.ExperienceModelId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += ExperienceModelId.CompareTo(other.ExperienceModelId);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (DefaultExperience == null && DefaultExperience == other.DefaultExperience)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(DefaultExperience - other.DefaultExperience);
-            }
-            if (DefaultRankCap == null && DefaultRankCap == other.DefaultRankCap)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(DefaultRankCap - other.DefaultRankCap);
-            }
-            if (MaxRankCap == null && MaxRankCap == other.MaxRankCap)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(MaxRankCap - other.MaxRankCap);
-            }
-            if (RankThreshold == null && RankThreshold == other.RankThreshold)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += RankThreshold.CompareTo(other.RankThreshold);
-            }
-            if (AcquireActionRates == null && AcquireActionRates == other.AcquireActionRates)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += AcquireActionRates.Length - other.AcquireActionRates.Length;
-                for (var i = 0; i < AcquireActionRates.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += AcquireActionRates[i].CompareTo(other.AcquireActionRates[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type ExperienceModel.", nameof(obj));
             }
-            return diff;
+            var diff = 0;
+            diff = ModelComparer.Compare(ExperienceModelId, other.ExperienceModelId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(DefaultExperience, other.DefaultExperience);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(DefaultRankCap, other.DefaultRankCap);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(MaxRankCap, other.MaxRankCap);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(RankThreshold, other.RankThreshold);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(AcquireActionRates, other.AcquireActionRates);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

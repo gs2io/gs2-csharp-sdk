@@ -66,8 +66,8 @@ namespace Gs2.Gs2Distributor.Domain
 
     public class Gs2Distributor {
 
-        private static readonly List<AutoRunStampSheetNotification> _completedStampSheets = new List<AutoRunStampSheetNotification>();
-        private static readonly List<AutoRunTransactionNotification> _completedTransactions = new List<AutoRunTransactionNotification>();
+        private readonly List<AutoRunStampSheetNotification> _completedStampSheets = new List<AutoRunStampSheetNotification>();
+        private readonly List<AutoRunTransactionNotification> _completedTransactions = new List<AutoRunTransactionNotification>();
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DistributorRestClient _client;
 
@@ -271,7 +271,8 @@ namespace Gs2.Gs2Distributor.Domain
                 case "AutoRunStampSheetNotification": {
                     lock (_completedStampSheets)
                     {
-                        var notification = AutoRunStampSheetNotification.FromJson(JsonMapper.ToObject(payload));
+                        var notification = NotificationPayload.Parse(payload, AutoRunStampSheetNotification.FromJson);
+                        Telemetry.EndTransaction(notification.TransactionId);
                         _gs2.Cache.Delete<Gs2.Gs2Distributor.Model.StampSheetResult>(
                             (null as Gs2.Gs2Distributor.Model.StampSheetResult).CacheParentKey(
                                 notification.NamespaceName,
@@ -292,7 +293,7 @@ namespace Gs2.Gs2Distributor.Domain
                 case "AutoRunTransactionNotification": {
                     lock (_completedTransactions)
                     {
-                        var notification = AutoRunTransactionNotification.FromJson(JsonMapper.ToObject(payload));
+                        var notification = NotificationPayload.Parse(payload, AutoRunTransactionNotification.FromJson);
                         _gs2.Cache.Delete<Gs2.Gs2Distributor.Model.TransactionResult>(
                             (null as Gs2.Gs2Distributor.Model.TransactionResult).CacheParentKey(
                                 notification.NamespaceName,

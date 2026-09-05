@@ -191,44 +191,36 @@ namespace Gs2.Gs2MegaField.Model
         public int CompareTo(object obj)
         {
             var other = obj as AreaModel;
-            var diff = 0;
-            if (AreaModelId == null && AreaModelId == other.AreaModelId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += AreaModelId.CompareTo(other.AreaModelId);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (LayerModels == null && LayerModels == other.LayerModels)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += LayerModels.Length - other.LayerModels.Length;
-                for (var i = 0; i < LayerModels.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += LayerModels[i].CompareTo(other.LayerModels[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type AreaModel.", nameof(obj));
             }
-            return diff;
+            var diff = 0;
+            diff = ModelComparer.Compare(AreaModelId, other.AreaModelId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(LayerModels, other.LayerModels);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

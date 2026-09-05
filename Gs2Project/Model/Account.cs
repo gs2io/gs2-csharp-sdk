@@ -188,88 +188,66 @@ namespace Gs2.Gs2Project.Model
         public int CompareTo(object obj)
         {
             var other = obj as Account;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Account.", nameof(obj));
+            }
             var diff = 0;
-            if (AccountId == null && AccountId == other.AccountId)
+            diff = ModelComparer.Compare(AccountId, other.AccountId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += AccountId.CompareTo(other.AccountId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Email, other.Email);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(FullName, other.FullName);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Email == null && Email == other.Email)
+            diff = ModelComparer.Compare(CompanyName, other.CompanyName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(EnableTwoFactorAuthentication, other.EnableTwoFactorAuthentication);
+            if (diff != 0)
             {
-                diff += Email.CompareTo(other.Email);
+                return diff;
             }
-            if (FullName == null && FullName == other.FullName)
+            diff = ModelComparer.Compare(TwoFactorAuthenticationSetting, other.TwoFactorAuthenticationSetting);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Status, other.Status);
+            if (diff != 0)
             {
-                diff += FullName.CompareTo(other.FullName);
+                return diff;
             }
-            if (CompanyName == null && CompanyName == other.CompanyName)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += CompanyName.CompareTo(other.CompanyName);
+                return diff;
             }
-            if (EnableTwoFactorAuthentication == null && EnableTwoFactorAuthentication == other.EnableTwoFactorAuthentication)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += EnableTwoFactorAuthentication.CompareTo(other.EnableTwoFactorAuthentication);
-            }
-            if (TwoFactorAuthenticationSetting == null && TwoFactorAuthenticationSetting == other.TwoFactorAuthenticationSetting)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += TwoFactorAuthenticationSetting.CompareTo(other.TwoFactorAuthenticationSetting);
-            }
-            if (Status == null && Status == other.Status)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Status.CompareTo(other.Status);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

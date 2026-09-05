@@ -480,13 +480,14 @@ namespace Gs2.Gs2Friend.Domain
         ) {
             switch (action) {
                 case "FollowNotification": {
+                    var notification = NotificationPayload.Parse(payload, FollowNotification.FromJson);
     #if UNITY_2017_1_OR_NEWER
-                    onFollowNotification.Invoke(FollowNotification.FromJson(JsonMapper.ToObject(payload)));
+                    onFollowNotification.Invoke(notification);
     #endif
                     break;
                 }
                 case "AcceptRequestNotification": {
-                    var notification = AcceptRequestNotification.FromJson(JsonMapper.ToObject(payload));
+                    var notification = NotificationPayload.Parse(payload, AcceptRequestNotification.FromJson);
                     _gs2.Cache.Delete<Gs2.Gs2Friend.Model.SendFriendRequest>(
                         (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                             notification.NamespaceName,
@@ -561,7 +562,7 @@ namespace Gs2.Gs2Friend.Domain
                     break;
                 }
                 case "RejectRequestNotification": {
-                    var notification = RejectRequestNotification.FromJson(JsonMapper.ToObject(payload));
+                    var notification = NotificationPayload.Parse(payload, RejectRequestNotification.FromJson);
                     _gs2.Cache.Delete<Gs2.Gs2Friend.Model.SendFriendRequest>(
                         (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                             notification.NamespaceName,
@@ -636,7 +637,7 @@ namespace Gs2.Gs2Friend.Domain
                     break;
                 }
                 case "ReceiveRequestNotification": {
-                    var notification = ReceiveRequestNotification.FromJson(JsonMapper.ToObject(payload));
+                    var notification = NotificationPayload.Parse(payload, ReceiveRequestNotification.FromJson);
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.SendFriendRequest>(
                         (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                             notification.NamespaceName,
@@ -705,7 +706,7 @@ namespace Gs2.Gs2Friend.Domain
                     break;
                 }
                 case "DeleteFriendNotification": {
-                    var notification = DeleteFriendNotification.FromJson(JsonMapper.ToObject(payload));
+                    var notification = NotificationPayload.Parse(payload, DeleteFriendNotification.FromJson);
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.FriendUser>(
                         (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                             notification.NamespaceName,
@@ -733,7 +734,7 @@ namespace Gs2.Gs2Friend.Domain
                     break;
                 }
                 case "CancelRequestNotification": {
-                    var notification = CancelRequestNotification.FromJson(JsonMapper.ToObject(payload));
+                    var notification = NotificationPayload.Parse(payload, CancelRequestNotification.FromJson);
                     _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.SendFriendRequest>(
                         (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                             notification.NamespaceName,

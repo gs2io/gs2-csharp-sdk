@@ -277,128 +277,91 @@ namespace Gs2.Gs2Inventory.Model
         public int CompareTo(object obj)
         {
             var other = obj as Namespace;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Namespace.", nameof(obj));
+            }
             var diff = 0;
-            if (NamespaceId == null && NamespaceId == other.NamespaceId)
+            diff = ModelComparer.Compare(NamespaceId, other.NamespaceId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += NamespaceId.CompareTo(other.NamespaceId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TransactionSetting, other.TransactionSetting);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Description == null && Description == other.Description)
+            diff = ModelComparer.Compare(AcquireScript, other.AcquireScript);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(OverflowScript, other.OverflowScript);
+            if (diff != 0)
             {
-                diff += Description.CompareTo(other.Description);
+                return diff;
             }
-            if (TransactionSetting == null && TransactionSetting == other.TransactionSetting)
+            diff = ModelComparer.Compare(ConsumeScript, other.ConsumeScript);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(SimpleItemAcquireScript, other.SimpleItemAcquireScript);
+            if (diff != 0)
             {
-                diff += TransactionSetting.CompareTo(other.TransactionSetting);
+                return diff;
             }
-            if (AcquireScript == null && AcquireScript == other.AcquireScript)
+            diff = ModelComparer.Compare(SimpleItemConsumeScript, other.SimpleItemConsumeScript);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(BigItemAcquireScript, other.BigItemAcquireScript);
+            if (diff != 0)
             {
-                diff += AcquireScript.CompareTo(other.AcquireScript);
+                return diff;
             }
-            if (OverflowScript == null && OverflowScript == other.OverflowScript)
+            diff = ModelComparer.Compare(BigItemConsumeScript, other.BigItemConsumeScript);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(LogSetting, other.LogSetting);
+            if (diff != 0)
             {
-                diff += OverflowScript.CompareTo(other.OverflowScript);
+                return diff;
             }
-            if (ConsumeScript == null && ConsumeScript == other.ConsumeScript)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += ConsumeScript.CompareTo(other.ConsumeScript);
+                return diff;
             }
-            if (SimpleItemAcquireScript == null && SimpleItemAcquireScript == other.SimpleItemAcquireScript)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += SimpleItemAcquireScript.CompareTo(other.SimpleItemAcquireScript);
-            }
-            if (SimpleItemConsumeScript == null && SimpleItemConsumeScript == other.SimpleItemConsumeScript)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += SimpleItemConsumeScript.CompareTo(other.SimpleItemConsumeScript);
-            }
-            if (BigItemAcquireScript == null && BigItemAcquireScript == other.BigItemAcquireScript)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += BigItemAcquireScript.CompareTo(other.BigItemAcquireScript);
-            }
-            if (BigItemConsumeScript == null && BigItemConsumeScript == other.BigItemConsumeScript)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += BigItemConsumeScript.CompareTo(other.BigItemConsumeScript);
-            }
-            if (LogSetting == null && LogSetting == other.LogSetting)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += LogSetting.CompareTo(other.LogSetting);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

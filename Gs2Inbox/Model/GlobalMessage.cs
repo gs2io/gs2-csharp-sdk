@@ -225,68 +225,51 @@ namespace Gs2.Gs2Inbox.Model
         public int CompareTo(object obj)
         {
             var other = obj as GlobalMessage;
-            var diff = 0;
-            if (GlobalMessageId == null && GlobalMessageId == other.GlobalMessageId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += GlobalMessageId.CompareTo(other.GlobalMessageId);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (ReadAcquireActions == null && ReadAcquireActions == other.ReadAcquireActions)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ReadAcquireActions.Length - other.ReadAcquireActions.Length;
-                for (var i = 0; i < ReadAcquireActions.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += ReadAcquireActions[i].CompareTo(other.ReadAcquireActions[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type GlobalMessage.", nameof(obj));
             }
-            if (ExpiresTimeSpan == null && ExpiresTimeSpan == other.ExpiresTimeSpan)
+            var diff = 0;
+            diff = ModelComparer.Compare(GlobalMessageId, other.GlobalMessageId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += ExpiresTimeSpan.CompareTo(other.ExpiresTimeSpan);
+                return diff;
             }
-            if (ExpiresAt == null && ExpiresAt == other.ExpiresAt)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(ReadAcquireActions, other.ReadAcquireActions);
+            if (diff != 0)
             {
-                diff += (int)(ExpiresAt - other.ExpiresAt);
+                return diff;
             }
-            if (MessageReceptionPeriodEventId == null && MessageReceptionPeriodEventId == other.MessageReceptionPeriodEventId)
+            diff = ModelComparer.Compare(ExpiresTimeSpan, other.ExpiresTimeSpan);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ExpiresAt, other.ExpiresAt);
+            if (diff != 0)
             {
-                diff += MessageReceptionPeriodEventId.CompareTo(other.MessageReceptionPeriodEventId);
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.Compare(MessageReceptionPeriodEventId, other.MessageReceptionPeriodEventId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

@@ -94,32 +94,31 @@ namespace Gs2.Gs2Inbox.Model
         public int CompareTo(object obj)
         {
             var other = obj as TimeSpan_;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type TimeSpan_.", nameof(obj));
+            }
             var diff = 0;
-            if (Days == null && Days == other.Days)
+            diff = ModelComparer.Compare(Days, other.Days);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Hours, other.Hours);
+            if (diff != 0)
             {
-                diff += (int)(Days - other.Days);
+                return diff;
             }
-            if (Hours == null && Hours == other.Hours)
+            diff = ModelComparer.Compare(Minutes, other.Minutes);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += (int)(Hours - other.Hours);
-            }
-            if (Minutes == null && Minutes == other.Minutes)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Minutes - other.Minutes);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

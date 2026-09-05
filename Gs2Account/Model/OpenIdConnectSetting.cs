@@ -196,88 +196,61 @@ namespace Gs2.Gs2Account.Model
         public int CompareTo(object obj)
         {
             var other = obj as OpenIdConnectSetting;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type OpenIdConnectSetting.", nameof(obj));
+            }
             var diff = 0;
-            if (ConfigurationPath == null && ConfigurationPath == other.ConfigurationPath)
+            diff = ModelComparer.Compare(ConfigurationPath, other.ConfigurationPath);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ClientId, other.ClientId);
+            if (diff != 0)
             {
-                diff += ConfigurationPath.CompareTo(other.ConfigurationPath);
+                return diff;
             }
-            if (ClientId == null && ClientId == other.ClientId)
+            diff = ModelComparer.Compare(ClientSecret, other.ClientSecret);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(AppleTeamId, other.AppleTeamId);
+            if (diff != 0)
             {
-                diff += ClientId.CompareTo(other.ClientId);
+                return diff;
             }
-            if (ClientSecret == null && ClientSecret == other.ClientSecret)
+            diff = ModelComparer.Compare(AppleKeyId, other.AppleKeyId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ApplePrivateKeyPem, other.ApplePrivateKeyPem);
+            if (diff != 0)
             {
-                diff += ClientSecret.CompareTo(other.ClientSecret);
+                return diff;
             }
-            if (AppleTeamId == null && AppleTeamId == other.AppleTeamId)
+            diff = ModelComparer.Compare(DoneEndpointUrl, other.DoneEndpointUrl);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(AdditionalScopeValues, other.AdditionalScopeValues);
+            if (diff != 0)
             {
-                diff += AppleTeamId.CompareTo(other.AppleTeamId);
+                return diff;
             }
-            if (AppleKeyId == null && AppleKeyId == other.AppleKeyId)
+            diff = ModelComparer.CompareArray(AdditionalReturnValues, other.AdditionalReturnValues);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += AppleKeyId.CompareTo(other.AppleKeyId);
-            }
-            if (ApplePrivateKeyPem == null && ApplePrivateKeyPem == other.ApplePrivateKeyPem)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ApplePrivateKeyPem.CompareTo(other.ApplePrivateKeyPem);
-            }
-            if (DoneEndpointUrl == null && DoneEndpointUrl == other.DoneEndpointUrl)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += DoneEndpointUrl.CompareTo(other.DoneEndpointUrl);
-            }
-            if (AdditionalScopeValues == null && AdditionalScopeValues == other.AdditionalScopeValues)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += AdditionalScopeValues.Length - other.AdditionalScopeValues.Length;
-                for (var i = 0; i < AdditionalScopeValues.Length; i++)
-                {
-                    diff += AdditionalScopeValues[i].CompareTo(other.AdditionalScopeValues[i]);
-                }
-            }
-            if (AdditionalReturnValues == null && AdditionalReturnValues == other.AdditionalReturnValues)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += AdditionalReturnValues.Length - other.AdditionalReturnValues.Length;
-                for (var i = 0; i < AdditionalReturnValues.Length; i++)
-                {
-                    diff += AdditionalReturnValues[i].CompareTo(other.AdditionalReturnValues[i]);
-                }
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

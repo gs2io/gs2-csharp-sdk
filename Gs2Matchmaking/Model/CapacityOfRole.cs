@@ -141,48 +141,36 @@ namespace Gs2.Gs2Matchmaking.Model
         public int CompareTo(object obj)
         {
             var other = obj as CapacityOfRole;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type CapacityOfRole.", nameof(obj));
+            }
             var diff = 0;
-            if (RoleName == null && RoleName == other.RoleName)
+            diff = ModelComparer.Compare(RoleName, other.RoleName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(RoleAliases, other.RoleAliases);
+            if (diff != 0)
             {
-                diff += RoleName.CompareTo(other.RoleName);
+                return diff;
             }
-            if (RoleAliases == null && RoleAliases == other.RoleAliases)
+            diff = ModelComparer.Compare(Capacity, other.Capacity);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(Participants, other.Participants);
+            if (diff != 0)
             {
-                diff += RoleAliases.Length - other.RoleAliases.Length;
-                for (var i = 0; i < RoleAliases.Length; i++)
-                {
-                    diff += RoleAliases[i].CompareTo(other.RoleAliases[i]);
-                }
+                return diff;
             }
-            if (Capacity == null && Capacity == other.Capacity)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Capacity - other.Capacity);
-            }
-            if (Participants == null && Participants == other.Participants)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Participants.Length - other.Participants.Length;
-                for (var i = 0; i < Participants.Length; i++)
-                {
-                    diff += Participants[i].CompareTo(other.Participants[i]);
-                }
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

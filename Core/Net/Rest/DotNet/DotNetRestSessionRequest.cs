@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -33,6 +34,48 @@ namespace Gs2.Core.Net
     
     public class DotNetRestSessionRequest : RestSessionRequest
     {
+        private static readonly HttpClient RevocationCheckingHttpClient = CreateHttpClient(true);
+        private static readonly HttpClient NonRevocationCheckingHttpClient = CreateHttpClient(false);
+
+        private bool _checkCertificateRevocation;
+        private HttpClient _httpClient;
+        private readonly object _cancellationLock = new object();
+        private CancellationTokenSource _cancellation;
+
+        internal bool CheckCertificateRevocation => this._checkCertificateRevocation;
+        internal HttpClient SharedHttpClient => this._httpClient;
+
+        public DotNetRestSessionRequest() : this(true)
+        {
+        }
+
+        public DotNetRestSessionRequest(bool checkCertificateRevocation)
+        {
+            ConfigureCertificateRevocation(checkCertificateRevocation);
+        }
+
+        internal void ConfigureCertificateRevocation(bool checkCertificateRevocation)
+        {
+            this._checkCertificateRevocation = checkCertificateRevocation;
+            this._httpClient = checkCertificateRevocation
+                ? RevocationCheckingHttpClient
+                : NonRevocationCheckingHttpClient;
+        }
+
+        private static HttpClient CreateHttpClient(bool checkCertificateRevocation)
+        {
+            return new HttpClient(CreateHttpClientHandler(checkCertificateRevocation), true);
+        }
+
+        internal static HttpClientHandler CreateHttpClientHandler(bool checkCertificateRevocation)
+        {
+            return new HttpClientHandler
+            {
+                CheckCertificateRevocationList = checkCertificateRevocation,
+                UseCookies = false,
+            };
+        }
+
         private static byte[] Compress(byte[] data)
         {
             using var output = new MemoryStream();
@@ -53,6 +96,14 @@ namespace Gs2.Core.Net
 
         public override async Task<RestResult> Invoke()
         {
+            using var cancellation = new CancellationTokenSource();
+            lock (_cancellationLock)
+            {
+                _cancellation = cancellation;
+            }
+
+            try
+            {
             var uri = QueryStrings.Count == 0 ?
                 Url :
                 Url + '?' + string.Join("&", QueryStrings.Select(
@@ -103,8 +154,7 @@ namespace Gs2.Core.Net
 
             try
             {
-                using var httpClient = new HttpClient();
-                using var response = await httpClient.SendAsync(request);
+                using var response = await this._httpClient.SendAsync(request, cancellation.Token);
 
                 string responseBody;
                 if (EnableResponseDecompression && response.Content.Headers.ContentEncoding.Contains("gzip"))
@@ -139,6 +189,25 @@ namespace Gs2.Core.Net
                     0,
                     e.Message
                 );
+            }
+            }
+            finally
+            {
+                lock (_cancellationLock)
+                {
+                    if (ReferenceEquals(_cancellation, cancellation))
+                    {
+                        _cancellation = null;
+                    }
+                }
+            }
+        }
+
+        public override void Abort()
+        {
+            lock (_cancellationLock)
+            {
+                _cancellation?.Cancel();
             }
         }
     }

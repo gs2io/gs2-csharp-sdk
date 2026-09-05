@@ -52,8 +52,6 @@ namespace Gs2.Gs2JobQueue.Model
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithJobName(!data.Keys.Contains("jobName") || data["jobName"] == null ? null : data["jobName"].ToString());
             
-            Telemetry.EndJob(notification.JobName);
-            
             return notification;
         }
     }

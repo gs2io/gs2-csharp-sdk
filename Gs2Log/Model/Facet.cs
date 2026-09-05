@@ -123,44 +123,36 @@ namespace Gs2.Gs2Log.Model
         public int CompareTo(object obj)
         {
             var other = obj as Facet;
-            var diff = 0;
-            if (Field == null && Field == other.Field)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += Field.CompareTo(other.Field);
-            }
-            if (Values == null && Values == other.Values)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Values.Length - other.Values.Length;
-                for (var i = 0; i < Values.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += Values[i].CompareTo(other.Values[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type Facet.", nameof(obj));
             }
-            if (Range == null && Range == other.Range)
+            var diff = 0;
+            diff = ModelComparer.Compare(Field, other.Field);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(Values, other.Values);
+            if (diff != 0)
             {
-                diff += Range.CompareTo(other.Range);
+                return diff;
             }
-            if (GlobalRange == null && GlobalRange == other.GlobalRange)
+            diff = ModelComparer.Compare(Range, other.Range);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(GlobalRange, other.GlobalRange);
+            if (diff != 0)
             {
-                diff += GlobalRange.CompareTo(other.GlobalRange);
+                return diff;
             }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

@@ -105,40 +105,36 @@ namespace Gs2.Gs2Guild.Model
         public int CompareTo(object obj)
         {
             var other = obj as Member;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Member.", nameof(obj));
+            }
             var diff = 0;
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(RoleName, other.RoleName);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (RoleName == null && RoleName == other.RoleName)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(JoinedAt, other.JoinedAt);
+            if (diff != 0)
             {
-                diff += RoleName.CompareTo(other.RoleName);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (JoinedAt == null && JoinedAt == other.JoinedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(JoinedAt - other.JoinedAt);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

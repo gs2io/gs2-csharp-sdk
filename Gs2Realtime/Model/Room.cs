@@ -246,84 +246,61 @@ namespace Gs2.Gs2Realtime.Model
         public int CompareTo(object obj)
         {
             var other = obj as Room;
-            var diff = 0;
-            if (RoomId == null && RoomId == other.RoomId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += RoomId.CompareTo(other.RoomId);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (IpAddress == null && IpAddress == other.IpAddress)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += IpAddress.CompareTo(other.IpAddress);
-            }
-            if (Port == null && Port == other.Port)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Port - other.Port);
-            }
-            if (EncryptionKey == null && EncryptionKey == other.EncryptionKey)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += EncryptionKey.CompareTo(other.EncryptionKey);
-            }
-            if (NotificationUserIds == null && NotificationUserIds == other.NotificationUserIds)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += NotificationUserIds.Length - other.NotificationUserIds.Length;
-                for (var i = 0; i < NotificationUserIds.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += NotificationUserIds[i].CompareTo(other.NotificationUserIds[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type Room.", nameof(obj));
             }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
+            var diff = 0;
+            diff = ModelComparer.Compare(RoomId, other.RoomId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += (int)(CreatedAt - other.CreatedAt);
+                return diff;
             }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
+            diff = ModelComparer.Compare(IpAddress, other.IpAddress);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Port, other.Port);
+            if (diff != 0)
             {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
+                return diff;
             }
-            if (Revision == null && Revision == other.Revision)
+            diff = ModelComparer.Compare(EncryptionKey, other.EncryptionKey);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(NotificationUserIds, other.NotificationUserIds);
+            if (diff != 0)
             {
-                diff += (int)(Revision - other.Revision);
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

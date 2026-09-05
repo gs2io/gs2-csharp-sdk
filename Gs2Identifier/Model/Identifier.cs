@@ -116,48 +116,41 @@ namespace Gs2.Gs2Identifier.Model
         public int CompareTo(object obj)
         {
             var other = obj as Identifier;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Identifier.", nameof(obj));
+            }
             var diff = 0;
-            if (ClientId == null && ClientId == other.ClientId)
+            diff = ModelComparer.Compare(ClientId, other.ClientId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserName, other.UserName);
+            if (diff != 0)
             {
-                diff += ClientId.CompareTo(other.ClientId);
+                return diff;
             }
-            if (UserName == null && UserName == other.UserName)
+            diff = ModelComparer.Compare(ClientSecret, other.ClientSecret);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += UserName.CompareTo(other.UserName);
+                return diff;
             }
-            if (ClientSecret == null && ClientSecret == other.ClientSecret)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += ClientSecret.CompareTo(other.ClientSecret);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

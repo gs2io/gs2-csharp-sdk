@@ -162,32 +162,31 @@ namespace Gs2.Gs2Dictionary.Model
         public int CompareTo(object obj)
         {
             var other = obj as EntryModel;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type EntryModel.", nameof(obj));
+            }
             var diff = 0;
-            if (EntryModelId == null && EntryModelId == other.EntryModelId)
+            diff = ModelComparer.Compare(EntryModelId, other.EntryModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += EntryModelId.CompareTo(other.EntryModelId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

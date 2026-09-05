@@ -1,11 +1,6 @@
 using System;
-using System.Collections;
-using Gs2.Core.Model;
-#if UNITY_2017_1_OR_NEWER && GS2_ENABLE_UNITASK
-using Cysharp.Threading.Tasks;
-#else
 using System.Threading.Tasks;
-#endif
+using Gs2.Core.Model;
 
 namespace Gs2.Core.Net.Chaos
 {
@@ -13,6 +8,7 @@ namespace Gs2.Core.Net.Chaos
     {
         private readonly float _chaos;
         private readonly Random _random;
+        private readonly object _randomLock = new object();
 
         public ChaosGs2RestSession(IGs2Credential basicGs2Credential, float chaos, Region region = Region.ApNortheast1, bool checkCertificateRevocation = true) : base(basicGs2Credential, region, checkCertificateRevocation) {
             this._chaos = chaos;
@@ -24,7 +20,7 @@ namespace Gs2.Core.Net.Chaos
             this._random = new Random();
         }
 
-        private void ThrowNeedRetryException(IGs2SessionRequest request) {
+        private RestResult CreateNeedRetryResult() {
             var payload = new[] {
                 new RequestError("chaos", "chaos.chaos.chaos.error.chaos")
             };
@@ -37,25 +33,22 @@ namespace Gs2.Core.Net.Chaos
                 new Gs2.Core.Exception.RequestTimeoutException(payload),
             };
             var exception = exceptions[this._random.Next(exceptions.Length)];
-            this._result[request.TaskId] = new RestResult(
+            return new RestResult(
                 exception.StatusCode,
                 exception.Message
             );
         }
-        
-        // Send
-        
-#if GS2_ENABLE_UNITASK
-        public override async UniTask SendAsync(IGs2SessionRequest request)
-#else
-        public override async Task SendAsync(IGs2SessionRequest request)
-#endif
+
+        protected override Task<RestResult> InvokeRequestAsync(RestSessionRequest request)
         {
-            if (this._random.NextDouble() < this._chaos) {
-                ThrowNeedRetryException(request);
-                return;
+            lock (_randomLock)
+            {
+                if (this._random.NextDouble() < this._chaos)
+                {
+                    return Task.FromResult(CreateNeedRetryResult());
+                }
             }
-            await base.SendAsync(request);
+            return base.InvokeRequestAsync(request);
         }
 
     }

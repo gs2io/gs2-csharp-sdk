@@ -348,140 +348,91 @@ namespace Gs2.Gs2LoginReward.Model
         public int CompareTo(object obj)
         {
             var other = obj as BonusModelMaster;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type BonusModelMaster.", nameof(obj));
+            }
             var diff = 0;
-            if (BonusModelId == null && BonusModelId == other.BonusModelId)
+            diff = ModelComparer.Compare(BonusModelId, other.BonusModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += BonusModelId.CompareTo(other.BonusModelId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Description == null && Description == other.Description)
+            diff = ModelComparer.Compare(Mode, other.Mode);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(PeriodEventId, other.PeriodEventId);
+            if (diff != 0)
             {
-                diff += Description.CompareTo(other.Description);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
+            diff = ModelComparer.Compare(ResetHour, other.ResetHour);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Repeat, other.Repeat);
+            if (diff != 0)
             {
-                diff += Metadata.CompareTo(other.Metadata);
+                return diff;
             }
-            if (Mode == null && Mode == other.Mode)
+            diff = ModelComparer.CompareArray(Rewards, other.Rewards);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(MissedReceiveRelief, other.MissedReceiveRelief);
+            if (diff != 0)
             {
-                diff += Mode.CompareTo(other.Mode);
+                return diff;
             }
-            if (PeriodEventId == null && PeriodEventId == other.PeriodEventId)
+            diff = ModelComparer.CompareArray(MissedReceiveReliefVerifyActions, other.MissedReceiveReliefVerifyActions);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(MissedReceiveReliefConsumeActions, other.MissedReceiveReliefConsumeActions);
+            if (diff != 0)
             {
-                diff += PeriodEventId.CompareTo(other.PeriodEventId);
+                return diff;
             }
-            if (ResetHour == null && ResetHour == other.ResetHour)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += (int)(ResetHour - other.ResetHour);
+                return diff;
             }
-            if (Repeat == null && Repeat == other.Repeat)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += Repeat.CompareTo(other.Repeat);
-            }
-            if (Rewards == null && Rewards == other.Rewards)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Rewards.Length - other.Rewards.Length;
-                for (var i = 0; i < Rewards.Length; i++)
-                {
-                    diff += Rewards[i].CompareTo(other.Rewards[i]);
-                }
-            }
-            if (MissedReceiveRelief == null && MissedReceiveRelief == other.MissedReceiveRelief)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += MissedReceiveRelief.CompareTo(other.MissedReceiveRelief);
-            }
-            if (MissedReceiveReliefVerifyActions == null && MissedReceiveReliefVerifyActions == other.MissedReceiveReliefVerifyActions)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += MissedReceiveReliefVerifyActions.Length - other.MissedReceiveReliefVerifyActions.Length;
-                for (var i = 0; i < MissedReceiveReliefVerifyActions.Length; i++)
-                {
-                    diff += MissedReceiveReliefVerifyActions[i].CompareTo(other.MissedReceiveReliefVerifyActions[i]);
-                }
-            }
-            if (MissedReceiveReliefConsumeActions == null && MissedReceiveReliefConsumeActions == other.MissedReceiveReliefConsumeActions)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += MissedReceiveReliefConsumeActions.Length - other.MissedReceiveReliefConsumeActions.Length;
-                for (var i = 0; i < MissedReceiveReliefConsumeActions.Length; i++)
-                {
-                    diff += MissedReceiveReliefConsumeActions[i].CompareTo(other.MissedReceiveReliefConsumeActions[i]);
-                }
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

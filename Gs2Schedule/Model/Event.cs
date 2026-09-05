@@ -301,128 +301,91 @@ namespace Gs2.Gs2Schedule.Model
         public int CompareTo(object obj)
         {
             var other = obj as Event;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Event.", nameof(obj));
+            }
             var diff = 0;
-            if (EventId == null && EventId == other.EventId)
+            diff = ModelComparer.Compare(EventId, other.EventId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += EventId.CompareTo(other.EventId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ScheduleType, other.ScheduleType);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
+            diff = ModelComparer.Compare(AbsoluteBegin, other.AbsoluteBegin);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(AbsoluteEnd, other.AbsoluteEnd);
+            if (diff != 0)
             {
-                diff += Metadata.CompareTo(other.Metadata);
+                return diff;
             }
-            if (ScheduleType == null && ScheduleType == other.ScheduleType)
+            diff = ModelComparer.Compare(RelativeTriggerName, other.RelativeTriggerName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(RepeatSetting, other.RepeatSetting);
+            if (diff != 0)
             {
-                diff += ScheduleType.CompareTo(other.ScheduleType);
+                return diff;
             }
-            if (AbsoluteBegin == null && AbsoluteBegin == other.AbsoluteBegin)
+            diff = ModelComparer.Compare(RepeatType, other.RepeatType);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(RepeatBeginDayOfMonth, other.RepeatBeginDayOfMonth);
+            if (diff != 0)
             {
-                diff += (int)(AbsoluteBegin - other.AbsoluteBegin);
+                return diff;
             }
-            if (AbsoluteEnd == null && AbsoluteEnd == other.AbsoluteEnd)
+            diff = ModelComparer.Compare(RepeatEndDayOfMonth, other.RepeatEndDayOfMonth);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(RepeatBeginDayOfWeek, other.RepeatBeginDayOfWeek);
+            if (diff != 0)
             {
-                diff += (int)(AbsoluteEnd - other.AbsoluteEnd);
+                return diff;
             }
-            if (RelativeTriggerName == null && RelativeTriggerName == other.RelativeTriggerName)
+            diff = ModelComparer.Compare(RepeatEndDayOfWeek, other.RepeatEndDayOfWeek);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(RepeatBeginHour, other.RepeatBeginHour);
+            if (diff != 0)
             {
-                diff += RelativeTriggerName.CompareTo(other.RelativeTriggerName);
+                return diff;
             }
-            if (RepeatSetting == null && RepeatSetting == other.RepeatSetting)
+            diff = ModelComparer.Compare(RepeatEndHour, other.RepeatEndHour);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += RepeatSetting.CompareTo(other.RepeatSetting);
-            }
-            if (RepeatType == null && RepeatType == other.RepeatType)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += RepeatType.CompareTo(other.RepeatType);
-            }
-            if (RepeatBeginDayOfMonth == null && RepeatBeginDayOfMonth == other.RepeatBeginDayOfMonth)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(RepeatBeginDayOfMonth - other.RepeatBeginDayOfMonth);
-            }
-            if (RepeatEndDayOfMonth == null && RepeatEndDayOfMonth == other.RepeatEndDayOfMonth)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(RepeatEndDayOfMonth - other.RepeatEndDayOfMonth);
-            }
-            if (RepeatBeginDayOfWeek == null && RepeatBeginDayOfWeek == other.RepeatBeginDayOfWeek)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += RepeatBeginDayOfWeek.CompareTo(other.RepeatBeginDayOfWeek);
-            }
-            if (RepeatEndDayOfWeek == null && RepeatEndDayOfWeek == other.RepeatEndDayOfWeek)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += RepeatEndDayOfWeek.CompareTo(other.RepeatEndDayOfWeek);
-            }
-            if (RepeatBeginHour == null && RepeatBeginHour == other.RepeatBeginHour)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(RepeatBeginHour - other.RepeatBeginHour);
-            }
-            if (RepeatEndHour == null && RepeatEndHour == other.RepeatEndHour)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(RepeatEndHour - other.RepeatEndHour);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

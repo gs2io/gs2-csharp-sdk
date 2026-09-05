@@ -52,8 +52,6 @@ namespace Gs2.Gs2Distributor.Model
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString());
 
-            Telemetry.EndTransaction(notification.TransactionId);
-
             return notification;
         }
     }

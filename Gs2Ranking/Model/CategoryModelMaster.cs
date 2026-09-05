@@ -414,192 +414,126 @@ namespace Gs2.Gs2Ranking.Model
         public int CompareTo(object obj)
         {
             var other = obj as CategoryModelMaster;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type CategoryModelMaster.", nameof(obj));
+            }
             var diff = 0;
-            if (CategoryModelId == null && CategoryModelId == other.CategoryModelId)
+            diff = ModelComparer.Compare(CategoryModelId, other.CategoryModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += CategoryModelId.CompareTo(other.CategoryModelId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Description == null && Description == other.Description)
+            diff = ModelComparer.Compare(MinimumValue, other.MinimumValue);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(MaximumValue, other.MaximumValue);
+            if (diff != 0)
             {
-                diff += Description.CompareTo(other.Description);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
+            diff = ModelComparer.Compare(Sum, other.Sum);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(OrderDirection, other.OrderDirection);
+            if (diff != 0)
             {
-                diff += Metadata.CompareTo(other.Metadata);
+                return diff;
             }
-            if (MinimumValue == null && MinimumValue == other.MinimumValue)
+            diff = ModelComparer.Compare(Scope, other.Scope);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(GlobalRankingSetting, other.GlobalRankingSetting);
+            if (diff != 0)
             {
-                diff += (int)(MinimumValue - other.MinimumValue);
+                return diff;
             }
-            if (MaximumValue == null && MaximumValue == other.MaximumValue)
+            diff = ModelComparer.Compare(EntryPeriodEventId, other.EntryPeriodEventId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(AccessPeriodEventId, other.AccessPeriodEventId);
+            if (diff != 0)
             {
-                diff += (int)(MaximumValue - other.MaximumValue);
+                return diff;
             }
-            if (Sum == null && Sum == other.Sum)
+            diff = ModelComparer.Compare(UniqueByUserId, other.UniqueByUserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CalculateFixedTimingHour, other.CalculateFixedTimingHour);
+            if (diff != 0)
             {
-                diff += Sum == other.Sum ? 0 : 1;
+                return diff;
             }
-            if (OrderDirection == null && OrderDirection == other.OrderDirection)
+            diff = ModelComparer.Compare(CalculateFixedTimingMinute, other.CalculateFixedTimingMinute);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CalculateIntervalMinutes, other.CalculateIntervalMinutes);
+            if (diff != 0)
             {
-                diff += OrderDirection.CompareTo(other.OrderDirection);
+                return diff;
             }
-            if (Scope == null && Scope == other.Scope)
+            diff = ModelComparer.CompareArray(AdditionalScopes, other.AdditionalScopes);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(IgnoreUserIds, other.IgnoreUserIds);
+            if (diff != 0)
             {
-                diff += Scope.CompareTo(other.Scope);
+                return diff;
             }
-            if (GlobalRankingSetting == null && GlobalRankingSetting == other.GlobalRankingSetting)
+            diff = ModelComparer.Compare(Generation, other.Generation);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += GlobalRankingSetting.CompareTo(other.GlobalRankingSetting);
+                return diff;
             }
-            if (EntryPeriodEventId == null && EntryPeriodEventId == other.EntryPeriodEventId)
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += EntryPeriodEventId.CompareTo(other.EntryPeriodEventId);
+                return diff;
             }
-            if (AccessPeriodEventId == null && AccessPeriodEventId == other.AccessPeriodEventId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += AccessPeriodEventId.CompareTo(other.AccessPeriodEventId);
-            }
-            if (UniqueByUserId == null && UniqueByUserId == other.UniqueByUserId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UniqueByUserId == other.UniqueByUserId ? 0 : 1;
-            }
-            if (CalculateFixedTimingHour == null && CalculateFixedTimingHour == other.CalculateFixedTimingHour)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CalculateFixedTimingHour - other.CalculateFixedTimingHour);
-            }
-            if (CalculateFixedTimingMinute == null && CalculateFixedTimingMinute == other.CalculateFixedTimingMinute)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CalculateFixedTimingMinute - other.CalculateFixedTimingMinute);
-            }
-            if (CalculateIntervalMinutes == null && CalculateIntervalMinutes == other.CalculateIntervalMinutes)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CalculateIntervalMinutes - other.CalculateIntervalMinutes);
-            }
-            if (AdditionalScopes == null && AdditionalScopes == other.AdditionalScopes)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += AdditionalScopes.Length - other.AdditionalScopes.Length;
-                for (var i = 0; i < AdditionalScopes.Length; i++)
-                {
-                    diff += AdditionalScopes[i].CompareTo(other.AdditionalScopes[i]);
-                }
-            }
-            if (IgnoreUserIds == null && IgnoreUserIds == other.IgnoreUserIds)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += IgnoreUserIds.Length - other.IgnoreUserIds.Length;
-                for (var i = 0; i < IgnoreUserIds.Length; i++)
-                {
-                    diff += IgnoreUserIds[i].CompareTo(other.IgnoreUserIds[i]);
-                }
-            }
-            if (Generation == null && Generation == other.Generation)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Generation.CompareTo(other.Generation);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

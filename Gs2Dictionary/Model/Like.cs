@@ -179,32 +179,31 @@ namespace Gs2.Gs2Dictionary.Model
         public int CompareTo(object obj)
         {
             var other = obj as Like;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Like.", nameof(obj));
+            }
             var diff = 0;
-            if (LikeId == null && LikeId == other.LikeId)
+            diff = ModelComparer.Compare(LikeId, other.LikeId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += LikeId.CompareTo(other.LikeId);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += UserId.CompareTo(other.UserId);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

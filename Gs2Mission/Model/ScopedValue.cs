@@ -127,56 +127,46 @@ namespace Gs2.Gs2Mission.Model
         public int CompareTo(object obj)
         {
             var other = obj as ScopedValue;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type ScopedValue.", nameof(obj));
+            }
             var diff = 0;
-            if (ScopeType == null && ScopeType == other.ScopeType)
+            diff = ModelComparer.Compare(ScopeType, other.ScopeType);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ResetType, other.ResetType);
+            if (diff != 0)
             {
-                diff += ScopeType.CompareTo(other.ScopeType);
+                return diff;
             }
-            if (ResetType == null && ResetType == other.ResetType)
+            diff = ModelComparer.Compare(ConditionName, other.ConditionName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Value, other.Value);
+            if (diff != 0)
             {
-                diff += ResetType.CompareTo(other.ResetType);
+                return diff;
             }
-            if (ConditionName == null && ConditionName == other.ConditionName)
+            diff = ModelComparer.Compare(NextResetAt, other.NextResetAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += ConditionName.CompareTo(other.ConditionName);
+                return diff;
             }
-            if (Value == null && Value == other.Value)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Value - other.Value);
-            }
-            if (NextResetAt == null && NextResetAt == other.NextResetAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(NextResetAt - other.NextResetAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

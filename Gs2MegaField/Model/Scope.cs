@@ -94,32 +94,31 @@ namespace Gs2.Gs2MegaField.Model
         public int CompareTo(object obj)
         {
             var other = obj as Scope;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Scope.", nameof(obj));
+            }
             var diff = 0;
-            if (LayerName == null && LayerName == other.LayerName)
+            diff = ModelComparer.Compare(LayerName, other.LayerName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(R, other.R);
+            if (diff != 0)
             {
-                diff += LayerName.CompareTo(other.LayerName);
+                return diff;
             }
-            if (R == null && R == other.R)
+            diff = ModelComparer.Compare(Limit, other.Limit);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += (int)(R - other.R);
-            }
-            if (Limit == null && Limit == other.Limit)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Limit - other.Limit);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

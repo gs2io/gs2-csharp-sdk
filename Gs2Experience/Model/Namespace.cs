@@ -255,112 +255,81 @@ namespace Gs2.Gs2Experience.Model
         public int CompareTo(object obj)
         {
             var other = obj as Namespace;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Namespace.", nameof(obj));
+            }
             var diff = 0;
-            if (NamespaceId == null && NamespaceId == other.NamespaceId)
+            diff = ModelComparer.Compare(NamespaceId, other.NamespaceId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += NamespaceId.CompareTo(other.NamespaceId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TransactionSetting, other.TransactionSetting);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Description == null && Description == other.Description)
+            diff = ModelComparer.Compare(RankCapScriptId, other.RankCapScriptId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ChangeExperienceScript, other.ChangeExperienceScript);
+            if (diff != 0)
             {
-                diff += Description.CompareTo(other.Description);
+                return diff;
             }
-            if (TransactionSetting == null && TransactionSetting == other.TransactionSetting)
+            diff = ModelComparer.Compare(ChangeRankScript, other.ChangeRankScript);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ChangeRankCapScript, other.ChangeRankCapScript);
+            if (diff != 0)
             {
-                diff += TransactionSetting.CompareTo(other.TransactionSetting);
+                return diff;
             }
-            if (RankCapScriptId == null && RankCapScriptId == other.RankCapScriptId)
+            diff = ModelComparer.Compare(OverflowExperienceScript, other.OverflowExperienceScript);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(LogSetting, other.LogSetting);
+            if (diff != 0)
             {
-                diff += RankCapScriptId.CompareTo(other.RankCapScriptId);
+                return diff;
             }
-            if (ChangeExperienceScript == null && ChangeExperienceScript == other.ChangeExperienceScript)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += ChangeExperienceScript.CompareTo(other.ChangeExperienceScript);
+                return diff;
             }
-            if (ChangeRankScript == null && ChangeRankScript == other.ChangeRankScript)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += ChangeRankScript.CompareTo(other.ChangeRankScript);
-            }
-            if (ChangeRankCapScript == null && ChangeRankCapScript == other.ChangeRankCapScript)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ChangeRankCapScript.CompareTo(other.ChangeRankCapScript);
-            }
-            if (OverflowExperienceScript == null && OverflowExperienceScript == other.OverflowExperienceScript)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += OverflowExperienceScript.CompareTo(other.OverflowExperienceScript);
-            }
-            if (LogSetting == null && LogSetting == other.LogSetting)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += LogSetting.CompareTo(other.LogSetting);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

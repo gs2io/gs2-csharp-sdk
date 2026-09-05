@@ -160,80 +160,61 @@ namespace Gs2.Gs2Mission.Model
         public int CompareTo(object obj)
         {
             var other = obj as CounterScopeModel;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type CounterScopeModel.", nameof(obj));
+            }
             var diff = 0;
-            if (ScopeType == null && ScopeType == other.ScopeType)
+            diff = ModelComparer.Compare(ScopeType, other.ScopeType);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ResetType, other.ResetType);
+            if (diff != 0)
             {
-                diff += ScopeType.CompareTo(other.ScopeType);
+                return diff;
             }
-            if (ResetType == null && ResetType == other.ResetType)
+            diff = ModelComparer.Compare(ResetDayOfMonth, other.ResetDayOfMonth);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ResetDayOfWeek, other.ResetDayOfWeek);
+            if (diff != 0)
             {
-                diff += ResetType.CompareTo(other.ResetType);
+                return diff;
             }
-            if (ResetDayOfMonth == null && ResetDayOfMonth == other.ResetDayOfMonth)
+            diff = ModelComparer.Compare(ResetHour, other.ResetHour);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ConditionName, other.ConditionName);
+            if (diff != 0)
             {
-                diff += (int)(ResetDayOfMonth - other.ResetDayOfMonth);
+                return diff;
             }
-            if (ResetDayOfWeek == null && ResetDayOfWeek == other.ResetDayOfWeek)
+            diff = ModelComparer.Compare(Condition, other.Condition);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(AnchorTimestamp, other.AnchorTimestamp);
+            if (diff != 0)
             {
-                diff += ResetDayOfWeek.CompareTo(other.ResetDayOfWeek);
+                return diff;
             }
-            if (ResetHour == null && ResetHour == other.ResetHour)
+            diff = ModelComparer.Compare(Days, other.Days);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += (int)(ResetHour - other.ResetHour);
-            }
-            if (ConditionName == null && ConditionName == other.ConditionName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ConditionName.CompareTo(other.ConditionName);
-            }
-            if (Condition == null && Condition == other.Condition)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Condition.CompareTo(other.Condition);
-            }
-            if (AnchorTimestamp == null && AnchorTimestamp == other.AnchorTimestamp)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(AnchorTimestamp - other.AnchorTimestamp);
-            }
-            if (Days == null && Days == other.Days)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Days - other.Days);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

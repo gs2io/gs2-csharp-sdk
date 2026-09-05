@@ -224,68 +224,51 @@ namespace Gs2.Gs2Inventory.Model
         public int CompareTo(object obj)
         {
             var other = obj as InventoryModel;
-            var diff = 0;
-            if (InventoryModelId == null && InventoryModelId == other.InventoryModelId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += InventoryModelId.CompareTo(other.InventoryModelId);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (InitialCapacity == null && InitialCapacity == other.InitialCapacity)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(InitialCapacity - other.InitialCapacity);
-            }
-            if (MaxCapacity == null && MaxCapacity == other.MaxCapacity)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(MaxCapacity - other.MaxCapacity);
-            }
-            if (ProtectReferencedItem == null && ProtectReferencedItem == other.ProtectReferencedItem)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ProtectReferencedItem == other.ProtectReferencedItem ? 0 : 1;
-            }
-            if (ItemModels == null && ItemModels == other.ItemModels)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ItemModels.Length - other.ItemModels.Length;
-                for (var i = 0; i < ItemModels.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += ItemModels[i].CompareTo(other.ItemModels[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type InventoryModel.", nameof(obj));
             }
-            return diff;
+            var diff = 0;
+            diff = ModelComparer.Compare(InventoryModelId, other.InventoryModelId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(InitialCapacity, other.InitialCapacity);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(MaxCapacity, other.MaxCapacity);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(ProtectReferencedItem, other.ProtectReferencedItem);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(ItemModels, other.ItemModels);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

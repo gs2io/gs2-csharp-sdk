@@ -283,120 +283,86 @@ namespace Gs2.Gs2Mission.Model
         public int CompareTo(object obj)
         {
             var other = obj as MissionGroupModelMaster;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type MissionGroupModelMaster.", nameof(obj));
+            }
             var diff = 0;
-            if (MissionGroupId == null && MissionGroupId == other.MissionGroupId)
+            diff = ModelComparer.Compare(MissionGroupId, other.MissionGroupId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += MissionGroupId.CompareTo(other.MissionGroupId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
+            diff = ModelComparer.Compare(ResetType, other.ResetType);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ResetDayOfMonth, other.ResetDayOfMonth);
+            if (diff != 0)
             {
-                diff += Metadata.CompareTo(other.Metadata);
+                return diff;
             }
-            if (Description == null && Description == other.Description)
+            diff = ModelComparer.Compare(ResetDayOfWeek, other.ResetDayOfWeek);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ResetHour, other.ResetHour);
+            if (diff != 0)
             {
-                diff += Description.CompareTo(other.Description);
+                return diff;
             }
-            if (ResetType == null && ResetType == other.ResetType)
+            diff = ModelComparer.Compare(AnchorTimestamp, other.AnchorTimestamp);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Days, other.Days);
+            if (diff != 0)
             {
-                diff += ResetType.CompareTo(other.ResetType);
+                return diff;
             }
-            if (ResetDayOfMonth == null && ResetDayOfMonth == other.ResetDayOfMonth)
+            diff = ModelComparer.Compare(CompleteNotificationNamespaceId, other.CompleteNotificationNamespaceId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += (int)(ResetDayOfMonth - other.ResetDayOfMonth);
+                return diff;
             }
-            if (ResetDayOfWeek == null && ResetDayOfWeek == other.ResetDayOfWeek)
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += ResetDayOfWeek.CompareTo(other.ResetDayOfWeek);
+                return diff;
             }
-            if (ResetHour == null && ResetHour == other.ResetHour)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(ResetHour - other.ResetHour);
-            }
-            if (AnchorTimestamp == null && AnchorTimestamp == other.AnchorTimestamp)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(AnchorTimestamp - other.AnchorTimestamp);
-            }
-            if (Days == null && Days == other.Days)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Days - other.Days);
-            }
-            if (CompleteNotificationNamespaceId == null && CompleteNotificationNamespaceId == other.CompleteNotificationNamespaceId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += CompleteNotificationNamespaceId.CompareTo(other.CompleteNotificationNamespaceId);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

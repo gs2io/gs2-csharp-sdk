@@ -72,16 +72,21 @@ namespace Gs2.Gs2Identifier.Model
         public int CompareTo(object obj)
         {
             var other = obj as ProjectToken;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type ProjectToken.", nameof(obj));
+            }
             var diff = 0;
-            if (Token == null && Token == other.Token)
+            diff = ModelComparer.Compare(Token, other.Token);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += Token.CompareTo(other.Token);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

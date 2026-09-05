@@ -157,44 +157,36 @@ namespace Gs2.Gs2Identifier.Model
         public int CompareTo(object obj)
         {
             var other = obj as AttachSecurityPolicy;
-            var diff = 0;
-            if (UserId == null && UserId == other.UserId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += UserId.CompareTo(other.UserId);
-            }
-            if (SecurityPolicyIds == null && SecurityPolicyIds == other.SecurityPolicyIds)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += SecurityPolicyIds.Length - other.SecurityPolicyIds.Length;
-                for (var i = 0; i < SecurityPolicyIds.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += SecurityPolicyIds[i].CompareTo(other.SecurityPolicyIds[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type AttachSecurityPolicy.", nameof(obj));
             }
-            if (AttachedAt == null && AttachedAt == other.AttachedAt)
+            var diff = 0;
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(SecurityPolicyIds, other.SecurityPolicyIds);
+            if (diff != 0)
             {
-                diff += (int)(AttachedAt - other.AttachedAt);
+                return diff;
             }
-            if (Revision == null && Revision == other.Revision)
+            diff = ModelComparer.Compare(AttachedAt, other.AttachedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += (int)(Revision - other.Revision);
+                return diff;
             }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

@@ -152,56 +152,41 @@ namespace Gs2.Gs2Matchmaking.Model
         public int CompareTo(object obj)
         {
             var other = obj as Player;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Player.", nameof(obj));
+            }
             var diff = 0;
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(Attributes, other.Attributes);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (Attributes == null && Attributes == other.Attributes)
+            diff = ModelComparer.Compare(RoleName, other.RoleName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(DenyUserIds, other.DenyUserIds);
+            if (diff != 0)
             {
-                diff += Attributes.Length - other.Attributes.Length;
-                for (var i = 0; i < Attributes.Length; i++)
-                {
-                    diff += Attributes[i].CompareTo(other.Attributes[i]);
-                }
+                return diff;
             }
-            if (RoleName == null && RoleName == other.RoleName)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += RoleName.CompareTo(other.RoleName);
-            }
-            if (DenyUserIds == null && DenyUserIds == other.DenyUserIds)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += DenyUserIds.Length - other.DenyUserIds.Length;
-                for (var i = 0; i < DenyUserIds.Length; i++)
-                {
-                    diff += DenyUserIds[i].CompareTo(other.DenyUserIds[i]);
-                }
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

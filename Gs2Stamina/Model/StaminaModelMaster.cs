@@ -298,128 +298,91 @@ namespace Gs2.Gs2Stamina.Model
         public int CompareTo(object obj)
         {
             var other = obj as StaminaModelMaster;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type StaminaModelMaster.", nameof(obj));
+            }
             var diff = 0;
-            if (StaminaModelId == null && StaminaModelId == other.StaminaModelId)
+            diff = ModelComparer.Compare(StaminaModelId, other.StaminaModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += StaminaModelId.CompareTo(other.StaminaModelId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
+            diff = ModelComparer.Compare(RecoverIntervalMinutes, other.RecoverIntervalMinutes);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(RecoverValue, other.RecoverValue);
+            if (diff != 0)
             {
-                diff += Metadata.CompareTo(other.Metadata);
+                return diff;
             }
-            if (Description == null && Description == other.Description)
+            diff = ModelComparer.Compare(InitialCapacity, other.InitialCapacity);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(IsOverflow, other.IsOverflow);
+            if (diff != 0)
             {
-                diff += Description.CompareTo(other.Description);
+                return diff;
             }
-            if (RecoverIntervalMinutes == null && RecoverIntervalMinutes == other.RecoverIntervalMinutes)
+            diff = ModelComparer.Compare(MaxCapacity, other.MaxCapacity);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(MaxStaminaTableName, other.MaxStaminaTableName);
+            if (diff != 0)
             {
-                diff += (int)(RecoverIntervalMinutes - other.RecoverIntervalMinutes);
+                return diff;
             }
-            if (RecoverValue == null && RecoverValue == other.RecoverValue)
+            diff = ModelComparer.Compare(RecoverIntervalTableName, other.RecoverIntervalTableName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(RecoverValueTableName, other.RecoverValueTableName);
+            if (diff != 0)
             {
-                diff += (int)(RecoverValue - other.RecoverValue);
+                return diff;
             }
-            if (InitialCapacity == null && InitialCapacity == other.InitialCapacity)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += (int)(InitialCapacity - other.InitialCapacity);
+                return diff;
             }
-            if (IsOverflow == null && IsOverflow == other.IsOverflow)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += IsOverflow == other.IsOverflow ? 0 : 1;
-            }
-            if (MaxCapacity == null && MaxCapacity == other.MaxCapacity)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(MaxCapacity - other.MaxCapacity);
-            }
-            if (MaxStaminaTableName == null && MaxStaminaTableName == other.MaxStaminaTableName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += MaxStaminaTableName.CompareTo(other.MaxStaminaTableName);
-            }
-            if (RecoverIntervalTableName == null && RecoverIntervalTableName == other.RecoverIntervalTableName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += RecoverIntervalTableName.CompareTo(other.RecoverIntervalTableName);
-            }
-            if (RecoverValueTableName == null && RecoverValueTableName == other.RecoverValueTableName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += RecoverValueTableName.CompareTo(other.RecoverValueTableName);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

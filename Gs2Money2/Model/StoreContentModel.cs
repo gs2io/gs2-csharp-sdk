@@ -184,48 +184,41 @@ namespace Gs2.Gs2Money2.Model
         public int CompareTo(object obj)
         {
             var other = obj as StoreContentModel;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type StoreContentModel.", nameof(obj));
+            }
             var diff = 0;
-            if (StoreContentModelId == null && StoreContentModelId == other.StoreContentModelId)
+            diff = ModelComparer.Compare(StoreContentModelId, other.StoreContentModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += StoreContentModelId.CompareTo(other.StoreContentModelId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(AppleAppStore, other.AppleAppStore);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
+            diff = ModelComparer.Compare(GooglePlay, other.GooglePlay);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (AppleAppStore == null && AppleAppStore == other.AppleAppStore)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += AppleAppStore.CompareTo(other.AppleAppStore);
-            }
-            if (GooglePlay == null && GooglePlay == other.GooglePlay)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += GooglePlay.CompareTo(other.GooglePlay);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

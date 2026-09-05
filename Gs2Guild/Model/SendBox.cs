@@ -241,68 +241,51 @@ namespace Gs2.Gs2Guild.Model
         public int CompareTo(object obj)
         {
             var other = obj as SendBox;
-            var diff = 0;
-            if (SendBoxId == null && SendBoxId == other.SendBoxId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += SendBoxId.CompareTo(other.SendBoxId);
-            }
-            if (UserId == null && UserId == other.UserId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UserId.CompareTo(other.UserId);
-            }
-            if (GuildModelName == null && GuildModelName == other.GuildModelName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += GuildModelName.CompareTo(other.GuildModelName);
-            }
-            if (TargetGuildNames == null && TargetGuildNames == other.TargetGuildNames)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += TargetGuildNames.Length - other.TargetGuildNames.Length;
-                for (var i = 0; i < TargetGuildNames.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += TargetGuildNames[i].CompareTo(other.TargetGuildNames[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type SendBox.", nameof(obj));
             }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
+            var diff = 0;
+            diff = ModelComparer.Compare(SendBoxId, other.SendBoxId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += (int)(CreatedAt - other.CreatedAt);
+                return diff;
             }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
+            diff = ModelComparer.Compare(GuildModelName, other.GuildModelName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(TargetGuildNames, other.TargetGuildNames);
+            if (diff != 0)
             {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
+                return diff;
             }
-            if (Revision == null && Revision == other.Revision)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += (int)(Revision - other.Revision);
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

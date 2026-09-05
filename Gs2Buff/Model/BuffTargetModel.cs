@@ -123,44 +123,36 @@ namespace Gs2.Gs2Buff.Model
         public int CompareTo(object obj)
         {
             var other = obj as BuffTargetModel;
-            var diff = 0;
-            if (TargetModelName == null && TargetModelName == other.TargetModelName)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += TargetModelName.CompareTo(other.TargetModelName);
-            }
-            if (TargetFieldName == null && TargetFieldName == other.TargetFieldName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += TargetFieldName.CompareTo(other.TargetFieldName);
-            }
-            if (ConditionGrns == null && ConditionGrns == other.ConditionGrns)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ConditionGrns.Length - other.ConditionGrns.Length;
-                for (var i = 0; i < ConditionGrns.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += ConditionGrns[i].CompareTo(other.ConditionGrns[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type BuffTargetModel.", nameof(obj));
             }
-            if (Rate == null && Rate == other.Rate)
+            var diff = 0;
+            diff = ModelComparer.Compare(TargetModelName, other.TargetModelName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TargetFieldName, other.TargetFieldName);
+            if (diff != 0)
             {
-                diff += (int)(Rate - other.Rate);
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.CompareArray(ConditionGrns, other.ConditionGrns);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Rate, other.Rate);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

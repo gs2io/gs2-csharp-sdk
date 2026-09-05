@@ -105,40 +105,36 @@ namespace Gs2.Gs2Distributor.Model
         public int CompareTo(object obj)
         {
             var other = obj as BatchRequestPayload;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type BatchRequestPayload.", nameof(obj));
+            }
             var diff = 0;
-            if (RequestId == null && RequestId == other.RequestId)
+            diff = ModelComparer.Compare(RequestId, other.RequestId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Service, other.Service);
+            if (diff != 0)
             {
-                diff += RequestId.CompareTo(other.RequestId);
+                return diff;
             }
-            if (Service == null && Service == other.Service)
+            diff = ModelComparer.Compare(MethodName, other.MethodName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Parameter, other.Parameter);
+            if (diff != 0)
             {
-                diff += Service.CompareTo(other.Service);
+                return diff;
             }
-            if (MethodName == null && MethodName == other.MethodName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += MethodName.CompareTo(other.MethodName);
-            }
-            if (Parameter == null && Parameter == other.Parameter)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Parameter.CompareTo(other.Parameter);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

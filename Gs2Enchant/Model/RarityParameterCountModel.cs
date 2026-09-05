@@ -83,24 +83,26 @@ namespace Gs2.Gs2Enchant.Model
         public int CompareTo(object obj)
         {
             var other = obj as RarityParameterCountModel;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type RarityParameterCountModel.", nameof(obj));
+            }
             var diff = 0;
-            if (Count == null && Count == other.Count)
+            diff = ModelComparer.Compare(Count, other.Count);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Weight, other.Weight);
+            if (diff != 0)
             {
-                diff += (int)(Count - other.Count);
+                return diff;
             }
-            if (Weight == null && Weight == other.Weight)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Weight - other.Weight);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

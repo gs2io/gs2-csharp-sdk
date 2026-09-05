@@ -134,52 +134,41 @@ namespace Gs2.Gs2Money2.Model
         public int CompareTo(object obj)
         {
             var other = obj as SubscriptionStatus;
-            var diff = 0;
-            if (UserId == null && UserId == other.UserId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += UserId.CompareTo(other.UserId);
-            }
-            if (ContentName == null && ContentName == other.ContentName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ContentName.CompareTo(other.ContentName);
-            }
-            if (Status == null && Status == other.Status)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Status.CompareTo(other.Status);
-            }
-            if (ExpiresAt == null && ExpiresAt == other.ExpiresAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(ExpiresAt - other.ExpiresAt);
-            }
-            if (Detail == null && Detail == other.Detail)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Detail.Length - other.Detail.Length;
-                for (var i = 0; i < Detail.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += Detail[i].CompareTo(other.Detail[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type SubscriptionStatus.", nameof(obj));
             }
-            return diff;
+            var diff = 0;
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(ContentName, other.ContentName);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Status, other.Status);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(ExpiresAt, other.ExpiresAt);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(Detail, other.Detail);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

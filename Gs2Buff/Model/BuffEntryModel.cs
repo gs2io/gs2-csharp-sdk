@@ -228,80 +228,61 @@ namespace Gs2.Gs2Buff.Model
         public int CompareTo(object obj)
         {
             var other = obj as BuffEntryModel;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type BuffEntryModel.", nameof(obj));
+            }
             var diff = 0;
-            if (BuffEntryModelId == null && BuffEntryModelId == other.BuffEntryModelId)
+            diff = ModelComparer.Compare(BuffEntryModelId, other.BuffEntryModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += BuffEntryModelId.CompareTo(other.BuffEntryModelId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Expression, other.Expression);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
+            diff = ModelComparer.Compare(TargetType, other.TargetType);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TargetModel, other.TargetModel);
+            if (diff != 0)
             {
-                diff += Metadata.CompareTo(other.Metadata);
+                return diff;
             }
-            if (Expression == null && Expression == other.Expression)
+            diff = ModelComparer.Compare(TargetAction, other.TargetAction);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Priority, other.Priority);
+            if (diff != 0)
             {
-                diff += Expression.CompareTo(other.Expression);
+                return diff;
             }
-            if (TargetType == null && TargetType == other.TargetType)
+            diff = ModelComparer.Compare(ApplyPeriodScheduleEventId, other.ApplyPeriodScheduleEventId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += TargetType.CompareTo(other.TargetType);
-            }
-            if (TargetModel == null && TargetModel == other.TargetModel)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += TargetModel.CompareTo(other.TargetModel);
-            }
-            if (TargetAction == null && TargetAction == other.TargetAction)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += TargetAction.CompareTo(other.TargetAction);
-            }
-            if (Priority == null && Priority == other.Priority)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Priority - other.Priority);
-            }
-            if (ApplyPeriodScheduleEventId == null && ApplyPeriodScheduleEventId == other.ApplyPeriodScheduleEventId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ApplyPeriodScheduleEventId.CompareTo(other.ApplyPeriodScheduleEventId);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

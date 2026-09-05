@@ -94,32 +94,31 @@ namespace Gs2.Gs2Version.Model
         public int CompareTo(object obj)
         {
             var other = obj as Version_;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Version_.", nameof(obj));
+            }
             var diff = 0;
-            if (Major == null && Major == other.Major)
+            diff = ModelComparer.Compare(Major, other.Major);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Minor, other.Minor);
+            if (diff != 0)
             {
-                diff += (int)(Major - other.Major);
+                return diff;
             }
-            if (Minor == null && Minor == other.Minor)
+            diff = ModelComparer.Compare(Micro, other.Micro);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += (int)(Minor - other.Minor);
-            }
-            if (Micro == null && Micro == other.Micro)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Micro - other.Micro);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

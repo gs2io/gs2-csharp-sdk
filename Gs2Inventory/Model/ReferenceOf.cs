@@ -219,24 +219,26 @@ namespace Gs2.Gs2Inventory.Model
         public int CompareTo(object obj)
         {
             var other = obj as ReferenceOf;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type ReferenceOf.", nameof(obj));
+            }
             var diff = 0;
-            if (ReferenceOfId == null && ReferenceOfId == other.ReferenceOfId)
+            diff = ModelComparer.Compare(ReferenceOfId, other.ReferenceOfId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += ReferenceOfId.CompareTo(other.ReferenceOfId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

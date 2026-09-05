@@ -260,72 +260,51 @@ namespace Gs2.Gs2Guild.Model
         public int CompareTo(object obj)
         {
             var other = obj as Inbox;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Inbox.", nameof(obj));
+            }
             var diff = 0;
-            if (InboxId == null && InboxId == other.InboxId)
+            diff = ModelComparer.Compare(InboxId, other.InboxId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(GuildName, other.GuildName);
+            if (diff != 0)
             {
-                diff += InboxId.CompareTo(other.InboxId);
+                return diff;
             }
-            if (GuildName == null && GuildName == other.GuildName)
+            diff = ModelComparer.CompareArray(FromUserIds, other.FromUserIds);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(ReceiveMemberRequests, other.ReceiveMemberRequests);
+            if (diff != 0)
             {
-                diff += GuildName.CompareTo(other.GuildName);
+                return diff;
             }
-            if (FromUserIds == null && FromUserIds == other.FromUserIds)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += FromUserIds.Length - other.FromUserIds.Length;
-                for (var i = 0; i < FromUserIds.Length; i++)
-                {
-                    diff += FromUserIds[i].CompareTo(other.FromUserIds[i]);
-                }
+                return diff;
             }
-            if (ReceiveMemberRequests == null && ReceiveMemberRequests == other.ReceiveMemberRequests)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += ReceiveMemberRequests.Length - other.ReceiveMemberRequests.Length;
-                for (var i = 0; i < ReceiveMemberRequests.Length; i++)
-                {
-                    diff += ReceiveMemberRequests[i].CompareTo(other.ReceiveMemberRequests[i]);
-                }
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

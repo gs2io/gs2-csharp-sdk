@@ -289,112 +289,81 @@ namespace Gs2.Gs2Money.Model
         public int CompareTo(object obj)
         {
             var other = obj as Receipt;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Receipt.", nameof(obj));
+            }
             var diff = 0;
-            if (ReceiptId == null && ReceiptId == other.ReceiptId)
+            diff = ModelComparer.Compare(ReceiptId, other.ReceiptId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TransactionId, other.TransactionId);
+            if (diff != 0)
             {
-                diff += ReceiptId.CompareTo(other.ReceiptId);
+                return diff;
             }
-            if (TransactionId == null && TransactionId == other.TransactionId)
+            diff = ModelComparer.Compare(PurchaseToken, other.PurchaseToken);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += TransactionId.CompareTo(other.TransactionId);
+                return diff;
             }
-            if (PurchaseToken == null && PurchaseToken == other.PurchaseToken)
+            diff = ModelComparer.Compare(Type, other.Type);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Slot, other.Slot);
+            if (diff != 0)
             {
-                diff += PurchaseToken.CompareTo(other.PurchaseToken);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(Price, other.Price);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Paid, other.Paid);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (Type == null && Type == other.Type)
+            diff = ModelComparer.Compare(Free, other.Free);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Total, other.Total);
+            if (diff != 0)
             {
-                diff += Type.CompareTo(other.Type);
+                return diff;
             }
-            if (Slot == null && Slot == other.Slot)
+            diff = ModelComparer.Compare(ContentsId, other.ContentsId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += (int)(Slot - other.Slot);
+                return diff;
             }
-            if (Price == null && Price == other.Price)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += (int)(Price - other.Price);
-            }
-            if (Paid == null && Paid == other.Paid)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Paid - other.Paid);
-            }
-            if (Free == null && Free == other.Free)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Free - other.Free);
-            }
-            if (Total == null && Total == other.Total)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Total - other.Total);
-            }
-            if (ContentsId == null && ContentsId == other.ContentsId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ContentsId.CompareTo(other.ContentsId);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

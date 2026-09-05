@@ -13,7 +13,7 @@ namespace Gs2.Core.Net
         public JsonData Body { set; get; }
         public Gs2Exception Error { set; get; }
         public Gs2SessionTaskId Gs2SessionTaskId { set; get; }
-        public bool IsSuccess => StatusCode == 200;
+        public bool IsSuccess => StatusCode == 200 && Error == null;
 
 #if UNITY_2017_1_OR_NEWER
         [Preserve]
@@ -53,11 +53,15 @@ namespace Gs2.Core.Net
             var gs2Message = Gs2Message.FromJson(JsonMapper.ToObject(body));
             Body = gs2Message.Body;
 
-            if (gs2Message.Status != 200 && gs2Message.Body != null)
+            if (gs2Message.Status != 200)
             {
-                var error = GeneralError.FromJson(gs2Message.Body);
+                var error = gs2Message.Body == null ? null : GeneralError.FromJson(gs2Message.Body);
                 var errorMessage = error != null ? error.Message : body;
                 Error = ExtractError(errorMessage, gs2Message.Status ?? 0);
+                if (Error != null)
+                {
+                    Error.Metadata = error?.Metadata;
+                }
             }
 
             Gs2SessionTaskId = new Gs2SessionTaskId(gs2Message.RequestId);

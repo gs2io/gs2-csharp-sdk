@@ -15,22 +15,25 @@ namespace Gs2.Core.Domain
         public TResult Result { get; private set; }
         public Gs2Exception Error { get; private set; }
         private IEnumerator InflightAction { get; set; }
+        private volatile bool _isComplete;
 
         protected abstract IEnumerator Action();
 
         public bool IsComplete()
         {
-            return Result != null || Error != null;
+            return this._isComplete;
         }
 
         public void OnError(Gs2Exception error)
         {
             Error = error;
+            this._isComplete = true;
         }
         
         public void OnComplete(TResult result)
         {
             Result = result;
+            this._isComplete = true;
         }
 
         public bool MoveNext()

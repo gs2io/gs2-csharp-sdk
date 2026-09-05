@@ -310,152 +310,106 @@ namespace Gs2.Gs2Money.Model
         public int CompareTo(object obj)
         {
             var other = obj as Namespace;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Namespace.", nameof(obj));
+            }
             var diff = 0;
-            if (NamespaceId == null && NamespaceId == other.NamespaceId)
+            diff = ModelComparer.Compare(NamespaceId, other.NamespaceId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += NamespaceId.CompareTo(other.NamespaceId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TransactionSetting, other.TransactionSetting);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Description == null && Description == other.Description)
+            diff = ModelComparer.Compare(Priority, other.Priority);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ShareFree, other.ShareFree);
+            if (diff != 0)
             {
-                diff += Description.CompareTo(other.Description);
+                return diff;
             }
-            if (TransactionSetting == null && TransactionSetting == other.TransactionSetting)
+            diff = ModelComparer.Compare(Currency, other.Currency);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(AppleKey, other.AppleKey);
+            if (diff != 0)
             {
-                diff += TransactionSetting.CompareTo(other.TransactionSetting);
+                return diff;
             }
-            if (Priority == null && Priority == other.Priority)
+            diff = ModelComparer.Compare(GoogleKey, other.GoogleKey);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(EnableFakeReceipt, other.EnableFakeReceipt);
+            if (diff != 0)
             {
-                diff += Priority.CompareTo(other.Priority);
+                return diff;
             }
-            if (ShareFree == null && ShareFree == other.ShareFree)
+            diff = ModelComparer.Compare(CreateWalletScript, other.CreateWalletScript);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(DepositScript, other.DepositScript);
+            if (diff != 0)
             {
-                diff += ShareFree == other.ShareFree ? 0 : 1;
+                return diff;
             }
-            if (Currency == null && Currency == other.Currency)
+            diff = ModelComparer.Compare(WithdrawScript, other.WithdrawScript);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Balance, other.Balance);
+            if (diff != 0)
             {
-                diff += Currency.CompareTo(other.Currency);
+                return diff;
             }
-            if (AppleKey == null && AppleKey == other.AppleKey)
+            diff = ModelComparer.Compare(LogSetting, other.LogSetting);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += AppleKey.CompareTo(other.AppleKey);
+                return diff;
             }
-            if (GoogleKey == null && GoogleKey == other.GoogleKey)
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += GoogleKey.CompareTo(other.GoogleKey);
+                return diff;
             }
-            if (EnableFakeReceipt == null && EnableFakeReceipt == other.EnableFakeReceipt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += EnableFakeReceipt == other.EnableFakeReceipt ? 0 : 1;
-            }
-            if (CreateWalletScript == null && CreateWalletScript == other.CreateWalletScript)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += CreateWalletScript.CompareTo(other.CreateWalletScript);
-            }
-            if (DepositScript == null && DepositScript == other.DepositScript)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += DepositScript.CompareTo(other.DepositScript);
-            }
-            if (WithdrawScript == null && WithdrawScript == other.WithdrawScript)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += WithdrawScript.CompareTo(other.WithdrawScript);
-            }
-            if (Balance == null && Balance == other.Balance)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Balance - other.Balance);
-            }
-            if (LogSetting == null && LogSetting == other.LogSetting)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += LogSetting.CompareTo(other.LogSetting);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

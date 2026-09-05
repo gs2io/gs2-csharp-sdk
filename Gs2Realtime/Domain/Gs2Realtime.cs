@@ -265,7 +265,7 @@ namespace Gs2.Gs2Realtime.Domain
         ) {
             switch (action) {
                 case "Create": {
-                    var notification = CreateNotification.FromJson(JsonMapper.ToObject(payload));
+                    var notification = NotificationPayload.Parse(payload, CreateNotification.FromJson);
                     (null as Gs2.Gs2Realtime.Model.Room).DeleteCache(
                         cache,
                         notification.NamespaceName,

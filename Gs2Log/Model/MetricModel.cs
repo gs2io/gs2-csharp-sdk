@@ -112,36 +112,31 @@ namespace Gs2.Gs2Log.Model
         public int CompareTo(object obj)
         {
             var other = obj as MetricModel;
-            var diff = 0;
-            if (Name == null && Name == other.Name)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (Type == null && Type == other.Type)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Type.CompareTo(other.Type);
-            }
-            if (Labels == null && Labels == other.Labels)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Labels.Length - other.Labels.Length;
-                for (var i = 0; i < Labels.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += Labels[i].CompareTo(other.Labels[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type MetricModel.", nameof(obj));
             }
-            return diff;
+            var diff = 0;
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Type, other.Type);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(Labels, other.Labels);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

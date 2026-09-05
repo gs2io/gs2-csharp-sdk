@@ -94,32 +94,31 @@ namespace Gs2.Gs2JobQueue.Model
         public int CompareTo(object obj)
         {
             var other = obj as JobEntry;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type JobEntry.", nameof(obj));
+            }
             var diff = 0;
-            if (ScriptId == null && ScriptId == other.ScriptId)
+            diff = ModelComparer.Compare(ScriptId, other.ScriptId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Args, other.Args);
+            if (diff != 0)
             {
-                diff += ScriptId.CompareTo(other.ScriptId);
+                return diff;
             }
-            if (Args == null && Args == other.Args)
+            diff = ModelComparer.Compare(MaxTryCount, other.MaxTryCount);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += Args.CompareTo(other.Args);
-            }
-            if (MaxTryCount == null && MaxTryCount == other.MaxTryCount)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(MaxTryCount - other.MaxTryCount);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

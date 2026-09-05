@@ -28,6 +28,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Core.Model;
@@ -50,7 +51,7 @@ namespace Gs2.Core.Domain
 {
     public partial class AutoStampSheetDomain : TransactionDomain
     {
-        private static Dictionary<string, long> _handled = new Dictionary<string, long>();
+        private static readonly ExpiringHandledResultSet HandledResults = new ExpiringHandledResultSet(TimeSpan.FromMinutes(3));
         private readonly string _transactionId;
         private readonly string _namespaceName;
 
@@ -83,18 +84,7 @@ namespace Gs2.Core.Domain
         private TransactionDomain HandleResult(
             Gs2Distributor.Model.StampSheetResult result
         ) {
-            var skipCallback = false;
-            lock (_handled) {
-                if (_handled.ContainsKey(this._transactionId)) {
-                    _handled = _handled
-                        .Where(pair => pair.Value >= UnixTime.ToUnixTime(DateTime.Now))
-                        .ToDictionary(pair => pair.Key, pair => pair.Value);
-                    skipCallback = true;
-                }
-                else {
-                    _handled.Add(this._transactionId, UnixTime.ToUnixTime(DateTime.Now.Add(TimeSpan.FromMinutes(3))));
-                }
-            }
+            var skipCallback = !HandledResults.TryHandle(this._transactionId);
 
             if (result.VerifyTaskRequests != null) {
                 for (var i = 0; i < result.VerifyTaskRequests.Length; i++) {
@@ -104,7 +94,7 @@ namespace Gs2.Core.Domain
                             throw Gs2Exception.ExtractError(result.VerifyTaskResults[i], result.VerifyTaskResultCodes[i]);
                         }
                         if (!skipCallback) {
-                            Gs2.TransactionConfiguration.ConsumeActionEventHandler.Invoke(
+                            Gs2.TransactionConfiguration.VerifyActionEventHandler.Invoke(
                                 Gs2.Cache,
                                 this._transactionId + "[" + i + "]",
                                 null,
@@ -202,9 +192,9 @@ namespace Gs2.Core.Domain
 #endif
             bool all = false
         ) {
-            var begin = DateTime.Now;
+            var timer = Stopwatch.StartNew();
             RETRY:
-            if (DateTime.Now - begin > TimeSpan.FromSeconds(10)) {
+            if (timer.Elapsed > TimeSpan.FromSeconds(10)) {
                 throw new TimeoutException("Failed to retrieve transaction results, either because there is some failure in GS2, or the GS2-Gateway used to notify the GS2-Distributor used to execute the transaction is not yet configured, or the GS2-Gateway has a user ID to receive notifications The configuration API may not have been invoked.");
             }
             var domain = new Gs2Distributor.Domain.Gs2Distributor(

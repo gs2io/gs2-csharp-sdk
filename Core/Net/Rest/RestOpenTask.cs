@@ -7,9 +7,21 @@ namespace Gs2.Core.Net
 {
     public class RestOpenTask : Gs2RestSessionTask<LoginRequest, LoginResult>
     {
+        private readonly object _sessionOpenToken;
+
         public RestOpenTask(IGs2Session session, RestSessionRequestFactory factory, LoginRequest request) : base(session, factory, request)
         {
             Session = session;
+        }
+
+        internal RestOpenTask(
+            IGs2Session session,
+            RestSessionRequestFactory factory,
+            LoginRequest request,
+            object sessionOpenToken
+        ) : this(session, factory, request)
+        {
+            _sessionOpenToken = sessionOpenToken;
         }
         
         protected override IGs2SessionRequest CreateRequest(LoginRequest request)
@@ -20,6 +32,7 @@ namespace Gs2.Core.Net
                       + "/projectToken/login";
 
             var restRequest = Factory.Post(url);
+            restRequest.SessionOpenToken = _sessionOpenToken;
             restRequest.AddHeader("Content-Type", "application/json");
 
             var stringBuilder = new StringBuilder();

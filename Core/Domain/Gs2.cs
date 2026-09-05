@@ -23,6 +23,18 @@ namespace Gs2.Core.Domain
 {
     public class Gs2
     {
+        private static readonly string[] MultiWordJobResultServices =
+        {
+            "state_machine",
+            "season_rating",
+            "login_reward",
+            "skill_tree",
+            "serial_key",
+            "mega_field",
+            "job_queue",
+            "ad_reward",
+        };
+
         public static int DefaultCacheMinutes = 15;
         private DateTime _lastPingAt = DateTime.Now;
 
@@ -54,6 +66,7 @@ namespace Gs2.Core.Domain
         public readonly Gs2Exchange.Domain.Gs2Exchange Exchange;
         public readonly Gs2Experience.Domain.Gs2Experience Experience;
         public readonly Gs2Formation.Domain.Gs2Formation Formation;
+        public readonly Gs2Freeze.Domain.Gs2Freeze Freeze;
         public readonly Gs2Friend.Domain.Gs2Friend Friend;
         public readonly Gs2Gateway.Domain.Gs2Gateway Gateway;
         public readonly Gs2Grade.Domain.Gs2Grade Grade;
@@ -124,6 +137,7 @@ namespace Gs2.Core.Domain
             this.Exchange = new Gs2Exchange.Domain.Gs2Exchange(this);
             this.Experience = new Gs2Experience.Domain.Gs2Experience(this);
             this.Formation = new Gs2Formation.Domain.Gs2Formation(this);
+            this.Freeze = new Gs2Freeze.Domain.Gs2Freeze(this);
             this.Friend = new Gs2Friend.Domain.Gs2Friend(this);
             this.Gateway = new Gs2Gateway.Domain.Gs2Gateway(this);
             this.Grade = new Gs2Grade.Domain.Gs2Grade(this);
@@ -162,8 +176,16 @@ namespace Gs2.Core.Domain
 
             if (wssession != null)
             {
-                wssession.OnNotificationMessage += message =>
+                var weakSelf = new WeakReference(this);
+                Gs2WebSocketSession.NotificationHandler notificationHandler = null;
+                notificationHandler = message =>
                 {
+                    var target = weakSelf.Target as Gs2;
+                    if (target == null)
+                    {
+                        wssession.OnSdkNotificationMessage -= notificationHandler;
+                        return;
+                    }
                     if (message.subject.Contains(":"))
                     {
                         var service = message.subject.Substring(0, message.subject.IndexOf(':'));
@@ -171,155 +193,159 @@ namespace Gs2.Core.Domain
                         switch (service)
                         {
                             case "Gs2Account":
-                                this.Account.HandleNotification(this._cache, method, message.payload);
+                                target.Account.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2AdReward":
-                                this.AdReward.HandleNotification(this._cache, method, message.payload);
+                                target.AdReward.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Auth":
-                                this.Auth.HandleNotification(this._cache, method, message.payload);
+                                target.Auth.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Buff":
-                                this.Buff.HandleNotification(this._cache, method, message.payload);
+                                target.Buff.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Chat":
-                                this.Chat.HandleNotification(this._cache, method, message.payload);
+                                target.Chat.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Datastore":
-                                this.Datastore.HandleNotification(this._cache, method, message.payload);
+                                target.Datastore.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Deploy":
-                                this.Deploy.HandleNotification(this._cache, method, message.payload);
+                                target.Deploy.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Dictionary":
-                                this.Dictionary.HandleNotification(this._cache, method, message.payload);
+                                target.Dictionary.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Distributor":
-                                this.Distributor.HandleNotification(this._cache, method, message.payload);
+                                target.Distributor.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Enchant":
-                                this.Enchant.HandleNotification(this._cache, method, message.payload);
+                                target.Enchant.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Enhance":
-                                this.Enhance.HandleNotification(this._cache, method, message.payload);
+                                target.Enhance.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Exchange":
-                                this.Exchange.HandleNotification(this._cache, method, message.payload);
+                                target.Exchange.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Experience":
-                                this.Experience.HandleNotification(this._cache, method, message.payload);
+                                target.Experience.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Formation":
-                                this.Formation.HandleNotification(this._cache, method, message.payload);
+                                target.Formation.HandleNotification(target._cache, method, message.payload);
+                                break;
+                            case "Gs2Freeze":
+                                target.Freeze.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Friend":
-                                this.Friend.HandleNotification(this._cache, method, message.payload);
+                                target.Friend.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Gateway":
-                                this.Gateway.HandleNotification(this._cache, method, message.payload);
+                                target.Gateway.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Grade":
-                                this.Grade.HandleNotification(this._cache, method, message.payload);
+                                target.Grade.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Guard":
-                                this.Guard.HandleNotification(this._cache, method, message.payload);
+                                target.Guard.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Guild":
-                                this.Guild.HandleNotification(this._cache, method, message.payload);
+                                target.Guild.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Identifier":
-                                this.Identifier.HandleNotification(this._cache, method, message.payload);
+                                target.Identifier.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Idle":
-                                this.Idle.HandleNotification(this._cache, method, message.payload);
+                                target.Idle.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Inbox":
-                                this.Inbox.HandleNotification(this._cache, method, message.payload);
+                                target.Inbox.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Inventory":
-                                this.Inventory.HandleNotification(this._cache, method, message.payload);
+                                target.Inventory.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2JobQueue":
-                                this.JobQueue.HandleNotification(this._cache, method, message.payload);
+                                target.JobQueue.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Key":
-                                this.Key.HandleNotification(this._cache, method, message.payload);
+                                target.Key.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Limit":
-                                this.Limit.HandleNotification(this._cache, method, message.payload);
+                                target.Limit.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2LoginReward":
-                                this.LoginReward.HandleNotification(this._cache, method, message.payload);
+                                target.LoginReward.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Lock":
-                                this.Lock.HandleNotification(this._cache, method, message.payload);
+                                target.Lock.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Log":
-                                this.Log.HandleNotification(this._cache, method, message.payload);
+                                target.Log.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Lottery":
-                                this.Lottery.HandleNotification(this._cache, method, message.payload);
+                                target.Lottery.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Matchmaking":
-                                this.Matchmaking.HandleNotification(this._cache, method, message.payload);
+                                target.Matchmaking.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2MegaField":
-                                this.MegaField.HandleNotification(this._cache, method, message.payload);
+                                target.MegaField.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Mission":
-                                this.Mission.HandleNotification(this._cache, method, message.payload);
+                                target.Mission.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Money":
-                                this.Money.HandleNotification(this._cache, method, message.payload);
+                                target.Money.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Money2":
-                                this.Money2.HandleNotification(this._cache, method, message.payload);
+                                target.Money2.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2News":
-                                this.News.HandleNotification(this._cache, method, message.payload);
+                                target.News.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Quest":
-                                this.Quest.HandleNotification(this._cache, method, message.payload);
+                                target.Quest.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Ranking":
-                                this.Ranking.HandleNotification(this._cache, method, message.payload);
+                                target.Ranking.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Ranking2":
-                                this.Ranking2.HandleNotification(this._cache, method, message.payload);
+                                target.Ranking2.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Realtime":
-                                this.Realtime.HandleNotification(this._cache, method, message.payload);
+                                target.Realtime.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Schedule":
-                                this.Schedule.HandleNotification(this._cache, method, message.payload);
+                                target.Schedule.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Script":
-                                this.Script.HandleNotification(this._cache, method, message.payload);
+                                target.Script.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2SeasonRating":
-                                this.SeasonRating.HandleNotification(this._cache, method, message.payload);
+                                target.SeasonRating.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2SerialKey":
-                                this.SerialKey.HandleNotification(this._cache, method, message.payload);
+                                target.SerialKey.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Showcase":
-                                this.Showcase.HandleNotification(this._cache, method, message.payload);
+                                target.Showcase.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2SkillTree":
-                                this.SkillTree.HandleNotification(this._cache, method, message.payload);
+                                target.SkillTree.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Stamina":
-                                this.Stamina.HandleNotification(this._cache, method, message.payload);
+                                target.Stamina.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2StateMachine":
-                                this.StateMachine.HandleNotification(this._cache, method, message.payload);
+                                target.StateMachine.HandleNotification(target._cache, method, message.payload);
                                 break;
                             case "Gs2Version":
-                                this.Version.HandleNotification(this._cache, method, message.payload);
+                                target.Version.HandleNotification(target._cache, method, message.payload);
                                 break;
                         }
                     }
                 };
+                wssession.OnSdkNotificationMessage += notificationHandler;
             }
         }
 
@@ -476,6 +502,9 @@ namespace Gs2.Core.Domain
                         break;
                     case "Gs2Formation":
                         this.Formation.UpdateCacheFromStampSheet(transactionId, timeOffset, method, request, result);
+                        break;
+                    case "Gs2Freeze":
+                        this.Freeze.UpdateCacheFromStampSheet(transactionId, timeOffset, method, request, result);
                         break;
                     case "Gs2Friend":
                         this.Friend.UpdateCacheFromStampSheet(transactionId, timeOffset, method, request, result);
@@ -643,6 +672,9 @@ namespace Gs2.Core.Domain
                     case "Gs2Formation":
                         this.Formation.UpdateCacheFromStampTask(taskId, timeOffset, method, request, result);
                         break;
+                    case "Gs2Freeze":
+                        this.Freeze.UpdateCacheFromStampTask(taskId, timeOffset, method, request, result);
+                        break;
                     case "Gs2Friend":
                         this.Friend.UpdateCacheFromStampTask(taskId, timeOffset, method, request, result);
                         break;
@@ -759,6 +791,47 @@ namespace Gs2.Core.Domain
             this._jobQueueDomain.Push(namespaceName);
         }
 
+        internal static bool TryParseJobResultScriptName(
+            string scriptName,
+            out string service,
+            out string method
+        )
+        {
+            service = null;
+            method = null;
+            const string prefix = "execute_";
+            if (scriptName == null || !scriptName.StartsWith(prefix, StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            var actionName = scriptName.Substring(prefix.Length);
+            foreach (var candidate in MultiWordJobResultServices)
+            {
+                var servicePrefix = candidate + "_";
+                if (actionName.StartsWith(servicePrefix, StringComparison.Ordinal))
+                {
+                    var parsedMethod = actionName.Substring(servicePrefix.Length);
+                    if (parsedMethod.Length == 0)
+                    {
+                        return false;
+                    }
+                    service = candidate;
+                    method = parsedMethod;
+                    return true;
+                }
+            }
+
+            var separatorIndex = actionName.IndexOf('_');
+            if (separatorIndex <= 0 || separatorIndex == actionName.Length - 1)
+            {
+                return false;
+            }
+            service = actionName.Substring(0, separatorIndex);
+            method = actionName.Substring(separatorIndex + 1);
+            return true;
+        }
+
         public void UpdateCacheFromJobResult(
             int? timeOffset,
             Job job,
@@ -770,11 +843,8 @@ namespace Gs2.Core.Domain
                 if (job.ScriptId.Split(':')[3] == "system")
                 {
                     var scriptName = job.ScriptId.Substring(job.ScriptId.LastIndexOf(':') + 1);
-                    if (scriptName.StartsWith("execute_"))
+                    if (TryParseJobResultScriptName(scriptName, out var service, out var method))
                     {
-                        var scriptNameTemp = scriptName.Replace("execute_", "");
-                        var service = scriptNameTemp.Split('_')[0];
-                        var method = scriptNameTemp.Substring(scriptNameTemp.IndexOf("_", StringComparison.Ordinal) + 1);
                         switch (service)
                         {
                             case "account":
@@ -818,6 +888,9 @@ namespace Gs2.Core.Domain
                                 break;
                             case "formation":
                                 this.Formation.UpdateCacheFromJobResult(method, timeOffset, job, result);
+                                break;
+                            case "freeze":
+                                this.Freeze.UpdateCacheFromJobResult(method, timeOffset, job, result);
                                 break;
                             case "friend":
                                 this.Friend.UpdateCacheFromJobResult(method, timeOffset, job, result);
@@ -939,7 +1012,10 @@ namespace Gs2.Core.Domain
 #endif
         {
             await this._restSession.CloseAsync();
-            await this._webSocketSession.CloseAsync();
+            if (this._webSocketSession != null)
+            {
+                await this._webSocketSession.CloseAsync();
+            }
         }
     }
 }

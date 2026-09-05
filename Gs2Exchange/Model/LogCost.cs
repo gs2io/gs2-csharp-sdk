@@ -126,40 +126,31 @@ namespace Gs2.Gs2Exchange.Model
         public int CompareTo(object obj)
         {
             var other = obj as LogCost;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type LogCost.", nameof(obj));
+            }
             var diff = 0;
-            if (Base == null && Base == other.Base)
+            diff = ModelComparer.Compare(Base, other.Base);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(Adds, other.Adds);
+            if (diff != 0)
             {
-                diff += (int)(Base - other.Base);
+                return diff;
             }
-            if (Adds == null && Adds == other.Adds)
+            diff = ModelComparer.CompareArray(Subs, other.Subs);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += Adds.Length - other.Adds.Length;
-                for (var i = 0; i < Adds.Length; i++)
-                {
-                    diff += (int)(Adds[i] - other.Adds[i]);
-                }
-            }
-            if (Subs == null && Subs == other.Subs)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Subs.Length - other.Subs.Length;
-                for (var i = 0; i < Subs.Length; i++)
-                {
-                    diff += (int)(Subs[i] - other.Subs[i]);
-                }
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

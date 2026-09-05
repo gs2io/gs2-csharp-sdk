@@ -112,36 +112,31 @@ namespace Gs2.Gs2Quest.Model
         public int CompareTo(object obj)
         {
             var other = obj as Contents;
-            var diff = 0;
-            if (Metadata == null && Metadata == other.Metadata)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (CompleteAcquireActions == null && CompleteAcquireActions == other.CompleteAcquireActions)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += CompleteAcquireActions.Length - other.CompleteAcquireActions.Length;
-                for (var i = 0; i < CompleteAcquireActions.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += CompleteAcquireActions[i].CompareTo(other.CompleteAcquireActions[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type Contents.", nameof(obj));
             }
-            if (Weight == null && Weight == other.Weight)
+            var diff = 0;
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(CompleteAcquireActions, other.CompleteAcquireActions);
+            if (diff != 0)
             {
-                diff += (int)(Weight - other.Weight);
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.Compare(Weight, other.Weight);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

@@ -105,40 +105,36 @@ namespace Gs2.Gs2JobQueue.Model
         public int CompareTo(object obj)
         {
             var other = obj as JobResultBody;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type JobResultBody.", nameof(obj));
+            }
             var diff = 0;
-            if (TryNumber == null && TryNumber == other.TryNumber)
+            diff = ModelComparer.Compare(TryNumber, other.TryNumber);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(StatusCode, other.StatusCode);
+            if (diff != 0)
             {
-                diff += (int)(TryNumber - other.TryNumber);
+                return diff;
             }
-            if (StatusCode == null && StatusCode == other.StatusCode)
+            diff = ModelComparer.Compare(Result, other.Result);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TryAt, other.TryAt);
+            if (diff != 0)
             {
-                diff += (int)(StatusCode - other.StatusCode);
+                return diff;
             }
-            if (Result == null && Result == other.Result)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Result.CompareTo(other.Result);
-            }
-            if (TryAt == null && TryAt == other.TryAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(TryAt - other.TryAt);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

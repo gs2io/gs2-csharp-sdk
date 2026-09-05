@@ -258,68 +258,51 @@ namespace Gs2.Gs2Formation.Model
         public int CompareTo(object obj)
         {
             var other = obj as Form;
-            var diff = 0;
-            if (FormId == null && FormId == other.FormId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += FormId.CompareTo(other.FormId);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (Index == null && Index == other.Index)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Index - other.Index);
-            }
-            if (Slots == null && Slots == other.Slots)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Slots.Length - other.Slots.Length;
-                for (var i = 0; i < Slots.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += Slots[i].CompareTo(other.Slots[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type Form.", nameof(obj));
             }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
+            var diff = 0;
+            diff = ModelComparer.Compare(FormId, other.FormId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += (int)(CreatedAt - other.CreatedAt);
+                return diff;
             }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
+            diff = ModelComparer.Compare(Index, other.Index);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(Slots, other.Slots);
+            if (diff != 0)
             {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
+                return diff;
             }
-            if (Revision == null && Revision == other.Revision)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += (int)(Revision - other.Revision);
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

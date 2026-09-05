@@ -284,96 +284,71 @@ namespace Gs2.Gs2Experience.Model
         public int CompareTo(object obj)
         {
             var other = obj as Status;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Status.", nameof(obj));
+            }
             var diff = 0;
-            if (StatusId == null && StatusId == other.StatusId)
+            diff = ModelComparer.Compare(StatusId, other.StatusId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ExperienceName, other.ExperienceName);
+            if (diff != 0)
             {
-                diff += StatusId.CompareTo(other.StatusId);
+                return diff;
             }
-            if (ExperienceName == null && ExperienceName == other.ExperienceName)
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(PropertyId, other.PropertyId);
+            if (diff != 0)
             {
-                diff += ExperienceName.CompareTo(other.ExperienceName);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(ExperienceValue, other.ExperienceValue);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(RankValue, other.RankValue);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (PropertyId == null && PropertyId == other.PropertyId)
+            diff = ModelComparer.Compare(RankCapValue, other.RankCapValue);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(NextRankUpExperienceValue, other.NextRankUpExperienceValue);
+            if (diff != 0)
             {
-                diff += PropertyId.CompareTo(other.PropertyId);
+                return diff;
             }
-            if (ExperienceValue == null && ExperienceValue == other.ExperienceValue)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += (int)(ExperienceValue - other.ExperienceValue);
+                return diff;
             }
-            if (RankValue == null && RankValue == other.RankValue)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += (int)(RankValue - other.RankValue);
-            }
-            if (RankCapValue == null && RankCapValue == other.RankCapValue)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(RankCapValue - other.RankCapValue);
-            }
-            if (NextRankUpExperienceValue == null && NextRankUpExperienceValue == other.NextRankUpExperienceValue)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(NextRankUpExperienceValue - other.NextRankUpExperienceValue);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

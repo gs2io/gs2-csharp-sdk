@@ -32,7 +32,8 @@ namespace Gs2.Core.Net
                 "identifier",
                 "projectToken",
                 "login",
-                jsonWriter
+                jsonWriter,
+                false
             );
 
             jsonWriter.WriteObjectEnd();
@@ -44,11 +45,14 @@ namespace Gs2.Core.Net
         {
             var request = CreateRequest(Request);
             request.TaskId = TaskId;
-#if UNITY_2017_1_OR_NEWER
-            ((Gs2WebSocketSession)Session).SendNonBlocking(request);
-#else
-            Session.SendAsync(request);
-#endif
+            if (Session is Gs2WebSocketSession webSocketSession)
+            {
+                webSocketSession.SendLoginNonBlocking(request);
+            }
+            else
+            {
+                _ = Session.SendAsync(request);
+            }
         }
     }
 }

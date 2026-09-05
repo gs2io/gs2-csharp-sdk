@@ -123,44 +123,36 @@ namespace Gs2.Gs2Lottery.Model
         public int CompareTo(object obj)
         {
             var other = obj as BoxItem;
-            var diff = 0;
-            if (PrizeId == null && PrizeId == other.PrizeId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += PrizeId.CompareTo(other.PrizeId);
-            }
-            if (AcquireActions == null && AcquireActions == other.AcquireActions)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += AcquireActions.Length - other.AcquireActions.Length;
-                for (var i = 0; i < AcquireActions.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += AcquireActions[i].CompareTo(other.AcquireActions[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type BoxItem.", nameof(obj));
             }
-            if (Remaining == null && Remaining == other.Remaining)
+            var diff = 0;
+            diff = ModelComparer.Compare(PrizeId, other.PrizeId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(AcquireActions, other.AcquireActions);
+            if (diff != 0)
             {
-                diff += (int)(Remaining - other.Remaining);
+                return diff;
             }
-            if (Initial == null && Initial == other.Initial)
+            diff = ModelComparer.Compare(Remaining, other.Remaining);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Initial, other.Initial);
+            if (diff != 0)
             {
-                diff += (int)(Initial - other.Initial);
+                return diff;
             }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

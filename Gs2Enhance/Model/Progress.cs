@@ -239,88 +239,66 @@ namespace Gs2.Gs2Enhance.Model
         public int CompareTo(object obj)
         {
             var other = obj as Progress;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Progress.", nameof(obj));
+            }
             var diff = 0;
-            if (ProgressId == null && ProgressId == other.ProgressId)
+            diff = ModelComparer.Compare(ProgressId, other.ProgressId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += ProgressId.CompareTo(other.ProgressId);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(RateName, other.RateName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (RateName == null && RateName == other.RateName)
+            diff = ModelComparer.Compare(PropertyId, other.PropertyId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ExperienceValue, other.ExperienceValue);
+            if (diff != 0)
             {
-                diff += RateName.CompareTo(other.RateName);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Rate, other.Rate);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (PropertyId == null && PropertyId == other.PropertyId)
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += PropertyId.CompareTo(other.PropertyId);
+                return diff;
             }
-            if (ExperienceValue == null && ExperienceValue == other.ExperienceValue)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(ExperienceValue - other.ExperienceValue);
-            }
-            if (Rate == null && Rate == other.Rate)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Rate - other.Rate);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

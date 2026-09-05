@@ -105,40 +105,36 @@ namespace Gs2.Gs2Money2.Model
         public int CompareTo(object obj)
         {
             var other = obj as RefundEvent;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type RefundEvent.", nameof(obj));
+            }
             var diff = 0;
-            if (ContentName == null && ContentName == other.ContentName)
+            diff = ModelComparer.Compare(ContentName, other.ContentName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Platform, other.Platform);
+            if (diff != 0)
             {
-                diff += ContentName.CompareTo(other.ContentName);
+                return diff;
             }
-            if (Platform == null && Platform == other.Platform)
+            diff = ModelComparer.Compare(AppleAppStoreRefundEvent, other.AppleAppStoreRefundEvent);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(GooglePlayRefundEvent, other.GooglePlayRefundEvent);
+            if (diff != 0)
             {
-                diff += Platform.CompareTo(other.Platform);
+                return diff;
             }
-            if (AppleAppStoreRefundEvent == null && AppleAppStoreRefundEvent == other.AppleAppStoreRefundEvent)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += AppleAppStoreRefundEvent.CompareTo(other.AppleAppStoreRefundEvent);
-            }
-            if (GooglePlayRefundEvent == null && GooglePlayRefundEvent == other.GooglePlayRefundEvent)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += GooglePlayRefundEvent.CompareTo(other.GooglePlayRefundEvent);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

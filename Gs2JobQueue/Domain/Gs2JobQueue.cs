@@ -66,7 +66,7 @@ namespace Gs2.Gs2JobQueue.Domain
 
     public class Gs2JobQueue {
 
-        private static readonly List<RunNotification> _completedJobs = new List<RunNotification>();
+        private readonly List<RunNotification> _completedJobs = new List<RunNotification>();
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2JobQueueRestClient _client;
         public string Url { get; set; } = null!;
@@ -508,15 +508,17 @@ namespace Gs2.Gs2JobQueue.Domain
         ) {
             switch (action) {
                 case "Push": {
+                    var notification = NotificationPayload.Parse(payload, PushNotification.FromJson);
     #if UNITY_2017_1_OR_NEWER
-                    onPushNotification.Invoke(PushNotification.FromJson(JsonMapper.ToObject(payload)));
+                    onPushNotification.Invoke(notification);
     #endif
                     break;
                 }
                 case "RunNotification": {
                     lock (_completedJobs)
                     {
-                        var notification = RunNotification.FromJson(JsonMapper.ToObject(payload));
+                        var notification = NotificationPayload.Parse(payload, RunNotification.FromJson);
+                        Telemetry.EndJob(notification.JobName);
                         _completedJobs.Add(notification);
     #if UNITY_2017_1_OR_NEWER
                         onRunNotification.Invoke(notification);

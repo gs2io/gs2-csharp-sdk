@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Security;
 using System.Security.Authentication;
 using System.Threading;
@@ -25,7 +26,7 @@ using UnityEngine.Events;
 
 namespace Gs2.Core.Net
 {
-    public partial class Gs2WebSocketSession : IGs2Session
+    public partial class Gs2WebSocketSession : IGs2Session, IRequestTrackingSession
     {
         public static string EndpointHost = "wss://gateway-ws.{region}.gen2.gs2io.com";
         public static int OpenTimeoutSec = 10;
@@ -33,19 +34,31 @@ namespace Gs2.Core.Net
 
         public delegate void NotificationHandler(NotificationMessage message);
         public event NotificationHandler OnNotificationMessage;
+        internal event NotificationHandler OnSdkNotificationMessage;
         public delegate void DisconnectHandler();
         public event DisconnectHandler OnDisconnect;
         public delegate void ErrorHandler(Gs2.Core.Exception.Gs2Exception error);
         public event ErrorHandler OnError;
 
         private WebSocketSession _session;
+        private long _sessionGeneration;
+        private Gs2SessionTaskId _loginRequestTaskId = Gs2SessionTaskId.InvalidId;
+        private Gs2Exception _openError;
+        private long _disconnectPendingGeneration;
+        private long _disconnectNotifiedGeneration;
 
         // ReSharper disable once MemberCanBePrivate.Global
         public volatile State State;
+        private readonly object _stateLock = new object();
         private readonly SemaphoreSlim _semaphore  = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _closeSemaphore = new SemaphoreSlim(1, 1);
 
         private readonly ConcurrentDictionary<Gs2SessionTaskId, WebSocketSessionRequest> _inflightRequest = new ConcurrentDictionary<Gs2SessionTaskId, WebSocketSessionRequest>();
         private readonly ConcurrentDictionary<Gs2SessionTaskId, WebSocketResult> _result = new ConcurrentDictionary<Gs2SessionTaskId, WebSocketResult>();
+        internal int InflightRequestCount => _inflightRequest.Count;
+        internal int ResultCount => _result.Count;
+        private readonly Func<string, bool, WebSocketSession> _webSocketSessionFactory;
+        private readonly Action<Action> _runOnMainThread;
 
         public IGs2Credential Credential { get; }
         public Region Region { get; }
@@ -56,12 +69,123 @@ namespace Gs2.Core.Net
         }
 
         public Gs2WebSocketSession(IGs2Credential basicGs2Credential, string region, bool checkCertificateRevocation = true)
+            : this(basicGs2Credential, region, checkCertificateRevocation, CreateWebSocketSession)
+        {
+        }
+
+        internal Gs2WebSocketSession(
+            IGs2Credential basicGs2Credential,
+            string region,
+            bool checkCertificateRevocation,
+            Func<string, bool, WebSocketSession> webSocketSessionFactory,
+            Action<Action> runOnMainThread = null
+        )
         {
             Credential = basicGs2Credential;
             Region = RegionExt.ValueOf(region);
 
             this._checkCertificateRevocation = checkCertificateRevocation;
+            this._webSocketSessionFactory = webSocketSessionFactory;
+            this._runOnMainThread = runOnMainThread ?? TaskUtilities.RunOnMainThreadIfSupported;
             this.State = State.Idle;
+        }
+
+        private static WebSocketSession CreateWebSocketSession(string url, bool checkCertificateRevocation)
+        {
+#if UNITY_WEBGL && !UNITY_EDITOR
+            return new WebSocketSession(url);
+#else
+            return new WebSocketSession(url, checkCertificateRevocation);
+#endif
+        }
+
+        private bool IsActiveSessionEvent(WebSocketSession session, long sessionGeneration)
+        {
+            return ReferenceEquals(this._session, session) &&
+                   this._sessionGeneration == sessionGeneration &&
+                   this._disconnectPendingGeneration != sessionGeneration &&
+                   this.State is State.Opening or State.LoggingIn or State.Available;
+        }
+
+        private bool TryBeginDisconnect(WebSocketSession session, long sessionGeneration)
+        {
+            lock (this._stateLock)
+            {
+                if (!IsActiveSessionEvent(session, sessionGeneration))
+                {
+                    return false;
+                }
+                this._disconnectPendingGeneration = sessionGeneration;
+                this._inflightRequest.Clear();
+                return true;
+            }
+        }
+
+        private void HandleProtocolError(
+            WebSocketSession session,
+            long sessionGeneration,
+            System.Exception exception
+        )
+        {
+            var error = exception as Gs2Exception ??
+                        new Gs2.Core.Exception.UnknownException(exception.Message, exception);
+            if (!TryBeginDisconnect(session, sessionGeneration))
+            {
+                return;
+            }
+            TaskUtilities.RunOnMainThreadIfSupported(() =>
+            {
+                try
+                {
+                    OnError?.Invoke(error);
+                    NotifyDisconnect(sessionGeneration);
+                }
+                finally
+                {
+                    RecordOpenError(session, sessionGeneration, error);
+                    CloseSessionAsync(session, sessionGeneration).Forget();
+                }
+            });
+        }
+
+        private void RecordOpenError(
+            WebSocketSession session,
+            long sessionGeneration,
+            Gs2Exception error
+        )
+        {
+            lock (this._stateLock)
+            {
+                if (ReferenceEquals(this._session, session) &&
+                    this._sessionGeneration == sessionGeneration &&
+                    this.State is State.Opening or State.LoggingIn)
+                {
+                    Volatile.Write(ref this._openError, error);
+                }
+            }
+        }
+
+        private void NotifyDisconnect(long sessionGeneration)
+        {
+            lock (this._stateLock)
+            {
+                if (this._disconnectNotifiedGeneration == sessionGeneration)
+                {
+                    return;
+                }
+                this._disconnectNotifiedGeneration = sessionGeneration;
+            }
+            OnDisconnect?.Invoke();
+        }
+
+        private bool IsReOpenWaitingForTransition()
+        {
+            lock (this._stateLock)
+            {
+                return this.State is State.Opening or State.LoggingIn or State.CancellingTasks or State.Closing ||
+                       this.State == State.Available &&
+                       this._disconnectPendingGeneration == this._sessionGeneration;
+            }
         }
 
         // Open
@@ -75,15 +199,16 @@ namespace Gs2.Core.Net
         {
             await TaskUtilities.WaitAsync(this._semaphore);
 
-            Gs2Exception caughtError = null;
-            void HandleError(Gs2Exception error)
-            {
-                Volatile.Write(ref caughtError, error);
-            }
-            OnError += HandleError;
+            var openingStarted = false;
+            long sessionGeneration = 0;
             try {
-                if (this.State != State.Available)
+                lock (this._stateLock)
                 {
+                    if (this.State == State.Available)
+                    {
+                        return new OpenResult();
+                    }
+
                     if (this.State != State.Idle && this.State != State.Closed)
                     {
                         throw new InvalidOperationException("invalid state");
@@ -91,97 +216,305 @@ namespace Gs2.Core.Net
 
                     this._result.Clear();
                     this._inflightRequest.Clear();
+                    this._loginRequestTaskId = Gs2SessionTaskId.InvalidId;
+                    Volatile.Write(ref this._openError, null);
+                    this._session = null;
+                    sessionGeneration = ++this._sessionGeneration;
                     this.State = State.Opening;
-                    
+                    openingStarted = true;
+                }
+
+                {
                     var url = EndpointHost.Replace("{region}", Region.DisplayName());
 
-                    this._session = new WebSocketSession(url);
-                    
-                    this._session.OnOpen += () =>
+                    var session = this._webSocketSessionFactory.Invoke(url, this._checkCertificateRevocation);
+                    session.OnOpen += () =>
                     {
-                        this.State = State.LoggingIn;
-                        new WebSocketOpenTask(this, new LoginRequest {ClientId = Credential.ClientId, ClientSecret = Credential.ClientSecret,}).NonBlockingInvoke();
+                        var loginRequired = true;
+                        lock (this._stateLock)
+                        {
+                            if (!ReferenceEquals(this._session, session) ||
+                                this._sessionGeneration != sessionGeneration ||
+                                this._disconnectPendingGeneration == sessionGeneration ||
+                                this.State != State.Opening)
+                            {
+                                return;
+                            }
+
+                            if (Credential is ProjectTokenGs2Credential)
+                            {
+                                this.State = State.Available;
+                                loginRequired = false;
+                            }
+                            else
+                            {
+                                this.State = State.LoggingIn;
+                            }
+                        }
+                        if (!loginRequired)
+                        {
+                            return;
+                        }
+                        try
+                        {
+                            new WebSocketOpenTask(this, new LoginRequest {ClientId = Credential.ClientId, ClientSecret = Credential.ClientSecret,}).NonBlockingInvoke();
+                        }
+                        catch (System.Exception exception)
+                        {
+                            try
+                            {
+                                HandleProtocolError(session, sessionGeneration, exception);
+                            }
+                            catch (System.Exception)
+                            {
+                                // The open task observes the protocol error through OnError.
+                            }
+                        }
                     };
 
-                    this._session.OnMessage += (message) => TaskUtilities.RunOnMainThreadIfSupported(() =>
+                    session.OnMessage += (message) => TaskUtilities.RunOnMainThreadIfSupported(() =>
                     {
-                        var gs2WebSocketResponse = new WebSocketResult(message);
+                        lock (this._stateLock)
+                        {
+                            if (!IsActiveSessionEvent(session, sessionGeneration))
+                            {
+                                return;
+                            }
+                        }
+
+                        WebSocketResult gs2WebSocketResponse;
+                        try
+                        {
+                            gs2WebSocketResponse = new WebSocketResult(message);
+                        }
+                        catch (System.Exception exception)
+                        {
+                            HandleProtocolError(session, sessionGeneration, exception);
+                            return;
+                        }
                         if (gs2WebSocketResponse.Gs2SessionTaskId == Gs2SessionTaskId.InvalidId)
                         {
                             // API 応答以外のメッセージ
-                            OnNotificationMessage?.Invoke(NotificationMessage.FromJson(gs2WebSocketResponse.Body));
+                            NotificationMessage notification;
+                            try
+                            {
+                                notification = NotificationMessage.FromJson(gs2WebSocketResponse.Body);
+                                if (notification?.subject == null || notification.payload == null)
+                                {
+                                    throw new InvalidOperationException("Notification did not contain required dispatch fields.");
+                                }
+                            }
+                            catch (System.Exception exception)
+                            {
+                                HandleProtocolError(session, sessionGeneration, exception);
+                                return;
+                            }
+                            lock (this._stateLock)
+                            {
+                                if (!IsActiveSessionEvent(session, sessionGeneration))
+                                {
+                                    return;
+                                }
+                            }
+                            try
+                            {
+                                OnSdkNotificationMessage?.Invoke(notification);
+                            }
+                            catch (NotificationPayloadException exception)
+                            {
+                                HandleProtocolError(session, sessionGeneration, exception);
+                                return;
+                            }
+                            lock (this._stateLock)
+                            {
+                                if (!IsActiveSessionEvent(session, sessionGeneration))
+                                {
+                                    return;
+                                }
+                            }
+                            OnNotificationMessage?.Invoke(notification);
                         }
                         else
                         {
-                            if (this.State == State.LoggingIn)
+                            var isLoginResponse = false;
+                            lock (this._stateLock)
                             {
-                                if (gs2WebSocketResponse.Error == null)
+                                isLoginResponse = this.State == State.LoggingIn &&
+                                                  gs2WebSocketResponse.Gs2SessionTaskId == this._loginRequestTaskId;
+                            }
+                            if (isLoginResponse)
+                            {
+                                var loginError = gs2WebSocketResponse.Error;
+                                if (loginError == null)
                                 {
-                                    var projectToken = LoginResult.FromJson(gs2WebSocketResponse.Body).AccessToken;
-                                    if (projectToken != null)
+                                    try
                                     {
-                                        this.Credential.ProjectToken = projectToken;
-                                        this.State = State.Available;
+                                        var loginResult = LoginResult.FromJson(gs2WebSocketResponse.Body);
+                                        var projectToken = loginResult?.AccessToken;
+                                        if (projectToken == null)
+                                        {
+                                            throw new InvalidOperationException("Login response did not contain an access token.");
+                                        }
+                                        lock (this._stateLock)
+                                        {
+                                            if (ReferenceEquals(this._session, session) &&
+                                                this._sessionGeneration == sessionGeneration &&
+                                                this._disconnectPendingGeneration != sessionGeneration &&
+                                                this.State == State.LoggingIn)
+                                            {
+                                                this.Credential.ProjectToken = projectToken;
+                                                this.State = State.Available;
+                                            }
+                                        }
+                                    }
+                                    catch (System.Exception exception)
+                                    {
+                                        loginError = exception as Gs2Exception ??
+                                                     new Gs2.Core.Exception.UnknownException(exception.Message, exception);
                                     }
                                 }
-                                else
+                                ForgetRequest(gs2WebSocketResponse.Gs2SessionTaskId);
+                                if (loginError != null)
                                 {
-                                    OnError?.Invoke(gs2WebSocketResponse.Error);
-                                    CloseAsync().Forget();
+                                    if (!TryBeginDisconnect(session, sessionGeneration))
+                                    {
+                                        return;
+                                    }
+                                    try
+                                    {
+                                        OnError?.Invoke(loginError);
+                                    }
+                                    finally
+                                    {
+                                        RecordOpenError(session, sessionGeneration, loginError);
+                                        CloseSessionAsync(session, sessionGeneration).Forget();
+                                    }
+                                }
+                                return;
+                            }
+                            lock (this._stateLock)
+                            {
+                                if (!IsActiveSessionEvent(session, sessionGeneration))
+                                {
+                                    return;
                                 }
                             }
                             OnMessage(gs2WebSocketResponse);
                         }
                     });
 
-                    this._session.OnClose += () => TaskUtilities.RunOnMainThreadIfSupported(() =>
+                    session.OnClose += () =>
                     {
-                        OnDisconnect?.Invoke();
-                        CloseAsync().Forget();
-                    });
-
-                    this._session.OnError += (errorEventArgs) => TaskUtilities.RunOnMainThreadIfSupported(() =>
-                    {
-                        var error = new Gs2.Core.Exception.UnknownException(new Gs2.Core.Model.RequestError[]{
-                            new Gs2.Core.Model.RequestError {
-                                Component = "WebSocket",
-                                Message = errorEventArgs.Message
+                        if (!TryBeginDisconnect(session, sessionGeneration))
+                        {
+                            return;
+                        }
+                        this._runOnMainThread(() =>
+                        {
+                            try
+                            {
+                                NotifyDisconnect(sessionGeneration);
+                            }
+                            finally
+                            {
+                                CloseSessionAsync(session, sessionGeneration).Forget();
                             }
                         });
-                        OnError?.Invoke(error);
-                        OnDisconnect?.Invoke();
-                        CloseAsync().Forget();
-                    });
+                    };
 
-                    this._session.Connect();
+                    session.OnError += (errorEventArgs) =>
+                    {
+                        if (!TryBeginDisconnect(session, sessionGeneration))
+                        {
+                            return;
+                        }
+                        var error = new Gs2.Core.Exception.UnknownException(
+                            new Gs2.Core.Model.RequestError[]{
+                                new Gs2.Core.Model.RequestError {
+                                    Component = "WebSocket",
+                                    Message = errorEventArgs.Message
+                                }
+                            },
+                            errorEventArgs.Exception
+                        );
+                        this._runOnMainThread(() =>
+                        {
+                            try
+                            {
+                                OnError?.Invoke(error);
+                                NotifyDisconnect(sessionGeneration);
+                            }
+                            finally
+                            {
+                                RecordOpenError(session, sessionGeneration, error);
+                                CloseSessionAsync(session, sessionGeneration).Forget();
+                            }
+                        });
+                    };
+
+                    var adopted = false;
+                    lock (this._stateLock)
+                    {
+                        if (this.State == State.Opening &&
+                            this._sessionGeneration == sessionGeneration &&
+                            this._session == null)
+                        {
+                            this._session = session;
+                            adopted = true;
+                            session.Connect();
+                        }
+                    }
+
+                    if (!adopted)
+                    {
+                        session.Dispose();
+                        throw new SessionNotOpenException(Array.Empty<RequestError>());
+                    }
                 }
 
                 {
-                    var begin = DateTime.Now;
+                    var timer = Stopwatch.StartNew();
                     while (this.State != State.Available)
                     {
-                        var caught = Volatile.Read(ref caughtError);
+                        var caught = Volatile.Read(ref this._openError);
                         if (caught != null) {
-                            this._session?.Close();
-                            this.State = State.Closed;
+                            await CloseAsync();
                             throw caught;
                         }
-                        if (this.State is State.Closing or State.Closed or State.CancellingTasks) {
+                        if (this.State is State.Closing or State.CancellingTasks) {
+                            await CloseAsync();
                             throw new SessionNotOpenException(Array.Empty<RequestError>());
                         }
-                        if ((DateTime.Now - begin).Seconds > OpenTimeoutSec) {
-                            this._session?.Close();
-                            this.State = State.Closed;
+                        if (this.State == State.Closed) {
+                            throw new SessionNotOpenException(Array.Empty<RequestError>());
+                        }
+                        if (timer.Elapsed.TotalSeconds >= OpenTimeoutSec) {
+                            await CloseAsync();
                             throw new RequestTimeoutException(Array.Empty<RequestError>());
                         }
 
                         await TaskUtilities.Yield();
                     }
                 }
+                openingStarted = false;
                 return new OpenResult();
             }
+            catch
+            {
+                if (openingStarted)
+                {
+                    try
+                    {
+                        await CloseAsync();
+                    }
+                    catch (System.Exception)
+                    {
+                        // Preserve the startup exception if transport cleanup also fails.
+                    }
+                }
+                throw;
+            }
             finally {
-                OnError -= HandleError;
                 this._semaphore.Release();
             }
         }
@@ -203,10 +536,10 @@ namespace Gs2.Core.Net
         public async Task<OpenResult> ReOpenAsync()
 #endif
         {
-            if (this.State == State.Opening || this.State == State.LoggingIn) {
-                var begin = DateTime.Now;
-                while (this.State != State.Available && this.State != State.Closed) {
-                    if ((DateTime.Now - begin).Seconds > OpenTimeoutSec) {
+            if (IsReOpenWaitingForTransition()) {
+                var timer = Stopwatch.StartNew();
+                while (IsReOpenWaitingForTransition()) {
+                    if (timer.Elapsed.TotalSeconds >= OpenTimeoutSec) {
                         throw new RequestTimeoutException(Array.Empty<RequestError>());
                     }
 
@@ -236,16 +569,55 @@ namespace Gs2.Core.Net
         public async Task CloseAsync()
 #endif
         {
-            if (this.State == State.Idle) {
-                this.State = State.Closed;
+            WebSocketSession session;
+            long sessionGeneration;
+            lock (this._stateLock)
+            {
+                session = this._session;
+                sessionGeneration = this._sessionGeneration;
             }
-            else {
-                this.State = State.CancellingTasks;
+            await CloseSessionAsync(session, sessionGeneration);
+        }
+
+#if GS2_ENABLE_UNITASK
+        private async UniTask CloseSessionAsync(WebSocketSession expectedSession, long expectedGeneration)
+#else
+        private async Task CloseSessionAsync(WebSocketSession expectedSession, long expectedGeneration)
+#endif
+        {
+            await TaskUtilities.WaitAsync(this._closeSemaphore);
+            var shouldTransitionToClosed = false;
+            try
+            {
+                WebSocketSession session;
+                long sessionGeneration;
+                lock (this._stateLock)
+                {
+                    if (!ReferenceEquals(this._session, expectedSession) ||
+                        this._sessionGeneration != expectedGeneration)
+                    {
+                        return;
+                    }
+
+                    if (this.State == State.Idle || this.State == State.Closed)
+                    {
+                        if (this.State == State.Idle)
+                        {
+                            this.State = State.Closed;
+                        }
+                        return;
+                    }
+
+                    shouldTransitionToClosed = true;
+                    this.State = State.CancellingTasks;
+                    session = this._session;
+                    sessionGeneration = this._sessionGeneration;
+                }
 
                 {
-                    var begin = DateTime.Now;
+                    var timer = Stopwatch.StartNew();
                     while (!this._inflightRequest.IsEmpty) {
-                        if ((DateTime.Now - begin).Seconds > CloseTimeoutSec) {
+                        if (timer.Elapsed.TotalSeconds >= CloseTimeoutSec) {
                             this._inflightRequest.Clear();
                             break;
                         }
@@ -256,22 +628,46 @@ namespace Gs2.Core.Net
 
                 this.State = State.Closing;
 
-                this._session.Close();
-
+                if (session == null)
                 {
-                    var begin = DateTime.Now;
-                    while (this._session.GetState() != WebSocketSession.StateEnum.Closed)
-                    {
-                        if ((DateTime.Now - begin).Seconds > CloseTimeoutSec) {
-                            this._inflightRequest.Clear();
-                            break;
-                        }
-
-                        await TaskUtilities.Yield();
-                    }
+                    return;
                 }
 
-                this.State = State.Closed;
+                try
+                {
+                    session.Close();
+                    TaskUtilities.RunOnMainThreadIfSupported(
+                        () => NotifyDisconnect(sessionGeneration)
+                    );
+
+                    {
+                        var timer = Stopwatch.StartNew();
+                        while (session.GetState() != WebSocketSession.StateEnum.Closed)
+                        {
+                            if (timer.Elapsed.TotalSeconds >= CloseTimeoutSec) {
+                                this._inflightRequest.Clear();
+                                break;
+                            }
+
+                            await TaskUtilities.Yield();
+                        }
+                    }
+                }
+                finally
+                {
+                    session.Dispose();
+                }
+            }
+            finally
+            {
+                if (shouldTransitionToClosed)
+                {
+                    lock (this._stateLock)
+                    {
+                        this.State = State.Closed;
+                    }
+                }
+                this._closeSemaphore.Release();
             }
         }
         
@@ -285,15 +681,63 @@ namespace Gs2.Core.Net
         
         // Send
         
-        private void SendImpl(IGs2SessionRequest request) {
+        private void SendImpl(IGs2SessionRequest request, bool isLoginRequest = false) {
+            if (request is not WebSocketSessionRequest)
+            {
+                throw new ArgumentException("The request is not a WebSocket session request.", nameof(request));
+            }
             if (request is WebSocketSessionRequest sessionRequest) {
-                this._inflightRequest[sessionRequest.TaskId] = sessionRequest;
+                WebSocketSession session;
+                long sessionGeneration;
+                lock (this._stateLock)
+                {
+                    if (isLoginRequest)
+                    {
+                        if (this.State != State.LoggingIn ||
+                            this._loginRequestTaskId != Gs2SessionTaskId.InvalidId)
+                        {
+                            return;
+                        }
+                    }
+                    else if (this.State != State.Available)
+                    {
+                        throw new SessionNotOpenException("Session no longer open.");
+                    }
+                    if (this._disconnectPendingGeneration == this._sessionGeneration)
+                    {
+                        if (isLoginRequest)
+                        {
+                            return;
+                        }
+                        throw new SessionNotOpenException("Session no longer open.");
+                    }
+
+                    this._inflightRequest[sessionRequest.TaskId] = sessionRequest;
+                    if (isLoginRequest)
+                    {
+                        this._loginRequestTaskId = sessionRequest.TaskId;
+                    }
+                    session = this._session;
+                    sessionGeneration = this._sessionGeneration;
+                }
 
                 try {
-                    this._session.Send(sessionRequest.Body);
+                    session.Send(sessionRequest.Body);
                 }
-                catch (SystemException) {
-                    this._inflightRequest.TryRemove(sessionRequest.TaskId, out _);
+                catch (System.Exception exception) {
+                    lock (this._stateLock)
+                    {
+                        this._inflightRequest.TryRemove(sessionRequest.TaskId, out _);
+                    }
+                    try
+                    {
+                        HandleProtocolError(session, sessionGeneration, exception);
+                    }
+                    catch (System.Exception)
+                    {
+                        // Preserve the transport send exception if a public callback also fails.
+                    }
+                    throw;
                 }
             }
         }
@@ -319,7 +763,24 @@ namespace Gs2.Core.Net
             SendImpl(request);
         }
 
-        public bool Ping() => this._session?.Ping() ?? false;
+        internal void SendLoginNonBlocking(IGs2SessionRequest request)
+        {
+            SendImpl(request, true);
+        }
+
+        public bool Ping()
+        {
+            WebSocketSession session;
+            lock (this._stateLock)
+            {
+                if (this._disconnectPendingGeneration == this._sessionGeneration)
+                {
+                    return false;
+                }
+                session = this._session;
+            }
+            return session?.Ping() ?? false;
+        }
 
         public bool IsCanceled()
         {
@@ -333,29 +794,72 @@ namespace Gs2.Core.Net
 
         public bool IsDisconnected()
         {
-            return this.State == State.Idle || this.State == State.Closing || this.State == State.Closed;
+            lock (this._stateLock)
+            {
+                return this.State == State.Idle ||
+                       this.State == State.Closing ||
+                       this.State == State.Closed ||
+                       this._disconnectPendingGeneration == this._sessionGeneration;
+            }
         }
 
         public IGs2SessionResult MarkRead(IGs2SessionRequest request)
         {
-            this._result.TryRemove(request.TaskId, out var result);
-            return result;
+            lock (this._stateLock)
+            {
+                this._result.TryRemove(request.TaskId, out var result);
+                return result;
+            }
+        }
+
+        void IRequestTrackingSession.Forget(IGs2SessionRequest request)
+        {
+            ForgetRequest(request.TaskId);
+        }
+
+        RequestTrackingState IRequestTrackingSession.GetRequestTrackingState(IGs2SessionRequest request)
+        {
+            lock (this._stateLock)
+            {
+                if (this._result.ContainsKey(request.TaskId))
+                {
+                    return RequestTrackingState.Completed;
+                }
+                if (this._inflightRequest.TryGetValue(request.TaskId, out var pendingRequest) &&
+                    ReferenceEquals(pendingRequest, request))
+                {
+                    return RequestTrackingState.Pending;
+                }
+                return RequestTrackingState.Abandoned;
+            }
+        }
+
+        private void ForgetRequest(Gs2SessionTaskId taskId)
+        {
+            lock (this._stateLock)
+            {
+                this._inflightRequest.TryRemove(taskId, out _);
+                this._result.TryRemove(taskId, out _);
+            }
         }
 
         private void OnMessage(WebSocketResult result)
         {
-            if (this._inflightRequest.TryRemove(result.Gs2SessionTaskId, out _))
+            lock (this._stateLock)
             {
-                try
+                if (this._inflightRequest.TryRemove(result.Gs2SessionTaskId, out _))
                 {
-                    this._result[result.Gs2SessionTaskId] = result;
-                }
-                catch (Gs2Exception e)
-                {
-                    this._result[result.Gs2SessionTaskId] = new WebSocketResult("{}")
+                    try
                     {
-                        Error = e,
-                    };
+                        this._result[result.Gs2SessionTaskId] = result;
+                    }
+                    catch (Gs2Exception e)
+                    {
+                        this._result[result.Gs2SessionTaskId] = new WebSocketResult("{}")
+                        {
+                            Error = e,
+                        };
+                    }
                 }
             }
         }

@@ -321,160 +321,111 @@ namespace Gs2.Gs2Money2.Model
         public int CompareTo(object obj)
         {
             var other = obj as Namespace;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Namespace.", nameof(obj));
+            }
             var diff = 0;
-            if (NamespaceId == null && NamespaceId == other.NamespaceId)
+            diff = ModelComparer.Compare(NamespaceId, other.NamespaceId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += NamespaceId.CompareTo(other.NamespaceId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TransactionSetting, other.TransactionSetting);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Description == null && Description == other.Description)
+            diff = ModelComparer.Compare(CurrencyUsagePriority, other.CurrencyUsagePriority);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(SharedFreeCurrency, other.SharedFreeCurrency);
+            if (diff != 0)
             {
-                diff += Description.CompareTo(other.Description);
+                return diff;
             }
-            if (TransactionSetting == null && TransactionSetting == other.TransactionSetting)
+            diff = ModelComparer.Compare(PlatformSetting, other.PlatformSetting);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(DepositBalanceScript, other.DepositBalanceScript);
+            if (diff != 0)
             {
-                diff += TransactionSetting.CompareTo(other.TransactionSetting);
+                return diff;
             }
-            if (CurrencyUsagePriority == null && CurrencyUsagePriority == other.CurrencyUsagePriority)
+            diff = ModelComparer.Compare(WithdrawBalanceScript, other.WithdrawBalanceScript);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(VerifyReceiptScript, other.VerifyReceiptScript);
+            if (diff != 0)
             {
-                diff += CurrencyUsagePriority.CompareTo(other.CurrencyUsagePriority);
+                return diff;
             }
-            if (SharedFreeCurrency == null && SharedFreeCurrency == other.SharedFreeCurrency)
+            diff = ModelComparer.Compare(SubscribeScript, other.SubscribeScript);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(RenewScript, other.RenewScript);
+            if (diff != 0)
             {
-                diff += SharedFreeCurrency == other.SharedFreeCurrency ? 0 : 1;
+                return diff;
             }
-            if (PlatformSetting == null && PlatformSetting == other.PlatformSetting)
+            diff = ModelComparer.Compare(UnsubscribeScript, other.UnsubscribeScript);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TakeOverScript, other.TakeOverScript);
+            if (diff != 0)
             {
-                diff += PlatformSetting.CompareTo(other.PlatformSetting);
+                return diff;
             }
-            if (DepositBalanceScript == null && DepositBalanceScript == other.DepositBalanceScript)
+            diff = ModelComparer.Compare(ChangeSubscriptionStatusNotification, other.ChangeSubscriptionStatusNotification);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(LogSetting, other.LogSetting);
+            if (diff != 0)
             {
-                diff += DepositBalanceScript.CompareTo(other.DepositBalanceScript);
+                return diff;
             }
-            if (WithdrawBalanceScript == null && WithdrawBalanceScript == other.WithdrawBalanceScript)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += WithdrawBalanceScript.CompareTo(other.WithdrawBalanceScript);
+                return diff;
             }
-            if (VerifyReceiptScript == null && VerifyReceiptScript == other.VerifyReceiptScript)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += VerifyReceiptScript.CompareTo(other.VerifyReceiptScript);
-            }
-            if (SubscribeScript == null && SubscribeScript == other.SubscribeScript)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += SubscribeScript.CompareTo(other.SubscribeScript);
-            }
-            if (RenewScript == null && RenewScript == other.RenewScript)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += RenewScript.CompareTo(other.RenewScript);
-            }
-            if (UnsubscribeScript == null && UnsubscribeScript == other.UnsubscribeScript)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UnsubscribeScript.CompareTo(other.UnsubscribeScript);
-            }
-            if (TakeOverScript == null && TakeOverScript == other.TakeOverScript)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += TakeOverScript.CompareTo(other.TakeOverScript);
-            }
-            if (ChangeSubscriptionStatusNotification == null && ChangeSubscriptionStatusNotification == other.ChangeSubscriptionStatusNotification)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ChangeSubscriptionStatusNotification.CompareTo(other.ChangeSubscriptionStatusNotification);
-            }
-            if (LogSetting == null && LogSetting == other.LogSetting)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += LogSetting.CompareTo(other.LogSetting);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

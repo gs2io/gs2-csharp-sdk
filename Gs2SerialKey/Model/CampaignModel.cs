@@ -173,40 +173,36 @@ namespace Gs2.Gs2SerialKey.Model
         public int CompareTo(object obj)
         {
             var other = obj as CampaignModel;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type CampaignModel.", nameof(obj));
+            }
             var diff = 0;
-            if (CampaignId == null && CampaignId == other.CampaignId)
+            diff = ModelComparer.Compare(CampaignId, other.CampaignId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += CampaignId.CompareTo(other.CampaignId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(EnableCampaignCode, other.EnableCampaignCode);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (EnableCampaignCode == null && EnableCampaignCode == other.EnableCampaignCode)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += EnableCampaignCode == other.EnableCampaignCode ? 0 : 1;
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

@@ -336,128 +336,86 @@ namespace Gs2.Gs2StateMachine.Model
         public int CompareTo(object obj)
         {
             var other = obj as Status;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Status.", nameof(obj));
+            }
             var diff = 0;
-            if (StatusId == null && StatusId == other.StatusId)
+            diff = ModelComparer.Compare(StatusId, other.StatusId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += StatusId.CompareTo(other.StatusId);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(StateMachineVersion, other.StateMachineVersion);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(EnableSpeculativeExecution, other.EnableSpeculativeExecution);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(StateMachineDefinition, other.StateMachineDefinition);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (StateMachineVersion == null && StateMachineVersion == other.StateMachineVersion)
+            diff = ModelComparer.Compare(RandomStatus, other.RandomStatus);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(Stacks, other.Stacks);
+            if (diff != 0)
             {
-                diff += (int)(StateMachineVersion - other.StateMachineVersion);
+                return diff;
             }
-            if (EnableSpeculativeExecution == null && EnableSpeculativeExecution == other.EnableSpeculativeExecution)
+            diff = ModelComparer.CompareArray(Variables, other.Variables);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Value, other.Value);
+            if (diff != 0)
             {
-                diff += EnableSpeculativeExecution.CompareTo(other.EnableSpeculativeExecution);
+                return diff;
             }
-            if (StateMachineDefinition == null && StateMachineDefinition == other.StateMachineDefinition)
+            diff = ModelComparer.Compare(LastError, other.LastError);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TransitionCount, other.TransitionCount);
+            if (diff != 0)
             {
-                diff += StateMachineDefinition.CompareTo(other.StateMachineDefinition);
+                return diff;
             }
-            if (RandomStatus == null && RandomStatus == other.RandomStatus)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += RandomStatus.CompareTo(other.RandomStatus);
+                return diff;
             }
-            if (Stacks == null && Stacks == other.Stacks)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Stacks.Length - other.Stacks.Length;
-                for (var i = 0; i < Stacks.Length; i++)
-                {
-                    diff += Stacks[i].CompareTo(other.Stacks[i]);
-                }
-            }
-            if (Variables == null && Variables == other.Variables)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Variables.Length - other.Variables.Length;
-                for (var i = 0; i < Variables.Length; i++)
-                {
-                    diff += Variables[i].CompareTo(other.Variables[i]);
-                }
-            }
-            if (Value == null && Value == other.Value)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Value.CompareTo(other.Value);
-            }
-            if (LastError == null && LastError == other.LastError)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += LastError.CompareTo(other.LastError);
-            }
-            if (TransitionCount == null && TransitionCount == other.TransitionCount)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(TransitionCount - other.TransitionCount);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

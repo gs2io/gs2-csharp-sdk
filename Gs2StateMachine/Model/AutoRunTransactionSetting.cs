@@ -80,24 +80,26 @@ namespace Gs2.Gs2StateMachine.Model
         public int CompareTo(object obj)
         {
             var other = obj as AutoRunTransactionSetting;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type AutoRunTransactionSetting.", nameof(obj));
+            }
             var diff = 0;
-            if (DistributorNamespaceId == null && DistributorNamespaceId == other.DistributorNamespaceId)
+            diff = ModelComparer.Compare(DistributorNamespaceId, other.DistributorNamespaceId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(QueueNamespaceId, other.QueueNamespaceId);
+            if (diff != 0)
             {
-                diff += DistributorNamespaceId.CompareTo(other.DistributorNamespaceId);
+                return diff;
             }
-            if (QueueNamespaceId == null && QueueNamespaceId == other.QueueNamespaceId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += QueueNamespaceId.CompareTo(other.QueueNamespaceId);
-            }
-            return diff;
+            return 0;
         }
     }
 }

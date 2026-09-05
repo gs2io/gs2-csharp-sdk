@@ -83,24 +83,26 @@ namespace Gs2.Gs2Ranking.Model
         public int CompareTo(object obj)
         {
             var other = obj as CalculatedAt;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type CalculatedAt.", nameof(obj));
+            }
             var diff = 0;
-            if (CategoryName == null && CategoryName == other.CategoryName)
+            diff = ModelComparer.Compare(CategoryName, other.CategoryName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Value, other.Value);
+            if (diff != 0)
             {
-                diff += CategoryName.CompareTo(other.CategoryName);
+                return diff;
             }
-            if (Value == null && Value == other.Value)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Value - other.Value);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

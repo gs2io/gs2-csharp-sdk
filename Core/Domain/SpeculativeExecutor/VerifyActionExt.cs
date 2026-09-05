@@ -25,7 +25,7 @@ namespace Gs2.Core.SpeculativeExecutor
             }
             return new VerifyAction()
                 .WithAction(self.Action)
-                .WithRequest(self.Request.Replace($"#{{{key}}}", System.Text.RegularExpressions.Regex.Replace(value, "(?<!\\\\)\"", "\\\"")));
+                .WithRequest(self.Request.Replace($"#{{{key}}}", ActionConfig.EscapeJsonStringContent(value)));
         }
     }
 }

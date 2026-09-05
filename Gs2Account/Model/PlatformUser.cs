@@ -94,32 +94,31 @@ namespace Gs2.Gs2Account.Model
         public int CompareTo(object obj)
         {
             var other = obj as PlatformUser;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type PlatformUser.", nameof(obj));
+            }
             var diff = 0;
-            if (Type == null && Type == other.Type)
+            diff = ModelComparer.Compare(Type, other.Type);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserIdentifier, other.UserIdentifier);
+            if (diff != 0)
             {
-                diff += (int)(Type - other.Type);
+                return diff;
             }
-            if (UserIdentifier == null && UserIdentifier == other.UserIdentifier)
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += UserIdentifier.CompareTo(other.UserIdentifier);
-            }
-            if (UserId == null && UserId == other.UserId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UserId.CompareTo(other.UserId);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

@@ -83,24 +83,26 @@ namespace Gs2.Gs2Buff.Model
         public int CompareTo(object obj)
         {
             var other = obj as BuffTargetGrn;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type BuffTargetGrn.", nameof(obj));
+            }
             var diff = 0;
-            if (TargetModelName == null && TargetModelName == other.TargetModelName)
+            diff = ModelComparer.Compare(TargetModelName, other.TargetModelName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TargetGrn, other.TargetGrn);
+            if (diff != 0)
             {
-                diff += TargetModelName.CompareTo(other.TargetModelName);
+                return diff;
             }
-            if (TargetGrn == null && TargetGrn == other.TargetGrn)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += TargetGrn.CompareTo(other.TargetGrn);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

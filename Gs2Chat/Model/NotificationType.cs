@@ -83,24 +83,26 @@ namespace Gs2.Gs2Chat.Model
         public int CompareTo(object obj)
         {
             var other = obj as NotificationType;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type NotificationType.", nameof(obj));
+            }
             var diff = 0;
-            if (Category == null && Category == other.Category)
+            diff = ModelComparer.Compare(Category, other.Category);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(EnableTransferMobilePushNotification, other.EnableTransferMobilePushNotification);
+            if (diff != 0)
             {
-                diff += (int)(Category - other.Category);
+                return diff;
             }
-            if (EnableTransferMobilePushNotification == null && EnableTransferMobilePushNotification == other.EnableTransferMobilePushNotification)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += EnableTransferMobilePushNotification == other.EnableTransferMobilePushNotification ? 0 : 1;
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

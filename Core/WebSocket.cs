@@ -246,7 +246,7 @@ namespace Gs2.HybridWebSocket
     /// <summary>
     /// WebSocket class bound to JSLIB.
     /// </summary>
-    public class WebSocket: IWebSocket
+    public class WebSocket: IWebSocket, IDisposable
     {
 
         /* WebSocket JSLIB functions */
@@ -313,7 +313,22 @@ namespace Gs2.HybridWebSocket
         /// </summary>
         ~WebSocket()
         {
-            WebSocketFactory.HandleInstanceDestroy(this.instanceId);
+            Dispose(false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            var id = System.Threading.Interlocked.Exchange(ref this.instanceId, -1);
+            if (id >= 0)
+            {
+                WebSocketFactory.HandleInstanceDestroy(id);
+            }
         }
 
         /// <summary>
@@ -684,6 +699,7 @@ namespace Gs2.HybridWebSocket
 #if UNITY_WEBGL && !UNITY_EDITOR
         /* Map of websocket instances */
         private static Dictionary<Int32, WebSocket> instances = new Dictionary<Int32, WebSocket>();
+        private static readonly object instancesLock = new object();
 
         /* Delegates */
         public delegate void OnOpenCallback(int instanceId);
@@ -740,9 +756,15 @@ namespace Gs2.HybridWebSocket
         /// <param name="instanceId">Instance identifier.</param>
         public static void HandleInstanceDestroy(int instanceId)
         {
-
-            instances.Remove(instanceId);
-            WebSocketFree(instanceId);
+            var removed = false;
+            lock (instancesLock)
+            {
+                removed = instances.Remove(instanceId);
+            }
+            if (removed)
+            {
+                WebSocketFree(instanceId);
+            }
 
         }
 
@@ -752,7 +774,11 @@ namespace Gs2.HybridWebSocket
 
             WebSocket instanceRef;
 
-            if (instances.TryGetValue(instanceId, out instanceRef))
+            lock (instancesLock)
+            {
+                instances.TryGetValue(instanceId, out instanceRef);
+            }
+            if (instanceRef != null)
             {
                 instanceRef.DelegateOnOpenEvent();
             }
@@ -764,7 +790,11 @@ namespace Gs2.HybridWebSocket
         {
             WebSocket instanceRef;
 
-            if (instances.TryGetValue(instanceId, out instanceRef))
+            lock (instancesLock)
+            {
+                instances.TryGetValue(instanceId, out instanceRef);
+            }
+            if (instanceRef != null)
             {
                 string msg = Marshal.PtrToStringAuto(msgPtr);
                 instanceRef.DelegateOnMessageEvent(msg);
@@ -779,7 +809,11 @@ namespace Gs2.HybridWebSocket
             
             WebSocket instanceRef;
 
-            if (instances.TryGetValue(instanceId, out instanceRef))
+            lock (instancesLock)
+            {
+                instances.TryGetValue(instanceId, out instanceRef);
+            }
+            if (instanceRef != null)
             {
                 byte[] msg = new byte[msgSize];
                 Marshal.Copy(msgPtr, msg, 0, msgSize);
@@ -795,7 +829,11 @@ namespace Gs2.HybridWebSocket
 
             WebSocket instanceRef;
 
-            if (instances.TryGetValue(instanceId, out instanceRef))
+            lock (instancesLock)
+            {
+                instances.TryGetValue(instanceId, out instanceRef);
+            }
+            if (instanceRef != null)
             {
 
                 string errorMsg = Marshal.PtrToStringAuto(errorPtr);
@@ -811,7 +849,11 @@ namespace Gs2.HybridWebSocket
 
             WebSocket instanceRef;
 
-            if (instances.TryGetValue(instanceId, out instanceRef))
+            lock (instancesLock)
+            {
+                instances.TryGetValue(instanceId, out instanceRef);
+            }
+            if (instanceRef != null)
             {
                 instanceRef.DelegateOnCloseEvent(closeCode);
             }
@@ -832,7 +874,10 @@ namespace Gs2.HybridWebSocket
 
             int instanceId = WebSocketAllocate(url);
             WebSocket wrapper = new WebSocket(instanceId);
-            instances.Add(instanceId, wrapper);
+            lock (instancesLock)
+            {
+                instances.Add(instanceId, wrapper);
+            }
 
             return wrapper;
 #else

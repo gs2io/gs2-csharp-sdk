@@ -279,108 +279,76 @@ namespace Gs2.Gs2Guild.Model
         public int CompareTo(object obj)
         {
             var other = obj as GuildModel;
-            var diff = 0;
-            if (GuildModelId == null && GuildModelId == other.GuildModelId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += GuildModelId.CompareTo(other.GuildModelId);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (DefaultMaximumMemberCount == null && DefaultMaximumMemberCount == other.DefaultMaximumMemberCount)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(DefaultMaximumMemberCount - other.DefaultMaximumMemberCount);
-            }
-            if (MaximumMemberCount == null && MaximumMemberCount == other.MaximumMemberCount)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(MaximumMemberCount - other.MaximumMemberCount);
-            }
-            if (InactivityPeriodDays == null && InactivityPeriodDays == other.InactivityPeriodDays)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(InactivityPeriodDays - other.InactivityPeriodDays);
-            }
-            if (Roles == null && Roles == other.Roles)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Roles.Length - other.Roles.Length;
-                for (var i = 0; i < Roles.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += Roles[i].CompareTo(other.Roles[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type GuildModel.", nameof(obj));
             }
-            if (GuildMasterRole == null && GuildMasterRole == other.GuildMasterRole)
+            var diff = 0;
+            diff = ModelComparer.Compare(GuildModelId, other.GuildModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += GuildMasterRole.CompareTo(other.GuildMasterRole);
+                return diff;
             }
-            if (GuildMemberDefaultRole == null && GuildMemberDefaultRole == other.GuildMemberDefaultRole)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(DefaultMaximumMemberCount, other.DefaultMaximumMemberCount);
+            if (diff != 0)
             {
-                diff += GuildMemberDefaultRole.CompareTo(other.GuildMemberDefaultRole);
+                return diff;
             }
-            if (RejoinCoolTimeMinutes == null && RejoinCoolTimeMinutes == other.RejoinCoolTimeMinutes)
+            diff = ModelComparer.Compare(MaximumMemberCount, other.MaximumMemberCount);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(InactivityPeriodDays, other.InactivityPeriodDays);
+            if (diff != 0)
             {
-                diff += (int)(RejoinCoolTimeMinutes - other.RejoinCoolTimeMinutes);
+                return diff;
             }
-            if (MaxConcurrentJoinGuilds == null && MaxConcurrentJoinGuilds == other.MaxConcurrentJoinGuilds)
+            diff = ModelComparer.CompareArray(Roles, other.Roles);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(GuildMasterRole, other.GuildMasterRole);
+            if (diff != 0)
             {
-                diff += (int)(MaxConcurrentJoinGuilds - other.MaxConcurrentJoinGuilds);
+                return diff;
             }
-            if (MaxConcurrentGuildMasterCount == null && MaxConcurrentGuildMasterCount == other.MaxConcurrentGuildMasterCount)
+            diff = ModelComparer.Compare(GuildMemberDefaultRole, other.GuildMemberDefaultRole);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(RejoinCoolTimeMinutes, other.RejoinCoolTimeMinutes);
+            if (diff != 0)
             {
-                diff += (int)(MaxConcurrentGuildMasterCount - other.MaxConcurrentGuildMasterCount);
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.Compare(MaxConcurrentJoinGuilds, other.MaxConcurrentJoinGuilds);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(MaxConcurrentGuildMasterCount, other.MaxConcurrentGuildMasterCount);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

@@ -467,25 +467,28 @@ namespace Gs2.Gs2Matchmaking.Domain
         ) {
             switch (action) {
                 case "Join": {
+                    var notification = NotificationPayload.Parse(payload, JoinNotification.FromJson);
     #if UNITY_2017_1_OR_NEWER
-                    onJoinNotification.Invoke(JoinNotification.FromJson(JsonMapper.ToObject(payload)));
+                    onJoinNotification.Invoke(notification);
     #endif
                     break;
                 }
                 case "Leave": {
+                    var notification = NotificationPayload.Parse(payload, LeaveNotification.FromJson);
     #if UNITY_2017_1_OR_NEWER
-                    onLeaveNotification.Invoke(LeaveNotification.FromJson(JsonMapper.ToObject(payload)));
+                    onLeaveNotification.Invoke(notification);
     #endif
                     break;
                 }
                 case "Complete": {
+                    var notification = NotificationPayload.Parse(payload, CompleteNotification.FromJson);
     #if UNITY_2017_1_OR_NEWER
-                    onCompleteNotification.Invoke(CompleteNotification.FromJson(JsonMapper.ToObject(payload)));
+                    onCompleteNotification.Invoke(notification);
     #endif
                     break;
                 }
                 case "ChangeRatingNotification": {
-                    var notification = ChangeRatingNotification.FromJson(JsonMapper.ToObject(payload));
+                    var notification = NotificationPayload.Parse(payload, ChangeRatingNotification.FromJson);
                     _gs2.Cache.ClearListCache<Gs2.Gs2Matchmaking.Model.Rating>(
                         (null as Gs2.Gs2Matchmaking.Model.Rating).CacheParentKey(
                             notification.NamespaceName,

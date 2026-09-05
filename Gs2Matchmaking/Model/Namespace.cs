@@ -387,208 +387,141 @@ namespace Gs2.Gs2Matchmaking.Model
         public int CompareTo(object obj)
         {
             var other = obj as Namespace;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Namespace.", nameof(obj));
+            }
             var diff = 0;
-            if (NamespaceId == null && NamespaceId == other.NamespaceId)
+            diff = ModelComparer.Compare(NamespaceId, other.NamespaceId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += NamespaceId.CompareTo(other.NamespaceId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TransactionSetting, other.TransactionSetting);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Description == null && Description == other.Description)
+            diff = ModelComparer.Compare(EnableRating, other.EnableRating);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(EnableDisconnectDetection, other.EnableDisconnectDetection);
+            if (diff != 0)
             {
-                diff += Description.CompareTo(other.Description);
+                return diff;
             }
-            if (TransactionSetting == null && TransactionSetting == other.TransactionSetting)
+            diff = ModelComparer.Compare(DisconnectDetectionTimeoutSeconds, other.DisconnectDetectionTimeoutSeconds);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreateGatheringTriggerType, other.CreateGatheringTriggerType);
+            if (diff != 0)
             {
-                diff += TransactionSetting.CompareTo(other.TransactionSetting);
+                return diff;
             }
-            if (EnableRating == null && EnableRating == other.EnableRating)
+            diff = ModelComparer.Compare(CreateGatheringTriggerRealtimeNamespaceId, other.CreateGatheringTriggerRealtimeNamespaceId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreateGatheringTriggerScriptId, other.CreateGatheringTriggerScriptId);
+            if (diff != 0)
             {
-                diff += EnableRating == other.EnableRating ? 0 : 1;
+                return diff;
             }
-            if (EnableDisconnectDetection == null && EnableDisconnectDetection == other.EnableDisconnectDetection)
+            diff = ModelComparer.Compare(CompleteMatchmakingTriggerType, other.CompleteMatchmakingTriggerType);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CompleteMatchmakingTriggerRealtimeNamespaceId, other.CompleteMatchmakingTriggerRealtimeNamespaceId);
+            if (diff != 0)
             {
-                diff += EnableDisconnectDetection.CompareTo(other.EnableDisconnectDetection);
+                return diff;
             }
-            if (DisconnectDetectionTimeoutSeconds == null && DisconnectDetectionTimeoutSeconds == other.DisconnectDetectionTimeoutSeconds)
+            diff = ModelComparer.Compare(CompleteMatchmakingTriggerScriptId, other.CompleteMatchmakingTriggerScriptId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(EnableCollaborateSeasonRating, other.EnableCollaborateSeasonRating);
+            if (diff != 0)
             {
-                diff += (int)(DisconnectDetectionTimeoutSeconds - other.DisconnectDetectionTimeoutSeconds);
+                return diff;
             }
-            if (CreateGatheringTriggerType == null && CreateGatheringTriggerType == other.CreateGatheringTriggerType)
+            diff = ModelComparer.Compare(CollaborateSeasonRatingNamespaceId, other.CollaborateSeasonRatingNamespaceId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CollaborateSeasonRatingTtl, other.CollaborateSeasonRatingTtl);
+            if (diff != 0)
             {
-                diff += CreateGatheringTriggerType.CompareTo(other.CreateGatheringTriggerType);
+                return diff;
             }
-            if (CreateGatheringTriggerRealtimeNamespaceId == null && CreateGatheringTriggerRealtimeNamespaceId == other.CreateGatheringTriggerRealtimeNamespaceId)
+            diff = ModelComparer.Compare(ChangeRatingScript, other.ChangeRatingScript);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(JoinNotification, other.JoinNotification);
+            if (diff != 0)
             {
-                diff += CreateGatheringTriggerRealtimeNamespaceId.CompareTo(other.CreateGatheringTriggerRealtimeNamespaceId);
+                return diff;
             }
-            if (CreateGatheringTriggerScriptId == null && CreateGatheringTriggerScriptId == other.CreateGatheringTriggerScriptId)
+            diff = ModelComparer.Compare(LeaveNotification, other.LeaveNotification);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CompleteNotification, other.CompleteNotification);
+            if (diff != 0)
             {
-                diff += CreateGatheringTriggerScriptId.CompareTo(other.CreateGatheringTriggerScriptId);
+                return diff;
             }
-            if (CompleteMatchmakingTriggerType == null && CompleteMatchmakingTriggerType == other.CompleteMatchmakingTriggerType)
+            diff = ModelComparer.Compare(ChangeRatingNotification, other.ChangeRatingNotification);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(LogSetting, other.LogSetting);
+            if (diff != 0)
             {
-                diff += CompleteMatchmakingTriggerType.CompareTo(other.CompleteMatchmakingTriggerType);
+                return diff;
             }
-            if (CompleteMatchmakingTriggerRealtimeNamespaceId == null && CompleteMatchmakingTriggerRealtimeNamespaceId == other.CompleteMatchmakingTriggerRealtimeNamespaceId)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += CompleteMatchmakingTriggerRealtimeNamespaceId.CompareTo(other.CompleteMatchmakingTriggerRealtimeNamespaceId);
+                return diff;
             }
-            if (CompleteMatchmakingTriggerScriptId == null && CompleteMatchmakingTriggerScriptId == other.CompleteMatchmakingTriggerScriptId)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += CompleteMatchmakingTriggerScriptId.CompareTo(other.CompleteMatchmakingTriggerScriptId);
-            }
-            if (EnableCollaborateSeasonRating == null && EnableCollaborateSeasonRating == other.EnableCollaborateSeasonRating)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += EnableCollaborateSeasonRating.CompareTo(other.EnableCollaborateSeasonRating);
-            }
-            if (CollaborateSeasonRatingNamespaceId == null && CollaborateSeasonRatingNamespaceId == other.CollaborateSeasonRatingNamespaceId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += CollaborateSeasonRatingNamespaceId.CompareTo(other.CollaborateSeasonRatingNamespaceId);
-            }
-            if (CollaborateSeasonRatingTtl == null && CollaborateSeasonRatingTtl == other.CollaborateSeasonRatingTtl)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CollaborateSeasonRatingTtl - other.CollaborateSeasonRatingTtl);
-            }
-            if (ChangeRatingScript == null && ChangeRatingScript == other.ChangeRatingScript)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ChangeRatingScript.CompareTo(other.ChangeRatingScript);
-            }
-            if (JoinNotification == null && JoinNotification == other.JoinNotification)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += JoinNotification.CompareTo(other.JoinNotification);
-            }
-            if (LeaveNotification == null && LeaveNotification == other.LeaveNotification)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += LeaveNotification.CompareTo(other.LeaveNotification);
-            }
-            if (CompleteNotification == null && CompleteNotification == other.CompleteNotification)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += CompleteNotification.CompareTo(other.CompleteNotification);
-            }
-            if (ChangeRatingNotification == null && ChangeRatingNotification == other.ChangeRatingNotification)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ChangeRatingNotification.CompareTo(other.ChangeRatingNotification);
-            }
-            if (LogSetting == null && LogSetting == other.LogSetting)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += LogSetting.CompareTo(other.LogSetting);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

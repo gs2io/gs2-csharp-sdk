@@ -109,36 +109,31 @@ namespace Gs2.Core.Model
         public int CompareTo(object obj)
         {
             var other = obj as ResultMetadata;
-            var diff = 0;
-            if (RequestId == null && RequestId == other.RequestId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += RequestId.CompareTo(other.RequestId);
-            }
-            if (Uncommitted == null && Uncommitted == other.Uncommitted)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Uncommitted.CompareTo(other.Uncommitted);
-            }
-            if (ScriptTransactionResults == null && ScriptTransactionResults == other.ScriptTransactionResults)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ScriptTransactionResults.Length - other.ScriptTransactionResults.Length;
-                for (var i = 0; i < ScriptTransactionResults.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += ScriptTransactionResults[i].CompareTo(other.ScriptTransactionResults[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type ResultMetadata.", nameof(obj));
             }
-            return diff;
+            var diff = 0;
+            diff = ModelComparer.Compare(RequestId, other.RequestId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Uncommitted, other.Uncommitted);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(ScriptTransactionResults, other.ScriptTransactionResults);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {
@@ -148,8 +143,8 @@ namespace Gs2.Core.Model
 
         public object Clone() {
             return new ResultMetadata {
-                RequestId = RequestId.Clone() as string,
-                Uncommitted = Uncommitted.Clone() as string,
+                RequestId = RequestId,
+                Uncommitted = Uncommitted,
                 ScriptTransactionResults = ScriptTransactionResults?.Clone() as Gs2.Core.Model.ScriptTransactionResult[],
             };
         }

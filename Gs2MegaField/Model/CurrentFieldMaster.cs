@@ -134,24 +134,26 @@ namespace Gs2.Gs2MegaField.Model
         public int CompareTo(object obj)
         {
             var other = obj as CurrentFieldMaster;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type CurrentFieldMaster.", nameof(obj));
+            }
             var diff = 0;
-            if (NamespaceId == null && NamespaceId == other.NamespaceId)
+            diff = ModelComparer.Compare(NamespaceId, other.NamespaceId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Settings, other.Settings);
+            if (diff != 0)
             {
-                diff += NamespaceId.CompareTo(other.NamespaceId);
+                return diff;
             }
-            if (Settings == null && Settings == other.Settings)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Settings.CompareTo(other.Settings);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

@@ -72,16 +72,21 @@ namespace Gs2.Gs2Money2.Model
         public int CompareTo(object obj)
         {
             var other = obj as AppleAppStoreSubscriptionContent;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type AppleAppStoreSubscriptionContent.", nameof(obj));
+            }
             var diff = 0;
-            if (SubscriptionGroupIdentifier == null && SubscriptionGroupIdentifier == other.SubscriptionGroupIdentifier)
+            diff = ModelComparer.Compare(SubscriptionGroupIdentifier, other.SubscriptionGroupIdentifier);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += SubscriptionGroupIdentifier.CompareTo(other.SubscriptionGroupIdentifier);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

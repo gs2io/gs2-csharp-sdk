@@ -83,24 +83,26 @@ namespace Gs2.Gs2Matchmaking.Model
         public int CompareTo(object obj)
         {
             var other = obj as GameResult;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type GameResult.", nameof(obj));
+            }
             var diff = 0;
-            if (Rank == null && Rank == other.Rank)
+            diff = ModelComparer.Compare(Rank, other.Rank);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += (int)(Rank - other.Rank);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UserId.CompareTo(other.UserId);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

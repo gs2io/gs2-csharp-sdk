@@ -66,7 +66,7 @@ namespace Gs2.Core.Model
             return new JsonData {
                 ["scriptId"] = ScriptId,
                 ["transactionId"] = TransactionId,
-                ["transactionResult"] = TransactionResult.ToJson(),
+                ["transactionResult"] = TransactionResult?.ToJson(),
             };
         }
 
@@ -91,24 +91,31 @@ namespace Gs2.Core.Model
         public int CompareTo(object obj)
         {
             var other = obj as ScriptTransactionResult;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type ScriptTransactionResult.", nameof(obj));
+            }
             var diff = 0;
-            if (ScriptId == null && ScriptId == other.ScriptId)
+            diff = ModelComparer.Compare(ScriptId, other.ScriptId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TransactionId, other.TransactionId);
+            if (diff != 0)
             {
-                diff += ScriptId.CompareTo(other.ScriptId);
+                return diff;
             }
-            if (TransactionId == null && TransactionId == other.TransactionId)
+            diff = ModelComparer.Compare(TransactionResult, other.TransactionResult);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += TransactionId.CompareTo(other.TransactionId);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

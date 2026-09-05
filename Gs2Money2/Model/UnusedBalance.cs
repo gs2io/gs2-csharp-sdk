@@ -184,48 +184,41 @@ namespace Gs2.Gs2Money2.Model
         public int CompareTo(object obj)
         {
             var other = obj as UnusedBalance;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type UnusedBalance.", nameof(obj));
+            }
             var diff = 0;
-            if (UnusedBalanceId == null && UnusedBalanceId == other.UnusedBalanceId)
+            diff = ModelComparer.Compare(UnusedBalanceId, other.UnusedBalanceId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Currency, other.Currency);
+            if (diff != 0)
             {
-                diff += UnusedBalanceId.CompareTo(other.UnusedBalanceId);
+                return diff;
             }
-            if (Currency == null && Currency == other.Currency)
+            diff = ModelComparer.Compare(Balance, other.Balance);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += Currency.CompareTo(other.Currency);
+                return diff;
             }
-            if (Balance == null && Balance == other.Balance)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += (int)(Balance - other.Balance);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

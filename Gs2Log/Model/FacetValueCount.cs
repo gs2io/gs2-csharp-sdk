@@ -83,24 +83,26 @@ namespace Gs2.Gs2Log.Model
         public int CompareTo(object obj)
         {
             var other = obj as FacetValueCount;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type FacetValueCount.", nameof(obj));
+            }
             var diff = 0;
-            if (Value == null && Value == other.Value)
+            diff = ModelComparer.Compare(Value, other.Value);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Count, other.Count);
+            if (diff != 0)
             {
-                diff += Value.CompareTo(other.Value);
+                return diff;
             }
-            if (Count == null && Count == other.Count)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Count - other.Count);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

@@ -102,40 +102,36 @@ namespace Gs2.Gs2Experience.Model
         public int CompareTo(object obj)
         {
             var other = obj as AcquireActionResult;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type AcquireActionResult.", nameof(obj));
+            }
             var diff = 0;
-            if (Action == null && Action == other.Action)
+            diff = ModelComparer.Compare(Action, other.Action);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(AcquireRequest, other.AcquireRequest);
+            if (diff != 0)
             {
-                diff += Action.CompareTo(other.Action);
+                return diff;
             }
-            if (AcquireRequest == null && AcquireRequest == other.AcquireRequest)
+            diff = ModelComparer.Compare(StatusCode, other.StatusCode);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(AcquireResult, other.AcquireResult);
+            if (diff != 0)
             {
-                diff += AcquireRequest.CompareTo(other.AcquireRequest);
+                return diff;
             }
-            if (StatusCode == null && StatusCode == other.StatusCode)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(StatusCode - other.StatusCode);
-            }
-            if (AcquireResult == null && AcquireResult == other.AcquireResult)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += AcquireResult.CompareTo(other.AcquireResult);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

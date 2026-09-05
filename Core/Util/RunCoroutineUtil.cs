@@ -40,7 +40,8 @@ namespace Gs2.Core.Util
 
 			foreach (var runner in runners)
 			{
-				isComplete = isComplete && runner.Step();
+				var runnerComplete = runner.Step();
+				isComplete = isComplete && runnerComplete;
 			}
 
 			// 追加分は追加時に1ステップ実行されるので、結果だけ反映する

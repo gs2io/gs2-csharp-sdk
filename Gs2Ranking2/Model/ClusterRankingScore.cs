@@ -290,88 +290,66 @@ namespace Gs2.Gs2Ranking2.Model
         public int CompareTo(object obj)
         {
             var other = obj as ClusterRankingScore;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type ClusterRankingScore.", nameof(obj));
+            }
             var diff = 0;
-            if (ClusterRankingScoreId == null && ClusterRankingScoreId == other.ClusterRankingScoreId)
+            diff = ModelComparer.Compare(ClusterRankingScoreId, other.ClusterRankingScoreId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(RankingName, other.RankingName);
+            if (diff != 0)
             {
-                diff += ClusterRankingScoreId.CompareTo(other.ClusterRankingScoreId);
+                return diff;
             }
-            if (RankingName == null && RankingName == other.RankingName)
+            diff = ModelComparer.Compare(ClusterName, other.ClusterName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Season, other.Season);
+            if (diff != 0)
             {
-                diff += RankingName.CompareTo(other.RankingName);
+                return diff;
             }
-            if (ClusterName == null && ClusterName == other.ClusterName)
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Score, other.Score);
+            if (diff != 0)
             {
-                diff += ClusterName.CompareTo(other.ClusterName);
+                return diff;
             }
-            if (Season == null && Season == other.Season)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += (int)(Season - other.Season);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (Score == null && Score == other.Score)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Score - other.Score);
-            }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

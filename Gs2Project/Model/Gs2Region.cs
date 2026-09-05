@@ -83,24 +83,26 @@ namespace Gs2.Gs2Project.Model
         public int CompareTo(object obj)
         {
             var other = obj as Gs2Region;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Gs2Region.", nameof(obj));
+            }
             var diff = 0;
-            if (RegionName == null && RegionName == other.RegionName)
+            diff = ModelComparer.Compare(RegionName, other.RegionName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Status, other.Status);
+            if (diff != 0)
             {
-                diff += RegionName.CompareTo(other.RegionName);
+                return diff;
             }
-            if (Status == null && Status == other.Status)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Status.CompareTo(other.Status);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

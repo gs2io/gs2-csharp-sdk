@@ -217,72 +217,56 @@ namespace Gs2.Gs2Money2.Model
         public int CompareTo(object obj)
         {
             var other = obj as RefundHistory;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type RefundHistory.", nameof(obj));
+            }
             var diff = 0;
-            if (RefundHistoryId == null && RefundHistoryId == other.RefundHistoryId)
+            diff = ModelComparer.Compare(RefundHistoryId, other.RefundHistoryId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TransactionId, other.TransactionId);
+            if (diff != 0)
             {
-                diff += RefundHistoryId.CompareTo(other.RefundHistoryId);
+                return diff;
             }
-            if (TransactionId == null && TransactionId == other.TransactionId)
+            diff = ModelComparer.Compare(Year, other.Year);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Month, other.Month);
+            if (diff != 0)
             {
-                diff += TransactionId.CompareTo(other.TransactionId);
+                return diff;
             }
-            if (Year == null && Year == other.Year)
+            diff = ModelComparer.Compare(Day, other.Day);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += (int)(Year - other.Year);
+                return diff;
             }
-            if (Month == null && Month == other.Month)
+            diff = ModelComparer.Compare(Detail, other.Detail);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += (int)(Month - other.Month);
+                return diff;
             }
-            if (Day == null && Day == other.Day)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Day - other.Day);
-            }
-            if (UserId == null && UserId == other.UserId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UserId.CompareTo(other.UserId);
-            }
-            if (Detail == null && Detail == other.Detail)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Detail.CompareTo(other.Detail);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

@@ -239,88 +239,66 @@ namespace Gs2.Gs2Money2.Model
         public int CompareTo(object obj)
         {
             var other = obj as Event;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Event.", nameof(obj));
+            }
             var diff = 0;
-            if (EventId == null && EventId == other.EventId)
+            diff = ModelComparer.Compare(EventId, other.EventId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TransactionId, other.TransactionId);
+            if (diff != 0)
             {
-                diff += EventId.CompareTo(other.EventId);
+                return diff;
             }
-            if (TransactionId == null && TransactionId == other.TransactionId)
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(EventType, other.EventType);
+            if (diff != 0)
             {
-                diff += TransactionId.CompareTo(other.TransactionId);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(VerifyReceiptEvent, other.VerifyReceiptEvent);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(DepositEvent, other.DepositEvent);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (EventType == null && EventType == other.EventType)
+            diff = ModelComparer.Compare(WithdrawEvent, other.WithdrawEvent);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(RefundEvent, other.RefundEvent);
+            if (diff != 0)
             {
-                diff += EventType.CompareTo(other.EventType);
+                return diff;
             }
-            if (VerifyReceiptEvent == null && VerifyReceiptEvent == other.VerifyReceiptEvent)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += VerifyReceiptEvent.CompareTo(other.VerifyReceiptEvent);
+                return diff;
             }
-            if (DepositEvent == null && DepositEvent == other.DepositEvent)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += DepositEvent.CompareTo(other.DepositEvent);
-            }
-            if (WithdrawEvent == null && WithdrawEvent == other.WithdrawEvent)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += WithdrawEvent.CompareTo(other.WithdrawEvent);
-            }
-            if (RefundEvent == null && RefundEvent == other.RefundEvent)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += RefundEvent.CompareTo(other.RefundEvent);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

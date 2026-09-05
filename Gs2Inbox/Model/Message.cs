@@ -274,92 +274,66 @@ namespace Gs2.Gs2Inbox.Model
         public int CompareTo(object obj)
         {
             var other = obj as Message;
-            var diff = 0;
-            if (MessageId == null && MessageId == other.MessageId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += MessageId.CompareTo(other.MessageId);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (UserId == null && UserId == other.UserId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UserId.CompareTo(other.UserId);
-            }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (IsRead == null && IsRead == other.IsRead)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += IsRead == other.IsRead ? 0 : 1;
-            }
-            if (ReadAcquireActions == null && ReadAcquireActions == other.ReadAcquireActions)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ReadAcquireActions.Length - other.ReadAcquireActions.Length;
-                for (var i = 0; i < ReadAcquireActions.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += ReadAcquireActions[i].CompareTo(other.ReadAcquireActions[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type Message.", nameof(obj));
             }
-            if (ReceivedAt == null && ReceivedAt == other.ReceivedAt)
+            var diff = 0;
+            diff = ModelComparer.Compare(MessageId, other.MessageId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += (int)(ReceivedAt - other.ReceivedAt);
+                return diff;
             }
-            if (ReadAt == null && ReadAt == other.ReadAt)
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                diff += (int)(ReadAt - other.ReadAt);
+                return diff;
             }
-            if (ExpiresAt == null && ExpiresAt == other.ExpiresAt)
+            diff = ModelComparer.Compare(IsRead, other.IsRead);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(ReadAcquireActions, other.ReadAcquireActions);
+            if (diff != 0)
             {
-                diff += (int)(ExpiresAt - other.ExpiresAt);
+                return diff;
             }
-            if (Revision == null && Revision == other.Revision)
+            diff = ModelComparer.Compare(ReceivedAt, other.ReceivedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ReadAt, other.ReadAt);
+            if (diff != 0)
             {
-                diff += (int)(Revision - other.Revision);
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.Compare(ExpiresAt, other.ExpiresAt);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

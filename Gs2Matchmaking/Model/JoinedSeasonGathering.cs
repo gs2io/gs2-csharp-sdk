@@ -240,64 +240,51 @@ namespace Gs2.Gs2Matchmaking.Model
         public int CompareTo(object obj)
         {
             var other = obj as JoinedSeasonGathering;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type JoinedSeasonGathering.", nameof(obj));
+            }
             var diff = 0;
-            if (JoinedSeasonGatheringId == null && JoinedSeasonGatheringId == other.JoinedSeasonGatheringId)
+            diff = ModelComparer.Compare(JoinedSeasonGatheringId, other.JoinedSeasonGatheringId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += JoinedSeasonGatheringId.CompareTo(other.JoinedSeasonGatheringId);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(SeasonName, other.SeasonName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Season, other.Season);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (SeasonName == null && SeasonName == other.SeasonName)
+            diff = ModelComparer.Compare(Tier, other.Tier);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(SeasonGatheringName, other.SeasonGatheringName);
+            if (diff != 0)
             {
-                diff += SeasonName.CompareTo(other.SeasonName);
+                return diff;
             }
-            if (Season == null && Season == other.Season)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += (int)(Season - other.Season);
-            }
-            if (Tier == null && Tier == other.Tier)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Tier - other.Tier);
-            }
-            if (SeasonGatheringName == null && SeasonGatheringName == other.SeasonGatheringName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += SeasonGatheringName.CompareTo(other.SeasonGatheringName);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

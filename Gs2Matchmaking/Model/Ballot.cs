@@ -105,40 +105,36 @@ namespace Gs2.Gs2Matchmaking.Model
         public int CompareTo(object obj)
         {
             var other = obj as Ballot;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Ballot.", nameof(obj));
+            }
             var diff = 0;
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(RatingName, other.RatingName);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (RatingName == null && RatingName == other.RatingName)
+            diff = ModelComparer.Compare(GatheringName, other.GatheringName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(NumberOfPlayer, other.NumberOfPlayer);
+            if (diff != 0)
             {
-                diff += RatingName.CompareTo(other.RatingName);
+                return diff;
             }
-            if (GatheringName == null && GatheringName == other.GatheringName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += GatheringName.CompareTo(other.GatheringName);
-            }
-            if (NumberOfPlayer == null && NumberOfPlayer == other.NumberOfPlayer)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(NumberOfPlayer - other.NumberOfPlayer);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

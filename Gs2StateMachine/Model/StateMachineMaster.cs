@@ -206,64 +206,51 @@ namespace Gs2.Gs2StateMachine.Model
         public int CompareTo(object obj)
         {
             var other = obj as StateMachineMaster;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type StateMachineMaster.", nameof(obj));
+            }
             var diff = 0;
-            if (StateMachineId == null && StateMachineId == other.StateMachineId)
+            diff = ModelComparer.Compare(StateMachineId, other.StateMachineId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(MainStateMachineName, other.MainStateMachineName);
+            if (diff != 0)
             {
-                diff += StateMachineId.CompareTo(other.StateMachineId);
+                return diff;
             }
-            if (MainStateMachineName == null && MainStateMachineName == other.MainStateMachineName)
+            diff = ModelComparer.Compare(Payload, other.Payload);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Version, other.Version);
+            if (diff != 0)
             {
-                diff += MainStateMachineName.CompareTo(other.MainStateMachineName);
+                return diff;
             }
-            if (Payload == null && Payload == other.Payload)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += Payload.CompareTo(other.Payload);
+                return diff;
             }
-            if (Version == null && Version == other.Version)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += (int)(Version - other.Version);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

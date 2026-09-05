@@ -257,92 +257,66 @@ namespace Gs2.Gs2Enhance.Model
         public int CompareTo(object obj)
         {
             var other = obj as UnleashRateModelMaster;
-            var diff = 0;
-            if (UnleashRateModelId == null && UnleashRateModelId == other.UnleashRateModelId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += UnleashRateModelId.CompareTo(other.UnleashRateModelId);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (Description == null && Description == other.Description)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Description.CompareTo(other.Description);
-            }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (TargetInventoryModelId == null && TargetInventoryModelId == other.TargetInventoryModelId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += TargetInventoryModelId.CompareTo(other.TargetInventoryModelId);
-            }
-            if (GradeModelId == null && GradeModelId == other.GradeModelId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += GradeModelId.CompareTo(other.GradeModelId);
-            }
-            if (GradeEntries == null && GradeEntries == other.GradeEntries)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += GradeEntries.Length - other.GradeEntries.Length;
-                for (var i = 0; i < GradeEntries.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += GradeEntries[i].CompareTo(other.GradeEntries[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type UnleashRateModelMaster.", nameof(obj));
             }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
+            var diff = 0;
+            diff = ModelComparer.Compare(UnleashRateModelId, other.UnleashRateModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += (int)(CreatedAt - other.CreatedAt);
+                return diff;
             }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
+                return diff;
             }
-            if (Revision == null && Revision == other.Revision)
+            diff = ModelComparer.Compare(TargetInventoryModelId, other.TargetInventoryModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(GradeModelId, other.GradeModelId);
+            if (diff != 0)
             {
-                diff += (int)(Revision - other.Revision);
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.CompareArray(GradeEntries, other.GradeEntries);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

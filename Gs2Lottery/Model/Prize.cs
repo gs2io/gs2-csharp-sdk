@@ -156,68 +156,51 @@ namespace Gs2.Gs2Lottery.Model
         public int CompareTo(object obj)
         {
             var other = obj as Prize;
-            var diff = 0;
-            if (PrizeId == null && PrizeId == other.PrizeId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += PrizeId.CompareTo(other.PrizeId);
-            }
-            if (Type == null && Type == other.Type)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Type.CompareTo(other.Type);
-            }
-            if (AcquireActions == null && AcquireActions == other.AcquireActions)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += AcquireActions.Length - other.AcquireActions.Length;
-                for (var i = 0; i < AcquireActions.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += AcquireActions[i].CompareTo(other.AcquireActions[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type Prize.", nameof(obj));
             }
-            if (DrawnLimit == null && DrawnLimit == other.DrawnLimit)
+            var diff = 0;
+            diff = ModelComparer.Compare(PrizeId, other.PrizeId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Type, other.Type);
+            if (diff != 0)
             {
-                diff += (int)(DrawnLimit - other.DrawnLimit);
+                return diff;
             }
-            if (LimitFailOverPrizeId == null && LimitFailOverPrizeId == other.LimitFailOverPrizeId)
+            diff = ModelComparer.CompareArray(AcquireActions, other.AcquireActions);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(DrawnLimit, other.DrawnLimit);
+            if (diff != 0)
             {
-                diff += LimitFailOverPrizeId.CompareTo(other.LimitFailOverPrizeId);
+                return diff;
             }
-            if (PrizeTableName == null && PrizeTableName == other.PrizeTableName)
+            diff = ModelComparer.Compare(LimitFailOverPrizeId, other.LimitFailOverPrizeId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(PrizeTableName, other.PrizeTableName);
+            if (diff != 0)
             {
-                diff += PrizeTableName.CompareTo(other.PrizeTableName);
+                return diff;
             }
-            if (Weight == null && Weight == other.Weight)
+            diff = ModelComparer.Compare(Weight, other.Weight);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += (int)(Weight - other.Weight);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

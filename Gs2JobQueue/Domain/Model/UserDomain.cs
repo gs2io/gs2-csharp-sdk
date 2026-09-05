@@ -239,8 +239,9 @@ namespace Gs2.Gs2JobQueue.Domain.Model
             )).ToArray() ?? Array.Empty<Gs2.Gs2JobQueue.Domain.Model.JobDomain>();
             if (result.AutoRun != null && !result.AutoRun.Value)
             {
-                this._gs2.JobQueueDomain.Push(
-                    this.NamespaceName
+                this._gs2.JobQueueDomain.PushForUser(
+                    this.NamespaceName,
+                    this.UserId
                 );
             }
             this.AutoRun = result?.AutoRun;

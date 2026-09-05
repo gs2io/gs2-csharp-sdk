@@ -195,56 +195,46 @@ namespace Gs2.Gs2Project.Model
         public int CompareTo(object obj)
         {
             var other = obj as ImportErrorLog;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type ImportErrorLog.", nameof(obj));
+            }
             var diff = 0;
-            if (DumpProgressId == null && DumpProgressId == other.DumpProgressId)
+            diff = ModelComparer.Compare(DumpProgressId, other.DumpProgressId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += DumpProgressId.CompareTo(other.DumpProgressId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(MicroserviceName, other.MicroserviceName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Message, other.Message);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (MicroserviceName == null && MicroserviceName == other.MicroserviceName)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += MicroserviceName.CompareTo(other.MicroserviceName);
+                return diff;
             }
-            if (Message == null && Message == other.Message)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Message.CompareTo(other.Message);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

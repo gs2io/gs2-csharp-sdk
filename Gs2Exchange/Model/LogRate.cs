@@ -99,28 +99,26 @@ namespace Gs2.Gs2Exchange.Model
         public int CompareTo(object obj)
         {
             var other = obj as LogRate;
-            var diff = 0;
-            if (Base == null && Base == other.Base)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Base - other.Base);
-            }
-            if (Logs == null && Logs == other.Logs)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Logs.Length - other.Logs.Length;
-                for (var i = 0; i < Logs.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += (int)(Logs[i] - other.Logs[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type LogRate.", nameof(obj));
             }
-            return diff;
+            var diff = 0;
+            diff = ModelComparer.Compare(Base, other.Base);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(Logs, other.Logs);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

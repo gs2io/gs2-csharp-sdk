@@ -72,16 +72,21 @@ namespace Gs2.Gs2Money2.Model
         public int CompareTo(object obj)
         {
             var other = obj as GooglePlayVerifyReceiptEvent;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type GooglePlayVerifyReceiptEvent.", nameof(obj));
+            }
             var diff = 0;
-            if (PurchaseToken == null && PurchaseToken == other.PurchaseToken)
+            diff = ModelComparer.Compare(PurchaseToken, other.PurchaseToken);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += PurchaseToken.CompareTo(other.PurchaseToken);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

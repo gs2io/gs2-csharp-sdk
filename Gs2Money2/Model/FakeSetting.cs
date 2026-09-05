@@ -72,16 +72,21 @@ namespace Gs2.Gs2Money2.Model
         public int CompareTo(object obj)
         {
             var other = obj as FakeSetting;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type FakeSetting.", nameof(obj));
+            }
             var diff = 0;
-            if (AcceptFakeReceipt == null && AcceptFakeReceipt == other.AcceptFakeReceipt)
+            diff = ModelComparer.Compare(AcceptFakeReceipt, other.AcceptFakeReceipt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += AcceptFakeReceipt.CompareTo(other.AcceptFakeReceipt);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

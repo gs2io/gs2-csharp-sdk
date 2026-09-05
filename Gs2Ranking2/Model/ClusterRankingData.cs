@@ -323,112 +323,81 @@ namespace Gs2.Gs2Ranking2.Model
         public int CompareTo(object obj)
         {
             var other = obj as ClusterRankingData;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type ClusterRankingData.", nameof(obj));
+            }
             var diff = 0;
-            if (ClusterRankingDataId == null && ClusterRankingDataId == other.ClusterRankingDataId)
+            diff = ModelComparer.Compare(ClusterRankingDataId, other.ClusterRankingDataId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(RankingName, other.RankingName);
+            if (diff != 0)
             {
-                diff += ClusterRankingDataId.CompareTo(other.ClusterRankingDataId);
+                return diff;
             }
-            if (RankingName == null && RankingName == other.RankingName)
+            diff = ModelComparer.Compare(ClusterName, other.ClusterName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Season, other.Season);
+            if (diff != 0)
             {
-                diff += RankingName.CompareTo(other.RankingName);
+                return diff;
             }
-            if (ClusterName == null && ClusterName == other.ClusterName)
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Index, other.Index);
+            if (diff != 0)
             {
-                diff += ClusterName.CompareTo(other.ClusterName);
+                return diff;
             }
-            if (Season == null && Season == other.Season)
+            diff = ModelComparer.Compare(Rank, other.Rank);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Score, other.Score);
+            if (diff != 0)
             {
-                diff += (int)(Season - other.Season);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(InvertUpdatedAt, other.InvertUpdatedAt);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (Index == null && Index == other.Index)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += (int)(Index - other.Index);
+                return diff;
             }
-            if (Rank == null && Rank == other.Rank)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += (int)(Rank - other.Rank);
-            }
-            if (Score == null && Score == other.Score)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Score - other.Score);
-            }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (InvertUpdatedAt == null && InvertUpdatedAt == other.InvertUpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(InvertUpdatedAt - other.InvertUpdatedAt);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

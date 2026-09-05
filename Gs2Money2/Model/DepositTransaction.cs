@@ -105,40 +105,36 @@ namespace Gs2.Gs2Money2.Model
         public int CompareTo(object obj)
         {
             var other = obj as DepositTransaction;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type DepositTransaction.", nameof(obj));
+            }
             var diff = 0;
-            if (Price == null && Price == other.Price)
+            diff = ModelComparer.Compare(Price, other.Price);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Currency, other.Currency);
+            if (diff != 0)
             {
-                diff += (int)(Price - other.Price);
+                return diff;
             }
-            if (Currency == null && Currency == other.Currency)
+            diff = ModelComparer.Compare(Count, other.Count);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(DepositedAt, other.DepositedAt);
+            if (diff != 0)
             {
-                diff += Currency.CompareTo(other.Currency);
+                return diff;
             }
-            if (Count == null && Count == other.Count)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Count - other.Count);
-            }
-            if (DepositedAt == null && DepositedAt == other.DepositedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(DepositedAt - other.DepositedAt);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

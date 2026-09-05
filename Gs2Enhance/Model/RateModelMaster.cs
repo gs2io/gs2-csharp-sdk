@@ -308,120 +308,81 @@ namespace Gs2.Gs2Enhance.Model
         public int CompareTo(object obj)
         {
             var other = obj as RateModelMaster;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type RateModelMaster.", nameof(obj));
+            }
             var diff = 0;
-            if (RateModelId == null && RateModelId == other.RateModelId)
+            diff = ModelComparer.Compare(RateModelId, other.RateModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += RateModelId.CompareTo(other.RateModelId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Description == null && Description == other.Description)
+            diff = ModelComparer.Compare(TargetInventoryModelId, other.TargetInventoryModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(AcquireExperienceSuffix, other.AcquireExperienceSuffix);
+            if (diff != 0)
             {
-                diff += Description.CompareTo(other.Description);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
+            diff = ModelComparer.Compare(MaterialInventoryModelId, other.MaterialInventoryModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(AcquireExperienceHierarchy, other.AcquireExperienceHierarchy);
+            if (diff != 0)
             {
-                diff += Metadata.CompareTo(other.Metadata);
+                return diff;
             }
-            if (TargetInventoryModelId == null && TargetInventoryModelId == other.TargetInventoryModelId)
+            diff = ModelComparer.Compare(ExperienceModelId, other.ExperienceModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(BonusRates, other.BonusRates);
+            if (diff != 0)
             {
-                diff += TargetInventoryModelId.CompareTo(other.TargetInventoryModelId);
+                return diff;
             }
-            if (AcquireExperienceSuffix == null && AcquireExperienceSuffix == other.AcquireExperienceSuffix)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += AcquireExperienceSuffix.CompareTo(other.AcquireExperienceSuffix);
+                return diff;
             }
-            if (MaterialInventoryModelId == null && MaterialInventoryModelId == other.MaterialInventoryModelId)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += MaterialInventoryModelId.CompareTo(other.MaterialInventoryModelId);
-            }
-            if (AcquireExperienceHierarchy == null && AcquireExperienceHierarchy == other.AcquireExperienceHierarchy)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += AcquireExperienceHierarchy.Length - other.AcquireExperienceHierarchy.Length;
-                for (var i = 0; i < AcquireExperienceHierarchy.Length; i++)
-                {
-                    diff += AcquireExperienceHierarchy[i].CompareTo(other.AcquireExperienceHierarchy[i]);
-                }
-            }
-            if (ExperienceModelId == null && ExperienceModelId == other.ExperienceModelId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ExperienceModelId.CompareTo(other.ExperienceModelId);
-            }
-            if (BonusRates == null && BonusRates == other.BonusRates)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += BonusRates.Length - other.BonusRates.Length;
-                for (var i = 0; i < BonusRates.Length; i++)
-                {
-                    diff += BonusRates[i].CompareTo(other.BonusRates[i]);
-                }
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

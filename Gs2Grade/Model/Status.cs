@@ -251,72 +251,56 @@ namespace Gs2.Gs2Grade.Model
         public int CompareTo(object obj)
         {
             var other = obj as Status;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Status.", nameof(obj));
+            }
             var diff = 0;
-            if (StatusId == null && StatusId == other.StatusId)
+            diff = ModelComparer.Compare(StatusId, other.StatusId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(GradeName, other.GradeName);
+            if (diff != 0)
             {
-                diff += StatusId.CompareTo(other.StatusId);
+                return diff;
             }
-            if (GradeName == null && GradeName == other.GradeName)
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(PropertyId, other.PropertyId);
+            if (diff != 0)
             {
-                diff += GradeName.CompareTo(other.GradeName);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(GradeValue, other.GradeValue);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (PropertyId == null && PropertyId == other.PropertyId)
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += PropertyId.CompareTo(other.PropertyId);
+                return diff;
             }
-            if (GradeValue == null && GradeValue == other.GradeValue)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(GradeValue - other.GradeValue);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

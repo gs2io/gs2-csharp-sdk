@@ -119,32 +119,26 @@ namespace Gs2.Gs2News.Model
         public int CompareTo(object obj)
         {
             var other = obj as View;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type View.", nameof(obj));
+            }
             var diff = 0;
-            if (Contents == null && Contents == other.Contents)
+            diff = ModelComparer.CompareArray(Contents, other.Contents);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(RemoveContents, other.RemoveContents);
+            if (diff != 0)
             {
-                diff += Contents.Length - other.Contents.Length;
-                for (var i = 0; i < Contents.Length; i++)
-                {
-                    diff += Contents[i].CompareTo(other.Contents[i]);
-                }
+                return diff;
             }
-            if (RemoveContents == null && RemoveContents == other.RemoveContents)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += RemoveContents.Length - other.RemoveContents.Length;
-                for (var i = 0; i < RemoveContents.Length; i++)
-                {
-                    diff += RemoveContents[i].CompareTo(other.RemoveContents[i]);
-                }
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

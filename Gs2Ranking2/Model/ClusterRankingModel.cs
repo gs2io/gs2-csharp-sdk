@@ -279,108 +279,76 @@ namespace Gs2.Gs2Ranking2.Model
         public int CompareTo(object obj)
         {
             var other = obj as ClusterRankingModel;
-            var diff = 0;
-            if (ClusterRankingModelId == null && ClusterRankingModelId == other.ClusterRankingModelId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += ClusterRankingModelId.CompareTo(other.ClusterRankingModelId);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (ClusterType == null && ClusterType == other.ClusterType)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ClusterType.CompareTo(other.ClusterType);
-            }
-            if (MinimumValue == null && MinimumValue == other.MinimumValue)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(MinimumValue - other.MinimumValue);
-            }
-            if (MaximumValue == null && MaximumValue == other.MaximumValue)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(MaximumValue - other.MaximumValue);
-            }
-            if (Sum == null && Sum == other.Sum)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Sum == other.Sum ? 0 : 1;
-            }
-            if (OrderDirection == null && OrderDirection == other.OrderDirection)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += OrderDirection.CompareTo(other.OrderDirection);
-            }
-            if (EntryPeriodEventId == null && EntryPeriodEventId == other.EntryPeriodEventId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += EntryPeriodEventId.CompareTo(other.EntryPeriodEventId);
-            }
-            if (RankingRewards == null && RankingRewards == other.RankingRewards)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += RankingRewards.Length - other.RankingRewards.Length;
-                for (var i = 0; i < RankingRewards.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += RankingRewards[i].CompareTo(other.RankingRewards[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type ClusterRankingModel.", nameof(obj));
             }
-            if (AccessPeriodEventId == null && AccessPeriodEventId == other.AccessPeriodEventId)
+            var diff = 0;
+            diff = ModelComparer.Compare(ClusterRankingModelId, other.ClusterRankingModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += AccessPeriodEventId.CompareTo(other.AccessPeriodEventId);
+                return diff;
             }
-            if (RewardCalculationIndex == null && RewardCalculationIndex == other.RewardCalculationIndex)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ClusterType, other.ClusterType);
+            if (diff != 0)
             {
-                diff += RewardCalculationIndex.CompareTo(other.RewardCalculationIndex);
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.Compare(MinimumValue, other.MinimumValue);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(MaximumValue, other.MaximumValue);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Sum, other.Sum);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(OrderDirection, other.OrderDirection);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(EntryPeriodEventId, other.EntryPeriodEventId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(RankingRewards, other.RankingRewards);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(AccessPeriodEventId, other.AccessPeriodEventId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(RewardCalculationIndex, other.RewardCalculationIndex);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

@@ -72,16 +72,21 @@ namespace Gs2.Gs2Matchmaking.Model
         public int CompareTo(object obj)
         {
             var other = obj as LogSetting;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type LogSetting.", nameof(obj));
+            }
             var diff = 0;
-            if (LoggingNamespaceId == null && LoggingNamespaceId == other.LoggingNamespaceId)
+            diff = ModelComparer.Compare(LoggingNamespaceId, other.LoggingNamespaceId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += LoggingNamespaceId.CompareTo(other.LoggingNamespaceId);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

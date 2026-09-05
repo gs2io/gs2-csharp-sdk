@@ -278,104 +278,76 @@ namespace Gs2.Gs2Money2.Model
         public int CompareTo(object obj)
         {
             var other = obj as SubscribeTransaction;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type SubscribeTransaction.", nameof(obj));
+            }
             var diff = 0;
-            if (SubscribeTransactionId == null && SubscribeTransactionId == other.SubscribeTransactionId)
+            diff = ModelComparer.Compare(SubscribeTransactionId, other.SubscribeTransactionId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ContentName, other.ContentName);
+            if (diff != 0)
             {
-                diff += SubscribeTransactionId.CompareTo(other.SubscribeTransactionId);
+                return diff;
             }
-            if (ContentName == null && ContentName == other.ContentName)
+            diff = ModelComparer.Compare(TransactionId, other.TransactionId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Store, other.Store);
+            if (diff != 0)
             {
-                diff += ContentName.CompareTo(other.ContentName);
+                return diff;
             }
-            if (TransactionId == null && TransactionId == other.TransactionId)
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(StatusDetail, other.StatusDetail);
+            if (diff != 0)
             {
-                diff += TransactionId.CompareTo(other.TransactionId);
+                return diff;
             }
-            if (Store == null && Store == other.Store)
+            diff = ModelComparer.Compare(ExpiresAt, other.ExpiresAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(LastAllocatedAt, other.LastAllocatedAt);
+            if (diff != 0)
             {
-                diff += Store.CompareTo(other.Store);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(LastTakeOverAt, other.LastTakeOverAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (StatusDetail == null && StatusDetail == other.StatusDetail)
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += StatusDetail.CompareTo(other.StatusDetail);
+                return diff;
             }
-            if (ExpiresAt == null && ExpiresAt == other.ExpiresAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(ExpiresAt - other.ExpiresAt);
-            }
-            if (LastAllocatedAt == null && LastAllocatedAt == other.LastAllocatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(LastAllocatedAt - other.LastAllocatedAt);
-            }
-            if (LastTakeOverAt == null && LastTakeOverAt == other.LastTakeOverAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(LastTakeOverAt - other.LastTakeOverAt);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

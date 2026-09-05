@@ -244,84 +244,61 @@ namespace Gs2.Gs2Stamina.Model
         public int CompareTo(object obj)
         {
             var other = obj as MaxStaminaTableMaster;
-            var diff = 0;
-            if (MaxStaminaTableId == null && MaxStaminaTableId == other.MaxStaminaTableId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += MaxStaminaTableId.CompareTo(other.MaxStaminaTableId);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (Description == null && Description == other.Description)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Description.CompareTo(other.Description);
-            }
-            if (ExperienceModelId == null && ExperienceModelId == other.ExperienceModelId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ExperienceModelId.CompareTo(other.ExperienceModelId);
-            }
-            if (Values == null && Values == other.Values)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Values.Length - other.Values.Length;
-                for (var i = 0; i < Values.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += (int)(Values[i] - other.Values[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type MaxStaminaTableMaster.", nameof(obj));
             }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
+            var diff = 0;
+            diff = ModelComparer.Compare(MaxStaminaTableId, other.MaxStaminaTableId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += (int)(CreatedAt - other.CreatedAt);
+                return diff;
             }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
+                return diff;
             }
-            if (Revision == null && Revision == other.Revision)
+            diff = ModelComparer.Compare(ExperienceModelId, other.ExperienceModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(Values, other.Values);
+            if (diff != 0)
             {
-                diff += (int)(Revision - other.Revision);
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

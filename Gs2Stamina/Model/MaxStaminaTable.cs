@@ -121,44 +121,36 @@ namespace Gs2.Gs2Stamina.Model
         public int CompareTo(object obj)
         {
             var other = obj as MaxStaminaTable;
-            var diff = 0;
-            if (Name == null && Name == other.Name)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (ExperienceModelId == null && ExperienceModelId == other.ExperienceModelId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ExperienceModelId.CompareTo(other.ExperienceModelId);
-            }
-            if (Values == null && Values == other.Values)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Values.Length - other.Values.Length;
-                for (var i = 0; i < Values.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += (int)(Values[i] - other.Values[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type MaxStaminaTable.", nameof(obj));
             }
-            return diff;
+            var diff = 0;
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(ExperienceModelId, other.ExperienceModelId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(Values, other.Values);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

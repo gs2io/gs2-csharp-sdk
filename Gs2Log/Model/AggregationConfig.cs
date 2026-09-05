@@ -83,24 +83,26 @@ namespace Gs2.Gs2Log.Model
         public int CompareTo(object obj)
         {
             var other = obj as AggregationConfig;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type AggregationConfig.", nameof(obj));
+            }
             var diff = 0;
-            if (Type == null && Type == other.Type)
+            diff = ModelComparer.Compare(Type, other.Type);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Field, other.Field);
+            if (diff != 0)
             {
-                diff += Type.CompareTo(other.Type);
+                return diff;
             }
-            if (Field == null && Field == other.Field)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Field.CompareTo(other.Field);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

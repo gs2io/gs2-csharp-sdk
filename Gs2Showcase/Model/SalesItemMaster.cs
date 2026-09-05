@@ -293,100 +293,66 @@ namespace Gs2.Gs2Showcase.Model
         public int CompareTo(object obj)
         {
             var other = obj as SalesItemMaster;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type SalesItemMaster.", nameof(obj));
+            }
             var diff = 0;
-            if (SalesItemId == null && SalesItemId == other.SalesItemId)
+            diff = ModelComparer.Compare(SalesItemId, other.SalesItemId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += SalesItemId.CompareTo(other.SalesItemId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Description == null && Description == other.Description)
+            diff = ModelComparer.CompareArray(VerifyActions, other.VerifyActions);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(ConsumeActions, other.ConsumeActions);
+            if (diff != 0)
             {
-                diff += Description.CompareTo(other.Description);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
+            diff = ModelComparer.CompareArray(AcquireActions, other.AcquireActions);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += Metadata.CompareTo(other.Metadata);
+                return diff;
             }
-            if (VerifyActions == null && VerifyActions == other.VerifyActions)
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += VerifyActions.Length - other.VerifyActions.Length;
-                for (var i = 0; i < VerifyActions.Length; i++)
-                {
-                    diff += VerifyActions[i].CompareTo(other.VerifyActions[i]);
-                }
+                return diff;
             }
-            if (ConsumeActions == null && ConsumeActions == other.ConsumeActions)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ConsumeActions.Length - other.ConsumeActions.Length;
-                for (var i = 0; i < ConsumeActions.Length; i++)
-                {
-                    diff += ConsumeActions[i].CompareTo(other.ConsumeActions[i]);
-                }
-            }
-            if (AcquireActions == null && AcquireActions == other.AcquireActions)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += AcquireActions.Length - other.AcquireActions.Length;
-                for (var i = 0; i < AcquireActions.Length; i++)
-                {
-                    diff += AcquireActions[i].CompareTo(other.AcquireActions[i]);
-                }
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

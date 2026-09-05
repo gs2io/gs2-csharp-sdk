@@ -231,64 +231,46 @@ namespace Gs2.Gs2Enchant.Model
         public int CompareTo(object obj)
         {
             var other = obj as RarityParameterModel;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type RarityParameterModel.", nameof(obj));
+            }
             var diff = 0;
-            if (RarityParameterModelId == null && RarityParameterModelId == other.RarityParameterModelId)
+            diff = ModelComparer.Compare(RarityParameterModelId, other.RarityParameterModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += RarityParameterModelId.CompareTo(other.RarityParameterModelId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(MaximumParameterCount, other.MaximumParameterCount);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
+            diff = ModelComparer.CompareArray(ParameterCounts, other.ParameterCounts);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(Parameters, other.Parameters);
+            if (diff != 0)
             {
-                diff += Metadata.CompareTo(other.Metadata);
+                return diff;
             }
-            if (MaximumParameterCount == null && MaximumParameterCount == other.MaximumParameterCount)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(MaximumParameterCount - other.MaximumParameterCount);
-            }
-            if (ParameterCounts == null && ParameterCounts == other.ParameterCounts)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ParameterCounts.Length - other.ParameterCounts.Length;
-                for (var i = 0; i < ParameterCounts.Length; i++)
-                {
-                    diff += ParameterCounts[i].CompareTo(other.ParameterCounts[i]);
-                }
-            }
-            if (Parameters == null && Parameters == other.Parameters)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Parameters.Length - other.Parameters.Length;
-                for (var i = 0; i < Parameters.Length; i++)
-                {
-                    diff += Parameters[i].CompareTo(other.Parameters[i]);
-                }
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

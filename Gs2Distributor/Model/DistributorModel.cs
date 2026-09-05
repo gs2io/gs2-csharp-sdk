@@ -202,52 +202,41 @@ namespace Gs2.Gs2Distributor.Model
         public int CompareTo(object obj)
         {
             var other = obj as DistributorModel;
-            var diff = 0;
-            if (DistributorModelId == null && DistributorModelId == other.DistributorModelId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += DistributorModelId.CompareTo(other.DistributorModelId);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (InboxNamespaceId == null && InboxNamespaceId == other.InboxNamespaceId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += InboxNamespaceId.CompareTo(other.InboxNamespaceId);
-            }
-            if (WhiteListTargetIds == null && WhiteListTargetIds == other.WhiteListTargetIds)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += WhiteListTargetIds.Length - other.WhiteListTargetIds.Length;
-                for (var i = 0; i < WhiteListTargetIds.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += WhiteListTargetIds[i].CompareTo(other.WhiteListTargetIds[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type DistributorModel.", nameof(obj));
             }
-            return diff;
+            var diff = 0;
+            diff = ModelComparer.Compare(DistributorModelId, other.DistributorModelId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(InboxNamespaceId, other.InboxNamespaceId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(WhiteListTargetIds, other.WhiteListTargetIds);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

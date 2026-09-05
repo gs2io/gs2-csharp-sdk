@@ -245,80 +245,61 @@ namespace Gs2.Gs2JobQueue.Model
         public int CompareTo(object obj)
         {
             var other = obj as Job;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Job.", nameof(obj));
+            }
             var diff = 0;
-            if (JobId == null && JobId == other.JobId)
+            diff = ModelComparer.Compare(JobId, other.JobId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += JobId.CompareTo(other.JobId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ScriptId, other.ScriptId);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(Args, other.Args);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CurrentRetryCount, other.CurrentRetryCount);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (ScriptId == null && ScriptId == other.ScriptId)
+            diff = ModelComparer.Compare(MaxTryCount, other.MaxTryCount);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += ScriptId.CompareTo(other.ScriptId);
+                return diff;
             }
-            if (Args == null && Args == other.Args)
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += Args.CompareTo(other.Args);
-            }
-            if (CurrentRetryCount == null && CurrentRetryCount == other.CurrentRetryCount)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CurrentRetryCount - other.CurrentRetryCount);
-            }
-            if (MaxTryCount == null && MaxTryCount == other.MaxTryCount)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(MaxTryCount - other.MaxTryCount);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

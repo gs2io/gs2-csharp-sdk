@@ -285,100 +285,71 @@ namespace Gs2.Gs2Datastore.Model
         public int CompareTo(object obj)
         {
             var other = obj as DataObject;
-            var diff = 0;
-            if (DataObjectId == null && DataObjectId == other.DataObjectId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += DataObjectId.CompareTo(other.DataObjectId);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (UserId == null && UserId == other.UserId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UserId.CompareTo(other.UserId);
-            }
-            if (Scope == null && Scope == other.Scope)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Scope.CompareTo(other.Scope);
-            }
-            if (AllowUserIds == null && AllowUserIds == other.AllowUserIds)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += AllowUserIds.Length - other.AllowUserIds.Length;
-                for (var i = 0; i < AllowUserIds.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += AllowUserIds[i].CompareTo(other.AllowUserIds[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type DataObject.", nameof(obj));
             }
-            if (Status == null && Status == other.Status)
+            var diff = 0;
+            diff = ModelComparer.Compare(DataObjectId, other.DataObjectId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += Status.CompareTo(other.Status);
+                return diff;
             }
-            if (Generation == null && Generation == other.Generation)
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Scope, other.Scope);
+            if (diff != 0)
             {
-                diff += Generation.CompareTo(other.Generation);
+                return diff;
             }
-            if (PreviousGeneration == null && PreviousGeneration == other.PreviousGeneration)
+            diff = ModelComparer.CompareArray(AllowUserIds, other.AllowUserIds);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Status, other.Status);
+            if (diff != 0)
             {
-                diff += PreviousGeneration.CompareTo(other.PreviousGeneration);
+                return diff;
             }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
+            diff = ModelComparer.Compare(Generation, other.Generation);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(PreviousGeneration, other.PreviousGeneration);
+            if (diff != 0)
             {
-                diff += (int)(CreatedAt - other.CreatedAt);
+                return diff;
             }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
+                return diff;
             }
-            if (Revision == null && Revision == other.Revision)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

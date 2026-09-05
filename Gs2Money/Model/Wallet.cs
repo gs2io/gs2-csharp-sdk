@@ -274,92 +274,66 @@ namespace Gs2.Gs2Money.Model
         public int CompareTo(object obj)
         {
             var other = obj as Wallet;
-            var diff = 0;
-            if (WalletId == null && WalletId == other.WalletId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += WalletId.CompareTo(other.WalletId);
-            }
-            if (UserId == null && UserId == other.UserId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UserId.CompareTo(other.UserId);
-            }
-            if (Slot == null && Slot == other.Slot)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Slot - other.Slot);
-            }
-            if (Paid == null && Paid == other.Paid)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Paid - other.Paid);
-            }
-            if (Free == null && Free == other.Free)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Free - other.Free);
-            }
-            if (Detail == null && Detail == other.Detail)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Detail.Length - other.Detail.Length;
-                for (var i = 0; i < Detail.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += Detail[i].CompareTo(other.Detail[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type Wallet.", nameof(obj));
             }
-            if (ShareFree == null && ShareFree == other.ShareFree)
+            var diff = 0;
+            diff = ModelComparer.Compare(WalletId, other.WalletId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += ShareFree == other.ShareFree ? 0 : 1;
+                return diff;
             }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
+            diff = ModelComparer.Compare(Slot, other.Slot);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Paid, other.Paid);
+            if (diff != 0)
             {
-                diff += (int)(CreatedAt - other.CreatedAt);
+                return diff;
             }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
+            diff = ModelComparer.Compare(Free, other.Free);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(Detail, other.Detail);
+            if (diff != 0)
             {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
+                return diff;
             }
-            if (Revision == null && Revision == other.Revision)
+            diff = ModelComparer.Compare(ShareFree, other.ShareFree);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += (int)(Revision - other.Revision);
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

@@ -354,184 +354,126 @@ namespace Gs2.Gs2Friend.Model
         public int CompareTo(object obj)
         {
             var other = obj as Namespace;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Namespace.", nameof(obj));
+            }
             var diff = 0;
-            if (NamespaceId == null && NamespaceId == other.NamespaceId)
+            diff = ModelComparer.Compare(NamespaceId, other.NamespaceId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += NamespaceId.CompareTo(other.NamespaceId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TransactionSetting, other.TransactionSetting);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Description == null && Description == other.Description)
+            diff = ModelComparer.Compare(FollowScript, other.FollowScript);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UnfollowScript, other.UnfollowScript);
+            if (diff != 0)
             {
-                diff += Description.CompareTo(other.Description);
+                return diff;
             }
-            if (TransactionSetting == null && TransactionSetting == other.TransactionSetting)
+            diff = ModelComparer.Compare(SendRequestScript, other.SendRequestScript);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CancelRequestScript, other.CancelRequestScript);
+            if (diff != 0)
             {
-                diff += TransactionSetting.CompareTo(other.TransactionSetting);
+                return diff;
             }
-            if (FollowScript == null && FollowScript == other.FollowScript)
+            diff = ModelComparer.Compare(AcceptRequestScript, other.AcceptRequestScript);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(RejectRequestScript, other.RejectRequestScript);
+            if (diff != 0)
             {
-                diff += FollowScript.CompareTo(other.FollowScript);
+                return diff;
             }
-            if (UnfollowScript == null && UnfollowScript == other.UnfollowScript)
+            diff = ModelComparer.Compare(DeleteFriendScript, other.DeleteFriendScript);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdateProfileScript, other.UpdateProfileScript);
+            if (diff != 0)
             {
-                diff += UnfollowScript.CompareTo(other.UnfollowScript);
+                return diff;
             }
-            if (SendRequestScript == null && SendRequestScript == other.SendRequestScript)
+            diff = ModelComparer.Compare(FollowNotification, other.FollowNotification);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ReceiveRequestNotification, other.ReceiveRequestNotification);
+            if (diff != 0)
             {
-                diff += SendRequestScript.CompareTo(other.SendRequestScript);
+                return diff;
             }
-            if (CancelRequestScript == null && CancelRequestScript == other.CancelRequestScript)
+            diff = ModelComparer.Compare(CancelRequestNotification, other.CancelRequestNotification);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(AcceptRequestNotification, other.AcceptRequestNotification);
+            if (diff != 0)
             {
-                diff += CancelRequestScript.CompareTo(other.CancelRequestScript);
+                return diff;
             }
-            if (AcceptRequestScript == null && AcceptRequestScript == other.AcceptRequestScript)
+            diff = ModelComparer.Compare(RejectRequestNotification, other.RejectRequestNotification);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(DeleteFriendNotification, other.DeleteFriendNotification);
+            if (diff != 0)
             {
-                diff += AcceptRequestScript.CompareTo(other.AcceptRequestScript);
+                return diff;
             }
-            if (RejectRequestScript == null && RejectRequestScript == other.RejectRequestScript)
+            diff = ModelComparer.Compare(LogSetting, other.LogSetting);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += RejectRequestScript.CompareTo(other.RejectRequestScript);
+                return diff;
             }
-            if (DeleteFriendScript == null && DeleteFriendScript == other.DeleteFriendScript)
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += DeleteFriendScript.CompareTo(other.DeleteFriendScript);
+                return diff;
             }
-            if (UpdateProfileScript == null && UpdateProfileScript == other.UpdateProfileScript)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UpdateProfileScript.CompareTo(other.UpdateProfileScript);
-            }
-            if (FollowNotification == null && FollowNotification == other.FollowNotification)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += FollowNotification.CompareTo(other.FollowNotification);
-            }
-            if (ReceiveRequestNotification == null && ReceiveRequestNotification == other.ReceiveRequestNotification)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ReceiveRequestNotification.CompareTo(other.ReceiveRequestNotification);
-            }
-            if (CancelRequestNotification == null && CancelRequestNotification == other.CancelRequestNotification)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += CancelRequestNotification.CompareTo(other.CancelRequestNotification);
-            }
-            if (AcceptRequestNotification == null && AcceptRequestNotification == other.AcceptRequestNotification)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += AcceptRequestNotification.CompareTo(other.AcceptRequestNotification);
-            }
-            if (RejectRequestNotification == null && RejectRequestNotification == other.RejectRequestNotification)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += RejectRequestNotification.CompareTo(other.RejectRequestNotification);
-            }
-            if (DeleteFriendNotification == null && DeleteFriendNotification == other.DeleteFriendNotification)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += DeleteFriendNotification.CompareTo(other.DeleteFriendNotification);
-            }
-            if (LogSetting == null && LogSetting == other.LogSetting)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += LogSetting.CompareTo(other.LogSetting);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

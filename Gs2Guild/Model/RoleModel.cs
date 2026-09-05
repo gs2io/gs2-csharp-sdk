@@ -94,32 +94,31 @@ namespace Gs2.Gs2Guild.Model
         public int CompareTo(object obj)
         {
             var other = obj as RoleModel;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type RoleModel.", nameof(obj));
+            }
             var diff = 0;
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
+            diff = ModelComparer.Compare(PolicyDocument, other.PolicyDocument);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (PolicyDocument == null && PolicyDocument == other.PolicyDocument)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += PolicyDocument.CompareTo(other.PolicyDocument);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

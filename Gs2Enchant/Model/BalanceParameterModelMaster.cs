@@ -257,92 +257,66 @@ namespace Gs2.Gs2Enchant.Model
         public int CompareTo(object obj)
         {
             var other = obj as BalanceParameterModelMaster;
-            var diff = 0;
-            if (BalanceParameterModelId == null && BalanceParameterModelId == other.BalanceParameterModelId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += BalanceParameterModelId.CompareTo(other.BalanceParameterModelId);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (Description == null && Description == other.Description)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Description.CompareTo(other.Description);
-            }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (TotalValue == null && TotalValue == other.TotalValue)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(TotalValue - other.TotalValue);
-            }
-            if (InitialValueStrategy == null && InitialValueStrategy == other.InitialValueStrategy)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += InitialValueStrategy.CompareTo(other.InitialValueStrategy);
-            }
-            if (Parameters == null && Parameters == other.Parameters)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Parameters.Length - other.Parameters.Length;
-                for (var i = 0; i < Parameters.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += Parameters[i].CompareTo(other.Parameters[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type BalanceParameterModelMaster.", nameof(obj));
             }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
+            var diff = 0;
+            diff = ModelComparer.Compare(BalanceParameterModelId, other.BalanceParameterModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += (int)(CreatedAt - other.CreatedAt);
+                return diff;
             }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
+                return diff;
             }
-            if (Revision == null && Revision == other.Revision)
+            diff = ModelComparer.Compare(TotalValue, other.TotalValue);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(InitialValueStrategy, other.InitialValueStrategy);
+            if (diff != 0)
             {
-                diff += (int)(Revision - other.Revision);
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.CompareArray(Parameters, other.Parameters);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

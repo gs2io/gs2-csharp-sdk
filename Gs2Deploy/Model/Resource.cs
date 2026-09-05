@@ -286,104 +286,71 @@ namespace Gs2.Gs2Deploy.Model
         public int CompareTo(object obj)
         {
             var other = obj as Resource;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Resource.", nameof(obj));
+            }
             var diff = 0;
-            if (ResourceId == null && ResourceId == other.ResourceId)
+            diff = ModelComparer.Compare(ResourceId, other.ResourceId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Type, other.Type);
+            if (diff != 0)
             {
-                diff += ResourceId.CompareTo(other.ResourceId);
+                return diff;
             }
-            if (Type == null && Type == other.Type)
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Request, other.Request);
+            if (diff != 0)
             {
-                diff += Type.CompareTo(other.Type);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Response, other.Response);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(RollbackContext, other.RollbackContext);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Request == null && Request == other.Request)
+            diff = ModelComparer.Compare(RollbackRequest, other.RollbackRequest);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(RollbackAfter, other.RollbackAfter);
+            if (diff != 0)
             {
-                diff += Request.CompareTo(other.Request);
+                return diff;
             }
-            if (Response == null && Response == other.Response)
+            diff = ModelComparer.CompareArray(OutputFields, other.OutputFields);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(WorkId, other.WorkId);
+            if (diff != 0)
             {
-                diff += Response.CompareTo(other.Response);
+                return diff;
             }
-            if (RollbackContext == null && RollbackContext == other.RollbackContext)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += RollbackContext.CompareTo(other.RollbackContext);
-            }
-            if (RollbackRequest == null && RollbackRequest == other.RollbackRequest)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += RollbackRequest.CompareTo(other.RollbackRequest);
-            }
-            if (RollbackAfter == null && RollbackAfter == other.RollbackAfter)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += RollbackAfter.Length - other.RollbackAfter.Length;
-                for (var i = 0; i < RollbackAfter.Length; i++)
-                {
-                    diff += RollbackAfter[i].CompareTo(other.RollbackAfter[i]);
-                }
-            }
-            if (OutputFields == null && OutputFields == other.OutputFields)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += OutputFields.Length - other.OutputFields.Length;
-                for (var i = 0; i < OutputFields.Length; i++)
-                {
-                    diff += OutputFields[i].CompareTo(other.OutputFields[i]);
-                }
-            }
-            if (WorkId == null && WorkId == other.WorkId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += WorkId.CompareTo(other.WorkId);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

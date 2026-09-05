@@ -116,48 +116,41 @@ namespace Gs2.Gs2Showcase.Model
         public int CompareTo(object obj)
         {
             var other = obj as DisplayItem;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type DisplayItem.", nameof(obj));
+            }
             var diff = 0;
-            if (DisplayItemId == null && DisplayItemId == other.DisplayItemId)
+            diff = ModelComparer.Compare(DisplayItemId, other.DisplayItemId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Type, other.Type);
+            if (diff != 0)
             {
-                diff += DisplayItemId.CompareTo(other.DisplayItemId);
+                return diff;
             }
-            if (Type == null && Type == other.Type)
+            diff = ModelComparer.Compare(SalesItem, other.SalesItem);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(SalesItemGroup, other.SalesItemGroup);
+            if (diff != 0)
             {
-                diff += Type.CompareTo(other.Type);
+                return diff;
             }
-            if (SalesItem == null && SalesItem == other.SalesItem)
+            diff = ModelComparer.Compare(SalesPeriodEventId, other.SalesPeriodEventId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += SalesItem.CompareTo(other.SalesItem);
-            }
-            if (SalesItemGroup == null && SalesItemGroup == other.SalesItemGroup)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += SalesItemGroup.CompareTo(other.SalesItemGroup);
-            }
-            if (SalesPeriodEventId == null && SalesPeriodEventId == other.SalesPeriodEventId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += SalesPeriodEventId.CompareTo(other.SalesPeriodEventId);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

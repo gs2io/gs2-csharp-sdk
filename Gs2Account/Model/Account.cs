@@ -246,84 +246,61 @@ namespace Gs2.Gs2Account.Model
         public int CompareTo(object obj)
         {
             var other = obj as Account;
-            var diff = 0;
-            if (AccountId == null && AccountId == other.AccountId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += AccountId.CompareTo(other.AccountId);
-            }
-            if (UserId == null && UserId == other.UserId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UserId.CompareTo(other.UserId);
-            }
-            if (Password == null && Password == other.Password)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Password.CompareTo(other.Password);
-            }
-            if (TimeOffset == null && TimeOffset == other.TimeOffset)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(TimeOffset - other.TimeOffset);
-            }
-            if (BanStatuses == null && BanStatuses == other.BanStatuses)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += BanStatuses.Length - other.BanStatuses.Length;
-                for (var i = 0; i < BanStatuses.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += BanStatuses[i].CompareTo(other.BanStatuses[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type Account.", nameof(obj));
             }
-            if (Banned == null && Banned == other.Banned)
+            var diff = 0;
+            diff = ModelComparer.Compare(AccountId, other.AccountId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += Banned == other.Banned ? 0 : 1;
+                return diff;
             }
-            if (LastAuthenticatedAt == null && LastAuthenticatedAt == other.LastAuthenticatedAt)
+            diff = ModelComparer.Compare(Password, other.Password);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TimeOffset, other.TimeOffset);
+            if (diff != 0)
             {
-                diff += (int)(LastAuthenticatedAt - other.LastAuthenticatedAt);
+                return diff;
             }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
+            diff = ModelComparer.CompareArray(BanStatuses, other.BanStatuses);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Banned, other.Banned);
+            if (diff != 0)
             {
-                diff += (int)(CreatedAt - other.CreatedAt);
+                return diff;
             }
-            if (Revision == null && Revision == other.Revision)
+            diff = ModelComparer.Compare(LastAuthenticatedAt, other.LastAuthenticatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += (int)(Revision - other.Revision);
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

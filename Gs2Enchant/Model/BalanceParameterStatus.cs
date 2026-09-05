@@ -269,76 +269,56 @@ namespace Gs2.Gs2Enchant.Model
         public int CompareTo(object obj)
         {
             var other = obj as BalanceParameterStatus;
-            var diff = 0;
-            if (BalanceParameterStatusId == null && BalanceParameterStatusId == other.BalanceParameterStatusId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += BalanceParameterStatusId.CompareTo(other.BalanceParameterStatusId);
-            }
-            if (UserId == null && UserId == other.UserId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UserId.CompareTo(other.UserId);
-            }
-            if (ParameterName == null && ParameterName == other.ParameterName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ParameterName.CompareTo(other.ParameterName);
-            }
-            if (PropertyId == null && PropertyId == other.PropertyId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += PropertyId.CompareTo(other.PropertyId);
-            }
-            if (ParameterValues == null && ParameterValues == other.ParameterValues)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ParameterValues.Length - other.ParameterValues.Length;
-                for (var i = 0; i < ParameterValues.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += ParameterValues[i].CompareTo(other.ParameterValues[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type BalanceParameterStatus.", nameof(obj));
             }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
+            var diff = 0;
+            diff = ModelComparer.Compare(BalanceParameterStatusId, other.BalanceParameterStatusId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += (int)(CreatedAt - other.CreatedAt);
+                return diff;
             }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
+            diff = ModelComparer.Compare(ParameterName, other.ParameterName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(PropertyId, other.PropertyId);
+            if (diff != 0)
             {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
+                return diff;
             }
-            if (Revision == null && Revision == other.Revision)
+            diff = ModelComparer.CompareArray(ParameterValues, other.ParameterValues);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += (int)(Revision - other.Revision);
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

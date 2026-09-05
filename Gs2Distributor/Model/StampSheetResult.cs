@@ -471,152 +471,91 @@ namespace Gs2.Gs2Distributor.Model
         public int CompareTo(object obj)
         {
             var other = obj as StampSheetResult;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type StampSheetResult.", nameof(obj));
+            }
             var diff = 0;
-            if (StampSheetResultId == null && StampSheetResultId == other.StampSheetResultId)
+            diff = ModelComparer.Compare(StampSheetResultId, other.StampSheetResultId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += StampSheetResultId.CompareTo(other.StampSheetResultId);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(TransactionId, other.TransactionId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(VerifyTaskRequests, other.VerifyTaskRequests);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (TransactionId == null && TransactionId == other.TransactionId)
+            diff = ModelComparer.CompareArray(TaskRequests, other.TaskRequests);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(SheetRequest, other.SheetRequest);
+            if (diff != 0)
             {
-                diff += TransactionId.CompareTo(other.TransactionId);
+                return diff;
             }
-            if (VerifyTaskRequests == null && VerifyTaskRequests == other.VerifyTaskRequests)
+            diff = ModelComparer.CompareArray(VerifyTaskResultCodes, other.VerifyTaskResultCodes);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(VerifyTaskResults, other.VerifyTaskResults);
+            if (diff != 0)
             {
-                diff += VerifyTaskRequests.Length - other.VerifyTaskRequests.Length;
-                for (var i = 0; i < VerifyTaskRequests.Length; i++)
-                {
-                    diff += VerifyTaskRequests[i].CompareTo(other.VerifyTaskRequests[i]);
-                }
+                return diff;
             }
-            if (TaskRequests == null && TaskRequests == other.TaskRequests)
+            diff = ModelComparer.CompareArray(TaskResultCodes, other.TaskResultCodes);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(TaskResults, other.TaskResults);
+            if (diff != 0)
             {
-                diff += TaskRequests.Length - other.TaskRequests.Length;
-                for (var i = 0; i < TaskRequests.Length; i++)
-                {
-                    diff += TaskRequests[i].CompareTo(other.TaskRequests[i]);
-                }
+                return diff;
             }
-            if (SheetRequest == null && SheetRequest == other.SheetRequest)
+            diff = ModelComparer.Compare(SheetResultCode, other.SheetResultCode);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(SheetResult, other.SheetResult);
+            if (diff != 0)
             {
-                diff += SheetRequest.CompareTo(other.SheetRequest);
+                return diff;
             }
-            if (VerifyTaskResultCodes == null && VerifyTaskResultCodes == other.VerifyTaskResultCodes)
+            diff = ModelComparer.Compare(NextTransactionId, other.NextTransactionId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += VerifyTaskResultCodes.Length - other.VerifyTaskResultCodes.Length;
-                for (var i = 0; i < VerifyTaskResultCodes.Length; i++)
-                {
-                    diff += (int)(VerifyTaskResultCodes[i] - other.VerifyTaskResultCodes[i]);
-                }
+                return diff;
             }
-            if (VerifyTaskResults == null && VerifyTaskResults == other.VerifyTaskResults)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += VerifyTaskResults.Length - other.VerifyTaskResults.Length;
-                for (var i = 0; i < VerifyTaskResults.Length; i++)
-                {
-                    diff += VerifyTaskResults[i].CompareTo(other.VerifyTaskResults[i]);
-                }
-            }
-            if (TaskResultCodes == null && TaskResultCodes == other.TaskResultCodes)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += TaskResultCodes.Length - other.TaskResultCodes.Length;
-                for (var i = 0; i < TaskResultCodes.Length; i++)
-                {
-                    diff += (int)(TaskResultCodes[i] - other.TaskResultCodes[i]);
-                }
-            }
-            if (TaskResults == null && TaskResults == other.TaskResults)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += TaskResults.Length - other.TaskResults.Length;
-                for (var i = 0; i < TaskResults.Length; i++)
-                {
-                    diff += TaskResults[i].CompareTo(other.TaskResults[i]);
-                }
-            }
-            if (SheetResultCode == null && SheetResultCode == other.SheetResultCode)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(SheetResultCode - other.SheetResultCode);
-            }
-            if (SheetResult == null && SheetResult == other.SheetResult)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += SheetResult.CompareTo(other.SheetResult);
-            }
-            if (NextTransactionId == null && NextTransactionId == other.NextTransactionId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += NextTransactionId.CompareTo(other.NextTransactionId);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

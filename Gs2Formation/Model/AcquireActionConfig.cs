@@ -98,28 +98,26 @@ namespace Gs2.Gs2Formation.Model
         public int CompareTo(object obj)
         {
             var other = obj as AcquireActionConfig;
-            var diff = 0;
-            if (Name == null && Name == other.Name)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (Config == null && Config == other.Config)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Config.Length - other.Config.Length;
-                for (var i = 0; i < Config.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += Config[i].CompareTo(other.Config[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type AcquireActionConfig.", nameof(obj));
             }
-            return diff;
+            var diff = 0;
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(Config, other.Config);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
     }
 }

@@ -101,28 +101,26 @@ namespace Gs2.Gs2StateMachine.Model
         public int CompareTo(object obj)
         {
             var other = obj as RandomStatus;
-            var diff = 0;
-            if (Seed == null && Seed == other.Seed)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Seed - other.Seed);
-            }
-            if (Used == null && Used == other.Used)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Used.Length - other.Used.Length;
-                for (var i = 0; i < Used.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += Used[i].CompareTo(other.Used[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type RandomStatus.", nameof(obj));
             }
-            return diff;
+            var diff = 0;
+            diff = ModelComparer.Compare(Seed, other.Seed);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(Used, other.Used);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

@@ -83,24 +83,26 @@ namespace Gs2.Gs2Ranking.Model
         public int CompareTo(object obj)
         {
             var other = obj as Scope;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Scope.", nameof(obj));
+            }
             var diff = 0;
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TargetDays, other.TargetDays);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (TargetDays == null && TargetDays == other.TargetDays)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(TargetDays - other.TargetDays);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

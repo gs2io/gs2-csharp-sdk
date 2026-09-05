@@ -33,7 +33,6 @@ namespace Gs2.Core.Domain
             else
             {
                 Current = default;
-                Error = default;
             }
         }
     }

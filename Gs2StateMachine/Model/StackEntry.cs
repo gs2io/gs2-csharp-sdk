@@ -83,24 +83,26 @@ namespace Gs2.Gs2StateMachine.Model
         public int CompareTo(object obj)
         {
             var other = obj as StackEntry;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type StackEntry.", nameof(obj));
+            }
             var diff = 0;
-            if (StateMachineName == null && StateMachineName == other.StateMachineName)
+            diff = ModelComparer.Compare(StateMachineName, other.StateMachineName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TaskName, other.TaskName);
+            if (diff != 0)
             {
-                diff += StateMachineName.CompareTo(other.StateMachineName);
+                return diff;
             }
-            if (TaskName == null && TaskName == other.TaskName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += TaskName.CompareTo(other.TaskName);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

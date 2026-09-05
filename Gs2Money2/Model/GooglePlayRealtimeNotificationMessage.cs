@@ -94,32 +94,31 @@ namespace Gs2.Gs2Money2.Model
         public int CompareTo(object obj)
         {
             var other = obj as GooglePlayRealtimeNotificationMessage;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type GooglePlayRealtimeNotificationMessage.", nameof(obj));
+            }
             var diff = 0;
-            if (Data == null && Data == other.Data)
+            diff = ModelComparer.Compare(Data, other.Data);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(MessageId, other.MessageId);
+            if (diff != 0)
             {
-                diff += Data.CompareTo(other.Data);
+                return diff;
             }
-            if (MessageId == null && MessageId == other.MessageId)
+            diff = ModelComparer.Compare(PublishTime, other.PublishTime);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += MessageId.CompareTo(other.MessageId);
-            }
-            if (PublishTime == null && PublishTime == other.PublishTime)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += PublishTime.CompareTo(other.PublishTime);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

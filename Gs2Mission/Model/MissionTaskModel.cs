@@ -317,112 +317,76 @@ namespace Gs2.Gs2Mission.Model
         public int CompareTo(object obj)
         {
             var other = obj as MissionTaskModel;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type MissionTaskModel.", nameof(obj));
+            }
             var diff = 0;
-            if (MissionTaskId == null && MissionTaskId == other.MissionTaskId)
+            diff = ModelComparer.Compare(MissionTaskId, other.MissionTaskId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += MissionTaskId.CompareTo(other.MissionTaskId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(VerifyCompleteType, other.VerifyCompleteType);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
+            diff = ModelComparer.Compare(TargetCounter, other.TargetCounter);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(VerifyCompleteConsumeActions, other.VerifyCompleteConsumeActions);
+            if (diff != 0)
             {
-                diff += Metadata.CompareTo(other.Metadata);
+                return diff;
             }
-            if (VerifyCompleteType == null && VerifyCompleteType == other.VerifyCompleteType)
+            diff = ModelComparer.CompareArray(CompleteAcquireActions, other.CompleteAcquireActions);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ChallengePeriodEventId, other.ChallengePeriodEventId);
+            if (diff != 0)
             {
-                diff += VerifyCompleteType.CompareTo(other.VerifyCompleteType);
+                return diff;
             }
-            if (TargetCounter == null && TargetCounter == other.TargetCounter)
+            diff = ModelComparer.Compare(PremiseMissionTaskName, other.PremiseMissionTaskName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CounterName, other.CounterName);
+            if (diff != 0)
             {
-                diff += TargetCounter.CompareTo(other.TargetCounter);
+                return diff;
             }
-            if (VerifyCompleteConsumeActions == null && VerifyCompleteConsumeActions == other.VerifyCompleteConsumeActions)
+            diff = ModelComparer.Compare(TargetResetType, other.TargetResetType);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TargetValue, other.TargetValue);
+            if (diff != 0)
             {
-                diff += VerifyCompleteConsumeActions.Length - other.VerifyCompleteConsumeActions.Length;
-                for (var i = 0; i < VerifyCompleteConsumeActions.Length; i++)
-                {
-                    diff += VerifyCompleteConsumeActions[i].CompareTo(other.VerifyCompleteConsumeActions[i]);
-                }
+                return diff;
             }
-            if (CompleteAcquireActions == null && CompleteAcquireActions == other.CompleteAcquireActions)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += CompleteAcquireActions.Length - other.CompleteAcquireActions.Length;
-                for (var i = 0; i < CompleteAcquireActions.Length; i++)
-                {
-                    diff += CompleteAcquireActions[i].CompareTo(other.CompleteAcquireActions[i]);
-                }
-            }
-            if (ChallengePeriodEventId == null && ChallengePeriodEventId == other.ChallengePeriodEventId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ChallengePeriodEventId.CompareTo(other.ChallengePeriodEventId);
-            }
-            if (PremiseMissionTaskName == null && PremiseMissionTaskName == other.PremiseMissionTaskName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += PremiseMissionTaskName.CompareTo(other.PremiseMissionTaskName);
-            }
-            if (CounterName == null && CounterName == other.CounterName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += CounterName.CompareTo(other.CounterName);
-            }
-            if (TargetResetType == null && TargetResetType == other.TargetResetType)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += TargetResetType.CompareTo(other.TargetResetType);
-            }
-            if (TargetValue == null && TargetValue == other.TargetValue)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(TargetValue - other.TargetValue);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

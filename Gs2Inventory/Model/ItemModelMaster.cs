@@ -267,96 +267,71 @@ namespace Gs2.Gs2Inventory.Model
         public int CompareTo(object obj)
         {
             var other = obj as ItemModelMaster;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type ItemModelMaster.", nameof(obj));
+            }
             var diff = 0;
-            if (ItemModelId == null && ItemModelId == other.ItemModelId)
+            diff = ModelComparer.Compare(ItemModelId, other.ItemModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(InventoryName, other.InventoryName);
+            if (diff != 0)
             {
-                diff += ItemModelId.CompareTo(other.ItemModelId);
+                return diff;
             }
-            if (InventoryName == null && InventoryName == other.InventoryName)
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                diff += InventoryName.CompareTo(other.InventoryName);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(StackingLimit, other.StackingLimit);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Description == null && Description == other.Description)
+            diff = ModelComparer.Compare(AllowMultipleStacks, other.AllowMultipleStacks);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(SortValue, other.SortValue);
+            if (diff != 0)
             {
-                diff += Description.CompareTo(other.Description);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += Metadata.CompareTo(other.Metadata);
+                return diff;
             }
-            if (StackingLimit == null && StackingLimit == other.StackingLimit)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += (int)(StackingLimit - other.StackingLimit);
-            }
-            if (AllowMultipleStacks == null && AllowMultipleStacks == other.AllowMultipleStacks)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += AllowMultipleStacks == other.AllowMultipleStacks ? 0 : 1;
-            }
-            if (SortValue == null && SortValue == other.SortValue)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(SortValue - other.SortValue);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

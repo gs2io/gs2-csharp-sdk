@@ -272,112 +272,81 @@ namespace Gs2.Gs2Project.Model
         public int CompareTo(object obj)
         {
             var other = obj as Billing;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Billing.", nameof(obj));
+            }
             var diff = 0;
-            if (BillingId == null && BillingId == other.BillingId)
+            diff = ModelComparer.Compare(BillingId, other.BillingId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ProjectName, other.ProjectName);
+            if (diff != 0)
             {
-                diff += BillingId.CompareTo(other.BillingId);
+                return diff;
             }
-            if (ProjectName == null && ProjectName == other.ProjectName)
+            diff = ModelComparer.Compare(Year, other.Year);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Month, other.Month);
+            if (diff != 0)
             {
-                diff += ProjectName.CompareTo(other.ProjectName);
+                return diff;
             }
-            if (Year == null && Year == other.Year)
+            diff = ModelComparer.Compare(Region, other.Region);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Service, other.Service);
+            if (diff != 0)
             {
-                diff += (int)(Year - other.Year);
+                return diff;
             }
-            if (Month == null && Month == other.Month)
+            diff = ModelComparer.Compare(ActivityType, other.ActivityType);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Unit, other.Unit);
+            if (diff != 0)
             {
-                diff += (int)(Month - other.Month);
+                return diff;
             }
-            if (Region == null && Region == other.Region)
+            diff = ModelComparer.Compare(UnitName, other.UnitName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Price, other.Price);
+            if (diff != 0)
             {
-                diff += Region.CompareTo(other.Region);
+                return diff;
             }
-            if (Service == null && Service == other.Service)
+            diff = ModelComparer.Compare(Currency, other.Currency);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += Service.CompareTo(other.Service);
+                return diff;
             }
-            if (ActivityType == null && ActivityType == other.ActivityType)
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += ActivityType.CompareTo(other.ActivityType);
-            }
-            if (Unit == null && Unit == other.Unit)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Unit - other.Unit);
-            }
-            if (UnitName == null && UnitName == other.UnitName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UnitName.CompareTo(other.UnitName);
-            }
-            if (Price == null && Price == other.Price)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Price - other.Price);
-            }
-            if (Currency == null && Currency == other.Currency)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Currency.CompareTo(other.Currency);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

@@ -83,24 +83,26 @@ namespace Gs2.Gs2Version.Model
         public int CompareTo(object obj)
         {
             var other = obj as Status;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Status.", nameof(obj));
+            }
             var diff = 0;
-            if (VersionModel == null && VersionModel == other.VersionModel)
+            diff = ModelComparer.Compare(VersionModel, other.VersionModel);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CurrentVersion, other.CurrentVersion);
+            if (diff != 0)
             {
-                diff += VersionModel.CompareTo(other.VersionModel);
+                return diff;
             }
-            if (CurrentVersion == null && CurrentVersion == other.CurrentVersion)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += CurrentVersion.CompareTo(other.CurrentVersion);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

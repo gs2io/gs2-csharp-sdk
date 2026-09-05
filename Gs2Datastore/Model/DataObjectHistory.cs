@@ -229,56 +229,46 @@ namespace Gs2.Gs2Datastore.Model
         public int CompareTo(object obj)
         {
             var other = obj as DataObjectHistory;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type DataObjectHistory.", nameof(obj));
+            }
             var diff = 0;
-            if (DataObjectHistoryId == null && DataObjectHistoryId == other.DataObjectHistoryId)
+            diff = ModelComparer.Compare(DataObjectHistoryId, other.DataObjectHistoryId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(DataObjectName, other.DataObjectName);
+            if (diff != 0)
             {
-                diff += DataObjectHistoryId.CompareTo(other.DataObjectHistoryId);
+                return diff;
             }
-            if (DataObjectName == null && DataObjectName == other.DataObjectName)
+            diff = ModelComparer.Compare(Generation, other.Generation);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ContentLength, other.ContentLength);
+            if (diff != 0)
             {
-                diff += DataObjectName.CompareTo(other.DataObjectName);
+                return diff;
             }
-            if (Generation == null && Generation == other.Generation)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += Generation.CompareTo(other.Generation);
+                return diff;
             }
-            if (ContentLength == null && ContentLength == other.ContentLength)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(ContentLength - other.ContentLength);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

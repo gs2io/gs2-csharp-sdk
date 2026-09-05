@@ -101,28 +101,26 @@ namespace Gs2.Gs2SeasonRating.Model
         public int CompareTo(object obj)
         {
             var other = obj as WrittenBallot;
-            var diff = 0;
-            if (Ballot == null && Ballot == other.Ballot)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += Ballot.CompareTo(other.Ballot);
-            }
-            if (GameResults == null && GameResults == other.GameResults)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += GameResults.Length - other.GameResults.Length;
-                for (var i = 0; i < GameResults.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += GameResults[i].CompareTo(other.GameResults[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type WrittenBallot.", nameof(obj));
             }
-            return diff;
+            var diff = 0;
+            diff = ModelComparer.Compare(Ballot, other.Ballot);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(GameResults, other.GameResults);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

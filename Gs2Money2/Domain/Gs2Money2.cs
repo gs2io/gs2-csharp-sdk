@@ -528,7 +528,7 @@ namespace Gs2.Gs2Money2.Domain
         ) {
             switch (action) {
                 case "ChangeSubscriptionStatus": {
-                    var notification = ChangeSubscriptionStatus.FromJson(JsonMapper.ToObject(payload));
+                    var notification = NotificationPayload.Parse(payload, ChangeSubscriptionStatus.FromJson);
                     _gs2.Cache.ClearListCache<Gs2.Gs2Money2.Model.SubscriptionStatus>(
                         (null as Gs2.Gs2Money2.Model.SubscriptionStatus).CacheParentKey(
                             notification.NamespaceName,

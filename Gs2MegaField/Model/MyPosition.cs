@@ -94,32 +94,31 @@ namespace Gs2.Gs2MegaField.Model
         public int CompareTo(object obj)
         {
             var other = obj as MyPosition;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type MyPosition.", nameof(obj));
+            }
             var diff = 0;
-            if (Position == null && Position == other.Position)
+            diff = ModelComparer.Compare(Position, other.Position);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Vector, other.Vector);
+            if (diff != 0)
             {
-                diff += Position.CompareTo(other.Position);
+                return diff;
             }
-            if (Vector == null && Vector == other.Vector)
+            diff = ModelComparer.Compare(R, other.R);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += Vector.CompareTo(other.Vector);
-            }
-            if (R == null && R == other.R)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(R - other.R);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

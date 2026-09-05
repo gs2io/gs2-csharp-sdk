@@ -119,32 +119,26 @@ namespace Gs2.Gs2Log.Model
         public int CompareTo(object obj)
         {
             var other = obj as TimeseriesMetadata;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type TimeseriesMetadata.", nameof(obj));
+            }
             var diff = 0;
-            if (Keys == null && Keys == other.Keys)
+            diff = ModelComparer.CompareArray(Keys, other.Keys);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(GroupBy, other.GroupBy);
+            if (diff != 0)
             {
-                diff += Keys.Length - other.Keys.Length;
-                for (var i = 0; i < Keys.Length; i++)
-                {
-                    diff += Keys[i].CompareTo(other.Keys[i]);
-                }
+                return diff;
             }
-            if (GroupBy == null && GroupBy == other.GroupBy)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += GroupBy.Length - other.GroupBy.Length;
-                for (var i = 0; i < GroupBy.Length; i++)
-                {
-                    diff += GroupBy[i].CompareTo(other.GroupBy[i]);
-                }
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

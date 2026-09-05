@@ -53,6 +53,11 @@ namespace Gs2.Core.Model
 		
 		public static Region ValueOf(string value)
 		{
+			if (value == null)
+			{
+				throw new ArgumentNullException(nameof(value));
+			}
+
 			foreach (var region in Enum.GetValues(typeof(Region)).Cast<Region>().ToList())
 			{
 				if (region.DisplayName() == value)
@@ -61,7 +66,7 @@ namespace Gs2.Core.Model
 				}
 			}
 
-			return Region.ApNortheast1;
+			throw new ArgumentException("Unknown region: " + value, nameof(value));
 		}
 	}
 }

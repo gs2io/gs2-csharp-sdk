@@ -99,28 +99,26 @@ namespace Gs2.Gs2Experience.Model
         public int CompareTo(object obj)
         {
             var other = obj as Threshold;
-            var diff = 0;
-            if (Metadata == null && Metadata == other.Metadata)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (Values == null && Values == other.Values)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Values.Length - other.Values.Length;
-                for (var i = 0; i < Values.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += (int)(Values[i] - other.Values[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type Threshold.", nameof(obj));
             }
-            return diff;
+            var diff = 0;
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(Values, other.Values);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

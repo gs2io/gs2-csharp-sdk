@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Gs2.Core.Control;
 using Gs2.Core.Exception;
@@ -29,6 +30,8 @@ namespace Gs2.Core.Net
 
         protected IGs2Session Session;
 
+        protected virtual TimeSpan RequestTimeout => TimeSpan.FromSeconds(10);
+
         protected Gs2SessionTask(IGs2Session session, TRequest request)
         {
             this.Session = session;
@@ -55,40 +58,103 @@ namespace Gs2.Core.Net
                 throw new SessionNotOpenException("Session no longer open.");
             }
 
-            Telemetry.StartRequest(request.TaskId, Request);
-
-            await this.Session.SendAsync(request);
-
-            var begin = DateTime.Now;
-            while (!this.Session.IsCompleted(request))
+            try
             {
-                if ((DateTime.Now - begin).Seconds > 10)
+                try
                 {
-                    throw new RequestTimeoutException(Array.Empty<RequestError>());
+                    Telemetry.StartRequest(request.TaskId, Request);
                 }
-                if (this.Session.IsCanceled())
+                catch (System.Exception)
                 {
-                    throw new UserCancelException(Array.Empty<RequestError>());
+                    // Telemetry observers must not change the request outcome.
                 }
-                await TaskUtilities.Yield();
-            }
-            var response = this.Session.MarkRead(request);
-            
-            Telemetry.EndRequest(request.TaskId, Request, response);
 
-            if (response.IsSuccess) {
-                var transactionResult = Gs2.Core.Result.TransactionResult.FromJson(response.Body);
-                if (transactionResult != null) {
-                    if (transactionResult.TransactionId != null && 
-                        (transactionResult.AutoRunStampSheet ?? false)) {
-                        Telemetry.StartTransaction(transactionResult.TransactionId, Request);
+                var requestTimer = Stopwatch.StartNew();
+                await this.Session.SendAsync(request);
+
+                while (true)
+                {
+                    if (this.Session is IRequestTrackingSession trackingSession)
+                    {
+                        var trackingState = trackingSession.GetRequestTrackingState(request);
+                        if (trackingState == RequestTrackingState.Completed)
+                        {
+                            break;
+                        }
+                        if (trackingState == RequestTrackingState.Abandoned)
+                        {
+                            throw new SessionNotOpenException("Session no longer open.");
+                        }
+                    }
+                    else if (this.Session.IsCompleted(request))
+                    {
+                        break;
+                    }
+                    if (this.Session.IsCanceled())
+                    {
+                        throw new UserCancelException(Array.Empty<RequestError>());
+                    }
+                    if (this.Session.IsDisconnected())
+                    {
+                        throw new SessionNotOpenException("Session no longer open.");
+                    }
+                    if (requestTimer.Elapsed >= RequestTimeout)
+                    {
+                        throw new RequestTimeoutException(Array.Empty<RequestError>());
+                    }
+                    await TaskUtilities.Yield();
+                }
+                var response = this.Session.MarkRead(request);
+                if (response == null)
+                {
+                    throw new SessionNotOpenException("Session no longer open.");
+                }
+
+                try
+                {
+                    Telemetry.EndRequest(request.TaskId, Request, response);
+                }
+                catch (System.Exception)
+                {
+                    // Telemetry observers must not change the request outcome.
+                }
+
+                if (response.IsSuccess) {
+                    var transactionResult = Gs2.Core.Result.TransactionResult.FromJson(response.Body);
+                    if (transactionResult != null) {
+                        if (transactionResult.TransactionId != null &&
+                            (transactionResult.AutoRunStampSheet ?? false)) {
+                            try
+                            {
+                                Telemetry.StartTransaction(transactionResult.TransactionId, Request);
+                            }
+                            catch (System.Exception)
+                            {
+                                // Telemetry observers must not change the request outcome.
+                            }
+                        }
+                    }
+                    return (TResult)typeof(TResult).GetMethod("FromJson")?.Invoke(null, new object[] { response.Body });
+                }
+                else
+                {
+                    throw response.Error;
+                }
+            }
+            catch
+            {
+                if (this.Session is IRequestTrackingSession trackingSession)
+                {
+                    try
+                    {
+                        trackingSession.Forget(request);
+                    }
+                    catch (System.Exception)
+                    {
+                        // Preserve the request failure if transport tracking cleanup also fails.
                     }
                 }
-                return (TResult)typeof(TResult).GetMethod("FromJson")?.Invoke(null, new object[] { response.Body });
-            }
-            else
-            {
-                throw response.Error;
+                throw;
             }
         }
     }

@@ -83,24 +83,26 @@ namespace Gs2.Gs2Script.Model
         public int CompareTo(object obj)
         {
             var other = obj as RandomUsed;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type RandomUsed.", nameof(obj));
+            }
             var diff = 0;
-            if (Category == null && Category == other.Category)
+            diff = ModelComparer.Compare(Category, other.Category);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Used, other.Used);
+            if (diff != 0)
             {
-                diff += (int)(Category - other.Category);
+                return diff;
             }
-            if (Used == null && Used == other.Used)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Used - other.Used);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

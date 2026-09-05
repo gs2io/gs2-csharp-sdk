@@ -26,6 +26,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Core.Model;
@@ -49,7 +50,7 @@ namespace Gs2.Core.Domain
 {
     public partial class AutoJobQueueDomain : TransactionDomain
     {
-        private static Dictionary<string, long> _handled = new Dictionary<string, long>();
+        private static readonly ExpiringHandledResultSet HandledResults = new ExpiringHandledResultSet(TimeSpan.FromMinutes(3));
         private readonly string _namespaceName;
         private readonly string _jobName;
 
@@ -75,18 +76,7 @@ namespace Gs2.Core.Domain
                 throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 0);
             }
 
-            var skipCallback = false;
-            lock (_handled) {
-                if (_handled.ContainsKey(this._jobName)) {
-                    _handled = _handled
-                        .Where(pair => pair.Value >= UnixTime.ToUnixTime(DateTime.Now))
-                        .ToDictionary(pair => pair.Key, pair => pair.Value);
-                    skipCallback = true;
-                }
-                else {
-                    _handled.Add(this._jobName, UnixTime.ToUnixTime(DateTime.Now.Add(TimeSpan.FromMinutes(3))));
-                }
-            }
+            var skipCallback = !HandledResults.TryHandle(job.JobId);
             
             if (!skipCallback) {
                 Gs2.UpdateCacheFromJobResult(
@@ -155,9 +145,9 @@ namespace Gs2.Core.Domain
 #endif
             bool all = false
         ) {
-            var begin = DateTime.Now;
+            var timer = Stopwatch.StartNew();
             RETRY:
-            if (DateTime.Now - begin > TimeSpan.FromSeconds(10)) {
+            if (timer.Elapsed > TimeSpan.FromSeconds(10)) {
                 throw new TimeoutException("Failed to retrieve the results of the Job Queue execution: either there is some kind of failure in GS2, or the GS2-Gateway used for notification has not been configured for GS2-JobQueue used to execute the Job Queue, or the GS2-Gateway has a user ID setting to receive notifications. API may not have been invoked.");
             }
             var domain = new Gs2JobQueue.Domain.Gs2JobQueue(

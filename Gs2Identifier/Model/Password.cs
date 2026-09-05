@@ -172,64 +172,51 @@ namespace Gs2.Gs2Identifier.Model
         public int CompareTo(object obj)
         {
             var other = obj as Password;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Password.", nameof(obj));
+            }
             var diff = 0;
-            if (PasswordId == null && PasswordId == other.PasswordId)
+            diff = ModelComparer.Compare(PasswordId, other.PasswordId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += PasswordId.CompareTo(other.PasswordId);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(UserName, other.UserName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(EnableTwoFactorAuthentication, other.EnableTwoFactorAuthentication);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (UserName == null && UserName == other.UserName)
+            diff = ModelComparer.Compare(TwoFactorAuthenticationSetting, other.TwoFactorAuthenticationSetting);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += UserName.CompareTo(other.UserName);
+                return diff;
             }
-            if (EnableTwoFactorAuthentication == null && EnableTwoFactorAuthentication == other.EnableTwoFactorAuthentication)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += EnableTwoFactorAuthentication.CompareTo(other.EnableTwoFactorAuthentication);
-            }
-            if (TwoFactorAuthenticationSetting == null && TwoFactorAuthenticationSetting == other.TwoFactorAuthenticationSetting)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += TwoFactorAuthenticationSetting.CompareTo(other.TwoFactorAuthenticationSetting);
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

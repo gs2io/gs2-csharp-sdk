@@ -347,140 +347,96 @@ namespace Gs2.Gs2Version.Model
         public int CompareTo(object obj)
         {
             var other = obj as VersionModelMaster;
-            var diff = 0;
-            if (VersionModelId == null && VersionModelId == other.VersionModelId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += VersionModelId.CompareTo(other.VersionModelId);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (Description == null && Description == other.Description)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Description.CompareTo(other.Description);
-            }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (Scope == null && Scope == other.Scope)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Scope.CompareTo(other.Scope);
-            }
-            if (Type == null && Type == other.Type)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Type.CompareTo(other.Type);
-            }
-            if (CurrentVersion == null && CurrentVersion == other.CurrentVersion)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += CurrentVersion.CompareTo(other.CurrentVersion);
-            }
-            if (WarningVersion == null && WarningVersion == other.WarningVersion)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += WarningVersion.CompareTo(other.WarningVersion);
-            }
-            if (ErrorVersion == null && ErrorVersion == other.ErrorVersion)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ErrorVersion.CompareTo(other.ErrorVersion);
-            }
-            if (ScheduleVersions == null && ScheduleVersions == other.ScheduleVersions)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ScheduleVersions.Length - other.ScheduleVersions.Length;
-                for (var i = 0; i < ScheduleVersions.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += ScheduleVersions[i].CompareTo(other.ScheduleVersions[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type VersionModelMaster.", nameof(obj));
             }
-            if (NeedSignature == null && NeedSignature == other.NeedSignature)
+            var diff = 0;
+            diff = ModelComparer.Compare(VersionModelId, other.VersionModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += NeedSignature == other.NeedSignature ? 0 : 1;
+                return diff;
             }
-            if (SignatureKeyId == null && SignatureKeyId == other.SignatureKeyId)
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                diff += SignatureKeyId.CompareTo(other.SignatureKeyId);
+                return diff;
             }
-            if (ApproveRequirement == null && ApproveRequirement == other.ApproveRequirement)
+            diff = ModelComparer.Compare(Scope, other.Scope);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Type, other.Type);
+            if (diff != 0)
             {
-                diff += ApproveRequirement.CompareTo(other.ApproveRequirement);
+                return diff;
             }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
+            diff = ModelComparer.Compare(CurrentVersion, other.CurrentVersion);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(WarningVersion, other.WarningVersion);
+            if (diff != 0)
             {
-                diff += (int)(CreatedAt - other.CreatedAt);
+                return diff;
             }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
+            diff = ModelComparer.Compare(ErrorVersion, other.ErrorVersion);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(ScheduleVersions, other.ScheduleVersions);
+            if (diff != 0)
             {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
+                return diff;
             }
-            if (Revision == null && Revision == other.Revision)
+            diff = ModelComparer.Compare(NeedSignature, other.NeedSignature);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(SignatureKeyId, other.SignatureKeyId);
+            if (diff != 0)
             {
-                diff += (int)(Revision - other.Revision);
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.Compare(ApproveRequirement, other.ApproveRequirement);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

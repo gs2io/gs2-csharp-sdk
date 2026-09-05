@@ -213,60 +213,46 @@ namespace Gs2.Gs2Enchant.Model
         public int CompareTo(object obj)
         {
             var other = obj as BalanceParameterModel;
-            var diff = 0;
-            if (BalanceParameterModelId == null && BalanceParameterModelId == other.BalanceParameterModelId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += BalanceParameterModelId.CompareTo(other.BalanceParameterModelId);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            if (TotalValue == null && TotalValue == other.TotalValue)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(TotalValue - other.TotalValue);
-            }
-            if (InitialValueStrategy == null && InitialValueStrategy == other.InitialValueStrategy)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += InitialValueStrategy.CompareTo(other.InitialValueStrategy);
-            }
-            if (Parameters == null && Parameters == other.Parameters)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Parameters.Length - other.Parameters.Length;
-                for (var i = 0; i < Parameters.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += Parameters[i].CompareTo(other.Parameters[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type BalanceParameterModel.", nameof(obj));
             }
-            return diff;
+            var diff = 0;
+            diff = ModelComparer.Compare(BalanceParameterModelId, other.BalanceParameterModelId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(TotalValue, other.TotalValue);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(InitialValueStrategy, other.InitialValueStrategy);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(Parameters, other.Parameters);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

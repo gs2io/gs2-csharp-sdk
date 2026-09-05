@@ -105,40 +105,36 @@ namespace Gs2.Gs2Version.Model
         public int CompareTo(object obj)
         {
             var other = obj as ScriptSetting;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type ScriptSetting.", nameof(obj));
+            }
             var diff = 0;
-            if (TriggerScriptId == null && TriggerScriptId == other.TriggerScriptId)
+            diff = ModelComparer.Compare(TriggerScriptId, other.TriggerScriptId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(DoneTriggerTargetType, other.DoneTriggerTargetType);
+            if (diff != 0)
             {
-                diff += TriggerScriptId.CompareTo(other.TriggerScriptId);
+                return diff;
             }
-            if (DoneTriggerTargetType == null && DoneTriggerTargetType == other.DoneTriggerTargetType)
+            diff = ModelComparer.Compare(DoneTriggerScriptId, other.DoneTriggerScriptId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(DoneTriggerQueueNamespaceId, other.DoneTriggerQueueNamespaceId);
+            if (diff != 0)
             {
-                diff += DoneTriggerTargetType.CompareTo(other.DoneTriggerTargetType);
+                return diff;
             }
-            if (DoneTriggerScriptId == null && DoneTriggerScriptId == other.DoneTriggerScriptId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += DoneTriggerScriptId.CompareTo(other.DoneTriggerScriptId);
-            }
-            if (DoneTriggerQueueNamespaceId == null && DoneTriggerQueueNamespaceId == other.DoneTriggerQueueNamespaceId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += DoneTriggerQueueNamespaceId.CompareTo(other.DoneTriggerQueueNamespaceId);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

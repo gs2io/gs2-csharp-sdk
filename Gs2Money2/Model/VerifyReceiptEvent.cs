@@ -105,40 +105,36 @@ namespace Gs2.Gs2Money2.Model
         public int CompareTo(object obj)
         {
             var other = obj as VerifyReceiptEvent;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type VerifyReceiptEvent.", nameof(obj));
+            }
             var diff = 0;
-            if (ContentName == null && ContentName == other.ContentName)
+            diff = ModelComparer.Compare(ContentName, other.ContentName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Platform, other.Platform);
+            if (diff != 0)
             {
-                diff += ContentName.CompareTo(other.ContentName);
+                return diff;
             }
-            if (Platform == null && Platform == other.Platform)
+            diff = ModelComparer.Compare(AppleAppStoreVerifyReceiptEvent, other.AppleAppStoreVerifyReceiptEvent);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(GooglePlayVerifyReceiptEvent, other.GooglePlayVerifyReceiptEvent);
+            if (diff != 0)
             {
-                diff += Platform.CompareTo(other.Platform);
+                return diff;
             }
-            if (AppleAppStoreVerifyReceiptEvent == null && AppleAppStoreVerifyReceiptEvent == other.AppleAppStoreVerifyReceiptEvent)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += AppleAppStoreVerifyReceiptEvent.CompareTo(other.AppleAppStoreVerifyReceiptEvent);
-            }
-            if (GooglePlayVerifyReceiptEvent == null && GooglePlayVerifyReceiptEvent == other.GooglePlayVerifyReceiptEvent)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += GooglePlayVerifyReceiptEvent.CompareTo(other.GooglePlayVerifyReceiptEvent);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

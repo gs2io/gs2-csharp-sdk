@@ -83,24 +83,26 @@ namespace Gs2.Gs2Matchmaking.Model
         public int CompareTo(object obj)
         {
             var other = obj as SignedBallot;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type SignedBallot.", nameof(obj));
+            }
             var diff = 0;
-            if (Body == null && Body == other.Body)
+            diff = ModelComparer.Compare(Body, other.Body);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Signature, other.Signature);
+            if (diff != 0)
             {
-                diff += Body.CompareTo(other.Body);
+                return diff;
             }
-            if (Signature == null && Signature == other.Signature)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Signature.CompareTo(other.Signature);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

@@ -212,56 +212,46 @@ namespace Gs2.Gs2Lottery.Model
         public int CompareTo(object obj)
         {
             var other = obj as PrizeLimit;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type PrizeLimit.", nameof(obj));
+            }
             var diff = 0;
-            if (PrizeLimitId == null && PrizeLimitId == other.PrizeLimitId)
+            diff = ModelComparer.Compare(PrizeLimitId, other.PrizeLimitId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(PrizeId, other.PrizeId);
+            if (diff != 0)
             {
-                diff += PrizeLimitId.CompareTo(other.PrizeLimitId);
+                return diff;
             }
-            if (PrizeId == null && PrizeId == other.PrizeId)
+            diff = ModelComparer.Compare(DrawnCount, other.DrawnCount);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += PrizeId.CompareTo(other.PrizeId);
+                return diff;
             }
-            if (DrawnCount == null && DrawnCount == other.DrawnCount)
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += (int)(DrawnCount - other.DrawnCount);
+                return diff;
             }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

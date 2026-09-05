@@ -3,6 +3,7 @@
 #endif
 
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Gs2.Core.Util;
 #if GS2_USE_HYBRID_WEBSOCKET
@@ -14,7 +15,7 @@ using Gs2.Util.WebSocketSharp;
 
 namespace Gs2.Core.Net
 {
-    public class WebSocketSession
+    public class WebSocketSession : IDisposable
     {
         public enum StateEnum
         {
@@ -54,15 +55,17 @@ namespace Gs2.Core.Net
             _session.OnClose += HandleClose;
         }
 
-        public void Connect() => _session.Connect();
+        public virtual void Connect() => _session.Connect();
 
-        public void Close() => _session.Close();
+        public virtual void Close() => _session.Close();
 
-        public void Send(string message) => _session.Send(message);
+        public virtual void Send(string message) => _session.Send(message);
 
-        public bool Ping() => true;
+        public virtual void Dispose() => _session.Dispose();
 
-        public StateEnum GetState()
+        public virtual bool Ping() => true;
+
+        public virtual StateEnum GetState()
         {
             return _session.GetState() switch
             {
@@ -79,16 +82,24 @@ namespace Gs2.Core.Net
         }
 #else
         private readonly WebSocket _session;
+        private int _pingInFlight;
+        [ThreadStatic] private static WebSocketSession _activeSendSession;
+        [ThreadStatic] private static ErrorEventArgs _activeSendError;
 
         public event Action OnOpen;
         public event Action<string> OnMessage;
         public event Action OnClose;
         public event Action<ErrorEventArgs> OnError;
 
-        public WebSocketSession(string url)
+        public WebSocketSession(string url) : this(url, true)
+        {
+        }
+
+        public WebSocketSession(string url, bool checkCertificateRevocation)
         {
             _session = new WebSocket(url);
 
+            _session.SslConfiguration.CheckCertificateRevocation = checkCertificateRevocation;
             _session.SslConfiguration.ServerCertificateValidationCallback =
                 (sender, certificate, chain, sslPolicyErrors) => sslPolicyErrors == SslPolicyErrors.None;
 
@@ -98,7 +109,7 @@ namespace Gs2.Core.Net
             _session.OnError += HandleError;
         }
 
-        public void Connect()
+        public virtual void Connect()
         {
             try
             {
@@ -110,26 +121,79 @@ namespace Gs2.Core.Net
             }
         }
 
-        public void Close() => _session.Close();
+        public virtual void Close() => _session.Close();
 
-        public void Send(string message) => _session.Send(message);
+        public virtual void Send(string message)
+        {
+            var previousSession = _activeSendSession;
+            var previousError = _activeSendError;
+            _activeSendSession = this;
+            _activeSendError = null;
+            try
+            {
+                SendCore(message);
+                var sendError = _activeSendError;
+                if (sendError != null)
+                {
+                    throw new InvalidOperationException(sendError.Message, sendError.Exception);
+                }
+            }
+            finally
+            {
+                _activeSendSession = previousSession;
+                _activeSendError = previousError;
+            }
+        }
+
+        protected virtual void SendCore(string message) => _session.Send(message);
+
+        public virtual void Dispose()
+        {
+        }
 
         /// <remarks>
         /// websocket-sharp の Ping() は pong 受信を最大 WaitTime(既定5秒) 同期待ちするため、
         /// 呼び出しスレッド(多くの場合 Unity のメインスレッド)をブロックしないようバックグラウンドで送信する。
         /// 戻り値は「ping の送信を開始した」ことのみを表し、pong 受信の成否は表さない。
         /// </remarks>
-        public bool Ping()
+        public virtual bool Ping()
         {
             if (_session.ReadyState != WebSocketState.Open)
             {
                 return false;
             }
-            Task.Run(() => _session.Ping()).Forget();
-            return true;
+            return StartPing(() => _session.Ping());
         }
 
-        public StateEnum GetState()
+        internal bool StartPing(Func<bool> ping)
+        {
+            if (Interlocked.CompareExchange(ref _pingInFlight, 1, 0) != 0)
+            {
+                return false;
+            }
+            try
+            {
+                Task.Run(() =>
+                {
+                    try
+                    {
+                        ping();
+                    }
+                    finally
+                    {
+                        Volatile.Write(ref _pingInFlight, 0);
+                    }
+                }).Forget();
+                return true;
+            }
+            catch
+            {
+                Volatile.Write(ref _pingInFlight, 0);
+                throw;
+            }
+        }
+
+        public virtual StateEnum GetState()
         {
             return _session.ReadyState switch
             {
@@ -144,7 +208,7 @@ namespace Gs2.Core.Net
 
         private void HandleOpen(object sender, EventArgs eventArgs)
         {
-            OnOpen?.Invoke();
+            RaiseOpen();
         }
 
         private void HandleMessage(object sender, MessageEventArgs messageEventArgs)
@@ -153,17 +217,41 @@ namespace Gs2.Core.Net
                 return;
             }
 
-            OnMessage?.Invoke(messageEventArgs.Data);
+            DispatchMessage(messageEventArgs.Data);
         }
 
         private void HandleClose(object sender, CloseEventArgs e)
         {
-            OnClose?.Invoke();
+            RaiseClose();
         }
 
         private void HandleError(object sender, ErrorEventArgs errorEventArgs)
         {
-            OnError?.Invoke(errorEventArgs);
+            RaiseError(errorEventArgs);
+        }
+
+        protected void RaiseOpen() => OnOpen?.Invoke();
+        protected void RaiseMessage(string message) => OnMessage?.Invoke(message);
+        protected void DispatchMessage(string message)
+        {
+            try
+            {
+                RaiseMessage(message);
+            }
+            catch (System.Exception)
+            {
+                // websocket-sharp converts subscriber exceptions into transport OnError events.
+                // Application callbacks are not transport failures and must not disconnect the session.
+            }
+        }
+        protected void RaiseClose() => OnClose?.Invoke();
+        protected void RaiseError(ErrorEventArgs error)
+        {
+            if (ReferenceEquals(_activeSendSession, this))
+            {
+                _activeSendError = error;
+            }
+            OnError?.Invoke(error);
         }
 #endif
     }

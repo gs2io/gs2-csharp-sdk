@@ -72,16 +72,21 @@ namespace Gs2.Gs2Project.Model
         public int CompareTo(object obj)
         {
             var other = obj as TwoFactorAuthenticationSetting;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type TwoFactorAuthenticationSetting.", nameof(obj));
+            }
             var diff = 0;
-            if (Status == null && Status == other.Status)
+            diff = ModelComparer.Compare(Status, other.Status);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += Status.CompareTo(other.Status);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

@@ -150,28 +150,64 @@ namespace Gs2.Core.Domain
                     if (result.StatusCode / 100 != 2) {
                         throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 999);
                     }
+                    Gs2.TransactionConfiguration?.VerifyActionEventHandler?.Invoke(
+                        Gs2.Cache,
+                        stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
+                        this.AccessToken?.TimeOffset,
+                        verifyTaskPayloadJson["action"].ToString(),
+                        verifyTaskPayloadJson["args"].ToString(),
+                        result.Result
+                    );
                 }
                 else
                 {
+                    global::Gs2.Gs2Distributor.Result.RunVerifyTaskResult result;
                     try {
-                        var result = await client.RunVerifyTaskAsync(
+                        result = await client.RunVerifyTaskAsync(
                             new RunVerifyTaskRequest()
                                 .WithContextStack(contextStack)
                                 .WithNamespaceName(Gs2.TransactionConfiguration?.NamespaceName)
                                 .WithVerifyTask(verifyTasks[i].ToString())
                                 .WithKeyId(_stampSheetEncryptionKeyId)
                         );
-                        contextStack = result.ContextStack;
-                        if (result.StatusCode / 100 != 2) {
-                            throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 999);
-                        }
                     }
                     catch (NotFoundException) {
-                        if (Gs2.TransactionConfiguration != null) {
-                            Gs2.TransactionConfiguration.NamespaceName = null;
-                            return await WaitAsync(all);
+                        if (Gs2.TransactionConfiguration == null) {
+                            throw;
                         }
+                        Gs2.TransactionConfiguration.NamespaceName = null;
+                        var fallbackResult = await client.RunVerifyTaskWithoutNamespaceAsync(
+                            new RunVerifyTaskWithoutNamespaceRequest()
+                                .WithContextStack(contextStack)
+                                .WithVerifyTask(verifyTasks[i].ToString())
+                                .WithKeyId(_stampSheetEncryptionKeyId)
+                        );
+                        contextStack = fallbackResult.ContextStack;
+                        if (fallbackResult.StatusCode / 100 != 2) {
+                            throw Gs2Exception.ExtractError(fallbackResult.Result, fallbackResult.StatusCode ?? 999);
+                        }
+                        Gs2.TransactionConfiguration.VerifyActionEventHandler?.Invoke(
+                            Gs2.Cache,
+                            stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
+                            this.AccessToken?.TimeOffset,
+                            verifyTaskPayloadJson["action"].ToString(),
+                            verifyTaskPayloadJson["args"].ToString(),
+                            fallbackResult.Result
+                        );
+                        continue;
                     }
+                    contextStack = result.ContextStack;
+                    if (result.StatusCode / 100 != 2) {
+                        throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 999);
+                    }
+                    Gs2.TransactionConfiguration?.VerifyActionEventHandler?.Invoke(
+                        Gs2.Cache,
+                        stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
+                        this.AccessToken?.TimeOffset,
+                        verifyTaskPayloadJson["action"].ToString(),
+                        verifyTaskPayloadJson["args"].ToString(),
+                        result.Result
+                    );
                 }
             }
             for (var i = 0; i < stampTasks.Count; i++)
@@ -203,33 +239,53 @@ namespace Gs2.Core.Domain
                 }
                 else
                 {
+                    global::Gs2.Gs2Distributor.Result.RunStampTaskResult result;
                     try {
-                        var result = await client.RunStampTaskAsync(
+                        result = await client.RunStampTaskAsync(
                             new RunStampTaskRequest()
                                 .WithContextStack(contextStack)
                                 .WithNamespaceName(Gs2.TransactionConfiguration?.NamespaceName)
                                 .WithStampTask(stampTasks[i].ToString())
                                 .WithKeyId(_stampSheetEncryptionKeyId)
                         );
-                        contextStack = result.ContextStack;
-                        if (result.StatusCode / 100 != 2) {
-                            throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 999);
+                    }
+                    catch (NotFoundException) {
+                        if (Gs2.TransactionConfiguration == null) {
+                            throw;
                         }
-                        Gs2.TransactionConfiguration?.ConsumeActionEventHandler?.Invoke(
+                        Gs2.TransactionConfiguration.NamespaceName = null;
+                        var fallbackResult = await client.RunStampTaskWithoutNamespaceAsync(
+                            new RunStampTaskWithoutNamespaceRequest()
+                                .WithContextStack(contextStack)
+                                .WithStampTask(stampTasks[i].ToString())
+                                .WithKeyId(_stampSheetEncryptionKeyId)
+                        );
+                        contextStack = fallbackResult.ContextStack;
+                        if (fallbackResult.StatusCode / 100 != 2) {
+                            throw Gs2Exception.ExtractError(fallbackResult.Result, fallbackResult.StatusCode ?? 999);
+                        }
+                        Gs2.TransactionConfiguration.ConsumeActionEventHandler?.Invoke(
                             Gs2.Cache,
                             stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
                             this.AccessToken?.TimeOffset,
                             stampTaskPayloadJson["action"].ToString(),
                             stampTaskPayloadJson["args"].ToString(),
-                            result.Result
+                            fallbackResult.Result
                         );
+                        continue;
                     }
-                    catch (NotFoundException) {
-                        if (Gs2.TransactionConfiguration != null) {
-                            Gs2.TransactionConfiguration.NamespaceName = null;
-                            return await WaitAsync(all);
-                        }
+                    contextStack = result.ContextStack;
+                    if (result.StatusCode / 100 != 2) {
+                        throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 999);
                     }
+                    Gs2.TransactionConfiguration?.ConsumeActionEventHandler?.Invoke(
+                        Gs2.Cache,
+                        stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]",
+                        this.AccessToken?.TimeOffset,
+                        stampTaskPayloadJson["action"].ToString(),
+                        stampTaskPayloadJson["args"].ToString(),
+                        result.Result
+                    );
                 }
             }
 
@@ -259,14 +315,42 @@ namespace Gs2.Core.Domain
             }
             else
             {
+                global::Gs2.Gs2Distributor.Result.RunStampSheetResult result = null;
                 try {
-                    var result = await client.RunStampSheetAsync(
+                    result = await client.RunStampSheetAsync(
                         new RunStampSheetRequest()
                             .WithContextStack(contextStack)
                             .WithNamespaceName(Gs2.TransactionConfiguration?.NamespaceName)
                             .WithStampSheet(_stampSheet)
                             .WithKeyId(_stampSheetEncryptionKeyId)
                     );
+                }
+                catch (NotFoundException) {
+                    if (Gs2.TransactionConfiguration == null) {
+                        throw;
+                    }
+                    Gs2.TransactionConfiguration.NamespaceName = null;
+                    var fallbackResult = await client.RunStampSheetWithoutNamespaceAsync(
+                        new RunStampSheetWithoutNamespaceRequest()
+                            .WithContextStack(contextStack)
+                            .WithStampSheet(_stampSheet)
+                            .WithKeyId(_stampSheetEncryptionKeyId)
+                    );
+                    if (fallbackResult.StatusCode / 100 != 2) {
+                        throw Gs2Exception.ExtractError(fallbackResult.Result, fallbackResult.StatusCode ?? 999);
+                    }
+                    Gs2.TransactionConfiguration.AcquireActionEventHandler?.Invoke(
+                        Gs2.Cache,
+                        stampSheetPayloadJson["transactionId"].ToString(),
+                        this.AccessToken?.TimeOffset,
+                        stampSheetPayloadJson["action"].ToString(),
+                        stampSheetPayloadJson["args"].ToString(),
+                        fallbackResult.Result
+                    );
+                    action = stampSheetPayloadJson["action"].ToString();
+                    resultJson = JsonMapper.ToObject(fallbackResult.Result.Length != 0 ? fallbackResult.Result : "{}");
+                }
+                if (result != null) {
                     if (result.StatusCode / 100 != 2) {
                         throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 999);
                     }
@@ -280,12 +364,6 @@ namespace Gs2.Core.Domain
                     );
                     action = stampSheetPayloadJson["action"].ToString();
                     resultJson = JsonMapper.ToObject(result.Result.Length != 0 ? result.Result : "{}");
-                }
-                catch (NotFoundException) {
-                    if (Gs2.TransactionConfiguration != null) {
-                        Gs2.TransactionConfiguration.NamespaceName = null;
-                        return await WaitAsync(all);
-                    }
                 }
             }
 

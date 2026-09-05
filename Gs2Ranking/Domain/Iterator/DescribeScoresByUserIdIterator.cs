@@ -204,20 +204,6 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
             }
             var ret = this._result[0];
             this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
-            if (this._result.Length == 0 && !this._last) {
-                var future = this._load().ToGs2Future();
-                yield return future;
-                if (future.Error != null)
-                {
-                    Current = null;
-                    Error = future.Error;
-                    callback.Invoke(new AsyncResult<Gs2.Gs2Ranking.Model.Score>(
-                        Current,
-                        Error
-                    ));
-                    yield break;
-                }
-            }
             Current = ret;
             callback.Invoke(new AsyncResult<Gs2.Gs2Ranking.Model.Score>(
                 Current,
@@ -254,9 +240,6 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
                     }
                     var ret = this._result[0];
                     this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
-                    if (this._result.Length == 0 && !this._last) {
-                        await this._load();
-                    }
             #if GS2_ENABLE_UNITASK
                     await writer.YieldAsync(ret);
             #else

@@ -229,56 +229,46 @@ namespace Gs2.Gs2Ranking2.Model
         public int CompareTo(object obj)
         {
             var other = obj as GlobalRankingReceivedReward;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type GlobalRankingReceivedReward.", nameof(obj));
+            }
             var diff = 0;
-            if (GlobalRankingReceivedRewardId == null && GlobalRankingReceivedRewardId == other.GlobalRankingReceivedRewardId)
+            diff = ModelComparer.Compare(GlobalRankingReceivedRewardId, other.GlobalRankingReceivedRewardId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(RankingName, other.RankingName);
+            if (diff != 0)
             {
-                diff += GlobalRankingReceivedRewardId.CompareTo(other.GlobalRankingReceivedRewardId);
+                return diff;
             }
-            if (RankingName == null && RankingName == other.RankingName)
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Season, other.Season);
+            if (diff != 0)
             {
-                diff += RankingName.CompareTo(other.RankingName);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(ReceivedAt, other.ReceivedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (Season == null && Season == other.Season)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Season - other.Season);
-            }
-            if (ReceivedAt == null && ReceivedAt == other.ReceivedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(ReceivedAt - other.ReceivedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

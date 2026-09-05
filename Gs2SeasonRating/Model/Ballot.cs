@@ -105,40 +105,36 @@ namespace Gs2.Gs2SeasonRating.Model
         public int CompareTo(object obj)
         {
             var other = obj as Ballot;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Ballot.", nameof(obj));
+            }
             var diff = 0;
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(SeasonName, other.SeasonName);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (SeasonName == null && SeasonName == other.SeasonName)
+            diff = ModelComparer.Compare(SessionName, other.SessionName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(NumberOfPlayer, other.NumberOfPlayer);
+            if (diff != 0)
             {
-                diff += SeasonName.CompareTo(other.SeasonName);
+                return diff;
             }
-            if (SessionName == null && SessionName == other.SessionName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += SessionName.CompareTo(other.SessionName);
-            }
-            if (NumberOfPlayer == null && NumberOfPlayer == other.NumberOfPlayer)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(NumberOfPlayer - other.NumberOfPlayer);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

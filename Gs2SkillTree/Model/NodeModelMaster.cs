@@ -304,108 +304,71 @@ namespace Gs2.Gs2SkillTree.Model
         public int CompareTo(object obj)
         {
             var other = obj as NodeModelMaster;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type NodeModelMaster.", nameof(obj));
+            }
             var diff = 0;
-            if (NodeModelId == null && NodeModelId == other.NodeModelId)
+            diff = ModelComparer.Compare(NodeModelId, other.NodeModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += NodeModelId.CompareTo(other.NodeModelId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Description == null && Description == other.Description)
+            diff = ModelComparer.CompareArray(ReleaseVerifyActions, other.ReleaseVerifyActions);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(ReleaseConsumeActions, other.ReleaseConsumeActions);
+            if (diff != 0)
             {
-                diff += Description.CompareTo(other.Description);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
+            diff = ModelComparer.Compare(RestrainReturnRate, other.RestrainReturnRate);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(PremiseNodeNames, other.PremiseNodeNames);
+            if (diff != 0)
             {
-                diff += Metadata.CompareTo(other.Metadata);
+                return diff;
             }
-            if (ReleaseVerifyActions == null && ReleaseVerifyActions == other.ReleaseVerifyActions)
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                diff += ReleaseVerifyActions.Length - other.ReleaseVerifyActions.Length;
-                for (var i = 0; i < ReleaseVerifyActions.Length; i++)
-                {
-                    diff += ReleaseVerifyActions[i].CompareTo(other.ReleaseVerifyActions[i]);
-                }
+                return diff;
             }
-            if (ReleaseConsumeActions == null && ReleaseConsumeActions == other.ReleaseConsumeActions)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += ReleaseConsumeActions.Length - other.ReleaseConsumeActions.Length;
-                for (var i = 0; i < ReleaseConsumeActions.Length; i++)
-                {
-                    diff += ReleaseConsumeActions[i].CompareTo(other.ReleaseConsumeActions[i]);
-                }
-            }
-            if (RestrainReturnRate == null && RestrainReturnRate == other.RestrainReturnRate)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(RestrainReturnRate - other.RestrainReturnRate);
-            }
-            if (PremiseNodeNames == null && PremiseNodeNames == other.PremiseNodeNames)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += PremiseNodeNames.Length - other.PremiseNodeNames.Length;
-                for (var i = 0; i < PremiseNodeNames.Length; i++)
-                {
-                    diff += PremiseNodeNames[i].CompareTo(other.PremiseNodeNames[i]);
-                }
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

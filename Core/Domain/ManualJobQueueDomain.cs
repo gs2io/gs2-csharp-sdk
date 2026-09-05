@@ -26,6 +26,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Gs2.Core.Exception;
 using Gs2.Core.Model;
@@ -50,7 +51,7 @@ namespace Gs2.Core.Domain
     public partial class ManualJobQueueDomain : TransactionDomain
     {
         private static readonly TimeSpan RunRetryTimeout = TimeSpan.FromSeconds(15);
-        private static Dictionary<string, long> _handled = new Dictionary<string, long>();
+        private static readonly ExpiringHandledResultSet HandledResults = new ExpiringHandledResultSet(TimeSpan.FromMinutes(3));
         private readonly string _namespaceName;
         private readonly string _jobName;
 
@@ -76,18 +77,7 @@ namespace Gs2.Core.Domain
                 throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 0);
             }
 
-            var skipCallback = false;
-            lock (_handled) {
-                if (_handled.ContainsKey(this._jobName)) {
-                    _handled = _handled
-                        .Where(pair => pair.Value >= UnixTime.ToUnixTime(DateTime.Now))
-                        .ToDictionary(pair => pair.Key, pair => pair.Value);
-                    skipCallback = true;
-                }
-                else {
-                    _handled.Add(this._jobName, UnixTime.ToUnixTime(DateTime.Now.Add(TimeSpan.FromMinutes(3))));
-                }
-            }
+            var skipCallback = !HandledResults.TryHandle(job.JobId);
             
             if (!skipCallback) {
                 Gs2.UpdateCacheFromJobResult(
@@ -156,7 +146,7 @@ namespace Gs2.Core.Domain
 #endif
             bool all = false
         ) {
-            var begin = DateTime.Now;
+            var timer = Stopwatch.StartNew();
             RETRY:
             global::Gs2.Gs2JobQueue.Domain.Model.JobDomain result;
             try {
@@ -171,7 +161,7 @@ namespace Gs2.Core.Domain
                 );
             }
             catch (Gs2Exception e) {
-                if (!e.RecommendAutoRetry || DateTime.Now - begin > RunRetryTimeout) {
+                if (!e.RecommendAutoRetry || timer.Elapsed > RunRetryTimeout) {
                     throw;
                 }
                 await TaskUtilities.DelayAsync(Gs2Constant.RetryWait);
@@ -182,7 +172,10 @@ namespace Gs2.Core.Domain
                 return null;
             }
             if (job.Name != this._jobName) {
-                HandleResult(job, result.Result);
+                var foreignTransaction = HandleResult(job, result.Result);
+                if (foreignTransaction != null) {
+                    await foreignTransaction.WaitAsync(true);
+                }
                 if (result.IsLastJob ?? true) {
                     return null;
                 }

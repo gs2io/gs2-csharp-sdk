@@ -167,76 +167,56 @@ namespace Gs2.Gs2Log.Model
         public int CompareTo(object obj)
         {
             var other = obj as IssueStampSheetLog;
-            var diff = 0;
-            if (Timestamp == null && Timestamp == other.Timestamp)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Timestamp - other.Timestamp);
-            }
-            if (TransactionId == null && TransactionId == other.TransactionId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += TransactionId.CompareTo(other.TransactionId);
-            }
-            if (Service == null && Service == other.Service)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Service.CompareTo(other.Service);
-            }
-            if (Method == null && Method == other.Method)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Method.CompareTo(other.Method);
-            }
-            if (UserId == null && UserId == other.UserId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UserId.CompareTo(other.UserId);
-            }
-            if (Action == null && Action == other.Action)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Action.CompareTo(other.Action);
-            }
-            if (Args == null && Args == other.Args)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Args.CompareTo(other.Args);
-            }
-            if (Tasks == null && Tasks == other.Tasks)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Tasks.Length - other.Tasks.Length;
-                for (var i = 0; i < Tasks.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += Tasks[i].CompareTo(other.Tasks[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type IssueStampSheetLog.", nameof(obj));
             }
-            return diff;
+            var diff = 0;
+            diff = ModelComparer.Compare(Timestamp, other.Timestamp);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(TransactionId, other.TransactionId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Service, other.Service);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Method, other.Method);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Action, other.Action);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Args, other.Args);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(Tasks, other.Tasks);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

@@ -83,24 +83,26 @@ namespace Gs2.Gs2Grade.Model
         public int CompareTo(object obj)
         {
             var other = obj as DefaultGradeModel;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type DefaultGradeModel.", nameof(obj));
+            }
             var diff = 0;
-            if (PropertyIdRegex == null && PropertyIdRegex == other.PropertyIdRegex)
+            diff = ModelComparer.Compare(PropertyIdRegex, other.PropertyIdRegex);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(DefaultGradeValue, other.DefaultGradeValue);
+            if (diff != 0)
             {
-                diff += PropertyIdRegex.CompareTo(other.PropertyIdRegex);
+                return diff;
             }
-            if (DefaultGradeValue == null && DefaultGradeValue == other.DefaultGradeValue)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(DefaultGradeValue - other.DefaultGradeValue);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

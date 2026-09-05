@@ -285,100 +285,71 @@ namespace Gs2.Gs2Exchange.Model
         public int CompareTo(object obj)
         {
             var other = obj as Await;
-            var diff = 0;
-            if (AwaitId == null && AwaitId == other.AwaitId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += AwaitId.CompareTo(other.AwaitId);
-            }
-            if (UserId == null && UserId == other.UserId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UserId.CompareTo(other.UserId);
-            }
-            if (RateName == null && RateName == other.RateName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += RateName.CompareTo(other.RateName);
-            }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (Count == null && Count == other.Count)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Count - other.Count);
-            }
-            if (SkipSeconds == null && SkipSeconds == other.SkipSeconds)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(SkipSeconds - other.SkipSeconds);
-            }
-            if (Config == null && Config == other.Config)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Config.Length - other.Config.Length;
-                for (var i = 0; i < Config.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += Config[i].CompareTo(other.Config[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type Await.", nameof(obj));
             }
-            if (AcquirableAt == null && AcquirableAt == other.AcquirableAt)
+            var diff = 0;
+            diff = ModelComparer.Compare(AwaitId, other.AwaitId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += (int)(AcquirableAt - other.AcquirableAt);
+                return diff;
             }
-            if (ExchangedAt == null && ExchangedAt == other.ExchangedAt)
+            diff = ModelComparer.Compare(RateName, other.RateName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += (int)(ExchangedAt - other.ExchangedAt);
+                return diff;
             }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
+            diff = ModelComparer.Compare(Count, other.Count);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(SkipSeconds, other.SkipSeconds);
+            if (diff != 0)
             {
-                diff += (int)(CreatedAt - other.CreatedAt);
+                return diff;
             }
-            if (Revision == null && Revision == other.Revision)
+            diff = ModelComparer.CompareArray(Config, other.Config);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(AcquirableAt, other.AcquirableAt);
+            if (diff != 0)
             {
-                diff += (int)(Revision - other.Revision);
+                return diff;
             }
-            return diff;
+            diff = ModelComparer.Compare(ExchangedAt, other.ExchangedAt);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

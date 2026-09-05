@@ -206,64 +206,51 @@ namespace Gs2.Gs2Deploy.Model
         public int CompareTo(object obj)
         {
             var other = obj as Event;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Event.", nameof(obj));
+            }
             var diff = 0;
-            if (EventId == null && EventId == other.EventId)
+            diff = ModelComparer.Compare(EventId, other.EventId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += EventId.CompareTo(other.EventId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(ResourceName, other.ResourceName);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Type, other.Type);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (ResourceName == null && ResourceName == other.ResourceName)
+            diff = ModelComparer.Compare(Message, other.Message);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(EventAt, other.EventAt);
+            if (diff != 0)
             {
-                diff += ResourceName.CompareTo(other.ResourceName);
+                return diff;
             }
-            if (Type == null && Type == other.Type)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += Type.CompareTo(other.Type);
-            }
-            if (Message == null && Message == other.Message)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Message.CompareTo(other.Message);
-            }
-            if (EventAt == null && EventAt == other.EventAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(EventAt - other.EventAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

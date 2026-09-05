@@ -195,56 +195,46 @@ namespace Gs2.Gs2Matchmaking.Model
         public int CompareTo(object obj)
         {
             var other = obj as SeasonModel;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type SeasonModel.", nameof(obj));
+            }
             var diff = 0;
-            if (SeasonModelId == null && SeasonModelId == other.SeasonModelId)
+            diff = ModelComparer.Compare(SeasonModelId, other.SeasonModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += SeasonModelId.CompareTo(other.SeasonModelId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(MaximumParticipants, other.MaximumParticipants);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
+            diff = ModelComparer.Compare(ExperienceModelId, other.ExperienceModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(ChallengePeriodEventId, other.ChallengePeriodEventId);
+            if (diff != 0)
             {
-                diff += Metadata.CompareTo(other.Metadata);
+                return diff;
             }
-            if (MaximumParticipants == null && MaximumParticipants == other.MaximumParticipants)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(MaximumParticipants - other.MaximumParticipants);
-            }
-            if (ExperienceModelId == null && ExperienceModelId == other.ExperienceModelId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ExperienceModelId.CompareTo(other.ExperienceModelId);
-            }
-            if (ChallengePeriodEventId == null && ChallengePeriodEventId == other.ChallengePeriodEventId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ChallengePeriodEventId.CompareTo(other.ChallengePeriodEventId);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

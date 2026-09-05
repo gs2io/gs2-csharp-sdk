@@ -83,24 +83,26 @@ namespace Gs2.Gs2Enhance.Model
         public int CompareTo(object obj)
         {
             var other = obj as UnleashRateEntryModel;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type UnleashRateEntryModel.", nameof(obj));
+            }
             var diff = 0;
-            if (GradeValue == null && GradeValue == other.GradeValue)
+            diff = ModelComparer.Compare(GradeValue, other.GradeValue);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(NeedCount, other.NeedCount);
+            if (diff != 0)
             {
-                diff += (int)(GradeValue - other.GradeValue);
+                return diff;
             }
-            if (NeedCount == null && NeedCount == other.NeedCount)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(NeedCount - other.NeedCount);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

@@ -83,24 +83,26 @@ namespace Gs2.Gs2Buff.Model
         public int CompareTo(object obj)
         {
             var other = obj as OverrideBuffRate;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type OverrideBuffRate.", nameof(obj));
+            }
             var diff = 0;
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Rate, other.Rate);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Rate == null && Rate == other.Rate)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Rate - other.Rate);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

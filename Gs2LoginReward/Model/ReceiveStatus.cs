@@ -250,76 +250,56 @@ namespace Gs2.Gs2LoginReward.Model
         public int CompareTo(object obj)
         {
             var other = obj as ReceiveStatus;
-            var diff = 0;
-            if (ReceiveStatusId == null && ReceiveStatusId == other.ReceiveStatusId)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += ReceiveStatusId.CompareTo(other.ReceiveStatusId);
-            }
-            if (BonusModelName == null && BonusModelName == other.BonusModelName)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += BonusModelName.CompareTo(other.BonusModelName);
-            }
-            if (UserId == null && UserId == other.UserId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UserId.CompareTo(other.UserId);
-            }
-            if (ReceivedSteps == null && ReceivedSteps == other.ReceivedSteps)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ReceivedSteps.Length - other.ReceivedSteps.Length;
-                for (var i = 0; i < ReceivedSteps.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += ReceivedSteps[i] == other.ReceivedSteps[i] ? 0 : 1;
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type ReceiveStatus.", nameof(obj));
             }
-            if (LastReceivedAt == null && LastReceivedAt == other.LastReceivedAt)
+            var diff = 0;
+            diff = ModelComparer.Compare(ReceiveStatusId, other.ReceiveStatusId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(BonusModelName, other.BonusModelName);
+            if (diff != 0)
             {
-                diff += (int)(LastReceivedAt - other.LastReceivedAt);
+                return diff;
             }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(ReceivedSteps, other.ReceivedSteps);
+            if (diff != 0)
             {
-                diff += (int)(CreatedAt - other.CreatedAt);
+                return diff;
             }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
+            diff = ModelComparer.Compare(LastReceivedAt, other.LastReceivedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
+                return diff;
             }
-            if (Revision == null && Revision == other.Revision)
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += (int)(Revision - other.Revision);
+                return diff;
             }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

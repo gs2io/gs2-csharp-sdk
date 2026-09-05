@@ -101,28 +101,26 @@ namespace Gs2.Gs2Log.Model
         public int CompareTo(object obj)
         {
             var other = obj as TimeseriesPoint;
-            var diff = 0;
-            if (Timestamp == null && Timestamp == other.Timestamp)
+            if (ReferenceEquals(other, null))
             {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Timestamp - other.Timestamp);
-            }
-            if (Values == null && Values == other.Values)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Values.Length - other.Values.Length;
-                for (var i = 0; i < Values.Length; i++)
+                if (ReferenceEquals(obj, null))
                 {
-                    diff += Values[i].CompareTo(other.Values[i]);
+                    return 1;
                 }
+                throw new ArgumentException("Object must be of type TimeseriesPoint.", nameof(obj));
             }
-            return diff;
+            var diff = 0;
+            diff = ModelComparer.Compare(Timestamp, other.Timestamp);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(Values, other.Values);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
         }
 
         public void Validate() {

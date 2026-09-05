@@ -116,48 +116,41 @@ namespace Gs2.Gs2Formation.Model
         public int CompareTo(object obj)
         {
             var other = obj as SlotWithSignature;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type SlotWithSignature.", nameof(obj));
+            }
             var diff = 0;
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(PropertyType, other.PropertyType);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (PropertyType == null && PropertyType == other.PropertyType)
+            diff = ModelComparer.Compare(Body, other.Body);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Signature, other.Signature);
+            if (diff != 0)
             {
-                diff += PropertyType.CompareTo(other.PropertyType);
+                return diff;
             }
-            if (Body == null && Body == other.Body)
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += Body.CompareTo(other.Body);
-            }
-            if (Signature == null && Signature == other.Signature)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Signature.CompareTo(other.Signature);
-            }
-            if (Metadata == null && Metadata == other.Metadata)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Metadata.CompareTo(other.Metadata);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

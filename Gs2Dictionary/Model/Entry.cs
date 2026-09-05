@@ -190,40 +190,36 @@ namespace Gs2.Gs2Dictionary.Model
         public int CompareTo(object obj)
         {
             var other = obj as Entry;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Entry.", nameof(obj));
+            }
             var diff = 0;
-            if (EntryId == null && EntryId == other.EntryId)
+            diff = ModelComparer.Compare(EntryId, other.EntryId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                diff += EntryId.CompareTo(other.EntryId);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(AcquiredAt, other.AcquiredAt);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Name.CompareTo(other.Name);
-            }
-            if (AcquiredAt == null && AcquiredAt == other.AcquiredAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(AcquiredAt - other.AcquiredAt);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

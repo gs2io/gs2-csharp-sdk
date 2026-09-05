@@ -275,96 +275,66 @@ namespace Gs2.Gs2Enchant.Model
         public int CompareTo(object obj)
         {
             var other = obj as RarityParameterModelMaster;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type RarityParameterModelMaster.", nameof(obj));
+            }
             var diff = 0;
-            if (RarityParameterModelId == null && RarityParameterModelId == other.RarityParameterModelId)
+            diff = ModelComparer.Compare(RarityParameterModelId, other.RarityParameterModelId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Name, other.Name);
+            if (diff != 0)
             {
-                diff += RarityParameterModelId.CompareTo(other.RarityParameterModelId);
+                return diff;
             }
-            if (Name == null && Name == other.Name)
+            diff = ModelComparer.Compare(Description, other.Description);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Metadata, other.Metadata);
+            if (diff != 0)
             {
-                diff += Name.CompareTo(other.Name);
+                return diff;
             }
-            if (Description == null && Description == other.Description)
+            diff = ModelComparer.Compare(MaximumParameterCount, other.MaximumParameterCount);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(ParameterCounts, other.ParameterCounts);
+            if (diff != 0)
             {
-                diff += Description.CompareTo(other.Description);
+                return diff;
             }
-            if (Metadata == null && Metadata == other.Metadata)
+            diff = ModelComparer.CompareArray(Parameters, other.Parameters);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += Metadata.CompareTo(other.Metadata);
+                return diff;
             }
-            if (MaximumParameterCount == null && MaximumParameterCount == other.MaximumParameterCount)
+            diff = ModelComparer.Compare(UpdatedAt, other.UpdatedAt);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                diff += (int)(MaximumParameterCount - other.MaximumParameterCount);
+                return diff;
             }
-            if (ParameterCounts == null && ParameterCounts == other.ParameterCounts)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += ParameterCounts.Length - other.ParameterCounts.Length;
-                for (var i = 0; i < ParameterCounts.Length; i++)
-                {
-                    diff += ParameterCounts[i].CompareTo(other.ParameterCounts[i]);
-                }
-            }
-            if (Parameters == null && Parameters == other.Parameters)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Parameters.Length - other.Parameters.Length;
-                for (var i = 0; i < Parameters.Length; i++)
-                {
-                    diff += Parameters[i].CompareTo(other.Parameters[i]);
-                }
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (UpdatedAt == null && UpdatedAt == other.UpdatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(UpdatedAt - other.UpdatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

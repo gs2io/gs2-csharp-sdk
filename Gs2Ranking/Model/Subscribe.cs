@@ -259,72 +259,51 @@ namespace Gs2.Gs2Ranking.Model
         public int CompareTo(object obj)
         {
             var other = obj as Subscribe;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Subscribe.", nameof(obj));
+            }
             var diff = 0;
-            if (SubscribeId == null && SubscribeId == other.SubscribeId)
+            diff = ModelComparer.Compare(SubscribeId, other.SubscribeId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CategoryName, other.CategoryName);
+            if (diff != 0)
             {
-                diff += SubscribeId.CompareTo(other.SubscribeId);
+                return diff;
             }
-            if (CategoryName == null && CategoryName == other.CategoryName)
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.CompareArray(TargetUserIds, other.TargetUserIds);
+            if (diff != 0)
             {
-                diff += CategoryName.CompareTo(other.CategoryName);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.CompareArray(SubscribedUserIds, other.SubscribedUserIds);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (TargetUserIds == null && TargetUserIds == other.TargetUserIds)
+            diff = ModelComparer.Compare(Revision, other.Revision);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += TargetUserIds.Length - other.TargetUserIds.Length;
-                for (var i = 0; i < TargetUserIds.Length; i++)
-                {
-                    diff += TargetUserIds[i].CompareTo(other.TargetUserIds[i]);
-                }
-            }
-            if (SubscribedUserIds == null && SubscribedUserIds == other.SubscribedUserIds)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += SubscribedUserIds.Length - other.SubscribedUserIds.Length;
-                for (var i = 0; i < SubscribedUserIds.Length; i++)
-                {
-                    diff += SubscribedUserIds[i].CompareTo(other.SubscribedUserIds[i]);
-                }
-            }
-            if (CreatedAt == null && CreatedAt == other.CreatedAt)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(CreatedAt - other.CreatedAt);
-            }
-            if (Revision == null && Revision == other.Revision)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += (int)(Revision - other.Revision);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

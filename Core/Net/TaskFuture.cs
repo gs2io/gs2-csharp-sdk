@@ -20,15 +20,37 @@ namespace Gs2.Core.Net
         public TResult Result { get; private set; }
         public Gs2Exception Error { get; private set; }
 
-        private bool _isInvoked;
-        private bool _isOnProgress;
+        private volatile bool _isInvoked;
+        private volatile bool _isOnProgress;
+        private volatile bool _isComplete;
+
+#if GS2_ENABLE_UNITASK
+        private readonly AsyncLazy<TResult> _invokeTask;
+#else
+        private readonly Lazy<Task<TResult>> _invokeTask;
+#endif
+
+        protected TaskFuture()
+        {
+#if GS2_ENABLE_UNITASK
+            _invokeTask = UniTask.Lazy(InvokeOnce);
+#else
+            _invokeTask = new Lazy<Task<TResult>>(InvokeOnce);
+#endif
+        }
 
         public IEnumerator Action() => Invoke().ToCoroutine((Action<AsyncResult<TResult>>)null);
 
 #if GS2_ENABLE_UNITASK
-        public async UniTask<TResult> Invoke()
+        public UniTask<TResult> Invoke() => _invokeTask.Task;
 #else
-        public async Task<TResult> Invoke()
+        public Task<TResult> Invoke() => _invokeTask.Value;
+#endif
+
+#if GS2_ENABLE_UNITASK
+        private async UniTask<TResult> InvokeOnce()
+#else
+        private async Task<TResult> InvokeOnce()
 #endif
         {
             try
@@ -38,9 +60,9 @@ namespace Gs2.Core.Net
                 OnComplete(await InvokeImpl());
                 return Result;
             }
-            catch (Gs2Exception gs2Exception)
+            catch (System.Exception exception)
             {
-                OnError(gs2Exception);
+                OnError(exception as Gs2Exception ?? new UnknownException(exception.Message, exception));
                 throw Error;
             }
             finally
@@ -70,17 +92,19 @@ namespace Gs2.Core.Net
 
         public bool IsComplete()
         {
-            return Result != null || Error != null;
+            return _isComplete;
         }
 
         public virtual void OnError(Gs2Exception error)
         {
             Error = error;
+            _isComplete = true;
         }
 
         public virtual void OnComplete(TResult result)
         {
             Result = result;
+            _isComplete = true;
         }
 
 #if UNITY_2017_1_OR_NEWER && !GS2_ENABLE_UNITASK

@@ -94,32 +94,31 @@ namespace Gs2.Gs2News.Model
         public int CompareTo(object obj)
         {
             var other = obj as Content;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Content.", nameof(obj));
+            }
             var diff = 0;
-            if (Section == null && Section == other.Section)
+            diff = ModelComparer.Compare(Section, other.Section);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Value, other.Value);
+            if (diff != 0)
             {
-                diff += Section.CompareTo(other.Section);
+                return diff;
             }
-            if (Value == null && Value == other.Value)
+            diff = ModelComparer.Compare(FrontMatter, other.FrontMatter);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += Value.CompareTo(other.Value);
-            }
-            if (FrontMatter == null && FrontMatter == other.FrontMatter)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += FrontMatter.CompareTo(other.FrontMatter);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

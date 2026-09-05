@@ -94,32 +94,31 @@ namespace Gs2.Gs2Money2.Model
         public int CompareTo(object obj)
         {
             var other = obj as PlatformSetting;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type PlatformSetting.", nameof(obj));
+            }
             var diff = 0;
-            if (AppleAppStore == null && AppleAppStore == other.AppleAppStore)
+            diff = ModelComparer.Compare(AppleAppStore, other.AppleAppStore);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(GooglePlay, other.GooglePlay);
+            if (diff != 0)
             {
-                diff += AppleAppStore.CompareTo(other.AppleAppStore);
+                return diff;
             }
-            if (GooglePlay == null && GooglePlay == other.GooglePlay)
+            diff = ModelComparer.Compare(Fake, other.Fake);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
-            {
-                diff += GooglePlay.CompareTo(other.GooglePlay);
-            }
-            if (Fake == null && Fake == other.Fake)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Fake.CompareTo(other.Fake);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

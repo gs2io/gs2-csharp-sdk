@@ -62,7 +62,9 @@ namespace Gs2.Core.Exception
                 if (future.Error != null)
                 {
                     self.OnError(future.Error);
+                    yield break;
                 }
+                self.OnComplete(null);
             }
             return new Gs2InlineFuture(Impl);
         }
@@ -76,10 +78,11 @@ namespace Gs2.Core.Exception
                     try
                     {
                         await this._transaction.WaitAsync();
+                        self.OnComplete(null);
                     }
-                    catch (Gs2Exception e)
+                    catch (System.Exception e)
                     {
-                        self.OnError(e);
+                        self.OnError(e as Gs2Exception ?? new UnknownException(e.Message, e));
                     }
                 });
             }

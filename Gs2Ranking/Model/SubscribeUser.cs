@@ -207,40 +207,36 @@ namespace Gs2.Gs2Ranking.Model
         public int CompareTo(object obj)
         {
             var other = obj as SubscribeUser;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type SubscribeUser.", nameof(obj));
+            }
             var diff = 0;
-            if (SubscribeUserId == null && SubscribeUserId == other.SubscribeUserId)
+            diff = ModelComparer.Compare(SubscribeUserId, other.SubscribeUserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(CategoryName, other.CategoryName);
+            if (diff != 0)
             {
-                diff += SubscribeUserId.CompareTo(other.SubscribeUserId);
+                return diff;
             }
-            if (CategoryName == null && CategoryName == other.CategoryName)
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(TargetUserId, other.TargetUserId);
+            if (diff != 0)
             {
-                diff += CategoryName.CompareTo(other.CategoryName);
+                return diff;
             }
-            if (UserId == null && UserId == other.UserId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += UserId.CompareTo(other.UserId);
-            }
-            if (TargetUserId == null && TargetUserId == other.TargetUserId)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += TargetUserId.CompareTo(other.TargetUserId);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {

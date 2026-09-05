@@ -127,56 +127,46 @@ namespace Gs2.Gs2Gateway.Model
         public int CompareTo(object obj)
         {
             var other = obj as SendNotificationEntry;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type SendNotificationEntry.", nameof(obj));
+            }
             var diff = 0;
-            if (UserId == null && UserId == other.UserId)
+            diff = ModelComparer.Compare(UserId, other.UserId);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Issuer, other.Issuer);
+            if (diff != 0)
             {
-                diff += UserId.CompareTo(other.UserId);
+                return diff;
             }
-            if (Issuer == null && Issuer == other.Issuer)
+            diff = ModelComparer.Compare(Subject, other.Subject);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Payload, other.Payload);
+            if (diff != 0)
             {
-                diff += Issuer.CompareTo(other.Issuer);
+                return diff;
             }
-            if (Subject == null && Subject == other.Subject)
+            diff = ModelComparer.Compare(EnableTransferMobileNotification, other.EnableTransferMobileNotification);
+            if (diff != 0)
             {
-                // null and null
+                return diff;
             }
-            else
+            diff = ModelComparer.Compare(Sound, other.Sound);
+            if (diff != 0)
             {
-                diff += Subject.CompareTo(other.Subject);
+                return diff;
             }
-            if (Payload == null && Payload == other.Payload)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Payload.CompareTo(other.Payload);
-            }
-            if (EnableTransferMobileNotification == null && EnableTransferMobileNotification == other.EnableTransferMobileNotification)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += EnableTransferMobileNotification == other.EnableTransferMobileNotification ? 0 : 1;
-            }
-            if (Sound == null && Sound == other.Sound)
-            {
-                // null and null
-            }
-            else
-            {
-                diff += Sound.CompareTo(other.Sound);
-            }
-            return diff;
+            return 0;
         }
 
         public void Validate() {
