@@ -38,7 +38,9 @@ namespace Gs2.Gs2Idle.Request
 	{
          public string Name { set; get; } = null!;
          public string Description { set; get; } = null!;
+        [Obsolete("This method is deprecated")]
          public Gs2.Gs2Idle.Model.TransactionSetting TransactionSetting { set; get; } = null!;
+         public Gs2.Gs2Idle.Model.TransactionSettingV2 TransactionSettingV2 { set; get; } = null!;
          public Gs2.Gs2Idle.Model.ScriptSetting ReceiveScript { set; get; } = null!;
          public string OverrideAcquireActionsScriptId { set; get; } = null!;
          public Gs2.Gs2Idle.Model.LogSetting LogSetting { set; get; } = null!;
@@ -50,8 +52,13 @@ namespace Gs2.Gs2Idle.Request
             this.Description = description;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public CreateNamespaceRequest WithTransactionSetting(Gs2.Gs2Idle.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
+            return this;
+        }
+        public CreateNamespaceRequest WithTransactionSettingV2(Gs2.Gs2Idle.Model.TransactionSettingV2 transactionSettingV2) {
+            this.TransactionSettingV2 = transactionSettingV2;
             return this;
         }
         public CreateNamespaceRequest WithReceiveScript(Gs2.Gs2Idle.Model.ScriptSetting receiveScript) {
@@ -78,7 +85,7 @@ namespace Gs2.Gs2Idle.Request
             return new CreateNamespaceRequest()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
-                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Idle.Model.TransactionSetting.FromJson(data["transactionSetting"]))
+                .WithTransactionSettingV2(!data.Keys.Contains("transactionSettingV2") || data["transactionSettingV2"] == null ? null : Gs2.Gs2Idle.Model.TransactionSettingV2.FromJson(data["transactionSettingV2"]))
                 .WithReceiveScript(!data.Keys.Contains("receiveScript") || data["receiveScript"] == null ? null : Gs2.Gs2Idle.Model.ScriptSetting.FromJson(data["receiveScript"]))
                 .WithOverrideAcquireActionsScriptId(!data.Keys.Contains("overrideAcquireActionsScriptId") || data["overrideAcquireActionsScriptId"] == null ? null : data["overrideAcquireActionsScriptId"].ToString())
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Idle.Model.LogSetting.FromJson(data["logSetting"]));
@@ -89,7 +96,7 @@ namespace Gs2.Gs2Idle.Request
             return new JsonData {
                 ["name"] = Name,
                 ["description"] = Description,
-                ["transactionSetting"] = TransactionSetting?.ToJson(),
+                ["transactionSettingV2"] = TransactionSettingV2?.ToJson(),
                 ["receiveScript"] = ReceiveScript?.ToJson(),
                 ["overrideAcquireActionsScriptId"] = OverrideAcquireActionsScriptId,
                 ["logSetting"] = LogSetting?.ToJson(),
@@ -110,6 +117,9 @@ namespace Gs2.Gs2Idle.Request
             if (TransactionSetting != null) {
                 TransactionSetting.WriteJson(writer);
             }
+            if (TransactionSettingV2 != null) {
+                TransactionSettingV2.WriteJson(writer);
+            }
             if (ReceiveScript != null) {
                 ReceiveScript.WriteJson(writer);
             }
@@ -127,7 +137,7 @@ namespace Gs2.Gs2Idle.Request
             var key = "";
             key += Name + ":";
             key += Description + ":";
-            key += TransactionSetting + ":";
+            key += TransactionSettingV2 + ":";
             key += ReceiveScript + ":";
             key += OverrideAcquireActionsScriptId + ":";
             key += LogSetting + ":";

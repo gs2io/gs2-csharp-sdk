@@ -38,7 +38,9 @@ namespace Gs2.Gs2Mission.Request
 	{
          public string Name { set; get; } = null!;
          public string Description { set; get; } = null!;
+        [Obsolete("This method is deprecated")]
          public Gs2.Gs2Mission.Model.TransactionSetting TransactionSetting { set; get; } = null!;
+         public Gs2.Gs2Mission.Model.TransactionSettingV2 TransactionSettingV2 { set; get; } = null!;
          public Gs2.Gs2Mission.Model.ScriptSetting MissionCompleteScript { set; get; } = null!;
          public Gs2.Gs2Mission.Model.ScriptSetting CounterIncrementScript { set; get; } = null!;
          public Gs2.Gs2Mission.Model.ScriptSetting ReceiveRewardsScript { set; get; } = null!;
@@ -56,8 +58,13 @@ namespace Gs2.Gs2Mission.Request
             this.Description = description;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public CreateNamespaceRequest WithTransactionSetting(Gs2.Gs2Mission.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
+            return this;
+        }
+        public CreateNamespaceRequest WithTransactionSettingV2(Gs2.Gs2Mission.Model.TransactionSettingV2 transactionSettingV2) {
+            this.TransactionSettingV2 = transactionSettingV2;
             return this;
         }
         public CreateNamespaceRequest WithMissionCompleteScript(Gs2.Gs2Mission.Model.ScriptSetting missionCompleteScript) {
@@ -102,7 +109,7 @@ namespace Gs2.Gs2Mission.Request
             return new CreateNamespaceRequest()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
-                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Mission.Model.TransactionSetting.FromJson(data["transactionSetting"]))
+                .WithTransactionSettingV2(!data.Keys.Contains("transactionSettingV2") || data["transactionSettingV2"] == null ? null : Gs2.Gs2Mission.Model.TransactionSettingV2.FromJson(data["transactionSettingV2"]))
                 .WithMissionCompleteScript(!data.Keys.Contains("missionCompleteScript") || data["missionCompleteScript"] == null ? null : Gs2.Gs2Mission.Model.ScriptSetting.FromJson(data["missionCompleteScript"]))
                 .WithCounterIncrementScript(!data.Keys.Contains("counterIncrementScript") || data["counterIncrementScript"] == null ? null : Gs2.Gs2Mission.Model.ScriptSetting.FromJson(data["counterIncrementScript"]))
                 .WithReceiveRewardsScript(!data.Keys.Contains("receiveRewardsScript") || data["receiveRewardsScript"] == null ? null : Gs2.Gs2Mission.Model.ScriptSetting.FromJson(data["receiveRewardsScript"]))
@@ -115,7 +122,7 @@ namespace Gs2.Gs2Mission.Request
             return new JsonData {
                 ["name"] = Name,
                 ["description"] = Description,
-                ["transactionSetting"] = TransactionSetting?.ToJson(),
+                ["transactionSettingV2"] = TransactionSettingV2?.ToJson(),
                 ["missionCompleteScript"] = MissionCompleteScript?.ToJson(),
                 ["counterIncrementScript"] = CounterIncrementScript?.ToJson(),
                 ["receiveRewardsScript"] = ReceiveRewardsScript?.ToJson(),
@@ -137,6 +144,9 @@ namespace Gs2.Gs2Mission.Request
             }
             if (TransactionSetting != null) {
                 TransactionSetting.WriteJson(writer);
+            }
+            if (TransactionSettingV2 != null) {
+                TransactionSettingV2.WriteJson(writer);
             }
             if (MissionCompleteScript != null) {
                 MissionCompleteScript.WriteJson(writer);
@@ -168,7 +178,7 @@ namespace Gs2.Gs2Mission.Request
             var key = "";
             key += Name + ":";
             key += Description + ":";
-            key += TransactionSetting + ":";
+            key += TransactionSettingV2 + ":";
             key += MissionCompleteScript + ":";
             key += CounterIncrementScript + ":";
             key += ReceiveRewardsScript + ":";

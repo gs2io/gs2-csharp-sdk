@@ -37,7 +37,9 @@ namespace Gs2.Gs2Inventory.Model
         public string NamespaceId { set; get; }
         public string Name { set; get; }
         public string Description { set; get; }
+        [Obsolete("This method is deprecated")]
         public Gs2.Gs2Inventory.Model.TransactionSetting TransactionSetting { set; get; }
+        public Gs2.Gs2Inventory.Model.TransactionSettingV2 TransactionSettingV2 { set; get; }
         public Gs2.Gs2Inventory.Model.ScriptSetting AcquireScript { set; get; }
         public Gs2.Gs2Inventory.Model.ScriptSetting OverflowScript { set; get; }
         public Gs2.Gs2Inventory.Model.ScriptSetting ConsumeScript { set; get; }
@@ -61,8 +63,13 @@ namespace Gs2.Gs2Inventory.Model
             this.Description = description;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public Namespace WithTransactionSetting(Gs2.Gs2Inventory.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
+            return this;
+        }
+        public Namespace WithTransactionSettingV2(Gs2.Gs2Inventory.Model.TransactionSettingV2 transactionSettingV2) {
+            this.TransactionSettingV2 = transactionSettingV2;
             return this;
         }
         public Namespace WithAcquireScript(Gs2.Gs2Inventory.Model.ScriptSetting acquireScript) {
@@ -174,6 +181,7 @@ namespace Gs2.Gs2Inventory.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Inventory.Model.TransactionSetting.FromJson(data["transactionSetting"]))
+                .WithTransactionSettingV2(!data.Keys.Contains("transactionSettingV2") || data["transactionSettingV2"] == null ? null : Gs2.Gs2Inventory.Model.TransactionSettingV2.FromJson(data["transactionSettingV2"]))
                 .WithAcquireScript(!data.Keys.Contains("acquireScript") || data["acquireScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["acquireScript"]))
                 .WithOverflowScript(!data.Keys.Contains("overflowScript") || data["overflowScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["overflowScript"]))
                 .WithConsumeScript(!data.Keys.Contains("consumeScript") || data["consumeScript"] == null ? null : Gs2.Gs2Inventory.Model.ScriptSetting.FromJson(data["consumeScript"]))
@@ -193,7 +201,7 @@ namespace Gs2.Gs2Inventory.Model
                 ["namespaceId"] = NamespaceId,
                 ["name"] = Name,
                 ["description"] = Description,
-                ["transactionSetting"] = TransactionSetting?.ToJson(),
+                ["transactionSettingV2"] = TransactionSettingV2?.ToJson(),
                 ["acquireScript"] = AcquireScript?.ToJson(),
                 ["overflowScript"] = OverflowScript?.ToJson(),
                 ["consumeScript"] = ConsumeScript?.ToJson(),
@@ -226,6 +234,10 @@ namespace Gs2.Gs2Inventory.Model
             if (TransactionSetting != null) {
                 writer.WritePropertyName("transactionSetting");
                 TransactionSetting.WriteJson(writer);
+            }
+            if (TransactionSettingV2 != null) {
+                writer.WritePropertyName("transactionSettingV2");
+                TransactionSettingV2.WriteJson(writer);
             }
             if (AcquireScript != null) {
                 writer.WritePropertyName("acquireScript");
@@ -302,6 +314,11 @@ namespace Gs2.Gs2Inventory.Model
                 return diff;
             }
             diff = ModelComparer.Compare(TransactionSetting, other.TransactionSetting);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(TransactionSettingV2, other.TransactionSettingV2);
             if (diff != 0)
             {
                 return diff;
@@ -448,6 +465,7 @@ namespace Gs2.Gs2Inventory.Model
                 Name = Name,
                 Description = Description,
                 TransactionSetting = TransactionSetting?.Clone() as Gs2.Gs2Inventory.Model.TransactionSetting,
+                TransactionSettingV2 = TransactionSettingV2?.Clone() as Gs2.Gs2Inventory.Model.TransactionSettingV2,
                 AcquireScript = AcquireScript?.Clone() as Gs2.Gs2Inventory.Model.ScriptSetting,
                 OverflowScript = OverflowScript?.Clone() as Gs2.Gs2Inventory.Model.ScriptSetting,
                 ConsumeScript = ConsumeScript?.Clone() as Gs2.Gs2Inventory.Model.ScriptSetting,

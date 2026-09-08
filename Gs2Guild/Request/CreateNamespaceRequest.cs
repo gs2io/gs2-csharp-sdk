@@ -38,7 +38,9 @@ namespace Gs2.Gs2Guild.Request
 	{
          public string Name { set; get; } = null!;
          public string Description { set; get; } = null!;
+        [Obsolete("This method is deprecated")]
          public Gs2.Gs2Guild.Model.TransactionSetting TransactionSetting { set; get; } = null!;
+         public Gs2.Gs2Guild.Model.TransactionSettingV2 TransactionSettingV2 { set; get; } = null!;
          public Gs2.Gs2Guild.Model.NotificationSetting ChangeNotification { set; get; } = null!;
          public Gs2.Gs2Guild.Model.NotificationSetting JoinNotification { set; get; } = null!;
          public Gs2.Gs2Guild.Model.NotificationSetting LeaveNotification { set; get; } = null!;
@@ -62,8 +64,13 @@ namespace Gs2.Gs2Guild.Request
             this.Description = description;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public CreateNamespaceRequest WithTransactionSetting(Gs2.Gs2Guild.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
+            return this;
+        }
+        public CreateNamespaceRequest WithTransactionSettingV2(Gs2.Gs2Guild.Model.TransactionSettingV2 transactionSettingV2) {
+            this.TransactionSettingV2 = transactionSettingV2;
             return this;
         }
         public CreateNamespaceRequest WithChangeNotification(Gs2.Gs2Guild.Model.NotificationSetting changeNotification) {
@@ -138,7 +145,7 @@ namespace Gs2.Gs2Guild.Request
             return new CreateNamespaceRequest()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
-                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Guild.Model.TransactionSetting.FromJson(data["transactionSetting"]))
+                .WithTransactionSettingV2(!data.Keys.Contains("transactionSettingV2") || data["transactionSettingV2"] == null ? null : Gs2.Gs2Guild.Model.TransactionSettingV2.FromJson(data["transactionSettingV2"]))
                 .WithChangeNotification(!data.Keys.Contains("changeNotification") || data["changeNotification"] == null ? null : Gs2.Gs2Guild.Model.NotificationSetting.FromJson(data["changeNotification"]))
                 .WithJoinNotification(!data.Keys.Contains("joinNotification") || data["joinNotification"] == null ? null : Gs2.Gs2Guild.Model.NotificationSetting.FromJson(data["joinNotification"]))
                 .WithLeaveNotification(!data.Keys.Contains("leaveNotification") || data["leaveNotification"] == null ? null : Gs2.Gs2Guild.Model.NotificationSetting.FromJson(data["leaveNotification"]))
@@ -161,7 +168,7 @@ namespace Gs2.Gs2Guild.Request
             return new JsonData {
                 ["name"] = Name,
                 ["description"] = Description,
-                ["transactionSetting"] = TransactionSetting?.ToJson(),
+                ["transactionSettingV2"] = TransactionSettingV2?.ToJson(),
                 ["changeNotification"] = ChangeNotification?.ToJson(),
                 ["joinNotification"] = JoinNotification?.ToJson(),
                 ["leaveNotification"] = LeaveNotification?.ToJson(),
@@ -193,6 +200,9 @@ namespace Gs2.Gs2Guild.Request
             }
             if (TransactionSetting != null) {
                 TransactionSetting.WriteJson(writer);
+            }
+            if (TransactionSettingV2 != null) {
+                TransactionSettingV2.WriteJson(writer);
             }
             if (ChangeNotification != null) {
                 ChangeNotification.WriteJson(writer);
@@ -247,7 +257,7 @@ namespace Gs2.Gs2Guild.Request
             var key = "";
             key += Name + ":";
             key += Description + ":";
-            key += TransactionSetting + ":";
+            key += TransactionSettingV2 + ":";
             key += ChangeNotification + ":";
             key += JoinNotification + ":";
             key += LeaveNotification + ":";

@@ -81,6 +81,11 @@ namespace Gs2.Gs2Money
                     jsonWriter.WritePropertyName("transactionSetting");
                     request.TransactionSetting.WriteJson(jsonWriter);
                 }
+                if (request.TransactionSettingV2 != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSettingV2");
+                    request.TransactionSettingV2.WriteJson(jsonWriter);
+                }
                 if (request.Priority != null)
                 {
                     jsonWriter.WritePropertyName("priority");
@@ -413,6 +418,11 @@ namespace Gs2.Gs2Money
                 {
                     jsonWriter.WritePropertyName("transactionSetting");
                     request.TransactionSetting.WriteJson(jsonWriter);
+                }
+                if (request.TransactionSettingV2 != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSettingV2");
+                    request.TransactionSettingV2.WriteJson(jsonWriter);
                 }
                 if (request.Priority != null)
                 {

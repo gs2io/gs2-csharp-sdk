@@ -37,7 +37,9 @@ namespace Gs2.Gs2SkillTree.Model
         public string NamespaceId { set; get; }
         public string Name { set; get; }
         public string Description { set; get; }
+        [Obsolete("This method is deprecated")]
         public Gs2.Gs2SkillTree.Model.TransactionSetting TransactionSetting { set; get; }
+        public Gs2.Gs2SkillTree.Model.TransactionSettingV2 TransactionSettingV2 { set; get; }
         public Gs2.Gs2SkillTree.Model.ScriptSetting ReleaseScript { set; get; }
         public Gs2.Gs2SkillTree.Model.ScriptSetting RestrainScript { set; get; }
         public Gs2.Gs2SkillTree.Model.LogSetting LogSetting { set; get; }
@@ -56,8 +58,13 @@ namespace Gs2.Gs2SkillTree.Model
             this.Description = description;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public Namespace WithTransactionSetting(Gs2.Gs2SkillTree.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
+            return this;
+        }
+        public Namespace WithTransactionSettingV2(Gs2.Gs2SkillTree.Model.TransactionSettingV2 transactionSettingV2) {
+            this.TransactionSettingV2 = transactionSettingV2;
             return this;
         }
         public Namespace WithReleaseScript(Gs2.Gs2SkillTree.Model.ScriptSetting releaseScript) {
@@ -149,6 +156,7 @@ namespace Gs2.Gs2SkillTree.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2SkillTree.Model.TransactionSetting.FromJson(data["transactionSetting"]))
+                .WithTransactionSettingV2(!data.Keys.Contains("transactionSettingV2") || data["transactionSettingV2"] == null ? null : Gs2.Gs2SkillTree.Model.TransactionSettingV2.FromJson(data["transactionSettingV2"]))
                 .WithReleaseScript(!data.Keys.Contains("releaseScript") || data["releaseScript"] == null ? null : Gs2.Gs2SkillTree.Model.ScriptSetting.FromJson(data["releaseScript"]))
                 .WithRestrainScript(!data.Keys.Contains("restrainScript") || data["restrainScript"] == null ? null : Gs2.Gs2SkillTree.Model.ScriptSetting.FromJson(data["restrainScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2SkillTree.Model.LogSetting.FromJson(data["logSetting"]))
@@ -163,7 +171,7 @@ namespace Gs2.Gs2SkillTree.Model
                 ["namespaceId"] = NamespaceId,
                 ["name"] = Name,
                 ["description"] = Description,
-                ["transactionSetting"] = TransactionSetting?.ToJson(),
+                ["transactionSettingV2"] = TransactionSettingV2?.ToJson(),
                 ["releaseScript"] = ReleaseScript?.ToJson(),
                 ["restrainScript"] = RestrainScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
@@ -191,6 +199,10 @@ namespace Gs2.Gs2SkillTree.Model
             if (TransactionSetting != null) {
                 writer.WritePropertyName("transactionSetting");
                 TransactionSetting.WriteJson(writer);
+            }
+            if (TransactionSettingV2 != null) {
+                writer.WritePropertyName("transactionSettingV2");
+                TransactionSettingV2.WriteJson(writer);
             }
             if (ReleaseScript != null) {
                 writer.WritePropertyName("releaseScript");
@@ -247,6 +259,11 @@ namespace Gs2.Gs2SkillTree.Model
                 return diff;
             }
             diff = ModelComparer.Compare(TransactionSetting, other.TransactionSetting);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(TransactionSettingV2, other.TransactionSettingV2);
             if (diff != 0)
             {
                 return diff;
@@ -358,6 +375,7 @@ namespace Gs2.Gs2SkillTree.Model
                 Name = Name,
                 Description = Description,
                 TransactionSetting = TransactionSetting?.Clone() as Gs2.Gs2SkillTree.Model.TransactionSetting,
+                TransactionSettingV2 = TransactionSettingV2?.Clone() as Gs2.Gs2SkillTree.Model.TransactionSettingV2,
                 ReleaseScript = ReleaseScript?.Clone() as Gs2.Gs2SkillTree.Model.ScriptSetting,
                 RestrainScript = RestrainScript?.Clone() as Gs2.Gs2SkillTree.Model.ScriptSetting,
                 LogSetting = LogSetting?.Clone() as Gs2.Gs2SkillTree.Model.LogSetting,

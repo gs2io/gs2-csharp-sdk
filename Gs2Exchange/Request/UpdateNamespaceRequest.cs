@@ -40,7 +40,9 @@ namespace Gs2.Gs2Exchange.Request
          public string Description { set; get; } = null!;
          public bool? EnableAwaitExchange { set; get; } = null!;
          public bool? EnableDirectExchange { set; get; } = null!;
+        [Obsolete("This method is deprecated")]
          public Gs2.Gs2Exchange.Model.TransactionSetting TransactionSetting { set; get; } = null!;
+         public Gs2.Gs2Exchange.Model.TransactionSettingV2 TransactionSettingV2 { set; get; } = null!;
          public Gs2.Gs2Exchange.Model.ScriptSetting ExchangeScript { set; get; } = null!;
          public Gs2.Gs2Exchange.Model.ScriptSetting IncrementalExchangeScript { set; get; } = null!;
          public Gs2.Gs2Exchange.Model.ScriptSetting AcquireAwaitScript { set; get; } = null!;
@@ -65,8 +67,13 @@ namespace Gs2.Gs2Exchange.Request
             this.EnableDirectExchange = enableDirectExchange;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2Exchange.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
+            return this;
+        }
+        public UpdateNamespaceRequest WithTransactionSettingV2(Gs2.Gs2Exchange.Model.TransactionSettingV2 transactionSettingV2) {
+            this.TransactionSettingV2 = transactionSettingV2;
             return this;
         }
         public UpdateNamespaceRequest WithExchangeScript(Gs2.Gs2Exchange.Model.ScriptSetting exchangeScript) {
@@ -109,7 +116,7 @@ namespace Gs2.Gs2Exchange.Request
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithEnableAwaitExchange(!data.Keys.Contains("enableAwaitExchange") || data["enableAwaitExchange"] == null ? null : (bool?)bool.Parse(data["enableAwaitExchange"].ToString()))
                 .WithEnableDirectExchange(!data.Keys.Contains("enableDirectExchange") || data["enableDirectExchange"] == null ? null : (bool?)bool.Parse(data["enableDirectExchange"].ToString()))
-                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Exchange.Model.TransactionSetting.FromJson(data["transactionSetting"]))
+                .WithTransactionSettingV2(!data.Keys.Contains("transactionSettingV2") || data["transactionSettingV2"] == null ? null : Gs2.Gs2Exchange.Model.TransactionSettingV2.FromJson(data["transactionSettingV2"]))
                 .WithExchangeScript(!data.Keys.Contains("exchangeScript") || data["exchangeScript"] == null ? null : Gs2.Gs2Exchange.Model.ScriptSetting.FromJson(data["exchangeScript"]))
                 .WithIncrementalExchangeScript(!data.Keys.Contains("incrementalExchangeScript") || data["incrementalExchangeScript"] == null ? null : Gs2.Gs2Exchange.Model.ScriptSetting.FromJson(data["incrementalExchangeScript"]))
                 .WithAcquireAwaitScript(!data.Keys.Contains("acquireAwaitScript") || data["acquireAwaitScript"] == null ? null : Gs2.Gs2Exchange.Model.ScriptSetting.FromJson(data["acquireAwaitScript"]))
@@ -123,7 +130,7 @@ namespace Gs2.Gs2Exchange.Request
                 ["description"] = Description,
                 ["enableAwaitExchange"] = EnableAwaitExchange,
                 ["enableDirectExchange"] = EnableDirectExchange,
-                ["transactionSetting"] = TransactionSetting?.ToJson(),
+                ["transactionSettingV2"] = TransactionSettingV2?.ToJson(),
                 ["exchangeScript"] = ExchangeScript?.ToJson(),
                 ["incrementalExchangeScript"] = IncrementalExchangeScript?.ToJson(),
                 ["acquireAwaitScript"] = AcquireAwaitScript?.ToJson(),
@@ -152,6 +159,9 @@ namespace Gs2.Gs2Exchange.Request
             }
             if (TransactionSetting != null) {
                 TransactionSetting.WriteJson(writer);
+            }
+            if (TransactionSettingV2 != null) {
+                TransactionSettingV2.WriteJson(writer);
             }
             if (ExchangeScript != null) {
                 ExchangeScript.WriteJson(writer);
@@ -182,7 +192,7 @@ namespace Gs2.Gs2Exchange.Request
             key += Description + ":";
             key += EnableAwaitExchange + ":";
             key += EnableDirectExchange + ":";
-            key += TransactionSetting + ":";
+            key += TransactionSettingV2 + ":";
             key += ExchangeScript + ":";
             key += IncrementalExchangeScript + ":";
             key += AcquireAwaitScript + ":";

@@ -37,7 +37,9 @@ namespace Gs2.Gs2Buff.Model
         public string NamespaceId { set; get; }
         public string Name { set; get; }
         public string Description { set; get; }
+        [Obsolete("This method is deprecated")]
         public Gs2.Gs2Buff.Model.TransactionSetting TransactionSetting { set; get; }
+        public Gs2.Gs2Buff.Model.TransactionSettingV2 TransactionSettingV2 { set; get; }
         public Gs2.Gs2Buff.Model.ScriptSetting ApplyBuffScript { set; get; }
         public Gs2.Gs2Buff.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
@@ -55,8 +57,13 @@ namespace Gs2.Gs2Buff.Model
             this.Description = description;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public Namespace WithTransactionSetting(Gs2.Gs2Buff.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
+            return this;
+        }
+        public Namespace WithTransactionSettingV2(Gs2.Gs2Buff.Model.TransactionSettingV2 transactionSettingV2) {
+            this.TransactionSettingV2 = transactionSettingV2;
             return this;
         }
         public Namespace WithApplyBuffScript(Gs2.Gs2Buff.Model.ScriptSetting applyBuffScript) {
@@ -144,6 +151,7 @@ namespace Gs2.Gs2Buff.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Buff.Model.TransactionSetting.FromJson(data["transactionSetting"]))
+                .WithTransactionSettingV2(!data.Keys.Contains("transactionSettingV2") || data["transactionSettingV2"] == null ? null : Gs2.Gs2Buff.Model.TransactionSettingV2.FromJson(data["transactionSettingV2"]))
                 .WithApplyBuffScript(!data.Keys.Contains("applyBuffScript") || data["applyBuffScript"] == null ? null : Gs2.Gs2Buff.Model.ScriptSetting.FromJson(data["applyBuffScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Buff.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
@@ -157,7 +165,7 @@ namespace Gs2.Gs2Buff.Model
                 ["namespaceId"] = NamespaceId,
                 ["name"] = Name,
                 ["description"] = Description,
-                ["transactionSetting"] = TransactionSetting?.ToJson(),
+                ["transactionSettingV2"] = TransactionSettingV2?.ToJson(),
                 ["applyBuffScript"] = ApplyBuffScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
@@ -184,6 +192,10 @@ namespace Gs2.Gs2Buff.Model
             if (TransactionSetting != null) {
                 writer.WritePropertyName("transactionSetting");
                 TransactionSetting.WriteJson(writer);
+            }
+            if (TransactionSettingV2 != null) {
+                writer.WritePropertyName("transactionSettingV2");
+                TransactionSettingV2.WriteJson(writer);
             }
             if (ApplyBuffScript != null) {
                 writer.WritePropertyName("applyBuffScript");
@@ -236,6 +248,11 @@ namespace Gs2.Gs2Buff.Model
                 return diff;
             }
             diff = ModelComparer.Compare(TransactionSetting, other.TransactionSetting);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(TransactionSettingV2, other.TransactionSettingV2);
             if (diff != 0)
             {
                 return diff;
@@ -340,6 +357,7 @@ namespace Gs2.Gs2Buff.Model
                 Name = Name,
                 Description = Description,
                 TransactionSetting = TransactionSetting?.Clone() as Gs2.Gs2Buff.Model.TransactionSetting,
+                TransactionSettingV2 = TransactionSettingV2?.Clone() as Gs2.Gs2Buff.Model.TransactionSettingV2,
                 ApplyBuffScript = ApplyBuffScript?.Clone() as Gs2.Gs2Buff.Model.ScriptSetting,
                 LogSetting = LogSetting?.Clone() as Gs2.Gs2Buff.Model.LogSetting,
                 CreatedAt = CreatedAt,

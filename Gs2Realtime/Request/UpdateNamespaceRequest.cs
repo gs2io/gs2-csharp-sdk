@@ -38,7 +38,9 @@ namespace Gs2.Gs2Realtime.Request
 	{
          public string NamespaceName { set; get; } = null!;
          public string Description { set; get; } = null!;
+        [Obsolete("This method is deprecated")]
          public Gs2.Gs2Realtime.Model.TransactionSetting TransactionSetting { set; get; } = null!;
+         public Gs2.Gs2Realtime.Model.TransactionSettingV2 TransactionSettingV2 { set; get; } = null!;
          public string ServerType { set; get; } = null!;
          public string ServerSpec { set; get; } = null!;
          public Gs2.Gs2Realtime.Model.NotificationSetting CreateNotification { set; get; } = null!;
@@ -51,8 +53,13 @@ namespace Gs2.Gs2Realtime.Request
             this.Description = description;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2Realtime.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
+            return this;
+        }
+        public UpdateNamespaceRequest WithTransactionSettingV2(Gs2.Gs2Realtime.Model.TransactionSettingV2 transactionSettingV2) {
+            this.TransactionSettingV2 = transactionSettingV2;
             return this;
         }
         public UpdateNamespaceRequest WithServerType(string serverType) {
@@ -83,7 +90,7 @@ namespace Gs2.Gs2Realtime.Request
             return new UpdateNamespaceRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
-                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Realtime.Model.TransactionSetting.FromJson(data["transactionSetting"]))
+                .WithTransactionSettingV2(!data.Keys.Contains("transactionSettingV2") || data["transactionSettingV2"] == null ? null : Gs2.Gs2Realtime.Model.TransactionSettingV2.FromJson(data["transactionSettingV2"]))
                 .WithServerType(!data.Keys.Contains("serverType") || data["serverType"] == null ? null : data["serverType"].ToString())
                 .WithServerSpec(!data.Keys.Contains("serverSpec") || data["serverSpec"] == null ? null : data["serverSpec"].ToString())
                 .WithCreateNotification(!data.Keys.Contains("createNotification") || data["createNotification"] == null ? null : Gs2.Gs2Realtime.Model.NotificationSetting.FromJson(data["createNotification"]))
@@ -95,7 +102,7 @@ namespace Gs2.Gs2Realtime.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["description"] = Description,
-                ["transactionSetting"] = TransactionSetting?.ToJson(),
+                ["transactionSettingV2"] = TransactionSettingV2?.ToJson(),
                 ["serverType"] = ServerType,
                 ["serverSpec"] = ServerSpec,
                 ["createNotification"] = CreateNotification?.ToJson(),
@@ -116,6 +123,9 @@ namespace Gs2.Gs2Realtime.Request
             }
             if (TransactionSetting != null) {
                 TransactionSetting.WriteJson(writer);
+            }
+            if (TransactionSettingV2 != null) {
+                TransactionSettingV2.WriteJson(writer);
             }
             if (ServerType != null) {
                 writer.WritePropertyName("serverType");
@@ -138,7 +148,7 @@ namespace Gs2.Gs2Realtime.Request
             var key = "";
             key += NamespaceName + ":";
             key += Description + ":";
-            key += TransactionSetting + ":";
+            key += TransactionSettingV2 + ":";
             key += ServerType + ":";
             key += ServerSpec + ":";
             key += CreateNotification + ":";

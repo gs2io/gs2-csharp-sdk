@@ -38,7 +38,9 @@ namespace Gs2.Gs2Inbox.Model
         public string Name { set; get; }
         public string Description { set; get; }
         public bool? IsAutomaticDeletingEnabled { set; get; }
+        [Obsolete("This method is deprecated")]
         public Gs2.Gs2Inbox.Model.TransactionSetting TransactionSetting { set; get; }
+        public Gs2.Gs2Inbox.Model.TransactionSettingV2 TransactionSettingV2 { set; get; }
         public Gs2.Gs2Inbox.Model.ScriptSetting ReceiveMessageScript { set; get; }
         public Gs2.Gs2Inbox.Model.ScriptSetting ReadMessageScript { set; get; }
         public Gs2.Gs2Inbox.Model.ScriptSetting DeleteMessageScript { set; get; }
@@ -67,8 +69,13 @@ namespace Gs2.Gs2Inbox.Model
             this.IsAutomaticDeletingEnabled = isAutomaticDeletingEnabled;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public Namespace WithTransactionSetting(Gs2.Gs2Inbox.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
+            return this;
+        }
+        public Namespace WithTransactionSettingV2(Gs2.Gs2Inbox.Model.TransactionSettingV2 transactionSettingV2) {
+            this.TransactionSettingV2 = transactionSettingV2;
             return this;
         }
         public Namespace WithReceiveMessageScript(Gs2.Gs2Inbox.Model.ScriptSetting receiveMessageScript) {
@@ -179,6 +186,7 @@ namespace Gs2.Gs2Inbox.Model
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithIsAutomaticDeletingEnabled(!data.Keys.Contains("isAutomaticDeletingEnabled") || data["isAutomaticDeletingEnabled"] == null ? null : (bool?)bool.Parse(data["isAutomaticDeletingEnabled"].ToString()))
                 .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Inbox.Model.TransactionSetting.FromJson(data["transactionSetting"]))
+                .WithTransactionSettingV2(!data.Keys.Contains("transactionSettingV2") || data["transactionSettingV2"] == null ? null : Gs2.Gs2Inbox.Model.TransactionSettingV2.FromJson(data["transactionSettingV2"]))
                 .WithReceiveMessageScript(!data.Keys.Contains("receiveMessageScript") || data["receiveMessageScript"] == null ? null : Gs2.Gs2Inbox.Model.ScriptSetting.FromJson(data["receiveMessageScript"]))
                 .WithReadMessageScript(!data.Keys.Contains("readMessageScript") || data["readMessageScript"] == null ? null : Gs2.Gs2Inbox.Model.ScriptSetting.FromJson(data["readMessageScript"]))
                 .WithDeleteMessageScript(!data.Keys.Contains("deleteMessageScript") || data["deleteMessageScript"] == null ? null : Gs2.Gs2Inbox.Model.ScriptSetting.FromJson(data["deleteMessageScript"]))
@@ -198,7 +206,7 @@ namespace Gs2.Gs2Inbox.Model
                 ["name"] = Name,
                 ["description"] = Description,
                 ["isAutomaticDeletingEnabled"] = IsAutomaticDeletingEnabled,
-                ["transactionSetting"] = TransactionSetting?.ToJson(),
+                ["transactionSettingV2"] = TransactionSettingV2?.ToJson(),
                 ["receiveMessageScript"] = ReceiveMessageScript?.ToJson(),
                 ["readMessageScript"] = ReadMessageScript?.ToJson(),
                 ["deleteMessageScript"] = DeleteMessageScript?.ToJson(),
@@ -232,6 +240,10 @@ namespace Gs2.Gs2Inbox.Model
             if (TransactionSetting != null) {
                 writer.WritePropertyName("transactionSetting");
                 TransactionSetting.WriteJson(writer);
+            }
+            if (TransactionSettingV2 != null) {
+                writer.WritePropertyName("transactionSettingV2");
+                TransactionSettingV2.WriteJson(writer);
             }
             if (ReceiveMessageScript != null) {
                 writer.WritePropertyName("receiveMessageScript");
@@ -309,6 +321,11 @@ namespace Gs2.Gs2Inbox.Model
                 return diff;
             }
             diff = ModelComparer.Compare(TransactionSetting, other.TransactionSetting);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(TransactionSettingV2, other.TransactionSettingV2);
             if (diff != 0)
             {
                 return diff;
@@ -447,6 +464,7 @@ namespace Gs2.Gs2Inbox.Model
                 Description = Description,
                 IsAutomaticDeletingEnabled = IsAutomaticDeletingEnabled,
                 TransactionSetting = TransactionSetting?.Clone() as Gs2.Gs2Inbox.Model.TransactionSetting,
+                TransactionSettingV2 = TransactionSettingV2?.Clone() as Gs2.Gs2Inbox.Model.TransactionSettingV2,
                 ReceiveMessageScript = ReceiveMessageScript?.Clone() as Gs2.Gs2Inbox.Model.ScriptSetting,
                 ReadMessageScript = ReadMessageScript?.Clone() as Gs2.Gs2Inbox.Model.ScriptSetting,
                 DeleteMessageScript = DeleteMessageScript?.Clone() as Gs2.Gs2Inbox.Model.ScriptSetting,

@@ -104,7 +104,16 @@ namespace Gs2.Gs2AdReward.Model.Transaction
             this AcquirePointByUserIdRequest request,
             double rate
         ) {
+/* diff --- start
             request.Point = (long?) (request.Point * rate);
+ diff --- end */
+            // 倍率適用後の値は long の範囲に飽和させる（サーバ側の ApplyAffineInt64 と同じ）。 /* diff +++ */
+            // 素の (long) キャストは範囲外の double に対して未規定で、x64 では long.MinValue になり /* diff +++ */
+            // 不足判定をすり抜けて OverflowException になっていた。 /* diff +++ */
+            if (request.Point.HasValue) { /* diff +++ */
+                var scaled = request.Point.Value * rate; /* diff +++ */
+                request.Point = scaled >= long.MaxValue ? long.MaxValue : scaled <= long.MinValue ? long.MinValue : (long) scaled; /* diff +++ */
+            } /* diff +++ */
             return request;
         }
     }

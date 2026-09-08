@@ -39,7 +39,9 @@ namespace Gs2.Gs2StateMachine.Request
          public string NamespaceName { set; get; } = null!;
          public string Description { set; get; } = null!;
          public string SupportSpeculativeExecution { set; get; } = null!;
+        [Obsolete("This method is deprecated")]
          public Gs2.Gs2StateMachine.Model.TransactionSetting TransactionSetting { set; get; } = null!;
+         public Gs2.Gs2StateMachine.Model.TransactionSettingV2 TransactionSettingV2 { set; get; } = null!;
          public Gs2.Gs2StateMachine.Model.ScriptSetting StartScript { set; get; } = null!;
          public Gs2.Gs2StateMachine.Model.ScriptSetting PassScript { set; get; } = null!;
          public Gs2.Gs2StateMachine.Model.ScriptSetting ErrorScript { set; get; } = null!;
@@ -57,8 +59,13 @@ namespace Gs2.Gs2StateMachine.Request
             this.SupportSpeculativeExecution = supportSpeculativeExecution;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2StateMachine.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
+            return this;
+        }
+        public UpdateNamespaceRequest WithTransactionSettingV2(Gs2.Gs2StateMachine.Model.TransactionSettingV2 transactionSettingV2) {
+            this.TransactionSettingV2 = transactionSettingV2;
             return this;
         }
         public UpdateNamespaceRequest WithStartScript(Gs2.Gs2StateMachine.Model.ScriptSetting startScript) {
@@ -94,7 +101,7 @@ namespace Gs2.Gs2StateMachine.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithSupportSpeculativeExecution(!data.Keys.Contains("supportSpeculativeExecution") || data["supportSpeculativeExecution"] == null ? null : data["supportSpeculativeExecution"].ToString())
-                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2StateMachine.Model.TransactionSetting.FromJson(data["transactionSetting"]))
+                .WithTransactionSettingV2(!data.Keys.Contains("transactionSettingV2") || data["transactionSettingV2"] == null ? null : Gs2.Gs2StateMachine.Model.TransactionSettingV2.FromJson(data["transactionSettingV2"]))
                 .WithStartScript(!data.Keys.Contains("startScript") || data["startScript"] == null ? null : Gs2.Gs2StateMachine.Model.ScriptSetting.FromJson(data["startScript"]))
                 .WithPassScript(!data.Keys.Contains("passScript") || data["passScript"] == null ? null : Gs2.Gs2StateMachine.Model.ScriptSetting.FromJson(data["passScript"]))
                 .WithErrorScript(!data.Keys.Contains("errorScript") || data["errorScript"] == null ? null : Gs2.Gs2StateMachine.Model.ScriptSetting.FromJson(data["errorScript"]))
@@ -108,7 +115,7 @@ namespace Gs2.Gs2StateMachine.Request
                 ["namespaceName"] = NamespaceName,
                 ["description"] = Description,
                 ["supportSpeculativeExecution"] = SupportSpeculativeExecution,
-                ["transactionSetting"] = TransactionSetting?.ToJson(),
+                ["transactionSettingV2"] = TransactionSettingV2?.ToJson(),
                 ["startScript"] = StartScript?.ToJson(),
                 ["passScript"] = PassScript?.ToJson(),
                 ["errorScript"] = ErrorScript?.ToJson(),
@@ -135,6 +142,9 @@ namespace Gs2.Gs2StateMachine.Request
             if (TransactionSetting != null) {
                 TransactionSetting.WriteJson(writer);
             }
+            if (TransactionSettingV2 != null) {
+                TransactionSettingV2.WriteJson(writer);
+            }
             if (StartScript != null) {
                 StartScript.WriteJson(writer);
             }
@@ -159,7 +169,7 @@ namespace Gs2.Gs2StateMachine.Request
             key += NamespaceName + ":";
             key += Description + ":";
             key += SupportSpeculativeExecution + ":";
-            key += TransactionSetting + ":";
+            key += TransactionSettingV2 + ":";
             key += StartScript + ":";
             key += PassScript + ":";
             key += ErrorScript + ":";

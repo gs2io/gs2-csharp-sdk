@@ -193,6 +193,11 @@ namespace Gs2.Gs2Lottery
                     jsonWriter.WritePropertyName("transactionSetting");
                     request.TransactionSetting.WriteJson(jsonWriter);
                 }
+                if (request.TransactionSettingV2 != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSettingV2");
+                    request.TransactionSettingV2.WriteJson(jsonWriter);
+                }
                 if (request.LotteryTriggerScriptId != null)
                 {
                     jsonWriter.WritePropertyName("lotteryTriggerScriptId");
@@ -496,6 +501,11 @@ namespace Gs2.Gs2Lottery
                 {
                     jsonWriter.WritePropertyName("transactionSetting");
                     request.TransactionSetting.WriteJson(jsonWriter);
+                }
+                if (request.TransactionSettingV2 != null)
+                {
+                    jsonWriter.WritePropertyName("transactionSettingV2");
+                    request.TransactionSettingV2.WriteJson(jsonWriter);
                 }
                 if (request.LotteryTriggerScriptId != null)
                 {

@@ -37,7 +37,9 @@ namespace Gs2.Gs2Realtime.Model
         public string NamespaceId { set; get; }
         public string Name { set; get; }
         public string Description { set; get; }
+        [Obsolete("This method is deprecated")]
         public Gs2.Gs2Realtime.Model.TransactionSetting TransactionSetting { set; get; }
+        public Gs2.Gs2Realtime.Model.TransactionSettingV2 TransactionSettingV2 { set; get; }
         public string ServerType { set; get; }
         public string ServerSpec { set; get; }
         public Gs2.Gs2Realtime.Model.NotificationSetting CreateNotification { set; get; }
@@ -57,8 +59,13 @@ namespace Gs2.Gs2Realtime.Model
             this.Description = description;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public Namespace WithTransactionSetting(Gs2.Gs2Realtime.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
+            return this;
+        }
+        public Namespace WithTransactionSettingV2(Gs2.Gs2Realtime.Model.TransactionSettingV2 transactionSettingV2) {
+            this.TransactionSettingV2 = transactionSettingV2;
             return this;
         }
         public Namespace WithServerType(string serverType) {
@@ -154,6 +161,7 @@ namespace Gs2.Gs2Realtime.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Realtime.Model.TransactionSetting.FromJson(data["transactionSetting"]))
+                .WithTransactionSettingV2(!data.Keys.Contains("transactionSettingV2") || data["transactionSettingV2"] == null ? null : Gs2.Gs2Realtime.Model.TransactionSettingV2.FromJson(data["transactionSettingV2"]))
                 .WithServerType(!data.Keys.Contains("serverType") || data["serverType"] == null ? null : data["serverType"].ToString())
                 .WithServerSpec(!data.Keys.Contains("serverSpec") || data["serverSpec"] == null ? null : data["serverSpec"].ToString())
                 .WithCreateNotification(!data.Keys.Contains("createNotification") || data["createNotification"] == null ? null : Gs2.Gs2Realtime.Model.NotificationSetting.FromJson(data["createNotification"]))
@@ -169,7 +177,7 @@ namespace Gs2.Gs2Realtime.Model
                 ["namespaceId"] = NamespaceId,
                 ["name"] = Name,
                 ["description"] = Description,
-                ["transactionSetting"] = TransactionSetting?.ToJson(),
+                ["transactionSettingV2"] = TransactionSettingV2?.ToJson(),
                 ["serverType"] = ServerType,
                 ["serverSpec"] = ServerSpec,
                 ["createNotification"] = CreateNotification?.ToJson(),
@@ -198,6 +206,10 @@ namespace Gs2.Gs2Realtime.Model
             if (TransactionSetting != null) {
                 writer.WritePropertyName("transactionSetting");
                 TransactionSetting.WriteJson(writer);
+            }
+            if (TransactionSettingV2 != null) {
+                writer.WritePropertyName("transactionSettingV2");
+                TransactionSettingV2.WriteJson(writer);
             }
             if (ServerType != null) {
                 writer.WritePropertyName("serverType");
@@ -258,6 +270,11 @@ namespace Gs2.Gs2Realtime.Model
                 return diff;
             }
             diff = ModelComparer.Compare(TransactionSetting, other.TransactionSetting);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(TransactionSettingV2, other.TransactionSettingV2);
             if (diff != 0)
             {
                 return diff;
@@ -392,6 +409,7 @@ namespace Gs2.Gs2Realtime.Model
                 Name = Name,
                 Description = Description,
                 TransactionSetting = TransactionSetting?.Clone() as Gs2.Gs2Realtime.Model.TransactionSetting,
+                TransactionSettingV2 = TransactionSettingV2?.Clone() as Gs2.Gs2Realtime.Model.TransactionSettingV2,
                 ServerType = ServerType,
                 ServerSpec = ServerSpec,
                 CreateNotification = CreateNotification?.Clone() as Gs2.Gs2Realtime.Model.NotificationSetting,

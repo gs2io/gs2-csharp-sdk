@@ -39,7 +39,9 @@ namespace Gs2.Gs2Inbox.Request
          public string NamespaceName { set; get; } = null!;
          public string Description { set; get; } = null!;
          public bool? IsAutomaticDeletingEnabled { set; get; } = null!;
+        [Obsolete("This method is deprecated")]
          public Gs2.Gs2Inbox.Model.TransactionSetting TransactionSetting { set; get; } = null!;
+         public Gs2.Gs2Inbox.Model.TransactionSettingV2 TransactionSettingV2 { set; get; } = null!;
          public Gs2.Gs2Inbox.Model.ScriptSetting ReceiveMessageScript { set; get; } = null!;
          public Gs2.Gs2Inbox.Model.ScriptSetting ReadMessageScript { set; get; } = null!;
          public Gs2.Gs2Inbox.Model.ScriptSetting DeleteMessageScript { set; get; } = null!;
@@ -61,8 +63,13 @@ namespace Gs2.Gs2Inbox.Request
             this.IsAutomaticDeletingEnabled = isAutomaticDeletingEnabled;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2Inbox.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
+            return this;
+        }
+        public UpdateNamespaceRequest WithTransactionSettingV2(Gs2.Gs2Inbox.Model.TransactionSettingV2 transactionSettingV2) {
+            this.TransactionSettingV2 = transactionSettingV2;
             return this;
         }
         public UpdateNamespaceRequest WithReceiveMessageScript(Gs2.Gs2Inbox.Model.ScriptSetting receiveMessageScript) {
@@ -108,7 +115,7 @@ namespace Gs2.Gs2Inbox.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithIsAutomaticDeletingEnabled(!data.Keys.Contains("isAutomaticDeletingEnabled") || data["isAutomaticDeletingEnabled"] == null ? null : (bool?)bool.Parse(data["isAutomaticDeletingEnabled"].ToString()))
-                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Inbox.Model.TransactionSetting.FromJson(data["transactionSetting"]))
+                .WithTransactionSettingV2(!data.Keys.Contains("transactionSettingV2") || data["transactionSettingV2"] == null ? null : Gs2.Gs2Inbox.Model.TransactionSettingV2.FromJson(data["transactionSettingV2"]))
                 .WithReceiveMessageScript(!data.Keys.Contains("receiveMessageScript") || data["receiveMessageScript"] == null ? null : Gs2.Gs2Inbox.Model.ScriptSetting.FromJson(data["receiveMessageScript"]))
                 .WithReadMessageScript(!data.Keys.Contains("readMessageScript") || data["readMessageScript"] == null ? null : Gs2.Gs2Inbox.Model.ScriptSetting.FromJson(data["readMessageScript"]))
                 .WithDeleteMessageScript(!data.Keys.Contains("deleteMessageScript") || data["deleteMessageScript"] == null ? null : Gs2.Gs2Inbox.Model.ScriptSetting.FromJson(data["deleteMessageScript"]))
@@ -122,7 +129,7 @@ namespace Gs2.Gs2Inbox.Request
                 ["namespaceName"] = NamespaceName,
                 ["description"] = Description,
                 ["isAutomaticDeletingEnabled"] = IsAutomaticDeletingEnabled,
-                ["transactionSetting"] = TransactionSetting?.ToJson(),
+                ["transactionSettingV2"] = TransactionSettingV2?.ToJson(),
                 ["receiveMessageScript"] = ReceiveMessageScript?.ToJson(),
                 ["readMessageScript"] = ReadMessageScript?.ToJson(),
                 ["deleteMessageScript"] = DeleteMessageScript?.ToJson(),
@@ -148,6 +155,9 @@ namespace Gs2.Gs2Inbox.Request
             }
             if (TransactionSetting != null) {
                 TransactionSetting.WriteJson(writer);
+            }
+            if (TransactionSettingV2 != null) {
+                TransactionSettingV2.WriteJson(writer);
             }
             if (ReceiveMessageScript != null) {
                 ReceiveMessageScript.WriteJson(writer);
@@ -180,7 +190,7 @@ namespace Gs2.Gs2Inbox.Request
             key += NamespaceName + ":";
             key += Description + ":";
             key += IsAutomaticDeletingEnabled + ":";
-            key += TransactionSetting + ":";
+            key += TransactionSettingV2 + ":";
             key += ReceiveMessageScript + ":";
             key += ReadMessageScript + ":";
             key += DeleteMessageScript + ":";

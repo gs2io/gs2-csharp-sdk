@@ -38,6 +38,7 @@ namespace Gs2.Gs2SeasonRating.Model
         public bool? TransactionUseDistributor { set; get; }
         public bool? CommitScriptResultInUseDistributor { set; get; }
         public bool? AcquireActionUseJobQueue { set; get; }
+        public bool? EnableSequentialExecution { set; get; }
         public string DistributorNamespaceId { set; get; }
         public string QueueNamespaceId { set; get; }
         public TransactionSetting WithEnableAtomicCommit(bool? enableAtomicCommit) {
@@ -54,6 +55,10 @@ namespace Gs2.Gs2SeasonRating.Model
         }
         public TransactionSetting WithAcquireActionUseJobQueue(bool? acquireActionUseJobQueue) {
             this.AcquireActionUseJobQueue = acquireActionUseJobQueue;
+            return this;
+        }
+        public TransactionSetting WithEnableSequentialExecution(bool? enableSequentialExecution) {
+            this.EnableSequentialExecution = enableSequentialExecution;
             return this;
         }
         public TransactionSetting WithDistributorNamespaceId(string distributorNamespaceId) {
@@ -78,6 +83,7 @@ namespace Gs2.Gs2SeasonRating.Model
                 .WithTransactionUseDistributor(!data.Keys.Contains("transactionUseDistributor") || data["transactionUseDistributor"] == null ? null : (bool?)bool.Parse(data["transactionUseDistributor"].ToString()))
                 .WithCommitScriptResultInUseDistributor(!data.Keys.Contains("commitScriptResultInUseDistributor") || data["commitScriptResultInUseDistributor"] == null ? null : (bool?)bool.Parse(data["commitScriptResultInUseDistributor"].ToString()))
                 .WithAcquireActionUseJobQueue(!data.Keys.Contains("acquireActionUseJobQueue") || data["acquireActionUseJobQueue"] == null ? null : (bool?)bool.Parse(data["acquireActionUseJobQueue"].ToString()))
+                .WithEnableSequentialExecution(!data.Keys.Contains("enableSequentialExecution") || data["enableSequentialExecution"] == null ? null : (bool?)bool.Parse(data["enableSequentialExecution"].ToString()))
                 .WithDistributorNamespaceId(!data.Keys.Contains("distributorNamespaceId") || data["distributorNamespaceId"] == null ? null : data["distributorNamespaceId"].ToString())
                 .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString());
         }
@@ -89,6 +95,7 @@ namespace Gs2.Gs2SeasonRating.Model
                 ["transactionUseDistributor"] = TransactionUseDistributor,
                 ["commitScriptResultInUseDistributor"] = CommitScriptResultInUseDistributor,
                 ["acquireActionUseJobQueue"] = AcquireActionUseJobQueue,
+                ["enableSequentialExecution"] = EnableSequentialExecution,
                 ["distributorNamespaceId"] = DistributorNamespaceId,
                 ["queueNamespaceId"] = QueueNamespaceId,
             };
@@ -112,6 +119,10 @@ namespace Gs2.Gs2SeasonRating.Model
             if (AcquireActionUseJobQueue != null) {
                 writer.WritePropertyName("acquireActionUseJobQueue");
                 writer.Write(bool.Parse(AcquireActionUseJobQueue.ToString()));
+            }
+            if (EnableSequentialExecution != null) {
+                writer.WritePropertyName("enableSequentialExecution");
+                writer.Write(bool.Parse(EnableSequentialExecution.ToString()));
             }
             if (DistributorNamespaceId != null) {
                 writer.WritePropertyName("distributorNamespaceId");
@@ -156,6 +167,11 @@ namespace Gs2.Gs2SeasonRating.Model
             {
                 return diff;
             }
+            diff = ModelComparer.Compare(EnableSequentialExecution, other.EnableSequentialExecution);
+            if (diff != 0)
+            {
+                return diff;
+            }
             diff = ModelComparer.Compare(DistributorNamespaceId, other.DistributorNamespaceId);
             if (diff != 0)
             {
@@ -175,6 +191,8 @@ namespace Gs2.Gs2SeasonRating.Model
             if (EnableAtomicCommit == true) {
             }
             if (TransactionUseDistributor == true) {
+            }
+            if (EnableAtomicCommit == true) {
             }
             if (EnableAtomicCommit == true) {
             }
@@ -200,6 +218,7 @@ namespace Gs2.Gs2SeasonRating.Model
                 TransactionUseDistributor = TransactionUseDistributor,
                 CommitScriptResultInUseDistributor = CommitScriptResultInUseDistributor,
                 AcquireActionUseJobQueue = AcquireActionUseJobQueue,
+                EnableSequentialExecution = EnableSequentialExecution,
                 DistributorNamespaceId = DistributorNamespaceId,
                 QueueNamespaceId = QueueNamespaceId,
             };

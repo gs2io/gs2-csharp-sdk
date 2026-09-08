@@ -38,7 +38,9 @@ namespace Gs2.Gs2Datastore.Request
 	{
          public string NamespaceName { set; get; } = null!;
          public string Description { set; get; } = null!;
+        [Obsolete("This method is deprecated")]
          public Gs2.Gs2Datastore.Model.TransactionSetting TransactionSetting { set; get; } = null!;
+         public Gs2.Gs2Datastore.Model.TransactionSettingV2 TransactionSettingV2 { set; get; } = null!;
          public Gs2.Gs2Datastore.Model.LogSetting LogSetting { set; get; } = null!;
          public Gs2.Gs2Datastore.Model.ScriptSetting DoneUploadScript { set; get; } = null!;
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
@@ -49,8 +51,13 @@ namespace Gs2.Gs2Datastore.Request
             this.Description = description;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2Datastore.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
+            return this;
+        }
+        public UpdateNamespaceRequest WithTransactionSettingV2(Gs2.Gs2Datastore.Model.TransactionSettingV2 transactionSettingV2) {
+            this.TransactionSettingV2 = transactionSettingV2;
             return this;
         }
         public UpdateNamespaceRequest WithLogSetting(Gs2.Gs2Datastore.Model.LogSetting logSetting) {
@@ -73,7 +80,7 @@ namespace Gs2.Gs2Datastore.Request
             return new UpdateNamespaceRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
-                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Datastore.Model.TransactionSetting.FromJson(data["transactionSetting"]))
+                .WithTransactionSettingV2(!data.Keys.Contains("transactionSettingV2") || data["transactionSettingV2"] == null ? null : Gs2.Gs2Datastore.Model.TransactionSettingV2.FromJson(data["transactionSettingV2"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Datastore.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithDoneUploadScript(!data.Keys.Contains("doneUploadScript") || data["doneUploadScript"] == null ? null : Gs2.Gs2Datastore.Model.ScriptSetting.FromJson(data["doneUploadScript"]));
         }
@@ -83,7 +90,7 @@ namespace Gs2.Gs2Datastore.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["description"] = Description,
-                ["transactionSetting"] = TransactionSetting?.ToJson(),
+                ["transactionSettingV2"] = TransactionSettingV2?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["doneUploadScript"] = DoneUploadScript?.ToJson(),
             };
@@ -103,6 +110,9 @@ namespace Gs2.Gs2Datastore.Request
             if (TransactionSetting != null) {
                 TransactionSetting.WriteJson(writer);
             }
+            if (TransactionSettingV2 != null) {
+                TransactionSettingV2.WriteJson(writer);
+            }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
             }
@@ -116,7 +126,7 @@ namespace Gs2.Gs2Datastore.Request
             var key = "";
             key += NamespaceName + ":";
             key += Description + ":";
-            key += TransactionSetting + ":";
+            key += TransactionSettingV2 + ":";
             key += LogSetting + ":";
             key += DoneUploadScript + ":";
             return key;

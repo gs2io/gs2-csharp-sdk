@@ -38,7 +38,9 @@ namespace Gs2.Gs2Quest.Request
 	{
          public string NamespaceName { set; get; } = null!;
          public string Description { set; get; } = null!;
+        [Obsolete("This method is deprecated")]
          public Gs2.Gs2Quest.Model.TransactionSetting TransactionSetting { set; get; } = null!;
+         public Gs2.Gs2Quest.Model.TransactionSettingV2 TransactionSettingV2 { set; get; } = null!;
          public Gs2.Gs2Quest.Model.ScriptSetting StartQuestScript { set; get; } = null!;
          public Gs2.Gs2Quest.Model.ScriptSetting CompleteQuestScript { set; get; } = null!;
          public Gs2.Gs2Quest.Model.ScriptSetting FailedQuestScript { set; get; } = null!;
@@ -55,8 +57,13 @@ namespace Gs2.Gs2Quest.Request
             this.Description = description;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public UpdateNamespaceRequest WithTransactionSetting(Gs2.Gs2Quest.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
+            return this;
+        }
+        public UpdateNamespaceRequest WithTransactionSettingV2(Gs2.Gs2Quest.Model.TransactionSettingV2 transactionSettingV2) {
+            this.TransactionSettingV2 = transactionSettingV2;
             return this;
         }
         public UpdateNamespaceRequest WithStartQuestScript(Gs2.Gs2Quest.Model.ScriptSetting startQuestScript) {
@@ -97,7 +104,7 @@ namespace Gs2.Gs2Quest.Request
             return new UpdateNamespaceRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
-                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Quest.Model.TransactionSetting.FromJson(data["transactionSetting"]))
+                .WithTransactionSettingV2(!data.Keys.Contains("transactionSettingV2") || data["transactionSettingV2"] == null ? null : Gs2.Gs2Quest.Model.TransactionSettingV2.FromJson(data["transactionSettingV2"]))
                 .WithStartQuestScript(!data.Keys.Contains("startQuestScript") || data["startQuestScript"] == null ? null : Gs2.Gs2Quest.Model.ScriptSetting.FromJson(data["startQuestScript"]))
                 .WithCompleteQuestScript(!data.Keys.Contains("completeQuestScript") || data["completeQuestScript"] == null ? null : Gs2.Gs2Quest.Model.ScriptSetting.FromJson(data["completeQuestScript"]))
                 .WithFailedQuestScript(!data.Keys.Contains("failedQuestScript") || data["failedQuestScript"] == null ? null : Gs2.Gs2Quest.Model.ScriptSetting.FromJson(data["failedQuestScript"]))
@@ -109,7 +116,7 @@ namespace Gs2.Gs2Quest.Request
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["description"] = Description,
-                ["transactionSetting"] = TransactionSetting?.ToJson(),
+                ["transactionSettingV2"] = TransactionSettingV2?.ToJson(),
                 ["startQuestScript"] = StartQuestScript?.ToJson(),
                 ["completeQuestScript"] = CompleteQuestScript?.ToJson(),
                 ["failedQuestScript"] = FailedQuestScript?.ToJson(),
@@ -130,6 +137,9 @@ namespace Gs2.Gs2Quest.Request
             }
             if (TransactionSetting != null) {
                 TransactionSetting.WriteJson(writer);
+            }
+            if (TransactionSettingV2 != null) {
+                TransactionSettingV2.WriteJson(writer);
             }
             if (StartQuestScript != null) {
                 StartQuestScript.WriteJson(writer);
@@ -158,7 +168,7 @@ namespace Gs2.Gs2Quest.Request
             var key = "";
             key += NamespaceName + ":";
             key += Description + ":";
-            key += TransactionSetting + ":";
+            key += TransactionSettingV2 + ":";
             key += StartQuestScript + ":";
             key += CompleteQuestScript + ":";
             key += FailedQuestScript + ":";

@@ -37,7 +37,9 @@ namespace Gs2.Gs2Formation.Model
         public string NamespaceId { set; get; }
         public string Name { set; get; }
         public string Description { set; get; }
+        [Obsolete("This method is deprecated")]
         public Gs2.Gs2Formation.Model.TransactionSetting TransactionSetting { set; get; }
+        public Gs2.Gs2Formation.Model.TransactionSettingV2 TransactionSettingV2 { set; get; }
         public Gs2.Gs2Formation.Model.ScriptSetting UpdateMoldScript { set; get; }
         public Gs2.Gs2Formation.Model.ScriptSetting UpdateFormScript { set; get; }
         public Gs2.Gs2Formation.Model.ScriptSetting UpdatePropertyFormScript { set; get; }
@@ -57,8 +59,13 @@ namespace Gs2.Gs2Formation.Model
             this.Description = description;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public Namespace WithTransactionSetting(Gs2.Gs2Formation.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
+            return this;
+        }
+        public Namespace WithTransactionSettingV2(Gs2.Gs2Formation.Model.TransactionSettingV2 transactionSettingV2) {
+            this.TransactionSettingV2 = transactionSettingV2;
             return this;
         }
         public Namespace WithUpdateMoldScript(Gs2.Gs2Formation.Model.ScriptSetting updateMoldScript) {
@@ -154,6 +161,7 @@ namespace Gs2.Gs2Formation.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Formation.Model.TransactionSetting.FromJson(data["transactionSetting"]))
+                .WithTransactionSettingV2(!data.Keys.Contains("transactionSettingV2") || data["transactionSettingV2"] == null ? null : Gs2.Gs2Formation.Model.TransactionSettingV2.FromJson(data["transactionSettingV2"]))
                 .WithUpdateMoldScript(!data.Keys.Contains("updateMoldScript") || data["updateMoldScript"] == null ? null : Gs2.Gs2Formation.Model.ScriptSetting.FromJson(data["updateMoldScript"]))
                 .WithUpdateFormScript(!data.Keys.Contains("updateFormScript") || data["updateFormScript"] == null ? null : Gs2.Gs2Formation.Model.ScriptSetting.FromJson(data["updateFormScript"]))
                 .WithUpdatePropertyFormScript(!data.Keys.Contains("updatePropertyFormScript") || data["updatePropertyFormScript"] == null ? null : Gs2.Gs2Formation.Model.ScriptSetting.FromJson(data["updatePropertyFormScript"]))
@@ -169,7 +177,7 @@ namespace Gs2.Gs2Formation.Model
                 ["namespaceId"] = NamespaceId,
                 ["name"] = Name,
                 ["description"] = Description,
-                ["transactionSetting"] = TransactionSetting?.ToJson(),
+                ["transactionSettingV2"] = TransactionSettingV2?.ToJson(),
                 ["updateMoldScript"] = UpdateMoldScript?.ToJson(),
                 ["updateFormScript"] = UpdateFormScript?.ToJson(),
                 ["updatePropertyFormScript"] = UpdatePropertyFormScript?.ToJson(),
@@ -198,6 +206,10 @@ namespace Gs2.Gs2Formation.Model
             if (TransactionSetting != null) {
                 writer.WritePropertyName("transactionSetting");
                 TransactionSetting.WriteJson(writer);
+            }
+            if (TransactionSettingV2 != null) {
+                writer.WritePropertyName("transactionSettingV2");
+                TransactionSettingV2.WriteJson(writer);
             }
             if (UpdateMoldScript != null) {
                 writer.WritePropertyName("updateMoldScript");
@@ -258,6 +270,11 @@ namespace Gs2.Gs2Formation.Model
                 return diff;
             }
             diff = ModelComparer.Compare(TransactionSetting, other.TransactionSetting);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(TransactionSettingV2, other.TransactionSettingV2);
             if (diff != 0)
             {
                 return diff;
@@ -376,6 +393,7 @@ namespace Gs2.Gs2Formation.Model
                 Name = Name,
                 Description = Description,
                 TransactionSetting = TransactionSetting?.Clone() as Gs2.Gs2Formation.Model.TransactionSetting,
+                TransactionSettingV2 = TransactionSettingV2?.Clone() as Gs2.Gs2Formation.Model.TransactionSettingV2,
                 UpdateMoldScript = UpdateMoldScript?.Clone() as Gs2.Gs2Formation.Model.ScriptSetting,
                 UpdateFormScript = UpdateFormScript?.Clone() as Gs2.Gs2Formation.Model.ScriptSetting,
                 UpdatePropertyFormScript = UpdatePropertyFormScript?.Clone() as Gs2.Gs2Formation.Model.ScriptSetting,

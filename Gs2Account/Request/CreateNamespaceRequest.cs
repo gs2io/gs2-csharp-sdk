@@ -38,7 +38,9 @@ namespace Gs2.Gs2Account.Request
 	{
          public string Name { set; get; } = null!;
          public string Description { set; get; } = null!;
+        [Obsolete("This method is deprecated")]
          public Gs2.Gs2Account.Model.TransactionSetting TransactionSetting { set; get; } = null!;
+         public Gs2.Gs2Account.Model.TransactionSettingV2 TransactionSettingV2 { set; get; } = null!;
          public bool? ChangePasswordIfTakeOver { set; get; } = null!;
          public bool? DifferentUserIdForLoginAndDataRetention { set; get; } = null!;
          public Gs2.Gs2Account.Model.ScriptSetting CreateAccountScript { set; get; } = null!;
@@ -56,8 +58,13 @@ namespace Gs2.Gs2Account.Request
             this.Description = description;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public CreateNamespaceRequest WithTransactionSetting(Gs2.Gs2Account.Model.TransactionSetting transactionSetting) {
             this.TransactionSetting = transactionSetting;
+            return this;
+        }
+        public CreateNamespaceRequest WithTransactionSettingV2(Gs2.Gs2Account.Model.TransactionSettingV2 transactionSettingV2) {
+            this.TransactionSettingV2 = transactionSettingV2;
             return this;
         }
         public CreateNamespaceRequest WithChangePasswordIfTakeOver(bool? changePasswordIfTakeOver) {
@@ -108,7 +115,7 @@ namespace Gs2.Gs2Account.Request
             return new CreateNamespaceRequest()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
-                .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Account.Model.TransactionSetting.FromJson(data["transactionSetting"]))
+                .WithTransactionSettingV2(!data.Keys.Contains("transactionSettingV2") || data["transactionSettingV2"] == null ? null : Gs2.Gs2Account.Model.TransactionSettingV2.FromJson(data["transactionSettingV2"]))
                 .WithChangePasswordIfTakeOver(!data.Keys.Contains("changePasswordIfTakeOver") || data["changePasswordIfTakeOver"] == null ? null : (bool?)bool.Parse(data["changePasswordIfTakeOver"].ToString()))
                 .WithDifferentUserIdForLoginAndDataRetention(!data.Keys.Contains("differentUserIdForLoginAndDataRetention") || data["differentUserIdForLoginAndDataRetention"] == null ? null : (bool?)bool.Parse(data["differentUserIdForLoginAndDataRetention"].ToString()))
                 .WithCreateAccountScript(!data.Keys.Contains("createAccountScript") || data["createAccountScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["createAccountScript"]))
@@ -125,7 +132,7 @@ namespace Gs2.Gs2Account.Request
             return new JsonData {
                 ["name"] = Name,
                 ["description"] = Description,
-                ["transactionSetting"] = TransactionSetting?.ToJson(),
+                ["transactionSettingV2"] = TransactionSettingV2?.ToJson(),
                 ["changePasswordIfTakeOver"] = ChangePasswordIfTakeOver,
                 ["differentUserIdForLoginAndDataRetention"] = DifferentUserIdForLoginAndDataRetention,
                 ["createAccountScript"] = CreateAccountScript?.ToJson(),
@@ -151,6 +158,9 @@ namespace Gs2.Gs2Account.Request
             }
             if (TransactionSetting != null) {
                 TransactionSetting.WriteJson(writer);
+            }
+            if (TransactionSettingV2 != null) {
+                TransactionSettingV2.WriteJson(writer);
             }
             if (ChangePasswordIfTakeOver != null) {
                 writer.WritePropertyName("changePasswordIfTakeOver");
@@ -188,7 +198,7 @@ namespace Gs2.Gs2Account.Request
             var key = "";
             key += Name + ":";
             key += Description + ":";
-            key += TransactionSetting + ":";
+            key += TransactionSettingV2 + ":";
             key += ChangePasswordIfTakeOver + ":";
             key += DifferentUserIdForLoginAndDataRetention + ":";
             key += CreateAccountScript + ":";
