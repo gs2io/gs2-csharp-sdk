@@ -84,6 +84,15 @@ namespace Gs2.Gs2Gateway.Domain.Model
             this.NamespaceName = namespaceName;
             this.UserId = userId;
         }
+
+        public Gs2.Gs2Gateway.Domain.Model.FirebaseTokenDomain FirebaseToken(
+        ) {
+            return new Gs2.Gs2Gateway.Domain.Model.FirebaseTokenDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.UserId
+            );
+        }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Gateway.Model.WebSocketSession> WebSocketSessions(
             string timeOffsetToken = null
@@ -196,15 +205,6 @@ namespace Gs2.Gs2Gateway.Domain.Model
         public Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain WebSocketSession(
         ) {
             return new Gs2.Gs2Gateway.Domain.Model.WebSocketSessionDomain(
-                this._gs2,
-                this.NamespaceName,
-                this.UserId
-            );
-        }
-
-        public Gs2.Gs2Gateway.Domain.Model.FirebaseTokenDomain FirebaseToken(
-        ) {
-            return new Gs2.Gs2Gateway.Domain.Model.FirebaseTokenDomain(
                 this._gs2,
                 this.NamespaceName,
                 this.UserId

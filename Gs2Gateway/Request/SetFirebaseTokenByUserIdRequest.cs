@@ -39,6 +39,7 @@ namespace Gs2.Gs2Gateway.Request
          public string NamespaceName { set; get; } = null!;
          public string UserId { set; get; } = null!;
          public string Token { set; get; } = null!;
+         public string Locale { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
         public string DuplicationAvoider { set; get; } = null!;
         public SetFirebaseTokenByUserIdRequest WithNamespaceName(string namespaceName) {
@@ -51,6 +52,10 @@ namespace Gs2.Gs2Gateway.Request
         }
         public SetFirebaseTokenByUserIdRequest WithToken(string token) {
             this.Token = token;
+            return this;
+        }
+        public SetFirebaseTokenByUserIdRequest WithLocale(string locale) {
+            this.Locale = locale;
             return this;
         }
         public SetFirebaseTokenByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
@@ -75,6 +80,7 @@ namespace Gs2.Gs2Gateway.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithToken(!data.Keys.Contains("token") || data["token"] == null ? null : data["token"].ToString())
+                .WithLocale(!data.Keys.Contains("locale") || data["locale"] == null ? null : data["locale"].ToString())
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
@@ -84,6 +90,7 @@ namespace Gs2.Gs2Gateway.Request
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["token"] = Token,
+                ["locale"] = Locale,
                 ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
@@ -103,6 +110,10 @@ namespace Gs2.Gs2Gateway.Request
                 writer.WritePropertyName("token");
                 writer.Write(Token.ToString());
             }
+            if (Locale != null) {
+                writer.WritePropertyName("locale");
+                writer.Write(Locale.ToString());
+            }
             if (TimeOffsetToken != null) {
                 writer.WritePropertyName("timeOffsetToken");
                 writer.Write(TimeOffsetToken.ToString());
@@ -115,6 +126,7 @@ namespace Gs2.Gs2Gateway.Request
             key += NamespaceName + ":";
             key += UserId + ":";
             key += Token + ":";
+            key += Locale + ":";
             key += TimeOffsetToken + ":";
             return key;
         }

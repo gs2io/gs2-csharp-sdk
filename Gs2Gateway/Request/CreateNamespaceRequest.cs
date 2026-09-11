@@ -41,7 +41,9 @@ namespace Gs2.Gs2Gateway.Request
         [Obsolete("This method is deprecated")]
          public Gs2.Gs2Gateway.Model.TransactionSetting TransactionSetting { set; get; } = null!;
          public Gs2.Gs2Gateway.Model.TransactionSettingV2 TransactionSettingV2 { set; get; } = null!;
+        [Obsolete("This method is deprecated")]
          public string FirebaseSecret { set; get; } = null!;
+         public string FirebaseProjectId { set; get; } = null!;
          public Gs2.Gs2Gateway.Model.LogSetting LogSetting { set; get; } = null!;
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
@@ -60,8 +62,13 @@ namespace Gs2.Gs2Gateway.Request
             this.TransactionSettingV2 = transactionSettingV2;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public CreateNamespaceRequest WithFirebaseSecret(string firebaseSecret) {
             this.FirebaseSecret = firebaseSecret;
+            return this;
+        }
+        public CreateNamespaceRequest WithFirebaseProjectId(string firebaseProjectId) {
+            this.FirebaseProjectId = firebaseProjectId;
             return this;
         }
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Gateway.Model.LogSetting logSetting) {
@@ -81,7 +88,7 @@ namespace Gs2.Gs2Gateway.Request
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithTransactionSettingV2(!data.Keys.Contains("transactionSettingV2") || data["transactionSettingV2"] == null ? null : Gs2.Gs2Gateway.Model.TransactionSettingV2.FromJson(data["transactionSettingV2"]))
-                .WithFirebaseSecret(!data.Keys.Contains("firebaseSecret") || data["firebaseSecret"] == null ? null : data["firebaseSecret"].ToString())
+                .WithFirebaseProjectId(!data.Keys.Contains("firebaseProjectId") || data["firebaseProjectId"] == null ? null : data["firebaseProjectId"].ToString())
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Gateway.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
@@ -91,7 +98,7 @@ namespace Gs2.Gs2Gateway.Request
                 ["name"] = Name,
                 ["description"] = Description,
                 ["transactionSettingV2"] = TransactionSettingV2?.ToJson(),
-                ["firebaseSecret"] = FirebaseSecret,
+                ["firebaseProjectId"] = FirebaseProjectId,
                 ["logSetting"] = LogSetting?.ToJson(),
             };
         }
@@ -117,6 +124,10 @@ namespace Gs2.Gs2Gateway.Request
                 writer.WritePropertyName("firebaseSecret");
                 writer.Write(FirebaseSecret.ToString());
             }
+            if (FirebaseProjectId != null) {
+                writer.WritePropertyName("firebaseProjectId");
+                writer.Write(FirebaseProjectId.ToString());
+            }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
             }
@@ -128,7 +139,7 @@ namespace Gs2.Gs2Gateway.Request
             key += Name + ":";
             key += Description + ":";
             key += TransactionSettingV2 + ":";
-            key += FirebaseSecret + ":";
+            key += FirebaseProjectId + ":";
             key += LogSetting + ":";
             return key;
         }

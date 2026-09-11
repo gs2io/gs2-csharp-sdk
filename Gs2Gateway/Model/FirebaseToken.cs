@@ -37,6 +37,7 @@ namespace Gs2.Gs2Gateway.Model
         public string FirebaseTokenId { set; get; }
         public string UserId { set; get; }
         public string Token { set; get; }
+        public string Locale { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
@@ -50,6 +51,10 @@ namespace Gs2.Gs2Gateway.Model
         }
         public FirebaseToken WithToken(string token) {
             this.Token = token;
+            return this;
+        }
+        public FirebaseToken WithLocale(string locale) {
+            this.Locale = locale;
             return this;
         }
         public FirebaseToken WithCreatedAt(long? createdAt) {
@@ -145,6 +150,7 @@ namespace Gs2.Gs2Gateway.Model
                 .WithFirebaseTokenId(!data.Keys.Contains("firebaseTokenId") || data["firebaseTokenId"] == null ? null : data["firebaseTokenId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithToken(!data.Keys.Contains("token") || data["token"] == null ? null : data["token"].ToString())
+                .WithLocale(!data.Keys.Contains("locale") || data["locale"] == null ? null : data["locale"].ToString())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
@@ -156,6 +162,7 @@ namespace Gs2.Gs2Gateway.Model
                 ["firebaseTokenId"] = FirebaseTokenId,
                 ["userId"] = UserId,
                 ["token"] = Token,
+                ["locale"] = Locale,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
                 ["revision"] = Revision,
@@ -176,6 +183,10 @@ namespace Gs2.Gs2Gateway.Model
             if (Token != null) {
                 writer.WritePropertyName("token");
                 writer.Write(Token.ToString());
+            }
+            if (Locale != null) {
+                writer.WritePropertyName("locale");
+                writer.Write(Locale.ToString());
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
@@ -219,6 +230,11 @@ namespace Gs2.Gs2Gateway.Model
             {
                 return diff;
             }
+            diff = ModelComparer.Compare(Locale, other.Locale);
+            if (diff != 0)
+            {
+                return diff;
+            }
             diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
             if (diff != 0)
             {
@@ -256,6 +272,13 @@ namespace Gs2.Gs2Gateway.Model
                 if (Token.Length > 1024) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("firebaseToken", "gateway.firebaseToken.token.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Locale.Length > 32) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("firebaseToken", "gateway.firebaseToken.locale.error.tooLong"),
                     });
                 }
             }
@@ -302,6 +325,7 @@ namespace Gs2.Gs2Gateway.Model
                 FirebaseTokenId = FirebaseTokenId,
                 UserId = UserId,
                 Token = Token,
+                Locale = Locale,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

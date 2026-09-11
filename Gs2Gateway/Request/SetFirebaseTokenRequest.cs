@@ -39,6 +39,7 @@ namespace Gs2.Gs2Gateway.Request
          public string NamespaceName { set; get; } = null!;
          public string AccessToken { set; get; } = null!;
          public string Token { set; get; } = null!;
+         public string Locale { set; get; } = null!;
         public string DuplicationAvoider { set; get; } = null!;
         public SetFirebaseTokenRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -50,6 +51,10 @@ namespace Gs2.Gs2Gateway.Request
         }
         public SetFirebaseTokenRequest WithToken(string token) {
             this.Token = token;
+            return this;
+        }
+        public SetFirebaseTokenRequest WithLocale(string locale) {
+            this.Locale = locale;
             return this;
         }
 
@@ -69,7 +74,8 @@ namespace Gs2.Gs2Gateway.Request
             return new SetFirebaseTokenRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
-                .WithToken(!data.Keys.Contains("token") || data["token"] == null ? null : data["token"].ToString());
+                .WithToken(!data.Keys.Contains("token") || data["token"] == null ? null : data["token"].ToString())
+                .WithLocale(!data.Keys.Contains("locale") || data["locale"] == null ? null : data["locale"].ToString());
         }
 
         public override JsonData ToJson()
@@ -78,6 +84,7 @@ namespace Gs2.Gs2Gateway.Request
                 ["namespaceName"] = NamespaceName,
                 ["accessToken"] = AccessToken,
                 ["token"] = Token,
+                ["locale"] = Locale,
             };
         }
 
@@ -96,6 +103,10 @@ namespace Gs2.Gs2Gateway.Request
                 writer.WritePropertyName("token");
                 writer.Write(Token.ToString());
             }
+            if (Locale != null) {
+                writer.WritePropertyName("locale");
+                writer.Write(Locale.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -104,6 +115,7 @@ namespace Gs2.Gs2Gateway.Request
             key += NamespaceName + ":";
             key += AccessToken + ":";
             key += Token + ":";
+            key += Locale + ":";
             return key;
         }
     }

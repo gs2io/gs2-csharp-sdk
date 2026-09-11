@@ -91,6 +91,11 @@ namespace Gs2.Gs2Gateway
                     jsonWriter.WritePropertyName("firebaseSecret");
                     jsonWriter.Write(request.FirebaseSecret.ToString());
                 }
+                if (request.FirebaseProjectId != null)
+                {
+                    jsonWriter.WritePropertyName("firebaseProjectId");
+                    jsonWriter.Write(request.FirebaseProjectId.ToString());
+                }
                 if (request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
@@ -388,6 +393,11 @@ namespace Gs2.Gs2Gateway
                 {
                     jsonWriter.WritePropertyName("firebaseSecret");
                     jsonWriter.Write(request.FirebaseSecret.ToString());
+                }
+                if (request.FirebaseProjectId != null)
+                {
+                    jsonWriter.WritePropertyName("firebaseProjectId");
+                    jsonWriter.Write(request.FirebaseProjectId.ToString());
                 }
                 if (request.LogSetting != null)
                 {
@@ -1687,6 +1697,11 @@ namespace Gs2.Gs2Gateway
                     jsonWriter.WritePropertyName("token");
                     jsonWriter.Write(request.Token.ToString());
                 }
+                if (request.Locale != null)
+                {
+                    jsonWriter.WritePropertyName("locale");
+                    jsonWriter.Write(request.Locale.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -1797,6 +1812,11 @@ namespace Gs2.Gs2Gateway
                 {
                     jsonWriter.WritePropertyName("token");
                     jsonWriter.Write(request.Token.ToString());
+                }
+                if (request.Locale != null)
+                {
+                    jsonWriter.WritePropertyName("locale");
+                    jsonWriter.Write(request.Locale.ToString());
                 }
                 if (request.TimeOffsetToken != null)
                 {

@@ -203,6 +203,11 @@ namespace Gs2.Gs2Gateway
                     jsonWriter.WritePropertyName("firebaseSecret");
                     jsonWriter.Write(request.FirebaseSecret);
                 }
+                if (request.FirebaseProjectId != null)
+                {
+                    jsonWriter.WritePropertyName("firebaseProjectId");
+                    jsonWriter.Write(request.FirebaseProjectId);
+                }
                 if (request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
@@ -501,6 +506,11 @@ namespace Gs2.Gs2Gateway
                 {
                     jsonWriter.WritePropertyName("firebaseSecret");
                     jsonWriter.Write(request.FirebaseSecret);
+                }
+                if (request.FirebaseProjectId != null)
+                {
+                    jsonWriter.WritePropertyName("firebaseProjectId");
+                    jsonWriter.Write(request.FirebaseProjectId);
                 }
                 if (request.LogSetting != null)
                 {
@@ -2233,6 +2243,11 @@ namespace Gs2.Gs2Gateway
                     jsonWriter.WritePropertyName("token");
                     jsonWriter.Write(request.Token);
                 }
+                if (request.Locale != null)
+                {
+                    jsonWriter.WritePropertyName("locale");
+                    jsonWriter.Write(request.Locale);
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -2346,6 +2361,11 @@ namespace Gs2.Gs2Gateway
                 {
                     jsonWriter.WritePropertyName("token");
                     jsonWriter.Write(request.Token);
+                }
+                if (request.Locale != null)
+                {
+                    jsonWriter.WritePropertyName("locale");
+                    jsonWriter.Write(request.Locale);
                 }
                 if (request.ContextStack != null)
                 {

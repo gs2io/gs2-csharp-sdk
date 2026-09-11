@@ -40,7 +40,9 @@ namespace Gs2.Gs2Gateway.Model
         [Obsolete("This method is deprecated")]
         public Gs2.Gs2Gateway.Model.TransactionSetting TransactionSetting { set; get; }
         public Gs2.Gs2Gateway.Model.TransactionSettingV2 TransactionSettingV2 { set; get; }
+        [Obsolete("This method is deprecated")]
         public string FirebaseSecret { set; get; }
+        public string FirebaseProjectId { set; get; }
         public Gs2.Gs2Gateway.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
@@ -66,8 +68,13 @@ namespace Gs2.Gs2Gateway.Model
             this.TransactionSettingV2 = transactionSettingV2;
             return this;
         }
+        [Obsolete("This method is deprecated")]
         public Namespace WithFirebaseSecret(string firebaseSecret) {
             this.FirebaseSecret = firebaseSecret;
+            return this;
+        }
+        public Namespace WithFirebaseProjectId(string firebaseProjectId) {
+            this.FirebaseProjectId = firebaseProjectId;
             return this;
         }
         public Namespace WithLogSetting(Gs2.Gs2Gateway.Model.LogSetting logSetting) {
@@ -153,6 +160,7 @@ namespace Gs2.Gs2Gateway.Model
                 .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Gateway.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithTransactionSettingV2(!data.Keys.Contains("transactionSettingV2") || data["transactionSettingV2"] == null ? null : Gs2.Gs2Gateway.Model.TransactionSettingV2.FromJson(data["transactionSettingV2"]))
                 .WithFirebaseSecret(!data.Keys.Contains("firebaseSecret") || data["firebaseSecret"] == null ? null : data["firebaseSecret"].ToString())
+                .WithFirebaseProjectId(!data.Keys.Contains("firebaseProjectId") || data["firebaseProjectId"] == null ? null : data["firebaseProjectId"].ToString())
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Gateway.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
@@ -166,7 +174,7 @@ namespace Gs2.Gs2Gateway.Model
                 ["name"] = Name,
                 ["description"] = Description,
                 ["transactionSettingV2"] = TransactionSettingV2?.ToJson(),
-                ["firebaseSecret"] = FirebaseSecret,
+                ["firebaseProjectId"] = FirebaseProjectId,
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -200,6 +208,10 @@ namespace Gs2.Gs2Gateway.Model
             if (FirebaseSecret != null) {
                 writer.WritePropertyName("firebaseSecret");
                 writer.Write(FirebaseSecret.ToString());
+            }
+            if (FirebaseProjectId != null) {
+                writer.WritePropertyName("firebaseProjectId");
+                writer.Write(FirebaseProjectId.ToString());
             }
             if (LogSetting != null) {
                 writer.WritePropertyName("logSetting");
@@ -262,6 +274,11 @@ namespace Gs2.Gs2Gateway.Model
             {
                 return diff;
             }
+            diff = ModelComparer.Compare(FirebaseProjectId, other.FirebaseProjectId);
+            if (diff != 0)
+            {
+                return diff;
+            }
             diff = ModelComparer.Compare(LogSetting, other.LogSetting);
             if (diff != 0)
             {
@@ -310,9 +327,9 @@ namespace Gs2.Gs2Gateway.Model
             {
             }
             {
-                if (FirebaseSecret.Length > 1024) {
+                if (FirebaseProjectId.Length > 256) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
-                        new RequestError("namespace", "gateway.namespace.firebaseSecret.error.tooLong"),
+                        new RequestError("namespace", "gateway.namespace.firebaseProjectId.error.tooLong"),
                     });
                 }
             }
@@ -364,6 +381,7 @@ namespace Gs2.Gs2Gateway.Model
                 TransactionSetting = TransactionSetting?.Clone() as Gs2.Gs2Gateway.Model.TransactionSetting,
                 TransactionSettingV2 = TransactionSettingV2?.Clone() as Gs2.Gs2Gateway.Model.TransactionSettingV2,
                 FirebaseSecret = FirebaseSecret,
+                FirebaseProjectId = FirebaseProjectId,
                 LogSetting = LogSetting?.Clone() as Gs2.Gs2Gateway.Model.LogSetting,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
