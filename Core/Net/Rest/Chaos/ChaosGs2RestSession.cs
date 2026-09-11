@@ -10,12 +10,12 @@ namespace Gs2.Core.Net.Chaos
         private readonly Random _random;
         private readonly object _randomLock = new object();
 
-        public ChaosGs2RestSession(IGs2Credential basicGs2Credential, float chaos, Region region = Region.ApNortheast1, bool checkCertificateRevocation = true) : base(basicGs2Credential, region, checkCertificateRevocation) {
+        public ChaosGs2RestSession(IGs2Credential basicGs2Credential, float chaos, Region region = Region.ApNortheast1, bool checkCertificateRevocation = true, string steadyEndpoint = null) : base(basicGs2Credential, region, checkCertificateRevocation, steadyEndpoint) {
             this._chaos = chaos;
             this._random = new Random();
         }
 
-        public ChaosGs2RestSession(IGs2Credential basicGs2Credential, string region, float chaos, bool checkCertificateRevocation = true) : base(basicGs2Credential, region, checkCertificateRevocation) {
+        public ChaosGs2RestSession(IGs2Credential basicGs2Credential, string region, float chaos, bool checkCertificateRevocation = true, string steadyEndpoint = null) : base(basicGs2Credential, region, checkCertificateRevocation, steadyEndpoint) {
             this._chaos = chaos;
             this._random = new Random();
         }

@@ -26,10 +26,9 @@ namespace Gs2.Core.Net
         
         protected override IGs2SessionRequest CreateRequest(LoginRequest request)
         {
-            var url = Gs2RestSession.EndpointHost
-                          .Replace("{service}", "identifier")
-                          .Replace("{region}", Session.Region.DisplayName())
-                      + "/projectToken/login";
+            // ★プロジェクトトークンのログインも Steady の基点配下（<steady>/identifier/projectToken/login）へ向ける。
+            // 共有クラウドの identifier へ行かせると、Steady のアプリのログインだけ別の基点になる。
+            var url = EndpointFor("identifier") + "/projectToken/login";
 
             var restRequest = Factory.Post(url);
             restRequest.SessionOpenToken = _sessionOpenToken;

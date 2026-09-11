@@ -179,7 +179,10 @@ namespace Gs2.Core.Net
                     "",
                     0,
                     e.Message
-                );
+                )
+                {
+                    TransportFailure = TransportFailure.Timeout,
+                };
             }
             catch (System.Net.Http.HttpRequestException e)
             {
@@ -188,7 +191,10 @@ namespace Gs2.Core.Net
                     "",
                     0,
                     e.Message
-                );
+                )
+                {
+                    TransportFailure = ClassifyTransportFailure(e),
+                };
             }
             }
             finally
@@ -209,6 +215,26 @@ namespace Gs2.Core.Net
             {
                 _cancellation?.Cancel();
             }
+        }
+
+        /// <summary>
+        /// HttpRequestException を「1 バイトも送っていない」接続段階の失敗（DNS / TCP 拒否 / TLS）とそれ以外に分ける。
+        /// 接続段階なら inner に SocketException（DNS 解決・接続拒否・接続タイムアウト）か
+        /// AuthenticationException（TLS handshake / 証明書検証）が入る。送信後の切断（IOException 等）は Other。
+        /// ★HttpClientHandler（.NET 4.7.1）には接続専用のタイムアウトが無いので、接続段階の「固まり」は
+        /// ここでは分類できない（要求全体のタイムアウトとして OperationCanceledException で来る）。
+        /// </summary>
+        internal static TransportFailure ClassifyTransportFailure(System.Net.Http.HttpRequestException exception)
+        {
+            for (System.Exception inner = exception?.InnerException; inner != null; inner = inner.InnerException)
+            {
+                if (inner is System.Net.Sockets.SocketException ||
+                    inner is System.Security.Authentication.AuthenticationException)
+                {
+                    return TransportFailure.ConnectFailed;
+                }
+            }
+            return TransportFailure.Other;
         }
     }
 }
