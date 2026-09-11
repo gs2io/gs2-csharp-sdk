@@ -2353,6 +2353,16 @@ namespace Gs2.Gs2Gateway
                     jsonWriter.WritePropertyName("sound");
                     jsonWriter.Write(request.Sound.ToString());
                 }
+                if (request.MobileNotificationMessages != null)
+                {
+                    jsonWriter.WritePropertyName("mobileNotificationMessages");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.MobileNotificationMessages)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
                 if (request.TimeOffsetToken != null)
                 {
                     jsonWriter.WritePropertyName("timeOffsetToken");

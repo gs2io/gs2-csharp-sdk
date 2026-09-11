@@ -41,6 +41,7 @@ namespace Gs2.Gs2Gateway.Request
          public string Subject { set; get; } = null!;
          public string Payload { set; get; } = null!;
          public string Sound { set; get; } = null!;
+         public Gs2.Gs2Gateway.Model.MobileNotificationMessage[] MobileNotificationMessages { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
         public string DuplicationAvoider { set; get; } = null!;
         public SendMobileNotificationByUserIdRequest WithNamespaceName(string namespaceName) {
@@ -61,6 +62,10 @@ namespace Gs2.Gs2Gateway.Request
         }
         public SendMobileNotificationByUserIdRequest WithSound(string sound) {
             this.Sound = sound;
+            return this;
+        }
+        public SendMobileNotificationByUserIdRequest WithMobileNotificationMessages(Gs2.Gs2Gateway.Model.MobileNotificationMessage[] mobileNotificationMessages) {
+            this.MobileNotificationMessages = mobileNotificationMessages;
             return this;
         }
         public SendMobileNotificationByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
@@ -87,17 +92,30 @@ namespace Gs2.Gs2Gateway.Request
                 .WithSubject(!data.Keys.Contains("subject") || data["subject"] == null ? null : data["subject"].ToString())
                 .WithPayload(!data.Keys.Contains("payload") || data["payload"] == null ? null : data["payload"].ToString())
                 .WithSound(!data.Keys.Contains("sound") || data["sound"] == null ? null : data["sound"].ToString())
+                .WithMobileNotificationMessages(!data.Keys.Contains("mobileNotificationMessages") || data["mobileNotificationMessages"] == null || !data["mobileNotificationMessages"].IsArray ? null : data["mobileNotificationMessages"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Gateway.Model.MobileNotificationMessage.FromJson(v);
+                }).ToArray())
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
         {
+            JsonData mobileNotificationMessagesJsonData = null;
+            if (MobileNotificationMessages != null && MobileNotificationMessages.Length > 0)
+            {
+                mobileNotificationMessagesJsonData = new JsonData();
+                foreach (var mobileNotificationMessage in MobileNotificationMessages)
+                {
+                    mobileNotificationMessagesJsonData.Add(mobileNotificationMessage.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["userId"] = UserId,
                 ["subject"] = Subject,
                 ["payload"] = Payload,
                 ["sound"] = Sound,
+                ["mobileNotificationMessages"] = mobileNotificationMessagesJsonData,
                 ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
@@ -125,6 +143,17 @@ namespace Gs2.Gs2Gateway.Request
                 writer.WritePropertyName("sound");
                 writer.Write(Sound.ToString());
             }
+            if (MobileNotificationMessages != null) {
+                writer.WritePropertyName("mobileNotificationMessages");
+                writer.WriteArrayStart();
+                foreach (var mobileNotificationMessage in MobileNotificationMessages)
+                {
+                    if (mobileNotificationMessage != null) {
+                        mobileNotificationMessage.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
+            }
             if (TimeOffsetToken != null) {
                 writer.WritePropertyName("timeOffsetToken");
                 writer.Write(TimeOffsetToken.ToString());
@@ -139,6 +168,7 @@ namespace Gs2.Gs2Gateway.Request
             key += Subject + ":";
             key += Payload + ":";
             key += Sound + ":";
+            key += MobileNotificationMessages + ":";
             key += TimeOffsetToken + ":";
             return key;
         }

@@ -40,6 +40,7 @@ namespace Gs2.Gs2Gateway.Model
         public string Payload { set; get; }
         public bool? EnableTransferMobileNotification { set; get; }
         public string Sound { set; get; }
+        public Gs2.Gs2Gateway.Model.MobileNotificationMessage[] MobileNotificationMessages { set; get; }
         public SendNotificationEntry WithUserId(string userId) {
             this.UserId = userId;
             return this;
@@ -64,6 +65,10 @@ namespace Gs2.Gs2Gateway.Model
             this.Sound = sound;
             return this;
         }
+        public SendNotificationEntry WithMobileNotificationMessages(Gs2.Gs2Gateway.Model.MobileNotificationMessage[] mobileNotificationMessages) {
+            this.MobileNotificationMessages = mobileNotificationMessages;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -79,11 +84,23 @@ namespace Gs2.Gs2Gateway.Model
                 .WithSubject(!data.Keys.Contains("subject") || data["subject"] == null ? null : data["subject"].ToString())
                 .WithPayload(!data.Keys.Contains("payload") || data["payload"] == null ? null : data["payload"].ToString())
                 .WithEnableTransferMobileNotification(!data.Keys.Contains("enableTransferMobileNotification") || data["enableTransferMobileNotification"] == null ? null : (bool?)bool.Parse(data["enableTransferMobileNotification"].ToString()))
-                .WithSound(!data.Keys.Contains("sound") || data["sound"] == null ? null : data["sound"].ToString());
+                .WithSound(!data.Keys.Contains("sound") || data["sound"] == null ? null : data["sound"].ToString())
+                .WithMobileNotificationMessages(!data.Keys.Contains("mobileNotificationMessages") || data["mobileNotificationMessages"] == null || !data["mobileNotificationMessages"].IsArray ? null : data["mobileNotificationMessages"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Gateway.Model.MobileNotificationMessage.FromJson(v);
+                }).ToArray());
         }
 
         public JsonData ToJson()
         {
+            JsonData mobileNotificationMessagesJsonData = null;
+            if (MobileNotificationMessages != null && MobileNotificationMessages.Length > 0)
+            {
+                mobileNotificationMessagesJsonData = new JsonData();
+                foreach (var mobileNotificationMessage in MobileNotificationMessages)
+                {
+                    mobileNotificationMessagesJsonData.Add(mobileNotificationMessage.ToJson());
+                }
+            }
             return new JsonData {
                 ["userId"] = UserId,
                 ["issuer"] = Issuer,
@@ -91,6 +108,7 @@ namespace Gs2.Gs2Gateway.Model
                 ["payload"] = Payload,
                 ["enableTransferMobileNotification"] = EnableTransferMobileNotification,
                 ["sound"] = Sound,
+                ["mobileNotificationMessages"] = mobileNotificationMessagesJsonData,
             };
         }
 
@@ -120,6 +138,17 @@ namespace Gs2.Gs2Gateway.Model
             if (Sound != null) {
                 writer.WritePropertyName("sound");
                 writer.Write(Sound.ToString());
+            }
+            if (MobileNotificationMessages != null) {
+                writer.WritePropertyName("mobileNotificationMessages");
+                writer.WriteArrayStart();
+                foreach (var mobileNotificationMessage in MobileNotificationMessages)
+                {
+                    if (mobileNotificationMessage != null) {
+                        mobileNotificationMessage.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
             }
             writer.WriteObjectEnd();
         }
@@ -166,6 +195,11 @@ namespace Gs2.Gs2Gateway.Model
             {
                 return diff;
             }
+            diff = ModelComparer.CompareArray(MobileNotificationMessages, other.MobileNotificationMessages);
+            if (diff != 0)
+            {
+                return diff;
+            }
             return 0;
         }
 
@@ -207,6 +241,13 @@ namespace Gs2.Gs2Gateway.Model
                     });
                 }
             }
+            {
+                if (MobileNotificationMessages.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("sendNotificationEntry", "gateway.sendNotificationEntry.mobileNotificationMessages.error.tooMany"),
+                    });
+                }
+            }
         }
 
         public object Clone() {
@@ -217,6 +258,7 @@ namespace Gs2.Gs2Gateway.Model
                 Payload = Payload,
                 EnableTransferMobileNotification = EnableTransferMobileNotification,
                 Sound = Sound,
+                MobileNotificationMessages = MobileNotificationMessages?.Clone() as Gs2.Gs2Gateway.Model.MobileNotificationMessage[],
             };
         }
     }

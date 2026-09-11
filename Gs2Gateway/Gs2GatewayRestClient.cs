@@ -1947,6 +1947,16 @@ namespace Gs2.Gs2Gateway
                     jsonWriter.WritePropertyName("sound");
                     jsonWriter.Write(request.Sound);
                 }
+                if (request.MobileNotificationMessages != null)
+                {
+                    jsonWriter.WritePropertyName("mobileNotificationMessages");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.MobileNotificationMessages)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -2864,6 +2874,16 @@ namespace Gs2.Gs2Gateway
                 {
                     jsonWriter.WritePropertyName("sound");
                     jsonWriter.Write(request.Sound);
+                }
+                if (request.MobileNotificationMessages != null)
+                {
+                    jsonWriter.WritePropertyName("mobileNotificationMessages");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.MobileNotificationMessages)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
                 }
                 if (request.ContextStack != null)
                 {
