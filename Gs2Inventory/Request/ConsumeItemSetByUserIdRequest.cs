@@ -91,7 +91,7 @@ namespace Gs2.Gs2Inventory.Request
                 .WithInventoryName(!data.Keys.Contains("inventoryName") || data["inventoryName"] == null ? null : data["inventoryName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithItemName(!data.Keys.Contains("itemName") || data["itemName"] == null ? null : data["itemName"].ToString())
-                .WithConsumeCount(!data.Keys.Contains("consumeCount") || data["consumeCount"] == null ? null : (long?)(data["consumeCount"].ToString().Contains(".") ? (long)double.Parse(data["consumeCount"].ToString()) : long.Parse(data["consumeCount"].ToString())))
+                .WithConsumeCount(!data.Keys.Contains("consumeCount") || data["consumeCount"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["consumeCount"].ToString()))
                 .WithItemSetName(!data.Keys.Contains("itemSetName") || data["itemSetName"] == null ? null : data["itemSetName"].ToString())
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }

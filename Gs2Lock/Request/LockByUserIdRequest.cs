@@ -86,7 +86,7 @@ namespace Gs2.Gs2Lock.Request
                 .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
-                .WithTtl(!data.Keys.Contains("ttl") || data["ttl"] == null ? null : (long?)(data["ttl"].ToString().Contains(".") ? (long)double.Parse(data["ttl"].ToString()) : long.Parse(data["ttl"].ToString())))
+                .WithTtl(!data.Keys.Contains("ttl") || data["ttl"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["ttl"].ToString()))
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 

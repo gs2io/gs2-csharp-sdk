@@ -59,9 +59,9 @@ namespace Gs2.Gs2MegaField.Model
                 return null;
             }
             return new Position()
-                .WithX(!data.Keys.Contains("x") || data["x"] == null ? null : (float?)float.Parse(data["x"].ToString()))
-                .WithY(!data.Keys.Contains("y") || data["y"] == null ? null : (float?)float.Parse(data["y"].ToString()))
-                .WithZ(!data.Keys.Contains("z") || data["z"] == null ? null : (float?)float.Parse(data["z"].ToString()));
+                .WithX(!data.Keys.Contains("x") || data["x"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableFloat(data["x"].ToString()))
+                .WithY(!data.Keys.Contains("y") || data["y"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableFloat(data["y"].ToString()))
+                .WithZ(!data.Keys.Contains("z") || data["z"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableFloat(data["z"].ToString()));
         }
 
         public JsonData ToJson()

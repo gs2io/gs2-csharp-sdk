@@ -91,8 +91,8 @@ namespace Gs2.Gs2Exchange.Request
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithAwaitName(!data.Keys.Contains("awaitName") || data["awaitName"] == null ? null : data["awaitName"].ToString())
                 .WithSkipType(!data.Keys.Contains("skipType") || data["skipType"] == null ? null : data["skipType"].ToString())
-                .WithMinutes(!data.Keys.Contains("minutes") || data["minutes"] == null ? null : (int?)(data["minutes"].ToString().Contains(".") ? (int)double.Parse(data["minutes"].ToString()) : int.Parse(data["minutes"].ToString())))
-                .WithRate(!data.Keys.Contains("rate") || data["rate"] == null ? null : (float?)float.Parse(data["rate"].ToString()))
+                .WithMinutes(!data.Keys.Contains("minutes") || data["minutes"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["minutes"].ToString()))
+                .WithRate(!data.Keys.Contains("rate") || data["rate"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableFloat(data["rate"].ToString()))
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 

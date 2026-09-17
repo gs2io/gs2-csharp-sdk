@@ -210,10 +210,10 @@ namespace Gs2.Gs2JobQueue.Model
                 .WithJobId(!data.Keys.Contains("jobId") || data["jobId"] == null ? null : data["jobId"].ToString())
                 .WithScriptId(!data.Keys.Contains("scriptId") || data["scriptId"] == null ? null : data["scriptId"].ToString())
                 .WithArgs(!data.Keys.Contains("args") || data["args"] == null ? null : data["args"].ToString())
-                .WithTryNumber(!data.Keys.Contains("tryNumber") || data["tryNumber"] == null ? null : (int?)(data["tryNumber"].ToString().Contains(".") ? (int)double.Parse(data["tryNumber"].ToString()) : int.Parse(data["tryNumber"].ToString())))
-                .WithStatusCode(!data.Keys.Contains("statusCode") || data["statusCode"] == null ? null : (int?)(data["statusCode"].ToString().Contains(".") ? (int)double.Parse(data["statusCode"].ToString()) : int.Parse(data["statusCode"].ToString())))
+                .WithTryNumber(!data.Keys.Contains("tryNumber") || data["tryNumber"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["tryNumber"].ToString()))
+                .WithStatusCode(!data.Keys.Contains("statusCode") || data["statusCode"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["statusCode"].ToString()))
                 .WithResult(!data.Keys.Contains("result") || data["result"] == null ? null : data["result"].ToString())
-                .WithTryAt(!data.Keys.Contains("tryAt") || data["tryAt"] == null ? null : (long?)(data["tryAt"].ToString().Contains(".") ? (long)double.Parse(data["tryAt"].ToString()) : long.Parse(data["tryAt"].ToString())));
+                .WithTryAt(!data.Keys.Contains("tryAt") || data["tryAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["tryAt"].ToString()));
 /* diff +++ start */
 
             if (result != null) {

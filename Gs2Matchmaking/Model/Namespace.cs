@@ -232,9 +232,9 @@ namespace Gs2.Gs2Matchmaking.Model
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Matchmaking.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithTransactionSettingV2(!data.Keys.Contains("transactionSettingV2") || data["transactionSettingV2"] == null ? null : Gs2.Gs2Matchmaking.Model.TransactionSettingV2.FromJson(data["transactionSettingV2"]))
-                .WithEnableRating(!data.Keys.Contains("enableRating") || data["enableRating"] == null ? null : (bool?)bool.Parse(data["enableRating"].ToString()))
+                .WithEnableRating(!data.Keys.Contains("enableRating") || data["enableRating"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["enableRating"].ToString()))
                 .WithEnableDisconnectDetection(!data.Keys.Contains("enableDisconnectDetection") || data["enableDisconnectDetection"] == null ? null : data["enableDisconnectDetection"].ToString())
-                .WithDisconnectDetectionTimeoutSeconds(!data.Keys.Contains("disconnectDetectionTimeoutSeconds") || data["disconnectDetectionTimeoutSeconds"] == null ? null : (int?)(data["disconnectDetectionTimeoutSeconds"].ToString().Contains(".") ? (int)double.Parse(data["disconnectDetectionTimeoutSeconds"].ToString()) : int.Parse(data["disconnectDetectionTimeoutSeconds"].ToString())))
+                .WithDisconnectDetectionTimeoutSeconds(!data.Keys.Contains("disconnectDetectionTimeoutSeconds") || data["disconnectDetectionTimeoutSeconds"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["disconnectDetectionTimeoutSeconds"].ToString()))
                 .WithCreateGatheringTriggerType(!data.Keys.Contains("createGatheringTriggerType") || data["createGatheringTriggerType"] == null ? null : data["createGatheringTriggerType"].ToString())
                 .WithCreateGatheringTriggerRealtimeNamespaceId(!data.Keys.Contains("createGatheringTriggerRealtimeNamespaceId") || data["createGatheringTriggerRealtimeNamespaceId"] == null ? null : data["createGatheringTriggerRealtimeNamespaceId"].ToString())
                 .WithCreateGatheringTriggerScriptId(!data.Keys.Contains("createGatheringTriggerScriptId") || data["createGatheringTriggerScriptId"] == null ? null : data["createGatheringTriggerScriptId"].ToString())
@@ -243,16 +243,16 @@ namespace Gs2.Gs2Matchmaking.Model
                 .WithCompleteMatchmakingTriggerScriptId(!data.Keys.Contains("completeMatchmakingTriggerScriptId") || data["completeMatchmakingTriggerScriptId"] == null ? null : data["completeMatchmakingTriggerScriptId"].ToString())
                 .WithEnableCollaborateSeasonRating(!data.Keys.Contains("enableCollaborateSeasonRating") || data["enableCollaborateSeasonRating"] == null ? null : data["enableCollaborateSeasonRating"].ToString())
                 .WithCollaborateSeasonRatingNamespaceId(!data.Keys.Contains("collaborateSeasonRatingNamespaceId") || data["collaborateSeasonRatingNamespaceId"] == null ? null : data["collaborateSeasonRatingNamespaceId"].ToString())
-                .WithCollaborateSeasonRatingTtl(!data.Keys.Contains("collaborateSeasonRatingTtl") || data["collaborateSeasonRatingTtl"] == null ? null : (int?)(data["collaborateSeasonRatingTtl"].ToString().Contains(".") ? (int)double.Parse(data["collaborateSeasonRatingTtl"].ToString()) : int.Parse(data["collaborateSeasonRatingTtl"].ToString())))
+                .WithCollaborateSeasonRatingTtl(!data.Keys.Contains("collaborateSeasonRatingTtl") || data["collaborateSeasonRatingTtl"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["collaborateSeasonRatingTtl"].ToString()))
                 .WithChangeRatingScript(!data.Keys.Contains("changeRatingScript") || data["changeRatingScript"] == null ? null : Gs2.Gs2Matchmaking.Model.ScriptSetting.FromJson(data["changeRatingScript"]))
                 .WithJoinNotification(!data.Keys.Contains("joinNotification") || data["joinNotification"] == null ? null : Gs2.Gs2Matchmaking.Model.NotificationSetting.FromJson(data["joinNotification"]))
                 .WithLeaveNotification(!data.Keys.Contains("leaveNotification") || data["leaveNotification"] == null ? null : Gs2.Gs2Matchmaking.Model.NotificationSetting.FromJson(data["leaveNotification"]))
                 .WithCompleteNotification(!data.Keys.Contains("completeNotification") || data["completeNotification"] == null ? null : Gs2.Gs2Matchmaking.Model.NotificationSetting.FromJson(data["completeNotification"]))
                 .WithChangeRatingNotification(!data.Keys.Contains("changeRatingNotification") || data["changeRatingNotification"] == null ? null : Gs2.Gs2Matchmaking.Model.NotificationSetting.FromJson(data["changeRatingNotification"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Matchmaking.Model.LogSetting.FromJson(data["logSetting"]))
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["updatedAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["revision"].ToString()));
         }
 
         public JsonData ToJson()

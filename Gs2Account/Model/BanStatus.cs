@@ -61,7 +61,7 @@ namespace Gs2.Gs2Account.Model
             return new BanStatus()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithReason(!data.Keys.Contains("reason") || data["reason"] == null ? null : data["reason"].ToString())
-                .WithReleaseTimestamp(!data.Keys.Contains("releaseTimestamp") || data["releaseTimestamp"] == null ? null : (long?)(data["releaseTimestamp"].ToString().Contains(".") ? (long)double.Parse(data["releaseTimestamp"].ToString()) : long.Parse(data["releaseTimestamp"].ToString())));
+                .WithReleaseTimestamp(!data.Keys.Contains("releaseTimestamp") || data["releaseTimestamp"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["releaseTimestamp"].ToString()));
         }
 
         public JsonData ToJson()

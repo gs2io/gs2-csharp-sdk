@@ -86,7 +86,7 @@ namespace Gs2.Gs2Experience.Request
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithExperienceName(!data.Keys.Contains("experienceName") || data["experienceName"] == null ? null : data["experienceName"].ToString())
                 .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
-                .WithExperienceValue(!data.Keys.Contains("experienceValue") || data["experienceValue"] == null ? null : (long?)(data["experienceValue"].ToString().Contains(".") ? (long)double.Parse(data["experienceValue"].ToString()) : long.Parse(data["experienceValue"].ToString())))
+                .WithExperienceValue(!data.Keys.Contains("experienceValue") || data["experienceValue"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["experienceValue"].ToString()))
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 

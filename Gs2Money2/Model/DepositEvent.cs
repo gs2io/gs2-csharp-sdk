@@ -59,7 +59,7 @@ namespace Gs2.Gs2Money2.Model
                 return null;
             }
             return new DepositEvent()
-                .WithSlot(!data.Keys.Contains("slot") || data["slot"] == null ? null : (int?)(data["slot"].ToString().Contains(".") ? (int)double.Parse(data["slot"].ToString()) : int.Parse(data["slot"].ToString())))
+                .WithSlot(!data.Keys.Contains("slot") || data["slot"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["slot"].ToString()))
                 .WithDepositTransactions(!data.Keys.Contains("depositTransactions") || data["depositTransactions"] == null || !data["depositTransactions"].IsArray ? null : data["depositTransactions"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Money2.Model.DepositTransaction.FromJson(v);
                 }).ToArray())

@@ -55,7 +55,7 @@ namespace Gs2.Gs2Log.Model
             }
             return new FacetValueCount()
                 .WithValue(!data.Keys.Contains("value") || data["value"] == null ? null : data["value"].ToString())
-                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (long?)(data["count"].ToString().Contains(".") ? (long)double.Parse(data["count"].ToString()) : long.Parse(data["count"].ToString())));
+                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["count"].ToString()));
         }
 
         public JsonData ToJson()

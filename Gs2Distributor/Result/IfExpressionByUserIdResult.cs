@@ -62,7 +62,7 @@ namespace Gs2.Gs2Distributor.Result
             }
             return new IfExpressionByUserIdResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Distributor.Model.TransactionResult.FromJson(data["item"]))
-                .WithExpressionResult(!data.Keys.Contains("expressionResult") || data["expressionResult"] == null ? null : (bool?)bool.Parse(data["expressionResult"].ToString()))
+                .WithExpressionResult(!data.Keys.Contains("expressionResult") || data["expressionResult"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["expressionResult"].ToString()))
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 

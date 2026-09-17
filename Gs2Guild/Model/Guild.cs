@@ -223,24 +223,24 @@ namespace Gs2.Gs2Guild.Model
                 .WithGuildModelName(!data.Keys.Contains("guildModelName") || data["guildModelName"] == null ? null : data["guildModelName"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDisplayName(!data.Keys.Contains("displayName") || data["displayName"] == null ? null : data["displayName"].ToString())
-                .WithAttribute1(!data.Keys.Contains("attribute1") || data["attribute1"] == null ? null : (int?)(data["attribute1"].ToString().Contains(".") ? (int)double.Parse(data["attribute1"].ToString()) : int.Parse(data["attribute1"].ToString())))
-                .WithAttribute2(!data.Keys.Contains("attribute2") || data["attribute2"] == null ? null : (int?)(data["attribute2"].ToString().Contains(".") ? (int)double.Parse(data["attribute2"].ToString()) : int.Parse(data["attribute2"].ToString())))
-                .WithAttribute3(!data.Keys.Contains("attribute3") || data["attribute3"] == null ? null : (int?)(data["attribute3"].ToString().Contains(".") ? (int)double.Parse(data["attribute3"].ToString()) : int.Parse(data["attribute3"].ToString())))
-                .WithAttribute4(!data.Keys.Contains("attribute4") || data["attribute4"] == null ? null : (int?)(data["attribute4"].ToString().Contains(".") ? (int)double.Parse(data["attribute4"].ToString()) : int.Parse(data["attribute4"].ToString())))
-                .WithAttribute5(!data.Keys.Contains("attribute5") || data["attribute5"] == null ? null : (int?)(data["attribute5"].ToString().Contains(".") ? (int)double.Parse(data["attribute5"].ToString()) : int.Parse(data["attribute5"].ToString())))
+                .WithAttribute1(!data.Keys.Contains("attribute1") || data["attribute1"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["attribute1"].ToString()))
+                .WithAttribute2(!data.Keys.Contains("attribute2") || data["attribute2"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["attribute2"].ToString()))
+                .WithAttribute3(!data.Keys.Contains("attribute3") || data["attribute3"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["attribute3"].ToString()))
+                .WithAttribute4(!data.Keys.Contains("attribute4") || data["attribute4"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["attribute4"].ToString()))
+                .WithAttribute5(!data.Keys.Contains("attribute5") || data["attribute5"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["attribute5"].ToString()))
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithJoinPolicy(!data.Keys.Contains("joinPolicy") || data["joinPolicy"] == null ? null : data["joinPolicy"].ToString())
                 .WithCustomRoles(!data.Keys.Contains("customRoles") || data["customRoles"] == null || !data["customRoles"].IsArray ? null : data["customRoles"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Guild.Model.RoleModel.FromJson(v);
                 }).ToArray())
                 .WithGuildMemberDefaultRole(!data.Keys.Contains("guildMemberDefaultRole") || data["guildMemberDefaultRole"] == null ? null : data["guildMemberDefaultRole"].ToString())
-                .WithCurrentMaximumMemberCount(!data.Keys.Contains("currentMaximumMemberCount") || data["currentMaximumMemberCount"] == null ? null : (int?)(data["currentMaximumMemberCount"].ToString().Contains(".") ? (int)double.Parse(data["currentMaximumMemberCount"].ToString()) : int.Parse(data["currentMaximumMemberCount"].ToString())))
+                .WithCurrentMaximumMemberCount(!data.Keys.Contains("currentMaximumMemberCount") || data["currentMaximumMemberCount"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["currentMaximumMemberCount"].ToString()))
                 .WithMembers(!data.Keys.Contains("members") || data["members"] == null || !data["members"].IsArray ? null : data["members"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Guild.Model.Member.FromJson(v);
                 }).ToArray())
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["updatedAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["revision"].ToString()));
         }
 
         public JsonData ToJson()

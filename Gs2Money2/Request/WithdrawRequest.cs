@@ -79,9 +79,9 @@ namespace Gs2.Gs2Money2.Request
             return new WithdrawRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
-                .WithSlot(!data.Keys.Contains("slot") || data["slot"] == null ? null : (int?)(data["slot"].ToString().Contains(".") ? (int)double.Parse(data["slot"].ToString()) : int.Parse(data["slot"].ToString())))
-                .WithWithdrawCount(!data.Keys.Contains("withdrawCount") || data["withdrawCount"] == null ? null : (int?)(data["withdrawCount"].ToString().Contains(".") ? (int)double.Parse(data["withdrawCount"].ToString()) : int.Parse(data["withdrawCount"].ToString())))
-                .WithPaidOnly(!data.Keys.Contains("paidOnly") || data["paidOnly"] == null ? null : (bool?)bool.Parse(data["paidOnly"].ToString()));
+                .WithSlot(!data.Keys.Contains("slot") || data["slot"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["slot"].ToString()))
+                .WithWithdrawCount(!data.Keys.Contains("withdrawCount") || data["withdrawCount"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["withdrawCount"].ToString()))
+                .WithPaidOnly(!data.Keys.Contains("paidOnly") || data["paidOnly"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["paidOnly"].ToString()));
         }
 
         public override JsonData ToJson()

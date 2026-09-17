@@ -54,8 +54,8 @@ namespace Gs2.Gs2Enhance.Model
                 return null;
             }
             return new UnleashRateEntryModel()
-                .WithGradeValue(!data.Keys.Contains("gradeValue") || data["gradeValue"] == null ? null : (long?)(data["gradeValue"].ToString().Contains(".") ? (long)double.Parse(data["gradeValue"].ToString()) : long.Parse(data["gradeValue"].ToString())))
-                .WithNeedCount(!data.Keys.Contains("needCount") || data["needCount"] == null ? null : (int?)(data["needCount"].ToString().Contains(".") ? (int)double.Parse(data["needCount"].ToString()) : int.Parse(data["needCount"].ToString())));
+                .WithGradeValue(!data.Keys.Contains("gradeValue") || data["gradeValue"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["gradeValue"].ToString()))
+                .WithNeedCount(!data.Keys.Contains("needCount") || data["needCount"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["needCount"].ToString()));
         }
 
         public JsonData ToJson()

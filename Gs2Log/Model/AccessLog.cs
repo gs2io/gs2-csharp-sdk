@@ -79,7 +79,7 @@ namespace Gs2.Gs2Log.Model
                 return null;
             }
             return new AccessLog()
-                .WithTimestamp(!data.Keys.Contains("timestamp") || data["timestamp"] == null ? null : (long?)(data["timestamp"].ToString().Contains(".") ? (long)double.Parse(data["timestamp"].ToString()) : long.Parse(data["timestamp"].ToString())))
+                .WithTimestamp(!data.Keys.Contains("timestamp") || data["timestamp"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["timestamp"].ToString()))
                 .WithRequestId(!data.Keys.Contains("requestId") || data["requestId"] == null ? null : data["requestId"].ToString())
                 .WithService(!data.Keys.Contains("service") || data["service"] == null ? null : data["service"].ToString())
                 .WithMethod(!data.Keys.Contains("method") || data["method"] == null ? null : data["method"].ToString())

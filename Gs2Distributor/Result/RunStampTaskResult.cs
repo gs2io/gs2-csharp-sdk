@@ -68,7 +68,7 @@ namespace Gs2.Gs2Distributor.Result
             }
             return new RunStampTaskResult()
                 .WithContextStack(!data.Keys.Contains("contextStack") || data["contextStack"] == null ? null : data["contextStack"].ToString())
-                .WithStatusCode(!data.Keys.Contains("statusCode") || data["statusCode"] == null ? null : (int?)(data["statusCode"].ToString().Contains(".") ? (int)double.Parse(data["statusCode"].ToString()) : int.Parse(data["statusCode"].ToString())))
+                .WithStatusCode(!data.Keys.Contains("statusCode") || data["statusCode"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["statusCode"].ToString()))
                 .WithResult(!data.Keys.Contains("result") || data["result"] == null ? null : data["result"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }

@@ -179,17 +179,17 @@ namespace Gs2.Gs2Project.Model
             return new Billing()
                 .WithBillingId(!data.Keys.Contains("billingId") || data["billingId"] == null ? null : data["billingId"].ToString())
                 .WithProjectName(!data.Keys.Contains("projectName") || data["projectName"] == null ? null : data["projectName"].ToString())
-                .WithYear(!data.Keys.Contains("year") || data["year"] == null ? null : (int?)(data["year"].ToString().Contains(".") ? (int)double.Parse(data["year"].ToString()) : int.Parse(data["year"].ToString())))
-                .WithMonth(!data.Keys.Contains("month") || data["month"] == null ? null : (int?)(data["month"].ToString().Contains(".") ? (int)double.Parse(data["month"].ToString()) : int.Parse(data["month"].ToString())))
+                .WithYear(!data.Keys.Contains("year") || data["year"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["year"].ToString()))
+                .WithMonth(!data.Keys.Contains("month") || data["month"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["month"].ToString()))
                 .WithRegion(!data.Keys.Contains("region") || data["region"] == null ? null : data["region"].ToString())
                 .WithService(!data.Keys.Contains("service") || data["service"] == null ? null : data["service"].ToString())
                 .WithActivityType(!data.Keys.Contains("activityType") || data["activityType"] == null ? null : data["activityType"].ToString())
-                .WithUnit(!data.Keys.Contains("unit") || data["unit"] == null ? null : (double?)double.Parse(data["unit"].ToString()))
+                .WithUnit(!data.Keys.Contains("unit") || data["unit"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableDouble(data["unit"].ToString()))
                 .WithUnitName(!data.Keys.Contains("unitName") || data["unitName"] == null ? null : data["unitName"].ToString())
-                .WithPrice(!data.Keys.Contains("price") || data["price"] == null ? null : (double?)double.Parse(data["price"].ToString()))
+                .WithPrice(!data.Keys.Contains("price") || data["price"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableDouble(data["price"].ToString()))
                 .WithCurrency(!data.Keys.Contains("currency") || data["currency"] == null ? null : data["currency"].ToString())
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["updatedAt"].ToString()));
         }
 
         public JsonData ToJson()

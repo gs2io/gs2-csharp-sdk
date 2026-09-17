@@ -162,7 +162,7 @@ namespace Gs2.Gs2Exchange.Model
                     return Gs2.Core.Model.ConsumeAction.FromJson(v);
                 }).ToArray())
                 .WithTimingType(!data.Keys.Contains("timingType") || data["timingType"] == null ? null : data["timingType"].ToString())
-                .WithLockTime(!data.Keys.Contains("lockTime") || data["lockTime"] == null ? null : (int?)(data["lockTime"].ToString().Contains(".") ? (int)double.Parse(data["lockTime"].ToString()) : int.Parse(data["lockTime"].ToString())))
+                .WithLockTime(!data.Keys.Contains("lockTime") || data["lockTime"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["lockTime"].ToString()))
                 .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null || !data["acquireActions"].IsArray ? null : data["acquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray());

@@ -69,7 +69,7 @@ namespace Gs2.Gs2Datastore.Result
             return new PrepareDownloadByUserIdResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Datastore.Model.DataObject.FromJson(data["item"]))
                 .WithFileUrl(!data.Keys.Contains("fileUrl") || data["fileUrl"] == null ? null : data["fileUrl"].ToString())
-                .WithContentLength(!data.Keys.Contains("contentLength") || data["contentLength"] == null ? null : (long?)(data["contentLength"].ToString().Contains(".") ? (long)double.Parse(data["contentLength"].ToString()) : long.Parse(data["contentLength"].ToString())))
+                .WithContentLength(!data.Keys.Contains("contentLength") || data["contentLength"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["contentLength"].ToString()))
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 

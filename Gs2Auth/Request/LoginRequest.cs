@@ -62,7 +62,7 @@ namespace Gs2.Gs2Auth.Request
             }
             return new LoginRequest()
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithTimeOffset(!data.Keys.Contains("timeOffset") || data["timeOffset"] == null ? null : (int?)(data["timeOffset"].ToString().Contains(".") ? (int)double.Parse(data["timeOffset"].ToString()) : int.Parse(data["timeOffset"].ToString())))
+                .WithTimeOffset(!data.Keys.Contains("timeOffset") || data["timeOffset"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["timeOffset"].ToString()))
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 

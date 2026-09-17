@@ -63,7 +63,7 @@ namespace Gs2.Gs2Quest.Model
                 .WithCompleteAcquireActions(!data.Keys.Contains("completeAcquireActions") || data["completeAcquireActions"] == null || !data["completeAcquireActions"].IsArray ? null : data["completeAcquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
-                .WithWeight(!data.Keys.Contains("weight") || data["weight"] == null ? null : (int?)(data["weight"].ToString().Contains(".") ? (int)double.Parse(data["weight"].ToString()) : int.Parse(data["weight"].ToString())));
+                .WithWeight(!data.Keys.Contains("weight") || data["weight"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["weight"].ToString()));
         }
 
         public JsonData ToJson()

@@ -59,9 +59,9 @@ namespace Gs2.Gs2Version.Model
                 return null;
             }
             return new Version_()
-                .WithMajor(!data.Keys.Contains("major") || data["major"] == null ? null : (int?)(data["major"].ToString().Contains(".") ? (int)double.Parse(data["major"].ToString()) : int.Parse(data["major"].ToString())))
-                .WithMinor(!data.Keys.Contains("minor") || data["minor"] == null ? null : (int?)(data["minor"].ToString().Contains(".") ? (int)double.Parse(data["minor"].ToString()) : int.Parse(data["minor"].ToString())))
-                .WithMicro(!data.Keys.Contains("micro") || data["micro"] == null ? null : (int?)(data["micro"].ToString().Contains(".") ? (int)double.Parse(data["micro"].ToString()) : int.Parse(data["micro"].ToString())));
+                .WithMajor(!data.Keys.Contains("major") || data["major"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["major"].ToString()))
+                .WithMinor(!data.Keys.Contains("minor") || data["minor"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["minor"].ToString()))
+                .WithMicro(!data.Keys.Contains("micro") || data["micro"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["micro"].ToString()));
         }
 
         public JsonData ToJson()

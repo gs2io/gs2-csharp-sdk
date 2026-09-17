@@ -62,7 +62,7 @@ namespace Gs2.Gs2Account.Request
             }
             return new DoTakeOverOpenIdConnectRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : (int?)(data["type"].ToString().Contains(".") ? (int)double.Parse(data["type"].ToString()) : int.Parse(data["type"].ToString())))
+                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["type"].ToString()))
                 .WithIdToken(!data.Keys.Contains("idToken") || data["idToken"] == null ? null : data["idToken"].ToString());
         }
 

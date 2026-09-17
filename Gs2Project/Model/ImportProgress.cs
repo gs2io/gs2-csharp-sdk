@@ -138,11 +138,11 @@ namespace Gs2.Gs2Project.Model
                 .WithImportProgressId(!data.Keys.Contains("importProgressId") || data["importProgressId"] == null ? null : data["importProgressId"].ToString())
                 .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithImported(!data.Keys.Contains("imported") || data["imported"] == null ? null : (int?)(data["imported"].ToString().Contains(".") ? (int)double.Parse(data["imported"].ToString()) : int.Parse(data["imported"].ToString())))
-                .WithMicroserviceCount(!data.Keys.Contains("microserviceCount") || data["microserviceCount"] == null ? null : (int?)(data["microserviceCount"].ToString().Contains(".") ? (int)double.Parse(data["microserviceCount"].ToString()) : int.Parse(data["microserviceCount"].ToString())))
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
+                .WithImported(!data.Keys.Contains("imported") || data["imported"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["imported"].ToString()))
+                .WithMicroserviceCount(!data.Keys.Contains("microserviceCount") || data["microserviceCount"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["microserviceCount"].ToString()))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["updatedAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["revision"].ToString()));
         }
 
         public JsonData ToJson()

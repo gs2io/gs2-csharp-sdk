@@ -86,11 +86,11 @@ namespace Gs2.Gs2Schedule.Result
             }
             return new VerifyEventResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Schedule.Model.Event.FromJson(data["item"]))
-                .WithInSchedule(!data.Keys.Contains("inSchedule") || data["inSchedule"] == null ? null : (bool?)bool.Parse(data["inSchedule"].ToString()))
-                .WithScheduleStartAt(!data.Keys.Contains("scheduleStartAt") || data["scheduleStartAt"] == null ? null : (long?)(data["scheduleStartAt"].ToString().Contains(".") ? (long)double.Parse(data["scheduleStartAt"].ToString()) : long.Parse(data["scheduleStartAt"].ToString())))
-                .WithScheduleEndAt(!data.Keys.Contains("scheduleEndAt") || data["scheduleEndAt"] == null ? null : (long?)(data["scheduleEndAt"].ToString().Contains(".") ? (long)double.Parse(data["scheduleEndAt"].ToString()) : long.Parse(data["scheduleEndAt"].ToString())))
+                .WithInSchedule(!data.Keys.Contains("inSchedule") || data["inSchedule"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["inSchedule"].ToString()))
+                .WithScheduleStartAt(!data.Keys.Contains("scheduleStartAt") || data["scheduleStartAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["scheduleStartAt"].ToString()))
+                .WithScheduleEndAt(!data.Keys.Contains("scheduleEndAt") || data["scheduleEndAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["scheduleEndAt"].ToString()))
                 .WithRepeatSchedule(!data.Keys.Contains("repeatSchedule") || data["repeatSchedule"] == null ? null : Gs2.Gs2Schedule.Model.RepeatSchedule.FromJson(data["repeatSchedule"]))
-                .WithIsGlobalSchedule(!data.Keys.Contains("isGlobalSchedule") || data["isGlobalSchedule"] == null ? null : (bool?)bool.Parse(data["isGlobalSchedule"].ToString()))
+                .WithIsGlobalSchedule(!data.Keys.Contains("isGlobalSchedule") || data["isGlobalSchedule"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["isGlobalSchedule"].ToString()))
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 

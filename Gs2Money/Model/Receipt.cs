@@ -199,14 +199,14 @@ namespace Gs2.Gs2Money.Model
                 .WithPurchaseToken(!data.Keys.Contains("purchaseToken") || data["purchaseToken"] == null ? null : data["purchaseToken"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : data["type"].ToString())
-                .WithSlot(!data.Keys.Contains("slot") || data["slot"] == null ? null : (int?)(data["slot"].ToString().Contains(".") ? (int)double.Parse(data["slot"].ToString()) : int.Parse(data["slot"].ToString())))
-                .WithPrice(!data.Keys.Contains("price") || data["price"] == null ? null : (float?)float.Parse(data["price"].ToString()))
-                .WithPaid(!data.Keys.Contains("paid") || data["paid"] == null ? null : (int?)(data["paid"].ToString().Contains(".") ? (int)double.Parse(data["paid"].ToString()) : int.Parse(data["paid"].ToString())))
-                .WithFree(!data.Keys.Contains("free") || data["free"] == null ? null : (int?)(data["free"].ToString().Contains(".") ? (int)double.Parse(data["free"].ToString()) : int.Parse(data["free"].ToString())))
-                .WithTotal(!data.Keys.Contains("total") || data["total"] == null ? null : (int?)(data["total"].ToString().Contains(".") ? (int)double.Parse(data["total"].ToString()) : int.Parse(data["total"].ToString())))
+                .WithSlot(!data.Keys.Contains("slot") || data["slot"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["slot"].ToString()))
+                .WithPrice(!data.Keys.Contains("price") || data["price"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableFloat(data["price"].ToString()))
+                .WithPaid(!data.Keys.Contains("paid") || data["paid"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["paid"].ToString()))
+                .WithFree(!data.Keys.Contains("free") || data["free"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["free"].ToString()))
+                .WithTotal(!data.Keys.Contains("total") || data["total"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["total"].ToString()))
                 .WithContentsId(!data.Keys.Contains("contentsId") || data["contentsId"] == null ? null : data["contentsId"].ToString())
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["revision"].ToString()));
         }
 
         public JsonData ToJson()

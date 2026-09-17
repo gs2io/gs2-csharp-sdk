@@ -195,12 +195,12 @@ namespace Gs2.Gs2Money2.Model
                 .WithStore(!data.Keys.Contains("store") || data["store"] == null ? null : data["store"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithStatusDetail(!data.Keys.Contains("statusDetail") || data["statusDetail"] == null ? null : data["statusDetail"].ToString())
-                .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)(data["expiresAt"].ToString().Contains(".") ? (long)double.Parse(data["expiresAt"].ToString()) : long.Parse(data["expiresAt"].ToString())))
-                .WithLastAllocatedAt(!data.Keys.Contains("lastAllocatedAt") || data["lastAllocatedAt"] == null ? null : (long?)(data["lastAllocatedAt"].ToString().Contains(".") ? (long)double.Parse(data["lastAllocatedAt"].ToString()) : long.Parse(data["lastAllocatedAt"].ToString())))
-                .WithLastTakeOverAt(!data.Keys.Contains("lastTakeOverAt") || data["lastTakeOverAt"] == null ? null : (long?)(data["lastTakeOverAt"].ToString().Contains(".") ? (long)double.Parse(data["lastTakeOverAt"].ToString()) : long.Parse(data["lastTakeOverAt"].ToString())))
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
+                .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["expiresAt"].ToString()))
+                .WithLastAllocatedAt(!data.Keys.Contains("lastAllocatedAt") || data["lastAllocatedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["lastAllocatedAt"].ToString()))
+                .WithLastTakeOverAt(!data.Keys.Contains("lastTakeOverAt") || data["lastTakeOverAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["lastTakeOverAt"].ToString()))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["updatedAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["revision"].ToString()));
         }
 
         public JsonData ToJson()

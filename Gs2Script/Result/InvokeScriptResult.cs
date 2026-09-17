@@ -103,14 +103,14 @@ namespace Gs2.Gs2Script.Result
                 return null;
             }
             return new InvokeScriptResult()
-                .WithCode(!data.Keys.Contains("code") || data["code"] == null ? null : (int?)(data["code"].ToString().Contains(".") ? (int)double.Parse(data["code"].ToString()) : int.Parse(data["code"].ToString())))
+                .WithCode(!data.Keys.Contains("code") || data["code"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["code"].ToString()))
                 .WithResult(!data.Keys.Contains("result") || data["result"] == null ? null : data["result"].ToString())
                 .WithTransaction(!data.Keys.Contains("transaction") || data["transaction"] == null ? null : Gs2.Gs2Script.Model.Transaction_.FromJson(data["transaction"]))
                 .WithRandomStatus(!data.Keys.Contains("randomStatus") || data["randomStatus"] == null ? null : Gs2.Gs2Script.Model.RandomStatus.FromJson(data["randomStatus"]))
-                .WithAtomicCommit(!data.Keys.Contains("atomicCommit") || data["atomicCommit"] == null ? null : (bool?)bool.Parse(data["atomicCommit"].ToString()))
+                .WithAtomicCommit(!data.Keys.Contains("atomicCommit") || data["atomicCommit"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["atomicCommit"].ToString()))
                 .WithTransactionResult(!data.Keys.Contains("transactionResult") || data["transactionResult"] == null ? null : Gs2.Core.Model.TransactionResult.FromJson(data["transactionResult"]))
-                .WithExecuteTime(!data.Keys.Contains("executeTime") || data["executeTime"] == null ? null : (int?)(data["executeTime"].ToString().Contains(".") ? (int)double.Parse(data["executeTime"].ToString()) : int.Parse(data["executeTime"].ToString())))
-                .WithCharged(!data.Keys.Contains("charged") || data["charged"] == null ? null : (int?)(data["charged"].ToString().Contains(".") ? (int)double.Parse(data["charged"].ToString()) : int.Parse(data["charged"].ToString())))
+                .WithExecuteTime(!data.Keys.Contains("executeTime") || data["executeTime"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["executeTime"].ToString()))
+                .WithCharged(!data.Keys.Contains("charged") || data["charged"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["charged"].ToString()))
                 .WithOutput(!data.Keys.Contains("output") || data["output"] == null || !data["output"].IsArray ? null : data["output"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())

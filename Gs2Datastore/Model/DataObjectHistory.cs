@@ -179,9 +179,9 @@ namespace Gs2.Gs2Datastore.Model
                 .WithDataObjectHistoryId(!data.Keys.Contains("dataObjectHistoryId") || data["dataObjectHistoryId"] == null ? null : data["dataObjectHistoryId"].ToString())
                 .WithDataObjectName(!data.Keys.Contains("dataObjectName") || data["dataObjectName"] == null ? null : data["dataObjectName"].ToString())
                 .WithGeneration(!data.Keys.Contains("generation") || data["generation"] == null ? null : data["generation"].ToString())
-                .WithContentLength(!data.Keys.Contains("contentLength") || data["contentLength"] == null ? null : (long?)(data["contentLength"].ToString().Contains(".") ? (long)double.Parse(data["contentLength"].ToString()) : long.Parse(data["contentLength"].ToString())))
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
+                .WithContentLength(!data.Keys.Contains("contentLength") || data["contentLength"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["contentLength"].ToString()))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["revision"].ToString()));
         }
 
         public JsonData ToJson()

@@ -182,13 +182,13 @@ namespace Gs2.Gs2Idle.Model
                 .WithStatusId(!data.Keys.Contains("statusId") || data["statusId"] == null ? null : data["statusId"].ToString())
                 .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithRandomSeed(!data.Keys.Contains("randomSeed") || data["randomSeed"] == null ? null : (long?)(data["randomSeed"].ToString().Contains(".") ? (long)double.Parse(data["randomSeed"].ToString()) : long.Parse(data["randomSeed"].ToString())))
-                .WithIdleMinutes(!data.Keys.Contains("idleMinutes") || data["idleMinutes"] == null ? null : (int?)(data["idleMinutes"].ToString().Contains(".") ? (int)double.Parse(data["idleMinutes"].ToString()) : int.Parse(data["idleMinutes"].ToString())))
-                .WithNextRewardsAt(!data.Keys.Contains("nextRewardsAt") || data["nextRewardsAt"] == null ? null : (long?)(data["nextRewardsAt"].ToString().Contains(".") ? (long)double.Parse(data["nextRewardsAt"].ToString()) : long.Parse(data["nextRewardsAt"].ToString())))
-                .WithMaximumIdleMinutes(!data.Keys.Contains("maximumIdleMinutes") || data["maximumIdleMinutes"] == null ? null : (int?)(data["maximumIdleMinutes"].ToString().Contains(".") ? (int)double.Parse(data["maximumIdleMinutes"].ToString()) : int.Parse(data["maximumIdleMinutes"].ToString())))
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
+                .WithRandomSeed(!data.Keys.Contains("randomSeed") || data["randomSeed"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["randomSeed"].ToString()))
+                .WithIdleMinutes(!data.Keys.Contains("idleMinutes") || data["idleMinutes"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["idleMinutes"].ToString()))
+                .WithNextRewardsAt(!data.Keys.Contains("nextRewardsAt") || data["nextRewardsAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["nextRewardsAt"].ToString()))
+                .WithMaximumIdleMinutes(!data.Keys.Contains("maximumIdleMinutes") || data["maximumIdleMinutes"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["maximumIdleMinutes"].ToString()))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["updatedAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["revision"].ToString()));
         }
 
         public JsonData ToJson()

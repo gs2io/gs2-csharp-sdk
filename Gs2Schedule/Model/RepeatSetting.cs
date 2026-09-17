@@ -95,15 +95,15 @@ namespace Gs2.Gs2Schedule.Model
             }
             return new RepeatSetting()
                 .WithRepeatType(!data.Keys.Contains("repeatType") || data["repeatType"] == null ? null : data["repeatType"].ToString())
-                .WithBeginDayOfMonth(!data.Keys.Contains("beginDayOfMonth") || data["beginDayOfMonth"] == null ? null : (int?)(data["beginDayOfMonth"].ToString().Contains(".") ? (int)double.Parse(data["beginDayOfMonth"].ToString()) : int.Parse(data["beginDayOfMonth"].ToString())))
-                .WithEndDayOfMonth(!data.Keys.Contains("endDayOfMonth") || data["endDayOfMonth"] == null ? null : (int?)(data["endDayOfMonth"].ToString().Contains(".") ? (int)double.Parse(data["endDayOfMonth"].ToString()) : int.Parse(data["endDayOfMonth"].ToString())))
+                .WithBeginDayOfMonth(!data.Keys.Contains("beginDayOfMonth") || data["beginDayOfMonth"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["beginDayOfMonth"].ToString()))
+                .WithEndDayOfMonth(!data.Keys.Contains("endDayOfMonth") || data["endDayOfMonth"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["endDayOfMonth"].ToString()))
                 .WithBeginDayOfWeek(!data.Keys.Contains("beginDayOfWeek") || data["beginDayOfWeek"] == null ? null : data["beginDayOfWeek"].ToString())
                 .WithEndDayOfWeek(!data.Keys.Contains("endDayOfWeek") || data["endDayOfWeek"] == null ? null : data["endDayOfWeek"].ToString())
-                .WithBeginHour(!data.Keys.Contains("beginHour") || data["beginHour"] == null ? null : (int?)(data["beginHour"].ToString().Contains(".") ? (int)double.Parse(data["beginHour"].ToString()) : int.Parse(data["beginHour"].ToString())))
-                .WithEndHour(!data.Keys.Contains("endHour") || data["endHour"] == null ? null : (int?)(data["endHour"].ToString().Contains(".") ? (int)double.Parse(data["endHour"].ToString()) : int.Parse(data["endHour"].ToString())))
-                .WithAnchorTimestamp(!data.Keys.Contains("anchorTimestamp") || data["anchorTimestamp"] == null ? null : (long?)(data["anchorTimestamp"].ToString().Contains(".") ? (long)double.Parse(data["anchorTimestamp"].ToString()) : long.Parse(data["anchorTimestamp"].ToString())))
-                .WithActiveDays(!data.Keys.Contains("activeDays") || data["activeDays"] == null ? null : (int?)(data["activeDays"].ToString().Contains(".") ? (int)double.Parse(data["activeDays"].ToString()) : int.Parse(data["activeDays"].ToString())))
-                .WithInactiveDays(!data.Keys.Contains("inactiveDays") || data["inactiveDays"] == null ? null : (int?)(data["inactiveDays"].ToString().Contains(".") ? (int)double.Parse(data["inactiveDays"].ToString()) : int.Parse(data["inactiveDays"].ToString())));
+                .WithBeginHour(!data.Keys.Contains("beginHour") || data["beginHour"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["beginHour"].ToString()))
+                .WithEndHour(!data.Keys.Contains("endHour") || data["endHour"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["endHour"].ToString()))
+                .WithAnchorTimestamp(!data.Keys.Contains("anchorTimestamp") || data["anchorTimestamp"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["anchorTimestamp"].ToString()))
+                .WithActiveDays(!data.Keys.Contains("activeDays") || data["activeDays"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["activeDays"].ToString()))
+                .WithInactiveDays(!data.Keys.Contains("inactiveDays") || data["inactiveDays"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["inactiveDays"].ToString()));
         }
 
         public JsonData ToJson()

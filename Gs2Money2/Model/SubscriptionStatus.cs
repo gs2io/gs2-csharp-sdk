@@ -72,7 +72,7 @@ namespace Gs2.Gs2Money2.Model
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithContentName(!data.Keys.Contains("contentName") || data["contentName"] == null ? null : data["contentName"].ToString())
                 .WithStatus(!data.Keys.Contains("status") || data["status"] == null ? null : data["status"].ToString())
-                .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)(data["expiresAt"].ToString().Contains(".") ? (long)double.Parse(data["expiresAt"].ToString()) : long.Parse(data["expiresAt"].ToString())))
+                .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["expiresAt"].ToString()))
                 .WithDetail(!data.Keys.Contains("detail") || data["detail"] == null || !data["detail"].IsArray ? null : data["detail"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Money2.Model.SubscribeTransaction.FromJson(v);
                 }).ToArray());

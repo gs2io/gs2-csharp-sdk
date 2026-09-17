@@ -121,11 +121,11 @@ namespace Gs2.Gs2Project.Model
                 .WithReceiptId(!data.Keys.Contains("receiptId") || data["receiptId"] == null ? null : data["receiptId"].ToString())
                 .WithAccountName(!data.Keys.Contains("accountName") || data["accountName"] == null ? null : data["accountName"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
-                .WithDate(!data.Keys.Contains("date") || data["date"] == null ? null : (long?)(data["date"].ToString().Contains(".") ? (long)double.Parse(data["date"].ToString()) : long.Parse(data["date"].ToString())))
+                .WithDate(!data.Keys.Contains("date") || data["date"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["date"].ToString()))
                 .WithAmount(!data.Keys.Contains("amount") || data["amount"] == null ? null : data["amount"].ToString())
                 .WithPdfUrl(!data.Keys.Contains("pdfUrl") || data["pdfUrl"] == null ? null : data["pdfUrl"].ToString())
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["updatedAt"].ToString()));
         }
 
         public JsonData ToJson()

@@ -71,7 +71,7 @@ namespace Gs2.Gs2Log.Result
                 .WithParallels(!data.Keys.Contains("parallels") || data["parallels"] == null || !data["parallels"].IsArray ? null : data["parallels"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Log.Model.Trace.FromJson(v);
                 }).ToArray())
-                .WithParallelTruncated(!data.Keys.Contains("parallelTruncated") || data["parallelTruncated"] == null ? null : (bool?)bool.Parse(data["parallelTruncated"].ToString()))
+                .WithParallelTruncated(!data.Keys.Contains("parallelTruncated") || data["parallelTruncated"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["parallelTruncated"].ToString()))
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 

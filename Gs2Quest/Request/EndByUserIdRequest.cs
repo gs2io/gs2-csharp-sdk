@@ -87,7 +87,7 @@ namespace Gs2.Gs2Quest.Request
                 .WithRewards(!data.Keys.Contains("rewards") || data["rewards"] == null || !data["rewards"].IsArray ? null : data["rewards"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Quest.Model.Reward.FromJson(v);
                 }).ToArray())
-                .WithIsComplete(!data.Keys.Contains("isComplete") || data["isComplete"] == null ? null : (bool?)bool.Parse(data["isComplete"].ToString()))
+                .WithIsComplete(!data.Keys.Contains("isComplete") || data["isComplete"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["isComplete"].ToString()))
                 .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? null : data["config"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Quest.Model.Config.FromJson(v);
                 }).ToArray())

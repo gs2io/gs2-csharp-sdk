@@ -72,8 +72,8 @@ namespace Gs2.Gs2Enchant.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithResourceName(!data.Keys.Contains("resourceName") || data["resourceName"] == null ? null : data["resourceName"].ToString())
-                .WithResourceValue(!data.Keys.Contains("resourceValue") || data["resourceValue"] == null ? null : (long?)(data["resourceValue"].ToString().Contains(".") ? (long)double.Parse(data["resourceValue"].ToString()) : long.Parse(data["resourceValue"].ToString())))
-                .WithWeight(!data.Keys.Contains("weight") || data["weight"] == null ? null : (int?)(data["weight"].ToString().Contains(".") ? (int)double.Parse(data["weight"].ToString()) : int.Parse(data["weight"].ToString())));
+                .WithResourceValue(!data.Keys.Contains("resourceValue") || data["resourceValue"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["resourceValue"].ToString()))
+                .WithWeight(!data.Keys.Contains("weight") || data["weight"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["weight"].ToString()));
         }
 
         public JsonData ToJson()

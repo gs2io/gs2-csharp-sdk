@@ -48,14 +48,19 @@ namespace Gs2.Core.Net
             var request = CreateRequest(Request);
             request.TaskId = TaskId;
 
-            if (this.Session.IsCanceled())
-            {
-                throw new UserCancelException(Array.Empty<RequestError>());
-            }
-
+            // ★見る順は IsDisconnected → IsCanceled。接続が切れた（切れると印が付いた）ときは
+            // 必ず SessionNotOpenException で返す。閉じる途中は State が CancellingTasks にもなるので、
+            // 先に IsCanceled を見ると切断が「利用者の取り消し」に化け、Unity の Gs2Connection が
+            // 繋ぎ直さない（繋ぎ直しの合図は SessionNotOpenException だけ）。
+            // 利用者が自分で閉じたときは切断の印が付かないので、これまでどおり UserCancelException になる。
             if (this.Session.IsDisconnected())
             {
                 throw new SessionNotOpenException("Session no longer open.");
+            }
+
+            if (this.Session.IsCanceled())
+            {
+                throw new UserCancelException(Array.Empty<RequestError>());
             }
 
             try
@@ -90,13 +95,18 @@ namespace Gs2.Core.Net
                     {
                         break;
                     }
-                    if (this.Session.IsCanceled())
-                    {
-                        throw new UserCancelException(Array.Empty<RequestError>());
-                    }
+                    // ★ここも IsDisconnected を先に見る。サーバーが応答の前に接続を閉じた場合
+                    // （gateway の setUserId が自分自身の接続を切る形、ノードの停止、ネットワーク断）、
+                    // 待ち中の要求は必ず SessionNotOpenException で終わる。
+                    // 以前は切断の後片付けで State が CancellingTasks になった瞬間に当たると
+                    // UserCancelException になり、繋ぎ直しが起きなかった（どちらになるかは競争次第）。
                     if (this.Session.IsDisconnected())
                     {
                         throw new SessionNotOpenException("Session no longer open.");
+                    }
+                    if (this.Session.IsCanceled())
+                    {
+                        throw new UserCancelException(Array.Empty<RequestError>());
                     }
                     if (requestTimer.Elapsed >= RequestTimeout)
                     {

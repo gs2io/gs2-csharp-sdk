@@ -97,17 +97,17 @@ namespace Gs2.Gs2Log.Request
             }
             return new QueryTimeseriesRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithBegin(!data.Keys.Contains("begin") || data["begin"] == null ? null : (long?)(data["begin"].ToString().Contains(".") ? (long)double.Parse(data["begin"].ToString()) : long.Parse(data["begin"].ToString())))
-                .WithEnd(!data.Keys.Contains("end") || data["end"] == null ? null : (long?)(data["end"].ToString().Contains(".") ? (long)double.Parse(data["end"].ToString()) : long.Parse(data["end"].ToString())))
+                .WithBegin(!data.Keys.Contains("begin") || data["begin"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["begin"].ToString()))
+                .WithEnd(!data.Keys.Contains("end") || data["end"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["end"].ToString()))
                 .WithQuery(!data.Keys.Contains("query") || data["query"] == null ? null : data["query"].ToString())
                 .WithGroupBy(!data.Keys.Contains("groupBy") || data["groupBy"] == null || !data["groupBy"].IsArray ? null : data["groupBy"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
                 .WithAggregation(!data.Keys.Contains("aggregation") || data["aggregation"] == null ? null : Gs2.Gs2Log.Model.AggregationConfig.FromJson(data["aggregation"]))
-                .WithInterval(!data.Keys.Contains("interval") || data["interval"] == null ? null : (int?)(data["interval"].ToString().Contains(".") ? (int)double.Parse(data["interval"].ToString()) : int.Parse(data["interval"].ToString())))
-                .WithSeriesLimit(!data.Keys.Contains("seriesLimit") || data["seriesLimit"] == null ? null : (int?)(data["seriesLimit"].ToString().Contains(".") ? (int)double.Parse(data["seriesLimit"].ToString()) : int.Parse(data["seriesLimit"].ToString())))
+                .WithInterval(!data.Keys.Contains("interval") || data["interval"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["interval"].ToString()))
+                .WithSeriesLimit(!data.Keys.Contains("seriesLimit") || data["seriesLimit"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["seriesLimit"].ToString()))
                 .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
-                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())));
+                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["limit"].ToString()));
         }
 
         public override JsonData ToJson()

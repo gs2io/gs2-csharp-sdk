@@ -74,7 +74,7 @@ namespace Gs2.Gs2Account.Request
             return new UpdateBannedRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithBanned(!data.Keys.Contains("banned") || data["banned"] == null ? null : (bool?)bool.Parse(data["banned"].ToString()))
+                .WithBanned(!data.Keys.Contains("banned") || data["banned"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["banned"].ToString()))
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 

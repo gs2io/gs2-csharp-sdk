@@ -70,7 +70,7 @@ namespace Gs2.Gs2Log.Result
                 .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Log.Model.LogEntry.FromJson(v);
                 }).ToArray())
-                .WithTotalEntryCount(!data.Keys.Contains("totalEntryCount") || data["totalEntryCount"] == null ? null : (int?)(data["totalEntryCount"].ToString().Contains(".") ? (int)double.Parse(data["totalEntryCount"].ToString()) : int.Parse(data["totalEntryCount"].ToString())))
+                .WithTotalEntryCount(!data.Keys.Contains("totalEntryCount") || data["totalEntryCount"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["totalEntryCount"].ToString()))
                 .WithNextPageToken(!data.Keys.Contains("nextPageToken") || data["nextPageToken"] == null ? null : data["nextPageToken"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }

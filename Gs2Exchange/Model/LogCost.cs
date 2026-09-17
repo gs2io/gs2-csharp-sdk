@@ -59,7 +59,7 @@ namespace Gs2.Gs2Exchange.Model
                 return null;
             }
             return new LogCost()
-                .WithBase(!data.Keys.Contains("base") || data["base"] == null ? null : (double?)double.Parse(data["base"].ToString()))
+                .WithBase(!data.Keys.Contains("base") || data["base"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableDouble(data["base"].ToString()))
                 .WithAdds(!data.Keys.Contains("adds") || data["adds"] == null || !data["adds"].IsArray ? null : data["adds"].Cast<JsonData>().Select(v => {
                     return double.Parse(v.ToString());
                 }).ToArray())

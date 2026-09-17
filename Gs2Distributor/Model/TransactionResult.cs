@@ -186,9 +186,9 @@ namespace Gs2.Gs2Distributor.Model
                 .WithAcquireResults(!data.Keys.Contains("acquireResults") || data["acquireResults"] == null || !data["acquireResults"].IsArray ? null : data["acquireResults"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Distributor.Model.AcquireActionResult.FromJson(v);
                 }).ToArray())
-                .WithHasError(!data.Keys.Contains("hasError") || data["hasError"] == null ? null : (bool?)bool.Parse(data["hasError"].ToString()))
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
+                .WithHasError(!data.Keys.Contains("hasError") || data["hasError"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["hasError"].ToString()))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["revision"].ToString()));
         }
 
         public JsonData ToJson()

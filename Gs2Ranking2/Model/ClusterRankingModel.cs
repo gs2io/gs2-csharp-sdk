@@ -176,9 +176,9 @@ namespace Gs2.Gs2Ranking2.Model
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithClusterType(!data.Keys.Contains("clusterType") || data["clusterType"] == null ? null : data["clusterType"].ToString())
-                .WithMinimumValue(!data.Keys.Contains("minimumValue") || data["minimumValue"] == null ? null : (long?)(data["minimumValue"].ToString().Contains(".") ? (long)double.Parse(data["minimumValue"].ToString()) : long.Parse(data["minimumValue"].ToString())))
-                .WithMaximumValue(!data.Keys.Contains("maximumValue") || data["maximumValue"] == null ? null : (long?)(data["maximumValue"].ToString().Contains(".") ? (long)double.Parse(data["maximumValue"].ToString()) : long.Parse(data["maximumValue"].ToString())))
-                .WithSum(!data.Keys.Contains("sum") || data["sum"] == null ? null : (bool?)bool.Parse(data["sum"].ToString()))
+                .WithMinimumValue(!data.Keys.Contains("minimumValue") || data["minimumValue"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["minimumValue"].ToString()))
+                .WithMaximumValue(!data.Keys.Contains("maximumValue") || data["maximumValue"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["maximumValue"].ToString()))
+                .WithSum(!data.Keys.Contains("sum") || data["sum"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["sum"].ToString()))
                 .WithOrderDirection(!data.Keys.Contains("orderDirection") || data["orderDirection"] == null ? null : data["orderDirection"].ToString())
                 .WithEntryPeriodEventId(!data.Keys.Contains("entryPeriodEventId") || data["entryPeriodEventId"] == null ? null : data["entryPeriodEventId"].ToString())
                 .WithRankingRewards(!data.Keys.Contains("rankingRewards") || data["rankingRewards"] == null || !data["rankingRewards"].IsArray ? null : data["rankingRewards"].Cast<JsonData>().Select(v => {

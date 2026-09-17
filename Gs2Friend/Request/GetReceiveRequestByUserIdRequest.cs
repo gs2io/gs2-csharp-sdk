@@ -74,7 +74,7 @@ namespace Gs2.Gs2Friend.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithFromUserId(!data.Keys.Contains("fromUserId") || data["fromUserId"] == null ? null : data["fromUserId"].ToString())
-                .WithWithProfile(!data.Keys.Contains("withProfile") || data["withProfile"] == null ? null : (bool?)bool.Parse(data["withProfile"].ToString()))
+                .WithWithProfile(!data.Keys.Contains("withProfile") || data["withProfile"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["withProfile"].ToString()))
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 

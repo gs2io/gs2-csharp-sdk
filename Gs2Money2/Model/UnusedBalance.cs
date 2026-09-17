@@ -139,9 +139,9 @@ namespace Gs2.Gs2Money2.Model
             return new UnusedBalance()
                 .WithUnusedBalanceId(!data.Keys.Contains("unusedBalanceId") || data["unusedBalanceId"] == null ? null : data["unusedBalanceId"].ToString())
                 .WithCurrency(!data.Keys.Contains("currency") || data["currency"] == null ? null : data["currency"].ToString())
-                .WithBalance(!data.Keys.Contains("balance") || data["balance"] == null ? null : (double?)double.Parse(data["balance"].ToString()))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
+                .WithBalance(!data.Keys.Contains("balance") || data["balance"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableDouble(data["balance"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["updatedAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["revision"].ToString()));
         }
 
         public JsonData ToJson()

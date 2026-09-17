@@ -69,7 +69,7 @@ namespace Gs2.Gs2AdReward.Request
             return new ConsumePointRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
-                .WithPoint(!data.Keys.Contains("point") || data["point"] == null ? null : (long?)(data["point"].ToString().Contains(".") ? (long)double.Parse(data["point"].ToString()) : long.Parse(data["point"].ToString())));
+                .WithPoint(!data.Keys.Contains("point") || data["point"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["point"].ToString()));
         }
 
         public override JsonData ToJson()

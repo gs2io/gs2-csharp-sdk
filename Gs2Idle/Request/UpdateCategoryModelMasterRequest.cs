@@ -100,8 +100,8 @@ namespace Gs2.Gs2Idle.Request
                 .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithRewardIntervalMinutes(!data.Keys.Contains("rewardIntervalMinutes") || data["rewardIntervalMinutes"] == null ? null : (int?)(data["rewardIntervalMinutes"].ToString().Contains(".") ? (int)double.Parse(data["rewardIntervalMinutes"].ToString()) : int.Parse(data["rewardIntervalMinutes"].ToString())))
-                .WithDefaultMaximumIdleMinutes(!data.Keys.Contains("defaultMaximumIdleMinutes") || data["defaultMaximumIdleMinutes"] == null ? null : (int?)(data["defaultMaximumIdleMinutes"].ToString().Contains(".") ? (int)double.Parse(data["defaultMaximumIdleMinutes"].ToString()) : int.Parse(data["defaultMaximumIdleMinutes"].ToString())))
+                .WithRewardIntervalMinutes(!data.Keys.Contains("rewardIntervalMinutes") || data["rewardIntervalMinutes"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["rewardIntervalMinutes"].ToString()))
+                .WithDefaultMaximumIdleMinutes(!data.Keys.Contains("defaultMaximumIdleMinutes") || data["defaultMaximumIdleMinutes"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["defaultMaximumIdleMinutes"].ToString()))
                 .WithRewardResetMode(!data.Keys.Contains("rewardResetMode") || data["rewardResetMode"] == null ? null : data["rewardResetMode"].ToString())
                 .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null || !data["acquireActions"].IsArray ? null : data["acquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Idle.Model.AcquireActionList.FromJson(v);

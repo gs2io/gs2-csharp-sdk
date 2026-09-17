@@ -84,10 +84,10 @@ namespace Gs2.Gs2Chat.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithRoomName(!data.Keys.Contains("roomName") || data["roomName"] == null ? null : data["roomName"].ToString())
                 .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
-                .WithCategory(!data.Keys.Contains("category") || data["category"] == null ? null : (int?)(data["category"].ToString().Contains(".") ? (int)double.Parse(data["category"].ToString()) : int.Parse(data["category"].ToString())))
+                .WithCategory(!data.Keys.Contains("category") || data["category"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["category"].ToString()))
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
-                .WithStartAt(!data.Keys.Contains("startAt") || data["startAt"] == null ? null : (long?)(data["startAt"].ToString().Contains(".") ? (long)double.Parse(data["startAt"].ToString()) : long.Parse(data["startAt"].ToString())))
-                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())));
+                .WithStartAt(!data.Keys.Contains("startAt") || data["startAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["startAt"].ToString()))
+                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["limit"].ToString()));
         }
 
         public override JsonData ToJson()

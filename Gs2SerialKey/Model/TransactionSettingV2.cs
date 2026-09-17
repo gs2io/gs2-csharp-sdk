@@ -55,7 +55,7 @@ namespace Gs2.Gs2SerialKey.Model
             }
             return new TransactionSettingV2()
                 .WithDistributorNamespaceId(!data.Keys.Contains("distributorNamespaceId") || data["distributorNamespaceId"] == null ? null : data["distributorNamespaceId"].ToString())
-                .WithEnableParallelExecution(!data.Keys.Contains("enableParallelExecution") || data["enableParallelExecution"] == null ? null : (bool?)bool.Parse(data["enableParallelExecution"].ToString()));
+                .WithEnableParallelExecution(!data.Keys.Contains("enableParallelExecution") || data["enableParallelExecution"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["enableParallelExecution"].ToString()));
         }
 
         public JsonData ToJson()

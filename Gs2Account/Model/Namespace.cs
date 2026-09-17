@@ -187,8 +187,8 @@ namespace Gs2.Gs2Account.Model
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithTransactionSetting(!data.Keys.Contains("transactionSetting") || data["transactionSetting"] == null ? null : Gs2.Gs2Account.Model.TransactionSetting.FromJson(data["transactionSetting"]))
                 .WithTransactionSettingV2(!data.Keys.Contains("transactionSettingV2") || data["transactionSettingV2"] == null ? null : Gs2.Gs2Account.Model.TransactionSettingV2.FromJson(data["transactionSettingV2"]))
-                .WithChangePasswordIfTakeOver(!data.Keys.Contains("changePasswordIfTakeOver") || data["changePasswordIfTakeOver"] == null ? null : (bool?)bool.Parse(data["changePasswordIfTakeOver"].ToString()))
-                .WithDifferentUserIdForLoginAndDataRetention(!data.Keys.Contains("differentUserIdForLoginAndDataRetention") || data["differentUserIdForLoginAndDataRetention"] == null ? null : (bool?)bool.Parse(data["differentUserIdForLoginAndDataRetention"].ToString()))
+                .WithChangePasswordIfTakeOver(!data.Keys.Contains("changePasswordIfTakeOver") || data["changePasswordIfTakeOver"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["changePasswordIfTakeOver"].ToString()))
+                .WithDifferentUserIdForLoginAndDataRetention(!data.Keys.Contains("differentUserIdForLoginAndDataRetention") || data["differentUserIdForLoginAndDataRetention"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["differentUserIdForLoginAndDataRetention"].ToString()))
                 .WithCreateAccountScript(!data.Keys.Contains("createAccountScript") || data["createAccountScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["createAccountScript"]))
                 .WithAuthenticationScript(!data.Keys.Contains("authenticationScript") || data["authenticationScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["authenticationScript"]))
                 .WithCreateTakeOverScript(!data.Keys.Contains("createTakeOverScript") || data["createTakeOverScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["createTakeOverScript"]))
@@ -196,9 +196,9 @@ namespace Gs2.Gs2Account.Model
                 .WithBanScript(!data.Keys.Contains("banScript") || data["banScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["banScript"]))
                 .WithUnBanScript(!data.Keys.Contains("unBanScript") || data["unBanScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["unBanScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Account.Model.LogSetting.FromJson(data["logSetting"]))
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["updatedAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["revision"].ToString()));
         }
 
         public JsonData ToJson()

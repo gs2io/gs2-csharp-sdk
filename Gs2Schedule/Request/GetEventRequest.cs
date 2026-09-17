@@ -69,7 +69,7 @@ namespace Gs2.Gs2Schedule.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithEventName(!data.Keys.Contains("eventName") || data["eventName"] == null ? null : data["eventName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
-                .WithIsInSchedule(!data.Keys.Contains("isInSchedule") || data["isInSchedule"] == null ? null : (bool?)bool.Parse(data["isInSchedule"].ToString()));
+                .WithIsInSchedule(!data.Keys.Contains("isInSchedule") || data["isInSchedule"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["isInSchedule"].ToString()));
         }
 
         public override JsonData ToJson()

@@ -55,7 +55,7 @@ namespace Gs2.Gs2Grade.Model
             }
             return new DefaultGradeModel()
                 .WithPropertyIdRegex(!data.Keys.Contains("propertyIdRegex") || data["propertyIdRegex"] == null ? null : data["propertyIdRegex"].ToString())
-                .WithDefaultGradeValue(!data.Keys.Contains("defaultGradeValue") || data["defaultGradeValue"] == null ? null : (long?)(data["defaultGradeValue"].ToString().Contains(".") ? (long)double.Parse(data["defaultGradeValue"].ToString()) : long.Parse(data["defaultGradeValue"].ToString())));
+                .WithDefaultGradeValue(!data.Keys.Contains("defaultGradeValue") || data["defaultGradeValue"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["defaultGradeValue"].ToString()));
         }
 
         public JsonData ToJson()

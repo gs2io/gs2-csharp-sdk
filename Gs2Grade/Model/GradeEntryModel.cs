@@ -65,7 +65,7 @@ namespace Gs2.Gs2Grade.Model
             }
             return new GradeEntryModel()
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithRankCapValue(!data.Keys.Contains("rankCapValue") || data["rankCapValue"] == null ? null : (long?)(data["rankCapValue"].ToString().Contains(".") ? (long)double.Parse(data["rankCapValue"].ToString()) : long.Parse(data["rankCapValue"].ToString())))
+                .WithRankCapValue(!data.Keys.Contains("rankCapValue") || data["rankCapValue"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["rankCapValue"].ToString()))
                 .WithPropertyIdRegex(!data.Keys.Contains("propertyIdRegex") || data["propertyIdRegex"] == null ? null : data["propertyIdRegex"].ToString())
                 .WithGradeUpPropertyIdRegex(!data.Keys.Contains("gradeUpPropertyIdRegex") || data["gradeUpPropertyIdRegex"] == null ? null : data["gradeUpPropertyIdRegex"].ToString());
         }

@@ -54,8 +54,8 @@ namespace Gs2.Gs2Log.Model
                 return null;
             }
             return new NumericRange()
-                .WithMin(!data.Keys.Contains("min") || data["min"] == null ? null : (double?)double.Parse(data["min"].ToString()))
-                .WithMax(!data.Keys.Contains("max") || data["max"] == null ? null : (double?)double.Parse(data["max"].ToString()));
+                .WithMin(!data.Keys.Contains("min") || data["min"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableDouble(data["min"].ToString()))
+                .WithMax(!data.Keys.Contains("max") || data["max"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableDouble(data["max"].ToString()));
         }
 
         public JsonData ToJson()

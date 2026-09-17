@@ -59,7 +59,7 @@ namespace Gs2.Gs2Ranking2.Model
                 return null;
             }
             return new RankingReward()
-                .WithThresholdRank(!data.Keys.Contains("thresholdRank") || data["thresholdRank"] == null ? null : (int?)(data["thresholdRank"].ToString().Contains(".") ? (int)double.Parse(data["thresholdRank"].ToString()) : int.Parse(data["thresholdRank"].ToString())))
+                .WithThresholdRank(!data.Keys.Contains("thresholdRank") || data["thresholdRank"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["thresholdRank"].ToString()))
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null || !data["acquireActions"].IsArray ? null : data["acquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);

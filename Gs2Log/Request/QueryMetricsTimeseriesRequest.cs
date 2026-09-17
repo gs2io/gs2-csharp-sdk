@@ -97,8 +97,8 @@ namespace Gs2.Gs2Log.Request
             }
             return new QueryMetricsTimeseriesRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithBegin(!data.Keys.Contains("begin") || data["begin"] == null ? null : (long?)(data["begin"].ToString().Contains(".") ? (long)double.Parse(data["begin"].ToString()) : long.Parse(data["begin"].ToString())))
-                .WithEnd(!data.Keys.Contains("end") || data["end"] == null ? null : (long?)(data["end"].ToString().Contains(".") ? (long)double.Parse(data["end"].ToString()) : long.Parse(data["end"].ToString())))
+                .WithBegin(!data.Keys.Contains("begin") || data["begin"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["begin"].ToString()))
+                .WithEnd(!data.Keys.Contains("end") || data["end"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["end"].ToString()))
                 .WithQuery(!data.Keys.Contains("query") || data["query"] == null ? null : data["query"].ToString())
                 .WithGroupBy(!data.Keys.Contains("groupBy") || data["groupBy"] == null || !data["groupBy"].IsArray ? null : data["groupBy"].Cast<JsonData>().Select(v => {
                     return v.ToString();
@@ -106,8 +106,8 @@ namespace Gs2.Gs2Log.Request
                 .WithAggregations(!data.Keys.Contains("aggregations") || data["aggregations"] == null || !data["aggregations"].IsArray ? null : data["aggregations"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Log.Model.AggregationConfig.FromJson(v);
                 }).ToArray())
-                .WithInterval(!data.Keys.Contains("interval") || data["interval"] == null ? null : (int?)(data["interval"].ToString().Contains(".") ? (int)double.Parse(data["interval"].ToString()) : int.Parse(data["interval"].ToString())))
-                .WithSeriesLimit(!data.Keys.Contains("seriesLimit") || data["seriesLimit"] == null ? null : (int?)(data["seriesLimit"].ToString().Contains(".") ? (int)double.Parse(data["seriesLimit"].ToString()) : int.Parse(data["seriesLimit"].ToString())))
+                .WithInterval(!data.Keys.Contains("interval") || data["interval"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["interval"].ToString()))
+                .WithSeriesLimit(!data.Keys.Contains("seriesLimit") || data["seriesLimit"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["seriesLimit"].ToString()))
                 .WithOrderKey(!data.Keys.Contains("orderKey") || data["orderKey"] == null ? null : data["orderKey"].ToString())
                 .WithOrderBy(!data.Keys.Contains("orderBy") || data["orderBy"] == null ? null : data["orderBy"].ToString());
         }

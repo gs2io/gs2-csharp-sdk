@@ -160,14 +160,14 @@ namespace Gs2.Gs2Realtime.Model
                 .WithRoomId(!data.Keys.Contains("roomId") || data["roomId"] == null ? null : data["roomId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithIpAddress(!data.Keys.Contains("ipAddress") || data["ipAddress"] == null ? null : data["ipAddress"].ToString())
-                .WithPort(!data.Keys.Contains("port") || data["port"] == null ? null : (int?)(data["port"].ToString().Contains(".") ? (int)double.Parse(data["port"].ToString()) : int.Parse(data["port"].ToString())))
+                .WithPort(!data.Keys.Contains("port") || data["port"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["port"].ToString()))
                 .WithEncryptionKey(!data.Keys.Contains("encryptionKey") || data["encryptionKey"] == null ? null : data["encryptionKey"].ToString())
                 .WithNotificationUserIds(!data.Keys.Contains("notificationUserIds") || data["notificationUserIds"] == null || !data["notificationUserIds"].IsArray ? null : data["notificationUserIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["updatedAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["revision"].ToString()));
         }
 
         public JsonData ToJson()

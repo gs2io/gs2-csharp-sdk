@@ -85,7 +85,7 @@ namespace Gs2.Gs2Enchant.Request
                 .WithParameterName(!data.Keys.Contains("parameterName") || data["parameterName"] == null ? null : data["parameterName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithTotalValue(!data.Keys.Contains("totalValue") || data["totalValue"] == null ? null : (long?)(data["totalValue"].ToString().Contains(".") ? (long)double.Parse(data["totalValue"].ToString()) : long.Parse(data["totalValue"].ToString())))
+                .WithTotalValue(!data.Keys.Contains("totalValue") || data["totalValue"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["totalValue"].ToString()))
                 .WithInitialValueStrategy(!data.Keys.Contains("initialValueStrategy") || data["initialValueStrategy"] == null ? null : data["initialValueStrategy"].ToString())
                 .WithParameters(!data.Keys.Contains("parameters") || data["parameters"] == null || !data["parameters"].IsArray ? null : data["parameters"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Enchant.Model.BalanceParameterValueModel.FromJson(v);

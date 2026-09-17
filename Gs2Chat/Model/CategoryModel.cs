@@ -128,7 +128,7 @@ namespace Gs2.Gs2Chat.Model
             }
             return new CategoryModel()
                 .WithCategoryModelId(!data.Keys.Contains("categoryModelId") || data["categoryModelId"] == null ? null : data["categoryModelId"].ToString())
-                .WithCategory(!data.Keys.Contains("category") || data["category"] == null ? null : (int?)(data["category"].ToString().Contains(".") ? (int)double.Parse(data["category"].ToString()) : int.Parse(data["category"].ToString())))
+                .WithCategory(!data.Keys.Contains("category") || data["category"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["category"].ToString()))
                 .WithRejectAccessTokenPost(!data.Keys.Contains("rejectAccessTokenPost") || data["rejectAccessTokenPost"] == null ? null : data["rejectAccessTokenPost"].ToString());
         }
 

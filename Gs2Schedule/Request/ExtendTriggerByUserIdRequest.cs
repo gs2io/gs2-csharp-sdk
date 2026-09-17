@@ -80,7 +80,7 @@ namespace Gs2.Gs2Schedule.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithTriggerName(!data.Keys.Contains("triggerName") || data["triggerName"] == null ? null : data["triggerName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithExtendSeconds(!data.Keys.Contains("extendSeconds") || data["extendSeconds"] == null ? null : (int?)(data["extendSeconds"].ToString().Contains(".") ? (int)double.Parse(data["extendSeconds"].ToString()) : int.Parse(data["extendSeconds"].ToString())))
+                .WithExtendSeconds(!data.Keys.Contains("extendSeconds") || data["extendSeconds"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["extendSeconds"].ToString()))
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 

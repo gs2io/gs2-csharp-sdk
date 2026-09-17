@@ -102,8 +102,8 @@ namespace Gs2.Gs2Identifier.Model
                 .WithSecurityPolicyIds(!data.Keys.Contains("securityPolicyIds") || data["securityPolicyIds"] == null || !data["securityPolicyIds"].IsArray ? null : data["securityPolicyIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
-                .WithAttachedAt(!data.Keys.Contains("attachedAt") || data["attachedAt"] == null ? null : (long?)(data["attachedAt"].ToString().Contains(".") ? (long)double.Parse(data["attachedAt"].ToString()) : long.Parse(data["attachedAt"].ToString())))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
+                .WithAttachedAt(!data.Keys.Contains("attachedAt") || data["attachedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["attachedAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["revision"].ToString()));
         }
 
         public JsonData ToJson()

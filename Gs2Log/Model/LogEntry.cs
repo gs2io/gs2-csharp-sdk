@@ -69,9 +69,9 @@ namespace Gs2.Gs2Log.Model
                 return null;
             }
             return new LogEntry()
-                .WithTimestamp(!data.Keys.Contains("timestamp") || data["timestamp"] == null ? null : (long?)(data["timestamp"].ToString().Contains(".") ? (long)double.Parse(data["timestamp"].ToString()) : long.Parse(data["timestamp"].ToString())))
+                .WithTimestamp(!data.Keys.Contains("timestamp") || data["timestamp"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["timestamp"].ToString()))
                 .WithStatus(!data.Keys.Contains("status") || data["status"] == null ? null : data["status"].ToString())
-                .WithDuration(!data.Keys.Contains("duration") || data["duration"] == null ? null : (long?)(data["duration"].ToString().Contains(".") ? (long)double.Parse(data["duration"].ToString()) : long.Parse(data["duration"].ToString())))
+                .WithDuration(!data.Keys.Contains("duration") || data["duration"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["duration"].ToString()))
                 .WithLine(!data.Keys.Contains("line") || data["line"] == null ? null : data["line"].ToString())
                 .WithLabels(!data.Keys.Contains("labels") || data["labels"] == null || !data["labels"].IsArray ? null : data["labels"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Log.Model.Label.FromJson(v);

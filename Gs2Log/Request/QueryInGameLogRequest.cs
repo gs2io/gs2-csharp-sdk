@@ -102,11 +102,11 @@ namespace Gs2.Gs2Log.Request
                 .WithTags(!data.Keys.Contains("tags") || data["tags"] == null || !data["tags"].IsArray ? null : data["tags"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Log.Model.InGameLogTag.FromJson(v);
                 }).ToArray())
-                .WithBegin(!data.Keys.Contains("begin") || data["begin"] == null ? null : (long?)(data["begin"].ToString().Contains(".") ? (long)double.Parse(data["begin"].ToString()) : long.Parse(data["begin"].ToString())))
-                .WithEnd(!data.Keys.Contains("end") || data["end"] == null ? null : (long?)(data["end"].ToString().Contains(".") ? (long)double.Parse(data["end"].ToString()) : long.Parse(data["end"].ToString())))
-                .WithLongTerm(!data.Keys.Contains("longTerm") || data["longTerm"] == null ? null : (bool?)bool.Parse(data["longTerm"].ToString()))
+                .WithBegin(!data.Keys.Contains("begin") || data["begin"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["begin"].ToString()))
+                .WithEnd(!data.Keys.Contains("end") || data["end"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["end"].ToString()))
+                .WithLongTerm(!data.Keys.Contains("longTerm") || data["longTerm"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["longTerm"].ToString()))
                 .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
-                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())))
+                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["limit"].ToString()))
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 

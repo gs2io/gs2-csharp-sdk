@@ -55,7 +55,7 @@ namespace Gs2.Gs2Lottery.Model
             }
             return new Probability()
                 .WithPrize(!data.Keys.Contains("prize") || data["prize"] == null ? null : Gs2.Gs2Lottery.Model.DrawnPrize.FromJson(data["prize"]))
-                .WithRate(!data.Keys.Contains("rate") || data["rate"] == null ? null : (float?)float.Parse(data["rate"].ToString()));
+                .WithRate(!data.Keys.Contains("rate") || data["rate"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableFloat(data["rate"].ToString()));
         }
 
         public JsonData ToJson()

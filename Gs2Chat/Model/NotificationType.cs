@@ -54,8 +54,8 @@ namespace Gs2.Gs2Chat.Model
                 return null;
             }
             return new NotificationType()
-                .WithCategory(!data.Keys.Contains("category") || data["category"] == null ? null : (int?)(data["category"].ToString().Contains(".") ? (int)double.Parse(data["category"].ToString()) : int.Parse(data["category"].ToString())))
-                .WithEnableTransferMobilePushNotification(!data.Keys.Contains("enableTransferMobilePushNotification") || data["enableTransferMobilePushNotification"] == null ? null : (bool?)bool.Parse(data["enableTransferMobilePushNotification"].ToString()));
+                .WithCategory(!data.Keys.Contains("category") || data["category"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["category"].ToString()))
+                .WithEnableTransferMobilePushNotification(!data.Keys.Contains("enableTransferMobilePushNotification") || data["enableTransferMobilePushNotification"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["enableTransferMobilePushNotification"].ToString()));
         }
 
         public JsonData ToJson()

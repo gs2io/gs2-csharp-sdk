@@ -81,7 +81,7 @@ namespace Gs2.Gs2Schedule.Request
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
                 .WithTriggerName(!data.Keys.Contains("triggerName") || data["triggerName"] == null ? null : data["triggerName"].ToString())
                 .WithVerifyType(!data.Keys.Contains("verifyType") || data["verifyType"] == null ? null : data["verifyType"].ToString())
-                .WithElapsedMinutes(!data.Keys.Contains("elapsedMinutes") || data["elapsedMinutes"] == null ? null : (int?)(data["elapsedMinutes"].ToString().Contains(".") ? (int)double.Parse(data["elapsedMinutes"].ToString()) : int.Parse(data["elapsedMinutes"].ToString())));
+                .WithElapsedMinutes(!data.Keys.Contains("elapsedMinutes") || data["elapsedMinutes"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["elapsedMinutes"].ToString()));
         }
 
         public override JsonData ToJson()

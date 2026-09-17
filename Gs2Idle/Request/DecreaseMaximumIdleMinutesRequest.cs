@@ -75,7 +75,7 @@ namespace Gs2.Gs2Idle.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
                 .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
-                .WithDecreaseMinutes(!data.Keys.Contains("decreaseMinutes") || data["decreaseMinutes"] == null ? null : (int?)(data["decreaseMinutes"].ToString().Contains(".") ? (int)double.Parse(data["decreaseMinutes"].ToString()) : int.Parse(data["decreaseMinutes"].ToString())));
+                .WithDecreaseMinutes(!data.Keys.Contains("decreaseMinutes") || data["decreaseMinutes"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["decreaseMinutes"].ToString()));
         }
 
         public override JsonData ToJson()

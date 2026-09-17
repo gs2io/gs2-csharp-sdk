@@ -154,12 +154,12 @@ namespace Gs2.Gs2Money2.Model
             return new RefundHistory()
                 .WithRefundHistoryId(!data.Keys.Contains("refundHistoryId") || data["refundHistoryId"] == null ? null : data["refundHistoryId"].ToString())
                 .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
-                .WithYear(!data.Keys.Contains("year") || data["year"] == null ? null : (int?)(data["year"].ToString().Contains(".") ? (int)double.Parse(data["year"].ToString()) : int.Parse(data["year"].ToString())))
-                .WithMonth(!data.Keys.Contains("month") || data["month"] == null ? null : (int?)(data["month"].ToString().Contains(".") ? (int)double.Parse(data["month"].ToString()) : int.Parse(data["month"].ToString())))
-                .WithDay(!data.Keys.Contains("day") || data["day"] == null ? null : (int?)(data["day"].ToString().Contains(".") ? (int)double.Parse(data["day"].ToString()) : int.Parse(data["day"].ToString())))
+                .WithYear(!data.Keys.Contains("year") || data["year"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["year"].ToString()))
+                .WithMonth(!data.Keys.Contains("month") || data["month"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["month"].ToString()))
+                .WithDay(!data.Keys.Contains("day") || data["day"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["day"].ToString()))
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithDetail(!data.Keys.Contains("detail") || data["detail"] == null ? null : Gs2.Gs2Money2.Model.RefundEvent.FromJson(data["detail"]))
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()));
         }
 
         public JsonData ToJson()

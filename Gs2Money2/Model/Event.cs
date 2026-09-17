@@ -170,8 +170,8 @@ namespace Gs2.Gs2Money2.Model
                 .WithDepositEvent(!data.Keys.Contains("depositEvent") || data["depositEvent"] == null ? null : Gs2.Gs2Money2.Model.DepositEvent.FromJson(data["depositEvent"]))
                 .WithWithdrawEvent(!data.Keys.Contains("withdrawEvent") || data["withdrawEvent"] == null ? null : Gs2.Gs2Money2.Model.WithdrawEvent.FromJson(data["withdrawEvent"]))
                 .WithRefundEvent(!data.Keys.Contains("refundEvent") || data["refundEvent"] == null ? null : Gs2.Gs2Money2.Model.RefundEvent.FromJson(data["refundEvent"]))
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["revision"].ToString()));
         }
 
         public JsonData ToJson()

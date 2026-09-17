@@ -172,11 +172,11 @@ namespace Gs2.Gs2SerialKey.Model
                 .WithIssueJobId(!data.Keys.Contains("issueJobId") || data["issueJobId"] == null ? null : data["issueJobId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithIssuedCount(!data.Keys.Contains("issuedCount") || data["issuedCount"] == null ? null : (int?)(data["issuedCount"].ToString().Contains(".") ? (int)double.Parse(data["issuedCount"].ToString()) : int.Parse(data["issuedCount"].ToString())))
-                .WithIssueRequestCount(!data.Keys.Contains("issueRequestCount") || data["issueRequestCount"] == null ? null : (int?)(data["issueRequestCount"].ToString().Contains(".") ? (int)double.Parse(data["issueRequestCount"].ToString()) : int.Parse(data["issueRequestCount"].ToString())))
+                .WithIssuedCount(!data.Keys.Contains("issuedCount") || data["issuedCount"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["issuedCount"].ToString()))
+                .WithIssueRequestCount(!data.Keys.Contains("issueRequestCount") || data["issueRequestCount"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["issueRequestCount"].ToString()))
                 .WithStatus(!data.Keys.Contains("status") || data["status"] == null ? null : data["status"].ToString())
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["revision"].ToString()));
         }
 
         public JsonData ToJson()

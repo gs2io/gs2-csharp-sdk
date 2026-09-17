@@ -75,7 +75,7 @@ namespace Gs2.Gs2Formation.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
                 .WithMoldModelName(!data.Keys.Contains("moldModelName") || data["moldModelName"] == null ? null : data["moldModelName"].ToString())
-                .WithCapacity(!data.Keys.Contains("capacity") || data["capacity"] == null ? null : (int?)(data["capacity"].ToString().Contains(".") ? (int)double.Parse(data["capacity"].ToString()) : int.Parse(data["capacity"].ToString())));
+                .WithCapacity(!data.Keys.Contains("capacity") || data["capacity"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["capacity"].ToString()));
         }
 
         public override JsonData ToJson()

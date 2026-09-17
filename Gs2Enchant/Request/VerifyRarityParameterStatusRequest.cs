@@ -98,8 +98,8 @@ namespace Gs2.Gs2Enchant.Request
                 .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
                 .WithVerifyType(!data.Keys.Contains("verifyType") || data["verifyType"] == null ? null : data["verifyType"].ToString())
                 .WithParameterValueName(!data.Keys.Contains("parameterValueName") || data["parameterValueName"] == null ? null : data["parameterValueName"].ToString())
-                .WithParameterCount(!data.Keys.Contains("parameterCount") || data["parameterCount"] == null ? null : (int?)(data["parameterCount"].ToString().Contains(".") ? (int)double.Parse(data["parameterCount"].ToString()) : int.Parse(data["parameterCount"].ToString())))
-                .WithMultiplyValueSpecifyingQuantity(!data.Keys.Contains("multiplyValueSpecifyingQuantity") || data["multiplyValueSpecifyingQuantity"] == null ? null : (bool?)bool.Parse(data["multiplyValueSpecifyingQuantity"].ToString()));
+                .WithParameterCount(!data.Keys.Contains("parameterCount") || data["parameterCount"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["parameterCount"].ToString()))
+                .WithMultiplyValueSpecifyingQuantity(!data.Keys.Contains("multiplyValueSpecifyingQuantity") || data["multiplyValueSpecifyingQuantity"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["multiplyValueSpecifyingQuantity"].ToString()));
         }
 
         public override JsonData ToJson()

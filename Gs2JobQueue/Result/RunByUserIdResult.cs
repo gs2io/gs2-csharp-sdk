@@ -69,7 +69,7 @@ namespace Gs2.Gs2JobQueue.Result
             return new RunByUserIdResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2JobQueue.Model.Job.FromJson(data["item"]))
                 .WithResult(!data.Keys.Contains("result") || data["result"] == null ? null : Gs2.Gs2JobQueue.Model.JobResultBody.FromJson(data["result"]))
-                .WithIsLastJob(!data.Keys.Contains("isLastJob") || data["isLastJob"] == null ? null : (bool?)bool.Parse(data["isLastJob"].ToString()))
+                .WithIsLastJob(!data.Keys.Contains("isLastJob") || data["isLastJob"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["isLastJob"].ToString()))
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 

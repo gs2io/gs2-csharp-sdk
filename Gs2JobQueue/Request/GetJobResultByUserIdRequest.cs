@@ -74,7 +74,7 @@ namespace Gs2.Gs2JobQueue.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithJobName(!data.Keys.Contains("jobName") || data["jobName"] == null ? null : data["jobName"].ToString())
-                .WithTryNumber(!data.Keys.Contains("tryNumber") || data["tryNumber"] == null ? null : (int?)(data["tryNumber"].ToString().Contains(".") ? (int)double.Parse(data["tryNumber"].ToString()) : int.Parse(data["tryNumber"].ToString())))
+                .WithTryNumber(!data.Keys.Contains("tryNumber") || data["tryNumber"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["tryNumber"].ToString()))
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 

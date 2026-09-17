@@ -67,7 +67,7 @@ namespace Gs2.Gs2Quest.Model
                 .WithAction(!data.Keys.Contains("action") || data["action"] == null ? null : data["action"].ToString())
                 .WithRequest(!data.Keys.Contains("request") || data["request"] == null ? null : data["request"].ToString())
                 .WithItemId(!data.Keys.Contains("itemId") || data["itemId"] == null ? null : data["itemId"].ToString())
-                .WithValue(!data.Keys.Contains("value") || data["value"] == null ? null : (int?)(data["value"].ToString().Contains(".") ? (int)double.Parse(data["value"].ToString()) : int.Parse(data["value"].ToString())));
+                .WithValue(!data.Keys.Contains("value") || data["value"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["value"].ToString()));
         }
 
         public JsonData ToJson()

@@ -72,8 +72,8 @@ namespace Gs2.Gs2Auth.Model
                 .WithToken(!data.Keys.Contains("token") || data["token"] == null ? null : data["token"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithFederationFromUserId(!data.Keys.Contains("federationFromUserId") || data["federationFromUserId"] == null ? null : data["federationFromUserId"].ToString())
-                .WithExpire(!data.Keys.Contains("expire") || data["expire"] == null ? null : (long?)(data["expire"].ToString().Contains(".") ? (long)double.Parse(data["expire"].ToString()) : long.Parse(data["expire"].ToString())))
-                .WithTimeOffset(!data.Keys.Contains("timeOffset") || data["timeOffset"] == null ? null : (int?)(data["timeOffset"].ToString().Contains(".") ? (int)double.Parse(data["timeOffset"].ToString()) : int.Parse(data["timeOffset"].ToString())));
+                .WithExpire(!data.Keys.Contains("expire") || data["expire"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["expire"].ToString()))
+                .WithTimeOffset(!data.Keys.Contains("timeOffset") || data["timeOffset"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["timeOffset"].ToString()));
         }
 
         public JsonData ToJson()

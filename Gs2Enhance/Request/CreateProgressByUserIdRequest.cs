@@ -94,7 +94,7 @@ namespace Gs2.Gs2Enhance.Request
                 .WithMaterials(!data.Keys.Contains("materials") || data["materials"] == null || !data["materials"].IsArray ? null : data["materials"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Enhance.Model.Material.FromJson(v);
                 }).ToArray())
-                .WithForce(!data.Keys.Contains("force") || data["force"] == null ? null : (bool?)bool.Parse(data["force"].ToString()))
+                .WithForce(!data.Keys.Contains("force") || data["force"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["force"].ToString()))
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 

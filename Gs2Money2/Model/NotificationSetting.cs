@@ -70,7 +70,7 @@ namespace Gs2.Gs2Money2.Model
             }
             return new NotificationSetting()
                 .WithGatewayNamespaceId(!data.Keys.Contains("gatewayNamespaceId") || data["gatewayNamespaceId"] == null ? null : data["gatewayNamespaceId"].ToString())
-                .WithEnableTransferMobileNotification(!data.Keys.Contains("enableTransferMobileNotification") || data["enableTransferMobileNotification"] == null ? null : (bool?)bool.Parse(data["enableTransferMobileNotification"].ToString()))
+                .WithEnableTransferMobileNotification(!data.Keys.Contains("enableTransferMobileNotification") || data["enableTransferMobileNotification"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["enableTransferMobileNotification"].ToString()))
                 .WithSound(!data.Keys.Contains("sound") || data["sound"] == null ? null : data["sound"].ToString())
                 .WithMobileNotificationMessages(!data.Keys.Contains("mobileNotificationMessages") || data["mobileNotificationMessages"] == null || !data["mobileNotificationMessages"].IsArray ? null : data["mobileNotificationMessages"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Money2.Model.MobileNotificationMessage.FromJson(v);

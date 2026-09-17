@@ -69,7 +69,7 @@ namespace Gs2.Gs2SerialKey.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithCampaignModelName(!data.Keys.Contains("campaignModelName") || data["campaignModelName"] == null ? null : data["campaignModelName"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithIssueRequestCount(!data.Keys.Contains("issueRequestCount") || data["issueRequestCount"] == null ? null : (int?)(data["issueRequestCount"].ToString().Contains(".") ? (int)double.Parse(data["issueRequestCount"].ToString()) : int.Parse(data["issueRequestCount"].ToString())));
+                .WithIssueRequestCount(!data.Keys.Contains("issueRequestCount") || data["issueRequestCount"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["issueRequestCount"].ToString()));
         }
 
         public override JsonData ToJson()

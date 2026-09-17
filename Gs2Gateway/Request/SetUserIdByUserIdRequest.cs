@@ -84,9 +84,9 @@ namespace Gs2.Gs2Gateway.Request
             return new SetUserIdByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithAllowConcurrentAccess(!data.Keys.Contains("allowConcurrentAccess") || data["allowConcurrentAccess"] == null ? null : (bool?)bool.Parse(data["allowConcurrentAccess"].ToString()))
+                .WithAllowConcurrentAccess(!data.Keys.Contains("allowConcurrentAccess") || data["allowConcurrentAccess"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["allowConcurrentAccess"].ToString()))
                 .WithSessionId(!data.Keys.Contains("sessionId") || data["sessionId"] == null ? null : data["sessionId"].ToString())
-                .WithForce(!data.Keys.Contains("force") || data["force"] == null ? null : (bool?)bool.Parse(data["force"].ToString()))
+                .WithForce(!data.Keys.Contains("force") || data["force"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["force"].ToString()))
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 

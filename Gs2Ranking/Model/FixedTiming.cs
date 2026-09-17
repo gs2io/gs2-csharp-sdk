@@ -54,8 +54,8 @@ namespace Gs2.Gs2Ranking.Model
                 return null;
             }
             return new FixedTiming()
-                .WithHour(!data.Keys.Contains("hour") || data["hour"] == null ? null : (int?)(data["hour"].ToString().Contains(".") ? (int)double.Parse(data["hour"].ToString()) : int.Parse(data["hour"].ToString())))
-                .WithMinute(!data.Keys.Contains("minute") || data["minute"] == null ? null : (int?)(data["minute"].ToString().Contains(".") ? (int)double.Parse(data["minute"].ToString()) : int.Parse(data["minute"].ToString())));
+                .WithHour(!data.Keys.Contains("hour") || data["hour"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["hour"].ToString()))
+                .WithMinute(!data.Keys.Contains("minute") || data["minute"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["minute"].ToString()));
         }
 
         public JsonData ToJson()

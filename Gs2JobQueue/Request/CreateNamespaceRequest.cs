@@ -91,7 +91,7 @@ namespace Gs2.Gs2JobQueue.Request
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithTransactionSettingV2(!data.Keys.Contains("transactionSettingV2") || data["transactionSettingV2"] == null ? null : Gs2.Gs2JobQueue.Model.TransactionSettingV2.FromJson(data["transactionSettingV2"]))
-                .WithEnableAutoRun(!data.Keys.Contains("enableAutoRun") || data["enableAutoRun"] == null ? null : (bool?)bool.Parse(data["enableAutoRun"].ToString()))
+                .WithEnableAutoRun(!data.Keys.Contains("enableAutoRun") || data["enableAutoRun"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["enableAutoRun"].ToString()))
                 .WithPushNotification(!data.Keys.Contains("pushNotification") || data["pushNotification"] == null ? null : Gs2.Gs2JobQueue.Model.NotificationSetting.FromJson(data["pushNotification"]))
                 .WithRunNotification(!data.Keys.Contains("runNotification") || data["runNotification"] == null ? null : Gs2.Gs2JobQueue.Model.NotificationSetting.FromJson(data["runNotification"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2JobQueue.Model.LogSetting.FromJson(data["logSetting"]));

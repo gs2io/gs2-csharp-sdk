@@ -100,7 +100,7 @@ namespace Gs2.Gs2Experience.Request
                 .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null || !data["acquireActions"].IsArray ? null : data["acquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
-                .WithBaseRate(!data.Keys.Contains("baseRate") || data["baseRate"] == null ? null : (float?)float.Parse(data["baseRate"].ToString()))
+                .WithBaseRate(!data.Keys.Contains("baseRate") || data["baseRate"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableFloat(data["baseRate"].ToString()))
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 

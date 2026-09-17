@@ -91,9 +91,9 @@ namespace Gs2.Gs2Inventory.Request
                 .WithItemName(!data.Keys.Contains("itemName") || data["itemName"] == null ? null : data["itemName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithStackingLimit(!data.Keys.Contains("stackingLimit") || data["stackingLimit"] == null ? null : (long?)(data["stackingLimit"].ToString().Contains(".") ? (long)double.Parse(data["stackingLimit"].ToString()) : long.Parse(data["stackingLimit"].ToString())))
-                .WithAllowMultipleStacks(!data.Keys.Contains("allowMultipleStacks") || data["allowMultipleStacks"] == null ? null : (bool?)bool.Parse(data["allowMultipleStacks"].ToString()))
-                .WithSortValue(!data.Keys.Contains("sortValue") || data["sortValue"] == null ? null : (int?)(data["sortValue"].ToString().Contains(".") ? (int)double.Parse(data["sortValue"].ToString()) : int.Parse(data["sortValue"].ToString())));
+                .WithStackingLimit(!data.Keys.Contains("stackingLimit") || data["stackingLimit"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["stackingLimit"].ToString()))
+                .WithAllowMultipleStacks(!data.Keys.Contains("allowMultipleStacks") || data["allowMultipleStacks"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["allowMultipleStacks"].ToString()))
+                .WithSortValue(!data.Keys.Contains("sortValue") || data["sortValue"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["sortValue"].ToString()));
         }
 
         public override JsonData ToJson()

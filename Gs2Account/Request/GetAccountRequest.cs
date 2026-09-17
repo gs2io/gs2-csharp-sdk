@@ -68,7 +68,7 @@ namespace Gs2.Gs2Account.Request
             return new GetAccountRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithIncludeLastAuthenticatedAt(!data.Keys.Contains("includeLastAuthenticatedAt") || data["includeLastAuthenticatedAt"] == null ? null : (bool?)bool.Parse(data["includeLastAuthenticatedAt"].ToString()))
+                .WithIncludeLastAuthenticatedAt(!data.Keys.Contains("includeLastAuthenticatedAt") || data["includeLastAuthenticatedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["includeLastAuthenticatedAt"].ToString()))
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 

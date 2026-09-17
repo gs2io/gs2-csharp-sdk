@@ -67,8 +67,8 @@ namespace Gs2.Gs2Log.Request
             }
             return new QueryFacetsRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithBegin(!data.Keys.Contains("begin") || data["begin"] == null ? null : (long?)(data["begin"].ToString().Contains(".") ? (long)double.Parse(data["begin"].ToString()) : long.Parse(data["begin"].ToString())))
-                .WithEnd(!data.Keys.Contains("end") || data["end"] == null ? null : (long?)(data["end"].ToString().Contains(".") ? (long)double.Parse(data["end"].ToString()) : long.Parse(data["end"].ToString())))
+                .WithBegin(!data.Keys.Contains("begin") || data["begin"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["begin"].ToString()))
+                .WithEnd(!data.Keys.Contains("end") || data["end"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["end"].ToString()))
                 .WithQuery(!data.Keys.Contains("query") || data["query"] == null ? null : data["query"].ToString());
         }
 

@@ -75,7 +75,7 @@ namespace Gs2.Gs2Log.Request
                 .WithMetricName(!data.Keys.Contains("metricName") || data["metricName"] == null ? null : data["metricName"].ToString())
                 .WithLabelNamePrefix(!data.Keys.Contains("labelNamePrefix") || data["labelNamePrefix"] == null ? null : data["labelNamePrefix"].ToString())
                 .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
-                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())));
+                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["limit"].ToString()));
         }
 
         public override JsonData ToJson()

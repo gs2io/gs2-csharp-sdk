@@ -106,7 +106,7 @@ namespace Gs2.Gs2Log.Request
                 .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : data["type"].ToString())
                 .WithGcpCredentialJson(!data.Keys.Contains("gcpCredentialJson") || data["gcpCredentialJson"] == null ? null : data["gcpCredentialJson"].ToString())
                 .WithBigQueryDatasetName(!data.Keys.Contains("bigQueryDatasetName") || data["bigQueryDatasetName"] == null ? null : data["bigQueryDatasetName"].ToString())
-                .WithLogExpireDays(!data.Keys.Contains("logExpireDays") || data["logExpireDays"] == null ? null : (int?)(data["logExpireDays"].ToString().Contains(".") ? (int)double.Parse(data["logExpireDays"].ToString()) : int.Parse(data["logExpireDays"].ToString())))
+                .WithLogExpireDays(!data.Keys.Contains("logExpireDays") || data["logExpireDays"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["logExpireDays"].ToString()))
                 .WithAwsRegion(!data.Keys.Contains("awsRegion") || data["awsRegion"] == null ? null : data["awsRegion"].ToString())
                 .WithAwsAccessKeyId(!data.Keys.Contains("awsAccessKeyId") || data["awsAccessKeyId"] == null ? null : data["awsAccessKeyId"].ToString())
                 .WithAwsSecretAccessKey(!data.Keys.Contains("awsSecretAccessKey") || data["awsSecretAccessKey"] == null ? null : data["awsSecretAccessKey"].ToString())

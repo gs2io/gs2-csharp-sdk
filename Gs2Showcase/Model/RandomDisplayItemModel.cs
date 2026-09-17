@@ -90,8 +90,8 @@ namespace Gs2.Gs2Showcase.Model
                 .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null || !data["acquireActions"].IsArray ? null : data["acquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
-                .WithStock(!data.Keys.Contains("stock") || data["stock"] == null ? null : (int?)(data["stock"].ToString().Contains(".") ? (int)double.Parse(data["stock"].ToString()) : int.Parse(data["stock"].ToString())))
-                .WithWeight(!data.Keys.Contains("weight") || data["weight"] == null ? null : (int?)(data["weight"].ToString().Contains(".") ? (int)double.Parse(data["weight"].ToString()) : int.Parse(data["weight"].ToString())));
+                .WithStock(!data.Keys.Contains("stock") || data["stock"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["stock"].ToString()))
+                .WithWeight(!data.Keys.Contains("weight") || data["weight"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["weight"].ToString()));
         }
 
         public JsonData ToJson()

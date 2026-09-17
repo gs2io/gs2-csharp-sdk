@@ -69,7 +69,7 @@ namespace Gs2.Gs2Friend.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
                 .WithFromUserId(!data.Keys.Contains("fromUserId") || data["fromUserId"] == null ? null : data["fromUserId"].ToString())
-                .WithWithProfile(!data.Keys.Contains("withProfile") || data["withProfile"] == null ? null : (bool?)bool.Parse(data["withProfile"].ToString()));
+                .WithWithProfile(!data.Keys.Contains("withProfile") || data["withProfile"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["withProfile"].ToString()));
         }
 
         public override JsonData ToJson()

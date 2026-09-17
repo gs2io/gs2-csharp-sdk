@@ -72,9 +72,9 @@ namespace Gs2.Gs2Money2.Request
             }
             return new GetDailyTransactionHistoryRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithYear(!data.Keys.Contains("year") || data["year"] == null ? null : (int?)(data["year"].ToString().Contains(".") ? (int)double.Parse(data["year"].ToString()) : int.Parse(data["year"].ToString())))
-                .WithMonth(!data.Keys.Contains("month") || data["month"] == null ? null : (int?)(data["month"].ToString().Contains(".") ? (int)double.Parse(data["month"].ToString()) : int.Parse(data["month"].ToString())))
-                .WithDay(!data.Keys.Contains("day") || data["day"] == null ? null : (int?)(data["day"].ToString().Contains(".") ? (int)double.Parse(data["day"].ToString()) : int.Parse(data["day"].ToString())))
+                .WithYear(!data.Keys.Contains("year") || data["year"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["year"].ToString()))
+                .WithMonth(!data.Keys.Contains("month") || data["month"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["month"].ToString()))
+                .WithDay(!data.Keys.Contains("day") || data["day"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["day"].ToString()))
                 .WithCurrency(!data.Keys.Contains("currency") || data["currency"] == null ? null : data["currency"].ToString());
         }
 

@@ -74,8 +74,8 @@ namespace Gs2.Gs2Ranking.Model
                 return null;
             }
             return new GlobalRankingSetting()
-                .WithUniqueByUserId(!data.Keys.Contains("uniqueByUserId") || data["uniqueByUserId"] == null ? null : (bool?)bool.Parse(data["uniqueByUserId"].ToString()))
-                .WithCalculateIntervalMinutes(!data.Keys.Contains("calculateIntervalMinutes") || data["calculateIntervalMinutes"] == null ? null : (int?)(data["calculateIntervalMinutes"].ToString().Contains(".") ? (int)double.Parse(data["calculateIntervalMinutes"].ToString()) : int.Parse(data["calculateIntervalMinutes"].ToString())))
+                .WithUniqueByUserId(!data.Keys.Contains("uniqueByUserId") || data["uniqueByUserId"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["uniqueByUserId"].ToString()))
+                .WithCalculateIntervalMinutes(!data.Keys.Contains("calculateIntervalMinutes") || data["calculateIntervalMinutes"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["calculateIntervalMinutes"].ToString()))
                 .WithCalculateFixedTiming(!data.Keys.Contains("calculateFixedTiming") || data["calculateFixedTiming"] == null ? null : Gs2.Gs2Ranking.Model.FixedTiming.FromJson(data["calculateFixedTiming"]))
                 .WithAdditionalScopes(!data.Keys.Contains("additionalScopes") || data["additionalScopes"] == null || !data["additionalScopes"].IsArray ? null : data["additionalScopes"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Ranking.Model.Scope.FromJson(v);

@@ -94,7 +94,7 @@ namespace Gs2.Gs2Enhance.Request
                     return Gs2.Gs2Enhance.Model.Material.FromJson(v);
                 }).ToArray())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
-                .WithForce(!data.Keys.Contains("force") || data["force"] == null ? null : (bool?)bool.Parse(data["force"].ToString()))
+                .WithForce(!data.Keys.Contains("force") || data["force"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["force"].ToString()))
                 .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? null : data["config"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Enhance.Model.Config.FromJson(v);
                 }).ToArray());

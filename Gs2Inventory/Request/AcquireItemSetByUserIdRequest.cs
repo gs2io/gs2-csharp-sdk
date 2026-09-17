@@ -101,9 +101,9 @@ namespace Gs2.Gs2Inventory.Request
                 .WithInventoryName(!data.Keys.Contains("inventoryName") || data["inventoryName"] == null ? null : data["inventoryName"].ToString())
                 .WithItemName(!data.Keys.Contains("itemName") || data["itemName"] == null ? null : data["itemName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithAcquireCount(!data.Keys.Contains("acquireCount") || data["acquireCount"] == null ? null : (long?)(data["acquireCount"].ToString().Contains(".") ? (long)double.Parse(data["acquireCount"].ToString()) : long.Parse(data["acquireCount"].ToString())))
-                .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : (long?)(data["expiresAt"].ToString().Contains(".") ? (long)double.Parse(data["expiresAt"].ToString()) : long.Parse(data["expiresAt"].ToString())))
-                .WithCreateNewItemSet(!data.Keys.Contains("createNewItemSet") || data["createNewItemSet"] == null ? null : (bool?)bool.Parse(data["createNewItemSet"].ToString()))
+                .WithAcquireCount(!data.Keys.Contains("acquireCount") || data["acquireCount"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["acquireCount"].ToString()))
+                .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["expiresAt"].ToString()))
+                .WithCreateNewItemSet(!data.Keys.Contains("createNewItemSet") || data["createNewItemSet"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["createNewItemSet"].ToString()))
                 .WithItemSetName(!data.Keys.Contains("itemSetName") || data["itemSetName"] == null ? null : data["itemSetName"].ToString())
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }

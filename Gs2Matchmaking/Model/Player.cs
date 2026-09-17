@@ -77,7 +77,7 @@ namespace Gs2.Gs2Matchmaking.Model
                 .WithDenyUserIds(!data.Keys.Contains("denyUserIds") || data["denyUserIds"] == null || !data["denyUserIds"].IsArray ? null : data["denyUserIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()));
         }
 
         public JsonData ToJson()

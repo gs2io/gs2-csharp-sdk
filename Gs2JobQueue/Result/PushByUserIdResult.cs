@@ -64,7 +64,7 @@ namespace Gs2.Gs2JobQueue.Result
                 .WithItems(!data.Keys.Contains("items") || data["items"] == null || !data["items"].IsArray ? null : data["items"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2JobQueue.Model.Job.FromJson(v);
                 }).ToArray())
-                .WithAutoRun(!data.Keys.Contains("autoRun") || data["autoRun"] == null ? null : (bool?)bool.Parse(data["autoRun"].ToString()))
+                .WithAutoRun(!data.Keys.Contains("autoRun") || data["autoRun"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["autoRun"].ToString()))
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 

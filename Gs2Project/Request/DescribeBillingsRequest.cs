@@ -78,8 +78,8 @@ namespace Gs2.Gs2Project.Request
             return new DescribeBillingsRequest()
                 .WithAccountToken(!data.Keys.Contains("accountToken") || data["accountToken"] == null ? null : data["accountToken"].ToString())
                 .WithProjectName(!data.Keys.Contains("projectName") || data["projectName"] == null ? null : data["projectName"].ToString())
-                .WithYear(!data.Keys.Contains("year") || data["year"] == null ? null : (int?)(data["year"].ToString().Contains(".") ? (int)double.Parse(data["year"].ToString()) : int.Parse(data["year"].ToString())))
-                .WithMonth(!data.Keys.Contains("month") || data["month"] == null ? null : (int?)(data["month"].ToString().Contains(".") ? (int)double.Parse(data["month"].ToString()) : int.Parse(data["month"].ToString())))
+                .WithYear(!data.Keys.Contains("year") || data["year"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["year"].ToString()))
+                .WithMonth(!data.Keys.Contains("month") || data["month"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["month"].ToString()))
                 .WithRegion(!data.Keys.Contains("region") || data["region"] == null ? null : data["region"].ToString())
                 .WithService(!data.Keys.Contains("service") || data["service"] == null ? null : data["service"].ToString());
         }

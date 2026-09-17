@@ -59,7 +59,7 @@ namespace Gs2.Gs2Account.Model
                 return null;
             }
             return new PlatformUser()
-                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : (int?)(data["type"].ToString().Contains(".") ? (int)double.Parse(data["type"].ToString()) : int.Parse(data["type"].ToString())))
+                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["type"].ToString()))
                 .WithUserIdentifier(!data.Keys.Contains("userIdentifier") || data["userIdentifier"] == null ? null : data["userIdentifier"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString());
         }

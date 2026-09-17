@@ -188,15 +188,15 @@ namespace Gs2.Gs2Exchange.Model
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithRateName(!data.Keys.Contains("rateName") || data["rateName"] == null ? null : data["rateName"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
-                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (int?)(data["count"].ToString().Contains(".") ? (int)double.Parse(data["count"].ToString()) : int.Parse(data["count"].ToString())))
-                .WithSkipSeconds(!data.Keys.Contains("skipSeconds") || data["skipSeconds"] == null ? null : (int?)(data["skipSeconds"].ToString().Contains(".") ? (int)double.Parse(data["skipSeconds"].ToString()) : int.Parse(data["skipSeconds"].ToString())))
+                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["count"].ToString()))
+                .WithSkipSeconds(!data.Keys.Contains("skipSeconds") || data["skipSeconds"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["skipSeconds"].ToString()))
                 .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? null : data["config"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Exchange.Model.Config.FromJson(v);
                 }).ToArray())
-                .WithAcquirableAt(!data.Keys.Contains("acquirableAt") || data["acquirableAt"] == null ? null : (long?)(data["acquirableAt"].ToString().Contains(".") ? (long)double.Parse(data["acquirableAt"].ToString()) : long.Parse(data["acquirableAt"].ToString())))
-                .WithExchangedAt(!data.Keys.Contains("exchangedAt") || data["exchangedAt"] == null ? null : (long?)(data["exchangedAt"].ToString().Contains(".") ? (long)double.Parse(data["exchangedAt"].ToString()) : long.Parse(data["exchangedAt"].ToString())))
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
+                .WithAcquirableAt(!data.Keys.Contains("acquirableAt") || data["acquirableAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["acquirableAt"].ToString()))
+                .WithExchangedAt(!data.Keys.Contains("exchangedAt") || data["exchangedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["exchangedAt"].ToString()))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["revision"].ToString()));
         }
 
         public JsonData ToJson()

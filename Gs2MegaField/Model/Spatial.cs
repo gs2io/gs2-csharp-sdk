@@ -197,9 +197,9 @@ namespace Gs2.Gs2MegaField.Model
                 .WithLayerModelName(!data.Keys.Contains("layerModelName") || data["layerModelName"] == null ? null : data["layerModelName"].ToString())
                 .WithPosition(!data.Keys.Contains("position") || data["position"] == null ? null : Gs2.Gs2MegaField.Model.Position.FromJson(data["position"]))
                 .WithVector(!data.Keys.Contains("vector") || data["vector"] == null ? null : Gs2.Gs2MegaField.Model.Vector.FromJson(data["vector"]))
-                .WithR(!data.Keys.Contains("r") || data["r"] == null ? null : (float?)float.Parse(data["r"].ToString()))
-                .WithLastSyncAt(!data.Keys.Contains("lastSyncAt") || data["lastSyncAt"] == null ? null : (long?)(data["lastSyncAt"].ToString().Contains(".") ? (long)double.Parse(data["lastSyncAt"].ToString()) : long.Parse(data["lastSyncAt"].ToString())))
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())));
+                .WithR(!data.Keys.Contains("r") || data["r"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableFloat(data["r"].ToString()))
+                .WithLastSyncAt(!data.Keys.Contains("lastSyncAt") || data["lastSyncAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["lastSyncAt"].ToString()))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()));
         }
 
         public JsonData ToJson()

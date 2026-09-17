@@ -63,7 +63,7 @@ namespace Gs2.Gs2Money2.Request
             return new GetWalletRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
-                .WithSlot(!data.Keys.Contains("slot") || data["slot"] == null ? null : (int?)(data["slot"].ToString().Contains(".") ? (int)double.Parse(data["slot"].ToString()) : int.Parse(data["slot"].ToString())));
+                .WithSlot(!data.Keys.Contains("slot") || data["slot"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["slot"].ToString()));
         }
 
         public override JsonData ToJson()

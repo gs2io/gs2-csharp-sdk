@@ -69,7 +69,7 @@ namespace Gs2.Gs2Stamina.Result
             return new RecoverStaminaByUserIdResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Stamina.Model.Stamina.FromJson(data["item"]))
                 .WithStaminaModel(!data.Keys.Contains("staminaModel") || data["staminaModel"] == null ? null : Gs2.Gs2Stamina.Model.StaminaModel.FromJson(data["staminaModel"]))
-                .WithOverflowValue(!data.Keys.Contains("overflowValue") || data["overflowValue"] == null ? null : (int?)(data["overflowValue"].ToString().Contains(".") ? (int)double.Parse(data["overflowValue"].ToString()) : int.Parse(data["overflowValue"].ToString())))
+                .WithOverflowValue(!data.Keys.Contains("overflowValue") || data["overflowValue"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["overflowValue"].ToString()))
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 

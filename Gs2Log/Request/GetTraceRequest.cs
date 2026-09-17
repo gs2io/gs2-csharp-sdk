@@ -68,8 +68,8 @@ namespace Gs2.Gs2Log.Request
             return new GetTraceRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithTraceId(!data.Keys.Contains("traceId") || data["traceId"] == null ? null : data["traceId"].ToString())
-                .WithBegin(!data.Keys.Contains("begin") || data["begin"] == null ? null : (long?)(data["begin"].ToString().Contains(".") ? (long)double.Parse(data["begin"].ToString()) : long.Parse(data["begin"].ToString())))
-                .WithEnd(!data.Keys.Contains("end") || data["end"] == null ? null : (long?)(data["end"].ToString().Contains(".") ? (long)double.Parse(data["end"].ToString()) : long.Parse(data["end"].ToString())));
+                .WithBegin(!data.Keys.Contains("begin") || data["begin"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["begin"].ToString()))
+                .WithEnd(!data.Keys.Contains("end") || data["end"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["end"].ToString()));
         }
 
         public override JsonData ToJson()

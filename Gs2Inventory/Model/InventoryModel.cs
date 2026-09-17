@@ -150,9 +150,9 @@ namespace Gs2.Gs2Inventory.Model
                 .WithInventoryModelId(!data.Keys.Contains("inventoryModelId") || data["inventoryModelId"] == null ? null : data["inventoryModelId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithInitialCapacity(!data.Keys.Contains("initialCapacity") || data["initialCapacity"] == null ? null : (int?)(data["initialCapacity"].ToString().Contains(".") ? (int)double.Parse(data["initialCapacity"].ToString()) : int.Parse(data["initialCapacity"].ToString())))
-                .WithMaxCapacity(!data.Keys.Contains("maxCapacity") || data["maxCapacity"] == null ? null : (int?)(data["maxCapacity"].ToString().Contains(".") ? (int)double.Parse(data["maxCapacity"].ToString()) : int.Parse(data["maxCapacity"].ToString())))
-                .WithProtectReferencedItem(!data.Keys.Contains("protectReferencedItem") || data["protectReferencedItem"] == null ? null : (bool?)bool.Parse(data["protectReferencedItem"].ToString()))
+                .WithInitialCapacity(!data.Keys.Contains("initialCapacity") || data["initialCapacity"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["initialCapacity"].ToString()))
+                .WithMaxCapacity(!data.Keys.Contains("maxCapacity") || data["maxCapacity"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["maxCapacity"].ToString()))
+                .WithProtectReferencedItem(!data.Keys.Contains("protectReferencedItem") || data["protectReferencedItem"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["protectReferencedItem"].ToString()))
                 .WithItemModels(!data.Keys.Contains("itemModels") || data["itemModels"] == null || !data["itemModels"].IsArray ? null : data["itemModels"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Inventory.Model.ItemModel.FromJson(v);
                 }).ToArray());

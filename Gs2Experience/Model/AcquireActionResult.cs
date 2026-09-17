@@ -63,7 +63,7 @@ namespace Gs2.Gs2Experience.Model
             return new AcquireActionResult()
                 .WithAction(!data.Keys.Contains("action") || data["action"] == null ? null : data["action"].ToString())
                 .WithAcquireRequest(!data.Keys.Contains("acquireRequest") || data["acquireRequest"] == null ? null : data["acquireRequest"].ToString())
-                .WithStatusCode(!data.Keys.Contains("statusCode") || data["statusCode"] == null ? null : (int?)(data["statusCode"].ToString().Contains(".") ? (int)double.Parse(data["statusCode"].ToString()) : int.Parse(data["statusCode"].ToString())))
+                .WithStatusCode(!data.Keys.Contains("statusCode") || data["statusCode"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["statusCode"].ToString()))
                 .WithAcquireResult(!data.Keys.Contains("acquireResult") || data["acquireResult"] == null ? null : data["acquireResult"].ToString());
         }
 

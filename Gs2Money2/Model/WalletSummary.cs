@@ -59,9 +59,9 @@ namespace Gs2.Gs2Money2.Model
                 return null;
             }
             return new WalletSummary()
-                .WithPaid(!data.Keys.Contains("paid") || data["paid"] == null ? null : (int?)(data["paid"].ToString().Contains(".") ? (int)double.Parse(data["paid"].ToString()) : int.Parse(data["paid"].ToString())))
-                .WithFree(!data.Keys.Contains("free") || data["free"] == null ? null : (int?)(data["free"].ToString().Contains(".") ? (int)double.Parse(data["free"].ToString()) : int.Parse(data["free"].ToString())))
-                .WithTotal(!data.Keys.Contains("total") || data["total"] == null ? null : (int?)(data["total"].ToString().Contains(".") ? (int)double.Parse(data["total"].ToString()) : int.Parse(data["total"].ToString())));
+                .WithPaid(!data.Keys.Contains("paid") || data["paid"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["paid"].ToString()))
+                .WithFree(!data.Keys.Contains("free") || data["free"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["free"].ToString()))
+                .WithTotal(!data.Keys.Contains("total") || data["total"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["total"].ToString()));
         }
 
         public JsonData ToJson()

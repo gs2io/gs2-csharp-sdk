@@ -86,8 +86,8 @@ namespace Gs2.Gs2MegaField.Request
                 .WithAreaModelName(!data.Keys.Contains("areaModelName") || data["areaModelName"] == null ? null : data["areaModelName"].ToString())
                 .WithLayerModelName(!data.Keys.Contains("layerModelName") || data["layerModelName"] == null ? null : data["layerModelName"].ToString())
                 .WithPoint(!data.Keys.Contains("point") || data["point"] == null ? null : Gs2.Gs2MegaField.Model.Position.FromJson(data["point"]))
-                .WithR(!data.Keys.Contains("r") || data["r"] == null ? null : (float?)float.Parse(data["r"].ToString()))
-                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())));
+                .WithR(!data.Keys.Contains("r") || data["r"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableFloat(data["r"].ToString()))
+                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["limit"].ToString()));
         }
 
         public override JsonData ToJson()

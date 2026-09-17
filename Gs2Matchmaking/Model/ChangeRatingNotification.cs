@@ -53,7 +53,7 @@ namespace Gs2.Gs2Matchmaking.Model
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithRatingName(!data.Keys.Contains("ratingName") || data["ratingName"] == null ? null : data["ratingName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithRateValue(!data.Keys.Contains("rateValue") || data["rateValue"] == null ? null : (float?)float.Parse(data["rateValue"].ToString()));
+                .WithRateValue(!data.Keys.Contains("rateValue") || data["rateValue"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableFloat(data["rateValue"].ToString()));
         }
     }
 }

@@ -179,9 +179,9 @@ namespace Gs2.Gs2Ranking2.Model
                 .WithGlobalRankingReceivedRewardId(!data.Keys.Contains("globalRankingReceivedRewardId") || data["globalRankingReceivedRewardId"] == null ? null : data["globalRankingReceivedRewardId"].ToString())
                 .WithRankingName(!data.Keys.Contains("rankingName") || data["rankingName"] == null ? null : data["rankingName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithSeason(!data.Keys.Contains("season") || data["season"] == null ? null : (long?)(data["season"].ToString().Contains(".") ? (long)double.Parse(data["season"].ToString()) : long.Parse(data["season"].ToString())))
-                .WithReceivedAt(!data.Keys.Contains("receivedAt") || data["receivedAt"] == null ? null : (long?)(data["receivedAt"].ToString().Contains(".") ? (long)double.Parse(data["receivedAt"].ToString()) : long.Parse(data["receivedAt"].ToString())))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
+                .WithSeason(!data.Keys.Contains("season") || data["season"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["season"].ToString()))
+                .WithReceivedAt(!data.Keys.Contains("receivedAt") || data["receivedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["receivedAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["revision"].ToString()));
         }
 
         public JsonData ToJson()

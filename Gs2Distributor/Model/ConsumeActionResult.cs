@@ -66,7 +66,7 @@ namespace Gs2.Gs2Distributor.Model
             return new ConsumeActionResult()
                 .WithAction(!data.Keys.Contains("action") || data["action"] == null ? null : data["action"].ToString())
                 .WithConsumeRequest(!data.Keys.Contains("consumeRequest") || data["consumeRequest"] == null ? null : data["consumeRequest"].ToString())
-                .WithStatusCode(!data.Keys.Contains("statusCode") || data["statusCode"] == null ? null : (int?)(data["statusCode"].ToString().Contains(".") ? (int)double.Parse(data["statusCode"].ToString()) : int.Parse(data["statusCode"].ToString())))
+                .WithStatusCode(!data.Keys.Contains("statusCode") || data["statusCode"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["statusCode"].ToString()))
                 .WithConsumeResult(!data.Keys.Contains("consumeResult") || data["consumeResult"] == null ? null : data["consumeResult"].ToString());
         }
 

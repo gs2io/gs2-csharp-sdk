@@ -54,8 +54,8 @@ namespace Gs2.Gs2Script.Model
                 return null;
             }
             return new RandomUsed()
-                .WithCategory(!data.Keys.Contains("category") || data["category"] == null ? null : (long?)(data["category"].ToString().Contains(".") ? (long)double.Parse(data["category"].ToString()) : long.Parse(data["category"].ToString())))
-                .WithUsed(!data.Keys.Contains("used") || data["used"] == null ? null : (long?)(data["used"].ToString().Contains(".") ? (long)double.Parse(data["used"].ToString()) : long.Parse(data["used"].ToString())));
+                .WithCategory(!data.Keys.Contains("category") || data["category"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["category"].ToString()))
+                .WithUsed(!data.Keys.Contains("used") || data["used"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["used"].ToString()));
         }
 
         public JsonData ToJson()

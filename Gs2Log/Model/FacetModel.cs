@@ -141,7 +141,7 @@ namespace Gs2.Gs2Log.Model
                 .WithField(!data.Keys.Contains("field") || data["field"] == null ? null : data["field"].ToString())
                 .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : data["type"].ToString())
                 .WithDisplayName(!data.Keys.Contains("displayName") || data["displayName"] == null ? null : data["displayName"].ToString())
-                .WithOrder(!data.Keys.Contains("order") || data["order"] == null ? null : (int?)(data["order"].ToString().Contains(".") ? (int)double.Parse(data["order"].ToString()) : int.Parse(data["order"].ToString())));
+                .WithOrder(!data.Keys.Contains("order") || data["order"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["order"].ToString()));
         }
 
         public JsonData ToJson()

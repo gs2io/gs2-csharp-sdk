@@ -184,10 +184,10 @@ namespace Gs2.Gs2Matchmaking.Model
                 .WithJoinedSeasonGatheringId(!data.Keys.Contains("joinedSeasonGatheringId") || data["joinedSeasonGatheringId"] == null ? null : data["joinedSeasonGatheringId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithSeasonName(!data.Keys.Contains("seasonName") || data["seasonName"] == null ? null : data["seasonName"].ToString())
-                .WithSeason(!data.Keys.Contains("season") || data["season"] == null ? null : (long?)(data["season"].ToString().Contains(".") ? (long)double.Parse(data["season"].ToString()) : long.Parse(data["season"].ToString())))
-                .WithTier(!data.Keys.Contains("tier") || data["tier"] == null ? null : (long?)(data["tier"].ToString().Contains(".") ? (long)double.Parse(data["tier"].ToString()) : long.Parse(data["tier"].ToString())))
+                .WithSeason(!data.Keys.Contains("season") || data["season"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["season"].ToString()))
+                .WithTier(!data.Keys.Contains("tier") || data["tier"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["tier"].ToString()))
                 .WithSeasonGatheringName(!data.Keys.Contains("seasonGatheringName") || data["seasonGatheringName"] == null ? null : data["seasonGatheringName"].ToString())
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()));
         }
 
         public JsonData ToJson()

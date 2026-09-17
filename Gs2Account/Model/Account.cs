@@ -160,14 +160,14 @@ namespace Gs2.Gs2Account.Model
                 .WithAccountId(!data.Keys.Contains("accountId") || data["accountId"] == null ? null : data["accountId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
-                .WithTimeOffset(!data.Keys.Contains("timeOffset") || data["timeOffset"] == null ? null : (int?)(data["timeOffset"].ToString().Contains(".") ? (int)double.Parse(data["timeOffset"].ToString()) : int.Parse(data["timeOffset"].ToString())))
+                .WithTimeOffset(!data.Keys.Contains("timeOffset") || data["timeOffset"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["timeOffset"].ToString()))
                 .WithBanStatuses(!data.Keys.Contains("banStatuses") || data["banStatuses"] == null || !data["banStatuses"].IsArray ? null : data["banStatuses"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Account.Model.BanStatus.FromJson(v);
                 }).ToArray())
-                .WithBanned(!data.Keys.Contains("banned") || data["banned"] == null ? null : (bool?)bool.Parse(data["banned"].ToString()))
-                .WithLastAuthenticatedAt(!data.Keys.Contains("lastAuthenticatedAt") || data["lastAuthenticatedAt"] == null ? null : (long?)(data["lastAuthenticatedAt"].ToString().Contains(".") ? (long)double.Parse(data["lastAuthenticatedAt"].ToString()) : long.Parse(data["lastAuthenticatedAt"].ToString())))
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
+                .WithBanned(!data.Keys.Contains("banned") || data["banned"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["banned"].ToString()))
+                .WithLastAuthenticatedAt(!data.Keys.Contains("lastAuthenticatedAt") || data["lastAuthenticatedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["lastAuthenticatedAt"].ToString()))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["revision"].ToString()));
         }
 
         public JsonData ToJson()

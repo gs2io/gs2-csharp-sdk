@@ -81,7 +81,7 @@ namespace Gs2.Gs2Identifier.Result
                 .WithAccessToken(!data.Keys.Contains("access_token") || data["access_token"] == null ? null : data["access_token"].ToString())
                 .WithTokenType(!data.Keys.Contains("token_type") || data["token_type"] == null ? null : data["token_type"].ToString())
 /* diff --- start
-                .WithExpiresIn(!data.Keys.Contains("expires_in") || data["expires_in"] == null ? null : (int?)(data["expires_in"].ToString().Contains(".") ? (int)double.Parse(data["expires_in"].ToString()) : int.Parse(data["expires_in"].ToString())))
+                .WithExpiresIn(!data.Keys.Contains("expires_in") || data["expires_in"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["expires_in"].ToString()))
                 .WithOwnerId(!data.Keys.Contains("owner_id") || data["owner_id"] == null ? null : data["owner_id"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
  diff --- end */

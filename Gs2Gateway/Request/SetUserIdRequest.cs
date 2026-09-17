@@ -79,9 +79,9 @@ namespace Gs2.Gs2Gateway.Request
             return new SetUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
-                .WithAllowConcurrentAccess(!data.Keys.Contains("allowConcurrentAccess") || data["allowConcurrentAccess"] == null ? null : (bool?)bool.Parse(data["allowConcurrentAccess"].ToString()))
+                .WithAllowConcurrentAccess(!data.Keys.Contains("allowConcurrentAccess") || data["allowConcurrentAccess"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["allowConcurrentAccess"].ToString()))
                 .WithSessionId(!data.Keys.Contains("sessionId") || data["sessionId"] == null ? null : data["sessionId"].ToString())
-                .WithForce(!data.Keys.Contains("force") || data["force"] == null ? null : (bool?)bool.Parse(data["force"].ToString()));
+                .WithForce(!data.Keys.Contains("force") || data["force"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["force"].ToString()));
         }
 
         public override JsonData ToJson()

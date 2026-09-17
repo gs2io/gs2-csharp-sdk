@@ -61,7 +61,7 @@ namespace Gs2.Gs2StateMachine.Model
             return new EmitEvent()
                 .WithEvent(!data.Keys.Contains("event") || data["event"] == null ? null : data["event"].ToString())
                 .WithParameters(!data.Keys.Contains("parameters") || data["parameters"] == null ? null : data["parameters"].ToString())
-                .WithTimestamp(!data.Keys.Contains("timestamp") || data["timestamp"] == null ? null : (long?)(data["timestamp"].ToString().Contains(".") ? (long)double.Parse(data["timestamp"].ToString()) : long.Parse(data["timestamp"].ToString())));
+                .WithTimestamp(!data.Keys.Contains("timestamp") || data["timestamp"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["timestamp"].ToString()));
         }
 
         public JsonData ToJson()

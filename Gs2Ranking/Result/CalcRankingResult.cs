@@ -55,7 +55,7 @@ namespace Gs2.Gs2Ranking.Result
                 return null;
             }
             return new CalcRankingResult()
-                .WithProcessing(!data.Keys.Contains("processing") || data["processing"] == null ? null : (bool?)bool.Parse(data["processing"].ToString()))
+                .WithProcessing(!data.Keys.Contains("processing") || data["processing"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["processing"].ToString()))
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 

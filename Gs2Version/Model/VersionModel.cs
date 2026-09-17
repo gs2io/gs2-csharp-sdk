@@ -203,7 +203,7 @@ namespace Gs2.Gs2Version.Model
                 .WithScheduleVersions(!data.Keys.Contains("scheduleVersions") || data["scheduleVersions"] == null || !data["scheduleVersions"].IsArray ? null : data["scheduleVersions"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Version.Model.ScheduleVersion.FromJson(v);
                 }).ToArray())
-                .WithNeedSignature(!data.Keys.Contains("needSignature") || data["needSignature"] == null ? null : (bool?)bool.Parse(data["needSignature"].ToString()))
+                .WithNeedSignature(!data.Keys.Contains("needSignature") || data["needSignature"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["needSignature"].ToString()))
                 .WithSignatureKeyId(!data.Keys.Contains("signatureKeyId") || data["signatureKeyId"] == null ? null : data["signatureKeyId"].ToString())
                 .WithApproveRequirement(!data.Keys.Contains("approveRequirement") || data["approveRequirement"] == null ? null : data["approveRequirement"].ToString());
         }

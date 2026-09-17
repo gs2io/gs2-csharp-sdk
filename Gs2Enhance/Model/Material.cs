@@ -55,7 +55,7 @@ namespace Gs2.Gs2Enhance.Model
             }
             return new Material()
                 .WithMaterialItemSetId(!data.Keys.Contains("materialItemSetId") || data["materialItemSetId"] == null ? null : data["materialItemSetId"].ToString())
-                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (int?)(data["count"].ToString().Contains(".") ? (int)double.Parse(data["count"].ToString()) : int.Parse(data["count"].ToString())));
+                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["count"].ToString()));
         }
 
         public JsonData ToJson()

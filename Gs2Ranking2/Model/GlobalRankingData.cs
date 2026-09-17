@@ -208,16 +208,16 @@ namespace Gs2.Gs2Ranking2.Model
             return new GlobalRankingData()
                 .WithGlobalRankingDataId(!data.Keys.Contains("globalRankingDataId") || data["globalRankingDataId"] == null ? null : data["globalRankingDataId"].ToString())
                 .WithRankingName(!data.Keys.Contains("rankingName") || data["rankingName"] == null ? null : data["rankingName"].ToString())
-                .WithSeason(!data.Keys.Contains("season") || data["season"] == null ? null : (long?)(data["season"].ToString().Contains(".") ? (long)double.Parse(data["season"].ToString()) : long.Parse(data["season"].ToString())))
+                .WithSeason(!data.Keys.Contains("season") || data["season"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["season"].ToString()))
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithIndex(!data.Keys.Contains("index") || data["index"] == null ? null : (int?)(data["index"].ToString().Contains(".") ? (int)double.Parse(data["index"].ToString()) : int.Parse(data["index"].ToString())))
-                .WithRank(!data.Keys.Contains("rank") || data["rank"] == null ? null : (int?)(data["rank"].ToString().Contains(".") ? (int)double.Parse(data["rank"].ToString()) : int.Parse(data["rank"].ToString())))
-                .WithScore(!data.Keys.Contains("score") || data["score"] == null ? null : (long?)(data["score"].ToString().Contains(".") ? (long)double.Parse(data["score"].ToString()) : long.Parse(data["score"].ToString())))
+                .WithIndex(!data.Keys.Contains("index") || data["index"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["index"].ToString()))
+                .WithRank(!data.Keys.Contains("rank") || data["rank"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["rank"].ToString()))
+                .WithScore(!data.Keys.Contains("score") || data["score"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["score"].ToString()))
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithInvertUpdatedAt(!data.Keys.Contains("invertUpdatedAt") || data["invertUpdatedAt"] == null ? null : (long?)(data["invertUpdatedAt"].ToString().Contains(".") ? (long)double.Parse(data["invertUpdatedAt"].ToString()) : long.Parse(data["invertUpdatedAt"].ToString())))
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
+                .WithInvertUpdatedAt(!data.Keys.Contains("invertUpdatedAt") || data["invertUpdatedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["invertUpdatedAt"].ToString()))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["updatedAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["revision"].ToString()));
         }
 
         public JsonData ToJson()

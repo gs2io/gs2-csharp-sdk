@@ -68,8 +68,8 @@ namespace Gs2.Gs2Lottery.Model
                 .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null || !data["acquireActions"].IsArray ? null : data["acquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
-                .WithRemaining(!data.Keys.Contains("remaining") || data["remaining"] == null ? null : (int?)(data["remaining"].ToString().Contains(".") ? (int)double.Parse(data["remaining"].ToString()) : int.Parse(data["remaining"].ToString())))
-                .WithInitial(!data.Keys.Contains("initial") || data["initial"] == null ? null : (int?)(data["initial"].ToString().Contains(".") ? (int)double.Parse(data["initial"].ToString()) : int.Parse(data["initial"].ToString())));
+                .WithRemaining(!data.Keys.Contains("remaining") || data["remaining"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["remaining"].ToString()))
+                .WithInitial(!data.Keys.Contains("initial") || data["initial"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["initial"].ToString()));
         }
 
         public JsonData ToJson()

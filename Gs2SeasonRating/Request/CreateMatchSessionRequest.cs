@@ -63,7 +63,7 @@ namespace Gs2.Gs2SeasonRating.Request
             return new CreateMatchSessionRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithSessionName(!data.Keys.Contains("sessionName") || data["sessionName"] == null ? null : data["sessionName"].ToString())
-                .WithTtlSeconds(!data.Keys.Contains("ttlSeconds") || data["ttlSeconds"] == null ? null : (int?)(data["ttlSeconds"].ToString().Contains(".") ? (int)double.Parse(data["ttlSeconds"].ToString()) : int.Parse(data["ttlSeconds"].ToString())));
+                .WithTtlSeconds(!data.Keys.Contains("ttlSeconds") || data["ttlSeconds"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["ttlSeconds"].ToString()));
         }
 
         public override JsonData ToJson()

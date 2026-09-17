@@ -210,7 +210,7 @@ namespace Gs2.Gs2Mission.Model
                 .WithPremiseMissionTaskName(!data.Keys.Contains("premiseMissionTaskName") || data["premiseMissionTaskName"] == null ? null : data["premiseMissionTaskName"].ToString())
                 .WithCounterName(!data.Keys.Contains("counterName") || data["counterName"] == null ? null : data["counterName"].ToString())
                 .WithTargetResetType(!data.Keys.Contains("targetResetType") || data["targetResetType"] == null ? null : data["targetResetType"].ToString())
-                .WithTargetValue(!data.Keys.Contains("targetValue") || data["targetValue"] == null ? null : (long?)(data["targetValue"].ToString().Contains(".") ? (long)double.Parse(data["targetValue"].ToString()) : long.Parse(data["targetValue"].ToString())));
+                .WithTargetValue(!data.Keys.Contains("targetValue") || data["targetValue"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["targetValue"].ToString()));
         }
 
         public JsonData ToJson()

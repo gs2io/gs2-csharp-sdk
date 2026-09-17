@@ -202,7 +202,7 @@ namespace Gs2.Gs2StateMachine.Model
                 .WithStatusId(!data.Keys.Contains("statusId") || data["statusId"] == null ? null : data["statusId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
-                .WithStateMachineVersion(!data.Keys.Contains("stateMachineVersion") || data["stateMachineVersion"] == null ? null : (long?)(data["stateMachineVersion"].ToString().Contains(".") ? (long)double.Parse(data["stateMachineVersion"].ToString()) : long.Parse(data["stateMachineVersion"].ToString())))
+                .WithStateMachineVersion(!data.Keys.Contains("stateMachineVersion") || data["stateMachineVersion"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["stateMachineVersion"].ToString()))
                 .WithEnableSpeculativeExecution(!data.Keys.Contains("enableSpeculativeExecution") || data["enableSpeculativeExecution"] == null ? null : data["enableSpeculativeExecution"].ToString())
                 .WithStateMachineDefinition(!data.Keys.Contains("stateMachineDefinition") || data["stateMachineDefinition"] == null ? null : data["stateMachineDefinition"].ToString())
                 .WithRandomStatus(!data.Keys.Contains("randomStatus") || data["randomStatus"] == null ? null : Gs2.Gs2StateMachine.Model.RandomStatus.FromJson(data["randomStatus"]))
@@ -214,9 +214,9 @@ namespace Gs2.Gs2StateMachine.Model
                 }).ToArray())
                 .WithValue(!data.Keys.Contains("status") || data["status"] == null ? null : data["status"].ToString())
                 .WithLastError(!data.Keys.Contains("lastError") || data["lastError"] == null ? null : data["lastError"].ToString())
-                .WithTransitionCount(!data.Keys.Contains("transitionCount") || data["transitionCount"] == null ? null : (int?)(data["transitionCount"].ToString().Contains(".") ? (int)double.Parse(data["transitionCount"].ToString()) : int.Parse(data["transitionCount"].ToString())))
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())));
+                .WithTransitionCount(!data.Keys.Contains("transitionCount") || data["transitionCount"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["transitionCount"].ToString()))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["updatedAt"].ToString()));
         }
 
         public JsonData ToJson()

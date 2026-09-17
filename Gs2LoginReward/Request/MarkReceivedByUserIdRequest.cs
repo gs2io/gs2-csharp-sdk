@@ -80,7 +80,7 @@ namespace Gs2.Gs2LoginReward.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithBonusModelName(!data.Keys.Contains("bonusModelName") || data["bonusModelName"] == null ? null : data["bonusModelName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithStepNumber(!data.Keys.Contains("stepNumber") || data["stepNumber"] == null ? null : (int?)(data["stepNumber"].ToString().Contains(".") ? (int)double.Parse(data["stepNumber"].ToString()) : int.Parse(data["stepNumber"].ToString())))
+                .WithStepNumber(!data.Keys.Contains("stepNumber") || data["stepNumber"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["stepNumber"].ToString()))
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 

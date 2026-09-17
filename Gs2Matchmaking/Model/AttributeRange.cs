@@ -60,8 +60,8 @@ namespace Gs2.Gs2Matchmaking.Model
             }
             return new AttributeRange()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
-                .WithMin(!data.Keys.Contains("min") || data["min"] == null ? null : (int?)(data["min"].ToString().Contains(".") ? (int)double.Parse(data["min"].ToString()) : int.Parse(data["min"].ToString())))
-                .WithMax(!data.Keys.Contains("max") || data["max"] == null ? null : (int?)(data["max"].ToString().Contains(".") ? (int)double.Parse(data["max"].ToString()) : int.Parse(data["max"].ToString())));
+                .WithMin(!data.Keys.Contains("min") || data["min"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["min"].ToString()))
+                .WithMax(!data.Keys.Contains("max") || data["max"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["max"].ToString()));
         }
 
         public JsonData ToJson()

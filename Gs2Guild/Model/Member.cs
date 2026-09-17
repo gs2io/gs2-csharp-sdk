@@ -67,7 +67,7 @@ namespace Gs2.Gs2Guild.Model
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithRoleName(!data.Keys.Contains("roleName") || data["roleName"] == null ? null : data["roleName"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithJoinedAt(!data.Keys.Contains("joinedAt") || data["joinedAt"] == null ? null : (long?)(data["joinedAt"].ToString().Contains(".") ? (long)double.Parse(data["joinedAt"].ToString()) : long.Parse(data["joinedAt"].ToString())));
+                .WithJoinedAt(!data.Keys.Contains("joinedAt") || data["joinedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["joinedAt"].ToString()));
         }
 
         public JsonData ToJson()

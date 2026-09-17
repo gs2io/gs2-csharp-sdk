@@ -79,13 +79,13 @@ namespace Gs2.Gs2Ranking.Model
                 return null;
             }
             return new Ranking()
-                .WithRank(!data.Keys.Contains("rank") || data["rank"] == null ? null : (long?)(data["rank"].ToString().Contains(".") ? (long)double.Parse(data["rank"].ToString()) : long.Parse(data["rank"].ToString())))
-                .WithIndex(!data.Keys.Contains("index") || data["index"] == null ? null : (long?)(data["index"].ToString().Contains(".") ? (long)double.Parse(data["index"].ToString()) : long.Parse(data["index"].ToString())))
+                .WithRank(!data.Keys.Contains("rank") || data["rank"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["rank"].ToString()))
+                .WithIndex(!data.Keys.Contains("index") || data["index"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["index"].ToString()))
                 .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithScore(!data.Keys.Contains("score") || data["score"] == null ? null : (long?)(data["score"].ToString().Contains(".") ? (long)double.Parse(data["score"].ToString()) : long.Parse(data["score"].ToString())))
+                .WithScore(!data.Keys.Contains("score") || data["score"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["score"].ToString()))
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())));
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()));
         }
 
         public JsonData ToJson()

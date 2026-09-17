@@ -78,7 +78,7 @@ namespace Gs2.Gs2Inventory.Result
                 }).ToArray())
                 .WithItemModel(!data.Keys.Contains("itemModel") || data["itemModel"] == null ? null : Gs2.Gs2Inventory.Model.ItemModel.FromJson(data["itemModel"]))
                 .WithInventory(!data.Keys.Contains("inventory") || data["inventory"] == null ? null : Gs2.Gs2Inventory.Model.Inventory.FromJson(data["inventory"]))
-                .WithOverflowCount(!data.Keys.Contains("overflowCount") || data["overflowCount"] == null ? null : (long?)(data["overflowCount"].ToString().Contains(".") ? (long)double.Parse(data["overflowCount"].ToString()) : long.Parse(data["overflowCount"].ToString())))
+                .WithOverflowCount(!data.Keys.Contains("overflowCount") || data["overflowCount"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["overflowCount"].ToString()))
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 

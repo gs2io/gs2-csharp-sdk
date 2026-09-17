@@ -55,7 +55,7 @@ namespace Gs2.Gs2Ranking.Model
             }
             return new Scope()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
-                .WithTargetDays(!data.Keys.Contains("targetDays") || data["targetDays"] == null ? null : (long?)(data["targetDays"].ToString().Contains(".") ? (long)double.Parse(data["targetDays"].ToString()) : long.Parse(data["targetDays"].ToString())));
+                .WithTargetDays(!data.Keys.Contains("targetDays") || data["targetDays"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["targetDays"].ToString()));
         }
 
         public JsonData ToJson()

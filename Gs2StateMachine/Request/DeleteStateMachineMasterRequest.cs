@@ -57,7 +57,7 @@ namespace Gs2.Gs2StateMachine.Request
             }
             return new DeleteStateMachineMasterRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithVersion(!data.Keys.Contains("version") || data["version"] == null ? null : (long?)(data["version"].ToString().Contains(".") ? (long)double.Parse(data["version"].ToString()) : long.Parse(data["version"].ToString())));
+                .WithVersion(!data.Keys.Contains("version") || data["version"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["version"].ToString()));
         }
 
         public override JsonData ToJson()

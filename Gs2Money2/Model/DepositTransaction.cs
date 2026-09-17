@@ -64,10 +64,10 @@ namespace Gs2.Gs2Money2.Model
                 return null;
             }
             return new DepositTransaction()
-                .WithPrice(!data.Keys.Contains("price") || data["price"] == null ? null : (double?)double.Parse(data["price"].ToString()))
+                .WithPrice(!data.Keys.Contains("price") || data["price"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableDouble(data["price"].ToString()))
                 .WithCurrency(!data.Keys.Contains("currency") || data["currency"] == null ? null : data["currency"].ToString())
-                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : (int?)(data["count"].ToString().Contains(".") ? (int)double.Parse(data["count"].ToString()) : int.Parse(data["count"].ToString())))
-                .WithDepositedAt(!data.Keys.Contains("depositedAt") || data["depositedAt"] == null ? null : (long?)(data["depositedAt"].ToString().Contains(".") ? (long)double.Parse(data["depositedAt"].ToString()) : long.Parse(data["depositedAt"].ToString())));
+                .WithCount(!data.Keys.Contains("count") || data["count"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["count"].ToString()))
+                .WithDepositedAt(!data.Keys.Contains("depositedAt") || data["depositedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["depositedAt"].ToString()));
         }
 
         public JsonData ToJson()

@@ -145,7 +145,7 @@ namespace Gs2.Gs2Matchmaking.Model
                 .WithSeasonModelId(!data.Keys.Contains("seasonModelId") || data["seasonModelId"] == null ? null : data["seasonModelId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithMaximumParticipants(!data.Keys.Contains("maximumParticipants") || data["maximumParticipants"] == null ? null : (int?)(data["maximumParticipants"].ToString().Contains(".") ? (int)double.Parse(data["maximumParticipants"].ToString()) : int.Parse(data["maximumParticipants"].ToString())))
+                .WithMaximumParticipants(!data.Keys.Contains("maximumParticipants") || data["maximumParticipants"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["maximumParticipants"].ToString()))
                 .WithExperienceModelId(!data.Keys.Contains("experienceModelId") || data["experienceModelId"] == null ? null : data["experienceModelId"].ToString())
                 .WithChallengePeriodEventId(!data.Keys.Contains("challengePeriodEventId") || data["challengePeriodEventId"] == null ? null : data["challengePeriodEventId"].ToString());
         }

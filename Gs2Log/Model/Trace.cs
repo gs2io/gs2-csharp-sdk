@@ -63,7 +63,7 @@ namespace Gs2.Gs2Log.Model
                 .WithSpans(!data.Keys.Contains("spans") || data["spans"] == null || !data["spans"].IsArray ? null : data["spans"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Log.Model.LogEntry.FromJson(v);
                 }).ToArray())
-                .WithTruncated(!data.Keys.Contains("truncated") || data["truncated"] == null ? null : (bool?)bool.Parse(data["truncated"].ToString()));
+                .WithTruncated(!data.Keys.Contains("truncated") || data["truncated"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["truncated"].ToString()));
         }
 
         public JsonData ToJson()

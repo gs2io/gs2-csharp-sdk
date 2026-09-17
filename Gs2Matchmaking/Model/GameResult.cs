@@ -54,7 +54,7 @@ namespace Gs2.Gs2Matchmaking.Model
                 return null;
             }
             return new GameResult()
-                .WithRank(!data.Keys.Contains("rank") || data["rank"] == null ? null : (int?)(data["rank"].ToString().Contains(".") ? (int)double.Parse(data["rank"].ToString()) : int.Parse(data["rank"].ToString())))
+                .WithRank(!data.Keys.Contains("rank") || data["rank"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["rank"].ToString()))
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString());
         }
 

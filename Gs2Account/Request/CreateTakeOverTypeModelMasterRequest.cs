@@ -72,7 +72,7 @@ namespace Gs2.Gs2Account.Request
             }
             return new CreateTakeOverTypeModelMasterRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : (int?)(data["type"].ToString().Contains(".") ? (int)double.Parse(data["type"].ToString()) : int.Parse(data["type"].ToString())))
+                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["type"].ToString()))
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithOpenIdConnectSetting(!data.Keys.Contains("openIdConnectSetting") || data["openIdConnectSetting"] == null ? null : Gs2.Gs2Account.Model.OpenIdConnectSetting.FromJson(data["openIdConnectSetting"]));

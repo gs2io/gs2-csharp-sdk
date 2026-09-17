@@ -59,9 +59,9 @@ namespace Gs2.Gs2Inbox.Model
                 return null;
             }
             return new TimeSpan_()
-                .WithDays(!data.Keys.Contains("days") || data["days"] == null ? null : (int?)(data["days"].ToString().Contains(".") ? (int)double.Parse(data["days"].ToString()) : int.Parse(data["days"].ToString())))
-                .WithHours(!data.Keys.Contains("hours") || data["hours"] == null ? null : (int?)(data["hours"].ToString().Contains(".") ? (int)double.Parse(data["hours"].ToString()) : int.Parse(data["hours"].ToString())))
-                .WithMinutes(!data.Keys.Contains("minutes") || data["minutes"] == null ? null : (int?)(data["minutes"].ToString().Contains(".") ? (int)double.Parse(data["minutes"].ToString()) : int.Parse(data["minutes"].ToString())));
+                .WithDays(!data.Keys.Contains("days") || data["days"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["days"].ToString()))
+                .WithHours(!data.Keys.Contains("hours") || data["hours"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["hours"].ToString()))
+                .WithMinutes(!data.Keys.Contains("minutes") || data["minutes"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["minutes"].ToString()));
         }
 
         public JsonData ToJson()

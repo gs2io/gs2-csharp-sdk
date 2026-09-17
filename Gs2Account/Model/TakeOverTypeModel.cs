@@ -133,7 +133,7 @@ namespace Gs2.Gs2Account.Model
             }
             return new TakeOverTypeModel()
                 .WithTakeOverTypeModelId(!data.Keys.Contains("takeOverTypeModelId") || data["takeOverTypeModelId"] == null ? null : data["takeOverTypeModelId"].ToString())
-                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : (int?)(data["type"].ToString().Contains(".") ? (int)double.Parse(data["type"].ToString()) : int.Parse(data["type"].ToString())))
+                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["type"].ToString()))
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithOpenIdConnectSetting(!data.Keys.Contains("openIdConnectSetting") || data["openIdConnectSetting"] == null ? null : Gs2.Gs2Account.Model.OpenIdConnectSetting.FromJson(data["openIdConnectSetting"]));
         }

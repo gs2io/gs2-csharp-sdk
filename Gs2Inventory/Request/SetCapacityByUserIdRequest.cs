@@ -80,7 +80,7 @@ namespace Gs2.Gs2Inventory.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithInventoryName(!data.Keys.Contains("inventoryName") || data["inventoryName"] == null ? null : data["inventoryName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithNewCapacityValue(!data.Keys.Contains("newCapacityValue") || data["newCapacityValue"] == null ? null : (int?)(data["newCapacityValue"].ToString().Contains(".") ? (int)double.Parse(data["newCapacityValue"].ToString()) : int.Parse(data["newCapacityValue"].ToString())))
+                .WithNewCapacityValue(!data.Keys.Contains("newCapacityValue") || data["newCapacityValue"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["newCapacityValue"].ToString()))
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 

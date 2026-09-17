@@ -55,7 +55,7 @@ namespace Gs2.Gs2Log.Model
             }
             return new TimeseriesValue()
                 .WithKey(!data.Keys.Contains("key") || data["key"] == null ? null : data["key"].ToString())
-                .WithValue(!data.Keys.Contains("value") || data["value"] == null ? null : (double?)double.Parse(data["value"].ToString()));
+                .WithValue(!data.Keys.Contains("value") || data["value"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableDouble(data["value"].ToString()));
         }
 
         public JsonData ToJson()

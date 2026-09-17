@@ -108,8 +108,8 @@ namespace Gs2.Gs2Money2.Request
                 .WithScheduleNamespaceId(!data.Keys.Contains("scheduleNamespaceId") || data["scheduleNamespaceId"] == null ? null : data["scheduleNamespaceId"].ToString())
                 .WithTriggerName(!data.Keys.Contains("triggerName") || data["triggerName"] == null ? null : data["triggerName"].ToString())
                 .WithTriggerExtendMode(!data.Keys.Contains("triggerExtendMode") || data["triggerExtendMode"] == null ? null : data["triggerExtendMode"].ToString())
-                .WithRollupHour(!data.Keys.Contains("rollupHour") || data["rollupHour"] == null ? null : (int?)(data["rollupHour"].ToString().Contains(".") ? (int)double.Parse(data["rollupHour"].ToString()) : int.Parse(data["rollupHour"].ToString())))
-                .WithReallocateSpanDays(!data.Keys.Contains("reallocateSpanDays") || data["reallocateSpanDays"] == null ? null : (int?)(data["reallocateSpanDays"].ToString().Contains(".") ? (int)double.Parse(data["reallocateSpanDays"].ToString()) : int.Parse(data["reallocateSpanDays"].ToString())))
+                .WithRollupHour(!data.Keys.Contains("rollupHour") || data["rollupHour"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["rollupHour"].ToString()))
+                .WithReallocateSpanDays(!data.Keys.Contains("reallocateSpanDays") || data["reallocateSpanDays"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["reallocateSpanDays"].ToString()))
                 .WithAppleAppStore(!data.Keys.Contains("appleAppStore") || data["appleAppStore"] == null ? null : Gs2.Gs2Money2.Model.AppleAppStoreSubscriptionContent.FromJson(data["appleAppStore"]))
                 .WithGooglePlay(!data.Keys.Contains("googlePlay") || data["googlePlay"] == null ? null : Gs2.Gs2Money2.Model.GooglePlaySubscriptionContent.FromJson(data["googlePlay"]));
         }

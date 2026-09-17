@@ -55,7 +55,7 @@ namespace Gs2.Gs2Ranking.Model
             }
             return new CalculatedAt()
                 .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
-                .WithValue(!data.Keys.Contains("calculatedAt") || data["calculatedAt"] == null ? null : (long?)(data["calculatedAt"].ToString().Contains(".") ? (long)double.Parse(data["calculatedAt"].ToString()) : long.Parse(data["calculatedAt"].ToString())));
+                .WithValue(!data.Keys.Contains("calculatedAt") || data["calculatedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["calculatedAt"].ToString()));
         }
 
         public JsonData ToJson()

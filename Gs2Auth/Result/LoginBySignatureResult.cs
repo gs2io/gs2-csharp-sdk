@@ -69,7 +69,7 @@ namespace Gs2.Gs2Auth.Result
             return new LoginBySignatureResult()
                 .WithToken(!data.Keys.Contains("token") || data["token"] == null ? null : data["token"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithExpire(!data.Keys.Contains("expire") || data["expire"] == null ? null : (long?)(data["expire"].ToString().Contains(".") ? (long)double.Parse(data["expire"].ToString()) : long.Parse(data["expire"].ToString())))
+                .WithExpire(!data.Keys.Contains("expire") || data["expire"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["expire"].ToString()))
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 

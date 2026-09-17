@@ -83,7 +83,7 @@ namespace Gs2.Gs2Gateway.Model
                 .WithIssuer(!data.Keys.Contains("issuer") || data["issuer"] == null ? null : data["issuer"].ToString())
                 .WithSubject(!data.Keys.Contains("subject") || data["subject"] == null ? null : data["subject"].ToString())
                 .WithPayload(!data.Keys.Contains("payload") || data["payload"] == null ? null : data["payload"].ToString())
-                .WithEnableTransferMobileNotification(!data.Keys.Contains("enableTransferMobileNotification") || data["enableTransferMobileNotification"] == null ? null : (bool?)bool.Parse(data["enableTransferMobileNotification"].ToString()))
+                .WithEnableTransferMobileNotification(!data.Keys.Contains("enableTransferMobileNotification") || data["enableTransferMobileNotification"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["enableTransferMobileNotification"].ToString()))
                 .WithSound(!data.Keys.Contains("sound") || data["sound"] == null ? null : data["sound"].ToString())
                 .WithMobileNotificationMessages(!data.Keys.Contains("mobileNotificationMessages") || data["mobileNotificationMessages"] == null || !data["mobileNotificationMessages"].IsArray ? null : data["mobileNotificationMessages"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Gateway.Model.MobileNotificationMessage.FromJson(v);

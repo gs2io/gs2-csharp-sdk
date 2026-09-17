@@ -74,7 +74,7 @@ namespace Gs2.Gs2AdReward.Request
             return new AcquirePointByUserIdRequest()
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithPoint(!data.Keys.Contains("point") || data["point"] == null ? null : (long?)(data["point"].ToString().Contains(".") ? (long)double.Parse(data["point"].ToString()) : long.Parse(data["point"].ToString())))
+                .WithPoint(!data.Keys.Contains("point") || data["point"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["point"].ToString()))
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 

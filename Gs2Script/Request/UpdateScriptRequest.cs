@@ -75,7 +75,7 @@ namespace Gs2.Gs2Script.Request
                 .WithScriptName(!data.Keys.Contains("scriptName") || data["scriptName"] == null ? null : data["scriptName"].ToString())
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithScript(!data.Keys.Contains("script") || data["script"] == null ? null : data["script"].ToString())
-                .WithDisableStringNumberToNumber(!data.Keys.Contains("disableStringNumberToNumber") || data["disableStringNumberToNumber"] == null ? null : (bool?)bool.Parse(data["disableStringNumberToNumber"].ToString()));
+                .WithDisableStringNumberToNumber(!data.Keys.Contains("disableStringNumberToNumber") || data["disableStringNumberToNumber"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["disableStringNumberToNumber"].ToString()));
         }
 
         public override JsonData ToJson()

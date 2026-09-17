@@ -149,11 +149,11 @@ namespace Gs2.Gs2News.Model
             return new Progress()
                 .WithProgressId(!data.Keys.Contains("progressId") || data["progressId"] == null ? null : data["progressId"].ToString())
                 .WithUploadToken(!data.Keys.Contains("uploadToken") || data["uploadToken"] == null ? null : data["uploadToken"].ToString())
-                .WithGenerated(!data.Keys.Contains("generated") || data["generated"] == null ? null : (int?)(data["generated"].ToString().Contains(".") ? (int)double.Parse(data["generated"].ToString()) : int.Parse(data["generated"].ToString())))
-                .WithPatternCount(!data.Keys.Contains("patternCount") || data["patternCount"] == null ? null : (int?)(data["patternCount"].ToString().Contains(".") ? (int)double.Parse(data["patternCount"].ToString()) : int.Parse(data["patternCount"].ToString())))
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
+                .WithGenerated(!data.Keys.Contains("generated") || data["generated"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["generated"].ToString()))
+                .WithPatternCount(!data.Keys.Contains("patternCount") || data["patternCount"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["patternCount"].ToString()))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["updatedAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["revision"].ToString()));
         }
 
         public JsonData ToJson()

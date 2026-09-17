@@ -91,12 +91,12 @@ namespace Gs2.Gs2Quest.Model
                 return null;
             }
             return new TransactionSetting()
-                .WithEnableAutoRun(!data.Keys.Contains("enableAutoRun") || data["enableAutoRun"] == null ? null : (bool?)bool.Parse(data["enableAutoRun"].ToString()))
-                .WithEnableAtomicCommit(!data.Keys.Contains("enableAtomicCommit") || data["enableAtomicCommit"] == null ? null : (bool?)bool.Parse(data["enableAtomicCommit"].ToString()))
-                .WithTransactionUseDistributor(!data.Keys.Contains("transactionUseDistributor") || data["transactionUseDistributor"] == null ? null : (bool?)bool.Parse(data["transactionUseDistributor"].ToString()))
-                .WithCommitScriptResultInUseDistributor(!data.Keys.Contains("commitScriptResultInUseDistributor") || data["commitScriptResultInUseDistributor"] == null ? null : (bool?)bool.Parse(data["commitScriptResultInUseDistributor"].ToString()))
-                .WithAcquireActionUseJobQueue(!data.Keys.Contains("acquireActionUseJobQueue") || data["acquireActionUseJobQueue"] == null ? null : (bool?)bool.Parse(data["acquireActionUseJobQueue"].ToString()))
-                .WithEnableSequentialExecution(!data.Keys.Contains("enableSequentialExecution") || data["enableSequentialExecution"] == null ? null : (bool?)bool.Parse(data["enableSequentialExecution"].ToString()))
+                .WithEnableAutoRun(!data.Keys.Contains("enableAutoRun") || data["enableAutoRun"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["enableAutoRun"].ToString()))
+                .WithEnableAtomicCommit(!data.Keys.Contains("enableAtomicCommit") || data["enableAtomicCommit"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["enableAtomicCommit"].ToString()))
+                .WithTransactionUseDistributor(!data.Keys.Contains("transactionUseDistributor") || data["transactionUseDistributor"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["transactionUseDistributor"].ToString()))
+                .WithCommitScriptResultInUseDistributor(!data.Keys.Contains("commitScriptResultInUseDistributor") || data["commitScriptResultInUseDistributor"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["commitScriptResultInUseDistributor"].ToString()))
+                .WithAcquireActionUseJobQueue(!data.Keys.Contains("acquireActionUseJobQueue") || data["acquireActionUseJobQueue"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["acquireActionUseJobQueue"].ToString()))
+                .WithEnableSequentialExecution(!data.Keys.Contains("enableSequentialExecution") || data["enableSequentialExecution"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["enableSequentialExecution"].ToString()))
                 .WithDistributorNamespaceId(!data.Keys.Contains("distributorNamespaceId") || data["distributorNamespaceId"] == null ? null : data["distributorNamespaceId"].ToString())
                 .WithKeyId(!data.Keys.Contains("keyId") || data["keyId"] == null ? null : data["keyId"].ToString())
                 .WithQueueNamespaceId(!data.Keys.Contains("queueNamespaceId") || data["queueNamespaceId"] == null ? null : data["queueNamespaceId"].ToString());

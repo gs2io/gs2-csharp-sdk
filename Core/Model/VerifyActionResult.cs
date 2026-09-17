@@ -63,7 +63,7 @@ namespace Gs2.Core.Model
             return new VerifyActionResult()
                 .WithAction(!data.Keys.Contains("action") || data["action"] == null ? null : data["action"].ToString())
                 .WithVerifyRequest(!data.Keys.Contains("verifyRequest") || data["verifyRequest"] == null ? null : data["verifyRequest"].ToString())
-                .WithStatusCode(!data.Keys.Contains("statusCode") || data["statusCode"] == null ? null : (int?)(data["statusCode"].ToString().Contains(".") ? (int)double.Parse(data["statusCode"].ToString()) : int.Parse(data["statusCode"].ToString())))
+                .WithStatusCode(!data.Keys.Contains("statusCode") || data["statusCode"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["statusCode"].ToString()))
                 .WithVerifyResult(!data.Keys.Contains("verifyResult") || data["verifyResult"] == null ? null : data["verifyResult"].ToString());
         }
 

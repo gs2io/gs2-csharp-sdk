@@ -62,7 +62,7 @@ namespace Gs2.Gs2Money.Result
             }
             return new WithdrawResult()
                 .WithItem(!data.Keys.Contains("item") || data["item"] == null ? null : Gs2.Gs2Money.Model.Wallet.FromJson(data["item"]))
-                .WithPrice(!data.Keys.Contains("price") || data["price"] == null ? null : (float?)float.Parse(data["price"].ToString()))
+                .WithPrice(!data.Keys.Contains("price") || data["price"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableFloat(data["price"].ToString()))
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 

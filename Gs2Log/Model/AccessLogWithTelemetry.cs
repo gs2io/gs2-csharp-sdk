@@ -94,10 +94,10 @@ namespace Gs2.Gs2Log.Model
                 return null;
             }
             return new AccessLogWithTelemetry()
-                .WithTimestamp(!data.Keys.Contains("timestamp") || data["timestamp"] == null ? null : (long?)(data["timestamp"].ToString().Contains(".") ? (long)double.Parse(data["timestamp"].ToString()) : long.Parse(data["timestamp"].ToString())))
+                .WithTimestamp(!data.Keys.Contains("timestamp") || data["timestamp"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["timestamp"].ToString()))
                 .WithSourceRequestId(!data.Keys.Contains("sourceRequestId") || data["sourceRequestId"] == null ? null : data["sourceRequestId"].ToString())
                 .WithRequestId(!data.Keys.Contains("requestId") || data["requestId"] == null ? null : data["requestId"].ToString())
-                .WithDuration(!data.Keys.Contains("duration") || data["duration"] == null ? null : (long?)(data["duration"].ToString().Contains(".") ? (long)double.Parse(data["duration"].ToString()) : long.Parse(data["duration"].ToString())))
+                .WithDuration(!data.Keys.Contains("duration") || data["duration"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["duration"].ToString()))
                 .WithService(!data.Keys.Contains("service") || data["service"] == null ? null : data["service"].ToString())
                 .WithMethod(!data.Keys.Contains("method") || data["method"] == null ? null : data["method"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())

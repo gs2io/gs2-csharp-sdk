@@ -164,7 +164,7 @@ namespace Gs2.Gs2SkillTree.Model
                 .WithReturnAcquireActions(!data.Keys.Contains("returnAcquireActions") || data["returnAcquireActions"] == null || !data["returnAcquireActions"].IsArray ? null : data["returnAcquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
-                .WithRestrainReturnRate(!data.Keys.Contains("restrainReturnRate") || data["restrainReturnRate"] == null ? null : (float?)float.Parse(data["restrainReturnRate"].ToString()))
+                .WithRestrainReturnRate(!data.Keys.Contains("restrainReturnRate") || data["restrainReturnRate"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableFloat(data["restrainReturnRate"].ToString()))
                 .WithPremiseNodeNames(!data.Keys.Contains("premiseNodeNames") || data["premiseNodeNames"] == null || !data["premiseNodeNames"].IsArray ? null : data["premiseNodeNames"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray());

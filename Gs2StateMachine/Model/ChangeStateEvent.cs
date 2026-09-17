@@ -61,7 +61,7 @@ namespace Gs2.Gs2StateMachine.Model
             return new ChangeStateEvent()
                 .WithTaskName(!data.Keys.Contains("taskName") || data["taskName"] == null ? null : data["taskName"].ToString())
                 .WithHash(!data.Keys.Contains("hash") || data["hash"] == null ? null : data["hash"].ToString())
-                .WithTimestamp(!data.Keys.Contains("timestamp") || data["timestamp"] == null ? null : (long?)(data["timestamp"].ToString().Contains(".") ? (long)double.Parse(data["timestamp"].ToString()) : long.Parse(data["timestamp"].ToString())));
+                .WithTimestamp(!data.Keys.Contains("timestamp") || data["timestamp"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["timestamp"].ToString()));
         }
 
         public JsonData ToJson()

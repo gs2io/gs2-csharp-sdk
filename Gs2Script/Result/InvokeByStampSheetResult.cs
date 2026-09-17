@@ -81,11 +81,11 @@ namespace Gs2.Gs2Script.Result
                 return null;
             }
             return new InvokeByStampSheetResult()
-                .WithCode(!data.Keys.Contains("code") || data["code"] == null ? null : (int?)(data["code"].ToString().Contains(".") ? (int)double.Parse(data["code"].ToString()) : int.Parse(data["code"].ToString())))
+                .WithCode(!data.Keys.Contains("code") || data["code"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["code"].ToString()))
                 .WithResult(!data.Keys.Contains("result") || data["result"] == null ? null : data["result"].ToString())
                 .WithRandomStatus(!data.Keys.Contains("randomStatus") || data["randomStatus"] == null ? null : Gs2.Gs2Script.Model.RandomStatus.FromJson(data["randomStatus"]))
-                .WithExecuteTime(!data.Keys.Contains("executeTime") || data["executeTime"] == null ? null : (int?)(data["executeTime"].ToString().Contains(".") ? (int)double.Parse(data["executeTime"].ToString()) : int.Parse(data["executeTime"].ToString())))
-                .WithCharged(!data.Keys.Contains("charged") || data["charged"] == null ? null : (int?)(data["charged"].ToString().Contains(".") ? (int)double.Parse(data["charged"].ToString()) : int.Parse(data["charged"].ToString())))
+                .WithExecuteTime(!data.Keys.Contains("executeTime") || data["executeTime"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["executeTime"].ToString()))
+                .WithCharged(!data.Keys.Contains("charged") || data["charged"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["charged"].ToString()))
                 .WithOutput(!data.Keys.Contains("output") || data["output"] == null || !data["output"].IsArray ? new string[]{} : data["output"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray());

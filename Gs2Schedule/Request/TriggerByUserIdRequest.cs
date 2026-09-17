@@ -91,7 +91,7 @@ namespace Gs2.Gs2Schedule.Request
                 .WithTriggerName(!data.Keys.Contains("triggerName") || data["triggerName"] == null ? null : data["triggerName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithTriggerStrategy(!data.Keys.Contains("triggerStrategy") || data["triggerStrategy"] == null ? null : data["triggerStrategy"].ToString())
-                .WithTtl(!data.Keys.Contains("ttl") || data["ttl"] == null ? null : (int?)(data["ttl"].ToString().Contains(".") ? (int)double.Parse(data["ttl"].ToString()) : int.Parse(data["ttl"].ToString())))
+                .WithTtl(!data.Keys.Contains("ttl") || data["ttl"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["ttl"].ToString()))
                 .WithEventId(!data.Keys.Contains("eventId") || data["eventId"] == null ? null : data["eventId"].ToString())
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }

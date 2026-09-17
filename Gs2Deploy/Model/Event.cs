@@ -152,8 +152,8 @@ namespace Gs2.Gs2Deploy.Model
                 .WithResourceName(!data.Keys.Contains("resourceName") || data["resourceName"] == null ? null : data["resourceName"].ToString())
                 .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : data["type"].ToString())
                 .WithMessage(!data.Keys.Contains("message") || data["message"] == null ? null : data["message"].ToString())
-                .WithEventAt(!data.Keys.Contains("eventAt") || data["eventAt"] == null ? null : (long?)(data["eventAt"].ToString().Contains(".") ? (long)double.Parse(data["eventAt"].ToString()) : long.Parse(data["eventAt"].ToString())))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
+                .WithEventAt(!data.Keys.Contains("eventAt") || data["eventAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["eventAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["revision"].ToString()));
         }
 
         public JsonData ToJson()

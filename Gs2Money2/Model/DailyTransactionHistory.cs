@@ -219,16 +219,16 @@ namespace Gs2.Gs2Money2.Model
             }
             return new DailyTransactionHistory()
                 .WithDailyTransactionHistoryId(!data.Keys.Contains("dailyTransactionHistoryId") || data["dailyTransactionHistoryId"] == null ? null : data["dailyTransactionHistoryId"].ToString())
-                .WithYear(!data.Keys.Contains("year") || data["year"] == null ? null : (int?)(data["year"].ToString().Contains(".") ? (int)double.Parse(data["year"].ToString()) : int.Parse(data["year"].ToString())))
-                .WithMonth(!data.Keys.Contains("month") || data["month"] == null ? null : (int?)(data["month"].ToString().Contains(".") ? (int)double.Parse(data["month"].ToString()) : int.Parse(data["month"].ToString())))
-                .WithDay(!data.Keys.Contains("day") || data["day"] == null ? null : (int?)(data["day"].ToString().Contains(".") ? (int)double.Parse(data["day"].ToString()) : int.Parse(data["day"].ToString())))
+                .WithYear(!data.Keys.Contains("year") || data["year"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["year"].ToString()))
+                .WithMonth(!data.Keys.Contains("month") || data["month"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["month"].ToString()))
+                .WithDay(!data.Keys.Contains("day") || data["day"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["day"].ToString()))
                 .WithCurrency(!data.Keys.Contains("currency") || data["currency"] == null ? null : data["currency"].ToString())
-                .WithDepositAmount(!data.Keys.Contains("depositAmount") || data["depositAmount"] == null ? null : (double?)double.Parse(data["depositAmount"].ToString()))
-                .WithWithdrawAmount(!data.Keys.Contains("withdrawAmount") || data["withdrawAmount"] == null ? null : (double?)double.Parse(data["withdrawAmount"].ToString()))
-                .WithIssueCount(!data.Keys.Contains("issueCount") || data["issueCount"] == null ? null : (long?)(data["issueCount"].ToString().Contains(".") ? (long)double.Parse(data["issueCount"].ToString()) : long.Parse(data["issueCount"].ToString())))
-                .WithConsumeCount(!data.Keys.Contains("consumeCount") || data["consumeCount"] == null ? null : (long?)(data["consumeCount"].ToString().Contains(".") ? (long)double.Parse(data["consumeCount"].ToString()) : long.Parse(data["consumeCount"].ToString())))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
+                .WithDepositAmount(!data.Keys.Contains("depositAmount") || data["depositAmount"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableDouble(data["depositAmount"].ToString()))
+                .WithWithdrawAmount(!data.Keys.Contains("withdrawAmount") || data["withdrawAmount"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableDouble(data["withdrawAmount"].ToString()))
+                .WithIssueCount(!data.Keys.Contains("issueCount") || data["issueCount"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["issueCount"].ToString()))
+                .WithConsumeCount(!data.Keys.Contains("consumeCount") || data["consumeCount"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["consumeCount"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["updatedAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["revision"].ToString()));
         }
 
         public JsonData ToJson()

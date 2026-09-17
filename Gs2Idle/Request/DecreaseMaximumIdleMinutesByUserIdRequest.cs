@@ -80,7 +80,7 @@ namespace Gs2.Gs2Idle.Request
                 .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
-                .WithDecreaseMinutes(!data.Keys.Contains("decreaseMinutes") || data["decreaseMinutes"] == null ? null : (int?)(data["decreaseMinutes"].ToString().Contains(".") ? (int)double.Parse(data["decreaseMinutes"].ToString()) : int.Parse(data["decreaseMinutes"].ToString())))
+                .WithDecreaseMinutes(!data.Keys.Contains("decreaseMinutes") || data["decreaseMinutes"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["decreaseMinutes"].ToString()))
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 

@@ -70,10 +70,10 @@ namespace Gs2.Gs2SeasonRating.Model
             }
             return new TierModel()
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithRaiseRankBonus(!data.Keys.Contains("raiseRankBonus") || data["raiseRankBonus"] == null ? null : (int?)(data["raiseRankBonus"].ToString().Contains(".") ? (int)double.Parse(data["raiseRankBonus"].ToString()) : int.Parse(data["raiseRankBonus"].ToString())))
-                .WithEntryFee(!data.Keys.Contains("entryFee") || data["entryFee"] == null ? null : (int?)(data["entryFee"].ToString().Contains(".") ? (int)double.Parse(data["entryFee"].ToString()) : int.Parse(data["entryFee"].ToString())))
-                .WithMinimumChangePoint(!data.Keys.Contains("minimumChangePoint") || data["minimumChangePoint"] == null ? null : (int?)(data["minimumChangePoint"].ToString().Contains(".") ? (int)double.Parse(data["minimumChangePoint"].ToString()) : int.Parse(data["minimumChangePoint"].ToString())))
-                .WithMaximumChangePoint(!data.Keys.Contains("maximumChangePoint") || data["maximumChangePoint"] == null ? null : (int?)(data["maximumChangePoint"].ToString().Contains(".") ? (int)double.Parse(data["maximumChangePoint"].ToString()) : int.Parse(data["maximumChangePoint"].ToString())));
+                .WithRaiseRankBonus(!data.Keys.Contains("raiseRankBonus") || data["raiseRankBonus"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["raiseRankBonus"].ToString()))
+                .WithEntryFee(!data.Keys.Contains("entryFee") || data["entryFee"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["entryFee"].ToString()))
+                .WithMinimumChangePoint(!data.Keys.Contains("minimumChangePoint") || data["minimumChangePoint"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["minimumChangePoint"].ToString()))
+                .WithMaximumChangePoint(!data.Keys.Contains("maximumChangePoint") || data["maximumChangePoint"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["maximumChangePoint"].ToString()));
         }
 
         public JsonData ToJson()

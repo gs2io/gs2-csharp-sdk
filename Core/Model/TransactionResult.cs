@@ -76,7 +76,7 @@ namespace Gs2.Core.Model
                 .WithAcquireResults(!data.Keys.Contains("acquireResults") || data["acquireResults"] == null || !data["acquireResults"].IsArray ? new Gs2.Core.Model.AcquireActionResult[]{} : data["acquireResults"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireActionResult.FromJson(v);
                 }).ToArray())
-                .WithHasError(!data.Keys.Contains("hasError") || data["hasError"] == null ? null : (bool?)bool.Parse(data["hasError"].ToString()));
+                .WithHasError(!data.Keys.Contains("hasError") || data["hasError"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["hasError"].ToString()));
         }
 
         public JsonData ToJson()

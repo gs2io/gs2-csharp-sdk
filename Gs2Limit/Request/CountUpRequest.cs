@@ -86,8 +86,8 @@ namespace Gs2.Gs2Limit.Request
                 .WithLimitName(!data.Keys.Contains("limitName") || data["limitName"] == null ? null : data["limitName"].ToString())
                 .WithCounterName(!data.Keys.Contains("counterName") || data["counterName"] == null ? null : data["counterName"].ToString())
                 .WithAccessToken(!data.Keys.Contains("accessToken") || data["accessToken"] == null ? null : data["accessToken"].ToString())
-                .WithCountUpValue(!data.Keys.Contains("countUpValue") || data["countUpValue"] == null ? null : (int?)(data["countUpValue"].ToString().Contains(".") ? (int)double.Parse(data["countUpValue"].ToString()) : int.Parse(data["countUpValue"].ToString())))
-                .WithMaxValue(!data.Keys.Contains("maxValue") || data["maxValue"] == null ? null : (int?)(data["maxValue"].ToString().Contains(".") ? (int)double.Parse(data["maxValue"].ToString()) : int.Parse(data["maxValue"].ToString())));
+                .WithCountUpValue(!data.Keys.Contains("countUpValue") || data["countUpValue"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["countUpValue"].ToString()))
+                .WithMaxValue(!data.Keys.Contains("maxValue") || data["maxValue"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["maxValue"].ToString()));
         }
 
         public override JsonData ToJson()

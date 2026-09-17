@@ -179,10 +179,10 @@ namespace Gs2.Gs2JobQueue.Model
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithScriptId(!data.Keys.Contains("scriptId") || data["scriptId"] == null ? null : data["scriptId"].ToString())
                 .WithArgs(!data.Keys.Contains("args") || data["args"] == null ? null : data["args"].ToString())
-                .WithCurrentRetryCount(!data.Keys.Contains("currentRetryCount") || data["currentRetryCount"] == null ? null : (int?)(data["currentRetryCount"].ToString().Contains(".") ? (int)double.Parse(data["currentRetryCount"].ToString()) : int.Parse(data["currentRetryCount"].ToString())))
-                .WithMaxTryCount(!data.Keys.Contains("maxTryCount") || data["maxTryCount"] == null ? null : (int?)(data["maxTryCount"].ToString().Contains(".") ? (int)double.Parse(data["maxTryCount"].ToString()) : int.Parse(data["maxTryCount"].ToString())))
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())));
+                .WithCurrentRetryCount(!data.Keys.Contains("currentRetryCount") || data["currentRetryCount"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["currentRetryCount"].ToString()))
+                .WithMaxTryCount(!data.Keys.Contains("maxTryCount") || data["maxTryCount"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["maxTryCount"].ToString()))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["updatedAt"].ToString()));
         }
 
         public JsonData ToJson()

@@ -92,8 +92,8 @@ namespace Gs2.Gs2Experience.Request
                 .WithExperienceName(!data.Keys.Contains("experienceName") || data["experienceName"] == null ? null : data["experienceName"].ToString())
                 .WithVerifyType(!data.Keys.Contains("verifyType") || data["verifyType"] == null ? null : data["verifyType"].ToString())
                 .WithPropertyId(!data.Keys.Contains("propertyId") || data["propertyId"] == null ? null : data["propertyId"].ToString())
-                .WithRankValue(!data.Keys.Contains("rankValue") || data["rankValue"] == null ? null : (long?)(data["rankValue"].ToString().Contains(".") ? (long)double.Parse(data["rankValue"].ToString()) : long.Parse(data["rankValue"].ToString())))
-                .WithMultiplyValueSpecifyingQuantity(!data.Keys.Contains("multiplyValueSpecifyingQuantity") || data["multiplyValueSpecifyingQuantity"] == null ? null : (bool?)bool.Parse(data["multiplyValueSpecifyingQuantity"].ToString()));
+                .WithRankValue(!data.Keys.Contains("rankValue") || data["rankValue"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["rankValue"].ToString()))
+                .WithMultiplyValueSpecifyingQuantity(!data.Keys.Contains("multiplyValueSpecifyingQuantity") || data["multiplyValueSpecifyingQuantity"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["multiplyValueSpecifyingQuantity"].ToString()));
         }
 
         public override JsonData ToJson()

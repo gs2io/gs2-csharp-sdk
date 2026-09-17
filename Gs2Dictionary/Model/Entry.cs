@@ -152,7 +152,7 @@ namespace Gs2.Gs2Dictionary.Model
                 .WithEntryId(!data.Keys.Contains("entryId") || data["entryId"] == null ? null : data["entryId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
-                .WithAcquiredAt(!data.Keys.Contains("acquiredAt") || data["acquiredAt"] == null ? null : (long?)(data["acquiredAt"].ToString().Contains(".") ? (long)double.Parse(data["acquiredAt"].ToString()) : long.Parse(data["acquiredAt"].ToString())));
+                .WithAcquiredAt(!data.Keys.Contains("acquiredAt") || data["acquiredAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["acquiredAt"].ToString()));
         }
 
         public JsonData ToJson()

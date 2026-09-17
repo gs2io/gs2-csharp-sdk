@@ -149,10 +149,10 @@ namespace Gs2.Gs2Guild.Request
                 .WithJoinPolicies(!data.Keys.Contains("joinPolicies") || data["joinPolicies"] == null || !data["joinPolicies"].IsArray ? null : data["joinPolicies"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
-                .WithIncludeFullMembersGuild(!data.Keys.Contains("includeFullMembersGuild") || data["includeFullMembersGuild"] == null ? null : (bool?)bool.Parse(data["includeFullMembersGuild"].ToString()))
+                .WithIncludeFullMembersGuild(!data.Keys.Contains("includeFullMembersGuild") || data["includeFullMembersGuild"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["includeFullMembersGuild"].ToString()))
                 .WithOrderBy(!data.Keys.Contains("orderBy") || data["orderBy"] == null ? null : data["orderBy"].ToString())
                 .WithPageToken(!data.Keys.Contains("pageToken") || data["pageToken"] == null ? null : data["pageToken"].ToString())
-                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : (int?)(data["limit"].ToString().Contains(".") ? (int)double.Parse(data["limit"].ToString()) : int.Parse(data["limit"].ToString())))
+                .WithLimit(!data.Keys.Contains("limit") || data["limit"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["limit"].ToString()))
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 

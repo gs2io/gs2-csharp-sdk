@@ -69,7 +69,7 @@ namespace Gs2.Gs2Buff.Model
                 .WithConditionGrns(!data.Keys.Contains("conditionGrns") || data["conditionGrns"] == null || !data["conditionGrns"].IsArray ? null : data["conditionGrns"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Buff.Model.BuffTargetGrn.FromJson(v);
                 }).ToArray())
-                .WithRate(!data.Keys.Contains("rate") || data["rate"] == null ? null : (float?)float.Parse(data["rate"].ToString()));
+                .WithRate(!data.Keys.Contains("rate") || data["rate"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableFloat(data["rate"].ToString()));
         }
 
         public JsonData ToJson()

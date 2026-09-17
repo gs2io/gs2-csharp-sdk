@@ -96,8 +96,8 @@ namespace Gs2.Gs2Showcase.Model
                 .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null || !data["acquireActions"].IsArray ? null : data["acquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
-                .WithCurrentPurchaseCount(!data.Keys.Contains("currentPurchaseCount") || data["currentPurchaseCount"] == null ? null : (int?)(data["currentPurchaseCount"].ToString().Contains(".") ? (int)double.Parse(data["currentPurchaseCount"].ToString()) : int.Parse(data["currentPurchaseCount"].ToString())))
-                .WithMaximumPurchaseCount(!data.Keys.Contains("maximumPurchaseCount") || data["maximumPurchaseCount"] == null ? null : (int?)(data["maximumPurchaseCount"].ToString().Contains(".") ? (int)double.Parse(data["maximumPurchaseCount"].ToString()) : int.Parse(data["maximumPurchaseCount"].ToString())));
+                .WithCurrentPurchaseCount(!data.Keys.Contains("currentPurchaseCount") || data["currentPurchaseCount"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["currentPurchaseCount"].ToString()))
+                .WithMaximumPurchaseCount(!data.Keys.Contains("maximumPurchaseCount") || data["maximumPurchaseCount"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["maximumPurchaseCount"].ToString()));
         }
 
         public JsonData ToJson()

@@ -77,8 +77,8 @@ namespace Gs2.Gs2Log.Result
                     return Gs2.Gs2Log.Model.InGameLog.FromJson(v);
                 }).ToArray())
                 .WithNextPageToken(!data.Keys.Contains("nextPageToken") || data["nextPageToken"] == null ? null : data["nextPageToken"].ToString())
-                .WithTotalCount(!data.Keys.Contains("totalCount") || data["totalCount"] == null ? null : (long?)(data["totalCount"].ToString().Contains(".") ? (long)double.Parse(data["totalCount"].ToString()) : long.Parse(data["totalCount"].ToString())))
-                .WithScanSize(!data.Keys.Contains("scanSize") || data["scanSize"] == null ? null : (long?)(data["scanSize"].ToString().Contains(".") ? (long)double.Parse(data["scanSize"].ToString()) : long.Parse(data["scanSize"].ToString())))
+                .WithTotalCount(!data.Keys.Contains("totalCount") || data["totalCount"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["totalCount"].ToString()))
+                .WithScanSize(!data.Keys.Contains("scanSize") || data["scanSize"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["scanSize"].ToString()))
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : ResultMetadata.FromJson(data["metadata"]));
         }
 

@@ -197,16 +197,16 @@ namespace Gs2.Gs2Stamina.Model
                 .WithStaminaId(!data.Keys.Contains("staminaId") || data["staminaId"] == null ? null : data["staminaId"].ToString())
                 .WithStaminaName(!data.Keys.Contains("staminaName") || data["staminaName"] == null ? null : data["staminaName"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithValue(!data.Keys.Contains("value") || data["value"] == null ? null : (int?)(data["value"].ToString().Contains(".") ? (int)double.Parse(data["value"].ToString()) : int.Parse(data["value"].ToString())))
-                .WithMaxValue(!data.Keys.Contains("maxValue") || data["maxValue"] == null ? null : (int?)(data["maxValue"].ToString().Contains(".") ? (int)double.Parse(data["maxValue"].ToString()) : int.Parse(data["maxValue"].ToString())))
-                .WithRecoverIntervalMinutes(!data.Keys.Contains("recoverIntervalMinutes") || data["recoverIntervalMinutes"] == null ? null : (int?)(data["recoverIntervalMinutes"].ToString().Contains(".") ? (int)double.Parse(data["recoverIntervalMinutes"].ToString()) : int.Parse(data["recoverIntervalMinutes"].ToString())))
-                .WithRecoverValue(!data.Keys.Contains("recoverValue") || data["recoverValue"] == null ? null : (int?)(data["recoverValue"].ToString().Contains(".") ? (int)double.Parse(data["recoverValue"].ToString()) : int.Parse(data["recoverValue"].ToString())))
-                .WithOverflowValue(!data.Keys.Contains("overflowValue") || data["overflowValue"] == null ? null : (int?)(data["overflowValue"].ToString().Contains(".") ? (int)double.Parse(data["overflowValue"].ToString()) : int.Parse(data["overflowValue"].ToString())))
-                .WithNextRecoverAt(!data.Keys.Contains("nextRecoverAt") || data["nextRecoverAt"] == null ? null : (long?)(data["nextRecoverAt"].ToString().Contains(".") ? (long)double.Parse(data["nextRecoverAt"].ToString()) : long.Parse(data["nextRecoverAt"].ToString())))
-                .WithLastRecoveredAt(!data.Keys.Contains("lastRecoveredAt") || data["lastRecoveredAt"] == null ? null : (long?)(data["lastRecoveredAt"].ToString().Contains(".") ? (long)double.Parse(data["lastRecoveredAt"].ToString()) : long.Parse(data["lastRecoveredAt"].ToString())))
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : (long?)(data["createdAt"].ToString().Contains(".") ? (long)double.Parse(data["createdAt"].ToString()) : long.Parse(data["createdAt"].ToString())))
-                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : (long?)(data["updatedAt"].ToString().Contains(".") ? (long)double.Parse(data["updatedAt"].ToString()) : long.Parse(data["updatedAt"].ToString())))
-                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : (long?)(data["revision"].ToString().Contains(".") ? (long)double.Parse(data["revision"].ToString()) : long.Parse(data["revision"].ToString())));
+                .WithValue(!data.Keys.Contains("value") || data["value"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["value"].ToString()))
+                .WithMaxValue(!data.Keys.Contains("maxValue") || data["maxValue"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["maxValue"].ToString()))
+                .WithRecoverIntervalMinutes(!data.Keys.Contains("recoverIntervalMinutes") || data["recoverIntervalMinutes"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["recoverIntervalMinutes"].ToString()))
+                .WithRecoverValue(!data.Keys.Contains("recoverValue") || data["recoverValue"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["recoverValue"].ToString()))
+                .WithOverflowValue(!data.Keys.Contains("overflowValue") || data["overflowValue"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["overflowValue"].ToString()))
+                .WithNextRecoverAt(!data.Keys.Contains("nextRecoverAt") || data["nextRecoverAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["nextRecoverAt"].ToString()))
+                .WithLastRecoveredAt(!data.Keys.Contains("lastRecoveredAt") || data["lastRecoveredAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["lastRecoveredAt"].ToString()))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()))
+                .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["updatedAt"].ToString()))
+                .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["revision"].ToString()));
         }
 
         public JsonData ToJson()

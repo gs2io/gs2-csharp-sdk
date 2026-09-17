@@ -60,7 +60,7 @@ namespace Gs2.Gs2Distributor.Model
             }
             return new BatchResultPayload()
                 .WithRequestId(!data.Keys.Contains("requestId") || data["requestId"] == null ? null : data["requestId"].ToString())
-                .WithStatusCode(!data.Keys.Contains("statusCode") || data["statusCode"] == null ? null : (int?)(data["statusCode"].ToString().Contains(".") ? (int)double.Parse(data["statusCode"].ToString()) : int.Parse(data["statusCode"].ToString())))
+                .WithStatusCode(!data.Keys.Contains("statusCode") || data["statusCode"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["statusCode"].ToString()))
                 .WithResultPayload(!data.Keys.Contains("resultPayload") || data["resultPayload"] == null ? null : data["resultPayload"].ToString());
         }
 
