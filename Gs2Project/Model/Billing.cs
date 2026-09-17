@@ -176,6 +176,13 @@ namespace Gs2.Gs2Project.Model
             if (data == null) {
                 return null;
             }
+            if (data.IsString) {
+                // The model arrived as the JSON text of itself rather than as
+                // an object. A stamp sheet carries values the client supplied
+                // as strings — a store receipt is one — so reading such a
+                // request back finds the text where the object is expected.
+                data = JsonMapper.ToObject(data.ToString());
+            }
             return new Billing()
                 .WithBillingId(!data.Keys.Contains("billingId") || data["billingId"] == null ? null : data["billingId"].ToString())
                 .WithProjectName(!data.Keys.Contains("projectName") || data["projectName"] == null ? null : data["projectName"].ToString())

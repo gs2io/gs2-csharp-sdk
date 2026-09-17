@@ -168,6 +168,13 @@ namespace Gs2.Gs2Ranking2.Model
             if (data == null) {
                 return null;
             }
+            if (data.IsString) {
+                // The model arrived as the JSON text of itself rather than as
+                // an object. A stamp sheet carries values the client supplied
+                // as strings — a store receipt is one — so reading such a
+                // request back finds the text where the object is expected.
+                data = JsonMapper.ToObject(data.ToString());
+            }
             return new Subscribe()
                 .WithSubscribeId(!data.Keys.Contains("subscribeId") || data["subscribeId"] == null ? null : data["subscribeId"].ToString())
                 .WithRankingName(!data.Keys.Contains("rankingName") || data["rankingName"] == null ? null : data["rankingName"].ToString())

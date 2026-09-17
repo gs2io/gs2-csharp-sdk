@@ -48,6 +48,13 @@ namespace Gs2.Gs2AdReward.Model
             if (data == null) {
                 return null;
             }
+            if (data.IsString) {
+                // The model arrived as the JSON text of itself rather than as
+                // an object. A stamp sheet carries values the client supplied
+                // as strings — a store receipt is one — so reading such a
+                // request back finds the text where the object is expected.
+                data = JsonMapper.ToObject(data.ToString());
+            }
             return new AdMob()
                 .WithAllowAdUnitIds(!data.Keys.Contains("allowAdUnitIds") || data["allowAdUnitIds"] == null || !data["allowAdUnitIds"].IsArray ? null : data["allowAdUnitIds"].Cast<JsonData>().Select(v => {
                     return v.ToString();

@@ -58,6 +58,13 @@ namespace Gs2.Gs2Matchmaking.Model
             if (data == null) {
                 return null;
             }
+            if (data.IsString) {
+                // The model arrived as the JSON text of itself rather than as
+                // an object. A stamp sheet carries values the client supplied
+                // as strings — a store receipt is one — so reading such a
+                // request back finds the text where the object is expected.
+                data = JsonMapper.ToObject(data.ToString());
+            }
             return new TimeSpan_()
                 .WithDays(!data.Keys.Contains("days") || data["days"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["days"].ToString()))
                 .WithHours(!data.Keys.Contains("hours") || data["hours"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["hours"].ToString()))

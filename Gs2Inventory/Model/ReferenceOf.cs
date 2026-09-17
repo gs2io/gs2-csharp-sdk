@@ -189,6 +189,13 @@ namespace Gs2.Gs2Inventory.Model
             if (data == null) {
                 return null;
             }
+            if (data.IsString) {
+                // The model arrived as the JSON text of itself rather than as
+                // an object. A stamp sheet carries values the client supplied
+                // as strings — a store receipt is one — so reading such a
+                // request back finds the text where the object is expected.
+                data = JsonMapper.ToObject(data.ToString());
+            }
             return new ReferenceOf()
                 .WithReferenceOfId(!data.Keys.Contains("referenceOfId") || data["referenceOfId"] == null ? null : data["referenceOfId"].ToString())
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString());

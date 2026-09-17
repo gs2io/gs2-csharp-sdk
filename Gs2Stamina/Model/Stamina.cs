@@ -193,6 +193,13 @@ namespace Gs2.Gs2Stamina.Model
             if (data == null) {
                 return null;
             }
+            if (data.IsString) {
+                // The model arrived as the JSON text of itself rather than as
+                // an object. A stamp sheet carries values the client supplied
+                // as strings — a store receipt is one — so reading such a
+                // request back finds the text where the object is expected.
+                data = JsonMapper.ToObject(data.ToString());
+            }
             return new Stamina()
                 .WithStaminaId(!data.Keys.Contains("staminaId") || data["staminaId"] == null ? null : data["staminaId"].ToString())
                 .WithStaminaName(!data.Keys.Contains("staminaName") || data["staminaName"] == null ? null : data["staminaName"].ToString())

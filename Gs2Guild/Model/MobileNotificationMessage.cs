@@ -58,6 +58,13 @@ namespace Gs2.Gs2Guild.Model
             if (data == null) {
                 return null;
             }
+            if (data.IsString) {
+                // The model arrived as the JSON text of itself rather than as
+                // an object. A stamp sheet carries values the client supplied
+                // as strings — a store receipt is one — so reading such a
+                // request back finds the text where the object is expected.
+                data = JsonMapper.ToObject(data.ToString());
+            }
             return new MobileNotificationMessage()
                 .WithLocale(!data.Keys.Contains("locale") || data["locale"] == null ? null : data["locale"].ToString())
                 .WithTitle(!data.Keys.Contains("title") || data["title"] == null ? null : data["title"].ToString())

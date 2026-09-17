@@ -53,6 +53,13 @@ namespace Gs2.Gs2Ranking.Model
             if (data == null) {
                 return null;
             }
+            if (data.IsString) {
+                // The model arrived as the JSON text of itself rather than as
+                // an object. A stamp sheet carries values the client supplied
+                // as strings — a store receipt is one — so reading such a
+                // request back finds the text where the object is expected.
+                data = JsonMapper.ToObject(data.ToString());
+            }
             return new CalculatedAt()
                 .WithCategoryName(!data.Keys.Contains("categoryName") || data["categoryName"] == null ? null : data["categoryName"].ToString())
                 .WithValue(!data.Keys.Contains("calculatedAt") || data["calculatedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["calculatedAt"].ToString()));

@@ -63,6 +63,13 @@ namespace Gs2.Gs2Quest.Model
             if (data == null) {
                 return null;
             }
+            if (data.IsString) {
+                // The model arrived as the JSON text of itself rather than as
+                // an object. A stamp sheet carries values the client supplied
+                // as strings — a store receipt is one — so reading such a
+                // request back finds the text where the object is expected.
+                data = JsonMapper.ToObject(data.ToString());
+            }
             return new Reward()
                 .WithAction(!data.Keys.Contains("action") || data["action"] == null ? null : data["action"].ToString())
                 .WithRequest(!data.Keys.Contains("request") || data["request"] == null ? null : data["request"].ToString())

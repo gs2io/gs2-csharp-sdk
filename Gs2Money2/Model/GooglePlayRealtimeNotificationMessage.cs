@@ -58,6 +58,13 @@ namespace Gs2.Gs2Money2.Model
             if (data == null) {
                 return null;
             }
+            if (data.IsString) {
+                // The model arrived as the JSON text of itself rather than as
+                // an object. A stamp sheet carries values the client supplied
+                // as strings — a store receipt is one — so reading such a
+                // request back finds the text where the object is expected.
+                data = JsonMapper.ToObject(data.ToString());
+            }
             return new GooglePlayRealtimeNotificationMessage()
                 .WithData(!data.Keys.Contains("data") || data["data"] == null ? null : data["data"].ToString())
                 .WithMessageId(!data.Keys.Contains("messageId") || data["messageId"] == null ? null : data["messageId"].ToString())

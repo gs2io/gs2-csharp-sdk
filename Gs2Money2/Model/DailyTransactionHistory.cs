@@ -217,6 +217,13 @@ namespace Gs2.Gs2Money2.Model
             if (data == null) {
                 return null;
             }
+            if (data.IsString) {
+                // The model arrived as the JSON text of itself rather than as
+                // an object. A stamp sheet carries values the client supplied
+                // as strings — a store receipt is one — so reading such a
+                // request back finds the text where the object is expected.
+                data = JsonMapper.ToObject(data.ToString());
+            }
             return new DailyTransactionHistory()
                 .WithDailyTransactionHistoryId(!data.Keys.Contains("dailyTransactionHistoryId") || data["dailyTransactionHistoryId"] == null ? null : data["dailyTransactionHistoryId"].ToString())
                 .WithYear(!data.Keys.Contains("year") || data["year"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["year"].ToString()))

@@ -166,6 +166,13 @@ namespace Gs2.Gs2Deploy.Model
             if (data == null) {
                 return null;
             }
+            if (data.IsString) {
+                // The model arrived as the JSON text of itself rather than as
+                // an object. A stamp sheet carries values the client supplied
+                // as strings — a store receipt is one — so reading such a
+                // request back finds the text where the object is expected.
+                data = JsonMapper.ToObject(data.ToString());
+            }
             return new Resource()
                 .WithResourceId(!data.Keys.Contains("resourceId") || data["resourceId"] == null ? null : data["resourceId"].ToString())
                 .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : data["type"].ToString())

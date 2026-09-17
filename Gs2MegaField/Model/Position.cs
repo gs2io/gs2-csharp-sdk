@@ -58,6 +58,13 @@ namespace Gs2.Gs2MegaField.Model
             if (data == null) {
                 return null;
             }
+            if (data.IsString) {
+                // The model arrived as the JSON text of itself rather than as
+                // an object. A stamp sheet carries values the client supplied
+                // as strings — a store receipt is one — so reading such a
+                // request back finds the text where the object is expected.
+                data = JsonMapper.ToObject(data.ToString());
+            }
             return new Position()
                 .WithX(!data.Keys.Contains("x") || data["x"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableFloat(data["x"].ToString()))
                 .WithY(!data.Keys.Contains("y") || data["y"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableFloat(data["y"].ToString()))

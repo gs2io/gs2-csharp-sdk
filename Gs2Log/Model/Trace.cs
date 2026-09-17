@@ -58,6 +58,13 @@ namespace Gs2.Gs2Log.Model
             if (data == null) {
                 return null;
             }
+            if (data.IsString) {
+                // The model arrived as the JSON text of itself rather than as
+                // an object. A stamp sheet carries values the client supplied
+                // as strings — a store receipt is one — so reading such a
+                // request back finds the text where the object is expected.
+                data = JsonMapper.ToObject(data.ToString());
+            }
             return new Trace()
                 .WithTraceId(!data.Keys.Contains("traceId") || data["traceId"] == null ? null : data["traceId"].ToString())
                 .WithSpans(!data.Keys.Contains("spans") || data["spans"] == null || !data["spans"].IsArray ? null : data["spans"].Cast<JsonData>().Select(v => {

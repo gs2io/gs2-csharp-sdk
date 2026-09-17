@@ -113,6 +113,13 @@ namespace Gs2.Gs2Guard.Model
             if (data == null) {
                 return null;
             }
+            if (data.IsString) {
+                // The model arrived as the JSON text of itself rather than as
+                // an object. A stamp sheet carries values the client supplied
+                // as strings — a store receipt is one — so reading such a
+                // request back finds the text where the object is expected.
+                data = JsonMapper.ToObject(data.ToString());
+            }
             return new BlockingPolicyModel()
                 .WithPassServices(!data.Keys.Contains("passServices") || data["passServices"] == null || !data["passServices"].IsArray ? null : data["passServices"].Cast<JsonData>().Select(v => {
                     return v.ToString();

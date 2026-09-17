@@ -78,6 +78,13 @@ namespace Gs2.Gs2Script.Model
             if (data == null) {
                 return null;
             }
+            if (data.IsString) {
+                // The model arrived as the JSON text of itself rather than as
+                // an object. A stamp sheet carries values the client supplied
+                // as strings — a store receipt is one — so reading such a
+                // request back finds the text where the object is expected.
+                data = JsonMapper.ToObject(data.ToString());
+            }
             return new GitHubCheckoutSetting()
                 .WithApiKeyId(!data.Keys.Contains("apiKeyId") || data["apiKeyId"] == null ? null : data["apiKeyId"].ToString())
                 .WithRepositoryName(!data.Keys.Contains("repositoryName") || data["repositoryName"] == null ? null : data["repositoryName"].ToString())

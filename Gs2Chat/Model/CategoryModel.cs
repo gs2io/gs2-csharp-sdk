@@ -126,6 +126,13 @@ namespace Gs2.Gs2Chat.Model
             if (data == null) {
                 return null;
             }
+            if (data.IsString) {
+                // The model arrived as the JSON text of itself rather than as
+                // an object. A stamp sheet carries values the client supplied
+                // as strings — a store receipt is one — so reading such a
+                // request back finds the text where the object is expected.
+                data = JsonMapper.ToObject(data.ToString());
+            }
             return new CategoryModel()
                 .WithCategoryModelId(!data.Keys.Contains("categoryModelId") || data["categoryModelId"] == null ? null : data["categoryModelId"].ToString())
                 .WithCategory(!data.Keys.Contains("category") || data["category"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["category"].ToString()))

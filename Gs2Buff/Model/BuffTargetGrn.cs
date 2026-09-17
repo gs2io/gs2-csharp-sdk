@@ -53,6 +53,13 @@ namespace Gs2.Gs2Buff.Model
             if (data == null) {
                 return null;
             }
+            if (data.IsString) {
+                // The model arrived as the JSON text of itself rather than as
+                // an object. A stamp sheet carries values the client supplied
+                // as strings — a store receipt is one — so reading such a
+                // request back finds the text where the object is expected.
+                data = JsonMapper.ToObject(data.ToString());
+            }
             return new BuffTargetGrn()
                 .WithTargetModelName(!data.Keys.Contains("targetModelName") || data["targetModelName"] == null ? null : data["targetModelName"].ToString())
                 .WithTargetGrn(!data.Keys.Contains("targetGrn") || data["targetGrn"] == null ? null : data["targetGrn"].ToString());

@@ -68,6 +68,13 @@ namespace Gs2.Gs2Formation.Model
             if (data == null) {
                 return null;
             }
+            if (data.IsString) {
+                // The model arrived as the JSON text of itself rather than as
+                // an object. A stamp sheet carries values the client supplied
+                // as strings — a store receipt is one — so reading such a
+                // request back finds the text where the object is expected.
+                data = JsonMapper.ToObject(data.ToString());
+            }
             return new SlotWithSignature()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithPropertyType(!data.Keys.Contains("propertyType") || data["propertyType"] == null ? null : data["propertyType"].ToString())

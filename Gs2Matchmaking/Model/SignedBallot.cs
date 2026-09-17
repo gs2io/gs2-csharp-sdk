@@ -53,6 +53,13 @@ namespace Gs2.Gs2Matchmaking.Model
             if (data == null) {
                 return null;
             }
+            if (data.IsString) {
+                // The model arrived as the JSON text of itself rather than as
+                // an object. A stamp sheet carries values the client supplied
+                // as strings — a store receipt is one — so reading such a
+                // request back finds the text where the object is expected.
+                data = JsonMapper.ToObject(data.ToString());
+            }
             return new SignedBallot()
                 .WithBody(!data.Keys.Contains("body") || data["body"] == null ? null : data["body"].ToString())
                 .WithSignature(!data.Keys.Contains("signature") || data["signature"] == null ? null : data["signature"].ToString());

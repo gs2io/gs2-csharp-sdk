@@ -53,6 +53,13 @@ namespace Gs2.Gs2Buff.Model
             if (data == null) {
                 return null;
             }
+            if (data.IsString) {
+                // The model arrived as the JSON text of itself rather than as
+                // an object. A stamp sheet carries values the client supplied
+                // as strings — a store receipt is one — so reading such a
+                // request back finds the text where the object is expected.
+                data = JsonMapper.ToObject(data.ToString());
+            }
             return new OverrideBuffRate()
                 .WithName(!data.Keys.Contains("name") || data["name"] == null ? null : data["name"].ToString())
                 .WithRate(!data.Keys.Contains("rate") || data["rate"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableFloat(data["rate"].ToString()));

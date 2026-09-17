@@ -63,6 +63,13 @@ namespace Gs2.Gs2JobQueue.Model
             if (data == null) {
                 return null;
             }
+            if (data.IsString) {
+                // The model arrived as the JSON text of itself rather than as
+                // an object. A stamp sheet carries values the client supplied
+                // as strings — a store receipt is one — so reading such a
+                // request back finds the text where the object is expected.
+                data = JsonMapper.ToObject(data.ToString());
+            }
             return new JobResultBody()
                 .WithTryNumber(!data.Keys.Contains("tryNumber") || data["tryNumber"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["tryNumber"].ToString()))
                 .WithStatusCode(!data.Keys.Contains("statusCode") || data["statusCode"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["statusCode"].ToString()))
