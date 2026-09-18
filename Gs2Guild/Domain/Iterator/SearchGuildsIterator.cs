@@ -83,9 +83,7 @@ namespace Gs2.Gs2Guild.Domain.Iterator
         public int[] Attributes5 { get; }
         public string[] JoinPolicies { get; }
         public bool? IncludeFullMembersGuild { get; }
-/* diff --- start
         public string OrderBy { get; }
- diff --- end */
         private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
@@ -106,11 +104,8 @@ namespace Gs2.Gs2Guild.Domain.Iterator
             int[] attributes4 = null,
             int[] attributes5 = null,
             string[] joinPolicies = null,
-/* diff --- start
             bool? includeFullMembersGuild = null,
             string orderBy = null
- diff --- end */
-            bool? includeFullMembersGuild = null /* diff +++ */
         ) {
             this._gs2 = gs2;
             this._client = client;
@@ -125,9 +120,7 @@ namespace Gs2.Gs2Guild.Domain.Iterator
             this.Attributes5 = attributes5;
             this.JoinPolicies = joinPolicies;
             this.IncludeFullMembersGuild = includeFullMembersGuild;
-/* diff --- start
             this.OrderBy = orderBy;
- diff --- end */
             this._pageToken = null;
             this._last = false;
             this._result = new Gs2.Gs2Guild.Model.Guild[]{};
@@ -173,9 +166,6 @@ namespace Gs2.Gs2Guild.Domain.Iterator
                     .WithNamespaceName(this.NamespaceName)
                     .WithGuildModelName(this.GuildModelName)
                     .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
-/* diff --- start
-                    .WithOrderBy(this.OrderBy)
- diff --- end */
 /* diff +++ start */
                     .WithDisplayName(this.DisplayName)
                     .WithAttributes1(this.Attributes1)
@@ -186,6 +176,7 @@ namespace Gs2.Gs2Guild.Domain.Iterator
                     .WithJoinPolicies(this.JoinPolicies)
                     .WithIncludeFullMembersGuild(this.IncludeFullMembersGuild)
 /* diff +++ end */
+                    .WithOrderBy(this.OrderBy)
                     .WithPageToken(this._pageToken)
                     .WithLimit(fetchSize);
                 var r = await this._client.SearchGuildsAsync(

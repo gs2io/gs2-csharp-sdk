@@ -353,7 +353,8 @@ namespace Gs2.Gs2Guild.Domain.Model
             int[] attributes4 = null,
             int[] attributes5 = null,
             string[] joinPolicies = null,
-            bool? includeFullMembersGuild = null
+            bool? includeFullMembersGuild = null,
+            string orderBy = null
         )
         {
             return new SearchGuildsIterator(
@@ -369,7 +370,8 @@ namespace Gs2.Gs2Guild.Domain.Model
                 attributes4,
                 attributes5,
                 joinPolicies,
-                includeFullMembersGuild
+                includeFullMembersGuild,
+                orderBy
             );
         }
         #endif
@@ -387,7 +389,8 @@ namespace Gs2.Gs2Guild.Domain.Model
             int[] attributes4 = null,
             int[] attributes5 = null,
             string[] joinPolicies = null,
-            bool? includeFullMembersGuild = null
+            bool? includeFullMembersGuild = null,
+            string orderBy = null
         )
         {
             return new SearchGuildsIterator(
@@ -403,9 +406,155 @@ namespace Gs2.Gs2Guild.Domain.Model
                 attributes4,
                 attributes5,
                 joinPolicies,
-                includeFullMembersGuild
+                includeFullMembersGuild,
+                orderBy
             );
         }
+
+        public ulong SubscribeSearchGuilds(
+            Action<Gs2.Gs2Guild.Model.Guild[]> callback,
+            string guildModelName,
+            string displayName = null,
+            int[] attributes1 = null,
+            int[] attributes2 = null,
+            int[] attributes3 = null,
+            int[] attributes4 = null,
+            int[] attributes5 = null,
+            string[] joinPolicies = null,
+            bool? includeFullMembersGuild = null,
+            string orderBy = null
+        )
+        {
+            return this._gs2.Cache.ListSubscribe<Gs2.Gs2Guild.Model.Guild>(
+                (null as Gs2.Gs2Guild.Model.Guild).CacheParentKey(
+                    this.NamespaceName,
+                    this.AccessToken?.TimeOffset
+                ),
+                callback,
+                () =>
+                {
+        #if GS2_ENABLE_UNITASK
+                    async UniTask Impl() {
+        #else
+                    async Task Impl() {
+        #endif
+                        try {
+        #if GS2_ENABLE_UNITASK
+                            await UniTask.SwitchToMainThread();
+        #endif
+                            callback.Invoke(await SearchGuildsAsync(
+                guildModelName,
+                displayName,
+                attributes1,
+                attributes2,
+                attributes3,
+                attributes4,
+                attributes5,
+                joinPolicies,
+                includeFullMembersGuild,
+                orderBy
+                            ).ToArrayAsync());
+                        }
+                        catch (System.Exception) {
+                            // ignored
+                        }
+                    }
+                    Impl().Forget();
+                }
+            );
+        }
+
+        #if GS2_ENABLE_UNITASK
+        public async UniTask<ulong> SubscribeSearchGuildsWithInitialCallAsync(
+        #else
+        public async Task<ulong> SubscribeSearchGuildsWithInitialCallAsync(
+        #endif
+            Action<Gs2.Gs2Guild.Model.Guild[]> callback,
+            string guildModelName,
+            string displayName = null,
+            int[] attributes1 = null,
+            int[] attributes2 = null,
+            int[] attributes3 = null,
+            int[] attributes4 = null,
+            int[] attributes5 = null,
+            string[] joinPolicies = null,
+            bool? includeFullMembersGuild = null,
+            string orderBy = null
+        )
+        {
+            var items = await SearchGuildsAsync(
+                guildModelName,
+                displayName,
+                attributes1,
+                attributes2,
+                attributes3,
+                attributes4,
+                attributes5,
+                joinPolicies,
+                includeFullMembersGuild,
+                orderBy
+            ).ToArrayAsync();
+            var callbackId = SubscribeSearchGuilds(
+                callback,
+                guildModelName,
+                displayName,
+                attributes1,
+                attributes2,
+                attributes3,
+                attributes4,
+                attributes5,
+                joinPolicies,
+                includeFullMembersGuild,
+                orderBy
+            );
+            callback.Invoke(items);
+            return callbackId;
+        }
+
+        public void UnsubscribeSearchGuilds(
+            ulong callbackId,
+            string guildModelName,
+            string displayName = null,
+            int[] attributes1 = null,
+            int[] attributes2 = null,
+            int[] attributes3 = null,
+            int[] attributes4 = null,
+            int[] attributes5 = null,
+            string[] joinPolicies = null,
+            bool? includeFullMembersGuild = null,
+            string orderBy = null
+        )
+        {
+            this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Guild.Model.Guild>(
+                (null as Gs2.Gs2Guild.Model.Guild).CacheParentKey(
+                    this.NamespaceName,
+                    this.AccessToken?.TimeOffset
+                ),
+                callbackId
+            );
+        }
+
+        public void InvalidateSearchGuilds(
+            string guildModelName,
+            string displayName = null,
+            int[] attributes1 = null,
+            int[] attributes2 = null,
+            int[] attributes3 = null,
+            int[] attributes4 = null,
+            int[] attributes5 = null,
+            string[] joinPolicies = null,
+            bool? includeFullMembersGuild = null,
+            string orderBy = null
+        )
+        {
+            this._gs2.Cache.ClearListCache<Gs2.Gs2Guild.Model.Guild>(
+                (null as Gs2.Gs2Guild.Model.Guild).CacheParentKey(
+                    this.NamespaceName,
+                    this.AccessToken?.TimeOffset
+                )
+            );
+        }
+
         
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Guild.Model.JoinedGuild> JoinedGuilds(
