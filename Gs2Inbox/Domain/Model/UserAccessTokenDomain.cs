@@ -228,7 +228,9 @@ namespace Gs2.Gs2Inbox.Domain.Model
                     this.UserId,
                     this.AccessToken?.TimeOffset
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => isRead == null || item.IsRead == isRead)
+                    .ToArray()),
                 () =>
                 {
         #if GS2_ENABLE_UNITASK

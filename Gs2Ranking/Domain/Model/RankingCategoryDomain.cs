@@ -390,7 +390,9 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.AdditionalScopeName,
                     null
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => score == null || item.Score == score)
+                    .ToArray()),
                 () =>
                 {
         #if GS2_ENABLE_UNITASK

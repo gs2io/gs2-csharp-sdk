@@ -123,7 +123,9 @@ namespace Gs2.Gs2Grade.Domain.Model
                     this.UserId,
                     this.AccessToken?.TimeOffset
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => gradeName == null || item.GradeName == gradeName)
+                    .ToArray()),
                 () =>
                 {
         #if GS2_ENABLE_UNITASK

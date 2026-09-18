@@ -122,7 +122,9 @@ namespace Gs2.Gs2Experience.Domain.Model
                     this.UserId,
                     this.AccessToken?.TimeOffset
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => experienceName == null || item.ExperienceName == experienceName)
+                    .ToArray()),
                 () =>
                 {
         #if GS2_ENABLE_UNITASK

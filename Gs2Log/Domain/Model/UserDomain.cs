@@ -144,7 +144,11 @@ namespace Gs2.Gs2Log.Domain.Model
                     this.UserId,
                     null
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => tags == null || item.Tags == tags)
+                    .Where(item => begin == null || item.Timestamp >= begin)
+                    .Where(item => end == null || item.Timestamp <= end)
+                    .ToArray()),
                 () =>
                 {
         //#if GS2_ENABLE_UNITASK

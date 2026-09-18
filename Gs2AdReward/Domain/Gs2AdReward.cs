@@ -305,7 +305,9 @@ namespace Gs2.Gs2AdReward.Domain
                 (null as Gs2.Gs2AdReward.Model.Namespace).CacheParentKey(
                     null
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => namePrefix == null || item.Name.StartsWith(namePrefix))
+                    .ToArray()),
                 () =>
                 {
         #if GS2_ENABLE_UNITASK

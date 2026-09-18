@@ -143,7 +143,10 @@ namespace Gs2.Gs2Ranking.Domain.Model
                     this.UserId,
                     null
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => categoryName == null || item.CategoryName == categoryName)
+                    .Where(item => scorerUserId == null || item.ScorerUserId == scorerUserId)
+                    .ToArray()),
                 () =>
                 {
         #if GS2_ENABLE_UNITASK

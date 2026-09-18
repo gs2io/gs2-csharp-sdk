@@ -126,7 +126,9 @@ namespace Gs2.Gs2Ranking2.Domain.Model
                     rankingName,
                     null
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => rankingName == null || item.RankingName == rankingName)
+                    .ToArray()),
                 () =>
                 {
         #if GS2_ENABLE_UNITASK

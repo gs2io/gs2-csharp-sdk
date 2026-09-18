@@ -137,7 +137,9 @@ namespace Gs2.Gs2Guard.Domain
                 (null as Gs2.Gs2Guard.Model.Namespace).CacheParentKey(
                     null
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => namePrefix == null || item.Name.StartsWith(namePrefix))
+                    .ToArray()),
                 () =>
                 {
         #if GS2_ENABLE_UNITASK

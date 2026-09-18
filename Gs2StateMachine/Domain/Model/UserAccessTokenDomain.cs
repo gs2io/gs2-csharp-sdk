@@ -122,7 +122,9 @@ namespace Gs2.Gs2StateMachine.Domain.Model
                     this.UserId,
                     this.AccessToken?.TimeOffset
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => status == null || item.Value == status)
+                    .ToArray()),
                 () =>
                 {
         #if GS2_ENABLE_UNITASK

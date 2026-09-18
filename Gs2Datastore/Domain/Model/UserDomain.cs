@@ -128,7 +128,9 @@ namespace Gs2.Gs2Datastore.Domain.Model
                     this.UserId,
                     null
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => status == null || item.Status == status)
+                    .ToArray()),
                 () =>
                 {
         #if GS2_ENABLE_UNITASK

@@ -136,7 +136,9 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this.RoomName,
                     null
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => category == null || item.Category == category)
+                    .ToArray()),
                 () =>
                 {
         #if GS2_ENABLE_UNITASK
@@ -262,7 +264,9 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this.RoomName,
                     null
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => category == null || item.Category == category)
+                    .ToArray()),
                 () =>
                 {
         #if GS2_ENABLE_UNITASK

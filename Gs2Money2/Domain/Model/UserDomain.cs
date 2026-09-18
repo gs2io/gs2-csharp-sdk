@@ -250,7 +250,10 @@ namespace Gs2.Gs2Money2.Domain.Model
                     this.UserId,
                     null
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => begin == null || item.CreatedAt >= begin)
+                    .Where(item => end == null || item.CreatedAt <= end)
+                    .ToArray()),
                 () =>
                 {
         #if GS2_ENABLE_UNITASK

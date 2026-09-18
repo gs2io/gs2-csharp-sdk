@@ -169,7 +169,9 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this.UserId,
                     this.AccessToken?.TimeOffset
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => roomNamePrefix == null || item.RoomName.StartsWith(roomNamePrefix))
+                    .ToArray()),
                 () =>
                 {
         #if GS2_ENABLE_UNITASK

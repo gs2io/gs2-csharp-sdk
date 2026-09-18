@@ -119,7 +119,9 @@ namespace Gs2.Gs2LoginReward.Domain.Model
                     this.NamespaceName,
                     null
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => namePrefix == null || item.Name.StartsWith(namePrefix))
+                    .ToArray()),
                 () =>
                 {
         #if GS2_ENABLE_UNITASK

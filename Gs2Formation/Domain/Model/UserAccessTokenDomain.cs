@@ -237,7 +237,9 @@ namespace Gs2.Gs2Formation.Domain.Model
                     this.UserId,
                     this.AccessToken?.TimeOffset
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => propertyFormModelName == null || item.Name == propertyFormModelName)
+                    .ToArray()),
                 () =>
                 {
         #if GS2_ENABLE_UNITASK

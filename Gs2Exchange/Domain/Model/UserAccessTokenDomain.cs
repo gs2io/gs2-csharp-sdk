@@ -131,7 +131,9 @@ namespace Gs2.Gs2Exchange.Domain.Model
                     this.UserId,
                     this.AccessToken?.TimeOffset
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => rateName == null || item.RateName == rateName)
+                    .ToArray()),
                 () =>
                 {
         #if GS2_ENABLE_UNITASK

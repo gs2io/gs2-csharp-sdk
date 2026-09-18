@@ -13,7 +13,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- * deny overwrite
  */
 // ReSharper disable RedundantNameQualifier
 // ReSharper disable RedundantUsingDirective
@@ -122,14 +121,8 @@ namespace Gs2.Gs2Money2.Domain.Iterator
                     out var list
             )) {
                 this._result = list
-/* diff --- start
-                    .Where(item => this.Begin == null || item.Begin == this.Begin)
-                    .Where(item => this.End == null || item.End == this.End)
- diff --- end */
-/* diff +++ start */
                     .Where(item => this.Begin == null || item.CreatedAt >= this.Begin)
                     .Where(item => this.End == null || item.CreatedAt <= this.End)
-/* diff +++ end */
                     .ToArray();
                 this._pageToken = null;
                 this._last = true;
@@ -147,14 +140,8 @@ namespace Gs2.Gs2Money2.Domain.Iterator
                     request
                 );
                 this._result = r.Items
-/* diff --- start
-                    .Where(item => this.Begin == null || item.Begin == this.Begin)
-                    .Where(item => this.End == null || item.End == this.End)
- diff --- end */
-/* diff +++ start */
                     .Where(item => this.Begin == null || item.CreatedAt >= this.Begin)
                     .Where(item => this.End == null || item.CreatedAt <= this.End)
-/* diff +++ end */
                     .ToArray();
                 this._pageToken = r.NextPageToken;
                 this._last = this._pageToken == null;

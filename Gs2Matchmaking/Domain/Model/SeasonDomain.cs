@@ -132,7 +132,9 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.Season,
                     null
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => tier == null || item.Tier == tier)
+                    .ToArray()),
                 () =>
                 {
         #if GS2_ENABLE_UNITASK
@@ -255,7 +257,9 @@ namespace Gs2.Gs2Matchmaking.Domain.Model
                     this.Season,
                     null
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => tier == null || item.Tier == tier)
+                    .ToArray()),
                 () =>
                 {
         #if GS2_ENABLE_UNITASK

@@ -119,7 +119,9 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this.UserId,
                     null
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => namePrefix == null || item.Name.StartsWith(namePrefix))
+                    .ToArray()),
                 () =>
                 {
         #if GS2_ENABLE_UNITASK
@@ -251,7 +253,9 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this.UserId,
                     null
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => roomNamePrefix == null || item.RoomName.StartsWith(roomNamePrefix))
+                    .ToArray()),
                 () =>
                 {
         #if GS2_ENABLE_UNITASK
@@ -364,7 +368,9 @@ namespace Gs2.Gs2Chat.Domain.Model
                     this.UserId,
                     null
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => roomName == null || item.RoomName == roomName)
+                    .ToArray()),
                 () =>
                 {
         #if GS2_ENABLE_UNITASK

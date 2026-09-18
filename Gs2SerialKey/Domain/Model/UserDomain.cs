@@ -125,7 +125,9 @@ namespace Gs2.Gs2SerialKey.Domain.Model
                     this.UserId,
                     null
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => campaignModelName == null || item.CampaignModelName == campaignModelName)
+                    .ToArray()),
                 () =>
                 {
         #if GS2_ENABLE_UNITASK

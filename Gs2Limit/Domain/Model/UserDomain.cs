@@ -125,7 +125,9 @@ namespace Gs2.Gs2Limit.Domain.Model
                     this.UserId,
                     null
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => limitName == null || item.LimitName == limitName)
+                    .ToArray()),
                 () =>
                 {
         #if GS2_ENABLE_UNITASK

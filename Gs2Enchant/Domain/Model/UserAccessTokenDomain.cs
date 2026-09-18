@@ -122,7 +122,9 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     this.UserId,
                     this.AccessToken?.TimeOffset
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => parameterName == null || item.ParameterName == parameterName)
+                    .ToArray()),
                 () =>
                 {
         #if GS2_ENABLE_UNITASK
@@ -250,7 +252,9 @@ namespace Gs2.Gs2Enchant.Domain.Model
                     this.UserId,
                     this.AccessToken?.TimeOffset
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => parameterName == null || item.ParameterName == parameterName)
+                    .ToArray()),
                 () =>
                 {
         #if GS2_ENABLE_UNITASK

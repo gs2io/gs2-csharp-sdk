@@ -219,7 +219,9 @@ namespace Gs2.Gs2Identifier.Domain.Model
                 (null as string).CacheParentKey(
                     null
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => clientId == null || item.ClientId == clientId)
+                    .ToArray()),
                 () =>
                 {
         //#if GS2_ENABLE_UNITASK

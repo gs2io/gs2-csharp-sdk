@@ -121,7 +121,9 @@ namespace Gs2.Gs2Inventory.Domain.Model
                     this.InventoryName,
                     null
                 ),
-                callback,
+                items => callback.Invoke(items
+                    .Where(item => namePrefix == null || item.Name.StartsWith(namePrefix))
+                    .ToArray()),
                 () =>
                 {
         #if GS2_ENABLE_UNITASK
