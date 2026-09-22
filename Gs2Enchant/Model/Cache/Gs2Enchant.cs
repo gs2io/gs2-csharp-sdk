@@ -18,12 +18,58 @@
 
 #pragma warning disable CS1522 // Empty switch block
 
+using System.Linq;
 using Gs2.Core.Domain;
+using Gs2.Util.LitJson;
 
 namespace Gs2.Gs2Enchant.Model.Cache
 {
     public static class Gs2Enchant
     {
+        /// <summary>
+        /// Gs2Distributor:DescribeUserData（ユーザーの全データの一括取得）の 1 エントリを、kind に対応するモデルのキャッシュへ入れる。
+        /// 戻り値は親キー（null は知らない kind ＝ SDK が古い / 対応表に無い）。呼び手は全ページを読み終えてから
+        /// SetListCached(cache, timeOffset, kind, parentKey) を呼ぶ。対応表は sdk-gen の type/user_data_cache.py（kind → モデル）。
+        /// </summary>
+        public static string PutUserData(
+            CacheDatabase cache,
+            string namespaceName,
+            string userId,
+            int? timeOffset,
+            string kind,
+            string payload
+        ) {
+            switch (kind) {
+                case "balanceParameterStatus":
+                    return Gs2.Gs2Enchant.Model.BalanceParameterStatus.FromJson(JsonMapper.ToObject(payload))
+                        ?.PutUserData(cache, namespaceName, userId, timeOffset);
+                case "rarityParameterStatus":
+                    return Gs2.Gs2Enchant.Model.RarityParameterStatus.FromJson(JsonMapper.ToObject(payload))
+                        ?.PutUserData(cache, namespaceName, userId, timeOffset);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 一括取得で入れた kind の親キーに「リストが揃った印」を立てる（Describe のイテレータがサーバーへ出なくなる）。
+        /// </summary>
+        public static bool SetListCached(
+            CacheDatabase cache,
+            int? timeOffset,
+            string kind,
+            string parentKey
+        ) {
+            switch (kind) {
+                case "balanceParameterStatus":
+                    cache.SetListCached<Gs2.Gs2Enchant.Model.BalanceParameterStatus>(parentKey);
+                    return true;
+                case "rarityParameterStatus":
+                    cache.SetListCached<Gs2.Gs2Enchant.Model.RarityParameterStatus>(parentKey);
+                    return true;
+            }
+            return false;
+        }
+
         public static void PutCache(
             CacheDatabase cache,
             string userId,

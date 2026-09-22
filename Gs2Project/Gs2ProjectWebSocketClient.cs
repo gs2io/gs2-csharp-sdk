@@ -1081,6 +1081,11 @@ namespace Gs2.Gs2Project
                     jsonWriter.WritePropertyName("eventBridgeAwsRegion");
                     jsonWriter.Write(request.EventBridgeAwsRegion.ToString());
                 }
+                if (request.DataStoreKeyScheme != null)
+                {
+                    jsonWriter.WritePropertyName("dataStoreKeyScheme");
+                    jsonWriter.Write(request.DataStoreKeyScheme.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");

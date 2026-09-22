@@ -208,6 +208,35 @@ namespace Gs2.Gs2Guild.Model.Cache
             );
         }
 
+        /// <summary>
+        /// Gs2Distributor:DescribeUserData（ユーザーの全データの一括取得）の 1 エントリ（この kind）をキャッシュへ入れる。
+        /// 鍵はエントリの namespaceName / 読み込むユーザーの userId / モデル自身のプロパティ / 主キー GRN から取る
+        /// （sdk-gen の BaseModel.user_data_cache_keys）。戻り値は親キーで、呼び手が全ページを読み終えてから
+        /// Gs2Guild.SetListCached(cache, timeOffset, kind, parentKey) で「リストが揃った印」を立てる。
+        /// </summary>
+        public static string PutUserData(
+            this ReceiveMemberRequest self,
+            CacheDatabase cache,
+            string namespaceName,
+            string userId,
+            int? timeOffset
+        ) {
+            self.PutCache(
+                cache,
+                namespaceName,
+                default /* TODO: 一括取得のエントリから guildModelName を決められない。手書きで値を入れる */,
+                default /* TODO: 一括取得のエントリから guildName を決められない。手書きで値を入れる */,
+                self.UserId,
+                timeOffset
+            );
+            return self.CacheParentKey(
+                namespaceName,
+                default /* TODO: 一括取得のエントリから guildModelName を決められない。手書きで値を入れる */,
+                default /* TODO: 一括取得のエントリから guildName を決められない。手書きで値を入れる */,
+                timeOffset
+            );
+        }
+
         public static void DeleteCache(
             this ReceiveMemberRequest self,
             CacheDatabase cache,

@@ -235,6 +235,42 @@ namespace Gs2.Gs2Money2.Model.Cache
             );
         }
 
+        /* diff +++ start */
+        /// <summary>
+        /// Gs2Distributor:DescribeUserData（ユーザーの全データの一括取得）の 1 エントリ（この kind）をキャッシュへ入れる。
+        /// 鍵はエントリの namespaceName / 読み込むユーザーの userId / モデル自身のプロパティ / 主キー GRN から取る
+        /// （sdk-gen の BaseModel.user_data_cache_keys）。戻り値は親キーで、呼び手が全ページを読み終えてから
+        /// Gs2Money2.SetListCached(cache, timeOffset, kind, parentKey) で「リストが揃った印」を立てる。
+        /// </summary>
+        public static string PutUserData(
+            this Wallet self,
+            CacheDatabase cache,
+            string namespaceName,
+            string userId,
+            int? timeOffset
+        ) {
+            // ★手書きの PutCache は slot 0 の共有無償通貨で親の ClearListCache（全 item を消す）を呼ぶ。
+            //   一括取得はエントリ順に入れるので、先に入れた他スロットが消えないよう直接 Put する。
+            cache.Put(
+                self.CacheParentKey(
+                    namespaceName,
+                    userId,
+                    timeOffset
+                ),
+                self.CacheKey(
+                    self.Slot
+                ),
+                self,
+                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+            );
+            return self.CacheParentKey(
+                namespaceName,
+                userId,
+                timeOffset
+            );
+        }
+        /* diff +++ end */
+
         public static void DeleteCache(
             this Wallet self,
             CacheDatabase cache,

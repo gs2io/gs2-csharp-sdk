@@ -18,12 +18,76 @@
 
 #pragma warning disable CS1522 // Empty switch block
 
+using System.Linq;
 using Gs2.Core.Domain;
+using Gs2.Util.LitJson;
 
 namespace Gs2.Gs2Friend.Model.Cache
 {
     public static class Gs2Friend
     {
+        /// <summary>
+        /// Gs2Distributor:DescribeUserData（ユーザーの全データの一括取得）の 1 エントリを、kind に対応するモデルのキャッシュへ入れる。
+        /// 戻り値は親キー（null は知らない kind ＝ SDK が古い / 対応表に無い）。呼び手は全ページを読み終えてから
+        /// SetListCached(cache, timeOffset, kind, parentKey) を呼ぶ。対応表は sdk-gen の type/user_data_cache.py（kind → モデル）。
+        /// </summary>
+        public static string PutUserData(
+            CacheDatabase cache,
+            string namespaceName,
+            string userId,
+            int? timeOffset,
+            string kind,
+            string payload
+        ) {
+            switch (kind) {
+                case "followUser":
+                    return Gs2.Gs2Friend.Model.FollowUser.FromJson(JsonMapper.ToObject(payload))
+                        ?.PutUserData(cache, namespaceName, userId, timeOffset);
+                case "friendUser":
+                    return Gs2.Gs2Friend.Model.FriendUser.FromJson(JsonMapper.ToObject(payload))
+                        ?.PutUserData(cache, namespaceName, userId, timeOffset);
+                case "profile":
+                    return Gs2.Gs2Friend.Model.Profile.FromJson(JsonMapper.ToObject(payload))
+                        ?.PutUserData(cache, namespaceName, userId, timeOffset);
+                case "receiveFriendRequest":
+                    return Gs2.Gs2Friend.Model.ReceiveFriendRequest.FromJson(JsonMapper.ToObject(payload))
+                        ?.PutUserData(cache, namespaceName, userId, timeOffset);
+                case "sendFriendRequest":
+                    return Gs2.Gs2Friend.Model.SendFriendRequest.FromJson(JsonMapper.ToObject(payload))
+                        ?.PutUserData(cache, namespaceName, userId, timeOffset);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 一括取得で入れた kind の親キーに「リストが揃った印」を立てる（Describe のイテレータがサーバーへ出なくなる）。
+        /// </summary>
+        public static bool SetListCached(
+            CacheDatabase cache,
+            int? timeOffset,
+            string kind,
+            string parentKey
+        ) {
+            switch (kind) {
+                case "followUser":
+                    cache.SetListCached<Gs2.Gs2Friend.Model.FollowUser>(parentKey);
+                    return true;
+                case "friendUser":
+                    cache.SetListCached<Gs2.Gs2Friend.Model.FriendUser>(parentKey);
+                    return true;
+                case "profile":
+                    cache.SetListCached<Gs2.Gs2Friend.Model.Profile>(parentKey);
+                    return true;
+                case "receiveFriendRequest":
+                    cache.SetListCached<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(parentKey);
+                    return true;
+                case "sendFriendRequest":
+                    cache.SetListCached<Gs2.Gs2Friend.Model.SendFriendRequest>(parentKey);
+                    return true;
+            }
+            return false;
+        }
+
         public static void PutCache(
             CacheDatabase cache,
             string userId,

@@ -4062,6 +4062,198 @@ namespace Gs2.Gs2Distributor
 #endif
 
 
+        public class DescribeUserDataTask : Gs2RestSessionTask<DescribeUserDataRequest, DescribeUserDataResult>
+        {
+            public DescribeUserDataTask(IGs2Session session, RestSessionRequestFactory factory, DescribeUserDataRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeUserDataRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "distributor")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/user/me/data";
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeUserData(
+                Request.DescribeUserDataRequest request,
+                UnityAction<AsyncResult<Result.DescribeUserDataResult>> callback
+        ) =>
+            new DescribeUserDataTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.DescribeUserDataResult> DescribeUserDataFuture(
+                Request.DescribeUserDataRequest request
+        ) =>
+            new DescribeUserDataTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.DescribeUserDataResult> DescribeUserDataAsync(
+                Request.DescribeUserDataRequest request
+        ) =>
+            new DescribeUserDataTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeUserDataResult>();
+    #else
+		public DescribeUserDataTask DescribeUserDataAsync(
+                Request.DescribeUserDataRequest request
+        )
+		{
+			return new DescribeUserDataTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.DescribeUserDataResult> DescribeUserDataAsync(
+                Request.DescribeUserDataRequest request
+        ) =>
+            new DescribeUserDataTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class DescribeUserDataByUserIdTask : Gs2RestSessionTask<DescribeUserDataByUserIdRequest, DescribeUserDataByUserIdResult>
+        {
+            public DescribeUserDataByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DescribeUserDataByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(DescribeUserDataByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "distributor")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/user/{userId}/data";
+
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Get(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.PageToken != null) {
+                    sessionRequest.AddQueryString("pageToken", $"{request.PageToken}");
+                }
+                if (request.Limit != null) {
+                    sessionRequest.AddQueryString("limit", $"{request.Limit}");
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator DescribeUserDataByUserId(
+                Request.DescribeUserDataByUserIdRequest request,
+                UnityAction<AsyncResult<Result.DescribeUserDataByUserIdResult>> callback
+        ) =>
+            new DescribeUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.DescribeUserDataByUserIdResult> DescribeUserDataByUserIdFuture(
+                Request.DescribeUserDataByUserIdRequest request
+        ) =>
+            new DescribeUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.DescribeUserDataByUserIdResult> DescribeUserDataByUserIdAsync(
+                Request.DescribeUserDataByUserIdRequest request
+        ) =>
+            new DescribeUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.DescribeUserDataByUserIdResult>();
+    #else
+		public DescribeUserDataByUserIdTask DescribeUserDataByUserIdAsync(
+                Request.DescribeUserDataByUserIdRequest request
+        )
+		{
+			return new DescribeUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.DescribeUserDataByUserIdResult> DescribeUserDataByUserIdAsync(
+                Request.DescribeUserDataByUserIdRequest request
+        ) =>
+            new DescribeUserDataByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
         public class IfExpressionByUserIdTask : Gs2RestSessionTask<IfExpressionByUserIdRequest, IfExpressionByUserIdResult>
         {
             public IfExpressionByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, IfExpressionByUserIdRequest request) : base(session, factory, request)

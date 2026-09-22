@@ -35,11 +35,16 @@ namespace Gs2.Gs2Guild.Model
 	public partial class SendMemberRequest : IComparable
 	{
         public string UserId { set; get; }
+        public string TargetGuildModelName { set; get; }
         public string TargetGuildName { set; get; }
         public string Metadata { set; get; }
         public long? CreatedAt { set; get; }
         public SendMemberRequest WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+        public SendMemberRequest WithTargetGuildModelName(string targetGuildModelName) {
+            this.TargetGuildModelName = targetGuildModelName;
             return this;
         }
         public SendMemberRequest WithTargetGuildName(string targetGuildName) {
@@ -72,6 +77,7 @@ namespace Gs2.Gs2Guild.Model
             }
             return new SendMemberRequest()
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithTargetGuildModelName(!data.Keys.Contains("targetGuildModelName") || data["targetGuildModelName"] == null ? null : data["targetGuildModelName"].ToString())
                 .WithTargetGuildName(!data.Keys.Contains("targetGuildName") || data["targetGuildName"] == null ? null : data["targetGuildName"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()));
@@ -81,6 +87,7 @@ namespace Gs2.Gs2Guild.Model
         {
             return new JsonData {
                 ["userId"] = UserId,
+                ["targetGuildModelName"] = TargetGuildModelName,
                 ["targetGuildName"] = TargetGuildName,
                 ["metadata"] = Metadata,
                 ["createdAt"] = CreatedAt,
@@ -93,6 +100,10 @@ namespace Gs2.Gs2Guild.Model
             if (UserId != null) {
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
+            }
+            if (TargetGuildModelName != null) {
+                writer.WritePropertyName("targetGuildModelName");
+                writer.Write(TargetGuildModelName.ToString());
             }
             if (TargetGuildName != null) {
                 writer.WritePropertyName("targetGuildName");
@@ -126,6 +137,11 @@ namespace Gs2.Gs2Guild.Model
             {
                 return diff;
             }
+            diff = ModelComparer.Compare(TargetGuildModelName, other.TargetGuildModelName);
+            if (diff != 0)
+            {
+                return diff;
+            }
             diff = ModelComparer.Compare(TargetGuildName, other.TargetGuildName);
             if (diff != 0)
             {
@@ -149,6 +165,13 @@ namespace Gs2.Gs2Guild.Model
                 if (UserId.Length > 128) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("sendMemberRequest", "guild.sendMemberRequest.userId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (TargetGuildModelName.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("sendMemberRequest", "guild.sendMemberRequest.targetGuildModelName.error.tooLong"),
                     });
                 }
             }
@@ -183,6 +206,7 @@ namespace Gs2.Gs2Guild.Model
         public object Clone() {
             return new SendMemberRequest {
                 UserId = UserId,
+                TargetGuildModelName = TargetGuildModelName,
                 TargetGuildName = TargetGuildName,
                 Metadata = Metadata,
                 CreatedAt = CreatedAt,

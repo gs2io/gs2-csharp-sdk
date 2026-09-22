@@ -196,6 +196,33 @@ namespace Gs2.Gs2Mission.Model.Cache
             );
         }
 
+        /// <summary>
+        /// Gs2Distributor:DescribeUserData（ユーザーの全データの一括取得）の 1 エントリ（この kind）をキャッシュへ入れる。
+        /// 鍵はエントリの namespaceName / 読み込むユーザーの userId / モデル自身のプロパティ / 主キー GRN から取る
+        /// （sdk-gen の BaseModel.user_data_cache_keys）。戻り値は親キーで、呼び手が全ページを読み終えてから
+        /// Gs2Mission.SetListCached(cache, timeOffset, kind, parentKey) で「リストが揃った印」を立てる。
+        /// </summary>
+        public static string PutUserData(
+            this MissionTaskModel self,
+            CacheDatabase cache,
+            string namespaceName,
+            string userId,
+            int? timeOffset
+        ) {
+            self.PutCache(
+                cache,
+                namespaceName,
+                MissionTaskModel.GetMissionGroupNameFromGrn(self.MissionTaskId),
+                self.Name,
+                timeOffset
+            );
+            return self.CacheParentKey(
+                namespaceName,
+                MissionTaskModel.GetMissionGroupNameFromGrn(self.MissionTaskId),
+                timeOffset
+            );
+        }
+
         public static void DeleteCache(
             this MissionTaskModel self,
             CacheDatabase cache,

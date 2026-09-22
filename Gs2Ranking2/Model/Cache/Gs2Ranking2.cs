@@ -18,12 +18,88 @@
 
 #pragma warning disable CS1522 // Empty switch block
 
+using System.Linq;
 using Gs2.Core.Domain;
+using Gs2.Util.LitJson;
 
 namespace Gs2.Gs2Ranking2.Model.Cache
 {
     public static class Gs2Ranking2
     {
+        /// <summary>
+        /// Gs2Distributor:DescribeUserData（ユーザーの全データの一括取得）の 1 エントリを、kind に対応するモデルのキャッシュへ入れる。
+        /// 戻り値は親キー（null は知らない kind ＝ SDK が古い / 対応表に無い）。呼び手は全ページを読み終えてから
+        /// SetListCached(cache, timeOffset, kind, parentKey) を呼ぶ。対応表は sdk-gen の type/user_data_cache.py（kind → モデル）。
+        /// </summary>
+        public static string PutUserData(
+            CacheDatabase cache,
+            string namespaceName,
+            string userId,
+            int? timeOffset,
+            string kind,
+            string payload
+        ) {
+            switch (kind) {
+                case "clusterRankingReceivedReward":
+                    return Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward.FromJson(JsonMapper.ToObject(payload))
+                        ?.PutUserData(cache, namespaceName, userId, timeOffset);
+                case "clusterRankingScore":
+                    return Gs2.Gs2Ranking2.Model.ClusterRankingScore.FromJson(JsonMapper.ToObject(payload))
+                        ?.PutUserData(cache, namespaceName, userId, timeOffset);
+                case "globalRankingReceivedReward":
+                    return Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward.FromJson(JsonMapper.ToObject(payload))
+                        ?.PutUserData(cache, namespaceName, userId, timeOffset);
+                case "globalRankingScore":
+                    return Gs2.Gs2Ranking2.Model.GlobalRankingScore.FromJson(JsonMapper.ToObject(payload))
+                        ?.PutUserData(cache, namespaceName, userId, timeOffset);
+                case "subscribeRankingData":
+                    return Gs2.Gs2Ranking2.Model.SubscribeRankingData.FromJson(JsonMapper.ToObject(payload))
+                        ?.PutUserData(cache, namespaceName, userId, timeOffset);
+                case "subscribeRankingScore":
+                    return Gs2.Gs2Ranking2.Model.SubscribeRankingScore.FromJson(JsonMapper.ToObject(payload))
+                        ?.PutUserData(cache, namespaceName, userId, timeOffset);
+                case "subscribeUser":
+                    return Gs2.Gs2Ranking2.Model.SubscribeUser.FromJson(JsonMapper.ToObject(payload))
+                        ?.PutUserData(cache, namespaceName, userId, timeOffset);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 一括取得で入れた kind の親キーに「リストが揃った印」を立てる（Describe のイテレータがサーバーへ出なくなる）。
+        /// </summary>
+        public static bool SetListCached(
+            CacheDatabase cache,
+            int? timeOffset,
+            string kind,
+            string parentKey
+        ) {
+            switch (kind) {
+                case "clusterRankingReceivedReward":
+                    cache.SetListCached<Gs2.Gs2Ranking2.Model.ClusterRankingReceivedReward>(parentKey);
+                    return true;
+                case "clusterRankingScore":
+                    cache.SetListCached<Gs2.Gs2Ranking2.Model.ClusterRankingScore>(parentKey);
+                    return true;
+                case "globalRankingReceivedReward":
+                    cache.SetListCached<Gs2.Gs2Ranking2.Model.GlobalRankingReceivedReward>(parentKey);
+                    return true;
+                case "globalRankingScore":
+                    cache.SetListCached<Gs2.Gs2Ranking2.Model.GlobalRankingScore>(parentKey);
+                    return true;
+                case "subscribeRankingData":
+                    cache.SetListCached<Gs2.Gs2Ranking2.Model.SubscribeRankingData>(parentKey);
+                    return true;
+                case "subscribeRankingScore":
+                    cache.SetListCached<Gs2.Gs2Ranking2.Model.SubscribeRankingScore>(parentKey);
+                    return true;
+                case "subscribeUser":
+                    cache.SetListCached<Gs2.Gs2Ranking2.Model.SubscribeUser>(parentKey);
+                    return true;
+            }
+            return false;
+        }
+
         public static void PutCache(
             CacheDatabase cache,
             string userId,

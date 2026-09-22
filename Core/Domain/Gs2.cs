@@ -1,6 +1,7 @@
 #pragma warning disable CS0618 // Obsolete with a message
 
 using System;
+using System.Collections.Generic;
 using System.Collections;
 using System.Threading.Tasks;
 using Gs2.Core.Exception;
@@ -364,6 +365,315 @@ namespace Gs2.Core.Domain
             string key
         ) {
             _cache.Delete<TKind>(parentKey, key);
+        }
+
+        // ---------------------------------------------------------------------------------------------
+        // ユーザーの全データの一括取得（Gs2Distributor:DescribeUserData）でキャッシュを作る
+        //
+        // ★ログイン直後に 1 回 await すると、そのユーザーの全 GS2 サービスのデータ（スタミナ・インベントリ・
+        //   ミッション進捗 …）が各モデルのキャッシュに載り、以後の Get / Describe はサーバーへ出ない。
+        //   各エントリは kind でモデルを示し、サービスごとの生成物 `Gs2<Service>.Model.Cache.Gs2<Service>.PutUserData`
+        //   （kind → モデルの振り分け。鍵の取り出しは各モデルの `PutUserData`、sdk-gen の BaseModel.user_data_cache_keys）
+        //   へ渡す。キー方式 v2 のプロジェクトでだけ使える（v1 は BadRequest）。
+        //
+        // ★「リストが揃った印」（Describe のイテレータがサーバーへ出ない条件）は、全ページを読み終えてから
+        //   (service, kind, 親キー) の集合にまとめて立てる。途中で失敗したら印は立てない（入れた item は個別 Get の
+        //   キャッシュとして残る）。エントリ単位の JSON の失敗は数えず続行する。
+        //   ロード中に作ったイテレータは部分的なリストを返しうるので、他の呼び出しの前に await すること。
+        //
+        // 戻り値: キャッシュに入れたエントリ数。知らない service / kind（SDK が古い、または対応表に無い）は数えず捨てる。
+        // ---------------------------------------------------------------------------------------------
+
+#if UNITY_2017_1_OR_NEWER
+        public Gs2Future<int> LoadUserDataFuture(
+            AccessToken accessToken
+        ) => LoadUserDataAsync(accessToken).ToGs2Future();
+#endif
+
+#if GS2_ENABLE_UNITASK
+        public async UniTask<int> LoadUserDataAsync(
+#else
+        public async Task<int> LoadUserDataAsync(
+#endif
+            AccessToken accessToken
+        )
+        {
+            if (accessToken == null) {
+                throw new ArgumentNullException(nameof(accessToken));
+            }
+            var client = new Gs2Distributor.Gs2DistributorRestClient(RestSession);
+            var loaded = 0;
+            var listCached = new HashSet<(string service, string kind, string parentKey)>();
+            string pageToken = null;
+            while (true) {
+                var result = await client.DescribeUserDataAsync(
+                    new Gs2Distributor.Request.DescribeUserDataRequest()
+                        .WithContextStack(DefaultContextStack)
+                        .WithAccessToken(accessToken.Token)
+                        .WithPageToken(pageToken)
+                        .WithLimit(100)
+                );
+                foreach (var entry in result.Items ?? Array.Empty<Gs2Distributor.Model.UserDataEntry>()) {
+                    string parentKey;
+                    try {
+                        parentKey = PutUserData(entry.Service, entry.NamespaceName, accessToken.UserId, accessToken.TimeOffset, entry.Kind, entry.Payload);
+                    }
+                    catch (System.Exception) {
+                        // 1 件の JSON が読めなくても他のエントリは入れる（個別 API で取り直せる）
+                        continue;
+                    }
+                    if (parentKey == null) {
+                        continue;
+                    }
+                    loaded++;
+                    listCached.Add((entry.Service, entry.Kind, parentKey));
+                }
+                pageToken = result.NextPageToken;
+                if (string.IsNullOrEmpty(pageToken)) {
+                    break;
+                }
+            }
+            foreach (var (service, kind, parentKey) in listCached) {
+                SetListCached(service, accessToken.TimeOffset, kind, parentKey);
+            }
+            return loaded;
+        }
+
+        /// <summary>
+        /// 一括取得の 1 エントリを、service の生成物へ振り分けてキャッシュへ入れる。戻り値は親キー（知らない service / kind は null）。
+        /// service は seed のディレクトリ名の綴り（"stamina" / "skill_tree"）。
+        /// </summary>
+        public string PutUserData(
+            string service,
+            string namespaceName,
+            string userId,
+            int? timeOffset,
+            string kind,
+            string payload
+        ) {
+            switch (service) {
+                case "account":
+                    return Gs2Account.Model.Cache.Gs2Account.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "ad_reward":
+                    return Gs2AdReward.Model.Cache.Gs2AdReward.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "auth":
+                    return Gs2Auth.Model.Cache.Gs2Auth.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "buff":
+                    return Gs2Buff.Model.Cache.Gs2Buff.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "chat":
+                    return Gs2Chat.Model.Cache.Gs2Chat.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "datastore":
+                    return Gs2Datastore.Model.Cache.Gs2Datastore.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "deploy":
+                    return Gs2Deploy.Model.Cache.Gs2Deploy.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "dictionary":
+                    return Gs2Dictionary.Model.Cache.Gs2Dictionary.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "distributor":
+                    return Gs2Distributor.Model.Cache.Gs2Distributor.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "enchant":
+                    return Gs2Enchant.Model.Cache.Gs2Enchant.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "enhance":
+                    return Gs2Enhance.Model.Cache.Gs2Enhance.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "exchange":
+                    return Gs2Exchange.Model.Cache.Gs2Exchange.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "experience":
+                    return Gs2Experience.Model.Cache.Gs2Experience.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "formation":
+                    return Gs2Formation.Model.Cache.Gs2Formation.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "freeze":
+                    return Gs2Freeze.Model.Cache.Gs2Freeze.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "friend":
+                    return Gs2Friend.Model.Cache.Gs2Friend.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "gateway":
+                    return Gs2Gateway.Model.Cache.Gs2Gateway.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "grade":
+                    return Gs2Grade.Model.Cache.Gs2Grade.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "guard":
+                    return Gs2Guard.Model.Cache.Gs2Guard.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "guild":
+                    return Gs2Guild.Model.Cache.Gs2Guild.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "identifier":
+                    return Gs2Identifier.Model.Cache.Gs2Identifier.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "idle":
+                    return Gs2Idle.Model.Cache.Gs2Idle.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "inbox":
+                    return Gs2Inbox.Model.Cache.Gs2Inbox.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "inventory":
+                    return Gs2Inventory.Model.Cache.Gs2Inventory.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "job_queue":
+                    return Gs2JobQueue.Model.Cache.Gs2JobQueue.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "key":
+                    return Gs2Key.Model.Cache.Gs2Key.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "limit":
+                    return Gs2Limit.Model.Cache.Gs2Limit.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "lock":
+                    return Gs2Lock.Model.Cache.Gs2Lock.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "log":
+                    return Gs2Log.Model.Cache.Gs2Log.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "login_reward":
+                    return Gs2LoginReward.Model.Cache.Gs2LoginReward.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "lottery":
+                    return Gs2Lottery.Model.Cache.Gs2Lottery.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "matchmaking":
+                    return Gs2Matchmaking.Model.Cache.Gs2Matchmaking.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "mega_field":
+                    return Gs2MegaField.Model.Cache.Gs2MegaField.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "mission":
+                    return Gs2Mission.Model.Cache.Gs2Mission.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "money":
+                    return Gs2Money.Model.Cache.Gs2Money.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "money2":
+                    return Gs2Money2.Model.Cache.Gs2Money2.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "news":
+                    return Gs2News.Model.Cache.Gs2News.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "project":
+                    return Gs2Project.Model.Cache.Gs2Project.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "quest":
+                    return Gs2Quest.Model.Cache.Gs2Quest.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "ranking":
+                    return Gs2Ranking.Model.Cache.Gs2Ranking.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "ranking2":
+                    return Gs2Ranking2.Model.Cache.Gs2Ranking2.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "realtime":
+                    return Gs2Realtime.Model.Cache.Gs2Realtime.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "schedule":
+                    return Gs2Schedule.Model.Cache.Gs2Schedule.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "script":
+                    return Gs2Script.Model.Cache.Gs2Script.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "season_rating":
+                    return Gs2SeasonRating.Model.Cache.Gs2SeasonRating.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "serial_key":
+                    return Gs2SerialKey.Model.Cache.Gs2SerialKey.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "showcase":
+                    return Gs2Showcase.Model.Cache.Gs2Showcase.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "skill_tree":
+                    return Gs2SkillTree.Model.Cache.Gs2SkillTree.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "stamina":
+                    return Gs2Stamina.Model.Cache.Gs2Stamina.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "state_machine":
+                    return Gs2StateMachine.Model.Cache.Gs2StateMachine.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                case "version":
+                    return Gs2Version.Model.Cache.Gs2Version.PutUserData(_cache, namespaceName, userId, timeOffset, kind, payload);
+                default:
+                    return null;
+            }
+        }
+
+        /// <summary>
+        /// 一括取得で入れた (service, kind, 親キー) に「リストが揃った印」を立てる。
+        /// </summary>
+        public bool SetListCached(
+            string service,
+            int? timeOffset,
+            string kind,
+            string parentKey
+        ) {
+            switch (service) {
+                case "account":
+                    return Gs2Account.Model.Cache.Gs2Account.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "ad_reward":
+                    return Gs2AdReward.Model.Cache.Gs2AdReward.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "auth":
+                    return Gs2Auth.Model.Cache.Gs2Auth.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "buff":
+                    return Gs2Buff.Model.Cache.Gs2Buff.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "chat":
+                    return Gs2Chat.Model.Cache.Gs2Chat.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "datastore":
+                    return Gs2Datastore.Model.Cache.Gs2Datastore.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "deploy":
+                    return Gs2Deploy.Model.Cache.Gs2Deploy.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "dictionary":
+                    return Gs2Dictionary.Model.Cache.Gs2Dictionary.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "distributor":
+                    return Gs2Distributor.Model.Cache.Gs2Distributor.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "enchant":
+                    return Gs2Enchant.Model.Cache.Gs2Enchant.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "enhance":
+                    return Gs2Enhance.Model.Cache.Gs2Enhance.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "exchange":
+                    return Gs2Exchange.Model.Cache.Gs2Exchange.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "experience":
+                    return Gs2Experience.Model.Cache.Gs2Experience.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "formation":
+                    return Gs2Formation.Model.Cache.Gs2Formation.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "freeze":
+                    return Gs2Freeze.Model.Cache.Gs2Freeze.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "friend":
+                    return Gs2Friend.Model.Cache.Gs2Friend.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "gateway":
+                    return Gs2Gateway.Model.Cache.Gs2Gateway.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "grade":
+                    return Gs2Grade.Model.Cache.Gs2Grade.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "guard":
+                    return Gs2Guard.Model.Cache.Gs2Guard.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "guild":
+                    return Gs2Guild.Model.Cache.Gs2Guild.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "identifier":
+                    return Gs2Identifier.Model.Cache.Gs2Identifier.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "idle":
+                    return Gs2Idle.Model.Cache.Gs2Idle.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "inbox":
+                    return Gs2Inbox.Model.Cache.Gs2Inbox.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "inventory":
+                    return Gs2Inventory.Model.Cache.Gs2Inventory.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "job_queue":
+                    return Gs2JobQueue.Model.Cache.Gs2JobQueue.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "key":
+                    return Gs2Key.Model.Cache.Gs2Key.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "limit":
+                    return Gs2Limit.Model.Cache.Gs2Limit.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "lock":
+                    return Gs2Lock.Model.Cache.Gs2Lock.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "log":
+                    return Gs2Log.Model.Cache.Gs2Log.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "login_reward":
+                    return Gs2LoginReward.Model.Cache.Gs2LoginReward.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "lottery":
+                    return Gs2Lottery.Model.Cache.Gs2Lottery.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "matchmaking":
+                    return Gs2Matchmaking.Model.Cache.Gs2Matchmaking.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "mega_field":
+                    return Gs2MegaField.Model.Cache.Gs2MegaField.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "mission":
+                    return Gs2Mission.Model.Cache.Gs2Mission.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "money":
+                    return Gs2Money.Model.Cache.Gs2Money.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "money2":
+                    return Gs2Money2.Model.Cache.Gs2Money2.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "news":
+                    return Gs2News.Model.Cache.Gs2News.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "project":
+                    return Gs2Project.Model.Cache.Gs2Project.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "quest":
+                    return Gs2Quest.Model.Cache.Gs2Quest.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "ranking":
+                    return Gs2Ranking.Model.Cache.Gs2Ranking.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "ranking2":
+                    return Gs2Ranking2.Model.Cache.Gs2Ranking2.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "realtime":
+                    return Gs2Realtime.Model.Cache.Gs2Realtime.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "schedule":
+                    return Gs2Schedule.Model.Cache.Gs2Schedule.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "script":
+                    return Gs2Script.Model.Cache.Gs2Script.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "season_rating":
+                    return Gs2SeasonRating.Model.Cache.Gs2SeasonRating.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "serial_key":
+                    return Gs2SerialKey.Model.Cache.Gs2SerialKey.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "showcase":
+                    return Gs2Showcase.Model.Cache.Gs2Showcase.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "skill_tree":
+                    return Gs2SkillTree.Model.Cache.Gs2SkillTree.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "stamina":
+                    return Gs2Stamina.Model.Cache.Gs2Stamina.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "state_machine":
+                    return Gs2StateMachine.Model.Cache.Gs2StateMachine.SetListCached(_cache, timeOffset, kind, parentKey);
+                case "version":
+                    return Gs2Version.Model.Cache.Gs2Version.SetListCached(_cache, timeOffset, kind, parentKey);
+                default:
+                    return false;
+            }
         }
 #if UNITY_2017_1_OR_NEWER
         public Gs2Future DispatchFuture(

@@ -46,6 +46,7 @@ namespace Gs2.Gs2Project.Request
          public string EnableEventBridge { set; get; } = null!;
          public string EventBridgeAwsAccountId { set; get; } = null!;
          public string EventBridgeAwsRegion { set; get; } = null!;
+         public string DataStoreKeyScheme { set; get; } = null!;
         public CreateProjectRequest WithAccountToken(string accountToken) {
             this.AccountToken = accountToken;
             return this;
@@ -86,6 +87,10 @@ namespace Gs2.Gs2Project.Request
             this.EventBridgeAwsRegion = eventBridgeAwsRegion;
             return this;
         }
+        public CreateProjectRequest WithDataStoreKeyScheme(string dataStoreKeyScheme) {
+            this.DataStoreKeyScheme = dataStoreKeyScheme;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -105,7 +110,8 @@ namespace Gs2.Gs2Project.Request
                 .WithBillingMethodName(!data.Keys.Contains("billingMethodName") || data["billingMethodName"] == null ? null : data["billingMethodName"].ToString())
                 .WithEnableEventBridge(!data.Keys.Contains("enableEventBridge") || data["enableEventBridge"] == null ? null : data["enableEventBridge"].ToString())
                 .WithEventBridgeAwsAccountId(!data.Keys.Contains("eventBridgeAwsAccountId") || data["eventBridgeAwsAccountId"] == null ? null : data["eventBridgeAwsAccountId"].ToString())
-                .WithEventBridgeAwsRegion(!data.Keys.Contains("eventBridgeAwsRegion") || data["eventBridgeAwsRegion"] == null ? null : data["eventBridgeAwsRegion"].ToString());
+                .WithEventBridgeAwsRegion(!data.Keys.Contains("eventBridgeAwsRegion") || data["eventBridgeAwsRegion"] == null ? null : data["eventBridgeAwsRegion"].ToString())
+                .WithDataStoreKeyScheme(!data.Keys.Contains("dataStoreKeyScheme") || data["dataStoreKeyScheme"] == null ? null : data["dataStoreKeyScheme"].ToString());
         }
 
         public override JsonData ToJson()
@@ -121,6 +127,7 @@ namespace Gs2.Gs2Project.Request
                 ["enableEventBridge"] = EnableEventBridge,
                 ["eventBridgeAwsAccountId"] = EventBridgeAwsAccountId,
                 ["eventBridgeAwsRegion"] = EventBridgeAwsRegion,
+                ["dataStoreKeyScheme"] = DataStoreKeyScheme,
             };
         }
 
@@ -167,6 +174,10 @@ namespace Gs2.Gs2Project.Request
                 writer.WritePropertyName("eventBridgeAwsRegion");
                 writer.Write(EventBridgeAwsRegion.ToString());
             }
+            if (DataStoreKeyScheme != null) {
+                writer.WritePropertyName("dataStoreKeyScheme");
+                writer.Write(DataStoreKeyScheme.ToString());
+            }
             writer.WriteObjectEnd();
         }
 
@@ -182,6 +193,7 @@ namespace Gs2.Gs2Project.Request
             key += EnableEventBridge + ":";
             key += EventBridgeAwsAccountId + ":";
             key += EventBridgeAwsRegion + ":";
+            key += DataStoreKeyScheme + ":";
             return key;
         }
     }

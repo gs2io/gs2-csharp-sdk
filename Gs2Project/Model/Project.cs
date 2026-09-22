@@ -45,6 +45,7 @@ namespace Gs2.Gs2Project.Model
         public string Currency { set; get; }
         public string EventBridgeAwsAccountId { set; get; }
         public string EventBridgeAwsRegion { set; get; }
+        public string DataStoreKeyScheme { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public Project WithProjectId(string projectId) {
@@ -89,6 +90,10 @@ namespace Gs2.Gs2Project.Model
         }
         public Project WithEventBridgeAwsRegion(string eventBridgeAwsRegion) {
             this.EventBridgeAwsRegion = eventBridgeAwsRegion;
+            return this;
+        }
+        public Project WithDataStoreKeyScheme(string dataStoreKeyScheme) {
+            this.DataStoreKeyScheme = dataStoreKeyScheme;
             return this;
         }
         public Project WithCreatedAt(long? createdAt) {
@@ -163,6 +168,7 @@ namespace Gs2.Gs2Project.Model
                 .WithCurrency(!data.Keys.Contains("currency") || data["currency"] == null ? null : data["currency"].ToString())
                 .WithEventBridgeAwsAccountId(!data.Keys.Contains("eventBridgeAwsAccountId") || data["eventBridgeAwsAccountId"] == null ? null : data["eventBridgeAwsAccountId"].ToString())
                 .WithEventBridgeAwsRegion(!data.Keys.Contains("eventBridgeAwsRegion") || data["eventBridgeAwsRegion"] == null ? null : data["eventBridgeAwsRegion"].ToString())
+                .WithDataStoreKeyScheme(!data.Keys.Contains("dataStoreKeyScheme") || data["dataStoreKeyScheme"] == null ? null : data["dataStoreKeyScheme"].ToString())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["updatedAt"].ToString()));
         }
@@ -190,6 +196,7 @@ namespace Gs2.Gs2Project.Model
                 ["currency"] = Currency,
                 ["eventBridgeAwsAccountId"] = EventBridgeAwsAccountId,
                 ["eventBridgeAwsRegion"] = EventBridgeAwsRegion,
+                ["dataStoreKeyScheme"] = DataStoreKeyScheme,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
             };
@@ -248,6 +255,10 @@ namespace Gs2.Gs2Project.Model
             if (EventBridgeAwsRegion != null) {
                 writer.WritePropertyName("eventBridgeAwsRegion");
                 writer.Write(EventBridgeAwsRegion.ToString());
+            }
+            if (DataStoreKeyScheme != null) {
+                writer.WritePropertyName("dataStoreKeyScheme");
+                writer.Write(DataStoreKeyScheme.ToString());
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
@@ -323,6 +334,11 @@ namespace Gs2.Gs2Project.Model
                 return diff;
             }
             diff = ModelComparer.Compare(EventBridgeAwsRegion, other.EventBridgeAwsRegion);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(DataStoreKeyScheme, other.DataStoreKeyScheme);
             if (diff != 0)
             {
                 return diff;
@@ -440,6 +456,17 @@ namespace Gs2.Gs2Project.Model
                 }
             }
             {
+                switch (DataStoreKeyScheme) {
+                    case "v1":
+                    case "v2":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("project", "project.project.dataStoreKeyScheme.error.invalid"),
+                        });
+                }
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("project", "project.project.createdAt.error.invalid"),
@@ -478,6 +505,7 @@ namespace Gs2.Gs2Project.Model
                 Currency = Currency,
                 EventBridgeAwsAccountId = EventBridgeAwsAccountId,
                 EventBridgeAwsRegion = EventBridgeAwsRegion,
+                DataStoreKeyScheme = DataStoreKeyScheme,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
             };

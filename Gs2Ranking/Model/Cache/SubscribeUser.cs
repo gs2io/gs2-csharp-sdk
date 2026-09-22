@@ -52,7 +52,7 @@ namespace Gs2.Gs2Ranking.Model.Cache
                 namespaceName,
                 userId,
                 categoryName,
-                additionalScopeName,
+                "Singleton",
                 timeOffset?.ToString() ?? "0",
                 "SubscribeUser"
             );
@@ -223,6 +223,37 @@ namespace Gs2.Gs2Ranking.Model.Cache
                 ),
                 self,
                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+            );
+        }
+
+        /// <summary>
+        /// Gs2Distributor:DescribeUserData（ユーザーの全データの一括取得）の 1 エントリ（この kind）をキャッシュへ入れる。
+        /// 鍵はエントリの namespaceName / 読み込むユーザーの userId / モデル自身のプロパティ / 主キー GRN から取る
+        /// （sdk-gen の BaseModel.user_data_cache_keys）。戻り値は親キーで、呼び手が全ページを読み終えてから
+        /// Gs2Ranking.SetListCached(cache, timeOffset, kind, parentKey) で「リストが揃った印」を立てる。
+        /// </summary>
+        public static string PutUserData(
+            this SubscribeUser self,
+            CacheDatabase cache,
+            string namespaceName,
+            string userId,
+            int? timeOffset
+        ) {
+            self.PutCache(
+                cache,
+                namespaceName,
+                userId,
+                self.CategoryName,
+                null,
+                self.TargetUserId,
+                timeOffset
+            );
+            return self.CacheParentKey(
+                namespaceName,
+                userId,
+                self.CategoryName,
+                null,
+                timeOffset
             );
         }
 
