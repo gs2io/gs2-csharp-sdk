@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
@@ -47,22 +46,26 @@ namespace Gs2.Gs2Inbox.Model.Cache
             int? timeOffset,
             OpenMessageRequest request
         ) {
-            (null as Message).DeleteCache(
-                cache,
-                request.NamespaceName,
-                userId,
-                request.MessageName,
-                timeOffset
-/* diff +++ start */
-            );
-            cache.ClearListCache<Message>(
-                (null as Message).CacheParentKey(
+            if (self.Item?.IsRead == true)
+            {
+                self.Item.PutCache(
+                    cache,
                     request.NamespaceName,
                     userId,
+                    request.MessageName,
                     timeOffset
-                )
-/* diff +++ end */
-            );
+                );
+            }
+            else
+            {
+                (null as Message).DeleteCache(
+                    cache,
+                    request.NamespaceName,
+                    userId,
+                    request.MessageName,
+                    timeOffset
+                );
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER
