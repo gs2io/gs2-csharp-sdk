@@ -46,13 +46,26 @@ namespace Gs2.Gs2Inbox.Model.Cache
             int? timeOffset,
             OpenMessageByUserIdRequest request
         ) {
-            (null as Message).DeleteCache(
-                cache,
-                request.NamespaceName,
-                self?.Item?.UserId,
-                request.MessageName,
-                timeOffset
-            );
+            if (self.Item?.IsRead == true)
+            {
+                self.Item.PutCache(
+                    cache,
+                    request.NamespaceName,
+                    self.Item.UserId,
+                    request.MessageName,
+                    timeOffset
+                );
+            }
+            else
+            {
+                (null as Message).DeleteCache(
+                    cache,
+                    request.NamespaceName,
+                    self?.Item?.UserId,
+                    request.MessageName,
+                    timeOffset
+                );
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER

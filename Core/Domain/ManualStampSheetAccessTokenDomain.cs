@@ -53,6 +53,16 @@ namespace Gs2.Core.Domain
         private readonly string _transactionId;
         private readonly string _stampSheet;
         private readonly string _stampSheetEncryptionKeyId;
+        // The stamp sheet runs once per instance: the SDK waits on it inside the
+        // action that issued it, and a caller that waits again (Gs2Bind does)
+        // shares that run instead of sending every task a second time.
+#if GS2_ENABLE_UNITASK
+        private UniTask<TransactionAccessTokenDomain>? _run;
+        private int _runGeneration;
+#else
+        private Task<TransactionAccessTokenDomain> _run;
+        private readonly object _runLock = new object();
+#endif
         public string TransactionId => _transactionId;
 
         public ManualStampSheetAccessTokenDomain(
@@ -122,6 +132,50 @@ namespace Gs2.Core.Domain
         public override async Task<TransactionAccessTokenDomain> WaitAsync(
 #endif
             bool all = false
+        ) {
+#if GS2_ENABLE_UNITASK
+            if (_run == null) {
+                _run = RunAsync().Preserve();
+                _runGeneration++;
+            }
+            var run = _run.Value;
+            var generation = _runGeneration;
+            TransactionAccessTokenDomain transaction;
+            try {
+                transaction = await run;
+            } catch {
+                // A failed run is forgotten so that waiting again retries it,
+                // unless a retry has already replaced it.
+                if (_runGeneration == generation) _run = null;
+                throw;
+            }
+#else
+            Task<TransactionAccessTokenDomain> run;
+            lock (_runLock) {
+                run = _run ??= RunAsync();
+            }
+            TransactionAccessTokenDomain transaction;
+            try {
+                transaction = await run;
+            } catch {
+                // A failed run is forgotten so that waiting again retries it.
+                lock (_runLock) {
+                    if (_run == run) _run = null;
+                }
+                throw;
+            }
+#endif
+            if (all && transaction != null) {
+                return await transaction.WaitAsync(true);
+            }
+            return transaction;
+        }
+
+#if GS2_ENABLE_UNITASK
+        private async UniTask<TransactionAccessTokenDomain> RunAsync(
+#else
+        private async Task<TransactionAccessTokenDomain> RunAsync(
+#endif
         ) {
             var client = new Gs2DistributorRestClient(
                 Gs2.RestSession
@@ -367,11 +421,7 @@ namespace Gs2.Core.Domain
                 }
             }
 
-            var transaction = HandleResult(action, resultJson);
-            if (all && transaction != null) {
-                return await transaction.WaitAsync(true);
-            }
-            return transaction;
+            return HandleResult(action, resultJson);
         }
     }
 }
