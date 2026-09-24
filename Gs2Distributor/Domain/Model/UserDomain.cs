@@ -65,6 +65,9 @@ namespace Gs2.Gs2Distributor.Domain.Model
         private readonly Gs2DistributorRestClient _client;
         public string NamespaceName { get; } = null!;
         public string UserId { get; } = null!;
+/* diff +++ start */
+        public string NextPageToken { get; set; } = null!;
+/* diff +++ end */
 
         public UserDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -79,6 +82,37 @@ namespace Gs2.Gs2Distributor.Domain.Model
             this.UserId = userId;
         }
 
+/* diff +++ start */
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Distributor.Model.UserDataEntry> UserData(
+            string timeOffsetToken = null
+        )
+        {
+            return new DescribeUserDataByUserIdIterator(
+                this._gs2,
+                this._client,
+                this.UserId,
+                timeOffsetToken
+            );
+        }
+        #endif
+
+        #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Distributor.Model.UserDataEntry> UserDataAsync(
+        #else
+        public DescribeUserDataByUserIdIterator UserDataAsync(
+        #endif
+            string timeOffsetToken = null
+        )
+        {
+            return new DescribeUserDataByUserIdIterator(
+                this._gs2,
+                this._client,
+                this.UserId,
+                timeOffsetToken
+            );
+        }
+/* diff +++ end */
         public Gs2.Gs2Distributor.Domain.Model.StampSheetResultDomain StampSheetResult(
             string transactionId
         ) {

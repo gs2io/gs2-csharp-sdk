@@ -362,22 +362,6 @@ namespace Gs2.Gs2Distributor.Model.Cache
                         Request.BatchExecuteApiRequest.FromJson(requestPayload)
                     );
                     break;
-                case "describeUserData":
-                    Result.DescribeUserDataResult.FromJson(resultPayload).PutCache(
-                        cache,
-                        userId,
-                        null,
-                        Request.DescribeUserDataRequest.FromJson(requestPayload)
-                    );
-                    break;
-                case "describeUserDataByUserId":
-                    Result.DescribeUserDataByUserIdResult.FromJson(resultPayload).PutCache(
-                        cache,
-                        userId,
-                        null,
-                        Request.DescribeUserDataByUserIdRequest.FromJson(requestPayload)
-                    );
-                    break;
                 case "ifExpressionByUserId":
                     Result.IfExpressionByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
@@ -416,6 +400,22 @@ namespace Gs2.Gs2Distributor.Model.Cache
                         userId,
                         null,
                         Request.GetStampSheetResultByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "describeUserData":
+                    Result.DescribeUserDataResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.DescribeUserDataRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "describeUserDataByUserId":
+                    Result.DescribeUserDataByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.DescribeUserDataByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
                 case "runTransaction":

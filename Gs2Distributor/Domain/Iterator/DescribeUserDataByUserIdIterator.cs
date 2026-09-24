@@ -58,35 +58,42 @@ using System.Threading.Tasks;
 namespace Gs2.Gs2Distributor.Domain.Iterator
 {
 
-    public class DescribeDistributorModelsIterator :
+    public class DescribeUserDataByUserIdIterator :
     #if UNITY_2017_1_OR_NEWER
-        Gs2Iterator<Gs2.Gs2Distributor.Model.DistributorModel>,
+        Gs2Iterator<Gs2.Gs2Distributor.Model.UserDataEntry>,
     #endif
     #if GS2_ENABLE_UNITASK
-        IUniTaskAsyncEnumerable<Gs2.Gs2Distributor.Model.DistributorModel>
+        IUniTaskAsyncEnumerable<Gs2.Gs2Distributor.Model.UserDataEntry>
     #else
-        IAsyncEnumerable<Gs2.Gs2Distributor.Model.DistributorModel>
+        IAsyncEnumerable<Gs2.Gs2Distributor.Model.UserDataEntry>
     #endif
     {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DistributorRestClient _client;
-        public string NamespaceName { get; }
+        // 一括取得: 読んだページの各エントリを kind ごとのモデルのキャッシュへ入れ、最終ページで (service, kind, 親キー) ごとに「リストが揃った印」を立てる
+        private readonly HashSet<(string service, string kind, string parentKey)> _listCached = new HashSet<(string service, string kind, string parentKey)>();
+        public string UserId { get; }
+        public string TimeOffsetToken { get; }
+        private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
-        private Gs2.Gs2Distributor.Model.DistributorModel[] _result;
+        private Gs2.Gs2Distributor.Model.UserDataEntry[] _result;
 
         public static int? fetchSize;
 
-        public DescribeDistributorModelsIterator(
+        public DescribeUserDataByUserIdIterator(
             Gs2.Core.Domain.Gs2 gs2,
             Gs2DistributorRestClient client,
-            string namespaceName
+            string userId,
+            string timeOffsetToken = null
         ) {
             this._gs2 = gs2;
             this._client = client;
-            this.NamespaceName = namespaceName;
+            this.UserId = userId;
+            this.TimeOffsetToken = timeOffsetToken;
+            this._pageToken = null;
             this._last = false;
-            this._result = new Gs2.Gs2Distributor.Model.DistributorModel[]{};
+            this._result = new Gs2.Gs2Distributor.Model.UserDataEntry[]{};
         }
 
         #if GS2_ENABLE_UNITASK
@@ -96,43 +103,36 @@ namespace Gs2.Gs2Distributor.Domain.Iterator
         #endif
             var isCacheChecked = this._isCacheChecked;
             this._isCacheChecked = true;
-            if (!isCacheChecked && this._gs2.Cache.TryGetList
-                    <Gs2.Gs2Distributor.Model.DistributorModel>
-            (
-                    (null as Gs2.Gs2Distributor.Model.DistributorModel).CacheParentKey(
-                        NamespaceName,
-                        null
-                    ),
-                    out var list
-            )) {
-                this._result = list
-                    .ToArray();
-                this._last = true;
-            } else {
 
-                var request = new Gs2.Gs2Distributor.Request.DescribeDistributorModelsRequest()
-                    .WithContextStack(this._gs2.DefaultContextStack)
-                    .WithNamespaceName(this.NamespaceName);
-                var r = await this._client.DescribeDistributorModelsAsync(
-                    request
-                );
-                this._result = r.Items
-                    .ToArray();
-                this._last = true;
-                r.PutCache(
-                    this._gs2.Cache,
-                    null,
-                    null,
-                    request
-                );
-
-                if (this._last) {
-                    this._gs2.Cache.SetListCached<Gs2.Gs2Distributor.Model.DistributorModel>(
-                        (null as Gs2.Gs2Distributor.Model.DistributorModel).CacheParentKey(
-                            NamespaceName,
-                            null
-                        )
-                    );
+            var request = new Gs2.Gs2Distributor.Request.DescribeUserDataByUserIdRequest()
+                .WithContextStack(this._gs2.DefaultContextStack)
+                .WithUserId(this.UserId)
+                .WithPageToken(this._pageToken)
+                .WithLimit(fetchSize);
+            var r = await this._client.DescribeUserDataByUserIdAsync(
+                request
+            );
+            this._result = r.Items
+                .ToArray();
+            this._pageToken = r.NextPageToken;
+            this._last = this._pageToken == null;
+            foreach (var entry in this._result) {
+                string parentKey;
+                try {
+                    parentKey = this._gs2.PutUserData(entry.Service, entry.NamespaceName, this.UserId, null, entry.Kind, entry.Payload);
+                }
+                catch (System.Exception) {
+                    // 1 件の JSON が読めなくても他のエントリは入れる（個別 API で取り直せる）
+                    continue;
+                }
+                if (parentKey == null) {
+                    continue;
+                }
+                this._listCached.Add((entry.Service, entry.Kind, parentKey));
+            }
+            if (this._last) {
+                foreach (var (service, kind, parentKey) in this._listCached) {
+                    this._gs2.SetListCached(service, null, kind, parentKey);
                 }
             }
         }
@@ -150,7 +150,7 @@ namespace Gs2.Gs2Distributor.Domain.Iterator
         }
 
         protected override System.Collections.IEnumerator Next(
-            Action<AsyncResult<Gs2.Gs2Distributor.Model.DistributorModel>> callback
+            Action<AsyncResult<Gs2.Gs2Distributor.Model.UserDataEntry>> callback
         )
         {
             if (this._result.Length == 0 && !this._last) {
@@ -160,7 +160,7 @@ namespace Gs2.Gs2Distributor.Domain.Iterator
                 {
                     Current = null;
                     Error = future.Error;
-                    callback.Invoke(new AsyncResult<Gs2.Gs2Distributor.Model.DistributorModel>(
+                    callback.Invoke(new AsyncResult<Gs2.Gs2Distributor.Model.UserDataEntry>(
                         Current,
                         Error
                     ));
@@ -169,7 +169,7 @@ namespace Gs2.Gs2Distributor.Domain.Iterator
             }
             if (this._result.Length == 0) {
                 Current = null;
-                callback.Invoke(new AsyncResult<Gs2.Gs2Distributor.Model.DistributorModel>(
+                callback.Invoke(new AsyncResult<Gs2.Gs2Distributor.Model.UserDataEntry>(
                     Current,
                     Error
                 ));
@@ -178,7 +178,7 @@ namespace Gs2.Gs2Distributor.Domain.Iterator
             var ret = this._result[0];
             this._result = this._result.ToList().GetRange(1, this._result.Length - 1).ToArray();
             Current = ret;
-            callback.Invoke(new AsyncResult<Gs2.Gs2Distributor.Model.DistributorModel>(
+            callback.Invoke(new AsyncResult<Gs2.Gs2Distributor.Model.UserDataEntry>(
                 Current,
                 Error
             ));
@@ -186,21 +186,18 @@ namespace Gs2.Gs2Distributor.Domain.Iterator
         #endif
 
         #if GS2_ENABLE_UNITASK
-        public IUniTaskAsyncEnumerator<Gs2.Gs2Distributor.Model.DistributorModel> GetAsyncEnumerator(
+        public IUniTaskAsyncEnumerator<Gs2.Gs2Distributor.Model.UserDataEntry> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
-        ) => UniTaskAsyncEnumerable.Create<Gs2.Gs2Distributor.Model.DistributorModel>(async (writer, token) =>
+        ) => UniTaskAsyncEnumerable.Create<Gs2.Gs2Distributor.Model.UserDataEntry>(async (writer, token) =>
         #else
-        public async IAsyncEnumerator<Gs2.Gs2Distributor.Model.DistributorModel> GetAsyncEnumerator(
+        public async IAsyncEnumerator<Gs2.Gs2Distributor.Model.UserDataEntry> GetAsyncEnumerator(
             CancellationToken cancellationToken = new CancellationToken()
         )
         #endif
         {
-            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Distributor.Model.DistributorModel>(
-                            (null as Gs2.Gs2Distributor.Model.DistributorModel).CacheParentKey(
-                        NamespaceName,
-                        null
-                   ),
-                   "ListDistributorModel"
+            using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Distributor.Model.UserDataEntry>(
+                            "distributor:UserDataEntry:" + (this.UserId ?? ""),
+                   "ListUserDataEntry"
                ).LockAsync()) {
                 while(this._hasNext()) {
                     cancellationToken.ThrowIfCancellationRequested();

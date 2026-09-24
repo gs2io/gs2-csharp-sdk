@@ -37,27 +37,27 @@ using System.Threading.Tasks;
 
 namespace Gs2.Gs2Distributor.Model.Cache
 {
-    public static partial class DistributeExt
+    public static partial class UserDataEntryExt
     {
         public static void PutCache(
-            this DescribeUserDataResult self,
+            this DescribeUserDataByUserIdResult self,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-            DescribeUserDataRequest request
+            DescribeUserDataByUserIdRequest request
         ) {
         }
 
 #if UNITY_2017_1_OR_NEWER
-        public static IFuture<DescribeUserDataResult> InvokeFuture(
-            this DescribeUserDataRequest request,
+        public static IFuture<DescribeUserDataByUserIdResult> InvokeFuture(
+            this DescribeUserDataByUserIdRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
-            Func<IFuture<DescribeUserDataResult>> invokeImpl
+            Func<IFuture<DescribeUserDataByUserIdResult>> invokeImpl
         )
         {
-            IEnumerator Impl(IFuture<DescribeUserDataResult> self)
+            IEnumerator Impl(IFuture<DescribeUserDataByUserIdResult> self)
             {
                 var future = invokeImpl();
                 yield return future;
@@ -75,25 +75,25 @@ namespace Gs2.Gs2Distributor.Model.Cache
 
                 self.OnComplete(future.Result);
             }
-            return new Gs2InlineFuture<DescribeUserDataResult>(Impl);
+            return new Gs2InlineFuture<DescribeUserDataByUserIdResult>(Impl);
         }
 #endif
 
 #if GS2_ENABLE_UNITASK
-        public static async UniTask<DescribeUserDataResult> InvokeAsync(
+        public static async UniTask<DescribeUserDataByUserIdResult> InvokeAsync(
 #else
-        public static async Task<DescribeUserDataResult> InvokeAsync(
+        public static async Task<DescribeUserDataByUserIdResult> InvokeAsync(
 #endif
-            this DescribeUserDataRequest request,
+            this DescribeUserDataByUserIdRequest request,
             CacheDatabase cache,
             string userId,
             int? timeOffset,
 #if GS2_ENABLE_UNITASK
-            Func<UniTask<DescribeUserDataResult>> invokeImpl
+            Func<UniTask<DescribeUserDataByUserIdResult>> invokeImpl
 #elif UNITY_2017_1_OR_NEWER
-            Func<TaskFuture<DescribeUserDataResult>> invokeImpl
+            Func<TaskFuture<DescribeUserDataByUserIdResult>> invokeImpl
 #else
-            Func<Task<DescribeUserDataResult>> invokeImpl
+            Func<Task<DescribeUserDataByUserIdResult>> invokeImpl
 #endif
         )
         {

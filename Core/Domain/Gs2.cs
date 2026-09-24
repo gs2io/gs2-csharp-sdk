@@ -398,45 +398,8 @@ namespace Gs2.Core.Domain
             AccessToken accessToken
         )
         {
-            if (accessToken == null) {
-                throw new ArgumentNullException(nameof(accessToken));
-            }
-            var client = new Gs2Distributor.Gs2DistributorRestClient(RestSession);
-            var loaded = 0;
-            var listCached = new HashSet<(string service, string kind, string parentKey)>();
-            string pageToken = null;
-            while (true) {
-                var result = await client.DescribeUserDataAsync(
-                    new Gs2Distributor.Request.DescribeUserDataRequest()
-                        .WithContextStack(DefaultContextStack)
-                        .WithAccessToken(accessToken.Token)
-                        .WithPageToken(pageToken)
-                        .WithLimit(100)
-                );
-                foreach (var entry in result.Items ?? Array.Empty<Gs2Distributor.Model.UserDataEntry>()) {
-                    string parentKey;
-                    try {
-                        parentKey = PutUserData(entry.Service, entry.NamespaceName, accessToken.UserId, accessToken.TimeOffset, entry.Kind, entry.Payload);
-                    }
-                    catch (System.Exception) {
-                        // 1 件の JSON が読めなくても他のエントリは入れる（個別 API で取り直せる）
-                        continue;
-                    }
-                    if (parentKey == null) {
-                        continue;
-                    }
-                    loaded++;
-                    listCached.Add((entry.Service, entry.Kind, parentKey));
-                }
-                pageToken = result.NextPageToken;
-                if (string.IsNullOrEmpty(pageToken)) {
-                    break;
-                }
-            }
-            foreach (var (service, kind, parentKey) in listCached) {
-                SetListCached(service, accessToken.TimeOffset, kind, parentKey);
-            }
-            return loaded;
+            // 実態は distributor ドメイン（生成物 Gs2Distributor.LoadUserDataAsync）。ここは糖衣
+            return await Distributor.LoadUserDataAsync(accessToken);
         }
 
         /// <summary>

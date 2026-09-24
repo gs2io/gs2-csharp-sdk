@@ -66,6 +66,9 @@ namespace Gs2.Gs2Distributor.Domain.Model
         public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
+/* diff +++ start */
+        public string NextPageToken { get; set; } = null!;
+/* diff +++ end */
 
 /* diff +++ start */
         public Gs2.Core.Domain.Gs2 Gs2 => this._gs2;
@@ -84,6 +87,33 @@ namespace Gs2.Gs2Distributor.Domain.Model
             this.AccessToken = accessToken;
         }
 
+/* diff +++ start */
+        #if UNITY_2017_1_OR_NEWER
+        public Gs2Iterator<Gs2.Gs2Distributor.Model.UserDataEntry> UserData(
+        )
+        {
+            return new DescribeUserDataIterator(
+                this._gs2,
+                this._client,
+                this.AccessToken
+            );
+        }
+        #endif
+
+        #if GS2_ENABLE_UNITASK
+        public IUniTaskAsyncEnumerable<Gs2.Gs2Distributor.Model.UserDataEntry> UserDataAsync(
+        #else
+        public DescribeUserDataIterator UserDataAsync(
+        #endif
+        )
+        {
+            return new DescribeUserDataIterator(
+                this._gs2,
+                this._client,
+                this.AccessToken
+            );
+        }
+/* diff +++ end */
         public Gs2.Gs2Distributor.Domain.Model.StampSheetResultAccessTokenDomain StampSheetResult(
             string transactionId
         ) {
