@@ -30,21 +30,6 @@ namespace Gs2.Core.Net
         public static int OpenTimeoutSec = 10;
         public static int CloseTimeoutSec = 3;
 
-        // ---------------------------------------------------------------- Steady（専用フリート）
-        //
-        // フリートは 1 つの名前（SteadyEndpoint、例 https://bs-dev.ap-northeast-1.dev.gen2.gs2io.com）で受け、
-        // REST は <steady>/<service>/...、WebSocket は wss://<host>/ を使う。名前はフリートのノードへ直接
-        // 解決される（間に ALB は無い）ので、フリートが手放した公開 IP に当たると SYN が落ちる。
-        // そのため Steady のときだけ接続段階に上限を置き、接続段階の失敗（1 バイトも送っていない）だけは
-        // 同じ要求をもう 1 回だけ送る。送信後の失敗は届いたかもしれないので再送しない（非冪等要求の二重実行を作らない）。
-
-        /// <summary>
-        /// Steady の基点への接続段階（DNS / TCP dial / TLS handshake）の上限秒。
-        /// ★近似である: .NET 4.7.1 の HttpClientHandler と UnityWebRequest には接続専用のタイムアウトが無く、
-        /// 接続段階だけを切ることができない。そこで Steady 宛の冪等な GET / DELETE だけ、要求タイムアウト全体を
-        /// この値に縮める。非冪等な POST / PUT には掛けない（GS2 の長い API を殺すし、接続段階と読み取りを
-        /// 区別できないので二重実行を作る）。
-        /// </summary>
         public static int SteadyConnectTimeoutSec = 5;
 
         private const string ServicePlaceholder = "{service}";
@@ -78,11 +63,6 @@ namespace Gs2.Core.Net
 
         private string _steadyEndpoint;
 
-        /// <summary>
-        /// Steady（専用フリート）の基点（https://&lt;host&gt;）。null なら共有クラウド（URL は従来と byte 単位で同じ）。
-        /// Open の前に設定する。設定すると全サービスの接続先が &lt;steady&gt;/&lt;service&gt; になり、
-        /// 接続段階に上限と 1 回の再送が付く。末尾の / と空白は落として正規化する。
-        /// </summary>
         public string SteadyEndpoint
         {
             get => this._steadyEndpoint;
@@ -106,7 +86,6 @@ namespace Gs2.Core.Net
             this.State = State.Idle;
         }
 
-        /// <summary>末尾の / と空白を落とす。空（null / 空白だけ）なら null。</summary>
         public static string NormalizeSteadyEndpoint(string value)
         {
             if (value == null)
@@ -117,7 +96,6 @@ namespace Gs2.Core.Net
             return normalized.Length == 0 ? null : normalized;
         }
 
-        /// <summary>共有クラウドの接続先（従来の <see cref="EndpointHost"/> の置換）。</summary>
         internal static string SharedCloudEndpoint(string service, string regionDisplayName)
         {
             return EndpointHost
@@ -125,13 +103,6 @@ namespace Gs2.Core.Net
                 .Replace(RegionPlaceholder, regionDisplayName);
         }
 
-        /// <summary>
-        /// service の接続先（https://... まで。パスは呼び手が足す）。
-        /// 優先順: サービスごとの override（endpointHost）＞ <see cref="SteadyEndpoint"/> ＞
-        /// 共有クラウドの template（静的 <see cref="EndpointHost"/>）。Go の
-        /// <c>Gs2RestSession.EndpointHost(service, endpointHost)</c>（core/steady.go）と同じ順。
-        /// <see cref="SteadyEndpoint"/> が null なら従来の文字列と byte 単位で同じ。
-        /// </summary>
         public string EndpointFor(string service, string endpointHost = null)
         {
             if (endpointHost == null && this._steadyEndpoint != null)
@@ -143,14 +114,6 @@ namespace Gs2.Core.Net
                 .Replace(RegionPlaceholder, Region.DisplayName());
         }
 
-        /// <summary>
-        /// 生成クライアントが静的 <see cref="EndpointHost"/> の template から組んだ URL を Steady の基点宛へ書き換える。
-        /// ★生成クライアント（Gs2&lt;Service&gt;RestClient）はセッションを知らずに静的 template だけから URL を組むので
-        /// （引数で接続先を渡す口が無い）、送る直前にここで直す。template の {service} の位置で service 名を切り出し、
-        /// &lt;steady&gt;/&lt;service&gt; + 残りのパス にする。
-        /// 対象でない URL（Steady 未設定 / template に {service} が無い独自プロキシ / 形が違う）はそのまま返す
-        /// ―― つまり service を特定できる形の override だけが Steady に書き換えられる。
-        /// </summary>
         internal string ToSteadyUrl(string url)
         {
             var steady = this._steadyEndpoint;
@@ -160,8 +123,6 @@ namespace Gs2.Core.Net
             }
             if (IsSteadyUrl(url))
             {
-                // ★既に基点宛。基点の名前が共有クラウドの template と同じ形（bs.ap-northeast-1.gen2.gs2io.com など）
-                // でも二重に書き換えない（<steady>/bs/<service>/... になってしまう）。
                 return url;
             }
 
@@ -181,7 +142,6 @@ namespace Gs2.Core.Net
             int serviceEnd;
             if (suffix.Length == 0)
             {
-                // template が {service} で終わる形（https://host/{service}）。service 名は次の / まで。
                 serviceEnd = url.IndexOf('/', prefix.Length);
                 if (serviceEnd < 0)
                 {
@@ -205,7 +165,6 @@ namespace Gs2.Core.Net
             return steady + "/" + service + url.Substring(serviceEnd + suffix.Length);
         }
 
-        /// <summary>要求 URL が Steady の基点宛か（接続段階の失敗で再送してよいのはこれだけ）。</summary>
         internal bool IsSteadyUrl(string url)
         {
             var steady = this._steadyEndpoint;
@@ -495,7 +454,6 @@ namespace Gs2.Core.Net
                     dotNetRequest.ConfigureCertificateRevocation(this._checkCertificateRevocation);
                 }
 #endif
-                // ★生成クライアントは静的 EndpointHost から URL を組むので、ここで Steady の基点宛へ直す（ToSteadyUrl）。
                 sessionRequest.Url = ToSteadyUrl(sessionRequest.Url);
 
                 long generation;
@@ -524,13 +482,6 @@ namespace Gs2.Core.Net
                     this._inflightRequest[sessionRequest.TaskId] = sessionRequest;
                 }
 
-                // Steady の基点宛の要求だけ、接続段階の失敗に備える（Steady 未設定なら従来どおり 1 回送るだけ）。
-                //   - 接続段階の失敗（ConnectFailed。1 バイトも送っていない）→ 同じ要求をもう 1 回だけ送る。
-                //   - タイムアウト → 冪等な GET / DELETE だけもう 1 回（POST / PUT は届いたかもしれないので再送しない）。
-                //   - 最初の試行の上限は、GET / DELETE だけ SteadyConnectTimeoutSec に縮める。
-                // ★この時間の縮めは近似: .NET 4.7.1 の HttpClientHandler も UnityWebRequest も接続専用の
-                //   タイムアウトを持たないので、POST / PUT では接続段階の固まりと読み取りの遅さを区別できない。
-                //   だから POST / PUT は縮めないし、タイムアウトでは再送もしない。再送は 1 回だけ（3 回目は無い）。
                 var viaSteady = IsSteadyUrl(sessionRequest.Url);
                 var idempotent = sessionRequest.Method == HttpMethod.Get || sessionRequest.Method == HttpMethod.Delete;
                 var firstTimeoutSec = viaSteady && idempotent && SteadyConnectTimeoutSec > 0
@@ -668,7 +619,6 @@ namespace Gs2.Core.Net
             }
         }
 
-        /// <summary>要求を送ってよい状態か（Steady の再送の前に確かめる。世代が変わっていたら送らない）。</summary>
         private bool IsRetryableSessionState(long generation)
         {
             lock (_stateLock)
@@ -678,9 +628,6 @@ namespace Gs2.Core.Net
             }
         }
 
-        /// <summary>
-        /// 要求を 1 回だけ送る。timeoutSec 内に終わらなければ中断して null を返す（呼び手が RequestTimeoutException にする）。
-        /// </summary>
         private async Task<RestResult> InvokeOnceAsync(RestSessionRequest request, int timeoutSec)
         {
             var invokeTask = InvokeRequestAsync(request);

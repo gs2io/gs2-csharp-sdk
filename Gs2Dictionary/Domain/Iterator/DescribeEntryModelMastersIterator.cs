@@ -207,7 +207,7 @@ namespace Gs2.Gs2Dictionary.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Dictionary.Model.EntryModelMaster>(
-                    (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).CacheParentKey(
+                            (null as Gs2.Gs2Dictionary.Model.EntryModelMaster).CacheParentKey(
                         NamespaceName,
                         null
                    ),

@@ -202,7 +202,7 @@ namespace Gs2.Gs2Quest.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Quest.Model.QuestModel>(
-                    (null as Gs2.Gs2Quest.Model.QuestModel).CacheParentKey(
+                            (null as Gs2.Gs2Quest.Model.QuestModel).CacheParentKey(
                         NamespaceName,
                         QuestGroupName,
                         null

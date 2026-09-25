@@ -223,7 +223,7 @@ namespace Gs2.Gs2Money2.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Money2.Model.Event>(
-                    (null as Gs2.Gs2Money2.Model.Event).CacheParentKey(
+                            (null as Gs2.Gs2Money2.Model.Event).CacheParentKey(
                         NamespaceName,
                         UserId,
                         null

@@ -190,7 +190,7 @@ namespace Gs2.Gs2Freeze.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Freeze.Model.Stage>(
-                    (null as Gs2.Gs2Freeze.Model.Stage).CacheParentKey(
+                            (null as Gs2.Gs2Freeze.Model.Stage).CacheParentKey(
                         null
                    ),
                    "ListStage"

@@ -196,7 +196,7 @@ namespace Gs2.Gs2Grade.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Grade.Model.GradeModel>(
-                    (null as Gs2.Gs2Grade.Model.GradeModel).CacheParentKey(
+                            (null as Gs2.Gs2Grade.Model.GradeModel).CacheParentKey(
                         NamespaceName,
                         null
                    ),

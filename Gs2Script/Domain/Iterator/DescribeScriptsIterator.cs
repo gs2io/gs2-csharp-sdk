@@ -207,7 +207,7 @@ namespace Gs2.Gs2Script.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Script.Model.Script>(
-                    (null as Gs2.Gs2Script.Model.Script).CacheParentKey(
+                            (null as Gs2.Gs2Script.Model.Script).CacheParentKey(
                         NamespaceName,
                         null
                    ),

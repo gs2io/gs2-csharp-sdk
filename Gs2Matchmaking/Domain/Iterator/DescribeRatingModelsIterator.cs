@@ -196,7 +196,7 @@ namespace Gs2.Gs2Matchmaking.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Matchmaking.Model.RatingModel>(
-                    (null as Gs2.Gs2Matchmaking.Model.RatingModel).CacheParentKey(
+                            (null as Gs2.Gs2Matchmaking.Model.RatingModel).CacheParentKey(
                         NamespaceName,
                         null
                    ),

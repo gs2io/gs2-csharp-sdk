@@ -196,7 +196,7 @@ namespace Gs2.Gs2Stamina.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Stamina.Model.StaminaModel>(
-                    (null as Gs2.Gs2Stamina.Model.StaminaModel).CacheParentKey(
+                            (null as Gs2.Gs2Stamina.Model.StaminaModel).CacheParentKey(
                         NamespaceName,
                         null
                    ),

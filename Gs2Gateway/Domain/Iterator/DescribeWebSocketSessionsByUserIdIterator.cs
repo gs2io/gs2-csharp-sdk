@@ -211,7 +211,7 @@ namespace Gs2.Gs2Gateway.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Gateway.Model.WebSocketSession>(
-                    (null as Gs2.Gs2Gateway.Model.WebSocketSession).CacheParentKey(
+                            (null as Gs2.Gs2Gateway.Model.WebSocketSession).CacheParentKey(
                         NamespaceName,
                         UserId,
                         null

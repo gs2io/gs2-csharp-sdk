@@ -209,7 +209,7 @@ namespace Gs2.Gs2Quest.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Quest.Model.CompletedQuestList>(
-                    (null as Gs2.Gs2Quest.Model.CompletedQuestList).CacheParentKey(
+                            (null as Gs2.Gs2Quest.Model.CompletedQuestList).CacheParentKey(
                         NamespaceName,
                         AccessToken?.UserId,
                         this.AccessToken?.TimeOffset

@@ -201,7 +201,7 @@ namespace Gs2.Gs2Grade.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Grade.Model.Namespace>(
-                    (null as Gs2.Gs2Grade.Model.Namespace).CacheParentKey(
+                            (null as Gs2.Gs2Grade.Model.Namespace).CacheParentKey(
                         null
                    ),
                    "ListNamespace"

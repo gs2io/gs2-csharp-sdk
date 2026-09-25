@@ -207,7 +207,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Log.Model.MetricModel>(
-                    (null as Gs2.Gs2Log.Model.MetricModel).CacheParentKey(
+                            (null as Gs2.Gs2Log.Model.MetricModel).CacheParentKey(
                         NamespaceName,
                         null
                    ),

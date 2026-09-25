@@ -207,7 +207,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Lottery.Model.PrizeTableMaster>(
-                    (null as Gs2.Gs2Lottery.Model.PrizeTableMaster).CacheParentKey(
+                            (null as Gs2.Gs2Lottery.Model.PrizeTableMaster).CacheParentKey(
                         NamespaceName,
                         null
                    ),

@@ -243,7 +243,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Chat.Model.Message>(
-                    (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
+                            (null as Gs2.Gs2Chat.Model.Message).CacheParentKey(
                         NamespaceName,
                         AccessToken?.UserId,
                         RoomName ?? default,

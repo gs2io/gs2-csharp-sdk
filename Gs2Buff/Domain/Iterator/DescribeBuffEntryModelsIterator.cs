@@ -196,7 +196,7 @@ namespace Gs2.Gs2Buff.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Buff.Model.BuffEntryModel>(
-                    (null as Gs2.Gs2Buff.Model.BuffEntryModel).CacheParentKey(
+                            (null as Gs2.Gs2Buff.Model.BuffEntryModel).CacheParentKey(
                         NamespaceName,
                         null
                    ),

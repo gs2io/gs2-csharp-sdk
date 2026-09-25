@@ -202,7 +202,7 @@ namespace Gs2.Gs2Deploy.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Deploy.Model.Event>(
-                    (null as Gs2.Gs2Deploy.Model.Event).CacheParentKey(
+                            (null as Gs2.Gs2Deploy.Model.Event).CacheParentKey(
                         StackName,
                         null
                    ),

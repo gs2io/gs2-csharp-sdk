@@ -208,7 +208,7 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2SerialKey.Model.IssueJob>(
-                    (null as Gs2.Gs2SerialKey.Model.IssueJob).CacheParentKey(
+                            (null as Gs2.Gs2SerialKey.Model.IssueJob).CacheParentKey(
                         NamespaceName,
                         CampaignModelName,
                         null

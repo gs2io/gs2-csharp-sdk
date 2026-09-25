@@ -207,7 +207,7 @@ namespace Gs2.Gs2Version.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Version.Model.VersionModelMaster>(
-                    (null as Gs2.Gs2Version.Model.VersionModelMaster).CacheParentKey(
+                            (null as Gs2.Gs2Version.Model.VersionModelMaster).CacheParentKey(
                         NamespaceName,
                         null
                    ),

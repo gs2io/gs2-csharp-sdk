@@ -209,7 +209,7 @@ namespace Gs2.Gs2Mission.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Mission.Model.Counter>(
-                    (null as Gs2.Gs2Mission.Model.Counter).CacheParentKey(
+                            (null as Gs2.Gs2Mission.Model.Counter).CacheParentKey(
                         NamespaceName,
                         AccessToken?.UserId,
                         this.AccessToken?.TimeOffset

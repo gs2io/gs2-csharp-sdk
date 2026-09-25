@@ -209,7 +209,7 @@ namespace Gs2.Gs2Dictionary.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Dictionary.Model.Like>(
-                    (null as Gs2.Gs2Dictionary.Model.Like).CacheParentKey(
+                            (null as Gs2.Gs2Dictionary.Model.Like).CacheParentKey(
                         NamespaceName,
                         AccessToken?.UserId,
                         this.AccessToken?.TimeOffset

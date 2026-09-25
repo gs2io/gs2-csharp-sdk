@@ -196,7 +196,7 @@ namespace Gs2.Gs2LoginReward.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2LoginReward.Model.BonusModel>(
-                    (null as Gs2.Gs2LoginReward.Model.BonusModel).CacheParentKey(
+                            (null as Gs2.Gs2LoginReward.Model.BonusModel).CacheParentKey(
                         NamespaceName,
                         null
                    ),

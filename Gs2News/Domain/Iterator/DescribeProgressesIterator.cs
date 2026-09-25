@@ -202,7 +202,7 @@ namespace Gs2.Gs2News.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2News.Model.Progress>(
-                    (null as Gs2.Gs2News.Model.Progress).CacheParentKey(
+                            (null as Gs2.Gs2News.Model.Progress).CacheParentKey(
                         NamespaceName,
                         null
                    ),

@@ -66,11 +66,6 @@ namespace Gs2.Core.Net
 
         private string _steadyEndpoint;
 
-        /// <summary>
-        /// Steady（専用フリート）の基点（https://&lt;host&gt;）。null なら共有クラウド（従来の gateway-ws）。
-        /// Open の前に設定する。設定すると接続先が wss://&lt;host&gt;/（基点が http:// なら ws://）になる。
-        /// 末尾の / と空白は落として正規化する。
-        /// </summary>
         public string SteadyEndpoint
         {
             get => this._steadyEndpoint;
@@ -105,20 +100,12 @@ namespace Gs2.Core.Net
             this.State = State.Idle;
         }
 
-        /// <summary>
-        /// 接続先。優先順は <see cref="SteadyEndpoint"/> ＞ 共有クラウドの <see cref="EndpointHost"/>
-        /// （Go の webSocketUrl（core/websocket.go）と同じ）。Steady の基点は wss://&lt;host&gt;/ にする
-        /// （http:// の基点（ローカルの試験・開発）は ws://）。URL として読めない基点は共有クラウドに落とす。
-        /// ★handshake には上限を置いていない: WebSocketSession（websocket-sharp / WebGL）に handshake 専用の
-        /// タイムアウトを渡す口が無い。REST 側の近似（<see cref="Gs2RestSession.SteadyConnectTimeoutSec"/>）だけが効く。
-        /// </summary>
         public string EndpointUrl()
         {
             return SteadyWebSocketUrl(this._steadyEndpoint)
                    ?? EndpointHost.Replace("{region}", Region.DisplayName());
         }
 
-        /// <summary>Steady の基点（https://&lt;host&gt;）から接続先 wss://&lt;host&gt;/ を作る。空 / 読めないなら null。</summary>
         internal static string SteadyWebSocketUrl(string steadyEndpoint)
         {
             var steady = Gs2RestSession.NormalizeSteadyEndpoint(steadyEndpoint);

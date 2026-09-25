@@ -70,7 +70,6 @@ namespace Gs2.Gs2Distributor.Domain.Iterator
     {
         private readonly Gs2.Core.Domain.Gs2 _gs2;
         private readonly Gs2DistributorRestClient _client;
-        // 一括取得: 読んだページの各エントリを kind ごとのモデルのキャッシュへ入れ、最終ページで (service, kind, 親キー) ごとに「リストが揃った印」を立てる
         private readonly HashSet<(string service, string kind, string parentKey)> _listCached = new HashSet<(string service, string kind, string parentKey)>();
         public AccessToken AccessToken { get; }
         public string UserId => AccessToken?.UserId;
@@ -120,7 +119,6 @@ namespace Gs2.Gs2Distributor.Domain.Iterator
                     parentKey = this._gs2.PutUserData(entry.Service, entry.NamespaceName, this.UserId, this.AccessToken?.TimeOffset, entry.Kind, entry.Payload);
                 }
                 catch (System.Exception) {
-                    // 1 件の JSON が読めなくても他のエントリは入れる（個別 API で取り直せる）
                     continue;
                 }
                 if (parentKey == null) {

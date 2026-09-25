@@ -202,7 +202,7 @@ namespace Gs2.Gs2MegaField.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2MegaField.Model.LayerModel>(
-                    (null as Gs2.Gs2MegaField.Model.LayerModel).CacheParentKey(
+                            (null as Gs2.Gs2MegaField.Model.LayerModel).CacheParentKey(
                         NamespaceName,
                         AreaModelName,
                         null

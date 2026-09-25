@@ -209,7 +209,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<string>(
-                    (null as Gs2.Gs2Friend.Model.BlackList).CacheParentKey(
+                            (null as Gs2.Gs2Friend.Model.BlackList).CacheParentKey(
                         NamespaceName,
                         AccessToken?.UserId,
                         this.AccessToken?.TimeOffset

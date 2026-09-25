@@ -214,7 +214,7 @@ namespace Gs2.Gs2Datastore.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Datastore.Model.DataObject>(
-                    (null as Gs2.Gs2Datastore.Model.DataObject).CacheParentKey(
+                            (null as Gs2.Gs2Datastore.Model.DataObject).CacheParentKey(
                         NamespaceName,
                         AccessToken?.UserId,
                         this.AccessToken?.TimeOffset

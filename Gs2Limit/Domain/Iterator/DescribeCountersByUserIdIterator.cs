@@ -216,7 +216,7 @@ namespace Gs2.Gs2Limit.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Limit.Model.Counter>(
-                    (null as Gs2.Gs2Limit.Model.Counter).CacheParentKey(
+                            (null as Gs2.Gs2Limit.Model.Counter).CacheParentKey(
                         NamespaceName,
                         UserId,
                         null

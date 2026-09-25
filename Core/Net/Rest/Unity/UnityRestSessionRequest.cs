@@ -182,12 +182,6 @@ namespace Gs2.Core.Net
             }
         }
 
-        /// <summary>
-        /// UnityWebRequest の ConnectionError を「1 バイトも送っていない」接続段階の失敗とそれ以外に分ける。
-        /// ★UnityWebRequest には接続専用の失敗種別も接続専用のタイムアウトも無いので、
-        /// 応答コード 0・送信 0 バイト・接続系の文言（"Cannot resolve destination host" /
-        /// "Cannot connect to destination host" / SSL / certificate）で近似する。"Request timeout" は Timeout。
-        /// </summary>
         internal static TransportFailure ClassifyTransportFailure(long responseCode, ulong uploadedBytes, string error)
         {
             if (error != null && error.IndexOf("Request timeout", StringComparison.OrdinalIgnoreCase) >= 0)

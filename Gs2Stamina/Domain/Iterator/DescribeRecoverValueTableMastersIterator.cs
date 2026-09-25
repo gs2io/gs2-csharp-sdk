@@ -207,7 +207,7 @@ namespace Gs2.Gs2Stamina.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Stamina.Model.RecoverValueTableMaster>(
-                    (null as Gs2.Gs2Stamina.Model.RecoverValueTableMaster).CacheParentKey(
+                            (null as Gs2.Gs2Stamina.Model.RecoverValueTableMaster).CacheParentKey(
                         NamespaceName,
                         null
                    ),

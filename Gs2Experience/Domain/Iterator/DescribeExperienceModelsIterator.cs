@@ -196,7 +196,7 @@ namespace Gs2.Gs2Experience.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Experience.Model.ExperienceModel>(
-                    (null as Gs2.Gs2Experience.Model.ExperienceModel).CacheParentKey(
+                            (null as Gs2.Gs2Experience.Model.ExperienceModel).CacheParentKey(
                         NamespaceName,
                         null
                    ),

@@ -202,7 +202,7 @@ namespace Gs2.Gs2Stamina.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Stamina.Model.MaxStaminaTableMaster>(
-                    (null as Gs2.Gs2Stamina.Model.MaxStaminaTableMaster).CacheParentKey(
+                            (null as Gs2.Gs2Stamina.Model.MaxStaminaTableMaster).CacheParentKey(
                         NamespaceName,
                         null
                    ),

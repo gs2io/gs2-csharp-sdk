@@ -207,7 +207,7 @@ namespace Gs2.Gs2Exchange.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Exchange.Model.IncrementalRateModelMaster>(
-                    (null as Gs2.Gs2Exchange.Model.IncrementalRateModelMaster).CacheParentKey(
+                            (null as Gs2.Gs2Exchange.Model.IncrementalRateModelMaster).CacheParentKey(
                         NamespaceName,
                         null
                    ),

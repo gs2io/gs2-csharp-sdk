@@ -196,7 +196,7 @@ namespace Gs2.Gs2Identifier.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Identifier.Model.User>(
-                    (null as Gs2.Gs2Identifier.Model.User).CacheParentKey(
+                            (null as Gs2.Gs2Identifier.Model.User).CacheParentKey(
                         null
                    ),
                    "ListUser"

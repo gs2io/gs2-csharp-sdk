@@ -25,11 +25,6 @@ namespace Gs2.Core.Net
             request.AddHeader("Authorization", $"Bearer {credential.ProjectToken}");
         }
 
-        /// <summary>
-        /// service の接続先（https://... まで。パスは呼び手が足す）。
-        /// Session が <see cref="Gs2RestSession"/> なら SteadyEndpoint を考慮し、
-        /// それ以外（テストのダブル等）は従来の共有クラウドの URL を返す。
-        /// </summary>
         protected string EndpointFor(string service)
         {
             return (Session as Gs2RestSession)?.EndpointFor(service)

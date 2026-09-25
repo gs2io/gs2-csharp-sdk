@@ -223,7 +223,7 @@ namespace Gs2.Gs2Ranking.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking.Model.Ranking>(
-                    (null as Gs2.Gs2Ranking.Model.Ranking).CacheParentKey(
+                            (null as Gs2.Gs2Ranking.Model.Ranking).CacheParentKey(
                         NamespaceName,
                         UserId ?? default,
                         CategoryName,

@@ -7,19 +7,11 @@ using UnityEngine.Networking;
 
 namespace Gs2.Core.Net
 {
-    /// <summary>
-    /// 要求が transport の段階でどう失敗したか。Steady の基点宛の要求を 1 回だけ再送するかの判断
-    /// （<see cref="Gs2RestSession.SendAsync"/>）に使う。
-    /// </summary>
     public enum TransportFailure
     {
-        /// <summary>transport の失敗ではない（HTTP 応答を受け取った）。</summary>
         None,
-        /// <summary>接続段階の失敗（DNS / TCP 拒否 / TLS）。1 バイトも送っていないので同じ要求を再送してよい。</summary>
         ConnectFailed,
-        /// <summary>タイムアウト。届いたかもしれないので冪等な GET / DELETE だけ再送してよい。</summary>
         Timeout,
-        /// <summary>その他の transport の失敗（送信後の切断など）。再送しない。</summary>
         Other,
     }
 
@@ -31,11 +23,6 @@ namespace Gs2.Core.Net
         public Gs2SessionTaskId Gs2SessionTaskId { get; set; }
         public bool IsSuccess => StatusCode == 200 && Error == null;
 
-        /// <summary>
-        /// transport の失敗の種類。HTTP 応答を受け取れなかった（StatusCode == 0）ときの既定は
-        /// <see cref="TransportFailure.Other"/> で、transport の実装（DotNetRestSessionRequest /
-        /// UnityRestSessionRequest）が分類できたときに後から上書きする。
-        /// </summary>
         public TransportFailure TransportFailure { get; set; }
 
 

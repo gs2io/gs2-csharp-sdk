@@ -211,7 +211,7 @@ namespace Gs2.Gs2SkillTree.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2SkillTree.Model.Status>(
-                    (null as Gs2.Gs2SkillTree.Model.Status).CacheParentKey(
+                            (null as Gs2.Gs2SkillTree.Model.Status).CacheParentKey(
                         NamespaceName,
                         UserId,
                         null

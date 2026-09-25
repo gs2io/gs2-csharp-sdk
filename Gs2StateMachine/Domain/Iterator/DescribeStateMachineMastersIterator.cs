@@ -202,7 +202,7 @@ namespace Gs2.Gs2StateMachine.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2StateMachine.Model.StateMachineMaster>(
-                    (null as Gs2.Gs2StateMachine.Model.StateMachineMaster).CacheParentKey(
+                            (null as Gs2.Gs2StateMachine.Model.StateMachineMaster).CacheParentKey(
                         NamespaceName,
                         null
                    ),

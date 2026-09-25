@@ -207,7 +207,7 @@ namespace Gs2.Gs2Schedule.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Schedule.Model.EventMaster>(
-                    (null as Gs2.Gs2Schedule.Model.EventMaster).CacheParentKey(
+                            (null as Gs2.Gs2Schedule.Model.EventMaster).CacheParentKey(
                         NamespaceName,
                         null
                    ),

@@ -207,7 +207,7 @@ namespace Gs2.Gs2Inbox.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Inbox.Model.GlobalMessageMaster>(
-                    (null as Gs2.Gs2Inbox.Model.GlobalMessageMaster).CacheParentKey(
+                            (null as Gs2.Gs2Inbox.Model.GlobalMessageMaster).CacheParentKey(
                         NamespaceName,
                         null
                    ),

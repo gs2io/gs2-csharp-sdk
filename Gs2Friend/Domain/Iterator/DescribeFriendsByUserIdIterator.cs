@@ -217,7 +217,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.FriendUser>(
-                    (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
+                            (null as Gs2.Gs2Friend.Model.FriendUser).CacheParentKey(
                         NamespaceName,
                         UserId,
                         WithProfile ?? default,

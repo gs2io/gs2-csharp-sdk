@@ -196,7 +196,7 @@ namespace Gs2.Gs2MegaField.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2MegaField.Model.AreaModel>(
-                    (null as Gs2.Gs2MegaField.Model.AreaModel).CacheParentKey(
+                            (null as Gs2.Gs2MegaField.Model.AreaModel).CacheParentKey(
                         NamespaceName,
                         null
                    ),

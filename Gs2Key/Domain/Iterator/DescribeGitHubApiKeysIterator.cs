@@ -202,7 +202,7 @@ namespace Gs2.Gs2Key.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Key.Model.GitHubApiKey>(
-                    (null as Gs2.Gs2Key.Model.GitHubApiKey).CacheParentKey(
+                            (null as Gs2.Gs2Key.Model.GitHubApiKey).CacheParentKey(
                         NamespaceName,
                         null
                    ),

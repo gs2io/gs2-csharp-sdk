@@ -26,11 +26,6 @@ namespace Gs2.Gs2Formation.Model.Cache
 {
     public static class Gs2Formation
     {
-        /// <summary>
-        /// Gs2Distributor:DescribeUserData（ユーザーの全データの一括取得）の 1 エントリを、kind に対応するモデルのキャッシュへ入れる。
-        /// 戻り値は親キー（null は知らない kind ＝ SDK が古い / 対応表に無い）。呼び手は全ページを読み終えてから
-        /// SetListCached(cache, timeOffset, kind, parentKey) を呼ぶ。対応表は sdk-gen の type/user_data_cache.py（kind → モデル）。
-        /// </summary>
         public static string PutUserData(
             CacheDatabase cache,
             string namespaceName,
@@ -53,9 +48,6 @@ namespace Gs2.Gs2Formation.Model.Cache
             return null;
         }
 
-        /// <summary>
-        /// 一括取得で入れた kind の親キーに「リストが揃った印」を立てる（Describe のイテレータがサーバーへ出なくなる）。
-        /// </summary>
         public static bool SetListCached(
             CacheDatabase cache,
             int? timeOffset,

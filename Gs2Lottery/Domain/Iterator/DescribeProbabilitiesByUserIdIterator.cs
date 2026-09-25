@@ -211,7 +211,7 @@ namespace Gs2.Gs2Lottery.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Lottery.Model.Probability>(
-                    (null as Gs2.Gs2Lottery.Model.Probability).CacheParentKey(
+                            (null as Gs2.Gs2Lottery.Model.Probability).CacheParentKey(
                         NamespaceName,
                         UserId,
                         LotteryName,

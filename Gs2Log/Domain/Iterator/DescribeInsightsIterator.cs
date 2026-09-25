@@ -202,7 +202,7 @@ namespace Gs2.Gs2Log.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Log.Model.Insight>(
-                    (null as Gs2.Gs2Log.Model.Insight).CacheParentKey(
+                            (null as Gs2.Gs2Log.Model.Insight).CacheParentKey(
                         NamespaceName,
                         null
                    ),

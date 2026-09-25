@@ -207,7 +207,7 @@ namespace Gs2.Gs2Inventory.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Inventory.Model.InventoryModelMaster>(
-                    (null as Gs2.Gs2Inventory.Model.InventoryModelMaster).CacheParentKey(
+                            (null as Gs2.Gs2Inventory.Model.InventoryModelMaster).CacheParentKey(
                         NamespaceName,
                         null
                    ),

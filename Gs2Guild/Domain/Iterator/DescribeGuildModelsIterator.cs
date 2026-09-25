@@ -196,7 +196,7 @@ namespace Gs2.Gs2Guild.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Guild.Model.GuildModel>(
-                    (null as Gs2.Gs2Guild.Model.GuildModel).CacheParentKey(
+                            (null as Gs2.Gs2Guild.Model.GuildModel).CacheParentKey(
                         NamespaceName,
                         null
                    ),

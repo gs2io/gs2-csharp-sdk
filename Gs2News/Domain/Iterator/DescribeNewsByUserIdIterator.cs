@@ -205,7 +205,7 @@ namespace Gs2.Gs2News.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2News.Model.News>(
-                    (null as Gs2.Gs2News.Model.News).CacheParentKey(
+                            (null as Gs2.Gs2News.Model.News).CacheParentKey(
                         NamespaceName,
                         UserId,
                         null

@@ -202,7 +202,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2SeasonRating.Model.MatchSession>(
-                    (null as Gs2.Gs2SeasonRating.Model.MatchSession).CacheParentKey(
+                            (null as Gs2.Gs2SeasonRating.Model.MatchSession).CacheParentKey(
                         NamespaceName,
                         null
                    ),

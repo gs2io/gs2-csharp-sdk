@@ -207,7 +207,7 @@ namespace Gs2.Gs2Enhance.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Enhance.Model.RateModelMaster>(
-                    (null as Gs2.Gs2Enhance.Model.RateModelMaster).CacheParentKey(
+                            (null as Gs2.Gs2Enhance.Model.RateModelMaster).CacheParentKey(
                         NamespaceName,
                         null
                    ),

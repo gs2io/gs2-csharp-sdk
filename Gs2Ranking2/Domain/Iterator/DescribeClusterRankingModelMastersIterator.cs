@@ -207,7 +207,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking2.Model.ClusterRankingModelMaster>(
-                    (null as Gs2.Gs2Ranking2.Model.ClusterRankingModelMaster).CacheParentKey(
+                            (null as Gs2.Gs2Ranking2.Model.ClusterRankingModelMaster).CacheParentKey(
                         NamespaceName,
                         null
                    ),

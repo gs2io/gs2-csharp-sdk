@@ -196,7 +196,7 @@ namespace Gs2.Gs2Formation.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Formation.Model.MoldModel>(
-                    (null as Gs2.Gs2Formation.Model.MoldModel).CacheParentKey(
+                            (null as Gs2.Gs2Formation.Model.MoldModel).CacheParentKey(
                         NamespaceName,
                         null
                    ),

@@ -196,7 +196,7 @@ namespace Gs2.Gs2SeasonRating.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2SeasonRating.Model.SeasonModel>(
-                    (null as Gs2.Gs2SeasonRating.Model.SeasonModel).CacheParentKey(
+                            (null as Gs2.Gs2SeasonRating.Model.SeasonModel).CacheParentKey(
                         NamespaceName,
                         null
                    ),

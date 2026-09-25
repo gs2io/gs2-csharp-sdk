@@ -367,23 +367,6 @@ namespace Gs2.Core.Domain
             _cache.Delete<TKind>(parentKey, key);
         }
 
-        // ---------------------------------------------------------------------------------------------
-        // ユーザーの全データの一括取得（Gs2Distributor:DescribeUserData）でキャッシュを作る
-        //
-        // ★ログイン直後に 1 回 await すると、そのユーザーの全 GS2 サービスのデータ（スタミナ・インベントリ・
-        //   ミッション進捗 …）が各モデルのキャッシュに載り、以後の Get / Describe はサーバーへ出ない。
-        //   各エントリは kind でモデルを示し、サービスごとの生成物 `Gs2<Service>.Model.Cache.Gs2<Service>.PutUserData`
-        //   （kind → モデルの振り分け。鍵の取り出しは各モデルの `PutUserData`、sdk-gen の BaseModel.user_data_cache_keys）
-        //   へ渡す。キー方式 v2 のプロジェクトでだけ使える（v1 は BadRequest）。
-        //
-        // ★「リストが揃った印」（Describe のイテレータがサーバーへ出ない条件）は、全ページを読み終えてから
-        //   (service, kind, 親キー) の集合にまとめて立てる。途中で失敗したら印は立てない（入れた item は個別 Get の
-        //   キャッシュとして残る）。エントリ単位の JSON の失敗は数えず続行する。
-        //   ロード中に作ったイテレータは部分的なリストを返しうるので、他の呼び出しの前に await すること。
-        //
-        // 戻り値: キャッシュに入れたエントリ数。知らない service / kind（SDK が古い、または対応表に無い）は数えず捨てる。
-        // ---------------------------------------------------------------------------------------------
-
 #if UNITY_2017_1_OR_NEWER
         public Gs2Future<int> LoadUserDataFuture(
             AccessToken accessToken
@@ -398,14 +381,9 @@ namespace Gs2.Core.Domain
             AccessToken accessToken
         )
         {
-            // 実態は distributor ドメイン（生成物 Gs2Distributor.LoadUserDataAsync）。ここは糖衣
             return await Distributor.LoadUserDataAsync(accessToken);
         }
 
-        /// <summary>
-        /// 一括取得の 1 エントリを、service の生成物へ振り分けてキャッシュへ入れる。戻り値は親キー（知らない service / kind は null）。
-        /// service は seed のディレクトリ名の綴り（"stamina" / "skill_tree"）。
-        /// </summary>
         public string PutUserData(
             string service,
             string namespaceName,
@@ -522,9 +500,6 @@ namespace Gs2.Core.Domain
             }
         }
 
-        /// <summary>
-        /// 一括取得で入れた (service, kind, 親キー) に「リストが揃った印」を立てる。
-        /// </summary>
         public bool SetListCached(
             string service,
             int? timeOffset,

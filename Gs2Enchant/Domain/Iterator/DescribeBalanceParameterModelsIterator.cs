@@ -196,7 +196,7 @@ namespace Gs2.Gs2Enchant.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Enchant.Model.BalanceParameterModel>(
-                    (null as Gs2.Gs2Enchant.Model.BalanceParameterModel).CacheParentKey(
+                            (null as Gs2.Gs2Enchant.Model.BalanceParameterModel).CacheParentKey(
                         NamespaceName,
                         null
                    ),

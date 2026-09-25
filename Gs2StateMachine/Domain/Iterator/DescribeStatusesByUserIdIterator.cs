@@ -216,7 +216,7 @@ namespace Gs2.Gs2StateMachine.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2StateMachine.Model.Status>(
-                    (null as Gs2.Gs2StateMachine.Model.Status).CacheParentKey(
+                            (null as Gs2.Gs2StateMachine.Model.Status).CacheParentKey(
                         NamespaceName,
                         UserId,
                         null

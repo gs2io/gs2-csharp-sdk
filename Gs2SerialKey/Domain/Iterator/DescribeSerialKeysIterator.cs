@@ -214,7 +214,7 @@ namespace Gs2.Gs2SerialKey.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2SerialKey.Model.SerialKey>(
-                    (null as Gs2.Gs2SerialKey.Model.SerialKey).CacheParentKey(
+                            (null as Gs2.Gs2SerialKey.Model.SerialKey).CacheParentKey(
                         NamespaceName,
                         default,
                         null

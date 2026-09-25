@@ -211,7 +211,7 @@ namespace Gs2.Gs2Schedule.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Schedule.Model.Trigger>(
-                    (null as Gs2.Gs2Schedule.Model.Trigger).CacheParentKey(
+                            (null as Gs2.Gs2Schedule.Model.Trigger).CacheParentKey(
                         NamespaceName,
                         UserId,
                         null

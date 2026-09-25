@@ -196,7 +196,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Chat.Model.CategoryModel>(
-                    (null as Gs2.Gs2Chat.Model.CategoryModel).CacheParentKey(
+                            (null as Gs2.Gs2Chat.Model.CategoryModel).CacheParentKey(
                         NamespaceName,
                         null
                    ),

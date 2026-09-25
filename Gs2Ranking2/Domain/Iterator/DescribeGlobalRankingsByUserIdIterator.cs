@@ -221,7 +221,7 @@ namespace Gs2.Gs2Ranking2.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Ranking2.Model.GlobalRankingData>(
-                    (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).CacheParentKey(
+                            (null as Gs2.Gs2Ranking2.Model.GlobalRankingData).CacheParentKey(
                         NamespaceName,
                         RankingName,
                         this.Season,

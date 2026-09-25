@@ -196,7 +196,7 @@ namespace Gs2.Gs2Money2.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Money2.Model.StoreSubscriptionContentModel>(
-                    (null as Gs2.Gs2Money2.Model.StoreSubscriptionContentModel).CacheParentKey(
+                            (null as Gs2.Gs2Money2.Model.StoreSubscriptionContentModel).CacheParentKey(
                         NamespaceName,
                         null
                    ),

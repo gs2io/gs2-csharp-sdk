@@ -211,7 +211,7 @@ namespace Gs2.Gs2Account.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Account.Model.PlatformId>(
-                    (null as Gs2.Gs2Account.Model.PlatformId).CacheParentKey(
+                            (null as Gs2.Gs2Account.Model.PlatformId).CacheParentKey(
                         NamespaceName,
                         UserId,
                         null

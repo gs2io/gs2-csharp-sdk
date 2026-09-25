@@ -46,6 +46,13 @@ namespace Gs2.Gs2Dictionary.Model.Cache
             int? timeOffset,
             ResetLikesByUserIdRequest request
         ) {
+            cache.ClearListCache<Like>(
+                (null as Like).CacheParentKey(
+                    request.NamespaceName,
+                    request.UserId,
+                    timeOffset
+                )
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER

@@ -209,7 +209,7 @@ namespace Gs2.Gs2Money.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Money.Model.Wallet>(
-                    (null as Gs2.Gs2Money.Model.Wallet).CacheParentKey(
+                            (null as Gs2.Gs2Money.Model.Wallet).CacheParentKey(
                         NamespaceName,
                         AccessToken?.UserId,
                         this.AccessToken?.TimeOffset

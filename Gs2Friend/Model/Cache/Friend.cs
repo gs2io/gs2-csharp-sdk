@@ -218,12 +218,6 @@ namespace Gs2.Gs2Friend.Model.Cache
             );
         }
 
-        /// <summary>
-        /// Gs2Distributor:DescribeUserData（ユーザーの全データの一括取得）の 1 エントリ（この kind）をキャッシュへ入れる。
-        /// 鍵はエントリの namespaceName / 読み込むユーザーの userId / モデル自身のプロパティ / 主キー GRN から取る
-        /// （sdk-gen の BaseModel.user_data_cache_keys）。戻り値は親キーで、呼び手が全ページを読み終えてから
-        /// Gs2Friend.SetListCached(cache, timeOffset, kind, parentKey) で「リストが揃った印」を立てる。
-        /// </summary>
         public static string PutUserData(
             this Friend self,
             CacheDatabase cache,
@@ -235,7 +229,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                 cache,
                 namespaceName,
                 userId,
-                default /* TODO: 一括取得のエントリから withProfile を決められない。手書きで値を入れる */,
+                default,
                 timeOffset
             );
             return self.CacheParentKey(

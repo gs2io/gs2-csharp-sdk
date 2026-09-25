@@ -316,13 +316,6 @@ namespace Gs2.Gs2Distributor.Domain
         
 
 /* diff +++ start */
-        /// <summary>
-        /// 一括取得（Gs2Distributor:DescribeUserData）で accessToken のユーザーの全データを、各モデルのキャッシュへ入れる。
-        /// ログイン直後に 1 回待つと、以後の Get / Describe はサーバーへ出ない。キー方式 v2 のプロジェクトでだけ使える（v1 は BadRequest）。
-        /// 各エントリは kind でモデルを示し、Core の PutUserData（service → 生成物 Gs2{Service}.PutUserData）へ振り分ける。
-        /// 「リストが揃った印」は全ページを読み終えてから (service, kind, 親キー) ごとにまとめて立てる。途中で失敗したら印は立てない。
-        /// 読めないエントリは数えず続行する。戻り値はキャッシュへ入れたエントリ数（知らない service / kind は数えない）。
-        /// </summary>
     #if UNITY_2017_1_OR_NEWER
         public Gs2Future<int> LoadUserDataFuture(
             AccessToken accessToken
@@ -357,7 +350,6 @@ namespace Gs2.Gs2Distributor.Domain
                         parentKey = _gs2.PutUserData(entry.Service, entry.NamespaceName, accessToken.UserId, accessToken.TimeOffset, entry.Kind, entry.Payload);
                     }
                     catch (System.Exception) {
-                        // 1 件の JSON が読めなくても他のエントリは入れる（個別 API で取り直せる）
                         continue;
                     }
                     if (parentKey == null) {

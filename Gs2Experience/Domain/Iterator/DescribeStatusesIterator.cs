@@ -214,7 +214,7 @@ namespace Gs2.Gs2Experience.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Experience.Model.Status>(
-                    (null as Gs2.Gs2Experience.Model.Status).CacheParentKey(
+                            (null as Gs2.Gs2Experience.Model.Status).CacheParentKey(
                         NamespaceName,
                         AccessToken?.UserId,
                         this.AccessToken?.TimeOffset

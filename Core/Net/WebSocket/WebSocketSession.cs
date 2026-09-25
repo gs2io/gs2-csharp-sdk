@@ -99,10 +99,6 @@ namespace Gs2.Core.Net
         {
             _session = new WebSocket(url);
 
-            // ★TLS の設定は wss:// のときだけ触る。websocket-sharp の SslConfiguration は
-            // 非 TLS（ws://）の接続で読むと InvalidOperationException を投げるので、
-            // ws://（Steady の基点を http:// にしたローカルの試験・開発。
-            // Gs2WebSocketSession.SteadyWebSocketUrl が作る）では接続を張る前に落ちていた。
             if (_session.IsSecure)
             {
                 _session.SslConfiguration.CheckCertificateRevocation = checkCertificateRevocation;

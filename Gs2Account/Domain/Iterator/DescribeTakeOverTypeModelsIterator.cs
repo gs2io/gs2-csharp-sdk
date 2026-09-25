@@ -196,7 +196,7 @@ namespace Gs2.Gs2Account.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Account.Model.TakeOverTypeModel>(
-                    (null as Gs2.Gs2Account.Model.TakeOverTypeModel).CacheParentKey(
+                            (null as Gs2.Gs2Account.Model.TakeOverTypeModel).CacheParentKey(
                         NamespaceName,
                         null
                    ),

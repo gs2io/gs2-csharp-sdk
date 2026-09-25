@@ -210,7 +210,7 @@ namespace Gs2.Gs2Money2.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Money2.Model.RefundHistory>(
-                    (null as Gs2.Gs2Money2.Model.RefundHistory).CacheParentKey(
+                            (null as Gs2.Gs2Money2.Model.RefundHistory).CacheParentKey(
                         NamespaceName,
                         null
                    ),

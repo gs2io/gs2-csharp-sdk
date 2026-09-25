@@ -228,7 +228,7 @@ namespace Gs2.Gs2Money.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Money.Model.Receipt>(
-                    (null as Gs2.Gs2Money.Model.Receipt).CacheParentKey(
+                            (null as Gs2.Gs2Money.Model.Receipt).CacheParentKey(
                         NamespaceName,
                         UserId,
                         null

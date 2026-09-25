@@ -209,7 +209,7 @@ namespace Gs2.Gs2Account.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Account.Model.TakeOver>(
-                    (null as Gs2.Gs2Account.Model.TakeOver).CacheParentKey(
+                            (null as Gs2.Gs2Account.Model.TakeOver).CacheParentKey(
                         NamespaceName,
                         AccessToken?.UserId,
                         this.AccessToken?.TimeOffset

@@ -211,7 +211,7 @@ namespace Gs2.Gs2JobQueue.Domain.Iterator
         #endif
         {
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2JobQueue.Model.Job>(
-                    (null as Gs2.Gs2JobQueue.Model.Job).CacheParentKey(
+                            (null as Gs2.Gs2JobQueue.Model.Job).CacheParentKey(
                         NamespaceName,
                         UserId,
                         null
