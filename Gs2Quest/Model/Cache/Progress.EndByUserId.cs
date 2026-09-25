@@ -12,7 +12,6 @@
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
- * deny overwrite
  */
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
@@ -50,22 +49,26 @@ namespace Gs2.Gs2Quest.Model.Cache
             (null as Progress).DeleteCache(
                 cache,
                 request.NamespaceName,
-/* diff --- start
-                self?.Item?.UserId,
- diff --- end */
-/* diff +++ start */
                 userId,
-/* diff +++ end */
                 timeOffset
-/* diff +++ start */
             );
+            var questGroupName = self.Item?.QuestModelId == null ? null : QuestModel.GetQuestGroupNameFromGrn(self.Item.QuestModelId);
+            if (questGroupName != null)
+            {
+                (null as CompletedQuestList).DeleteCache(
+                    cache,
+                    request.NamespaceName,
+                    userId,
+                    questGroupName,
+                    timeOffset
+                );
+            }
             cache.ClearListCache<CompletedQuestList>(
                 (null as CompletedQuestList).CacheParentKey(
                     request.NamespaceName,
                     userId,
                     timeOffset
                 )
-/* diff +++ end */
             );
         }
 
