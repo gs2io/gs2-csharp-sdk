@@ -46,13 +46,20 @@ namespace Gs2.Gs2Guild.Model.Cache
             int? timeOffset,
             WithdrawalRequest request
         ) {
-            self.Item?.PutCache(
+            (null as JoinedGuild).DeleteCache(
                 cache,
                 request.NamespaceName,
                 userId,
-                self.Item.GuildModelName,
-                self.Item.GuildName,
+                request.GuildModelName,
+                request.GuildName,
                 timeOffset
+            );
+            cache.ClearListCache<JoinedGuild>(
+                (null as JoinedGuild).CacheParentKey(
+                    request.NamespaceName,
+                    userId,
+                    timeOffset
+                )
             );
             self.Guild?.PutCache(
                 cache,

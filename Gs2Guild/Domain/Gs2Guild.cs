@@ -697,6 +697,13 @@ namespace Gs2.Gs2Guild.Domain
                         notification.GuildName,
                         null
                     );
+                    _gs2.Cache.ClearListCache<Gs2.Gs2Guild.Model.JoinedGuild>(
+                        (null as Gs2.Gs2Guild.Model.JoinedGuild).CacheParentKey(
+                            notification.NamespaceName,
+                            notification.JoinedUserId,
+                            null
+                        )
+                    );
     #if UNITY_2017_1_OR_NEWER
                     onJoinNotification.Invoke(notification);
     #endif
@@ -710,6 +717,21 @@ namespace Gs2.Gs2Guild.Domain
                         notification.GuildModelName,
                         notification.GuildName,
                         null
+                    );
+                    (null as Gs2.Gs2Guild.Model.JoinedGuild).DeleteCache(
+                        _gs2.Cache,
+                        notification.NamespaceName,
+                        notification.LeavedUserId,
+                        notification.GuildModelName,
+                        notification.GuildName,
+                        null
+                    );
+                    _gs2.Cache.ClearListCache<Gs2.Gs2Guild.Model.JoinedGuild>(
+                        (null as Gs2.Gs2Guild.Model.JoinedGuild).CacheParentKey(
+                            notification.NamespaceName,
+                            notification.LeavedUserId,
+                            null
+                        )
                     );
     #if UNITY_2017_1_OR_NEWER
                     onLeaveNotification.Invoke(notification);

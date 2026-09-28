@@ -68,6 +68,16 @@ namespace Gs2.Gs2Guild.Model.Cache
 /* diff +++ end */
                 timeOffset
             );
+            if (self.Item != null)
+            {
+                cache.ClearListCache<JoinedGuild>(
+                    (null as JoinedGuild).CacheParentKey(
+                        request.NamespaceName,
+                        userId,
+                        timeOffset
+                    )
+                );
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER
