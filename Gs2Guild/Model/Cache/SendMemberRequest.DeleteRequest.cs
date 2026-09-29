@@ -74,6 +74,24 @@ namespace Gs2.Gs2Guild.Model.Cache
                 var future = invokeImpl();
                 yield return future;
                 if (future.Error != null) {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        (null as SendMemberRequest).DeleteCache(
+                            cache,
+                            request.NamespaceName,
+                            userId,
+                            request.GuildModelName,
+                            request.TargetGuildName,
+                            timeOffset
+                        );
+                        cache.ClearListCache<SendMemberRequest>(
+                            (null as SendMemberRequest).CacheParentKey(
+                                request.NamespaceName,
+                                request.GuildModelName,
+                                userId,
+                                timeOffset
+                            )
+                        );
+                    }
                     self.OnError(future.Error);
                     yield break;
                 }
@@ -109,7 +127,29 @@ namespace Gs2.Gs2Guild.Model.Cache
 #endif
         )
         {
-            var result = await invokeImpl();
+            DeleteRequestResult result;
+            try {
+                result = await invokeImpl();
+            }
+            catch (Gs2.Core.Exception.NotFoundException) {
+                (null as SendMemberRequest).DeleteCache(
+                    cache,
+                    request.NamespaceName,
+                    userId,
+                    request.GuildModelName,
+                    request.TargetGuildName,
+                    timeOffset
+                );
+                cache.ClearListCache<SendMemberRequest>(
+                    (null as SendMemberRequest).CacheParentKey(
+                        request.NamespaceName,
+                        request.GuildModelName,
+                        userId,
+                        timeOffset
+                    )
+                );
+                throw;
+            }
             result.PutCache(
                 cache,
                 userId,

@@ -704,6 +704,22 @@ namespace Gs2.Gs2Guild.Domain
                             null
                         )
                     );
+                    (null as Gs2.Gs2Guild.Model.SendMemberRequest).DeleteCache(
+                        _gs2.Cache,
+                        notification.NamespaceName,
+                        notification.JoinedUserId,
+                        notification.GuildModelName,
+                        notification.GuildName,
+                        null
+                    );
+                    _gs2.Cache.ClearListCache<SendMemberRequest>(
+                        (null as Gs2.Gs2Guild.Model.SendMemberRequest).CacheParentKey(
+                            notification.NamespaceName,
+                            notification.GuildModelName,
+                            notification.JoinedUserId,
+                            null
+                        )
+                    );
     #if UNITY_2017_1_OR_NEWER
                     onJoinNotification.Invoke(notification);
     #endif
