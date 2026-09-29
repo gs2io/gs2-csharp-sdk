@@ -85,6 +85,8 @@ namespace Gs2.Core.Domain
         public void SetListCached<TKind>(string parentKey, object listCacheContext = null)
         {
             Action<TKind[]>[] callbacks;
+            TKind[] list;
+            Action[] refetchCallbacks;
             lock (_syncRoot)
             {
                 this._listCached.Ensure(typeof(TKind)).Add(parentKey);
@@ -93,10 +95,10 @@ namespace Gs2.Core.Domain
                 {
                     this._listCacheContexts.Ensure(typeof(TKind))[parentKey] = listCacheContext;
                 }
-                callbacks = GetListUpdateCallbacksLocked<TKind>(parentKey);
+                callbacks = GetCachedListUpdateCallbacksLocked<TKind>(parentKey, out list, out refetchCallbacks);
             }
-            var list = callbacks.Length == 0 ? null : List<TKind>(parentKey);
             InvokeCallbacks(callbacks, list);
+            InvokeCallbacks(refetchCallbacks);
         }
 
         public void ClearListCache<TKind>(string parentKey)
@@ -150,6 +152,31 @@ namespace Gs2.Core.Domain
                    ?? Array.Empty<Action<TKind[]>>();
         }
 
+        // List subscribers only observe lists that are actually cached. While a list is not cached
+        // (never fetched, cleared, or being re-fetched after invalidation) every Put of a fetched
+        // item would otherwise publish a transient empty array before SetListCached publishes the
+        // full list, so notification is deferred to SetListCached. A cached list that is genuinely
+        // empty is still published. If a cached entry turned out to be expired, the list is cleared
+        // and its re-fetch callbacks are returned instead of publishing an empty list.
+        private Action<TKind[]>[] GetCachedListUpdateCallbacksLocked<TKind>(
+            string parentKey,
+            out TKind[] list,
+            out Action[] refetchCallbacks
+        )
+        {
+            list = null;
+            refetchCallbacks = Array.Empty<Action>();
+            var callbacks = GetListUpdateCallbacksLocked<TKind>(parentKey);
+            if (callbacks.Length == 0 ||
+                this._listCached.Get(typeof(TKind))?.Contains(parentKey) != true ||
+                !TryGetListForceLocked(parentKey, out list, out refetchCallbacks))
+            {
+                list = null;
+                return Array.Empty<Action<TKind[]>>();
+            }
+            return callbacks;
+        }
+
         private Action<TKind>[] GetItemUpdateCallbacksLocked<TKind>(string parentKey, string key)
         {
             return this._cacheUpdateCallback.Get(typeof(TKind))?.Get(parentKey)?.Get(key)?.Values
@@ -190,6 +217,8 @@ namespace Gs2.Core.Domain
 
             Action<TKind>[] itemCallbacks = Array.Empty<Action<TKind>>();
             Action<TKind[]>[] listCallbacks = Array.Empty<Action<TKind[]>>();
+            TKind[] list = null;
+            Action[] listRefetchCallbacks = Array.Empty<Action>();
             lock (_syncRoot)
             {
                 var parent = this._cache.Ensure(typeof(TKind)).Ensure(parentKey);
@@ -199,12 +228,12 @@ namespace Gs2.Core.Domain
                 if (changed)
                 {
                     itemCallbacks = GetItemUpdateCallbacksLocked<TKind>(parentKey, key);
-                    listCallbacks = GetListUpdateCallbacksLocked<TKind>(parentKey);
+                    listCallbacks = GetCachedListUpdateCallbacksLocked<TKind>(parentKey, out list, out listRefetchCallbacks);
                 }
             }
             InvokeCallbacks(itemCallbacks, obj);
-            var list = listCallbacks.Length == 0 ? null : List<TKind>(parentKey);
             InvokeCallbacks(listCallbacks, list);
+            InvokeCallbacks(listRefetchCallbacks);
         }
 
         public void Delete<TKind>(string parentKey, string key)
@@ -248,15 +277,17 @@ namespace Gs2.Core.Domain
         private void InvokeDeleteCallbacks<TKind>(string parentKey, string key)
         {
             Action<TKind[]>[] listCallbacks;
+            TKind[] list;
+            Action[] listRefetchCallbacks;
             Action[] itemCallbacks;
             lock (_syncRoot)
             {
-                listCallbacks = GetListUpdateCallbacksLocked<TKind>(parentKey);
+                listCallbacks = GetCachedListUpdateCallbacksLocked<TKind>(parentKey, out list, out listRefetchCallbacks);
                 itemCallbacks = GetItemRefetchCallbacksLocked<TKind>(parentKey, key);
             }
 
-            var list = listCallbacks.Length == 0 ? null : List<TKind>(parentKey);
             InvokeCallbacks(listCallbacks, list);
+            InvokeCallbacks(listRefetchCallbacks);
             InvokeCallbacks(itemCallbacks);
         }
 
