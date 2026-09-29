@@ -104,6 +104,22 @@ namespace Gs2.Gs2Friend.Model.Cache
                 var future = invokeImpl();
                 yield return future;
                 if (future.Error != null) {
+                    if (future.Error is Gs2.Core.Exception.NotFoundException) {
+                        (null as ReceiveFriendRequest).DeleteCache(
+                            cache,
+                            request.NamespaceName,
+                            userId,
+                            request.FromUserId,
+                            timeOffset
+                        );
+                        cache.ClearListCache<ReceiveFriendRequest>(
+                            (null as ReceiveFriendRequest).CacheParentKey(
+                                request.NamespaceName,
+                                userId,
+                                timeOffset
+                            )
+                        );
+                    }
                     self.OnError(future.Error);
                     yield break;
                 }
@@ -139,7 +155,27 @@ namespace Gs2.Gs2Friend.Model.Cache
 #endif
         )
         {
-            var result = await invokeImpl();
+            RejectRequestResult result;
+            try {
+                result = await invokeImpl();
+            }
+            catch (Gs2.Core.Exception.NotFoundException) {
+                (null as ReceiveFriendRequest).DeleteCache(
+                    cache,
+                    request.NamespaceName,
+                    userId,
+                    request.FromUserId,
+                    timeOffset
+                );
+                cache.ClearListCache<ReceiveFriendRequest>(
+                    (null as ReceiveFriendRequest).CacheParentKey(
+                        request.NamespaceName,
+                        userId,
+                        timeOffset
+                    )
+                );
+                throw;
+            }
             result.PutCache(
                 cache,
                 userId,

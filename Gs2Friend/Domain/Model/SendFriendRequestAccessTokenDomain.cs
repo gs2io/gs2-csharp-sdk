@@ -175,7 +175,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this.AccessToken?.TimeOffset
                 )
             );
-            _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.SendFriendRequest>(
+            _gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(
                 (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                     this.NamespaceName,
                     this.TargetUserId,

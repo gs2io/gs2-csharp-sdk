@@ -87,7 +87,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                 cache,
                 request.NamespaceName,
                 request.TargetUserId,
-                false,
+                true,
                 userId,
                 timeOffset
             );

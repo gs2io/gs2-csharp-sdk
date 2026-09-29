@@ -73,30 +73,6 @@ namespace Gs2.Gs2Friend.Model.Cache
                 userId,
                 null,
                 request.TargetUserId,
-                timeOffset
-            );
-            (null as FollowUser).DeleteCache(
-                cache,
-                request.NamespaceName,
-                request.TargetUserId,
-                false,
-                userId,
-                timeOffset
-            );
-            (null as FollowUser).DeleteCache(
-                cache,
-                request.NamespaceName,
-                request.TargetUserId,
-                true,
-                userId,
-                timeOffset
-            );
-            (null as FollowUser).DeleteCache(
-                cache,
-                request.NamespaceName,
-                request.TargetUserId,
-                null,
-                userId,
 /* diff +++ end */
                 timeOffset
             );

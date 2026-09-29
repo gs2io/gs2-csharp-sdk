@@ -152,12 +152,6 @@ namespace Gs2.Core.Domain
                    ?? Array.Empty<Action<TKind[]>>();
         }
 
-        // List subscribers only observe lists that are actually cached. While a list is not cached
-        // (never fetched, cleared, or being re-fetched after invalidation) every Put of a fetched
-        // item would otherwise publish a transient empty array before SetListCached publishes the
-        // full list, so notification is deferred to SetListCached. A cached list that is genuinely
-        // empty is still published. If a cached entry turned out to be expired, the list is cleared
-        // and its re-fetch callbacks are returned instead of publishing an empty list.
         private Action<TKind[]>[] GetCachedListUpdateCallbacksLocked<TKind>(
             string parentKey,
             out TKind[] list,
