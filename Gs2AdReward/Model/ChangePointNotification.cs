@@ -20,6 +20,7 @@ namespace Gs2.Gs2AdReward.Model
 {
 	public class ChangePointNotification
 	{
+        internal static readonly string[] IntegerFields = { };
         public string NamespaceName { set; get; } = null!;
         public string UserId { set; get; } = null!;
         public ChangePointNotification WithNamespaceName(string namespaceName) {
@@ -40,8 +41,8 @@ namespace Gs2.Gs2AdReward.Model
                 return null;
             }
             return new ChangePointNotification()
-                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString());
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : (string)data["namespaceName"])
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : (string)data["userId"]);
         }
     }
 }

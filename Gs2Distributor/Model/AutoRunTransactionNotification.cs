@@ -20,6 +20,7 @@ namespace Gs2.Gs2Distributor.Model
 {
 	public class AutoRunTransactionNotification
 	{
+        internal static readonly string[] IntegerFields = { };
         public string NamespaceName { set; get; } = null!;
         public string UserId { set; get; } = null!;
         public string TransactionId { set; get; } = null!;
@@ -45,9 +46,9 @@ namespace Gs2.Gs2Distributor.Model
                 return null;
             }
             return new AutoRunTransactionNotification()
-                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString());
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : (string)data["namespaceName"])
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : (string)data["userId"])
+                .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : (string)data["transactionId"]);
         }
     }
 }

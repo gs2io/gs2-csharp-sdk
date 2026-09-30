@@ -20,6 +20,7 @@ namespace Gs2.Gs2Matchmaking.Model
 {
 	public class ChangeRatingNotification
 	{
+        internal static readonly string[] IntegerFields = { };
         public string NamespaceName { set; get; } = null!;
         public string RatingName { set; get; } = null!;
         public string UserId { set; get; } = null!;
@@ -50,10 +51,10 @@ namespace Gs2.Gs2Matchmaking.Model
                 return null;
             }
             return new ChangeRatingNotification()
-                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithRatingName(!data.Keys.Contains("ratingName") || data["ratingName"] == null ? null : data["ratingName"].ToString())
-                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithRateValue(!data.Keys.Contains("rateValue") || data["rateValue"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableFloat(data["rateValue"].ToString()));
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : (string)data["namespaceName"])
+                .WithRatingName(!data.Keys.Contains("ratingName") || data["ratingName"] == null ? null : (string)data["ratingName"])
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : (string)data["userId"])
+                .WithRateValue(!data.Keys.Contains("rateValue") || data["rateValue"] == null ? null : Gs2.Core.Model.NotificationPayload.ReadFloat(data["rateValue"]));
         }
     }
 }

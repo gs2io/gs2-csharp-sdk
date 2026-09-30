@@ -508,7 +508,7 @@ namespace Gs2.Gs2JobQueue.Domain
         ) {
             switch (action) {
                 case "Push": {
-                    var notification = NotificationPayload.Parse(payload, PushNotification.FromJson);
+                    var notification = NotificationPayload.Parse(payload, PushNotification.FromJson, PushNotification.IntegerFields);
     #if UNITY_2017_1_OR_NEWER
                     onPushNotification.Invoke(notification);
     #endif
@@ -517,7 +517,7 @@ namespace Gs2.Gs2JobQueue.Domain
                 case "RunNotification": {
                     lock (_completedJobs)
                     {
-                        var notification = NotificationPayload.Parse(payload, RunNotification.FromJson);
+                        var notification = NotificationPayload.Parse(payload, RunNotification.FromJson, RunNotification.IntegerFields);
                         Telemetry.EndJob(notification.JobName);
                         _completedJobs.Add(notification);
     #if UNITY_2017_1_OR_NEWER

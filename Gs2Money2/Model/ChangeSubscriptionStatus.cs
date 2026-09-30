@@ -20,6 +20,7 @@ namespace Gs2.Gs2Money2.Model
 {
 	public class ChangeSubscriptionStatus
 	{
+        internal static readonly string[] IntegerFields = { };
         public string NamespaceName { set; get; } = null!;
         public string UserId { set; get; } = null!;
         public string ContentName { set; get; } = null!;
@@ -45,9 +46,9 @@ namespace Gs2.Gs2Money2.Model
                 return null;
             }
             return new ChangeSubscriptionStatus()
-                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithContentName(!data.Keys.Contains("contentName") || data["contentName"] == null ? null : data["contentName"].ToString());
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : (string)data["namespaceName"])
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : (string)data["userId"])
+                .WithContentName(!data.Keys.Contains("contentName") || data["contentName"] == null ? null : (string)data["contentName"]);
         }
     }
 }

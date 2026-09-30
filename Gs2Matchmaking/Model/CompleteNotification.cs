@@ -20,6 +20,7 @@ namespace Gs2.Gs2Matchmaking.Model
 {
 	public class CompleteNotification
 	{
+        internal static readonly string[] IntegerFields = { };
         public string NamespaceName { set; get; } = null!;
         public string GatheringName { set; get; } = null!;
         public CompleteNotification WithNamespaceName(string namespaceName) {
@@ -40,8 +41,8 @@ namespace Gs2.Gs2Matchmaking.Model
                 return null;
             }
             return new CompleteNotification()
-                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithGatheringName(!data.Keys.Contains("gatheringName") || data["gatheringName"] == null ? null : data["gatheringName"].ToString());
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : (string)data["namespaceName"])
+                .WithGatheringName(!data.Keys.Contains("gatheringName") || data["gatheringName"] == null ? null : (string)data["gatheringName"]);
         }
     }
 }

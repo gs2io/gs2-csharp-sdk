@@ -20,6 +20,7 @@ namespace Gs2.Gs2Chat.Model
 {
 	public class PostNotification
 	{
+        internal static readonly string[] IntegerFields = { "category", "createdAt", };
         public string NamespaceName { set; get; } = null!;
         public string RoomName { set; get; } = null!;
         public string UserId { set; get; } = null!;
@@ -55,11 +56,11 @@ namespace Gs2.Gs2Chat.Model
                 return null;
             }
             return new PostNotification()
-                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithRoomName(!data.Keys.Contains("roomName") || data["roomName"] == null ? null : data["roomName"].ToString())
-                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithCategory(!data.Keys.Contains("category") || data["category"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["category"].ToString()))
-                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()));
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : (string)data["namespaceName"])
+                .WithRoomName(!data.Keys.Contains("roomName") || data["roomName"] == null ? null : (string)data["roomName"])
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : (string)data["userId"])
+                .WithCategory(!data.Keys.Contains("category") || data["category"] == null ? null : Gs2.Core.Model.NotificationPayload.ReadInt(data["category"]))
+                .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Model.NotificationPayload.ReadLong(data["createdAt"]));
         }
     }
 }

@@ -20,6 +20,7 @@ namespace Gs2.Gs2Friend.Model
 {
 	public class CancelRequestNotification
 	{
+        internal static readonly string[] IntegerFields = { };
         public string NamespaceName { set; get; } = null!;
         public string UserId { set; get; } = null!;
         public string FromUserId { set; get; } = null!;
@@ -45,9 +46,9 @@ namespace Gs2.Gs2Friend.Model
                 return null;
             }
             return new CancelRequestNotification()
-                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithFromUserId(!data.Keys.Contains("fromUserId") || data["fromUserId"] == null ? null : data["fromUserId"].ToString());
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : (string)data["namespaceName"])
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : (string)data["userId"])
+                .WithFromUserId(!data.Keys.Contains("fromUserId") || data["fromUserId"] == null ? null : (string)data["fromUserId"]);
         }
     }
 }

@@ -271,7 +271,7 @@ namespace Gs2.Gs2Distributor.Domain
                 case "AutoRunStampSheetNotification": {
                     lock (_completedStampSheets)
                     {
-                        var notification = NotificationPayload.Parse(payload, AutoRunStampSheetNotification.FromJson);
+                        var notification = NotificationPayload.Parse(payload, AutoRunStampSheetNotification.FromJson, AutoRunStampSheetNotification.IntegerFields);
                         Telemetry.EndTransaction(notification.TransactionId);
                         _gs2.Cache.Delete<Gs2.Gs2Distributor.Model.StampSheetResult>(
                             (null as Gs2.Gs2Distributor.Model.StampSheetResult).CacheParentKey(
@@ -293,7 +293,7 @@ namespace Gs2.Gs2Distributor.Domain
                 case "AutoRunTransactionNotification": {
                     lock (_completedTransactions)
                     {
-                        var notification = NotificationPayload.Parse(payload, AutoRunTransactionNotification.FromJson);
+                        var notification = NotificationPayload.Parse(payload, AutoRunTransactionNotification.FromJson, AutoRunTransactionNotification.IntegerFields);
                         _gs2.Cache.Delete<Gs2.Gs2Distributor.Model.TransactionResult>(
                             (null as Gs2.Gs2Distributor.Model.TransactionResult).CacheParentKey(
                                 notification.NamespaceName,

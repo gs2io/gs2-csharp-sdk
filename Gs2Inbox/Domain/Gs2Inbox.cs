@@ -530,7 +530,7 @@ namespace Gs2.Gs2Inbox.Domain
         ) {
             switch (action) {
                 case "ReceiveNotification": {
-                    var notification = NotificationPayload.Parse(payload, ReceiveNotification.FromJson);
+                    var notification = NotificationPayload.Parse(payload, ReceiveNotification.FromJson, ReceiveNotification.IntegerFields);
                     _gs2.Cache.ClearListCache<Gs2.Gs2Inbox.Model.Message>(
                         (null as Gs2.Gs2Inbox.Model.Message).CacheParentKey(
                             notification.NamespaceName,

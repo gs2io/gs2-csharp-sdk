@@ -20,6 +20,7 @@ namespace Gs2.Gs2Friend.Model
 {
 	public class RejectRequestNotification
 	{
+        internal static readonly string[] IntegerFields = { };
         public string NamespaceName { set; get; } = null!;
         public string UserId { set; get; } = null!;
         public string TargetUserId { set; get; } = null!;
@@ -45,9 +46,9 @@ namespace Gs2.Gs2Friend.Model
                 return null;
             }
             return new RejectRequestNotification()
-                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithTargetUserId(!data.Keys.Contains("targetUserId") || data["targetUserId"] == null ? null : data["targetUserId"].ToString());
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : (string)data["namespaceName"])
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : (string)data["userId"])
+                .WithTargetUserId(!data.Keys.Contains("targetUserId") || data["targetUserId"] == null ? null : (string)data["targetUserId"]);
         }
     }
 }

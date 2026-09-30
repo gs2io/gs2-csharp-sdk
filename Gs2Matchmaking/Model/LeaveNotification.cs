@@ -20,6 +20,7 @@ namespace Gs2.Gs2Matchmaking.Model
 {
 	public class LeaveNotification
 	{
+        internal static readonly string[] IntegerFields = { };
         public string NamespaceName { set; get; } = null!;
         public string GatheringName { set; get; } = null!;
         public string LeaveUserId { set; get; } = null!;
@@ -45,9 +46,9 @@ namespace Gs2.Gs2Matchmaking.Model
                 return null;
             }
             return new LeaveNotification()
-                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithGatheringName(!data.Keys.Contains("gatheringName") || data["gatheringName"] == null ? null : data["gatheringName"].ToString())
-                .WithLeaveUserId(!data.Keys.Contains("leaveUserId") || data["leaveUserId"] == null ? null : data["leaveUserId"].ToString());
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : (string)data["namespaceName"])
+                .WithGatheringName(!data.Keys.Contains("gatheringName") || data["gatheringName"] == null ? null : (string)data["gatheringName"])
+                .WithLeaveUserId(!data.Keys.Contains("leaveUserId") || data["leaveUserId"] == null ? null : (string)data["leaveUserId"]);
         }
     }
 }

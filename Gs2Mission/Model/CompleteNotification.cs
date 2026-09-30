@@ -20,6 +20,7 @@ namespace Gs2.Gs2Mission.Model
 {
 	public class CompleteNotification
 	{
+        internal static readonly string[] IntegerFields = { };
         public string NamespaceName { set; get; } = null!;
         public string GroupName { set; get; } = null!;
         public string UserId { set; get; } = null!;
@@ -50,10 +51,10 @@ namespace Gs2.Gs2Mission.Model
                 return null;
             }
             return new CompleteNotification()
-                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithGroupName(!data.Keys.Contains("groupName") || data["groupName"] == null ? null : data["groupName"].ToString())
-                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithTaskName(!data.Keys.Contains("taskName") || data["taskName"] == null ? null : data["taskName"].ToString());
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : (string)data["namespaceName"])
+                .WithGroupName(!data.Keys.Contains("groupName") || data["groupName"] == null ? null : (string)data["groupName"])
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : (string)data["userId"])
+                .WithTaskName(!data.Keys.Contains("taskName") || data["taskName"] == null ? null : (string)data["taskName"]);
         }
     }
 }

@@ -20,6 +20,7 @@ namespace Gs2.Gs2Realtime.Model
 {
 	public class CreateNotification
 	{
+        internal static readonly string[] IntegerFields = { };
         public string NamespaceName { set; get; } = null!;
         public string RoomName { set; get; } = null!;
         public CreateNotification WithNamespaceName(string namespaceName) {
@@ -40,8 +41,8 @@ namespace Gs2.Gs2Realtime.Model
                 return null;
             }
             return new CreateNotification()
-                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithRoomName(!data.Keys.Contains("roomName") || data["roomName"] == null ? null : data["roomName"].ToString());
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : (string)data["namespaceName"])
+                .WithRoomName(!data.Keys.Contains("roomName") || data["roomName"] == null ? null : (string)data["roomName"]);
         }
     }
 }

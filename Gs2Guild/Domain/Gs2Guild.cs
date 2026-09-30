@@ -628,7 +628,7 @@ namespace Gs2.Gs2Guild.Domain
         ) {
             switch (action) {
                 case "ReceiveRequestNotification": {
-                    var notification = NotificationPayload.Parse(payload, ReceiveRequestNotification.FromJson);
+                    var notification = NotificationPayload.Parse(payload, ReceiveRequestNotification.FromJson, ReceiveRequestNotification.IntegerFields);
                     _gs2.Cache.ClearListCache<ReceiveMemberRequest>(
                         (null as Gs2.Gs2Guild.Model.ReceiveMemberRequest).CacheParentKey(
                             notification.NamespaceName,
@@ -643,7 +643,7 @@ namespace Gs2.Gs2Guild.Domain
                     break;
                 }
                 case "RemoveRequestNotification": {
-                    var notification = NotificationPayload.Parse(payload, RemoveRequestNotification.FromJson);
+                    var notification = NotificationPayload.Parse(payload, RemoveRequestNotification.FromJson, RemoveRequestNotification.IntegerFields);
                     (null as Gs2.Gs2Guild.Model.ReceiveMemberRequest).DeleteCache(
                         _gs2.Cache,
                         notification.NamespaceName,
@@ -682,14 +682,14 @@ namespace Gs2.Gs2Guild.Domain
                     break;
                 }
                 case "ChangeNotification": {
-                    var notification = NotificationPayload.Parse(payload, ChangeNotification.FromJson);
+                    var notification = NotificationPayload.Parse(payload, ChangeNotification.FromJson, ChangeNotification.IntegerFields);
     #if UNITY_2017_1_OR_NEWER
                     onChangeNotification.Invoke(notification);
     #endif
                     break;
                 }
                 case "JoinNotification": {
-                    var notification = NotificationPayload.Parse(payload, JoinNotification.FromJson);
+                    var notification = NotificationPayload.Parse(payload, JoinNotification.FromJson, JoinNotification.IntegerFields);
                     (null as Gs2.Gs2Guild.Model.Guild).DeleteCache(
                         _gs2.Cache,
                         notification.NamespaceName,
@@ -726,7 +726,7 @@ namespace Gs2.Gs2Guild.Domain
                     break;
                 }
                 case "LeaveNotification": {
-                    var notification = NotificationPayload.Parse(payload, LeaveNotification.FromJson);
+                    var notification = NotificationPayload.Parse(payload, LeaveNotification.FromJson, LeaveNotification.IntegerFields);
                     (null as Gs2.Gs2Guild.Model.Guild).DeleteCache(
                         _gs2.Cache,
                         notification.NamespaceName,
@@ -755,7 +755,7 @@ namespace Gs2.Gs2Guild.Domain
                     break;
                 }
                 case "ChangeMemberNotification": {
-                    var notification = NotificationPayload.Parse(payload, ChangeMemberNotification.FromJson);
+                    var notification = NotificationPayload.Parse(payload, ChangeMemberNotification.FromJson, ChangeMemberNotification.IntegerFields);
                     (null as Gs2.Gs2Guild.Model.Guild).DeleteCache(
                         _gs2.Cache,
                         notification.NamespaceName,

@@ -23,6 +23,8 @@ namespace Gs2.Gs2JobQueue.Model
 {
 	public class RunNotification
 	{
+        internal static readonly string[] IntegerFields = { };
+
         public string NamespaceName { set; get; } = null!;
         public string UserId { set; get; } = null!;
         public string JobName { set; get; } = null!;
@@ -48,9 +50,9 @@ namespace Gs2.Gs2JobQueue.Model
                 return null;
             }
             var notification = new RunNotification()
-                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithJobName(!data.Keys.Contains("jobName") || data["jobName"] == null ? null : data["jobName"].ToString());
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : (string)data["namespaceName"])
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : (string)data["userId"])
+                .WithJobName(!data.Keys.Contains("jobName") || data["jobName"] == null ? null : (string)data["jobName"]);
             
             return notification;
         }

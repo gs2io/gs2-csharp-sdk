@@ -267,7 +267,7 @@ namespace Gs2.Gs2Realtime.Domain
         ) {
             switch (action) {
                 case "Create": {
-                    var notification = NotificationPayload.Parse(payload, CreateNotification.FromJson);
+                    var notification = NotificationPayload.Parse(payload, CreateNotification.FromJson, CreateNotification.IntegerFields);
                     (null as Gs2.Gs2Realtime.Model.Room).DeleteCache(
                         cache,
                         notification.NamespaceName,

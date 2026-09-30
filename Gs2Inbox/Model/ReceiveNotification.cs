@@ -20,6 +20,7 @@ namespace Gs2.Gs2Inbox.Model
 {
 	public class ReceiveNotification
 	{
+        internal static readonly string[] IntegerFields = { };
         public string NamespaceName { set; get; } = null!;
         public string UserId { set; get; } = null!;
         public string MessageName { set; get; } = null!;
@@ -45,9 +46,9 @@ namespace Gs2.Gs2Inbox.Model
                 return null;
             }
             return new ReceiveNotification()
-                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
-                .WithMessageName(!data.Keys.Contains("messageName") || data["messageName"] == null ? null : data["messageName"].ToString());
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : (string)data["namespaceName"])
+                .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : (string)data["userId"])
+                .WithMessageName(!data.Keys.Contains("messageName") || data["messageName"] == null ? null : (string)data["messageName"]);
         }
     }
 }

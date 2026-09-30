@@ -20,6 +20,7 @@ namespace Gs2.Gs2Guild.Model
 {
 	public class ReceiveRequestNotification
 	{
+        internal static readonly string[] IntegerFields = { };
         public string NamespaceName { set; get; } = null!;
         public string GuildModelName { set; get; } = null!;
         public string GuildName { set; get; } = null!;
@@ -50,10 +51,10 @@ namespace Gs2.Gs2Guild.Model
                 return null;
             }
             return new ReceiveRequestNotification()
-                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithGuildModelName(!data.Keys.Contains("guildModelName") || data["guildModelName"] == null ? null : data["guildModelName"].ToString())
-                .WithGuildName(!data.Keys.Contains("guildName") || data["guildName"] == null ? null : data["guildName"].ToString())
-                .WithFromUserId(!data.Keys.Contains("fromUserId") || data["fromUserId"] == null ? null : data["fromUserId"].ToString());
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : (string)data["namespaceName"])
+                .WithGuildModelName(!data.Keys.Contains("guildModelName") || data["guildModelName"] == null ? null : (string)data["guildModelName"])
+                .WithGuildName(!data.Keys.Contains("guildName") || data["guildName"] == null ? null : (string)data["guildName"])
+                .WithFromUserId(!data.Keys.Contains("fromUserId") || data["fromUserId"] == null ? null : (string)data["fromUserId"]);
         }
     }
 }

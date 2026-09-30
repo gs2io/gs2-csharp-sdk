@@ -20,6 +20,7 @@ namespace Gs2.Gs2Matchmaking.Model
 {
 	public class JoinNotification
 	{
+        internal static readonly string[] IntegerFields = { };
         public string NamespaceName { set; get; } = null!;
         public string GatheringName { set; get; } = null!;
         public string JoinUserId { set; get; } = null!;
@@ -45,9 +46,9 @@ namespace Gs2.Gs2Matchmaking.Model
                 return null;
             }
             return new JoinNotification()
-                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : data["namespaceName"].ToString())
-                .WithGatheringName(!data.Keys.Contains("gatheringName") || data["gatheringName"] == null ? null : data["gatheringName"].ToString())
-                .WithJoinUserId(!data.Keys.Contains("joinUserId") || data["joinUserId"] == null ? null : data["joinUserId"].ToString());
+                .WithNamespaceName(!data.Keys.Contains("namespaceName") || data["namespaceName"] == null ? null : (string)data["namespaceName"])
+                .WithGatheringName(!data.Keys.Contains("gatheringName") || data["gatheringName"] == null ? null : (string)data["gatheringName"])
+                .WithJoinUserId(!data.Keys.Contains("joinUserId") || data["joinUserId"] == null ? null : (string)data["joinUserId"]);
         }
     }
 }
