@@ -136,20 +136,58 @@ namespace Gs2.Core.Domain
 
         private Action[] GetListRefetchCallbacksLocked<TKind>(string parentKey)
         {
-            return this._listCacheUpdateCallback.Get(typeof(TKind))?.Get(parentKey)?.Values
-                       .Select(callback => callback.Item2)
-                       .Where(callback => callback != null)
+            var kind = typeof(TKind);
+            return this._listCacheUpdateCallback.Get(kind)?.Get(parentKey)?
+                       .Where(entry => entry.Value.Item2 != null)
+                       .Select(entry => GuardList(kind, parentKey, entry.Key, entry.Value.Item2))
                        .ToArray()
                    ?? Array.Empty<Action>();
         }
 
         private Action<TKind[]>[] GetListUpdateCallbacksLocked<TKind>(string parentKey)
         {
-            return this._listCacheUpdateCallback.Get(typeof(TKind))?.Get(parentKey)?.Values
-                       .Select(callback => callback.Item1 as Action<TKind[]>)
-                       .Where(callback => callback != null)
+            var kind = typeof(TKind);
+            return this._listCacheUpdateCallback.Get(kind)?.Get(parentKey)?
+                       .Where(entry => entry.Value.Item1 is Action<TKind[]>)
+                       .Select(entry => GuardList(kind, parentKey, entry.Key, (Action<TKind[]>)entry.Value.Item1))
                        .ToArray()
                    ?? Array.Empty<Action<TKind[]>>();
+        }
+
+        private bool IsListSubscribed(Type kind, string parentKey, ulong callbackId)
+        {
+            lock (_syncRoot)
+            {
+                return this._listCacheUpdateCallback.Get(kind)?.Get(parentKey)?.ContainsKey(callbackId) == true;
+            }
+        }
+
+        private bool IsItemSubscribed(Type kind, string parentKey, string key, ulong callbackId)
+        {
+            lock (_syncRoot)
+            {
+                return this._cacheUpdateCallback.Get(kind)?.Get(parentKey)?.Get(key)?.ContainsKey(callbackId) == true;
+            }
+        }
+
+        private Action GuardList(Type kind, string parentKey, ulong callbackId, Action callback)
+        {
+            return () => { if (IsListSubscribed(kind, parentKey, callbackId)) callback(); };
+        }
+
+        private Action<T> GuardList<T>(Type kind, string parentKey, ulong callbackId, Action<T> callback)
+        {
+            return value => { if (IsListSubscribed(kind, parentKey, callbackId)) callback(value); };
+        }
+
+        private Action GuardItem(Type kind, string parentKey, string key, ulong callbackId, Action callback)
+        {
+            return () => { if (IsItemSubscribed(kind, parentKey, key, callbackId)) callback(); };
+        }
+
+        private Action<T> GuardItem<T>(Type kind, string parentKey, string key, ulong callbackId, Action<T> callback)
+        {
+            return value => { if (IsItemSubscribed(kind, parentKey, key, callbackId)) callback(value); };
         }
 
         private Action<TKind[]>[] GetCachedListUpdateCallbacksLocked<TKind>(
@@ -173,18 +211,20 @@ namespace Gs2.Core.Domain
 
         private Action<TKind>[] GetItemUpdateCallbacksLocked<TKind>(string parentKey, string key)
         {
-            return this._cacheUpdateCallback.Get(typeof(TKind))?.Get(parentKey)?.Get(key)?.Values
-                       .Select(callback => callback.Item1 as Action<TKind>)
-                       .Where(callback => callback != null)
+            var kind = typeof(TKind);
+            return this._cacheUpdateCallback.Get(kind)?.Get(parentKey)?.Get(key)?
+                       .Where(entry => entry.Value.Item1 is Action<TKind>)
+                       .Select(entry => GuardItem(kind, parentKey, key, entry.Key, (Action<TKind>)entry.Value.Item1))
                        .ToArray()
                    ?? Array.Empty<Action<TKind>>();
         }
 
         private Action[] GetItemRefetchCallbacksLocked<TKind>(string parentKey, string key)
         {
-            return this._cacheUpdateCallback.Get(typeof(TKind))?.Get(parentKey)?.Get(key)?.Values
-                       .Select(callback => callback.Item2)
-                       .Where(callback => callback != null)
+            var kind = typeof(TKind);
+            return this._cacheUpdateCallback.Get(kind)?.Get(parentKey)?.Get(key)?
+                       .Where(entry => entry.Value.Item2 != null)
+                       .Select(entry => GuardItem(kind, parentKey, key, entry.Key, entry.Value.Item2))
                        .ToArray()
                    ?? Array.Empty<Action>();
         }

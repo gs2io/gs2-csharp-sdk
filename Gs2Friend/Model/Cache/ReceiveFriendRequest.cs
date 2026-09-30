@@ -90,7 +90,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                             fromUserId,
                             timeOffset
                         );
-                        if (e.Errors.Length != 0 && e.Errors[0].Component == "receiveFriendRequest") {
+                        if (e.Errors.Length != 0 && (e.Errors[0].Component == "fromUserId" || e.Errors[0].Component == "inbox")) {
                             self.OnComplete(default);
                             yield break;
                         }
@@ -164,7 +164,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     fromUserId,
                     timeOffset
                 );
-                if (e.errors.Length == 0 || e.errors[0].component != "receiveFriendRequest") {
+                if (e.errors.Length == 0 || (e.errors[0].component != "fromUserId" && e.errors[0].component != "inbox")) {
                     throw;
                 }
                 return null;
