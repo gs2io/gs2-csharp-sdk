@@ -57,7 +57,7 @@ namespace Gs2.Core.Net
             {
                 var error = gs2Message.Body == null ? null : GeneralError.FromJson(gs2Message.Body);
                 var errorMessage = error != null ? error.Message : body;
-                Error = ExtractError(errorMessage, gs2Message.Status ?? 0);
+                Error = Gs2Exception.ExtractError(errorMessage, gs2Message.Status ?? 0);
                 if (Error != null)
                 {
                     Error.Metadata = error?.Metadata;
@@ -67,37 +67,6 @@ namespace Gs2.Core.Net
             Gs2SessionTaskId = new Gs2SessionTaskId(gs2Message.RequestId);
             StatusCode = gs2Message.Status ?? 0;
             Body = gs2Message.Body;
-        }
-        
-        private static Gs2Exception ExtractError(string message, long statusCode)
-        {
-            switch (statusCode)
-            {
-                case 0:
-                    return new NoInternetConnectionException(message);
-                case 200:
-                    return null;
-                case 400:
-                    return new BadRequestException(message);
-                case 401:
-                    return new UnauthorizedException(message);
-                case 402:
-                    return new QuotaLimitExceededException(message);
-                case 404:
-                    return new NotFoundException(message);
-                case 409:
-                    return new ConflictException(message);
-                case 500:
-                    return new InternalServerErrorException(message);
-                case 502:
-                    return new BadGatewayException(message);
-                case 503:
-                    return new ServiceUnavailableException(message);
-                case 504:
-                    return new RequestTimeoutException(message);
-                default:
-                    return new UnknownException(message);
-            }
         }
     }
 }

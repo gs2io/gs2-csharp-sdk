@@ -2467,15 +2467,7 @@ namespace Gs2.Gs2Datastore
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "dataObject.status.invalid") > 0) {
-                    base.OnError(new Exception.InvalidStatusException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "dataObject.file.notUploaded") > 0) {
-                    base.OnError(new Exception.NotUploadedException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2DatastoreErrorResolver.Resolve("DoneUpload", error));
             }
         }
 
@@ -2590,15 +2582,7 @@ namespace Gs2.Gs2Datastore
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "dataObject.status.invalid") > 0) {
-                    base.OnError(new Exception.InvalidStatusException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "dataObject.file.notUploaded") > 0) {
-                    base.OnError(new Exception.NotUploadedException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2DatastoreErrorResolver.Resolve("DoneUploadByUserId", error));
             }
         }
 
@@ -2699,12 +2683,7 @@ namespace Gs2.Gs2Datastore
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "dataObject.status.invalid") > 0) {
-                    base.OnError(new Exception.InvalidStatusException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2DatastoreErrorResolver.Resolve("DeleteDataObject", error));
             }
         }
 
@@ -2806,12 +2785,7 @@ namespace Gs2.Gs2Datastore
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "dataObject.status.invalid") > 0) {
-                    base.OnError(new Exception.InvalidStatusException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2DatastoreErrorResolver.Resolve("DeleteDataObjectByUserId", error));
             }
         }
 
@@ -3804,12 +3778,7 @@ namespace Gs2.Gs2Datastore
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "dataObject.status.invalid") > 0) {
-                    base.OnError(new Exception.InvalidStatusException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2DatastoreErrorResolver.Resolve("RestoreDataObject", error));
             }
         }
 

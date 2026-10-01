@@ -4903,6 +4903,11 @@ namespace Gs2.Gs2Exchange
 
                 return sessionRequest;
             }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2ExchangeErrorResolver.Resolve("Acquire", error));
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -5022,6 +5027,11 @@ namespace Gs2.Gs2Exchange
                 );
 
                 return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2ExchangeErrorResolver.Resolve("AcquireByUserId", error));
             }
         }
 

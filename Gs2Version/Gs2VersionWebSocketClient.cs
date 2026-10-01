@@ -2015,12 +2015,7 @@ namespace Gs2.Gs2Version
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "version.accept.version.invalid") > 0) {
-                    base.OnError(new Exception.AcceptVersionInvalidException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2VersionErrorResolver.Resolve("Accept", error));
             }
         }
 
@@ -2141,12 +2136,7 @@ namespace Gs2.Gs2Version
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "version.accept.version.invalid") > 0) {
-                    base.OnError(new Exception.AcceptVersionInvalidException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2VersionErrorResolver.Resolve("AcceptByUserId", error));
             }
         }
 
@@ -2267,12 +2257,7 @@ namespace Gs2.Gs2Version
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "version.accept.version.invalid") > 0) {
-                    base.OnError(new Exception.AcceptVersionInvalidException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2VersionErrorResolver.Resolve("Reject", error));
             }
         }
 
@@ -2393,12 +2378,7 @@ namespace Gs2.Gs2Version
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "version.accept.version.invalid") > 0) {
-                    base.OnError(new Exception.AcceptVersionInvalidException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2VersionErrorResolver.Resolve("RejectByUserId", error));
             }
         }
 

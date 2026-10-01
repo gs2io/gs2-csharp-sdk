@@ -2888,12 +2888,7 @@ namespace Gs2.Gs2LoginReward
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "loginReward.bonus.alreadyReceived") > 0) {
-                    base.OnError(new Exception.AlreadyReceivedException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2LoginRewardErrorResolver.Resolve("Receive", error));
             }
         }
 
@@ -3018,12 +3013,7 @@ namespace Gs2.Gs2LoginReward
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "loginReward.bonus.alreadyReceived") > 0) {
-                    base.OnError(new Exception.AlreadyReceivedException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2LoginRewardErrorResolver.Resolve("ReceiveByUserId", error));
             }
         }
 
@@ -3152,12 +3142,7 @@ namespace Gs2.Gs2LoginReward
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "loginReward.bonus.alreadyReceived") > 0) {
-                    base.OnError(new Exception.AlreadyReceivedException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2LoginRewardErrorResolver.Resolve("MissedReceive", error));
             }
         }
 
@@ -3287,12 +3272,7 @@ namespace Gs2.Gs2LoginReward
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "loginReward.bonus.alreadyReceived") > 0) {
-                    base.OnError(new Exception.AlreadyReceivedException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2LoginRewardErrorResolver.Resolve("MissedReceiveByUserId", error));
             }
         }
 

@@ -2310,12 +2310,7 @@ namespace Gs2.Gs2Inbox
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "inbox.message.expired") > 0) {
-                    base.OnError(new Exception.MessageExpiredException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2InboxErrorResolver.Resolve("OpenMessage", error));
             }
         }
 
@@ -2430,12 +2425,7 @@ namespace Gs2.Gs2Inbox
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "inbox.message.expired") > 0) {
-                    base.OnError(new Exception.MessageExpiredException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2InboxErrorResolver.Resolve("OpenMessageByUserId", error));
             }
         }
 
@@ -2669,12 +2659,7 @@ namespace Gs2.Gs2Inbox
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "inbox.message.expired") > 0) {
-                    base.OnError(new Exception.MessageExpiredException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2InboxErrorResolver.Resolve("ReadMessage", error));
             }
         }
 
@@ -2799,12 +2784,7 @@ namespace Gs2.Gs2Inbox
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "inbox.message.expired") > 0) {
-                    base.OnError(new Exception.MessageExpiredException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2InboxErrorResolver.Resolve("ReadMessageByUserId", error));
             }
         }
 
@@ -2937,12 +2917,7 @@ namespace Gs2.Gs2Inbox
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "inbox.message.expired") > 0) {
-                    base.OnError(new Exception.MessageExpiredException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2InboxErrorResolver.Resolve("BatchReadMessages", error));
             }
         }
 
@@ -3076,12 +3051,7 @@ namespace Gs2.Gs2Inbox
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "inbox.message.expired") > 0) {
-                    base.OnError(new Exception.MessageExpiredException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2InboxErrorResolver.Resolve("BatchReadMessagesByUserId", error));
             }
         }
 

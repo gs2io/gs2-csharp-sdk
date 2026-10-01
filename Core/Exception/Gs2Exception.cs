@@ -81,12 +81,59 @@ namespace Gs2.Core.Exception
 
 		public static Gs2Exception ExtractError(string message, long statusCode)
 		{
+			if (statusCode == 200) {
+				return null;
+			}
+			var errors = ParseErrors(message, out var metadata);
+			var error = errors.Length > 0
+				? CreateByStatus(statusCode, errors)
+				: CreateByStatus(statusCode, message);
+			if (metadata != null) {
+				error.Metadata = metadata;
+			}
+			return error;
+		}
+
+		public static Gs2Exception ExtractError(string action, string message, long statusCode)
+		{
+			return Gs2ErrorResolver.ResolveAction(action, ExtractError(message, statusCode));
+		}
+
+		private static Gs2Exception CreateByStatus(long statusCode, RequestError[] errors)
+		{
+			switch (statusCode)
+			{
+				case 0:
+					return new NoInternetConnectionException(errors);
+				case 400:
+					return new BadRequestException(errors);
+				case 401:
+					return new UnauthorizedException(errors);
+				case 402:
+					return new QuotaLimitExceededException(errors);
+				case 404:
+					return new NotFoundException(errors);
+				case 409:
+					return new ConflictException(errors);
+				case 500:
+					return new InternalServerErrorException(errors);
+				case 502:
+					return new BadGatewayException(errors);
+				case 503:
+					return new ServiceUnavailableException(errors);
+				case 504:
+					return new RequestTimeoutException(errors);
+				default:
+					return new UnknownException(errors);
+			}
+		}
+
+		private static Gs2Exception CreateByStatus(long statusCode, string message)
+		{
 			switch (statusCode)
 			{
 				case 0:
 					return new NoInternetConnectionException(message);
-				case 200:
-					return null;
 				case 400:
 					return new BadRequestException(message);
 				case 401:
@@ -108,6 +155,79 @@ namespace Gs2.Core.Exception
 				default:
 					return new UnknownException(message);
 			}
+		}
+
+		private static RequestError[] ParseErrors(string message, out ResultMetadata metadata)
+		{
+			metadata = null;
+			if (string.IsNullOrEmpty(message)) {
+				return new RequestError[]{};
+			}
+			try {
+				return ParseErrors(JsonMapper.ToObject(message), out metadata);
+			} catch (System.Exception) {
+				metadata = null;
+				return new RequestError[]{};
+			}
+		}
+
+		private static RequestError[] ParseErrors(JsonData data, out ResultMetadata metadata)
+		{
+			metadata = null;
+			if (data == null) {
+				return new RequestError[]{};
+			}
+			if (data.IsArray) {
+				return ToRequestErrors(data);
+			}
+			if (!data.IsObject) {
+				return new RequestError[]{};
+			}
+			if (data.Keys.Contains("metadata") && data["metadata"] != null && data["metadata"].IsObject) {
+				metadata = ResultMetadata.FromJson(data["metadata"]);
+			}
+			if (data.Keys.Contains("errors") && data["errors"] != null && data["errors"].IsArray) {
+				return ToRequestErrors(data["errors"]);
+			}
+			if (data.Keys.Contains("code") && data["code"] != null && data["code"].IsString) {
+				return new[] { ToRequestError(data) };
+			}
+			if (data.Keys.Contains("message") && data["message"] != null && data["message"].IsString) {
+				var errors = ParseErrors((string)data["message"], out var innerMetadata);
+				if (metadata == null) {
+					metadata = innerMetadata;
+				}
+				return errors;
+			}
+			return new RequestError[]{};
+		}
+
+		private static RequestError[] ToRequestErrors(JsonData data)
+		{
+			var errors = new List<RequestError>();
+			for (var i = 0; i < data.Count; i++) {
+				if (data[i] != null && data[i].IsObject) {
+					errors.Add(ToRequestError(data[i]));
+				}
+			}
+			return errors.ToArray();
+		}
+
+		private static RequestError ToRequestError(JsonData data)
+		{
+			return new RequestError(
+				StringField(data, "component"),
+				StringField(data, "message"),
+				StringField(data, "code")
+			);
+		}
+
+		private static string StringField(JsonData data, string key)
+		{
+			if (!data.Keys.Contains(key) || data[key] == null) {
+				return null;
+			}
+			return data[key].IsString ? (string)data[key] : data[key].ToJson();
 		}
 	}
 }

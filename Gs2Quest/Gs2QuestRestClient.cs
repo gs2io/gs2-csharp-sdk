@@ -3712,12 +3712,7 @@ namespace Gs2.Gs2Quest
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "quest.progress.exists") > 0) {
-                    base.OnError(new Exception.InProgressException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2QuestErrorResolver.Resolve("Start", error));
             }
         }
 
@@ -3852,12 +3847,7 @@ namespace Gs2.Gs2Quest
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "quest.progress.exists") > 0) {
-                    base.OnError(new Exception.InProgressException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2QuestErrorResolver.Resolve("StartByUserId", error));
             }
         }
 

@@ -2953,12 +2953,7 @@ namespace Gs2.Gs2Lottery
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "box.items.empty") > 0) {
-                    base.OnError(new Exception.EmptyException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2LotteryErrorResolver.Resolve("DrawByUserId", error));
             }
         }
 

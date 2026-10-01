@@ -8154,12 +8154,7 @@ namespace Gs2.Gs2Inventory
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "itemSet.operation.conflict") > 0) {
-                    base.OnError(new Exception.ConflictException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2InventoryErrorResolver.Resolve("AcquireItemSetByUserId", error));
             }
         }
 
@@ -8285,12 +8280,7 @@ namespace Gs2.Gs2Inventory
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "itemSet.operation.conflict") > 0) {
-                    base.OnError(new Exception.ConflictException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2InventoryErrorResolver.Resolve("AcquireItemSetWithGradeByUserId", error));
             }
         }
 
@@ -8415,15 +8405,7 @@ namespace Gs2.Gs2Inventory
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "itemSet.operation.conflict") > 0) {
-                    base.OnError(new Exception.ConflictException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "itemSet.count.insufficient") > 0) {
-                    base.OnError(new Exception.InsufficientException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2InventoryErrorResolver.Resolve("ConsumeItemSet", error));
             }
         }
 
@@ -8549,15 +8531,7 @@ namespace Gs2.Gs2Inventory
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "itemSet.operation.conflict") > 0) {
-                    base.OnError(new Exception.ConflictException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "itemSet.count.insufficient") > 0) {
-                    base.OnError(new Exception.InsufficientException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2InventoryErrorResolver.Resolve("ConsumeItemSetByUserId", error));
             }
         }
 
@@ -11408,12 +11382,7 @@ namespace Gs2.Gs2Inventory
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "itemSet.operation.conflict") > 0) {
-                    base.OnError(new Exception.ConflictException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2InventoryErrorResolver.Resolve("AcquireSimpleItemsByUserId", error));
             }
         }
 
@@ -11537,15 +11506,7 @@ namespace Gs2.Gs2Inventory
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "itemSet.operation.conflict") > 0) {
-                    base.OnError(new Exception.ConflictException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "itemSet.count.insufficient") > 0) {
-                    base.OnError(new Exception.InsufficientException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2InventoryErrorResolver.Resolve("ConsumeSimpleItems", error));
             }
         }
 
@@ -11670,15 +11631,7 @@ namespace Gs2.Gs2Inventory
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "itemSet.operation.conflict") > 0) {
-                    base.OnError(new Exception.ConflictException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "itemSet.count.insufficient") > 0) {
-                    base.OnError(new Exception.InsufficientException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2InventoryErrorResolver.Resolve("ConsumeSimpleItemsByUserId", error));
             }
         }
 
@@ -11803,12 +11756,7 @@ namespace Gs2.Gs2Inventory
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "itemSet.operation.conflict") > 0) {
-                    base.OnError(new Exception.ConflictException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2InventoryErrorResolver.Resolve("SetSimpleItemsByUserId", error));
             }
         }
 
@@ -13085,12 +13033,7 @@ namespace Gs2.Gs2Inventory
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "itemSet.operation.conflict") > 0) {
-                    base.OnError(new Exception.ConflictException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2InventoryErrorResolver.Resolve("AcquireBigItemByUserId", error));
             }
         }
 
@@ -13210,15 +13153,7 @@ namespace Gs2.Gs2Inventory
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "itemSet.operation.conflict") > 0) {
-                    base.OnError(new Exception.ConflictException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "itemSet.count.insufficient") > 0) {
-                    base.OnError(new Exception.InsufficientException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2InventoryErrorResolver.Resolve("ConsumeBigItem", error));
             }
         }
 
@@ -13339,15 +13274,7 @@ namespace Gs2.Gs2Inventory
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "itemSet.operation.conflict") > 0) {
-                    base.OnError(new Exception.ConflictException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "itemSet.count.insufficient") > 0) {
-                    base.OnError(new Exception.InsufficientException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2InventoryErrorResolver.Resolve("ConsumeBigItemByUserId", error));
             }
         }
 
@@ -13468,12 +13395,7 @@ namespace Gs2.Gs2Inventory
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "itemSet.operation.conflict") > 0) {
-                    base.OnError(new Exception.ConflictException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2InventoryErrorResolver.Resolve("SetBigItemByUserId", error));
             }
         }
 

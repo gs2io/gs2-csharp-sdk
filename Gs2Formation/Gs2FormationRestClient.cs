@@ -6058,6 +6058,11 @@ namespace Gs2.Gs2Formation
 
                 return sessionRequest;
             }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2FormationErrorResolver.Resolve("SetForm", error));
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -6178,6 +6183,11 @@ namespace Gs2.Gs2Formation
                 );
 
                 return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2FormationErrorResolver.Resolve("SetFormByUserId", error));
             }
         }
 
@@ -6303,6 +6313,11 @@ namespace Gs2.Gs2Formation
                 );
 
                 return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2FormationErrorResolver.Resolve("SetFormWithSignature", error));
             }
         }
 
@@ -7538,6 +7553,11 @@ namespace Gs2.Gs2Formation
 
                 return sessionRequest;
             }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2FormationErrorResolver.Resolve("SetPropertyForm", error));
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -7658,6 +7678,11 @@ namespace Gs2.Gs2Formation
                 );
 
                 return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2FormationErrorResolver.Resolve("SetPropertyFormByUserId", error));
             }
         }
 
@@ -7783,6 +7808,11 @@ namespace Gs2.Gs2Formation
                 );
 
                 return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2FormationErrorResolver.Resolve("SetPropertyFormWithSignature", error));
             }
         }
 

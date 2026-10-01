@@ -91,7 +91,7 @@ namespace Gs2.Core.Domain
                     var verifyTask = result.VerifyTaskRequests[i];
                     if (i < result.VerifyTaskResults.Length) {
                         if (result.VerifyTaskResultCodes[i] / 100 != 2) {
-                            throw Gs2Exception.ExtractError(result.VerifyTaskResults[i], result.VerifyTaskResultCodes[i]);
+                            throw Gs2Exception.ExtractError(verifyTask.Action, result.VerifyTaskResults[i], result.VerifyTaskResultCodes[i]);
                         }
                         if (!skipCallback) {
                             Gs2.TransactionConfiguration.VerifyActionEventHandler.Invoke(
@@ -112,7 +112,7 @@ namespace Gs2.Core.Domain
                     var stampTask = result.TaskRequests[i];
                     if (i < result.TaskResults.Length) {
                         if (result.TaskResultCodes[i] / 100 != 2) {
-                            throw Gs2Exception.ExtractError(result.TaskResults[i], result.TaskResultCodes[i]);
+                            throw Gs2Exception.ExtractError(stampTask.Action, result.TaskResults[i], result.TaskResultCodes[i]);
                         }
                         if (!skipCallback) {
                             Gs2.TransactionConfiguration.ConsumeActionEventHandler.Invoke(
@@ -130,7 +130,7 @@ namespace Gs2.Core.Domain
 
             if (result.SheetResult != null) {
                 if (result.SheetResultCode / 100 != 2) {
-                    throw Gs2Exception.ExtractError(result.SheetResult, result.SheetResultCode ?? 999);
+                    throw Gs2Exception.ExtractError(result.SheetRequest?.Action, result.SheetResult, result.SheetResultCode ?? 999);
                 }
                 if (!skipCallback) {
                     Gs2.TransactionConfiguration.AcquireActionEventHandler.Invoke(

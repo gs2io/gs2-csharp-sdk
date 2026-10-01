@@ -74,7 +74,7 @@ namespace Gs2.Core.Domain
             Gs2JobQueue.Model.JobResultBody result
         ) {
             if (result.StatusCode / 100 != 2) {
-                throw Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 0);
+                throw Gs2ErrorResolver.ResolveJobScript(job.ScriptId, Gs2Exception.ExtractError(result.Result, result.StatusCode ?? 0));
             }
 
             var skipCallback = !HandledResults.TryHandle(job.JobId);

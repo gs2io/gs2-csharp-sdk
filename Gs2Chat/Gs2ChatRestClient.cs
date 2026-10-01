@@ -1701,12 +1701,7 @@ namespace Gs2.Gs2Chat
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "room.allowUserIds.notInclude") > 0) {
-                    base.OnError(new Exception.NoAccessPrivilegesException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2ChatErrorResolver.Resolve("CreateRoom", error));
             }
         }
 
@@ -2066,12 +2061,7 @@ namespace Gs2.Gs2Chat
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "room.allowUserIds.notInclude") > 0) {
-                    base.OnError(new Exception.NoAccessPrivilegesException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2ChatErrorResolver.Resolve("UpdateRoom", error));
             }
         }
 
@@ -2306,12 +2296,7 @@ namespace Gs2.Gs2Chat
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "room.allowUserIds.notInclude") > 0) {
-                    base.OnError(new Exception.NoAccessPrivilegesException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2ChatErrorResolver.Resolve("DeleteRoom", error));
             }
         }
 
@@ -2519,18 +2504,7 @@ namespace Gs2.Gs2Chat
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "room.allowUserIds.notInclude") > 0) {
-                    base.OnError(new Exception.NoAccessPrivilegesException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "room.password.require") > 0) {
-                    base.OnError(new Exception.PasswordRequiredException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "room.password.invalid") > 0) {
-                    base.OnError(new Exception.PasswordIncorrectException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2ChatErrorResolver.Resolve("DescribeMessages", error));
             }
         }
 
@@ -2642,18 +2616,7 @@ namespace Gs2.Gs2Chat
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "room.allowUserIds.notInclude") > 0) {
-                    base.OnError(new Exception.NoAccessPrivilegesException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "room.password.require") > 0) {
-                    base.OnError(new Exception.PasswordRequiredException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "room.password.invalid") > 0) {
-                    base.OnError(new Exception.PasswordIncorrectException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2ChatErrorResolver.Resolve("DescribeMessagesByUserId", error));
             }
         }
 
@@ -2762,18 +2725,7 @@ namespace Gs2.Gs2Chat
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "room.allowUserIds.notInclude") > 0) {
-                    base.OnError(new Exception.NoAccessPrivilegesException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "room.password.require") > 0) {
-                    base.OnError(new Exception.PasswordRequiredException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "room.password.invalid") > 0) {
-                    base.OnError(new Exception.PasswordIncorrectException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2ChatErrorResolver.Resolve("DescribeLatestMessages", error));
             }
         }
 
@@ -2885,18 +2837,7 @@ namespace Gs2.Gs2Chat
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "room.allowUserIds.notInclude") > 0) {
-                    base.OnError(new Exception.NoAccessPrivilegesException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "room.password.require") > 0) {
-                    base.OnError(new Exception.PasswordRequiredException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "room.password.invalid") > 0) {
-                    base.OnError(new Exception.PasswordIncorrectException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2ChatErrorResolver.Resolve("DescribeLatestMessagesByUserId", error));
             }
         }
 
@@ -3025,18 +2966,7 @@ namespace Gs2.Gs2Chat
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "room.allowUserIds.notInclude") > 0) {
-                    base.OnError(new Exception.NoAccessPrivilegesException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "room.password.require") > 0) {
-                    base.OnError(new Exception.PasswordRequiredException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "room.password.invalid") > 0) {
-                    base.OnError(new Exception.PasswordIncorrectException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2ChatErrorResolver.Resolve("Post", error));
             }
         }
 
@@ -3166,18 +3096,7 @@ namespace Gs2.Gs2Chat
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "room.allowUserIds.notInclude") > 0) {
-                    base.OnError(new Exception.NoAccessPrivilegesException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "room.password.require") > 0) {
-                    base.OnError(new Exception.PasswordRequiredException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "room.password.invalid") > 0) {
-                    base.OnError(new Exception.PasswordIncorrectException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2ChatErrorResolver.Resolve("PostByUserId", error));
             }
         }
 
@@ -3278,18 +3197,7 @@ namespace Gs2.Gs2Chat
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "room.allowUserIds.notInclude") > 0) {
-                    base.OnError(new Exception.NoAccessPrivilegesException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "room.password.require") > 0) {
-                    base.OnError(new Exception.PasswordRequiredException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "room.password.invalid") > 0) {
-                    base.OnError(new Exception.PasswordIncorrectException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2ChatErrorResolver.Resolve("GetMessage", error));
             }
         }
 
@@ -3393,18 +3301,7 @@ namespace Gs2.Gs2Chat
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "room.allowUserIds.notInclude") > 0) {
-                    base.OnError(new Exception.NoAccessPrivilegesException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "room.password.require") > 0) {
-                    base.OnError(new Exception.PasswordRequiredException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "room.password.invalid") > 0) {
-                    base.OnError(new Exception.PasswordIncorrectException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2ChatErrorResolver.Resolve("GetMessageByUserId", error));
             }
         }
 

@@ -5069,12 +5069,7 @@ namespace Gs2.Gs2Mission
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "counter.increase.conflict") > 0) {
-                    base.OnError(new Exception.ConflictException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2MissionErrorResolver.Resolve("IncreaseCounterByUserId", error));
             }
         }
 
@@ -5199,12 +5194,7 @@ namespace Gs2.Gs2Mission
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "counter.increase.conflict") > 0) {
-                    base.OnError(new Exception.ConflictException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2MissionErrorResolver.Resolve("SetCounterByUserId", error));
             }
         }
 
@@ -5323,12 +5313,7 @@ namespace Gs2.Gs2Mission
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "counter.increase.conflict") > 0) {
-                    base.OnError(new Exception.ConflictException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2MissionErrorResolver.Resolve("DecreaseCounter", error));
             }
         }
 
@@ -5448,12 +5433,7 @@ namespace Gs2.Gs2Mission
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "counter.increase.conflict") > 0) {
-                    base.OnError(new Exception.ConflictException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2MissionErrorResolver.Resolve("DecreaseCounterByUserId", error));
             }
         }
 

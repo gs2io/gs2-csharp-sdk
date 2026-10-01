@@ -1840,12 +1840,7 @@ namespace Gs2.Gs2JobQueue
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "jobQueue.execution.conflict") > 0) {
-                    base.OnError(new Exception.ConflictException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2JobQueueErrorResolver.Resolve("Run", error));
             }
         }
 
@@ -1959,12 +1954,7 @@ namespace Gs2.Gs2JobQueue
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "jobQueue.execution.conflict") > 0) {
-                    base.OnError(new Exception.ConflictException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2JobQueueErrorResolver.Resolve("RunByUserId", error));
             }
         }
 

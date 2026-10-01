@@ -2860,6 +2860,11 @@ namespace Gs2.Gs2Guild
 
                 return sessionRequest;
             }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2GuildErrorResolver.Resolve("CreateGuild", error));
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -3029,6 +3034,11 @@ namespace Gs2.Gs2Guild
                 );
 
                 return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2GuildErrorResolver.Resolve("CreateGuildByUserId", error));
             }
         }
 
@@ -3642,12 +3652,7 @@ namespace Gs2.Gs2Guild
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "guild.member.master.require") > 0) {
-                    base.OnError(new Exception.GuildMasterRequiredException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2GuildErrorResolver.Resolve("DeleteMember", error));
             }
         }
 
@@ -3759,12 +3764,7 @@ namespace Gs2.Gs2Guild
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "guild.member.master.require") > 0) {
-                    base.OnError(new Exception.GuildMasterRequiredException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2GuildErrorResolver.Resolve("DeleteMemberByGuildName", error));
             }
         }
 
@@ -5453,12 +5453,7 @@ namespace Gs2.Gs2Guild
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "guild.member.notFound") > 0) {
-                    base.OnError(new Exception.NotIncludedGuildMemberException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2GuildErrorResolver.Resolve("Assume", error));
             }
         }
 
@@ -5574,12 +5569,7 @@ namespace Gs2.Gs2Guild
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "guild.member.notFound") > 0) {
-                    base.OnError(new Exception.NotIncludedGuildMemberException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2GuildErrorResolver.Resolve("AssumeByUserId", error));
             }
         }
 
@@ -6840,12 +6830,7 @@ namespace Gs2.Gs2Guild
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "guild.member.master.require") > 0) {
-                    base.OnError(new Exception.GuildMasterRequiredException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2GuildErrorResolver.Resolve("Withdrawal", error));
             }
         }
 
@@ -6948,12 +6933,7 @@ namespace Gs2.Gs2Guild
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "guild.member.master.require") > 0) {
-                    base.OnError(new Exception.GuildMasterRequiredException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2GuildErrorResolver.Resolve("WithdrawalByUserId", error));
             }
         }
 
@@ -8424,15 +8404,7 @@ namespace Gs2.Gs2Guild
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "user.joinedGuild.tooMany") > 0) {
-                    base.OnError(new Exception.MaximumJoinedGuildsReachedException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "guild.members.tooMany") > 0) {
-                    base.OnError(new Exception.MaximumMembersReachedException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2GuildErrorResolver.Resolve("AcceptRequest", error));
             }
         }
 
@@ -8544,15 +8516,7 @@ namespace Gs2.Gs2Guild
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "user.joinedGuild.tooMany") > 0) {
-                    base.OnError(new Exception.MaximumJoinedGuildsReachedException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "guild.members.tooMany") > 0) {
-                    base.OnError(new Exception.MaximumMembersReachedException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2GuildErrorResolver.Resolve("AcceptRequestByGuildName", error));
             }
         }
 
@@ -9247,24 +9211,7 @@ namespace Gs2.Gs2Guild
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "guild.members.tooMany") > 0) {
-                    base.OnError(new Exception.MaximumMembersReachedException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "user.joinedGuild.tooMany") > 0) {
-                    base.OnError(new Exception.MaximumJoinedGuildsReachedException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "guild.receiveRequests.tooMany") > 0) {
-                    base.OnError(new Exception.MaximumReceiveRequestsReachedException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "guild.sendRequests.tooMany") > 0) {
-                    base.OnError(new Exception.MaximumSendRequestsReachedException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "guild.sendRequests.notMeetJoinRequirements") > 0) {
-                    base.OnError(new Exception.DotMeetJoinRequirementsException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2GuildErrorResolver.Resolve("SendRequest", error));
             }
         }
 
@@ -9385,24 +9332,7 @@ namespace Gs2.Gs2Guild
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "guild.members.tooMany") > 0) {
-                    base.OnError(new Exception.MaximumMembersReachedException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "user.joinedGuild.tooMany") > 0) {
-                    base.OnError(new Exception.MaximumJoinedGuildsReachedException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "guild.receiveRequests.tooMany") > 0) {
-                    base.OnError(new Exception.MaximumReceiveRequestsReachedException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "guild.sendRequests.tooMany") > 0) {
-                    base.OnError(new Exception.MaximumSendRequestsReachedException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "guild.sendRequests.notMeetJoinRequirements") > 0) {
-                    base.OnError(new Exception.DotMeetJoinRequirementsException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2GuildErrorResolver.Resolve("SendRequestByUserId", error));
             }
         }
 

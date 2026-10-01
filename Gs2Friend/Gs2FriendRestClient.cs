@@ -2668,6 +2668,11 @@ namespace Gs2.Gs2Friend
 
                 return sessionRequest;
             }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2FriendErrorResolver.Resolve("RegisterBlackList", error));
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -2777,6 +2782,11 @@ namespace Gs2.Gs2Friend
                 );
 
                 return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2FriendErrorResolver.Resolve("RegisterBlackListByUserId", error));
             }
         }
 
@@ -3472,6 +3482,11 @@ namespace Gs2.Gs2Friend
 
                 return sessionRequest;
             }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2FriendErrorResolver.Resolve("Follow", error));
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -3581,6 +3596,11 @@ namespace Gs2.Gs2Friend
                 );
 
                 return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2FriendErrorResolver.Resolve("FollowByUserId", error));
             }
         }
 
@@ -4075,6 +4095,11 @@ namespace Gs2.Gs2Friend
 
                 return sessionRequest;
             }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2FriendErrorResolver.Resolve("AddFriend", error));
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -4184,6 +4209,11 @@ namespace Gs2.Gs2Friend
                 );
 
                 return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2FriendErrorResolver.Resolve("AddFriendByUserId", error));
             }
         }
 
@@ -4879,6 +4909,11 @@ namespace Gs2.Gs2Friend
 
                 return sessionRequest;
             }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2FriendErrorResolver.Resolve("SendRequest", error));
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -4988,6 +5023,11 @@ namespace Gs2.Gs2Friend
                 );
 
                 return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2FriendErrorResolver.Resolve("SendRequestByUserId", error));
             }
         }
 
@@ -5683,6 +5723,11 @@ namespace Gs2.Gs2Friend
 
                 return sessionRequest;
             }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2FriendErrorResolver.Resolve("AcceptRequest", error));
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -5792,6 +5837,11 @@ namespace Gs2.Gs2Friend
                 );
 
                 return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2FriendErrorResolver.Resolve("AcceptRequestByUserId", error));
             }
         }
 

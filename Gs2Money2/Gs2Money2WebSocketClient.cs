@@ -1198,12 +1198,7 @@ namespace Gs2.Gs2Money2
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "wallet.operation.conflict") > 0) {
-                    base.OnError(new Exception.ConflictException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2Money2ErrorResolver.Resolve("DepositByUserId", error));
             }
         }
 

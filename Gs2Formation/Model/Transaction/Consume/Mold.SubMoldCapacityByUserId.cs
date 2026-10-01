@@ -44,7 +44,7 @@ namespace Gs2.Gs2Formation.Model.Transaction
 /* diff --- start
             catch (Gs2Exception) {
  diff --- end */
-            catch (Exception) { /* diff +++ */
+            catch (System.Exception) { /* diff +++ */
                 return false;
             }
         }

@@ -3711,12 +3711,7 @@ namespace Gs2.Gs2Stamina
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "stamina.stamina.insufficient") > 0) {
-                    base.OnError(new Exception.InsufficientException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2StaminaErrorResolver.Resolve("ConsumeStamina", error));
             }
         }
 
@@ -3837,12 +3832,7 @@ namespace Gs2.Gs2Stamina
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "stamina.stamina.insufficient") > 0) {
-                    base.OnError(new Exception.InsufficientException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2StaminaErrorResolver.Resolve("ConsumeStaminaByUserId", error));
             }
         }
 

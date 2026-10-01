@@ -3026,6 +3026,11 @@ namespace Gs2.Gs2Ranking2
 
                 return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
             }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2Ranking2ErrorResolver.Resolve("PutClusterRankingScore", error));
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -3151,6 +3156,11 @@ namespace Gs2.Gs2Ranking2
                 jsonWriter.WriteObjectEnd();
 
                 return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2Ranking2ErrorResolver.Resolve("PutClusterRankingScoreByUserId", error));
             }
         }
 

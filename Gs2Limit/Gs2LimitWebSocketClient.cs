@@ -1627,12 +1627,7 @@ namespace Gs2.Gs2Limit
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "limit.counter.overflow") > 0) {
-                    base.OnError(new Exception.OverflowException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2LimitErrorResolver.Resolve("CountUp", error));
             }
         }
 
@@ -1763,12 +1758,7 @@ namespace Gs2.Gs2Limit
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "limit.counter.overflow") > 0) {
-                    base.OnError(new Exception.OverflowException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2LimitErrorResolver.Resolve("CountUpByUserId", error));
             }
         }
 

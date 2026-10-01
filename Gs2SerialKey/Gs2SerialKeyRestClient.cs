@@ -2424,15 +2424,7 @@ namespace Gs2.Gs2SerialKey
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "code.status.invalid") > 0) {
-                    base.OnError(new Exception.AlreadyUsedException(error));
-                }
-                else if (error.Errors.Count(v => v.code == "code.code.notFound") > 0) {
-                    base.OnError(new Exception.CodeNotFoundException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2SerialKeyErrorResolver.Resolve("Use", error));
             }
         }
 
@@ -2547,6 +2539,11 @@ namespace Gs2.Gs2SerialKey
                 );
 
                 return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2SerialKeyErrorResolver.Resolve("UseByUserId", error));
             }
         }
 

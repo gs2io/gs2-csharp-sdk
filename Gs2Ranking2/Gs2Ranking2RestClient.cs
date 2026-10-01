@@ -3798,6 +3798,11 @@ namespace Gs2.Gs2Ranking2
 
                 return sessionRequest;
             }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2Ranking2ErrorResolver.Resolve("ReceiveGlobalRankingReceivedReward", error));
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -3918,6 +3923,11 @@ namespace Gs2.Gs2Ranking2
                 );
 
                 return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2Ranking2ErrorResolver.Resolve("ReceiveGlobalRankingReceivedRewardByUserId", error));
             }
         }
 
@@ -5818,6 +5828,11 @@ namespace Gs2.Gs2Ranking2
 
                 return sessionRequest;
             }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2Ranking2ErrorResolver.Resolve("PutClusterRankingScore", error));
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -5938,6 +5953,11 @@ namespace Gs2.Gs2Ranking2
                 );
 
                 return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2Ranking2ErrorResolver.Resolve("PutClusterRankingScoreByUserId", error));
             }
         }
 
@@ -7159,6 +7179,11 @@ namespace Gs2.Gs2Ranking2
 
                 return sessionRequest;
             }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2Ranking2ErrorResolver.Resolve("ReceiveClusterRankingReceivedReward", error));
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -7280,6 +7305,11 @@ namespace Gs2.Gs2Ranking2
                 );
 
                 return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2Ranking2ErrorResolver.Resolve("ReceiveClusterRankingReceivedRewardByUserId", error));
             }
         }
 

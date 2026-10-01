@@ -2792,12 +2792,7 @@ namespace Gs2.Gs2StateMachine
 
             public override void OnError(Gs2.Core.Exception.Gs2Exception error)
             {
-                if (error.Errors.Count(v => v.code == "stateMachine.state.mismatch") > 0) {
-                    base.OnError(new Exception.StateMismatchException(error));
-                }
-                else {
-                    base.OnError(error);
-                }
+                base.OnError(Gs2StateMachineErrorResolver.Resolve("Report", error));
             }
         }
 

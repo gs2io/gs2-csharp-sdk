@@ -52,7 +52,8 @@ namespace Gs2.Gs2Distributor.Model.Cache
 /* diff +++ start */
             foreach (var res in self.Results) {
                 if (res.StatusCode / 100 != 2) {
-                    throw Gs2Exception.ExtractError(res.ResultPayload, res.StatusCode ?? 999);
+                    var failed = request.RequestPayloads.FirstOrDefault(v => v.RequestId == res.RequestId);
+                    throw Gs2ErrorResolver.ResolveBatch(failed?.Service, failed?.MethodName, Gs2Exception.ExtractError(res.ResultPayload, res.StatusCode ?? 999));
                 }
                 var req = request.RequestPayloads.First(v => v.RequestId == res.RequestId);
                 switch (req.Service) {
