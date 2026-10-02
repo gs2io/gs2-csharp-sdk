@@ -53,6 +53,13 @@ namespace Gs2.Gs2Money.Model.Cache
                 self.Item.Slot ?? default,
                 timeOffset
             );
+            cache.ClearListCache<Receipt>(
+                (null as Receipt).CacheParentKey(
+                    request.NamespaceName,
+                    self?.Item?.UserId ?? request.UserId,
+                    null
+                )
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER

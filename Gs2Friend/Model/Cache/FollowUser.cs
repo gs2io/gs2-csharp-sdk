@@ -227,14 +227,14 @@ namespace Gs2.Gs2Friend.Model.Cache
                 cache,
                 namespaceName,
                 userId,
-                false /* サーバーの一括取得は withProfile 無しで展開する */,
+                false,
                 self.UserId,
                 timeOffset
             );
             return self.CacheParentKey(
                 namespaceName,
                 userId,
-                false /* サーバーの一括取得は withProfile 無しで展開する */,
+                false,
                 timeOffset
             );
         }
