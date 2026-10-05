@@ -151,6 +151,10 @@ namespace Gs2.Gs2Log.Domain.Iterator
                     .WithNamespaceName(this.NamespaceName)
                     .WithBegin(this.Begin)
                     .WithEnd(this.End)
+/* diff +++ start */
+                    .WithQuery(this.Query)
+                    .WithGroupBy(this.GroupBy)
+/* diff +++ end */
                     .WithAggregation(this.Aggregation)
                     .WithInterval(this.Interval)
                     .WithSeriesLimit(this.SeriesLimit)

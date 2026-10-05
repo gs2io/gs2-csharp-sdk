@@ -135,6 +135,9 @@ namespace Gs2.Gs2Log.Domain.Iterator
                     .WithNamespaceName(this.NamespaceName)
                     .WithBegin(this.Begin)
                     .WithEnd(this.End)
+/* diff +++ start */
+                    .WithQuery(this.Query)
+/* diff +++ end */
                     .WithPageToken(this._pageToken)
                     .WithLimit(fetchSize);
                 var r = await this._client.QueryLogAsync(
