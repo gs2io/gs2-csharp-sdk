@@ -42,6 +42,7 @@ namespace Gs2.Gs2Enhance.Request
          public string Metadata { set; get; } = null!;
          public string TargetInventoryModelId { set; get; } = null!;
          public string GradeModelId { set; get; } = null!;
+         public string[] GroupKeyHierarchy { set; get; } = null!;
          public Gs2.Gs2Enhance.Model.UnleashRateEntryModel[] GradeEntries { set; get; } = null!;
         public CreateUnleashRateModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
@@ -67,6 +68,10 @@ namespace Gs2.Gs2Enhance.Request
             this.GradeModelId = gradeModelId;
             return this;
         }
+        public CreateUnleashRateModelMasterRequest WithGroupKeyHierarchy(string[] groupKeyHierarchy) {
+            this.GroupKeyHierarchy = groupKeyHierarchy;
+            return this;
+        }
         public CreateUnleashRateModelMasterRequest WithGradeEntries(Gs2.Gs2Enhance.Model.UnleashRateEntryModel[] gradeEntries) {
             this.GradeEntries = gradeEntries;
             return this;
@@ -87,6 +92,9 @@ namespace Gs2.Gs2Enhance.Request
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithTargetInventoryModelId(!data.Keys.Contains("targetInventoryModelId") || data["targetInventoryModelId"] == null ? null : data["targetInventoryModelId"].ToString())
                 .WithGradeModelId(!data.Keys.Contains("gradeModelId") || data["gradeModelId"] == null ? null : data["gradeModelId"].ToString())
+                .WithGroupKeyHierarchy(!data.Keys.Contains("groupKeyHierarchy") || data["groupKeyHierarchy"] == null || !data["groupKeyHierarchy"].IsArray ? null : data["groupKeyHierarchy"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
                 .WithGradeEntries(!data.Keys.Contains("gradeEntries") || data["gradeEntries"] == null || !data["gradeEntries"].IsArray ? null : data["gradeEntries"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Enhance.Model.UnleashRateEntryModel.FromJson(v);
                 }).ToArray());
@@ -94,6 +102,15 @@ namespace Gs2.Gs2Enhance.Request
 
         public override JsonData ToJson()
         {
+            JsonData groupKeyHierarchyJsonData = null;
+            if (GroupKeyHierarchy != null && GroupKeyHierarchy.Length > 0)
+            {
+                groupKeyHierarchyJsonData = new JsonData();
+                foreach (var groupKeyHierarch in GroupKeyHierarchy)
+                {
+                    groupKeyHierarchyJsonData.Add(groupKeyHierarch);
+                }
+            }
             JsonData gradeEntriesJsonData = null;
             if (GradeEntries != null && GradeEntries.Length > 0)
             {
@@ -110,6 +127,7 @@ namespace Gs2.Gs2Enhance.Request
                 ["metadata"] = Metadata,
                 ["targetInventoryModelId"] = TargetInventoryModelId,
                 ["gradeModelId"] = GradeModelId,
+                ["groupKeyHierarchy"] = groupKeyHierarchyJsonData,
                 ["gradeEntries"] = gradeEntriesJsonData,
             };
         }
@@ -141,6 +159,15 @@ namespace Gs2.Gs2Enhance.Request
                 writer.WritePropertyName("gradeModelId");
                 writer.Write(GradeModelId.ToString());
             }
+            if (GroupKeyHierarchy != null) {
+                writer.WritePropertyName("groupKeyHierarchy");
+                writer.WriteArrayStart();
+                foreach (var groupKeyHierarch in GroupKeyHierarchy)
+                {
+                    writer.Write(groupKeyHierarch.ToString());
+                }
+                writer.WriteArrayEnd();
+            }
             if (GradeEntries != null) {
                 writer.WritePropertyName("gradeEntries");
                 writer.WriteArrayStart();
@@ -163,6 +190,7 @@ namespace Gs2.Gs2Enhance.Request
             key += Metadata + ":";
             key += TargetInventoryModelId + ":";
             key += GradeModelId + ":";
+            key += GroupKeyHierarchy + ":";
             key += GradeEntries + ":";
             return key;
         }

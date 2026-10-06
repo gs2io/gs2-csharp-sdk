@@ -40,6 +40,7 @@ namespace Gs2.Gs2Enhance.Model
         public string Metadata { set; get; }
         public string TargetInventoryModelId { set; get; }
         public string GradeModelId { set; get; }
+        public string[] GroupKeyHierarchy { set; get; }
         public Gs2.Gs2Enhance.Model.UnleashRateEntryModel[] GradeEntries { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
@@ -66,6 +67,10 @@ namespace Gs2.Gs2Enhance.Model
         }
         public UnleashRateModelMaster WithGradeModelId(string gradeModelId) {
             this.GradeModelId = gradeModelId;
+            return this;
+        }
+        public UnleashRateModelMaster WithGroupKeyHierarchy(string[] groupKeyHierarchy) {
+            this.GroupKeyHierarchy = groupKeyHierarchy;
             return this;
         }
         public UnleashRateModelMaster WithGradeEntries(Gs2.Gs2Enhance.Model.UnleashRateEntryModel[] gradeEntries) {
@@ -171,6 +176,9 @@ namespace Gs2.Gs2Enhance.Model
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
                 .WithTargetInventoryModelId(!data.Keys.Contains("targetInventoryModelId") || data["targetInventoryModelId"] == null ? null : data["targetInventoryModelId"].ToString())
                 .WithGradeModelId(!data.Keys.Contains("gradeModelId") || data["gradeModelId"] == null ? null : data["gradeModelId"].ToString())
+                .WithGroupKeyHierarchy(!data.Keys.Contains("groupKeyHierarchy") || data["groupKeyHierarchy"] == null || !data["groupKeyHierarchy"].IsArray ? null : data["groupKeyHierarchy"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
                 .WithGradeEntries(!data.Keys.Contains("gradeEntries") || data["gradeEntries"] == null || !data["gradeEntries"].IsArray ? null : data["gradeEntries"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Enhance.Model.UnleashRateEntryModel.FromJson(v);
                 }).ToArray())
@@ -181,6 +189,15 @@ namespace Gs2.Gs2Enhance.Model
 
         public JsonData ToJson()
         {
+            JsonData groupKeyHierarchyJsonData = null;
+            if (GroupKeyHierarchy != null && GroupKeyHierarchy.Length > 0)
+            {
+                groupKeyHierarchyJsonData = new JsonData();
+                foreach (var groupKeyHierarch in GroupKeyHierarchy)
+                {
+                    groupKeyHierarchyJsonData.Add(groupKeyHierarch);
+                }
+            }
             JsonData gradeEntriesJsonData = null;
             if (GradeEntries != null && GradeEntries.Length > 0)
             {
@@ -197,6 +214,7 @@ namespace Gs2.Gs2Enhance.Model
                 ["metadata"] = Metadata,
                 ["targetInventoryModelId"] = TargetInventoryModelId,
                 ["gradeModelId"] = GradeModelId,
+                ["groupKeyHierarchy"] = groupKeyHierarchyJsonData,
                 ["gradeEntries"] = gradeEntriesJsonData,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
@@ -230,6 +248,17 @@ namespace Gs2.Gs2Enhance.Model
             if (GradeModelId != null) {
                 writer.WritePropertyName("gradeModelId");
                 writer.Write(GradeModelId.ToString());
+            }
+            if (GroupKeyHierarchy != null) {
+                writer.WritePropertyName("groupKeyHierarchy");
+                writer.WriteArrayStart();
+                foreach (var groupKeyHierarch in GroupKeyHierarchy)
+                {
+                    if (groupKeyHierarch != null) {
+                        writer.Write(groupKeyHierarch.ToString());
+                    }
+                }
+                writer.WriteArrayEnd();
             }
             if (GradeEntries != null) {
                 writer.WritePropertyName("gradeEntries");
@@ -295,6 +324,11 @@ namespace Gs2.Gs2Enhance.Model
                 return diff;
             }
             diff = ModelComparer.Compare(GradeModelId, other.GradeModelId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(GroupKeyHierarchy, other.GroupKeyHierarchy);
             if (diff != 0)
             {
                 return diff;
@@ -366,6 +400,13 @@ namespace Gs2.Gs2Enhance.Model
                 }
             }
             {
+                if (GroupKeyHierarchy.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateModelMaster", "enhance.unleashRateModelMaster.groupKeyHierarchy.error.tooMany"),
+                    });
+                }
+            }
+            {
                 if (GradeEntries.Length < 1) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("unleashRateModelMaster", "enhance.unleashRateModelMaster.gradeEntries.error.tooFew"),
@@ -423,6 +464,7 @@ namespace Gs2.Gs2Enhance.Model
                 Metadata = Metadata,
                 TargetInventoryModelId = TargetInventoryModelId,
                 GradeModelId = GradeModelId,
+                GroupKeyHierarchy = GroupKeyHierarchy?.Clone() as string[],
                 GradeEntries = GradeEntries?.Clone() as Gs2.Gs2Enhance.Model.UnleashRateEntryModel[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,

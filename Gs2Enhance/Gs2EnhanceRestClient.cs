@@ -2553,6 +2553,16 @@ namespace Gs2.Gs2Enhance
                     jsonWriter.WritePropertyName("gradeModelId");
                     jsonWriter.Write(request.GradeModelId);
                 }
+                if (request.GroupKeyHierarchy != null)
+                {
+                    jsonWriter.WritePropertyName("groupKeyHierarchy");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.GroupKeyHierarchy)
+                    {
+                        jsonWriter.Write(item);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
                 if (request.GradeEntries != null)
                 {
                     jsonWriter.WritePropertyName("gradeEntries");
@@ -2771,6 +2781,16 @@ namespace Gs2.Gs2Enhance
                 {
                     jsonWriter.WritePropertyName("gradeModelId");
                     jsonWriter.Write(request.GradeModelId);
+                }
+                if (request.GroupKeyHierarchy != null)
+                {
+                    jsonWriter.WritePropertyName("groupKeyHierarchy");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.GroupKeyHierarchy)
+                    {
+                        jsonWriter.Write(item);
+                    }
+                    jsonWriter.WriteArrayEnd();
                 }
                 if (request.GradeEntries != null)
                 {
@@ -3363,6 +3383,21 @@ namespace Gs2.Gs2Enhance
                     }
                     jsonWriter.WriteArrayEnd();
                 }
+                if (request.RecipeName != null)
+                {
+                    jsonWriter.WritePropertyName("recipeName");
+                    jsonWriter.Write(request.RecipeName);
+                }
+                if (request.RecipeMaterials != null)
+                {
+                    jsonWriter.WritePropertyName("recipeMaterials");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.RecipeMaterials)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
                 if (request.Config != null)
                 {
                     jsonWriter.WritePropertyName("config");
@@ -3495,6 +3530,21 @@ namespace Gs2.Gs2Enhance
                     foreach(var item in request.Materials)
                     {
                         jsonWriter.Write(item);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.RecipeName != null)
+                {
+                    jsonWriter.WritePropertyName("recipeName");
+                    jsonWriter.Write(request.RecipeName);
+                }
+                if (request.RecipeMaterials != null)
+                {
+                    jsonWriter.WritePropertyName("recipeMaterials");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.RecipeMaterials)
+                    {
+                        item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
                 }

@@ -35,13 +35,23 @@ namespace Gs2.Gs2Enhance.Model
 	public partial class UnleashRateEntryModel : IComparable
 	{
         public long? GradeValue { set; get; }
+        public string Type { set; get; }
         public int? NeedCount { set; get; }
+        public Gs2.Gs2Enhance.Model.UnleashRecipe[] Recipes { set; get; }
         public UnleashRateEntryModel WithGradeValue(long? gradeValue) {
             this.GradeValue = gradeValue;
             return this;
         }
+        public UnleashRateEntryModel WithType(string type) {
+            this.Type = type;
+            return this;
+        }
         public UnleashRateEntryModel WithNeedCount(int? needCount) {
             this.NeedCount = needCount;
+            return this;
+        }
+        public UnleashRateEntryModel WithRecipes(Gs2.Gs2Enhance.Model.UnleashRecipe[] recipes) {
+            this.Recipes = recipes;
             return this;
         }
 
@@ -58,14 +68,29 @@ namespace Gs2.Gs2Enhance.Model
             }
             return new UnleashRateEntryModel()
                 .WithGradeValue(!data.Keys.Contains("gradeValue") || data["gradeValue"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["gradeValue"].ToString()))
-                .WithNeedCount(!data.Keys.Contains("needCount") || data["needCount"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["needCount"].ToString()));
+                .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : data["type"].ToString())
+                .WithNeedCount(!data.Keys.Contains("needCount") || data["needCount"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["needCount"].ToString()))
+                .WithRecipes(!data.Keys.Contains("recipes") || data["recipes"] == null || !data["recipes"].IsArray ? null : data["recipes"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Enhance.Model.UnleashRecipe.FromJson(v);
+                }).ToArray());
         }
 
         public JsonData ToJson()
         {
+            JsonData recipesJsonData = null;
+            if (Recipes != null && Recipes.Length > 0)
+            {
+                recipesJsonData = new JsonData();
+                foreach (var recipe in Recipes)
+                {
+                    recipesJsonData.Add(recipe.ToJson());
+                }
+            }
             return new JsonData {
                 ["gradeValue"] = GradeValue,
+                ["type"] = Type,
                 ["needCount"] = NeedCount,
+                ["recipes"] = recipesJsonData,
             };
         }
 
@@ -76,9 +101,24 @@ namespace Gs2.Gs2Enhance.Model
                 writer.WritePropertyName("gradeValue");
                 writer.Write((GradeValue.ToString().Contains(".") ? (long)double.Parse(GradeValue.ToString()) : long.Parse(GradeValue.ToString())));
             }
+            if (Type != null) {
+                writer.WritePropertyName("type");
+                writer.Write(Type.ToString());
+            }
             if (NeedCount != null) {
                 writer.WritePropertyName("needCount");
                 writer.Write((NeedCount.ToString().Contains(".") ? (int)double.Parse(NeedCount.ToString()) : int.Parse(NeedCount.ToString())));
+            }
+            if (Recipes != null) {
+                writer.WritePropertyName("recipes");
+                writer.WriteArrayStart();
+                foreach (var recipe in Recipes)
+                {
+                    if (recipe != null) {
+                        recipe.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
             }
             writer.WriteObjectEnd();
         }
@@ -100,7 +140,17 @@ namespace Gs2.Gs2Enhance.Model
             {
                 return diff;
             }
+            diff = ModelComparer.Compare(Type, other.Type);
+            if (diff != 0)
+            {
+                return diff;
+            }
             diff = ModelComparer.Compare(NeedCount, other.NeedCount);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(Recipes, other.Recipes);
             if (diff != 0)
             {
                 return diff;
@@ -122,6 +172,17 @@ namespace Gs2.Gs2Enhance.Model
                 }
             }
             {
+                switch (Type) {
+                    case "simple":
+                    case "recipe":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("unleashRateEntryModel", "enhance.unleashRateEntryModel.type.error.invalid"),
+                        });
+                }
+            }
+            if (Type == "simple") {
                 if (NeedCount < 1) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("unleashRateEntryModel", "enhance.unleashRateEntryModel.needCount.error.invalid"),
@@ -133,12 +194,26 @@ namespace Gs2.Gs2Enhance.Model
                     });
                 }
             }
+            if (Type == "recipe") {
+                if (Recipes.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateEntryModel", "enhance.unleashRateEntryModel.recipes.error.tooFew"),
+                    });
+                }
+                if (Recipes.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("unleashRateEntryModel", "enhance.unleashRateEntryModel.recipes.error.tooMany"),
+                    });
+                }
+            }
         }
 
         public object Clone() {
             return new UnleashRateEntryModel {
                 GradeValue = GradeValue,
+                Type = Type,
                 NeedCount = NeedCount,
+                Recipes = Recipes?.Clone() as Gs2.Gs2Enhance.Model.UnleashRecipe[],
             };
         }
     }

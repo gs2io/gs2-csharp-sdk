@@ -41,6 +41,8 @@ namespace Gs2.Gs2Enhance.Request
          public string AccessToken { set; get; } = null!;
          public string TargetItemSetId { set; get; } = null!;
          public string[] Materials { set; get; } = null!;
+         public string RecipeName { set; get; } = null!;
+         public Gs2.Gs2Enhance.Model.UnleashMaterialSelection[] RecipeMaterials { set; get; } = null!;
          public Gs2.Gs2Enhance.Model.Config[] Config { set; get; } = null!;
         public string DuplicationAvoider { set; get; } = null!;
         public UnleashRequest WithNamespaceName(string namespaceName) {
@@ -61,6 +63,14 @@ namespace Gs2.Gs2Enhance.Request
         }
         public UnleashRequest WithMaterials(string[] materials) {
             this.Materials = materials;
+            return this;
+        }
+        public UnleashRequest WithRecipeName(string recipeName) {
+            this.RecipeName = recipeName;
+            return this;
+        }
+        public UnleashRequest WithRecipeMaterials(Gs2.Gs2Enhance.Model.UnleashMaterialSelection[] recipeMaterials) {
+            this.RecipeMaterials = recipeMaterials;
             return this;
         }
         public UnleashRequest WithConfig(Gs2.Gs2Enhance.Model.Config[] config) {
@@ -89,6 +99,10 @@ namespace Gs2.Gs2Enhance.Request
                 .WithMaterials(!data.Keys.Contains("materials") || data["materials"] == null || !data["materials"].IsArray ? null : data["materials"].Cast<JsonData>().Select(v => {
                     return v.ToString();
                 }).ToArray())
+                .WithRecipeName(!data.Keys.Contains("recipeName") || data["recipeName"] == null ? null : data["recipeName"].ToString())
+                .WithRecipeMaterials(!data.Keys.Contains("recipeMaterials") || data["recipeMaterials"] == null || !data["recipeMaterials"].IsArray ? null : data["recipeMaterials"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Enhance.Model.UnleashMaterialSelection.FromJson(v);
+                }).ToArray())
                 .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? null : data["config"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Enhance.Model.Config.FromJson(v);
                 }).ToArray());
@@ -103,6 +117,15 @@ namespace Gs2.Gs2Enhance.Request
                 foreach (var material in Materials)
                 {
                     materialsJsonData.Add(material);
+                }
+            }
+            JsonData recipeMaterialsJsonData = null;
+            if (RecipeMaterials != null && RecipeMaterials.Length > 0)
+            {
+                recipeMaterialsJsonData = new JsonData();
+                foreach (var recipeMaterial in RecipeMaterials)
+                {
+                    recipeMaterialsJsonData.Add(recipeMaterial.ToJson());
                 }
             }
             JsonData configJsonData = null;
@@ -120,6 +143,8 @@ namespace Gs2.Gs2Enhance.Request
                 ["accessToken"] = AccessToken,
                 ["targetItemSetId"] = TargetItemSetId,
                 ["materials"] = materialsJsonData,
+                ["recipeName"] = RecipeName,
+                ["recipeMaterials"] = recipeMaterialsJsonData,
                 ["config"] = configJsonData,
             };
         }
@@ -152,6 +177,21 @@ namespace Gs2.Gs2Enhance.Request
                 }
                 writer.WriteArrayEnd();
             }
+            if (RecipeName != null) {
+                writer.WritePropertyName("recipeName");
+                writer.Write(RecipeName.ToString());
+            }
+            if (RecipeMaterials != null) {
+                writer.WritePropertyName("recipeMaterials");
+                writer.WriteArrayStart();
+                foreach (var recipeMaterial in RecipeMaterials)
+                {
+                    if (recipeMaterial != null) {
+                        recipeMaterial.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
+            }
             if (Config != null) {
                 writer.WritePropertyName("config");
                 writer.WriteArrayStart();
@@ -173,6 +213,8 @@ namespace Gs2.Gs2Enhance.Request
             key += AccessToken + ":";
             key += TargetItemSetId + ":";
             key += Materials + ":";
+            key += RecipeName + ":";
+            key += RecipeMaterials + ":";
             key += Config + ":";
             return key;
         }
