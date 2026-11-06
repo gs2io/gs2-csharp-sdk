@@ -208,6 +208,21 @@ namespace Gs2.Gs2Realtime
                     jsonWriter.WritePropertyName("serverSpec");
                     jsonWriter.Write(request.ServerSpec);
                 }
+                if (request.ObjectCatalog != null)
+                {
+                    jsonWriter.WritePropertyName("objectCatalog");
+                    jsonWriter.Write(request.ObjectCatalog);
+                }
+                if (request.StateMachineNamespaceId != null)
+                {
+                    jsonWriter.WritePropertyName("stateMachineNamespaceId");
+                    jsonWriter.Write(request.StateMachineNamespaceId);
+                }
+                if (request.StateMachineVersion != null)
+                {
+                    jsonWriter.WritePropertyName("stateMachineVersion");
+                    jsonWriter.Write(request.StateMachineVersion.ToString());
+                }
                 if (request.CreateNotification != null)
                 {
                     jsonWriter.WritePropertyName("createNotification");
@@ -516,6 +531,21 @@ namespace Gs2.Gs2Realtime
                 {
                     jsonWriter.WritePropertyName("serverSpec");
                     jsonWriter.Write(request.ServerSpec);
+                }
+                if (request.ObjectCatalog != null)
+                {
+                    jsonWriter.WritePropertyName("objectCatalog");
+                    jsonWriter.Write(request.ObjectCatalog);
+                }
+                if (request.StateMachineNamespaceId != null)
+                {
+                    jsonWriter.WritePropertyName("stateMachineNamespaceId");
+                    jsonWriter.Write(request.StateMachineNamespaceId);
+                }
+                if (request.StateMachineVersion != null)
+                {
+                    jsonWriter.WritePropertyName("stateMachineVersion");
+                    jsonWriter.Write(request.StateMachineVersion.ToString());
                 }
                 if (request.CreateNotification != null)
                 {

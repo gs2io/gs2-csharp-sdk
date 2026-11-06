@@ -155,7 +155,7 @@ var LibraryWebSocket = {
 				console.log("[JSLIB WebSocket] Connected.");
 
 			if (webSocketState.onOpen)
-				Module["dynCall_vi"](webSocketState.onOpen, instanceId);
+				{{{ makeDynCall('vi', 'webSocketState.onOpen') }}}(instanceId);
 
 		};
 
@@ -175,7 +175,7 @@ var LibraryWebSocket = {
 				HEAPU8.set(dataBuffer, buffer);
 
 				try {
-                    Module["dynCall_viii"](webSocketState.onMessageBinary, instanceId, buffer, dataBuffer.length);
+                    {{{ makeDynCall('viii', 'webSocketState.onMessageBinary') }}}(instanceId, buffer, dataBuffer.length);
 				} finally {
 					_free(buffer);
 				}
@@ -189,7 +189,7 @@ var LibraryWebSocket = {
             	stringToUTF8(msg, msgBuffer, msgBytes);
 
 	            try {
-                    Module["dynCall_vii"](webSocketState.onMessage, instanceId, msgBuffer);
+                    {{{ makeDynCall('vii', 'webSocketState.onMessage') }}}(instanceId, msgBuffer);
         	    } finally {
             	    _free(msgBuffer);
             	}
@@ -209,7 +209,7 @@ var LibraryWebSocket = {
 				stringToUTF8(msg, msgBuffer, msgBytes);
 
 				try {
-                    Module["dynCall_viii"](webSocketState.onError, instanceId, msgBuffer);
+                    {{{ makeDynCall('vii', 'webSocketState.onError') }}}(instanceId, msgBuffer);
 				} finally {
 					_free(msgBuffer);
 				}
@@ -223,10 +223,11 @@ var LibraryWebSocket = {
 			if (webSocketState.debug)
 				console.log("[JSLIB WebSocket] Closed.");
 
+			// Preserve the null sentinel used by Close/Send/Free, including when
+			// the C# close callback disposes this instance immediately.
+			instance.ws = null;
 			if (webSocketState.onClose)
-                Module["dynCall_vii"](webSocketState.onClose, instanceId, ev.code);
-
-			delete instance.ws;
+                {{{ makeDynCall('vii', 'webSocketState.onClose') }}}(instanceId, ev.code);
 
 		};
 
