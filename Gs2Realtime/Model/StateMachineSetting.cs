@@ -1,0 +1,140 @@
+/*
+ * Copyright 2016 Game Server Services, Inc. or its affiliates. All Rights
+ * Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+
+#pragma warning disable CS0618 // Obsolete with a message
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using Gs2.Core.Model;
+using Gs2.Util.LitJson;
+#if UNITY_2017_1_OR_NEWER
+using UnityEngine.Scripting;
+#endif
+
+namespace Gs2.Gs2Realtime.Model
+{
+
+#if UNITY_2017_1_OR_NEWER
+	[Preserve]
+#endif
+	public partial class StateMachineSetting : IComparable
+	{
+        public string NamespaceId { set; get; }
+        public long? Version { set; get; }
+        public StateMachineSetting WithNamespaceId(string namespaceId) {
+            this.NamespaceId = namespaceId;
+            return this;
+        }
+        public StateMachineSetting WithVersion(long? version) {
+            this.Version = version;
+            return this;
+        }
+
+#if UNITY_2017_1_OR_NEWER
+    	[Preserve]
+#endif
+        public static StateMachineSetting FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            if (data.IsString) {
+                data = JsonMapper.ToObject(data.ToString());
+            }
+            return new StateMachineSetting()
+                .WithNamespaceId(!data.Keys.Contains("namespaceId") || data["namespaceId"] == null ? null : data["namespaceId"].ToString())
+                .WithVersion(!data.Keys.Contains("version") || data["version"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["version"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["namespaceId"] = NamespaceId,
+                ["version"] = Version,
+            };
+        }
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (NamespaceId != null) {
+                writer.WritePropertyName("namespaceId");
+                writer.Write(NamespaceId.ToString());
+            }
+            if (Version != null) {
+                writer.WritePropertyName("version");
+                writer.Write((Version.ToString().Contains(".") ? (long)double.Parse(Version.ToString()) : long.Parse(Version.ToString())));
+            }
+            writer.WriteObjectEnd();
+        }
+
+        public int CompareTo(object obj)
+        {
+            var other = obj as StateMachineSetting;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type StateMachineSetting.", nameof(obj));
+            }
+            var diff = 0;
+            diff = ModelComparer.Compare(NamespaceId, other.NamespaceId);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(Version, other.Version);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
+        }
+
+        public void Validate() {
+            {
+                if (NamespaceId.Length > 1024) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stateMachineSetting", "realtime.stateMachineSetting.namespaceId.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (Version < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stateMachineSetting", "realtime.stateMachineSetting.version.error.invalid"),
+                    });
+                }
+                if (Version > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("stateMachineSetting", "realtime.stateMachineSetting.version.error.invalid"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new StateMachineSetting {
+                NamespaceId = NamespaceId,
+                Version = Version,
+            };
+        }
+    }
+}

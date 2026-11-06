@@ -208,20 +208,15 @@ namespace Gs2.Gs2Realtime
                     jsonWriter.WritePropertyName("serverSpec");
                     jsonWriter.Write(request.ServerSpec);
                 }
-                if (request.ObjectCatalog != null)
+                if (request.SyncSetting != null)
                 {
-                    jsonWriter.WritePropertyName("objectCatalog");
-                    jsonWriter.Write(request.ObjectCatalog);
+                    jsonWriter.WritePropertyName("syncSetting");
+                    request.SyncSetting.WriteJson(jsonWriter);
                 }
-                if (request.StateMachineNamespaceId != null)
+                if (request.StateMachineSetting != null)
                 {
-                    jsonWriter.WritePropertyName("stateMachineNamespaceId");
-                    jsonWriter.Write(request.StateMachineNamespaceId);
-                }
-                if (request.StateMachineVersion != null)
-                {
-                    jsonWriter.WritePropertyName("stateMachineVersion");
-                    jsonWriter.Write(request.StateMachineVersion.ToString());
+                    jsonWriter.WritePropertyName("stateMachineSetting");
+                    request.StateMachineSetting.WriteJson(jsonWriter);
                 }
                 if (request.CreateNotification != null)
                 {
@@ -532,20 +527,15 @@ namespace Gs2.Gs2Realtime
                     jsonWriter.WritePropertyName("serverSpec");
                     jsonWriter.Write(request.ServerSpec);
                 }
-                if (request.ObjectCatalog != null)
+                if (request.SyncSetting != null)
                 {
-                    jsonWriter.WritePropertyName("objectCatalog");
-                    jsonWriter.Write(request.ObjectCatalog);
+                    jsonWriter.WritePropertyName("syncSetting");
+                    request.SyncSetting.WriteJson(jsonWriter);
                 }
-                if (request.StateMachineNamespaceId != null)
+                if (request.StateMachineSetting != null)
                 {
-                    jsonWriter.WritePropertyName("stateMachineNamespaceId");
-                    jsonWriter.Write(request.StateMachineNamespaceId);
-                }
-                if (request.StateMachineVersion != null)
-                {
-                    jsonWriter.WritePropertyName("stateMachineVersion");
-                    jsonWriter.Write(request.StateMachineVersion.ToString());
+                    jsonWriter.WritePropertyName("stateMachineSetting");
+                    request.StateMachineSetting.WriteJson(jsonWriter);
                 }
                 if (request.CreateNotification != null)
                 {

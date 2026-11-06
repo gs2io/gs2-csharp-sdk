@@ -42,9 +42,8 @@ namespace Gs2.Gs2Realtime.Model
         public Gs2.Gs2Realtime.Model.TransactionSettingV2 TransactionSettingV2 { set; get; }
         public string ServerType { set; get; }
         public string ServerSpec { set; get; }
-        public string ObjectCatalog { set; get; }
-        public string StateMachineNamespaceId { set; get; }
-        public long? StateMachineVersion { set; get; }
+        public Gs2.Gs2Realtime.Model.SyncSetting SyncSetting { set; get; }
+        public Gs2.Gs2Realtime.Model.StateMachineSetting StateMachineSetting { set; get; }
         public Gs2.Gs2Realtime.Model.NotificationSetting CreateNotification { set; get; }
         public Gs2.Gs2Realtime.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
@@ -79,16 +78,12 @@ namespace Gs2.Gs2Realtime.Model
             this.ServerSpec = serverSpec;
             return this;
         }
-        public Namespace WithObjectCatalog(string objectCatalog) {
-            this.ObjectCatalog = objectCatalog;
+        public Namespace WithSyncSetting(Gs2.Gs2Realtime.Model.SyncSetting syncSetting) {
+            this.SyncSetting = syncSetting;
             return this;
         }
-        public Namespace WithStateMachineNamespaceId(string stateMachineNamespaceId) {
-            this.StateMachineNamespaceId = stateMachineNamespaceId;
-            return this;
-        }
-        public Namespace WithStateMachineVersion(long? stateMachineVersion) {
-            this.StateMachineVersion = stateMachineVersion;
+        public Namespace WithStateMachineSetting(Gs2.Gs2Realtime.Model.StateMachineSetting stateMachineSetting) {
+            this.StateMachineSetting = stateMachineSetting;
             return this;
         }
         public Namespace WithCreateNotification(Gs2.Gs2Realtime.Model.NotificationSetting createNotification) {
@@ -182,9 +177,8 @@ namespace Gs2.Gs2Realtime.Model
                 .WithTransactionSettingV2(!data.Keys.Contains("transactionSettingV2") || data["transactionSettingV2"] == null ? null : Gs2.Gs2Realtime.Model.TransactionSettingV2.FromJson(data["transactionSettingV2"]))
                 .WithServerType(!data.Keys.Contains("serverType") || data["serverType"] == null ? null : data["serverType"].ToString())
                 .WithServerSpec(!data.Keys.Contains("serverSpec") || data["serverSpec"] == null ? null : data["serverSpec"].ToString())
-                .WithObjectCatalog(!data.Keys.Contains("objectCatalog") || data["objectCatalog"] == null ? null : data["objectCatalog"].ToString())
-                .WithStateMachineNamespaceId(!data.Keys.Contains("stateMachineNamespaceId") || data["stateMachineNamespaceId"] == null ? null : data["stateMachineNamespaceId"].ToString())
-                .WithStateMachineVersion(!data.Keys.Contains("stateMachineVersion") || data["stateMachineVersion"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["stateMachineVersion"].ToString()))
+                .WithSyncSetting(!data.Keys.Contains("syncSetting") || data["syncSetting"] == null ? null : Gs2.Gs2Realtime.Model.SyncSetting.FromJson(data["syncSetting"]))
+                .WithStateMachineSetting(!data.Keys.Contains("stateMachineSetting") || data["stateMachineSetting"] == null ? null : Gs2.Gs2Realtime.Model.StateMachineSetting.FromJson(data["stateMachineSetting"]))
                 .WithCreateNotification(!data.Keys.Contains("createNotification") || data["createNotification"] == null ? null : Gs2.Gs2Realtime.Model.NotificationSetting.FromJson(data["createNotification"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Realtime.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()))
@@ -201,9 +195,8 @@ namespace Gs2.Gs2Realtime.Model
                 ["transactionSettingV2"] = TransactionSettingV2?.ToJson(),
                 ["serverType"] = ServerType,
                 ["serverSpec"] = ServerSpec,
-                ["objectCatalog"] = ObjectCatalog,
-                ["stateMachineNamespaceId"] = StateMachineNamespaceId,
-                ["stateMachineVersion"] = StateMachineVersion,
+                ["syncSetting"] = SyncSetting?.ToJson(),
+                ["stateMachineSetting"] = StateMachineSetting?.ToJson(),
                 ["createNotification"] = CreateNotification?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
@@ -243,17 +236,13 @@ namespace Gs2.Gs2Realtime.Model
                 writer.WritePropertyName("serverSpec");
                 writer.Write(ServerSpec.ToString());
             }
-            if (ObjectCatalog != null) {
-                writer.WritePropertyName("objectCatalog");
-                writer.Write(ObjectCatalog.ToString());
+            if (SyncSetting != null) {
+                writer.WritePropertyName("syncSetting");
+                SyncSetting.WriteJson(writer);
             }
-            if (StateMachineNamespaceId != null) {
-                writer.WritePropertyName("stateMachineNamespaceId");
-                writer.Write(StateMachineNamespaceId.ToString());
-            }
-            if (StateMachineVersion != null) {
-                writer.WritePropertyName("stateMachineVersion");
-                writer.Write((StateMachineVersion.ToString().Contains(".") ? (long)double.Parse(StateMachineVersion.ToString()) : long.Parse(StateMachineVersion.ToString())));
+            if (StateMachineSetting != null) {
+                writer.WritePropertyName("stateMachineSetting");
+                StateMachineSetting.WriteJson(writer);
             }
             if (CreateNotification != null) {
                 writer.WritePropertyName("createNotification");
@@ -325,17 +314,12 @@ namespace Gs2.Gs2Realtime.Model
             {
                 return diff;
             }
-            diff = ModelComparer.Compare(ObjectCatalog, other.ObjectCatalog);
+            diff = ModelComparer.Compare(SyncSetting, other.SyncSetting);
             if (diff != 0)
             {
                 return diff;
             }
-            diff = ModelComparer.Compare(StateMachineNamespaceId, other.StateMachineNamespaceId);
-            if (diff != 0)
-            {
-                return diff;
-            }
-            diff = ModelComparer.Compare(StateMachineVersion, other.StateMachineVersion);
+            diff = ModelComparer.Compare(StateMachineSetting, other.StateMachineSetting);
             if (diff != 0)
             {
                 return diff;
@@ -414,31 +398,9 @@ namespace Gs2.Gs2Realtime.Model
                         });
                 }
             }
-            if (ServerType == "sync") {
-                if (ObjectCatalog.Length > 65536) {
-                    throw new Gs2.Core.Exception.BadRequestException(new [] {
-                        new RequestError("namespace", "realtime.namespace.objectCatalog.error.tooLong"),
-                    });
-                }
+            {
             }
             if (ServerType == "stateMachine") {
-                if (StateMachineNamespaceId.Length > 1024) {
-                    throw new Gs2.Core.Exception.BadRequestException(new [] {
-                        new RequestError("namespace", "realtime.namespace.stateMachineNamespaceId.error.tooLong"),
-                    });
-                }
-            }
-            {
-                if (StateMachineVersion < 1) {
-                    throw new Gs2.Core.Exception.BadRequestException(new [] {
-                        new RequestError("namespace", "realtime.namespace.stateMachineVersion.error.invalid"),
-                    });
-                }
-                if (StateMachineVersion > 32503680000000) {
-                    throw new Gs2.Core.Exception.BadRequestException(new [] {
-                        new RequestError("namespace", "realtime.namespace.stateMachineVersion.error.invalid"),
-                    });
-                }
             }
             {
             }
@@ -491,9 +453,8 @@ namespace Gs2.Gs2Realtime.Model
                 TransactionSettingV2 = TransactionSettingV2?.Clone() as Gs2.Gs2Realtime.Model.TransactionSettingV2,
                 ServerType = ServerType,
                 ServerSpec = ServerSpec,
-                ObjectCatalog = ObjectCatalog,
-                StateMachineNamespaceId = StateMachineNamespaceId,
-                StateMachineVersion = StateMachineVersion,
+                SyncSetting = SyncSetting?.Clone() as Gs2.Gs2Realtime.Model.SyncSetting,
+                StateMachineSetting = StateMachineSetting?.Clone() as Gs2.Gs2Realtime.Model.StateMachineSetting,
                 CreateNotification = CreateNotification?.Clone() as Gs2.Gs2Realtime.Model.NotificationSetting,
                 LogSetting = LogSetting?.Clone() as Gs2.Gs2Realtime.Model.LogSetting,
                 CreatedAt = CreatedAt,
