@@ -41,6 +41,7 @@ namespace Gs2.Gs2Showcase.Model
         public Gs2.Core.Model.VerifyAction[] VerifyActions { set; get; }
         public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; }
         public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
+        public Gs2.Gs2Showcase.Model.Bonus[] Bonuses { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
@@ -70,6 +71,10 @@ namespace Gs2.Gs2Showcase.Model
         }
         public SalesItemMaster WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
+            return this;
+        }
+        public SalesItemMaster WithBonuses(Gs2.Gs2Showcase.Model.Bonus[] bonuses) {
+            this.Bonuses = bonuses;
             return this;
         }
         public SalesItemMaster WithCreatedAt(long? createdAt) {
@@ -178,6 +183,9 @@ namespace Gs2.Gs2Showcase.Model
                 .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null || !data["acquireActions"].IsArray ? null : data["acquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
+                .WithBonuses(!data.Keys.Contains("bonuses") || data["bonuses"] == null || !data["bonuses"].IsArray ? null : data["bonuses"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Showcase.Model.Bonus.FromJson(v);
+                }).ToArray())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["updatedAt"].ToString()))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["revision"].ToString()));
@@ -212,6 +220,15 @@ namespace Gs2.Gs2Showcase.Model
                     acquireActionsJsonData.Add(acquireAction.ToJson());
                 }
             }
+            JsonData bonusesJsonData = null;
+            if (Bonuses != null && Bonuses.Length > 0)
+            {
+                bonusesJsonData = new JsonData();
+                foreach (var bonus in Bonuses)
+                {
+                    bonusesJsonData.Add(bonus.ToJson());
+                }
+            }
             return new JsonData {
                 ["salesItemId"] = SalesItemId,
                 ["name"] = Name,
@@ -220,6 +237,7 @@ namespace Gs2.Gs2Showcase.Model
                 ["verifyActions"] = verifyActionsJsonData,
                 ["consumeActions"] = consumeActionsJsonData,
                 ["acquireActions"] = acquireActionsJsonData,
+                ["bonuses"] = bonusesJsonData,
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
                 ["revision"] = Revision,
@@ -274,6 +292,17 @@ namespace Gs2.Gs2Showcase.Model
                 {
                     if (acquireAction != null) {
                         acquireAction.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
+            }
+            if (Bonuses != null) {
+                writer.WritePropertyName("bonuses");
+                writer.WriteArrayStart();
+                foreach (var bonus in Bonuses)
+                {
+                    if (bonus != null) {
+                        bonus.WriteJson(writer);
                     }
                 }
                 writer.WriteArrayEnd();
@@ -336,6 +365,11 @@ namespace Gs2.Gs2Showcase.Model
                 return diff;
             }
             diff = ModelComparer.CompareArray(AcquireActions, other.AcquireActions);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(Bonuses, other.Bonuses);
             if (diff != 0)
             {
                 return diff;
@@ -414,6 +448,13 @@ namespace Gs2.Gs2Showcase.Model
                 }
             }
             {
+                if (Bonuses.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("salesItemMaster", "showcase.salesItemMaster.bonuses.error.tooMany"),
+                    });
+                }
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("salesItemMaster", "showcase.salesItemMaster.createdAt.error.invalid"),
@@ -460,6 +501,7 @@ namespace Gs2.Gs2Showcase.Model
                 VerifyActions = VerifyActions?.Clone() as Gs2.Core.Model.VerifyAction[],
                 ConsumeActions = ConsumeActions?.Clone() as Gs2.Core.Model.ConsumeAction[],
                 AcquireActions = AcquireActions?.Clone() as Gs2.Core.Model.AcquireAction[],
+                Bonuses = Bonuses?.Clone() as Gs2.Gs2Showcase.Model.Bonus[],
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

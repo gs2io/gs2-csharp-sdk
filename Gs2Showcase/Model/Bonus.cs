@@ -1,0 +1,158 @@
+/*
+ * Copyright 2016 Game Server Services, Inc. or its affiliates. All Rights
+ * Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+
+#pragma warning disable CS0618 // Obsolete with a message
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using Gs2.Core.Model;
+using Gs2.Util.LitJson;
+#if UNITY_2017_1_OR_NEWER
+using UnityEngine.Scripting;
+#endif
+
+namespace Gs2.Gs2Showcase.Model
+{
+
+#if UNITY_2017_1_OR_NEWER
+	[Preserve]
+#endif
+	public partial class Bonus : IComparable
+	{
+        public string RouteKey { set; get; }
+        public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
+        public Bonus WithRouteKey(string routeKey) {
+            this.RouteKey = routeKey;
+            return this;
+        }
+        public Bonus WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
+            this.AcquireActions = acquireActions;
+            return this;
+        }
+
+#if UNITY_2017_1_OR_NEWER
+    	[Preserve]
+#endif
+        public static Bonus FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            if (data.IsString) {
+                data = JsonMapper.ToObject(data.ToString());
+            }
+            return new Bonus()
+                .WithRouteKey(!data.Keys.Contains("routeKey") || data["routeKey"] == null ? null : data["routeKey"].ToString())
+                .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null || !data["acquireActions"].IsArray ? null : data["acquireActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.AcquireAction.FromJson(v);
+                }).ToArray());
+        }
+
+        public JsonData ToJson()
+        {
+            JsonData acquireActionsJsonData = null;
+            if (AcquireActions != null && AcquireActions.Length > 0)
+            {
+                acquireActionsJsonData = new JsonData();
+                foreach (var acquireAction in AcquireActions)
+                {
+                    acquireActionsJsonData.Add(acquireAction.ToJson());
+                }
+            }
+            return new JsonData {
+                ["routeKey"] = RouteKey,
+                ["acquireActions"] = acquireActionsJsonData,
+            };
+        }
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (RouteKey != null) {
+                writer.WritePropertyName("routeKey");
+                writer.Write(RouteKey.ToString());
+            }
+            if (AcquireActions != null) {
+                writer.WritePropertyName("acquireActions");
+                writer.WriteArrayStart();
+                foreach (var acquireAction in AcquireActions)
+                {
+                    if (acquireAction != null) {
+                        acquireAction.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
+            }
+            writer.WriteObjectEnd();
+        }
+
+        public int CompareTo(object obj)
+        {
+            var other = obj as Bonus;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type Bonus.", nameof(obj));
+            }
+            var diff = 0;
+            diff = ModelComparer.Compare(RouteKey, other.RouteKey);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(AcquireActions, other.AcquireActions);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
+        }
+
+        public void Validate() {
+            {
+                if (RouteKey.Length > 128) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonus", "showcase.bonus.routeKey.error.tooLong"),
+                    });
+                }
+            }
+            {
+                if (AcquireActions.Length < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonus", "showcase.bonus.acquireActions.error.tooFew"),
+                    });
+                }
+                if (AcquireActions.Length > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("bonus", "showcase.bonus.acquireActions.error.tooMany"),
+                    });
+                }
+            }
+        }
+
+        public object Clone() {
+            return new Bonus {
+                RouteKey = RouteKey,
+                AcquireActions = AcquireActions?.Clone() as Gs2.Core.Model.AcquireAction[],
+            };
+        }
+    }
+}

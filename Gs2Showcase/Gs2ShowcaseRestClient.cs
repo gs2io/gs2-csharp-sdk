@@ -1639,6 +1639,20 @@ namespace Gs2.Gs2Showcase
                     }
                     jsonWriter.WriteArrayEnd();
                 }
+                if (request.Bonuses != null)
+                {
+                    jsonWriter.WritePropertyName("bonuses");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Bonuses)
+                    {
+                        if (item == null) {
+                            jsonWriter.Write(null);
+                        } else {
+                            item.WriteJson(jsonWriter);
+                        }
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -1869,6 +1883,20 @@ namespace Gs2.Gs2Showcase
                     foreach(var item in request.AcquireActions)
                     {
                         item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.Bonuses != null)
+                {
+                    jsonWriter.WritePropertyName("bonuses");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.Bonuses)
+                    {
+                        if (item == null) {
+                            jsonWriter.Write(null);
+                        } else {
+                            item.WriteJson(jsonWriter);
+                        }
                     }
                     jsonWriter.WriteArrayEnd();
                 }
@@ -4200,6 +4228,11 @@ namespace Gs2.Gs2Showcase
                         item.WriteJson(jsonWriter);
                     }
                     jsonWriter.WriteArrayEnd();
+                }
+                if (request.RouteKey != null)
+                {
+                    jsonWriter.WritePropertyName("routeKey");
+                    jsonWriter.Write(request.RouteKey);
                 }
                 if (request.ContextStack != null)
                 {

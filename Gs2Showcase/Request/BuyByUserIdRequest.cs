@@ -42,6 +42,7 @@ namespace Gs2.Gs2Showcase.Request
          public string UserId { set; get; } = null!;
          public int? Quantity { set; get; } = null!;
          public Gs2.Gs2Showcase.Model.Config[] Config { set; get; } = null!;
+         public string RouteKey { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
         public string DuplicationAvoider { set; get; } = null!;
         public BuyByUserIdRequest WithNamespaceName(string namespaceName) {
@@ -66,6 +67,10 @@ namespace Gs2.Gs2Showcase.Request
         }
         public BuyByUserIdRequest WithConfig(Gs2.Gs2Showcase.Model.Config[] config) {
             this.Config = config;
+            return this;
+        }
+        public BuyByUserIdRequest WithRouteKey(string routeKey) {
+            this.RouteKey = routeKey;
             return this;
         }
         public BuyByUserIdRequest WithTimeOffsetToken(string timeOffsetToken) {
@@ -95,6 +100,7 @@ namespace Gs2.Gs2Showcase.Request
                 .WithConfig(!data.Keys.Contains("config") || data["config"] == null || !data["config"].IsArray ? null : data["config"].Cast<JsonData>().Select(v => {
                     return Gs2.Gs2Showcase.Model.Config.FromJson(v);
                 }).ToArray())
+                .WithRouteKey(!data.Keys.Contains("routeKey") || data["routeKey"] == null ? null : data["routeKey"].ToString())
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
@@ -116,6 +122,7 @@ namespace Gs2.Gs2Showcase.Request
                 ["userId"] = UserId,
                 ["quantity"] = Quantity,
                 ["config"] = configJsonData,
+                ["routeKey"] = RouteKey,
                 ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
@@ -154,6 +161,10 @@ namespace Gs2.Gs2Showcase.Request
                 }
                 writer.WriteArrayEnd();
             }
+            if (RouteKey != null) {
+                writer.WritePropertyName("routeKey");
+                writer.Write(RouteKey.ToString());
+            }
             if (TimeOffsetToken != null) {
                 writer.WritePropertyName("timeOffsetToken");
                 writer.Write(TimeOffsetToken.ToString());
@@ -169,6 +180,7 @@ namespace Gs2.Gs2Showcase.Request
             key += UserId + ":";
             key += Quantity + ":";
             key += Config + ":";
+            key += RouteKey + ":";
             key += TimeOffsetToken + ":";
             return key;
         }

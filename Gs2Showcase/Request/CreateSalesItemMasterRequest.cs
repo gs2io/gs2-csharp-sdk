@@ -43,6 +43,7 @@ namespace Gs2.Gs2Showcase.Request
          public Gs2.Core.Model.VerifyAction[] VerifyActions { set; get; } = null!;
          public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; } = null!;
          public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; } = null!;
+         public Gs2.Gs2Showcase.Model.Bonus[] Bonuses { set; get; } = null!;
         public CreateSalesItemMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -71,6 +72,10 @@ namespace Gs2.Gs2Showcase.Request
             this.AcquireActions = acquireActions;
             return this;
         }
+        public CreateSalesItemMasterRequest WithBonuses(Gs2.Gs2Showcase.Model.Bonus[] bonuses) {
+            this.Bonuses = bonuses;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -93,6 +98,9 @@ namespace Gs2.Gs2Showcase.Request
                 }).ToArray())
                 .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null || !data["acquireActions"].IsArray ? null : data["acquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
+                }).ToArray())
+                .WithBonuses(!data.Keys.Contains("bonuses") || data["bonuses"] == null || !data["bonuses"].IsArray ? null : data["bonuses"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Showcase.Model.Bonus.FromJson(v);
                 }).ToArray());
         }
 
@@ -125,6 +133,15 @@ namespace Gs2.Gs2Showcase.Request
                     acquireActionsJsonData.Add(acquireAction.ToJson());
                 }
             }
+            JsonData bonusesJsonData = null;
+            if (Bonuses != null && Bonuses.Length > 0)
+            {
+                bonusesJsonData = new JsonData();
+                foreach (var bonus in Bonuses)
+                {
+                    bonusesJsonData.Add(bonus.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["name"] = Name,
@@ -133,6 +150,7 @@ namespace Gs2.Gs2Showcase.Request
                 ["verifyActions"] = verifyActionsJsonData,
                 ["consumeActions"] = consumeActionsJsonData,
                 ["acquireActions"] = acquireActionsJsonData,
+                ["bonuses"] = bonusesJsonData,
             };
         }
 
@@ -188,6 +206,17 @@ namespace Gs2.Gs2Showcase.Request
                 }
                 writer.WriteArrayEnd();
             }
+            if (Bonuses != null) {
+                writer.WritePropertyName("bonuses");
+                writer.WriteArrayStart();
+                foreach (var bonus in Bonuses)
+                {
+                    if (bonus != null) {
+                        bonus.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
+            }
             writer.WriteObjectEnd();
         }
 
@@ -200,6 +229,7 @@ namespace Gs2.Gs2Showcase.Request
             key += VerifyActions + ":";
             key += ConsumeActions + ":";
             key += AcquireActions + ":";
+            key += Bonuses + ":";
             return key;
         }
     }

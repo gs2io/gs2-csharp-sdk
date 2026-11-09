@@ -39,6 +39,7 @@ namespace Gs2.Gs2Showcase.Model
         public Gs2.Core.Model.VerifyAction[] VerifyActions { set; get; }
         public Gs2.Core.Model.ConsumeAction[] ConsumeActions { set; get; }
         public Gs2.Core.Model.AcquireAction[] AcquireActions { set; get; }
+        public Gs2.Gs2Showcase.Model.Bonus[] Bonuses { set; get; }
         public SalesItem WithName(string name) {
             this.Name = name;
             return this;
@@ -57,6 +58,10 @@ namespace Gs2.Gs2Showcase.Model
         }
         public SalesItem WithAcquireActions(Gs2.Core.Model.AcquireAction[] acquireActions) {
             this.AcquireActions = acquireActions;
+            return this;
+        }
+        public SalesItem WithBonuses(Gs2.Gs2Showcase.Model.Bonus[] bonuses) {
+            this.Bonuses = bonuses;
             return this;
         }
 
@@ -82,6 +87,9 @@ namespace Gs2.Gs2Showcase.Model
                 }).ToArray())
                 .WithAcquireActions(!data.Keys.Contains("acquireActions") || data["acquireActions"] == null || !data["acquireActions"].IsArray ? null : data["acquireActions"].Cast<JsonData>().Select(v => {
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
+                }).ToArray())
+                .WithBonuses(!data.Keys.Contains("bonuses") || data["bonuses"] == null || !data["bonuses"].IsArray ? null : data["bonuses"].Cast<JsonData>().Select(v => {
+                    return Gs2.Gs2Showcase.Model.Bonus.FromJson(v);
                 }).ToArray());
         }
 
@@ -114,12 +122,22 @@ namespace Gs2.Gs2Showcase.Model
                     acquireActionsJsonData.Add(acquireAction.ToJson());
                 }
             }
+            JsonData bonusesJsonData = null;
+            if (Bonuses != null && Bonuses.Length > 0)
+            {
+                bonusesJsonData = new JsonData();
+                foreach (var bonus in Bonuses)
+                {
+                    bonusesJsonData.Add(bonus.ToJson());
+                }
+            }
             return new JsonData {
                 ["name"] = Name,
                 ["metadata"] = Metadata,
                 ["verifyActions"] = verifyActionsJsonData,
                 ["consumeActions"] = consumeActionsJsonData,
                 ["acquireActions"] = acquireActionsJsonData,
+                ["bonuses"] = bonusesJsonData,
             };
         }
 
@@ -167,6 +185,17 @@ namespace Gs2.Gs2Showcase.Model
                 }
                 writer.WriteArrayEnd();
             }
+            if (Bonuses != null) {
+                writer.WritePropertyName("bonuses");
+                writer.WriteArrayStart();
+                foreach (var bonus in Bonuses)
+                {
+                    if (bonus != null) {
+                        bonus.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
+            }
             writer.WriteObjectEnd();
         }
 
@@ -203,6 +232,11 @@ namespace Gs2.Gs2Showcase.Model
                 return diff;
             }
             diff = ModelComparer.CompareArray(AcquireActions, other.AcquireActions);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.CompareArray(Bonuses, other.Bonuses);
             if (diff != 0)
             {
                 return diff;
@@ -251,6 +285,13 @@ namespace Gs2.Gs2Showcase.Model
                     });
                 }
             }
+            {
+                if (Bonuses.Length > 10) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("salesItem", "showcase.salesItem.bonuses.error.tooMany"),
+                    });
+                }
+            }
         }
 
         public object Clone() {
@@ -260,6 +301,7 @@ namespace Gs2.Gs2Showcase.Model
                 VerifyActions = VerifyActions?.Clone() as Gs2.Core.Model.VerifyAction[],
                 ConsumeActions = ConsumeActions?.Clone() as Gs2.Core.Model.ConsumeAction[],
                 AcquireActions = AcquireActions?.Clone() as Gs2.Core.Model.AcquireAction[],
+                Bonuses = Bonuses?.Clone() as Gs2.Gs2Showcase.Model.Bonus[],
             };
         }
     }
