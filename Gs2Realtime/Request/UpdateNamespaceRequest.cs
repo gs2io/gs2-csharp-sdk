@@ -45,6 +45,7 @@ namespace Gs2.Gs2Realtime.Request
          public string ServerSpec { set; get; } = null!;
          public Gs2.Gs2Realtime.Model.SyncSetting SyncSetting { set; get; } = null!;
          public Gs2.Gs2Realtime.Model.StateMachineSetting StateMachineSetting { set; get; } = null!;
+         public Gs2.Gs2Realtime.Model.ParticipantSetting ParticipantSetting { set; get; } = null!;
          public Gs2.Gs2Realtime.Model.NotificationSetting CreateNotification { set; get; } = null!;
          public Gs2.Gs2Realtime.Model.LogSetting LogSetting { set; get; } = null!;
         public UpdateNamespaceRequest WithNamespaceName(string namespaceName) {
@@ -80,6 +81,10 @@ namespace Gs2.Gs2Realtime.Request
             this.StateMachineSetting = stateMachineSetting;
             return this;
         }
+        public UpdateNamespaceRequest WithParticipantSetting(Gs2.Gs2Realtime.Model.ParticipantSetting participantSetting) {
+            this.ParticipantSetting = participantSetting;
+            return this;
+        }
         public UpdateNamespaceRequest WithCreateNotification(Gs2.Gs2Realtime.Model.NotificationSetting createNotification) {
             this.CreateNotification = createNotification;
             return this;
@@ -105,6 +110,7 @@ namespace Gs2.Gs2Realtime.Request
                 .WithServerSpec(!data.Keys.Contains("serverSpec") || data["serverSpec"] == null ? null : data["serverSpec"].ToString())
                 .WithSyncSetting(!data.Keys.Contains("syncSetting") || data["syncSetting"] == null ? null : Gs2.Gs2Realtime.Model.SyncSetting.FromJson(data["syncSetting"]))
                 .WithStateMachineSetting(!data.Keys.Contains("stateMachineSetting") || data["stateMachineSetting"] == null ? null : Gs2.Gs2Realtime.Model.StateMachineSetting.FromJson(data["stateMachineSetting"]))
+                .WithParticipantSetting(!data.Keys.Contains("participantSetting") || data["participantSetting"] == null ? null : Gs2.Gs2Realtime.Model.ParticipantSetting.FromJson(data["participantSetting"]))
                 .WithCreateNotification(!data.Keys.Contains("createNotification") || data["createNotification"] == null ? null : Gs2.Gs2Realtime.Model.NotificationSetting.FromJson(data["createNotification"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Realtime.Model.LogSetting.FromJson(data["logSetting"]));
         }
@@ -119,6 +125,7 @@ namespace Gs2.Gs2Realtime.Request
                 ["serverSpec"] = ServerSpec,
                 ["syncSetting"] = SyncSetting?.ToJson(),
                 ["stateMachineSetting"] = StateMachineSetting?.ToJson(),
+                ["participantSetting"] = ParticipantSetting?.ToJson(),
                 ["createNotification"] = CreateNotification?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
             };
@@ -155,6 +162,9 @@ namespace Gs2.Gs2Realtime.Request
             if (StateMachineSetting != null) {
                 StateMachineSetting.WriteJson(writer);
             }
+            if (ParticipantSetting != null) {
+                ParticipantSetting.WriteJson(writer);
+            }
             if (CreateNotification != null) {
                 CreateNotification.WriteJson(writer);
             }
@@ -173,6 +183,7 @@ namespace Gs2.Gs2Realtime.Request
             key += ServerSpec + ":";
             key += SyncSetting + ":";
             key += StateMachineSetting + ":";
+            key += ParticipantSetting + ":";
             key += CreateNotification + ":";
             key += LogSetting + ":";
             return key;

@@ -44,6 +44,7 @@ namespace Gs2.Gs2Realtime.Model
         public string ServerSpec { set; get; }
         public Gs2.Gs2Realtime.Model.SyncSetting SyncSetting { set; get; }
         public Gs2.Gs2Realtime.Model.StateMachineSetting StateMachineSetting { set; get; }
+        public Gs2.Gs2Realtime.Model.ParticipantSetting ParticipantSetting { set; get; }
         public Gs2.Gs2Realtime.Model.NotificationSetting CreateNotification { set; get; }
         public Gs2.Gs2Realtime.Model.LogSetting LogSetting { set; get; }
         public long? CreatedAt { set; get; }
@@ -84,6 +85,10 @@ namespace Gs2.Gs2Realtime.Model
         }
         public Namespace WithStateMachineSetting(Gs2.Gs2Realtime.Model.StateMachineSetting stateMachineSetting) {
             this.StateMachineSetting = stateMachineSetting;
+            return this;
+        }
+        public Namespace WithParticipantSetting(Gs2.Gs2Realtime.Model.ParticipantSetting participantSetting) {
+            this.ParticipantSetting = participantSetting;
             return this;
         }
         public Namespace WithCreateNotification(Gs2.Gs2Realtime.Model.NotificationSetting createNotification) {
@@ -179,6 +184,7 @@ namespace Gs2.Gs2Realtime.Model
                 .WithServerSpec(!data.Keys.Contains("serverSpec") || data["serverSpec"] == null ? null : data["serverSpec"].ToString())
                 .WithSyncSetting(!data.Keys.Contains("syncSetting") || data["syncSetting"] == null ? null : Gs2.Gs2Realtime.Model.SyncSetting.FromJson(data["syncSetting"]))
                 .WithStateMachineSetting(!data.Keys.Contains("stateMachineSetting") || data["stateMachineSetting"] == null ? null : Gs2.Gs2Realtime.Model.StateMachineSetting.FromJson(data["stateMachineSetting"]))
+                .WithParticipantSetting(!data.Keys.Contains("participantSetting") || data["participantSetting"] == null ? null : Gs2.Gs2Realtime.Model.ParticipantSetting.FromJson(data["participantSetting"]))
                 .WithCreateNotification(!data.Keys.Contains("createNotification") || data["createNotification"] == null ? null : Gs2.Gs2Realtime.Model.NotificationSetting.FromJson(data["createNotification"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Realtime.Model.LogSetting.FromJson(data["logSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()))
@@ -197,6 +203,7 @@ namespace Gs2.Gs2Realtime.Model
                 ["serverSpec"] = ServerSpec,
                 ["syncSetting"] = SyncSetting?.ToJson(),
                 ["stateMachineSetting"] = StateMachineSetting?.ToJson(),
+                ["participantSetting"] = ParticipantSetting?.ToJson(),
                 ["createNotification"] = CreateNotification?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
@@ -243,6 +250,10 @@ namespace Gs2.Gs2Realtime.Model
             if (StateMachineSetting != null) {
                 writer.WritePropertyName("stateMachineSetting");
                 StateMachineSetting.WriteJson(writer);
+            }
+            if (ParticipantSetting != null) {
+                writer.WritePropertyName("participantSetting");
+                ParticipantSetting.WriteJson(writer);
             }
             if (CreateNotification != null) {
                 writer.WritePropertyName("createNotification");
@@ -320,6 +331,11 @@ namespace Gs2.Gs2Realtime.Model
                 return diff;
             }
             diff = ModelComparer.Compare(StateMachineSetting, other.StateMachineSetting);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(ParticipantSetting, other.ParticipantSetting);
             if (diff != 0)
             {
                 return diff;
@@ -407,6 +423,8 @@ namespace Gs2.Gs2Realtime.Model
             {
             }
             {
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("namespace", "realtime.namespace.createdAt.error.invalid"),
@@ -455,6 +473,7 @@ namespace Gs2.Gs2Realtime.Model
                 ServerSpec = ServerSpec,
                 SyncSetting = SyncSetting?.Clone() as Gs2.Gs2Realtime.Model.SyncSetting,
                 StateMachineSetting = StateMachineSetting?.Clone() as Gs2.Gs2Realtime.Model.StateMachineSetting,
+                ParticipantSetting = ParticipantSetting?.Clone() as Gs2.Gs2Realtime.Model.ParticipantSetting,
                 CreateNotification = CreateNotification?.Clone() as Gs2.Gs2Realtime.Model.NotificationSetting,
                 LogSetting = LogSetting?.Clone() as Gs2.Gs2Realtime.Model.LogSetting,
                 CreatedAt = CreatedAt,

@@ -218,6 +218,11 @@ namespace Gs2.Gs2Realtime
                     jsonWriter.WritePropertyName("stateMachineSetting");
                     request.StateMachineSetting.WriteJson(jsonWriter);
                 }
+                if (request.ParticipantSetting != null)
+                {
+                    jsonWriter.WritePropertyName("participantSetting");
+                    request.ParticipantSetting.WriteJson(jsonWriter);
+                }
                 if (request.CreateNotification != null)
                 {
                     jsonWriter.WritePropertyName("createNotification");
@@ -536,6 +541,11 @@ namespace Gs2.Gs2Realtime
                 {
                     jsonWriter.WritePropertyName("stateMachineSetting");
                     request.StateMachineSetting.WriteJson(jsonWriter);
+                }
+                if (request.ParticipantSetting != null)
+                {
+                    jsonWriter.WritePropertyName("participantSetting");
+                    request.ParticipantSetting.WriteJson(jsonWriter);
                 }
                 if (request.CreateNotification != null)
                 {
