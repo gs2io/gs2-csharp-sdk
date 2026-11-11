@@ -86,6 +86,7 @@ namespace Gs2.Gs2Guild
 				return error;
 			}
 			resolved.Metadata = error.Metadata;
+			resolved.Result = error.Result;
 			return resolved;
 		}
 	}

@@ -94,6 +94,14 @@ namespace Gs2.Gs2Schedule.Model.Cache
                 var future = invokeImpl();
                 yield return future;
                 if (future.Error != null) {
+                    if (future.Error is Gs2.Core.Exception.Gs2Exception failed && failed.Result != null) {
+                        VerifyEventResult.FromJson(Gs2.Util.LitJson.JsonMapper.ToObject(failed.Result))?.PutCache(
+                            cache,
+                            userId,
+                            timeOffset,
+                            request
+                        );
+                    }
                     self.OnError(future.Error);
                     yield break;
                 }
@@ -129,7 +137,19 @@ namespace Gs2.Gs2Schedule.Model.Cache
 #endif
         )
         {
-            var result = await invokeImpl();
+            VerifyEventResult result;
+            try {
+                result = await invokeImpl();
+            }
+            catch (Gs2.Core.Exception.Gs2Exception e) when (e.Result != null) {
+                VerifyEventResult.FromJson(Gs2.Util.LitJson.JsonMapper.ToObject(e.Result))?.PutCache(
+                    cache,
+                    userId,
+                    timeOffset,
+                    request
+                );
+                throw;
+            }
             result.PutCache(
                 cache,
                 userId,

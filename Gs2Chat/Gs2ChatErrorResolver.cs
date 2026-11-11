@@ -64,6 +64,7 @@ namespace Gs2.Gs2Chat
 				return error;
 			}
 			resolved.Metadata = error.Metadata;
+			resolved.Result = error.Result;
 			return resolved;
 		}
 	}

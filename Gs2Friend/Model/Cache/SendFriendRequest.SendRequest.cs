@@ -50,44 +50,35 @@ namespace Gs2.Gs2Friend.Model.Cache
             if (userId == null) {
                 throw new NullReferenceException();
             }
-            cache.Put(
-                (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
-                    request.NamespaceName,
-/* diff --- start
-                    userId,
- diff --- end */
-                    self.Item.UserId, /* diff +++ */
-                    timeOffset
-                ),
-                (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
-                    self.Item.TargetUserId
-                ),
-/* diff --- start
-                self.Item,
- diff --- end */
 /* diff +++ start */
-                new SendFriendRequest {
-                    UserId = self.Item.UserId,
-                    TargetUserId = self.Item.TargetUserId
-                },
-                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+            if (self.Item == null) {
+                return;
+            }
+            new SendFriendRequest {
+                UserId = self.Item.UserId,
+                TargetUserId = self.Item.TargetUserId,
+                PublicProfile = self.Item.PublicProfile,
+            }.PutCacheForEachWithProfile(
+                cache,
+                request.NamespaceName,
+                self.Item.UserId,
+                request.WithProfile,
+                self.Item.TargetUserId,
+                timeOffset
             );
-            cache.Put(
-                (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
-                    request.NamespaceName,
-                    self.Item.TargetUserId,
-                    timeOffset
-                ),
-                (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheKey(
-                    self.Item.UserId
-                ),
-                new ReceiveFriendRequest {
-                    UserId = self.Item.UserId,
-                    TargetUserId = self.Item.TargetUserId
-                },
+            // 相手の受信ボックス。応答の公開プロフィールは相手のものなので、公開プロフィール無しで置く
+            new ReceiveFriendRequest {
+                UserId = self.Item.UserId,
+                TargetUserId = self.Item.TargetUserId,
+            }.PutCacheForEachWithProfile(
+                cache,
+                request.NamespaceName,
+                self.Item.TargetUserId,
+                false,
+                self.Item.UserId,
+                timeOffset
+            );
 /* diff +++ end */
-                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
-            );
         }
 
 #if UNITY_2017_1_OR_NEWER

@@ -284,7 +284,8 @@ namespace Gs2.Gs2Friend.Domain.Model
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Friend.Model.SendFriendRequest> SendRequests(
-            string timeOffsetToken = null
+            string timeOffsetToken = null,
+            bool? withProfile = null
         )
         {
             return new DescribeSendRequestsByUserIdIterator(
@@ -292,7 +293,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.UserId,
-                timeOffsetToken
+                timeOffsetToken,
+                withProfile
             );
         }
         #endif
@@ -302,7 +304,8 @@ namespace Gs2.Gs2Friend.Domain.Model
         #else
         public DescribeSendRequestsByUserIdIterator SendRequestsAsync(
         #endif
-            string timeOffsetToken = null
+            string timeOffsetToken = null,
+            bool? withProfile = null
         )
         {
             return new DescribeSendRequestsByUserIdIterator(
@@ -310,41 +313,46 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.UserId,
-                timeOffsetToken
+                timeOffsetToken,
+                withProfile
             );
         }
 
         public ulong SubscribeSendRequests(
-            Action<Gs2.Gs2Friend.Model.SendFriendRequest[]> callback
+            Action<Gs2.Gs2Friend.Model.SendFriendRequest[]> callback,
+            bool? withProfile = null
         )
         {
+            void ReFetch()
+            {
+        #if GS2_ENABLE_UNITASK
+                async UniTask Impl() {
+        #else
+                async Task Impl() {
+        #endif
+                    try {
+        #if GS2_ENABLE_UNITASK
+                        await UniTask.SwitchToMainThread();
+        #endif
+                        callback.Invoke(await SendRequestsAsync(
+                            withProfile: withProfile
+                        ).ToArrayAsync());
+                    }
+                    catch (System.Exception) {
+                        // ignored
+                    }
+                }
+                Impl().Forget();
+            }
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Friend.Model.SendFriendRequest>(
                 (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
+                    withProfile,
                     null
                 ),
                 callback,
-                () =>
-                {
-        #if GS2_ENABLE_UNITASK
-                    async UniTask Impl() {
-        #else
-                    async Task Impl() {
-        #endif
-                        try {
-        #if GS2_ENABLE_UNITASK
-                            await UniTask.SwitchToMainThread();
-        #endif
-                            callback.Invoke(await SendRequestsAsync(
-                            ).ToArrayAsync());
-                        }
-                        catch (System.Exception) {
-                            // ignored
-                        }
-                    }
-                    Impl().Forget();
-                }
+                ReFetch
             );
         }
 
@@ -353,26 +361,31 @@ namespace Gs2.Gs2Friend.Domain.Model
         #else
         public async Task<ulong> SubscribeSendRequestsWithInitialCallAsync(
         #endif
-            Action<Gs2.Gs2Friend.Model.SendFriendRequest[]> callback
+            Action<Gs2.Gs2Friend.Model.SendFriendRequest[]> callback,
+            bool? withProfile = null
         )
         {
             var items = await SendRequestsAsync(
+                withProfile: withProfile
             ).ToArrayAsync();
             var callbackId = SubscribeSendRequests(
-                callback
+                callback,
+                withProfile
             );
             callback.Invoke(items);
             return callbackId;
         }
 
         public void UnsubscribeSendRequests(
-            ulong callbackId
+            ulong callbackId,
+            bool? withProfile = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Friend.Model.SendFriendRequest>(
                 (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
+                    withProfile,
                     null
                 ),
                 callbackId
@@ -380,30 +393,35 @@ namespace Gs2.Gs2Friend.Domain.Model
         }
 
         public void InvalidateSendRequests(
+            bool? withProfile = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.SendFriendRequest>(
                 (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
+                    withProfile,
                     null
                 )
             );
         }
 
         public Gs2.Gs2Friend.Domain.Model.SendFriendRequestDomain SendFriendRequest(
-            string targetUserId
+            string targetUserId,
+            bool? withProfile = null
         ) {
             return new Gs2.Gs2Friend.Domain.Model.SendFriendRequestDomain(
                 this._gs2,
                 this.NamespaceName,
                 this.UserId,
-                targetUserId
+                targetUserId,
+                withProfile
             );
         }
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Friend.Model.ReceiveFriendRequest> ReceiveRequests(
-            string timeOffsetToken = null
+            string timeOffsetToken = null,
+            bool? withProfile = null
         )
         {
             return new DescribeReceiveRequestsByUserIdIterator(
@@ -411,7 +429,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.UserId,
-                timeOffsetToken
+                timeOffsetToken,
+                withProfile
             );
         }
         #endif
@@ -421,7 +440,8 @@ namespace Gs2.Gs2Friend.Domain.Model
         #else
         public DescribeReceiveRequestsByUserIdIterator ReceiveRequestsAsync(
         #endif
-            string timeOffsetToken = null
+            string timeOffsetToken = null,
+            bool? withProfile = null
         )
         {
             return new DescribeReceiveRequestsByUserIdIterator(
@@ -429,41 +449,46 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._client,
                 this.NamespaceName,
                 this.UserId,
-                timeOffsetToken
+                timeOffsetToken,
+                withProfile
             );
         }
 
         public ulong SubscribeReceiveRequests(
-            Action<Gs2.Gs2Friend.Model.ReceiveFriendRequest[]> callback
+            Action<Gs2.Gs2Friend.Model.ReceiveFriendRequest[]> callback,
+            bool? withProfile = null
         )
         {
+            void ReFetch()
+            {
+        #if GS2_ENABLE_UNITASK
+                async UniTask Impl() {
+        #else
+                async Task Impl() {
+        #endif
+                    try {
+        #if GS2_ENABLE_UNITASK
+                        await UniTask.SwitchToMainThread();
+        #endif
+                        callback.Invoke(await ReceiveRequestsAsync(
+                            withProfile: withProfile
+                        ).ToArrayAsync());
+                    }
+                    catch (System.Exception) {
+                        // ignored
+                    }
+                }
+                Impl().Forget();
+            }
             return this._gs2.Cache.ListSubscribe<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(
                 (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
+                    withProfile,
                     null
                 ),
                 callback,
-                () =>
-                {
-        #if GS2_ENABLE_UNITASK
-                    async UniTask Impl() {
-        #else
-                    async Task Impl() {
-        #endif
-                        try {
-        #if GS2_ENABLE_UNITASK
-                            await UniTask.SwitchToMainThread();
-        #endif
-                            callback.Invoke(await ReceiveRequestsAsync(
-                            ).ToArrayAsync());
-                        }
-                        catch (System.Exception) {
-                            // ignored
-                        }
-                    }
-                    Impl().Forget();
-                }
+                ReFetch
             );
         }
 
@@ -472,26 +497,31 @@ namespace Gs2.Gs2Friend.Domain.Model
         #else
         public async Task<ulong> SubscribeReceiveRequestsWithInitialCallAsync(
         #endif
-            Action<Gs2.Gs2Friend.Model.ReceiveFriendRequest[]> callback
+            Action<Gs2.Gs2Friend.Model.ReceiveFriendRequest[]> callback,
+            bool? withProfile = null
         )
         {
             var items = await ReceiveRequestsAsync(
+                withProfile: withProfile
             ).ToArrayAsync();
             var callbackId = SubscribeReceiveRequests(
-                callback
+                callback,
+                withProfile
             );
             callback.Invoke(items);
             return callbackId;
         }
 
         public void UnsubscribeReceiveRequests(
-            ulong callbackId
+            ulong callbackId,
+            bool? withProfile = null
         )
         {
             this._gs2.Cache.ListUnsubscribe<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(
                 (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
+                    withProfile,
                     null
                 ),
                 callbackId
@@ -499,25 +529,29 @@ namespace Gs2.Gs2Friend.Domain.Model
         }
 
         public void InvalidateReceiveRequests(
+            bool? withProfile = null
         )
         {
             this._gs2.Cache.ClearListCache<Gs2.Gs2Friend.Model.ReceiveFriendRequest>(
                 (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
+                    withProfile,
                     null
                 )
             );
         }
 
         public Gs2.Gs2Friend.Domain.Model.ReceiveFriendRequestDomain ReceiveFriendRequest(
-            string fromUserId
+            string fromUserId,
+            bool? withProfile = null
         ) {
             return new Gs2.Gs2Friend.Domain.Model.ReceiveFriendRequestDomain(
                 this._gs2,
                 this.NamespaceName,
                 this.UserId,
-                fromUserId
+                fromUserId,
+                withProfile
             );
         }
 
@@ -552,7 +586,13 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._gs2,
                 this.NamespaceName,
                 result?.Item?.UserId,
+/* diff --- start
                 result?.Item?.TargetUserId
+ diff --- end */
+/* diff +++ start */
+                result?.Item?.TargetUserId,
+                request.WithProfile
+/* diff +++ end */
             );
 
             return domain;

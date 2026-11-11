@@ -55,6 +55,7 @@ namespace Gs2.Gs2Datastore
 				return error;
 			}
 			resolved.Metadata = error.Metadata;
+			resolved.Result = error.Result;
 			return resolved;
 		}
 	}

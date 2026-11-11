@@ -476,6 +476,34 @@ namespace Gs2.Gs2Schedule.Domain
                         );
                         break;
                     }
+                    case "VerifyTriggerByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyTriggerByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyTriggerByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
+                    case "VerifyEventByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyEventByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyEventByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
                 }
         }
 

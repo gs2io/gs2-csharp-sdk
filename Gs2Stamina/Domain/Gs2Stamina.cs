@@ -572,6 +572,76 @@ namespace Gs2.Gs2Stamina.Domain
                         );
                         break;
                     }
+                    case "VerifyStaminaValueByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyStaminaValueByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyStaminaValueByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
+                    case "VerifyStaminaMaxValueByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyStaminaMaxValueByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyStaminaMaxValueByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
+                    case "VerifyStaminaRecoverIntervalMinutesByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyStaminaRecoverIntervalMinutesByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyStaminaRecoverIntervalMinutesByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
+                    case "VerifyStaminaRecoverValueByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyStaminaRecoverValueByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyStaminaRecoverValueByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
+                    case "VerifyStaminaOverflowValueByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyStaminaOverflowValueByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyStaminaOverflowValueByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
                 }
         }
 

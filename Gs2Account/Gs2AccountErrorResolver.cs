@@ -65,6 +65,7 @@ namespace Gs2.Gs2Account
 				return error;
 			}
 			resolved.Metadata = error.Metadata;
+			resolved.Result = error.Result;
 			return resolved;
 		}
 	}

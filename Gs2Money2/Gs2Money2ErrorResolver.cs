@@ -71,6 +71,7 @@ namespace Gs2.Gs2Money2
 				return error;
 			}
 			resolved.Metadata = error.Metadata;
+			resolved.Result = error.Result;
 			return resolved;
 		}
 	}

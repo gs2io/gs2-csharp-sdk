@@ -557,6 +557,34 @@ namespace Gs2.Gs2Mission.Domain
                         );
                         break;
                     }
+                    case "VerifyCompleteByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyCompleteByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyCompleteByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
+                    case "VerifyCounterValueByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyCounterValueByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyCounterValueByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
                 }
         }
 

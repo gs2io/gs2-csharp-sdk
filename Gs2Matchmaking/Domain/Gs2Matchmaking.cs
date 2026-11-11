@@ -386,6 +386,22 @@ namespace Gs2.Gs2Matchmaking.Domain
                 string request,
                 string result
         ) {
+                switch (method) {
+                    case "VerifyIncludeParticipantByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyIncludeParticipantByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyIncludeParticipantByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
+                }
         }
 
         public void UpdateCacheFromJobResult(

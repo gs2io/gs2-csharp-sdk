@@ -716,6 +716,76 @@ namespace Gs2.Gs2Inventory.Domain
                         );
                         break;
                     }
+                    case "VerifyInventoryCurrentMaxCapacityByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyInventoryCurrentMaxCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyInventoryCurrentMaxCapacityByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
+                    case "VerifyItemSetByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyItemSetByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyItemSetByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
+                    case "VerifyReferenceOfByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyReferenceOfByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyReferenceOfByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
+                    case "VerifySimpleItemByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifySimpleItemByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifySimpleItemByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
+                    case "VerifyBigItemByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyBigItemByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyBigItemByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
                 }
         }
 

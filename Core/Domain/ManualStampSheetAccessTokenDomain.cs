@@ -204,7 +204,7 @@ namespace Gs2.Core.Domain
                         );
                         contextStack = result.ContextStack;
                         if (result.StatusCode / 100 != 2) {
-                            throw Gs2Exception.ExtractError(verifyTaskPayloadJson["action"].ToString(), result.Result, result.StatusCode ?? 999);
+                            throw TransactionConfiguration.ExtractVerifyError(Gs2.TransactionConfiguration, Gs2.Cache, stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]", this.AccessToken?.TimeOffset, verifyTaskPayloadJson["action"].ToString(), verifyTaskPayloadJson["args"].ToString(), result.Result, result.StatusCode ?? 999);
                         }
                         Gs2.TransactionConfiguration?.VerifyActionEventHandler?.Invoke(
                             Gs2.Cache,
@@ -240,7 +240,7 @@ namespace Gs2.Core.Domain
                             );
                             contextStack = fallbackResult.ContextStack;
                             if (fallbackResult.StatusCode / 100 != 2) {
-                                throw Gs2Exception.ExtractError(verifyTaskPayloadJson["action"].ToString(), fallbackResult.Result, fallbackResult.StatusCode ?? 999);
+                                throw TransactionConfiguration.ExtractVerifyError(Gs2.TransactionConfiguration, Gs2.Cache, stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]", this.AccessToken?.TimeOffset, verifyTaskPayloadJson["action"].ToString(), verifyTaskPayloadJson["args"].ToString(), fallbackResult.Result, fallbackResult.StatusCode ?? 999);
                             }
                             Gs2.TransactionConfiguration.VerifyActionEventHandler?.Invoke(
                                 Gs2.Cache,
@@ -254,7 +254,7 @@ namespace Gs2.Core.Domain
                         }
                         contextStack = result.ContextStack;
                         if (result.StatusCode / 100 != 2) {
-                            throw Gs2Exception.ExtractError(verifyTaskPayloadJson["action"].ToString(), result.Result, result.StatusCode ?? 999);
+                            throw TransactionConfiguration.ExtractVerifyError(Gs2.TransactionConfiguration, Gs2.Cache, stampSheetPayloadJson["transactionId"].ToString() + "[" + i + "]", this.AccessToken?.TimeOffset, verifyTaskPayloadJson["action"].ToString(), verifyTaskPayloadJson["args"].ToString(), result.Result, result.StatusCode ?? 999);
                         }
                         Gs2.TransactionConfiguration?.VerifyActionEventHandler?.Invoke(
                             Gs2.Cache,

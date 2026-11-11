@@ -452,6 +452,20 @@ namespace Gs2.Gs2Dictionary.Domain
                         );
                         break;
                     }
+                    case "VerifyEntryByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyEntryByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyEntryByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
                 }
         }
 

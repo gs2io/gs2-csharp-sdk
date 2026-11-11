@@ -84,9 +84,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
         public string NamespaceName { get; }
         public AccessToken AccessToken { get; }
         public string UserId => AccessToken?.UserId;
-/* diff --- start
         public bool? WithProfile { get; }
- diff --- end */
         private string _pageToken;
         private bool _isCacheChecked;
         private bool _last;
@@ -101,19 +99,14 @@ namespace Gs2.Gs2Friend.Domain.Iterator
             Gs2.Core.Domain.Gs2 gs2,
             Gs2FriendRestClient client,
             string namespaceName,
-/* diff --- start
             AccessToken accessToken,
             bool? withProfile = null
- diff --- end */
-            AccessToken accessToken /* diff +++ */
         ) {
             this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.AccessToken = accessToken;
-/* diff --- start
             this.WithProfile = withProfile;
- diff --- end */
             this._pageToken = null;
             this._last = false;
 /* diff --- start
@@ -138,6 +131,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                     (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                         NamespaceName,
                         AccessToken?.UserId,
+                        this.WithProfile, /* diff +++ */
 /* diff --- start
                         this.AccessToken?.TimeOffset
  diff --- end */
@@ -155,9 +149,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                     .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithAccessToken(this.AccessToken != null ? this.AccessToken.Token : null)
-/* diff --- start
                     .WithWithProfile(this.WithProfile)
- diff --- end */
                     .WithPageToken(this._pageToken)
                     .WithLimit(fetchSize);
                 var r = await this._client.DescribeReceiveRequestsAsync(
@@ -170,6 +162,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                 this._result = r.Items.Select(v => new ReceiveFriendRequest {
                         UserId = v.UserId,
                         TargetUserId = v.TargetUserId,
+                        PublicProfile = v.PublicProfile,
                     })
 /* diff +++ end */
                     .ToArray();
@@ -193,6 +186,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                         (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                             NamespaceName,
                             AccessToken?.UserId,
+                            this.WithProfile, /* diff +++ */
 /* diff --- start
                             this.AccessToken?.TimeOffset
  diff --- end */
@@ -297,6 +291,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                         (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                             NamespaceName,
                             AccessToken?.UserId,
+                            this.WithProfile, /* diff +++ */
                             AccessToken?.TimeOffset
                        ),
                        "ListReceiveFriendRequest"

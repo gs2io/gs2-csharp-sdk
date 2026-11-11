@@ -453,6 +453,20 @@ namespace Gs2.Gs2SerialKey.Domain
                         );
                         break;
                     }
+                    case "VerifyCodeByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyCodeByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyCodeByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
                 }
         }
 

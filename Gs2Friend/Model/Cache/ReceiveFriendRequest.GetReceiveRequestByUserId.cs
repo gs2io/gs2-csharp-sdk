@@ -50,32 +50,23 @@ namespace Gs2.Gs2Friend.Model.Cache
             if (userId == null) {
                 throw new NullReferenceException();
             }
-            cache.Put(
-                (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
-                    request.NamespaceName,
-/* diff --- start
-                    request.UserId,
- diff --- end */
-                    self.Item.TargetUserId, /* diff +++ */
-                    timeOffset
-                ),
-                (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheKey(
-/* diff --- start
-                    self.Item.TargetUserId
- diff --- end */
-                    self.Item.UserId /* diff +++ */
-                ),
-/* diff --- start
-                self.Item,
- diff --- end */
 /* diff +++ start */
-                new ReceiveFriendRequest {
-                    UserId = self.Item.UserId,
-                    TargetUserId = self.Item.TargetUserId
-                },
-/* diff +++ end */
-                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+            if (self.Item == null) {
+                return;
+            }
+            new ReceiveFriendRequest {
+                UserId = self.Item.UserId,
+                TargetUserId = self.Item.TargetUserId,
+                PublicProfile = self.Item.PublicProfile,
+            }.PutCacheForEachWithProfile(
+                cache,
+                request.NamespaceName,
+                self.Item.TargetUserId,
+                request.WithProfile,
+                self.Item.UserId,
+                timeOffset
             );
+/* diff +++ end */
         }
 
 #if UNITY_2017_1_OR_NEWER

@@ -50,44 +50,27 @@ namespace Gs2.Gs2Friend.Model.Cache
             if (userId == null) {
                 throw new NullReferenceException();
             }
-/* diff --- start
-            cache.Delete<FriendRequest>(
-                (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
- diff --- end */
 /* diff +++ start */
-            
+            if (self.Item == null) {
+                return;
+            }
             // 受信したフレンドリクエスト
-            cache.Delete<ReceiveFriendRequest>(
-                (null as ReceiveFriendRequest).CacheParentKey(
-/* diff +++ end */
-                    request.NamespaceName,
-/* diff --- start
-                    request.UserId,
- diff --- end */
-                    self.Item.TargetUserId, /* diff +++ */
-                    timeOffset
-                ),
-/* diff --- start
-                (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
- diff --- end */
-/* diff +++ start */
-                (null as ReceiveFriendRequest).CacheKey(
-                    self.Item.UserId
-                )
+            (null as ReceiveFriendRequest).DeleteCacheForEachWithProfile(
+                cache,
+                request.NamespaceName,
+                self.Item.TargetUserId,
+                self.Item.UserId,
+                timeOffset
             );
-            
             // 送信したフレンドリクエスト
-            cache.Delete<SendFriendRequest>(
-                (null as SendFriendRequest).CacheParentKey(
-                    request.NamespaceName,
-                    self.Item.UserId,
-                    timeOffset
-                ),
-                (null as SendFriendRequest).CacheKey(
-/* diff +++ end */
-                    self.Item.TargetUserId
-                )
+            (null as SendFriendRequest).DeleteCacheForEachWithProfile(
+                cache,
+                request.NamespaceName,
+                self.Item.UserId,
+                self.Item.TargetUserId,
+                timeOffset
             );
+/* diff +++ end */
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -105,20 +88,21 @@ namespace Gs2.Gs2Friend.Model.Cache
                 yield return future;
                 if (future.Error != null) {
                     if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        (null as SendFriendRequest).DeleteCache(
+                        /* diff +++ start */
+                        (null as SendFriendRequest).DeleteCacheForEachWithProfile(
                             cache,
                             request.NamespaceName,
                             request.UserId,
                             request.TargetUserId,
                             timeOffset
                         );
-                        cache.ClearListCache<SendFriendRequest>(
-                            (null as SendFriendRequest).CacheParentKey(
-                                request.NamespaceName,
-                                request.UserId,
-                                timeOffset
-                            )
+                        (null as SendFriendRequest).ClearListCacheForEachWithProfile(
+                            cache,
+                            request.NamespaceName,
+                            request.UserId,
+                            timeOffset
                         );
+                        /* diff +++ end */
                     }
                     self.OnError(future.Error);
                     yield break;
@@ -160,20 +144,21 @@ namespace Gs2.Gs2Friend.Model.Cache
                 result = await invokeImpl();
             }
             catch (Gs2.Core.Exception.NotFoundException) {
-                (null as SendFriendRequest).DeleteCache(
+                /* diff +++ start */
+                (null as SendFriendRequest).DeleteCacheForEachWithProfile(
                     cache,
                     request.NamespaceName,
                     request.UserId,
                     request.TargetUserId,
                     timeOffset
                 );
-                cache.ClearListCache<SendFriendRequest>(
-                    (null as SendFriendRequest).CacheParentKey(
-                        request.NamespaceName,
-                        request.UserId,
-                        timeOffset
-                    )
+                (null as SendFriendRequest).ClearListCacheForEachWithProfile(
+                    cache,
+                    request.NamespaceName,
+                    request.UserId,
+                    timeOffset
                 );
+                /* diff +++ end */
                 throw;
             }
             result.PutCache(

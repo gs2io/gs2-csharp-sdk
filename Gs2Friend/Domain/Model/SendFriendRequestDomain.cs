@@ -68,12 +68,19 @@ namespace Gs2.Gs2Friend.Domain.Model
         public string NamespaceName { get; } = null!;
         public string UserId { get; } = null!;
         public string TargetUserId { get; } = null!;
+        public bool? WithProfile { get; } /* diff +++ */
 
         public SendFriendRequestDomain(
             Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             string userId,
+/* diff --- start
             string targetUserId
+ diff --- end */
+/* diff +++ start */
+            string targetUserId,
+            bool? withProfile = null
+/* diff +++ end */
         ) {
             this._gs2 = gs2;
             this._client = new Gs2FriendRestClient(
@@ -82,6 +89,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             this.NamespaceName = namespaceName;
             this.UserId = userId;
             this.TargetUserId = targetUserId;
+            this.WithProfile = withProfile; /* diff +++ */
         }
 
     }
@@ -105,7 +113,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
-                .WithTargetUserId(this.TargetUserId);
+                .WithTargetUserId(this.TargetUserId)
+                .WithWithProfile(this.WithProfile); /* diff +++ */
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
@@ -115,6 +124,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             return result?.Item == null ? null : new SendFriendRequest {
                 UserId = result.Item.UserId,
                 TargetUserId = result.Item.TargetUserId,
+                PublicProfile = result.Item.PublicProfile, /* diff +++ */
             };
         }
 
@@ -149,7 +159,13 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._gs2,
                 this.NamespaceName,
                 request.UserId,
+/* diff --- start
                 request?.TargetUserId
+ diff --- end */
+/* diff +++ start */
+                request?.TargetUserId,
+                this.WithProfile
+/* diff +++ end */
             );
             return domain;
         }
@@ -172,6 +188,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                         (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                             this.NamespaceName,
                             this.UserId,
+                            this.WithProfile, /* diff +++ */
                             null
                         ),
                         (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
@@ -185,6 +202,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                         this.NamespaceName,
                         this.UserId,
+                        this.WithProfile, /* diff +++ */
                         null
                     ),
                     (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
@@ -198,6 +216,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
+                    this.WithProfile, /* diff +++ */
                     this.TargetUserId,
                     null,
                     () => this.GetAsync(
@@ -236,6 +255,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
+                this.WithProfile, /* diff +++ */
                 this.TargetUserId,
                 null
             );
@@ -247,6 +267,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
+                    this.WithProfile, /* diff +++ */
                     null
                 ),
                 (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
@@ -278,6 +299,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
+                    this.WithProfile, /* diff +++ */
                     null
                 ),
                 (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(

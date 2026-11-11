@@ -476,6 +476,20 @@ namespace Gs2.Gs2Limit.Domain
                         );
                         break;
                     }
+                    case "VerifyCounterByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyCounterByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyCounterByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
                 }
         }
 

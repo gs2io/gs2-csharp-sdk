@@ -66,6 +66,9 @@ namespace Gs2.Core.Exception
 			get { return metadata; }
 			set { metadata = value; }
 		}
+
+		// 失敗の本文の最上位にある result（JSON）。検証 API は失敗しても検証した時点の状態をここに入れて返す
+		public string Result { get; set; }
 		
 		public abstract int StatusCode { get; }
 		
@@ -91,7 +94,33 @@ namespace Gs2.Core.Exception
 			if (metadata != null) {
 				error.Metadata = metadata;
 			}
+			error.Result = ExtractResult(message);
 			return error;
+		}
+
+		// トランザクションの失敗（{"errors":…,"result":…}）と REST の失敗（{"message":…,"result":…}）のどちらも最上位に result を持つ
+		public static string ExtractResult(string body)
+		{
+			if (string.IsNullOrEmpty(body)) {
+				return null;
+			}
+			try {
+				return ExtractResult(JsonMapper.ToObject(body));
+			} catch (System.Exception) {
+				return null;
+			}
+		}
+
+		public static string ExtractResult(JsonData body)
+		{
+			if (body == null || !body.IsObject || !body.Keys.Contains("result")) {
+				return null;
+			}
+			var result = body["result"];
+			if (result == null || !result.IsObject || result.Count == 0) {
+				return null;
+			}
+			return result.ToJson();
 		}
 
 		public static Gs2Exception ExtractError(string action, string message, long statusCode)

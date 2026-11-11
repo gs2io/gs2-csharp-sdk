@@ -72,7 +72,24 @@ namespace Gs2.Gs2Inventory.Model.Cache
 /* diff +++ start */
                 timeOffset
             );
+            // 成功しても not_entry / empty なら参照元は無い。検証した時点のアイテムセットの一覧で載せるか消すかを決める
+            if (self.ItemSet == null) {
+                return;
+            }
             var referenceOf = new ReferenceOf().WithName(request.ReferenceOf);
+            if (!(self.ItemSet.ReferenceOf ?? Array.Empty<string>()).Contains(request.ReferenceOf)) {
+                referenceOf.DeleteCache(
+                    cache,
+                    request.NamespaceName,
+                    request.UserId,
+                    request.InventoryName,
+                    request.ItemName,
+                    request.ItemSetName,
+                    referenceOf.Name,
+                    timeOffset
+                );
+                return;
+            }
             referenceOf.PutCache(
                 cache,
                 request.NamespaceName,
@@ -100,6 +117,14 @@ namespace Gs2.Gs2Inventory.Model.Cache
                 var future = invokeImpl();
                 yield return future;
                 if (future.Error != null) {
+                    if (future.Error is Gs2.Core.Exception.Gs2Exception failed && failed.Result != null) {
+                        VerifyReferenceOfByUserIdResult.FromJson(Gs2.Util.LitJson.JsonMapper.ToObject(failed.Result))?.PutCache(
+                            cache,
+                            userId,
+                            timeOffset,
+                            request
+                        );
+                    }
                     self.OnError(future.Error);
                     yield break;
                 }
@@ -135,7 +160,19 @@ namespace Gs2.Gs2Inventory.Model.Cache
 #endif
         )
         {
-            var result = await invokeImpl();
+            VerifyReferenceOfByUserIdResult result;
+            try {
+                result = await invokeImpl();
+            }
+            catch (Gs2.Core.Exception.Gs2Exception e) when (e.Result != null) {
+                VerifyReferenceOfByUserIdResult.FromJson(Gs2.Util.LitJson.JsonMapper.ToObject(e.Result))?.PutCache(
+                    cache,
+                    userId,
+                    timeOffset,
+                    request
+                );
+                throw;
+            }
             result.PutCache(
                 cache,
                 userId,

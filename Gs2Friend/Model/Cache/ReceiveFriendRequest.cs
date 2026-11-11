@@ -43,6 +43,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             this ReceiveFriendRequest self,
             string namespaceName,
             string userId,
+            bool? withProfile,
             int? timeOffset
         ) {
             return string.Join(
@@ -50,6 +51,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                 "friend",
                 namespaceName,
                 userId,
+                withProfile.ToString(),
                 timeOffset?.ToString() ?? "0",
                 "ReceiveFriendRequest"
             );
@@ -71,6 +73,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            bool? withProfile,
             string fromUserId,
             int? timeOffset,
             Func<IFuture<ReceiveFriendRequest>> fetchImpl
@@ -87,6 +90,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                             cache,
                             namespaceName,
                             userId,
+                            withProfile,
                             fromUserId,
                             timeOffset
                         );
@@ -99,18 +103,11 @@ namespace Gs2.Gs2Friend.Model.Cache
                     yield break;
                 }
                 var item = future.Result;
-/* diff --- start
                 item.PutCache(
- diff --- end */
-/* diff +++ start */
-                new ReceiveFriendRequest {
-                    UserId = item.UserId,
-                    TargetUserId = item.TargetUserId,
-                }.PutCache(
-/* diff +++ end */
                     cache,
                     namespaceName,
                     userId,
+                    withProfile,
                     fromUserId,
                     timeOffset
                 );
@@ -129,6 +126,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            bool? withProfile,
             string fromUserId,
             int? timeOffset,
 #if GS2_ENABLE_UNITASK
@@ -139,18 +137,11 @@ namespace Gs2.Gs2Friend.Model.Cache
         ) {
             try {
                 var item = await fetchImpl();
-/* diff --- start
                 item.PutCache(
- diff --- end */
-/* diff +++ start */
-                new ReceiveFriendRequest {
-                    UserId = item.UserId,
-                    TargetUserId = item.TargetUserId,
-                }.PutCache(
-/* diff +++ end */
                     cache,
                     namespaceName,
                     userId,
+                    withProfile,
                     fromUserId,
                     timeOffset
                 );
@@ -161,6 +152,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                     cache,
                     namespaceName,
                     userId,
+                    withProfile,
                     fromUserId,
                     timeOffset
                 );
@@ -176,6 +168,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            bool? withProfile,
             string fromUserId,
             int? timeOffset
         ) {
@@ -186,6 +179,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
+                    withProfile,
                     timeOffset
                 ),
                 self.CacheKey(
@@ -199,6 +193,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            bool? withProfile,
             string fromUserId,
             int? timeOffset
         ) {
@@ -209,6 +204,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
+                    withProfile,
                     timeOffset
                 ),
                 self.CacheKey(
@@ -219,7 +215,6 @@ namespace Gs2.Gs2Friend.Model.Cache
             );
         }
 
-        /* diff +++ start */
         public static string PutUserData(
             this ReceiveFriendRequest self,
             CacheDatabase cache,
@@ -231,22 +226,24 @@ namespace Gs2.Gs2Friend.Model.Cache
                 cache,
                 namespaceName,
                 userId,
+                default,
                 self.UserId,
                 timeOffset
             );
             return self.CacheParentKey(
                 namespaceName,
                 userId,
+                default,
                 timeOffset
             );
         }
-        /* diff +++ end */
 
         public static void DeleteCache(
             this ReceiveFriendRequest self,
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            bool? withProfile,
             string fromUserId,
             int? timeOffset
         ) {
@@ -257,6 +254,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
+                    withProfile,
                     timeOffset
                 ),
                 self.CacheKey(
@@ -270,6 +268,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            bool? withProfile,
             int? timeOffset,
             Action<ReceiveFriendRequest[]> callback
         ) {
@@ -277,6 +276,7 @@ namespace Gs2.Gs2Friend.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
+                    withProfile,
                     timeOffset
                 ),
                 callback,
@@ -289,6 +289,7 @@ namespace Gs2.Gs2Friend.Model.Cache
             CacheDatabase cache,
             string namespaceName,
             string userId,
+            bool? withProfile,
             int? timeOffset,
             ulong callbackId
         ) {
@@ -296,10 +297,92 @@ namespace Gs2.Gs2Friend.Model.Cache
                 self.CacheParentKey(
                     namespaceName,
                     userId,
+                    withProfile,
                     timeOffset
                 ),
                 callbackId
             );
         }
+/* diff +++ start */
+
+        // withProfile の 3 通りの位置への書き込みは FriendUser / FollowUser と同じ規則にする。
+        // 公開プロフィール付きの値は withProfile=true の位置にだけ置き、false と null の位置には
+        // 公開プロフィールを外した値を置く。
+        public static void PutCacheForEachWithProfile(
+            this ReceiveFriendRequest self,
+            CacheDatabase cache,
+            string namespaceName,
+            string userId,
+            bool? withProfile,
+            string fromUserId,
+            int? timeOffset
+        ) {
+            if (self == null) {
+                return;
+            }
+            if (withProfile ?? false) {
+                self.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    true,
+                    fromUserId,
+                    timeOffset
+                );
+            }
+            foreach (var position in new bool?[] {false, null}) {
+                new ReceiveFriendRequest {
+                    UserId = self.UserId,
+                    TargetUserId = self.TargetUserId,
+                }.PutCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    position,
+                    fromUserId,
+                    timeOffset
+                );
+            }
+        }
+
+        public static void DeleteCacheForEachWithProfile(
+            this ReceiveFriendRequest self,
+            CacheDatabase cache,
+            string namespaceName,
+            string userId,
+            string fromUserId,
+            int? timeOffset
+        ) {
+            foreach (var withProfile in new bool?[] {false, true, null}) {
+                self.DeleteCache(
+                    cache,
+                    namespaceName,
+                    userId,
+                    withProfile,
+                    fromUserId,
+                    timeOffset
+                );
+            }
+        }
+
+        public static void ClearListCacheForEachWithProfile(
+            this ReceiveFriendRequest self,
+            CacheDatabase cache,
+            string namespaceName,
+            string userId,
+            int? timeOffset
+        ) {
+            foreach (var withProfile in new bool?[] {false, true, null}) {
+                cache.ClearListCache<ReceiveFriendRequest>(
+                    self.CacheParentKey(
+                        namespaceName,
+                        userId,
+                        withProfile,
+                        timeOffset
+                    )
+                );
+            }
+        }
+/* diff +++ end */
     }
 }

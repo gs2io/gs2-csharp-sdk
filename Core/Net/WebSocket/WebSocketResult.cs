@@ -61,6 +61,7 @@ namespace Gs2.Core.Net
                 if (Error != null)
                 {
                     Error.Metadata = error?.Metadata;
+                    Error.Result = Gs2Exception.ExtractResult(gs2Message.Body) ?? Error.Result;
                 }
             }
 

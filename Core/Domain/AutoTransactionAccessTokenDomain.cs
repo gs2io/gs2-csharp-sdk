@@ -89,7 +89,7 @@ namespace Gs2.Core.Domain
                 for (var i = 0; i < result.VerifyResults.Length; i++) {
                     var consumeActionResult = result.VerifyResults[i];
                     if (consumeActionResult.StatusCode / 100 != 2) {
-                        throw Gs2Exception.ExtractError(consumeActionResult.Action, consumeActionResult.VerifyResult, consumeActionResult.StatusCode ?? 999);
+                        throw TransactionConfiguration.ExtractVerifyError(skipCallback ? null : Gs2.TransactionConfiguration, Gs2.Cache, this._transactionId + "[" + i + "]", AccessToken?.TimeOffset, consumeActionResult.Action, consumeActionResult.VerifyRequest, consumeActionResult.VerifyResult, consumeActionResult.StatusCode ?? 999);
                     }
                 }
             }

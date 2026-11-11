@@ -91,7 +91,7 @@ namespace Gs2.Core.Domain
                     var verifyTask = result.VerifyTaskRequests[i];
                     if (i < result.VerifyTaskResults.Length) {
                         if (result.VerifyTaskResultCodes[i] / 100 != 2) {
-                            throw Gs2Exception.ExtractError(verifyTask.Action, result.VerifyTaskResults[i], result.VerifyTaskResultCodes[i]);
+                            throw TransactionConfiguration.ExtractVerifyError(skipCallback ? null : Gs2.TransactionConfiguration, Gs2.Cache, this._transactionId + "[" + i + "]", null, verifyTask.Action, verifyTask.Request, result.VerifyTaskResults[i], result.VerifyTaskResultCodes[i]);
                         }
                         if (!skipCallback) {
                             Gs2.TransactionConfiguration.VerifyActionEventHandler.Invoke(

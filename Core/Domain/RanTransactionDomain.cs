@@ -107,7 +107,7 @@ namespace Gs2.Core.Domain
                 for (var i = 0; i < result.VerifyResults.Length; i++) {
                     var consumeActionResult = result.VerifyResults[i];
                     if (consumeActionResult.StatusCode / 100 != 2) {
-                        throw Gs2Exception.ExtractError(consumeActionResult.Action, consumeActionResult.VerifyResult, consumeActionResult.StatusCode ?? 999);
+                        throw TransactionConfiguration.ExtractVerifyError(Gs2.TransactionConfiguration, Gs2.Cache, this._transactionId + "[" + i + "]", null, consumeActionResult.Action, consumeActionResult.VerifyRequest, consumeActionResult.VerifyResult, consumeActionResult.StatusCode ?? 999);
                     }
                 }
             }
@@ -217,7 +217,7 @@ namespace Gs2.Core.Domain
                         for (var i = 0; i < result.TransactionResult.VerifyResults.Length; i++) {
                             var consumeActionResult = result.TransactionResult.VerifyResults[i];
                             if (consumeActionResult.StatusCode / 100 != 2) {
-                                throw Gs2Exception.ExtractError(consumeActionResult.Action, consumeActionResult.VerifyResult, consumeActionResult.StatusCode ?? 999);
+                                throw TransactionConfiguration.ExtractVerifyError(Gs2.TransactionConfiguration, Gs2.Cache, this._transactionId + "[" + i + "]", null, consumeActionResult.Action, consumeActionResult.VerifyRequest, consumeActionResult.VerifyResult, consumeActionResult.StatusCode ?? 999);
                             }
                             Gs2.TransactionConfiguration.VerifyActionEventHandler.Invoke(
                                 Gs2.Cache,

@@ -476,6 +476,34 @@ namespace Gs2.Gs2Guild.Domain
                         );
                         break;
                     }
+                    case "VerifyCurrentMaximumMemberCountByGuildName": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyCurrentMaximumMemberCountByGuildNameRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyCurrentMaximumMemberCountByGuildNameResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.GuildName,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
+                    case "VerifyIncludeMemberByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyIncludeMemberByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyIncludeMemberByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
                 }
         }
 

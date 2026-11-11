@@ -49,6 +49,7 @@ namespace Gs2.Gs2Formation
 				return error;
 			}
 			resolved.Metadata = error.Metadata;
+			resolved.Result = error.Result;
 			return resolved;
 		}
 	}

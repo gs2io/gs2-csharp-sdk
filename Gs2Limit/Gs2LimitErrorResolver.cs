@@ -45,6 +45,7 @@ namespace Gs2.Gs2Limit
 				return error;
 			}
 			resolved.Metadata = error.Metadata;
+			resolved.Result = error.Result;
 			return resolved;
 		}
 	}

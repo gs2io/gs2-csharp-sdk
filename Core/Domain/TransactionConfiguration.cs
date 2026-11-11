@@ -1,4 +1,5 @@
 using System;
+using Gs2.Core.Exception;
 
 namespace Gs2.Core.Domain
 {
@@ -25,6 +26,24 @@ namespace Gs2.Core.Domain
             this.VerifyActionEventHandler = verifyActionEventHandler;
             this.ConsumeActionEventHandler = consumeActionEventHandler;
             this.AcquireActionEventHandler = acquireActionEventHandler;
+        }
+
+        // 検証が失敗しても、サーバーは検証した時点の状態を result に入れて返す。成功したときと同じくハンドラに渡してから失敗を返す
+        internal static Gs2Exception ExtractVerifyError(
+            TransactionConfiguration configuration,
+            CacheDatabase cache,
+            string taskId,
+            int? timeOffset,
+            string action,
+            string request,
+            string body,
+            long statusCode
+        ) {
+            var error = Gs2Exception.ExtractError(action, body, statusCode);
+            if (error?.Result != null) {
+                configuration?.VerifyActionEventHandler?.Invoke(cache, taskId, timeOffset, action, request, error.Result);
+            }
+            return error;
         }
 
         public static TransactionConfigurationBuilder Builder() {

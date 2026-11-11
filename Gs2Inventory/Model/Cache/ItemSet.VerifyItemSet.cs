@@ -58,6 +58,8 @@ namespace Gs2.Gs2Inventory.Model.Cache
                     timeOffset
                 );
             }
+            if (request.ItemSetName == null)
+            {
             self.Items?.PutCache(
                 cache,
                 request.NamespaceName,
@@ -66,6 +68,7 @@ namespace Gs2.Gs2Inventory.Model.Cache
                 request.ItemName,
                 timeOffset
             );
+            }
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -82,6 +85,14 @@ namespace Gs2.Gs2Inventory.Model.Cache
                 var future = invokeImpl();
                 yield return future;
                 if (future.Error != null) {
+                    if (future.Error is Gs2.Core.Exception.Gs2Exception failed && failed.Result != null) {
+                        VerifyItemSetResult.FromJson(Gs2.Util.LitJson.JsonMapper.ToObject(failed.Result))?.PutCache(
+                            cache,
+                            userId,
+                            timeOffset,
+                            request
+                        );
+                    }
                     self.OnError(future.Error);
                     yield break;
                 }
@@ -117,7 +128,19 @@ namespace Gs2.Gs2Inventory.Model.Cache
 #endif
         )
         {
-            var result = await invokeImpl();
+            VerifyItemSetResult result;
+            try {
+                result = await invokeImpl();
+            }
+            catch (Gs2.Core.Exception.Gs2Exception e) when (e.Result != null) {
+                VerifyItemSetResult.FromJson(Gs2.Util.LitJson.JsonMapper.ToObject(e.Result))?.PutCache(
+                    cache,
+                    userId,
+                    timeOffset,
+                    request
+                );
+                throw;
+            }
             result.PutCache(
                 cache,
                 userId,

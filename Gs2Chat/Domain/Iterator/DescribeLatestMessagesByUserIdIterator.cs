@@ -78,7 +78,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
         public int? Category { get; }
         public string UserId { get; }
         public string TimeOffsetToken { get; }
-        private long? _startAt;
+        private string _pageToken;
         private bool _last;
         private Gs2.Gs2Chat.Model.Message[] _result;
 
@@ -102,7 +102,7 @@ namespace Gs2.Gs2Chat.Domain.Iterator
             this.Category = category;
             this.UserId = userId;
             this.TimeOffsetToken = timeOffsetToken;
-            this._startAt = null;
+            this._pageToken = null;
             this._last = false;
             this._result = new Gs2.Gs2Chat.Model.Message[]{};
         }
@@ -112,35 +112,39 @@ namespace Gs2.Gs2Chat.Domain.Iterator
         #else
         private async Task _load() {
         #endif
-            var request = new Gs2.Gs2Chat.Request.DescribeLatestMessagesByUserIdRequest()
-                .WithContextStack(this._gs2.DefaultContextStack)
-                .WithNamespaceName(this.NamespaceName)
-                .WithRoomName(this.RoomName)
-                .WithPassword(this.Password)
-                .WithUserId(this.UserId)
-                .WithLimit(fetchSize);
-            var r = await this._client.DescribeLatestMessagesByUserIdAsync(
-                request
-            );
-            this._result = r.Items
-                .Where(item => this.Category == null || item.Category == this.Category)
-                .ToArray();
-            if (this._result.Length > 0) {
-                this._startAt = this._result[this._result.Length-1].CreatedAt + 1;
-            } else {
-                this._last = true;
-            }
-            r.PutCache(
-                this._gs2.Cache,
-                UserId,
-                null,
-                request
-            );
+            // TryGetList / SetListCached は使わない。Message のリストキャッシュは DescribeMessagesIterator と
+            // 同じ親キーで「古い順に startAt まで揃っている」ことを前提にしており、新しい順のページや
+            // カテゴリで絞ったページを載せるとそちらの列挙が欠ける。
+            // 空のページでも nextPageToken が続くことがある（サーバーが期限切れのメッセージを除いてから返す）ので、
+            // 空のページで列挙を打ち切らずに次のページを読む。
+            do {
+                var request = new Gs2.Gs2Chat.Request.DescribeLatestMessagesByUserIdRequest()
+                    .WithContextStack(this._gs2.DefaultContextStack)
+                    .WithNamespaceName(this.NamespaceName)
+                    .WithRoomName(this.RoomName)
+                    .WithPassword(this.Password)
+                    .WithCategory(this.Category)
+                    .WithUserId(this.UserId)
+                    .WithPageToken(this._pageToken)
+                    .WithLimit(fetchSize);
+                var r = await this._client.DescribeLatestMessagesByUserIdAsync(
+                    request
+                );
+                this._result = r.Items ?? new Gs2.Gs2Chat.Model.Message[]{};
+                this._pageToken = r.NextPageToken;
+                this._last = this._pageToken == null;
+                r.PutCache(
+                    this._gs2.Cache,
+                    UserId,
+                    null,
+                    request
+                );
+            } while (this._result.Length == 0 && !this._last);
         }
 
         private bool _hasNext()
         {
-            return true;
+            return this._result.Length != 0 || !this._last;
         }
 
         #if UNITY_2017_1_OR_NEWER

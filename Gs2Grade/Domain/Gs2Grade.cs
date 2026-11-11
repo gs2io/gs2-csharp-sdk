@@ -500,6 +500,34 @@ namespace Gs2.Gs2Grade.Domain
                         );
                         break;
                     }
+                    case "VerifyGradeByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyGradeByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyGradeByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
+                    case "VerifyGradeUpMaterialByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyGradeUpMaterialByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyGradeUpMaterialByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
                 }
         }
 

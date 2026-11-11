@@ -450,6 +450,48 @@ namespace Gs2.Gs2Ranking2.Domain
                         );
                         break;
                     }
+                    case "VerifyGlobalRankingScoreByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyGlobalRankingScoreByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyGlobalRankingScoreByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
+                    case "VerifyClusterRankingScoreByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyClusterRankingScoreByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyClusterRankingScoreByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
+                    case "VerifySubscribeRankingScoreByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifySubscribeRankingScoreByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifySubscribeRankingScoreByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
                 }
         }
 

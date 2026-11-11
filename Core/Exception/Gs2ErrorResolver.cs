@@ -139,7 +139,11 @@ namespace Gs2.Core.Exception
 			if (service == null || !Resolvers.TryGetValue(service, out var resolver)) {
 				return error;
 			}
-			return resolver(method, error);
+			var resolved = resolver(method, error);
+			if (resolved != null && resolved.Result == null) {
+				resolved.Result = error.Result;
+			}
+			return resolved;
 		}
 	}
 }

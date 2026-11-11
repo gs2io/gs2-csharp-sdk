@@ -4876,6 +4876,11 @@ namespace Gs2.Gs2Friend
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
+                if (request.WithProfile != null)
+                {
+                    jsonWriter.WritePropertyName("withProfile");
+                    jsonWriter.Write(request.WithProfile.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -4991,6 +4996,11 @@ namespace Gs2.Gs2Friend
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
+                if (request.WithProfile != null)
+                {
+                    jsonWriter.WritePropertyName("withProfile");
+                    jsonWriter.Write(request.WithProfile.ToString());
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");

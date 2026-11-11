@@ -62,6 +62,7 @@ namespace Gs2.Gs2Ranking2
 				return error;
 			}
 			resolved.Metadata = error.Metadata;
+			resolved.Result = error.Result;
 			return resolved;
 		}
 	}

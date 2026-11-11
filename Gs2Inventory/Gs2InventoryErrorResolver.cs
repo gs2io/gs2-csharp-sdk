@@ -62,6 +62,7 @@ namespace Gs2.Gs2Inventory
 				return error;
 			}
 			resolved.Metadata = error.Metadata;
+			resolved.Result = error.Result;
 			return resolved;
 		}
 	}

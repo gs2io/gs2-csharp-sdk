@@ -68,12 +68,19 @@ namespace Gs2.Gs2Friend.Domain.Model
         public string UserId { get; } = null!;
         public string TargetUserId { get; } = null!;
         public string FromUserId { get; } = null!;
+        public bool? WithProfile { get; } /* diff +++ */
 
         public ReceiveFriendRequestDomain(
             Gs2.Core.Domain.Gs2 gs2,
             string namespaceName,
             string userId,
+/* diff --- start
             string fromUserId
+ diff --- end */
+/* diff +++ start */
+            string fromUserId,
+            bool? withProfile = null
+/* diff +++ end */
         ) {
             this._gs2 = gs2;
             this._client = new Gs2FriendRestClient(
@@ -82,6 +89,8 @@ namespace Gs2.Gs2Friend.Domain.Model
             this.NamespaceName = namespaceName;
             this.UserId = userId;
             this.FromUserId = fromUserId;
+            this.WithProfile = withProfile; /* diff +++ */
+            this.TargetUserId = userId; /* diff +++ */
         }
 
     }
@@ -114,7 +123,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithUserId(this.UserId)
-                .WithFromUserId(this.FromUserId);
+                .WithFromUserId(this.FromUserId)
+                .WithWithProfile(this.WithProfile); /* diff +++ */
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
@@ -128,6 +138,7 @@ namespace Gs2.Gs2Friend.Domain.Model
             return result?.Item == null ? null : new ReceiveFriendRequest {
                 UserId = result.Item.UserId,
                 TargetUserId = result.Item.TargetUserId,
+                PublicProfile = result.Item.PublicProfile,
             };
 /* diff +++ end */
         }
@@ -217,8 +228,14 @@ namespace Gs2.Gs2Friend.Domain.Model
             var domain = new Gs2.Gs2Friend.Domain.Model.ReceiveFriendRequestDomain( /* diff +++ */
                 this._gs2,
                 this.NamespaceName,
-                result?.Item?.UserId,
+                this.UserId,
+/* diff --- start
                 this.FromUserId
+ diff --- end */
+/* diff +++ start */
+                this.FromUserId,
+                this.WithProfile
+/* diff +++ end */
             );
 
             return domain;
@@ -309,8 +326,14 @@ namespace Gs2.Gs2Friend.Domain.Model
             var domain = new Gs2.Gs2Friend.Domain.Model.ReceiveFriendRequestDomain( /* diff +++ */
                 this._gs2,
                 this.NamespaceName,
-                result?.Item?.UserId,
+                this.UserId,
+/* diff --- start
                 this.FromUserId
+ diff --- end */
+/* diff +++ start */
+                this.FromUserId,
+                this.WithProfile
+/* diff +++ end */
             );
 
             return domain;
@@ -346,10 +369,11 @@ namespace Gs2.Gs2Friend.Domain.Model
                         (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                             this.NamespaceName,
                             this.UserId,
+                            this.WithProfile, /* diff +++ */
                             null
                         ),
                         (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheKey(
-                            this.TargetUserId
+                            this.FromUserId
                         )
                     ).LockAsync()) {
                 if (this.UserId == null) {
@@ -362,10 +386,11 @@ namespace Gs2.Gs2Friend.Domain.Model
                     (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                         this.NamespaceName,
                         this.UserId,
+                        this.WithProfile, /* diff +++ */
                         null
                     ),
                     (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheKey(
-                        this.TargetUserId
+                        this.FromUserId
                     )
                 );
                 if (find) {
@@ -378,7 +403,8 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.TargetUserId,
+                    this.WithProfile, /* diff +++ */
+                    this.FromUserId,
                     null,
                     () => this.GetAsync(
                         new GetReceiveRequestByUserIdRequest()
@@ -433,8 +459,9 @@ namespace Gs2.Gs2Friend.Domain.Model
             (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).DeleteCache( /* diff +++ */
                 this._gs2.Cache,
                 this.NamespaceName,
-                this.TargetUserId,
                 this.UserId,
+                this.WithProfile, /* diff +++ */
+                this.FromUserId,
                 null
             );
         }
@@ -447,11 +474,12 @@ namespace Gs2.Gs2Friend.Domain.Model
             return this._gs2.Cache.Subscribe(
                 (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                     this.NamespaceName,
-                    this.TargetUserId,
+                    this.UserId,
+                    this.WithProfile, /* diff +++ */
                     null
                 ),
                 (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheKey(
-                    this.UserId
+                    this.FromUserId
                 ),
                 callback,
                 () =>
@@ -481,11 +509,12 @@ namespace Gs2.Gs2Friend.Domain.Model
             this._gs2.Cache.Unsubscribe<Gs2.Gs2Friend.Model.ReceiveFriendRequest>( /* diff +++ */
                 (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                     this.NamespaceName,
-                    this.TargetUserId,
+                    this.UserId,
+                    this.WithProfile, /* diff +++ */
                     null
                 ),
                 (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheKey(
-                    this.UserId
+                    this.FromUserId
                 ),
                 callbackId
             );

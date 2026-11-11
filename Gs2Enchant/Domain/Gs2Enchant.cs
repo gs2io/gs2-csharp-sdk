@@ -523,6 +523,22 @@ namespace Gs2.Gs2Enchant.Domain
                 string request,
                 string result
         ) {
+                switch (method) {
+                    case "VerifyRarityParameterStatusByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyRarityParameterStatusByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
+                }
         }
 
         public void UpdateCacheFromJobResult(

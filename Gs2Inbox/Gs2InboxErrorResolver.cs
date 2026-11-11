@@ -52,6 +52,7 @@ namespace Gs2.Gs2Inbox
 				return error;
 			}
 			resolved.Metadata = error.Metadata;
+			resolved.Result = error.Result;
 			return resolved;
 		}
 	}

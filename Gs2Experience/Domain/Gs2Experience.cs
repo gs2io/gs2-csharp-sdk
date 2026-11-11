@@ -572,6 +572,34 @@ namespace Gs2.Gs2Experience.Domain
                         );
                         break;
                     }
+                    case "VerifyRankByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyRankByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyRankByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
+                    case "VerifyRankCapByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyRankCapByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyRankCapByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
                 }
         }
 

@@ -84,9 +84,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
         private readonly Gs2FriendRestClient _client;
         public string NamespaceName { get; }
         public string UserId { get; }
-/* diff --- start
         public bool? WithProfile { get; }
- diff --- end */
         public string TimeOffsetToken { get; }
         private string _pageToken;
         private bool _isCacheChecked;
@@ -105,16 +103,18 @@ namespace Gs2.Gs2Friend.Domain.Iterator
             string userId,
 /* diff --- start
             bool? withProfile = null,
- diff --- end */
             string timeOffsetToken = null
+ diff --- end */
+/* diff +++ start */
+            string timeOffsetToken = null,
+            bool? withProfile = null
+/* diff +++ end */
         ) {
             this._gs2 = gs2;
             this._client = client;
             this.NamespaceName = namespaceName;
             this.UserId = userId;
-/* diff --- start
             this.WithProfile = withProfile;
- diff --- end */
             this.TimeOffsetToken = timeOffsetToken;
             this._pageToken = null;
             this._last = false;
@@ -140,6 +140,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                     (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                         NamespaceName,
                         UserId,
+                        this.WithProfile, /* diff +++ */
                         null
                     ),
                     out var list
@@ -154,9 +155,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                     .WithContextStack(this._gs2.DefaultContextStack)
                     .WithNamespaceName(this.NamespaceName)
                     .WithUserId(this.UserId)
-/* diff --- start
                     .WithWithProfile(this.WithProfile)
- diff --- end */
                     .WithPageToken(this._pageToken)
                     .WithLimit(fetchSize);
                 var r = await this._client.DescribeSendRequestsByUserIdAsync(
@@ -169,7 +168,8 @@ namespace Gs2.Gs2Friend.Domain.Iterator
 /* diff +++ start */
                 this._result = r.Items.Select(v => new SendFriendRequest {
                         UserId = v.UserId,
-                        TargetUserId = v.TargetUserId
+                        TargetUserId = v.TargetUserId,
+                        PublicProfile = v.PublicProfile
                     }).ToArray();
 /* diff +++ end */
                 this._pageToken = r.NextPageToken;
@@ -189,6 +189,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                         (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                             NamespaceName,
                             UserId,
+                            this.WithProfile, /* diff +++ */
                             null
                         )
                     );
@@ -290,6 +291,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                         (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                             NamespaceName,
                             UserId,
+                            this.WithProfile, /* diff +++ */
                             null
                        ),
                        "ListFriendRequest"
