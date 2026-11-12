@@ -238,6 +238,26 @@ namespace Gs2.Gs2Account
                     jsonWriter.WritePropertyName("unBanScript");
                     request.UnBanScript.WriteJson(jsonWriter);
                 }
+                if (request.AccountDeletionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("accountDeletionSetting");
+                    request.AccountDeletionSetting.WriteJson(jsonWriter);
+                }
+                if (request.RequestDeletionScript != null)
+                {
+                    jsonWriter.WritePropertyName("requestDeletionScript");
+                    request.RequestDeletionScript.WriteJson(jsonWriter);
+                }
+                if (request.CancelDeletionScript != null)
+                {
+                    jsonWriter.WritePropertyName("cancelDeletionScript");
+                    request.CancelDeletionScript.WriteJson(jsonWriter);
+                }
+                if (request.ExecuteDeletionScript != null)
+                {
+                    jsonWriter.WritePropertyName("executeDeletionScript");
+                    request.ExecuteDeletionScript.WriteJson(jsonWriter);
+                }
                 if (request.LogSetting != null)
                 {
                     jsonWriter.WritePropertyName("logSetting");
@@ -566,6 +586,26 @@ namespace Gs2.Gs2Account
                 {
                     jsonWriter.WritePropertyName("unBanScript");
                     request.UnBanScript.WriteJson(jsonWriter);
+                }
+                if (request.AccountDeletionSetting != null)
+                {
+                    jsonWriter.WritePropertyName("accountDeletionSetting");
+                    request.AccountDeletionSetting.WriteJson(jsonWriter);
+                }
+                if (request.RequestDeletionScript != null)
+                {
+                    jsonWriter.WritePropertyName("requestDeletionScript");
+                    request.RequestDeletionScript.WriteJson(jsonWriter);
+                }
+                if (request.CancelDeletionScript != null)
+                {
+                    jsonWriter.WritePropertyName("cancelDeletionScript");
+                    request.CancelDeletionScript.WriteJson(jsonWriter);
+                }
+                if (request.ExecuteDeletionScript != null)
+                {
+                    jsonWriter.WritePropertyName("executeDeletionScript");
+                    request.ExecuteDeletionScript.WriteJson(jsonWriter);
                 }
                 if (request.LogSetting != null)
                 {
@@ -2459,6 +2499,547 @@ namespace Gs2.Gs2Account
                 Request.AuthenticationRequest request
         ) =>
             new AuthenticationTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class RequestDeletionTask : Gs2RestSessionTask<RequestDeletionRequest, RequestDeletionResult>
+        {
+            public RequestDeletionTask(IGs2Session session, RestSessionRequestFactory factory, RequestDeletionRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(RequestDeletionRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/account/me/deletion";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator RequestDeletion(
+                Request.RequestDeletionRequest request,
+                UnityAction<AsyncResult<Result.RequestDeletionResult>> callback
+        ) =>
+            new RequestDeletionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.RequestDeletionResult> RequestDeletionFuture(
+                Request.RequestDeletionRequest request
+        ) =>
+            new RequestDeletionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.RequestDeletionResult> RequestDeletionAsync(
+                Request.RequestDeletionRequest request
+        ) =>
+            new RequestDeletionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.RequestDeletionResult>();
+    #else
+		public RequestDeletionTask RequestDeletionAsync(
+                Request.RequestDeletionRequest request
+        )
+		{
+			return new RequestDeletionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.RequestDeletionResult> RequestDeletionAsync(
+                Request.RequestDeletionRequest request
+        ) =>
+            new RequestDeletionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class RequestDeletionByUserIdTask : Gs2RestSessionTask<RequestDeletionByUserIdRequest, RequestDeletionByUserIdResult>
+        {
+            public RequestDeletionByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, RequestDeletionByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(RequestDeletionByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/account/{userId}/deletion";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator RequestDeletionByUserId(
+                Request.RequestDeletionByUserIdRequest request,
+                UnityAction<AsyncResult<Result.RequestDeletionByUserIdResult>> callback
+        ) =>
+            new RequestDeletionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.RequestDeletionByUserIdResult> RequestDeletionByUserIdFuture(
+                Request.RequestDeletionByUserIdRequest request
+        ) =>
+            new RequestDeletionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.RequestDeletionByUserIdResult> RequestDeletionByUserIdAsync(
+                Request.RequestDeletionByUserIdRequest request
+        ) =>
+            new RequestDeletionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.RequestDeletionByUserIdResult>();
+    #else
+		public RequestDeletionByUserIdTask RequestDeletionByUserIdAsync(
+                Request.RequestDeletionByUserIdRequest request
+        )
+		{
+			return new RequestDeletionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.RequestDeletionByUserIdResult> RequestDeletionByUserIdAsync(
+                Request.RequestDeletionByUserIdRequest request
+        ) =>
+            new RequestDeletionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class CancelDeletionTask : Gs2RestSessionTask<CancelDeletionRequest, CancelDeletionResult>
+        {
+            public CancelDeletionTask(IGs2Session session, RestSessionRequestFactory factory, CancelDeletionRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(CancelDeletionRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/account/{userId}/deletion/cancel";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Password != null)
+                {
+                    jsonWriter.WritePropertyName("password");
+                    jsonWriter.Write(request.Password);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2AccountErrorResolver.Resolve("CancelDeletion", error));
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CancelDeletion(
+                Request.CancelDeletionRequest request,
+                UnityAction<AsyncResult<Result.CancelDeletionResult>> callback
+        ) =>
+            new CancelDeletionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.CancelDeletionResult> CancelDeletionFuture(
+                Request.CancelDeletionRequest request
+        ) =>
+            new CancelDeletionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.CancelDeletionResult> CancelDeletionAsync(
+                Request.CancelDeletionRequest request
+        ) =>
+            new CancelDeletionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CancelDeletionResult>();
+    #else
+		public CancelDeletionTask CancelDeletionAsync(
+                Request.CancelDeletionRequest request
+        )
+		{
+			return new CancelDeletionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.CancelDeletionResult> CancelDeletionAsync(
+                Request.CancelDeletionRequest request
+        ) =>
+            new CancelDeletionTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class CancelDeletionByUserIdTask : Gs2RestSessionTask<CancelDeletionByUserIdRequest, CancelDeletionByUserIdResult>
+        {
+            public CancelDeletionByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, CancelDeletionByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(CancelDeletionByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/account/{userId}/deletion";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Delete(url);
+                if (request.ContextStack != null)
+                {
+                    sessionRequest.AddQueryString("contextStack", request.ContextStack);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator CancelDeletionByUserId(
+                Request.CancelDeletionByUserIdRequest request,
+                UnityAction<AsyncResult<Result.CancelDeletionByUserIdResult>> callback
+        ) =>
+            new CancelDeletionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.CancelDeletionByUserIdResult> CancelDeletionByUserIdFuture(
+                Request.CancelDeletionByUserIdRequest request
+        ) =>
+            new CancelDeletionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.CancelDeletionByUserIdResult> CancelDeletionByUserIdAsync(
+                Request.CancelDeletionByUserIdRequest request
+        ) =>
+            new CancelDeletionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.CancelDeletionByUserIdResult>();
+    #else
+		public CancelDeletionByUserIdTask CancelDeletionByUserIdAsync(
+                Request.CancelDeletionByUserIdRequest request
+        )
+		{
+			return new CancelDeletionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.CancelDeletionByUserIdResult> CancelDeletionByUserIdAsync(
+                Request.CancelDeletionByUserIdRequest request
+        ) =>
+            new CancelDeletionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class ExecuteDeletionByUserIdTask : Gs2RestSessionTask<ExecuteDeletionByUserIdRequest, ExecuteDeletionByUserIdResult>
+        {
+            public ExecuteDeletionByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, ExecuteDeletionByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(ExecuteDeletionByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/account/{userId}/deletion/execute";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator ExecuteDeletionByUserId(
+                Request.ExecuteDeletionByUserIdRequest request,
+                UnityAction<AsyncResult<Result.ExecuteDeletionByUserIdResult>> callback
+        ) =>
+            new ExecuteDeletionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.ExecuteDeletionByUserIdResult> ExecuteDeletionByUserIdFuture(
+                Request.ExecuteDeletionByUserIdRequest request
+        ) =>
+            new ExecuteDeletionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.ExecuteDeletionByUserIdResult> ExecuteDeletionByUserIdAsync(
+                Request.ExecuteDeletionByUserIdRequest request
+        ) =>
+            new ExecuteDeletionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.ExecuteDeletionByUserIdResult>();
+    #else
+		public ExecuteDeletionByUserIdTask ExecuteDeletionByUserIdAsync(
+                Request.ExecuteDeletionByUserIdRequest request
+        )
+		{
+			return new ExecuteDeletionByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.ExecuteDeletionByUserIdResult> ExecuteDeletionByUserIdAsync(
+                Request.ExecuteDeletionByUserIdRequest request
+        ) =>
+            new ExecuteDeletionByUserIdTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
                 request

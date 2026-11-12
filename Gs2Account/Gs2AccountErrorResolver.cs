@@ -42,6 +42,14 @@ namespace Gs2.Gs2Account
 						resolved = new Exception.BannedInfinityException(error);
 					}
 					break;
+				case "CancelDeletion":
+				case "UpdateTakeOver":
+				case "UpdateTakeOverByUserId":
+				case "DoTakeOver":
+					if (error.Errors.Any(v => v != null && v.code == "account.password.invalid")) {
+						resolved = new Exception.PasswordIncorrectException(error);
+					}
+					break;
 				case "CreateTakeOver":
 				case "CreateTakeOverByUserId":
 				case "CreateTakeOverOpenIdConnect":
@@ -51,13 +59,6 @@ namespace Gs2.Gs2Account
 					}
 					else if (error.Errors.Any(v => v != null && v.code == "account.takeOver.userIdentifier.duplicate")) {
 						resolved = new Exception.TakeOverIdentifierAlreadyUsedException(error);
-					}
-					break;
-				case "UpdateTakeOver":
-				case "UpdateTakeOverByUserId":
-				case "DoTakeOver":
-					if (error.Errors.Any(v => v != null && v.code == "account.password.invalid")) {
-						resolved = new Exception.PasswordIncorrectException(error);
 					}
 					break;
 			}

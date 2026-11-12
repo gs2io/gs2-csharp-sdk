@@ -39,6 +39,7 @@ namespace Gs2.Gs2Project.Request
          public string OwnerId { set; get; } = null!;
          public string TransactionId { set; get; } = null!;
          public string UserId { set; get; } = null!;
+         public string[] ExcludeMicroservices { set; get; } = null!;
          public string TimeOffsetToken { set; get; } = null!;
         public string DuplicationAvoider { set; get; } = null!;
         public WaitCleanUserDataRequest WithOwnerId(string ownerId) {
@@ -51,6 +52,10 @@ namespace Gs2.Gs2Project.Request
         }
         public WaitCleanUserDataRequest WithUserId(string userId) {
             this.UserId = userId;
+            return this;
+        }
+        public WaitCleanUserDataRequest WithExcludeMicroservices(string[] excludeMicroservices) {
+            this.ExcludeMicroservices = excludeMicroservices;
             return this;
         }
         public WaitCleanUserDataRequest WithTimeOffsetToken(string timeOffsetToken) {
@@ -75,15 +80,28 @@ namespace Gs2.Gs2Project.Request
                 .WithOwnerId(!data.Keys.Contains("ownerId") || data["ownerId"] == null ? null : data["ownerId"].ToString())
                 .WithTransactionId(!data.Keys.Contains("transactionId") || data["transactionId"] == null ? null : data["transactionId"].ToString())
                 .WithUserId(!data.Keys.Contains("userId") || data["userId"] == null ? null : data["userId"].ToString())
+                .WithExcludeMicroservices(!data.Keys.Contains("excludeMicroservices") || data["excludeMicroservices"] == null || !data["excludeMicroservices"].IsArray ? null : data["excludeMicroservices"].Cast<JsonData>().Select(v => {
+                    return v.ToString();
+                }).ToArray())
                 .WithTimeOffsetToken(!data.Keys.Contains("timeOffsetToken") || data["timeOffsetToken"] == null ? null : data["timeOffsetToken"].ToString());
         }
 
         public override JsonData ToJson()
         {
+            JsonData excludeMicroservicesJsonData = null;
+            if (ExcludeMicroservices != null && ExcludeMicroservices.Length > 0)
+            {
+                excludeMicroservicesJsonData = new JsonData();
+                foreach (var excludeMicroservice in ExcludeMicroservices)
+                {
+                    excludeMicroservicesJsonData.Add(excludeMicroservice);
+                }
+            }
             return new JsonData {
                 ["ownerId"] = OwnerId,
                 ["transactionId"] = TransactionId,
                 ["userId"] = UserId,
+                ["excludeMicroservices"] = excludeMicroservicesJsonData,
                 ["timeOffsetToken"] = TimeOffsetToken,
             };
         }
@@ -103,6 +121,15 @@ namespace Gs2.Gs2Project.Request
                 writer.WritePropertyName("userId");
                 writer.Write(UserId.ToString());
             }
+            if (ExcludeMicroservices != null) {
+                writer.WritePropertyName("excludeMicroservices");
+                writer.WriteArrayStart();
+                foreach (var excludeMicroservice in ExcludeMicroservices)
+                {
+                    writer.Write(excludeMicroservice.ToString());
+                }
+                writer.WriteArrayEnd();
+            }
             if (TimeOffsetToken != null) {
                 writer.WritePropertyName("timeOffsetToken");
                 writer.Write(TimeOffsetToken.ToString());
@@ -115,6 +142,7 @@ namespace Gs2.Gs2Project.Request
             key += OwnerId + ":";
             key += TransactionId + ":";
             key += UserId + ":";
+            key += ExcludeMicroservices + ":";
             key += TimeOffsetToken + ":";
             return key;
         }

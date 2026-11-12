@@ -3780,6 +3780,16 @@ namespace Gs2.Gs2Project
                     jsonWriter.WritePropertyName("userId");
                     jsonWriter.Write(request.UserId);
                 }
+                if (request.ExcludeMicroservices != null)
+                {
+                    jsonWriter.WritePropertyName("excludeMicroservices");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.ExcludeMicroservices)
+                    {
+                        jsonWriter.Write(item);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -3888,6 +3898,16 @@ namespace Gs2.Gs2Project
                 var stringBuilder = new StringBuilder();
                 var jsonWriter = new JsonWriter(stringBuilder);
                 jsonWriter.WriteObjectStart();
+                if (request.ExcludeMicroservices != null)
+                {
+                    jsonWriter.WritePropertyName("excludeMicroservices");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.ExcludeMicroservices)
+                    {
+                        jsonWriter.Write(item);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");

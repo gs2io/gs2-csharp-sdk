@@ -53,157 +53,6 @@ namespace Gs2.Gs2Account
 		}
 
 
-        public class CreateNamespaceTask : Gs2WebSocketSessionTask<Request.CreateNamespaceRequest, Result.CreateNamespaceResult>
-        {
-            public CreateNamespaceTask(IGs2Session session, Request.CreateNamespaceRequest request) : base(session, request)
-            {
-            }
-
-            protected override IGs2SessionRequest CreateRequest(Request.CreateNamespaceRequest request)
-            {
-                var stringBuilder = new StringBuilder();
-                var jsonWriter = new JsonWriter(stringBuilder);
-
-                jsonWriter.WriteObjectStart();
-
-                if (request.Name != null)
-                {
-                    jsonWriter.WritePropertyName("name");
-                    jsonWriter.Write(request.Name.ToString());
-                }
-                if (request.Description != null)
-                {
-                    jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(request.Description.ToString());
-                }
-                if (request.TransactionSetting != null)
-                {
-                    jsonWriter.WritePropertyName("transactionSetting");
-                    request.TransactionSetting.WriteJson(jsonWriter);
-                }
-                if (request.TransactionSettingV2 != null)
-                {
-                    jsonWriter.WritePropertyName("transactionSettingV2");
-                    request.TransactionSettingV2.WriteJson(jsonWriter);
-                }
-                if (request.ChangePasswordIfTakeOver != null)
-                {
-                    jsonWriter.WritePropertyName("changePasswordIfTakeOver");
-                    jsonWriter.Write(request.ChangePasswordIfTakeOver.ToString());
-                }
-                if (request.DifferentUserIdForLoginAndDataRetention != null)
-                {
-                    jsonWriter.WritePropertyName("differentUserIdForLoginAndDataRetention");
-                    jsonWriter.Write(request.DifferentUserIdForLoginAndDataRetention.ToString());
-                }
-                if (request.CreateAccountScript != null)
-                {
-                    jsonWriter.WritePropertyName("createAccountScript");
-                    request.CreateAccountScript.WriteJson(jsonWriter);
-                }
-                if (request.AuthenticationScript != null)
-                {
-                    jsonWriter.WritePropertyName("authenticationScript");
-                    request.AuthenticationScript.WriteJson(jsonWriter);
-                }
-                if (request.CreateTakeOverScript != null)
-                {
-                    jsonWriter.WritePropertyName("createTakeOverScript");
-                    request.CreateTakeOverScript.WriteJson(jsonWriter);
-                }
-                if (request.DoTakeOverScript != null)
-                {
-                    jsonWriter.WritePropertyName("doTakeOverScript");
-                    request.DoTakeOverScript.WriteJson(jsonWriter);
-                }
-                if (request.BanScript != null)
-                {
-                    jsonWriter.WritePropertyName("banScript");
-                    request.BanScript.WriteJson(jsonWriter);
-                }
-                if (request.UnBanScript != null)
-                {
-                    jsonWriter.WritePropertyName("unBanScript");
-                    request.UnBanScript.WriteJson(jsonWriter);
-                }
-                if (request.LogSetting != null)
-                {
-                    jsonWriter.WritePropertyName("logSetting");
-                    request.LogSetting.WriteJson(jsonWriter);
-                }
-                if (request.ContextStack != null)
-                {
-                    jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(request.ContextStack.ToString());
-                }
-                if (request.DryRun)
-                {
-                    jsonWriter.WritePropertyName("xGs2DryRun");
-                    jsonWriter.Write("true");
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    "account",
-                    "namespace",
-                    "createNamespace",
-                    jsonWriter
-                );
-
-                jsonWriter.WriteObjectEnd();
-
-                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-        public IEnumerator CreateNamespace(
-                Request.CreateNamespaceRequest request,
-                UnityAction<AsyncResult<Result.CreateNamespaceResult>> callback
-        ) =>
-            new CreateNamespaceTask(
-                Gs2WebSocketSession,
-                request
-            ).Invoke().ToCoroutine(callback);
-
-        public IFuture<Result.CreateNamespaceResult> CreateNamespaceFuture(
-                Request.CreateNamespaceRequest request
-        ) =>
-            new CreateNamespaceTask(
-                Gs2WebSocketSession,
-                request
-            ).Invoke().ToGs2Future();
-
-    #if GS2_ENABLE_UNITASK
-        public UniTask<Result.CreateNamespaceResult> CreateNamespaceAsync(
-            Request.CreateNamespaceRequest request
-        ) =>
-            new CreateNamespaceTask(
-                Gs2WebSocketSession,
-                request
-            ).Invoke().AsUniTask<Result.CreateNamespaceResult>();
-    #else
-        public CreateNamespaceTask CreateNamespaceAsync(
-                Request.CreateNamespaceRequest request
-        )
-        {
-            return new CreateNamespaceTask(
-                Gs2WebSocketSession,
-                request
-            );
-        }
-    #endif
-#else
-        public Task<Result.CreateNamespaceResult> CreateNamespaceAsync(
-            Request.CreateNamespaceRequest request
-        ) =>
-            new CreateNamespaceTask(
-                Gs2WebSocketSession,
-                request
-            ).Invoke().AsTask();
-#endif
-
-
         public class GetNamespaceStatusTask : Gs2WebSocketSessionTask<Request.GetNamespaceStatusRequest, Result.GetNamespaceStatusResult>
         {
             public GetNamespaceStatusTask(IGs2Session session, Request.GetNamespaceStatusRequest request) : base(session, request)
@@ -289,334 +138,6 @@ namespace Gs2.Gs2Account
             Request.GetNamespaceStatusRequest request
         ) =>
             new GetNamespaceStatusTask(
-                Gs2WebSocketSession,
-                request
-            ).Invoke().AsTask();
-#endif
-
-
-        public class GetNamespaceTask : Gs2WebSocketSessionTask<Request.GetNamespaceRequest, Result.GetNamespaceResult>
-        {
-            public GetNamespaceTask(IGs2Session session, Request.GetNamespaceRequest request) : base(session, request)
-            {
-            }
-
-            protected override IGs2SessionRequest CreateRequest(Request.GetNamespaceRequest request)
-            {
-                var stringBuilder = new StringBuilder();
-                var jsonWriter = new JsonWriter(stringBuilder);
-
-                jsonWriter.WriteObjectStart();
-
-                if (request.NamespaceName != null)
-                {
-                    jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(request.NamespaceName.ToString());
-                }
-                if (request.ContextStack != null)
-                {
-                    jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(request.ContextStack.ToString());
-                }
-                if (request.DryRun)
-                {
-                    jsonWriter.WritePropertyName("xGs2DryRun");
-                    jsonWriter.Write("true");
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    "account",
-                    "namespace",
-                    "getNamespace",
-                    jsonWriter
-                );
-
-                jsonWriter.WriteObjectEnd();
-
-                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-        public IEnumerator GetNamespace(
-                Request.GetNamespaceRequest request,
-                UnityAction<AsyncResult<Result.GetNamespaceResult>> callback
-        ) =>
-            new GetNamespaceTask(
-                Gs2WebSocketSession,
-                request
-            ).Invoke().ToCoroutine(callback);
-
-        public IFuture<Result.GetNamespaceResult> GetNamespaceFuture(
-                Request.GetNamespaceRequest request
-        ) =>
-            new GetNamespaceTask(
-                Gs2WebSocketSession,
-                request
-            ).Invoke().ToGs2Future();
-
-    #if GS2_ENABLE_UNITASK
-        public UniTask<Result.GetNamespaceResult> GetNamespaceAsync(
-            Request.GetNamespaceRequest request
-        ) =>
-            new GetNamespaceTask(
-                Gs2WebSocketSession,
-                request
-            ).Invoke().AsUniTask<Result.GetNamespaceResult>();
-    #else
-        public GetNamespaceTask GetNamespaceAsync(
-                Request.GetNamespaceRequest request
-        )
-        {
-            return new GetNamespaceTask(
-                Gs2WebSocketSession,
-                request
-            );
-        }
-    #endif
-#else
-        public Task<Result.GetNamespaceResult> GetNamespaceAsync(
-            Request.GetNamespaceRequest request
-        ) =>
-            new GetNamespaceTask(
-                Gs2WebSocketSession,
-                request
-            ).Invoke().AsTask();
-#endif
-
-
-        public class UpdateNamespaceTask : Gs2WebSocketSessionTask<Request.UpdateNamespaceRequest, Result.UpdateNamespaceResult>
-        {
-            public UpdateNamespaceTask(IGs2Session session, Request.UpdateNamespaceRequest request) : base(session, request)
-            {
-            }
-
-            protected override IGs2SessionRequest CreateRequest(Request.UpdateNamespaceRequest request)
-            {
-                var stringBuilder = new StringBuilder();
-                var jsonWriter = new JsonWriter(stringBuilder);
-
-                jsonWriter.WriteObjectStart();
-
-                if (request.NamespaceName != null)
-                {
-                    jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(request.NamespaceName.ToString());
-                }
-                if (request.Description != null)
-                {
-                    jsonWriter.WritePropertyName("description");
-                    jsonWriter.Write(request.Description.ToString());
-                }
-                if (request.TransactionSetting != null)
-                {
-                    jsonWriter.WritePropertyName("transactionSetting");
-                    request.TransactionSetting.WriteJson(jsonWriter);
-                }
-                if (request.TransactionSettingV2 != null)
-                {
-                    jsonWriter.WritePropertyName("transactionSettingV2");
-                    request.TransactionSettingV2.WriteJson(jsonWriter);
-                }
-                if (request.ChangePasswordIfTakeOver != null)
-                {
-                    jsonWriter.WritePropertyName("changePasswordIfTakeOver");
-                    jsonWriter.Write(request.ChangePasswordIfTakeOver.ToString());
-                }
-                if (request.CreateAccountScript != null)
-                {
-                    jsonWriter.WritePropertyName("createAccountScript");
-                    request.CreateAccountScript.WriteJson(jsonWriter);
-                }
-                if (request.AuthenticationScript != null)
-                {
-                    jsonWriter.WritePropertyName("authenticationScript");
-                    request.AuthenticationScript.WriteJson(jsonWriter);
-                }
-                if (request.CreateTakeOverScript != null)
-                {
-                    jsonWriter.WritePropertyName("createTakeOverScript");
-                    request.CreateTakeOverScript.WriteJson(jsonWriter);
-                }
-                if (request.DoTakeOverScript != null)
-                {
-                    jsonWriter.WritePropertyName("doTakeOverScript");
-                    request.DoTakeOverScript.WriteJson(jsonWriter);
-                }
-                if (request.BanScript != null)
-                {
-                    jsonWriter.WritePropertyName("banScript");
-                    request.BanScript.WriteJson(jsonWriter);
-                }
-                if (request.UnBanScript != null)
-                {
-                    jsonWriter.WritePropertyName("unBanScript");
-                    request.UnBanScript.WriteJson(jsonWriter);
-                }
-                if (request.LogSetting != null)
-                {
-                    jsonWriter.WritePropertyName("logSetting");
-                    request.LogSetting.WriteJson(jsonWriter);
-                }
-                if (request.ContextStack != null)
-                {
-                    jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(request.ContextStack.ToString());
-                }
-                if (request.DryRun)
-                {
-                    jsonWriter.WritePropertyName("xGs2DryRun");
-                    jsonWriter.Write("true");
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    "account",
-                    "namespace",
-                    "updateNamespace",
-                    jsonWriter
-                );
-
-                jsonWriter.WriteObjectEnd();
-
-                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-        public IEnumerator UpdateNamespace(
-                Request.UpdateNamespaceRequest request,
-                UnityAction<AsyncResult<Result.UpdateNamespaceResult>> callback
-        ) =>
-            new UpdateNamespaceTask(
-                Gs2WebSocketSession,
-                request
-            ).Invoke().ToCoroutine(callback);
-
-        public IFuture<Result.UpdateNamespaceResult> UpdateNamespaceFuture(
-                Request.UpdateNamespaceRequest request
-        ) =>
-            new UpdateNamespaceTask(
-                Gs2WebSocketSession,
-                request
-            ).Invoke().ToGs2Future();
-
-    #if GS2_ENABLE_UNITASK
-        public UniTask<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
-            Request.UpdateNamespaceRequest request
-        ) =>
-            new UpdateNamespaceTask(
-                Gs2WebSocketSession,
-                request
-            ).Invoke().AsUniTask<Result.UpdateNamespaceResult>();
-    #else
-        public UpdateNamespaceTask UpdateNamespaceAsync(
-                Request.UpdateNamespaceRequest request
-        )
-        {
-            return new UpdateNamespaceTask(
-                Gs2WebSocketSession,
-                request
-            );
-        }
-    #endif
-#else
-        public Task<Result.UpdateNamespaceResult> UpdateNamespaceAsync(
-            Request.UpdateNamespaceRequest request
-        ) =>
-            new UpdateNamespaceTask(
-                Gs2WebSocketSession,
-                request
-            ).Invoke().AsTask();
-#endif
-
-
-        public class DeleteNamespaceTask : Gs2WebSocketSessionTask<Request.DeleteNamespaceRequest, Result.DeleteNamespaceResult>
-        {
-            public DeleteNamespaceTask(IGs2Session session, Request.DeleteNamespaceRequest request) : base(session, request)
-            {
-            }
-
-            protected override IGs2SessionRequest CreateRequest(Request.DeleteNamespaceRequest request)
-            {
-                var stringBuilder = new StringBuilder();
-                var jsonWriter = new JsonWriter(stringBuilder);
-
-                jsonWriter.WriteObjectStart();
-
-                if (request.NamespaceName != null)
-                {
-                    jsonWriter.WritePropertyName("namespaceName");
-                    jsonWriter.Write(request.NamespaceName.ToString());
-                }
-                if (request.ContextStack != null)
-                {
-                    jsonWriter.WritePropertyName("contextStack");
-                    jsonWriter.Write(request.ContextStack.ToString());
-                }
-                if (request.DryRun)
-                {
-                    jsonWriter.WritePropertyName("xGs2DryRun");
-                    jsonWriter.Write("true");
-                }
-
-                AddHeader(
-                    Session.Credential,
-                    "account",
-                    "namespace",
-                    "deleteNamespace",
-                    jsonWriter
-                );
-
-                jsonWriter.WriteObjectEnd();
-
-                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
-            }
-        }
-
-#if UNITY_2017_1_OR_NEWER
-        public IEnumerator DeleteNamespace(
-                Request.DeleteNamespaceRequest request,
-                UnityAction<AsyncResult<Result.DeleteNamespaceResult>> callback
-        ) =>
-            new DeleteNamespaceTask(
-                Gs2WebSocketSession,
-                request
-            ).Invoke().ToCoroutine(callback);
-
-        public IFuture<Result.DeleteNamespaceResult> DeleteNamespaceFuture(
-                Request.DeleteNamespaceRequest request
-        ) =>
-            new DeleteNamespaceTask(
-                Gs2WebSocketSession,
-                request
-            ).Invoke().ToGs2Future();
-
-    #if GS2_ENABLE_UNITASK
-        public UniTask<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
-            Request.DeleteNamespaceRequest request
-        ) =>
-            new DeleteNamespaceTask(
-                Gs2WebSocketSession,
-                request
-            ).Invoke().AsUniTask<Result.DeleteNamespaceResult>();
-    #else
-        public DeleteNamespaceTask DeleteNamespaceAsync(
-                Request.DeleteNamespaceRequest request
-        )
-        {
-            return new DeleteNamespaceTask(
-                Gs2WebSocketSession,
-                request
-            );
-        }
-    #endif
-#else
-        public Task<Result.DeleteNamespaceResult> DeleteNamespaceAsync(
-            Request.DeleteNamespaceRequest request
-        ) =>
-            new DeleteNamespaceTask(
                 Gs2WebSocketSession,
                 request
             ).Invoke().AsTask();
@@ -2132,6 +1653,546 @@ namespace Gs2.Gs2Account
             Request.DeleteAccountRequest request
         ) =>
             new DeleteAccountTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class RequestDeletionTask : Gs2WebSocketSessionTask<Request.RequestDeletionRequest, Result.RequestDeletionResult>
+        {
+            public RequestDeletionTask(IGs2Session session, Request.RequestDeletionRequest request) : base(session, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(Request.RequestDeletionRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "account",
+                    "requestDeletion",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+        public IEnumerator RequestDeletion(
+                Request.RequestDeletionRequest request,
+                UnityAction<AsyncResult<Result.RequestDeletionResult>> callback
+        ) =>
+            new RequestDeletionTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
+
+        public IFuture<Result.RequestDeletionResult> RequestDeletionFuture(
+                Request.RequestDeletionRequest request
+        ) =>
+            new RequestDeletionTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+        public UniTask<Result.RequestDeletionResult> RequestDeletionAsync(
+            Request.RequestDeletionRequest request
+        ) =>
+            new RequestDeletionTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.RequestDeletionResult>();
+    #else
+        public RequestDeletionTask RequestDeletionAsync(
+                Request.RequestDeletionRequest request
+        )
+        {
+            return new RequestDeletionTask(
+                Gs2WebSocketSession,
+                request
+            );
+        }
+    #endif
+#else
+        public Task<Result.RequestDeletionResult> RequestDeletionAsync(
+            Request.RequestDeletionRequest request
+        ) =>
+            new RequestDeletionTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class RequestDeletionByUserIdTask : Gs2WebSocketSessionTask<Request.RequestDeletionByUserIdRequest, Result.RequestDeletionByUserIdResult>
+        {
+            public RequestDeletionByUserIdTask(IGs2Session session, Request.RequestDeletionByUserIdRequest request) : base(session, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(Request.RequestDeletionByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "account",
+                    "requestDeletionByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+        public IEnumerator RequestDeletionByUserId(
+                Request.RequestDeletionByUserIdRequest request,
+                UnityAction<AsyncResult<Result.RequestDeletionByUserIdResult>> callback
+        ) =>
+            new RequestDeletionByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
+
+        public IFuture<Result.RequestDeletionByUserIdResult> RequestDeletionByUserIdFuture(
+                Request.RequestDeletionByUserIdRequest request
+        ) =>
+            new RequestDeletionByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+        public UniTask<Result.RequestDeletionByUserIdResult> RequestDeletionByUserIdAsync(
+            Request.RequestDeletionByUserIdRequest request
+        ) =>
+            new RequestDeletionByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.RequestDeletionByUserIdResult>();
+    #else
+        public RequestDeletionByUserIdTask RequestDeletionByUserIdAsync(
+                Request.RequestDeletionByUserIdRequest request
+        )
+        {
+            return new RequestDeletionByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            );
+        }
+    #endif
+#else
+        public Task<Result.RequestDeletionByUserIdResult> RequestDeletionByUserIdAsync(
+            Request.RequestDeletionByUserIdRequest request
+        ) =>
+            new RequestDeletionByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class CancelDeletionTask : Gs2WebSocketSessionTask<Request.CancelDeletionRequest, Result.CancelDeletionResult>
+        {
+            public CancelDeletionTask(IGs2Session session, Request.CancelDeletionRequest request) : base(session, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(Request.CancelDeletionRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.Password != null)
+                {
+                    jsonWriter.WritePropertyName("password");
+                    jsonWriter.Write(request.Password.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "account",
+                    "cancelDeletion",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2AccountErrorResolver.Resolve("CancelDeletion", error));
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+        public IEnumerator CancelDeletion(
+                Request.CancelDeletionRequest request,
+                UnityAction<AsyncResult<Result.CancelDeletionResult>> callback
+        ) =>
+            new CancelDeletionTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
+
+        public IFuture<Result.CancelDeletionResult> CancelDeletionFuture(
+                Request.CancelDeletionRequest request
+        ) =>
+            new CancelDeletionTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+        public UniTask<Result.CancelDeletionResult> CancelDeletionAsync(
+            Request.CancelDeletionRequest request
+        ) =>
+            new CancelDeletionTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.CancelDeletionResult>();
+    #else
+        public CancelDeletionTask CancelDeletionAsync(
+                Request.CancelDeletionRequest request
+        )
+        {
+            return new CancelDeletionTask(
+                Gs2WebSocketSession,
+                request
+            );
+        }
+    #endif
+#else
+        public Task<Result.CancelDeletionResult> CancelDeletionAsync(
+            Request.CancelDeletionRequest request
+        ) =>
+            new CancelDeletionTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class CancelDeletionByUserIdTask : Gs2WebSocketSessionTask<Request.CancelDeletionByUserIdRequest, Result.CancelDeletionByUserIdResult>
+        {
+            public CancelDeletionByUserIdTask(IGs2Session session, Request.CancelDeletionByUserIdRequest request) : base(session, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(Request.CancelDeletionByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "account",
+                    "cancelDeletionByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+        public IEnumerator CancelDeletionByUserId(
+                Request.CancelDeletionByUserIdRequest request,
+                UnityAction<AsyncResult<Result.CancelDeletionByUserIdResult>> callback
+        ) =>
+            new CancelDeletionByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
+
+        public IFuture<Result.CancelDeletionByUserIdResult> CancelDeletionByUserIdFuture(
+                Request.CancelDeletionByUserIdRequest request
+        ) =>
+            new CancelDeletionByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+        public UniTask<Result.CancelDeletionByUserIdResult> CancelDeletionByUserIdAsync(
+            Request.CancelDeletionByUserIdRequest request
+        ) =>
+            new CancelDeletionByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.CancelDeletionByUserIdResult>();
+    #else
+        public CancelDeletionByUserIdTask CancelDeletionByUserIdAsync(
+                Request.CancelDeletionByUserIdRequest request
+        )
+        {
+            return new CancelDeletionByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            );
+        }
+    #endif
+#else
+        public Task<Result.CancelDeletionByUserIdResult> CancelDeletionByUserIdAsync(
+            Request.CancelDeletionByUserIdRequest request
+        ) =>
+            new CancelDeletionByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class ExecuteDeletionByUserIdTask : Gs2WebSocketSessionTask<Request.ExecuteDeletionByUserIdRequest, Result.ExecuteDeletionByUserIdResult>
+        {
+            public ExecuteDeletionByUserIdTask(IGs2Session session, Request.ExecuteDeletionByUserIdRequest request) : base(session, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(Request.ExecuteDeletionByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "account",
+                    "executeDeletionByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+        public IEnumerator ExecuteDeletionByUserId(
+                Request.ExecuteDeletionByUserIdRequest request,
+                UnityAction<AsyncResult<Result.ExecuteDeletionByUserIdResult>> callback
+        ) =>
+            new ExecuteDeletionByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
+
+        public IFuture<Result.ExecuteDeletionByUserIdResult> ExecuteDeletionByUserIdFuture(
+                Request.ExecuteDeletionByUserIdRequest request
+        ) =>
+            new ExecuteDeletionByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+        public UniTask<Result.ExecuteDeletionByUserIdResult> ExecuteDeletionByUserIdAsync(
+            Request.ExecuteDeletionByUserIdRequest request
+        ) =>
+            new ExecuteDeletionByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.ExecuteDeletionByUserIdResult>();
+    #else
+        public ExecuteDeletionByUserIdTask ExecuteDeletionByUserIdAsync(
+                Request.ExecuteDeletionByUserIdRequest request
+        )
+        {
+            return new ExecuteDeletionByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            );
+        }
+    #endif
+#else
+        public Task<Result.ExecuteDeletionByUserIdResult> ExecuteDeletionByUserIdAsync(
+            Request.ExecuteDeletionByUserIdRequest request
+        ) =>
+            new ExecuteDeletionByUserIdTask(
                 Gs2WebSocketSession,
                 request
             ).Invoke().AsTask();

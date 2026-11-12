@@ -2899,6 +2899,16 @@ namespace Gs2.Gs2Project
                     jsonWriter.WritePropertyName("userId");
                     jsonWriter.Write(request.UserId.ToString());
                 }
+                if (request.ExcludeMicroservices != null)
+                {
+                    jsonWriter.WritePropertyName("excludeMicroservices");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.ExcludeMicroservices)
+                    {
+                        jsonWriter.Write(item);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
                 if (request.TimeOffsetToken != null)
                 {
                     jsonWriter.WritePropertyName("timeOffsetToken");
@@ -2999,6 +3009,16 @@ namespace Gs2.Gs2Project
                 {
                     jsonWriter.WritePropertyName("userId");
                     jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.ExcludeMicroservices != null)
+                {
+                    jsonWriter.WritePropertyName("excludeMicroservices");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.ExcludeMicroservices)
+                    {
+                        jsonWriter.Write(item);
+                    }
+                    jsonWriter.WriteArrayEnd();
                 }
                 if (request.TimeOffsetToken != null)
                 {

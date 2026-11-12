@@ -41,6 +41,8 @@ namespace Gs2.Gs2Account.Model
         public Gs2.Gs2Account.Model.BanStatus[] BanStatuses { set; get; }
         public bool? Banned { set; get; }
         public long? LastAuthenticatedAt { set; get; }
+        public long? DeletionRequestedAt { set; get; }
+        public long? DeletionScheduledAt { set; get; }
         public long? CreatedAt { set; get; }
         public long? Revision { set; get; }
         public Account WithAccountId(string accountId) {
@@ -69,6 +71,14 @@ namespace Gs2.Gs2Account.Model
         }
         public Account WithLastAuthenticatedAt(long? lastAuthenticatedAt) {
             this.LastAuthenticatedAt = lastAuthenticatedAt;
+            return this;
+        }
+        public Account WithDeletionRequestedAt(long? deletionRequestedAt) {
+            this.DeletionRequestedAt = deletionRequestedAt;
+            return this;
+        }
+        public Account WithDeletionScheduledAt(long? deletionScheduledAt) {
+            this.DeletionScheduledAt = deletionScheduledAt;
             return this;
         }
         public Account WithCreatedAt(long? createdAt) {
@@ -169,6 +179,8 @@ namespace Gs2.Gs2Account.Model
                 }).ToArray())
                 .WithBanned(!data.Keys.Contains("banned") || data["banned"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["banned"].ToString()))
                 .WithLastAuthenticatedAt(!data.Keys.Contains("lastAuthenticatedAt") || data["lastAuthenticatedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["lastAuthenticatedAt"].ToString()))
+                .WithDeletionRequestedAt(!data.Keys.Contains("deletionRequestedAt") || data["deletionRequestedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["deletionRequestedAt"].ToString()))
+                .WithDeletionScheduledAt(!data.Keys.Contains("deletionScheduledAt") || data["deletionScheduledAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["deletionScheduledAt"].ToString()))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["revision"].ToString()));
         }
@@ -192,6 +204,8 @@ namespace Gs2.Gs2Account.Model
                 ["banStatuses"] = banStatusesJsonData,
                 ["banned"] = Banned,
                 ["lastAuthenticatedAt"] = LastAuthenticatedAt,
+                ["deletionRequestedAt"] = DeletionRequestedAt,
+                ["deletionScheduledAt"] = DeletionScheduledAt,
                 ["createdAt"] = CreatedAt,
                 ["revision"] = Revision,
             };
@@ -234,6 +248,14 @@ namespace Gs2.Gs2Account.Model
             if (LastAuthenticatedAt != null) {
                 writer.WritePropertyName("lastAuthenticatedAt");
                 writer.Write((LastAuthenticatedAt.ToString().Contains(".") ? (long)double.Parse(LastAuthenticatedAt.ToString()) : long.Parse(LastAuthenticatedAt.ToString())));
+            }
+            if (DeletionRequestedAt != null) {
+                writer.WritePropertyName("deletionRequestedAt");
+                writer.Write((DeletionRequestedAt.ToString().Contains(".") ? (long)double.Parse(DeletionRequestedAt.ToString()) : long.Parse(DeletionRequestedAt.ToString())));
+            }
+            if (DeletionScheduledAt != null) {
+                writer.WritePropertyName("deletionScheduledAt");
+                writer.Write((DeletionScheduledAt.ToString().Contains(".") ? (long)double.Parse(DeletionScheduledAt.ToString()) : long.Parse(DeletionScheduledAt.ToString())));
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
@@ -289,6 +311,16 @@ namespace Gs2.Gs2Account.Model
                 return diff;
             }
             diff = ModelComparer.Compare(LastAuthenticatedAt, other.LastAuthenticatedAt);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(DeletionRequestedAt, other.DeletionRequestedAt);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(DeletionScheduledAt, other.DeletionScheduledAt);
             if (diff != 0)
             {
                 return diff;
@@ -362,6 +394,30 @@ namespace Gs2.Gs2Account.Model
                 }
             }
             {
+                if (DeletionRequestedAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("account", "account.account.deletionRequestedAt.error.invalid"),
+                    });
+                }
+                if (DeletionRequestedAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("account", "account.account.deletionRequestedAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (DeletionScheduledAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("account", "account.account.deletionScheduledAt.error.invalid"),
+                    });
+                }
+                if (DeletionScheduledAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("account", "account.account.deletionScheduledAt.error.invalid"),
+                    });
+                }
+            }
+            {
                 if (CreatedAt < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("account", "account.account.createdAt.error.invalid"),
@@ -396,6 +452,8 @@ namespace Gs2.Gs2Account.Model
                 BanStatuses = BanStatuses?.Clone() as Gs2.Gs2Account.Model.BanStatus[],
                 Banned = Banned,
                 LastAuthenticatedAt = LastAuthenticatedAt,
+                DeletionRequestedAt = DeletionRequestedAt,
+                DeletionScheduledAt = DeletionScheduledAt,
                 CreatedAt = CreatedAt,
                 Revision = Revision,
             };

@@ -242,6 +242,46 @@ namespace Gs2.Gs2Account.Model.Cache
                         Request.AuthenticationRequest.FromJson(requestPayload)
                     );
                     break;
+                case "requestDeletion":
+                    Result.RequestDeletionResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.RequestDeletionRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "requestDeletionByUserId":
+                    Result.RequestDeletionByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.RequestDeletionByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "cancelDeletion":
+                    Result.CancelDeletionResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.CancelDeletionRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "cancelDeletionByUserId":
+                    Result.CancelDeletionByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.CancelDeletionByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "executeDeletionByUserId":
+                    Result.ExecuteDeletionByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.ExecuteDeletionByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "describeTakeOvers":
                     Result.DescribeTakeOversResult.FromJson(resultPayload).PutCache(
                         cache,

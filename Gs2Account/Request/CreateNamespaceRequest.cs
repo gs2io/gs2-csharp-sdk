@@ -49,6 +49,10 @@ namespace Gs2.Gs2Account.Request
          public Gs2.Gs2Account.Model.ScriptSetting DoTakeOverScript { set; get; } = null!;
          public Gs2.Gs2Account.Model.ScriptSetting BanScript { set; get; } = null!;
          public Gs2.Gs2Account.Model.ScriptSetting UnBanScript { set; get; } = null!;
+         public Gs2.Gs2Account.Model.AccountDeletionSetting AccountDeletionSetting { set; get; } = null!;
+         public Gs2.Gs2Account.Model.ScriptSetting RequestDeletionScript { set; get; } = null!;
+         public Gs2.Gs2Account.Model.ScriptSetting CancelDeletionScript { set; get; } = null!;
+         public Gs2.Gs2Account.Model.ScriptSetting ExecuteDeletionScript { set; get; } = null!;
          public Gs2.Gs2Account.Model.LogSetting LogSetting { set; get; } = null!;
         public CreateNamespaceRequest WithName(string name) {
             this.Name = name;
@@ -99,6 +103,22 @@ namespace Gs2.Gs2Account.Request
             this.UnBanScript = unBanScript;
             return this;
         }
+        public CreateNamespaceRequest WithAccountDeletionSetting(Gs2.Gs2Account.Model.AccountDeletionSetting accountDeletionSetting) {
+            this.AccountDeletionSetting = accountDeletionSetting;
+            return this;
+        }
+        public CreateNamespaceRequest WithRequestDeletionScript(Gs2.Gs2Account.Model.ScriptSetting requestDeletionScript) {
+            this.RequestDeletionScript = requestDeletionScript;
+            return this;
+        }
+        public CreateNamespaceRequest WithCancelDeletionScript(Gs2.Gs2Account.Model.ScriptSetting cancelDeletionScript) {
+            this.CancelDeletionScript = cancelDeletionScript;
+            return this;
+        }
+        public CreateNamespaceRequest WithExecuteDeletionScript(Gs2.Gs2Account.Model.ScriptSetting executeDeletionScript) {
+            this.ExecuteDeletionScript = executeDeletionScript;
+            return this;
+        }
         public CreateNamespaceRequest WithLogSetting(Gs2.Gs2Account.Model.LogSetting logSetting) {
             this.LogSetting = logSetting;
             return this;
@@ -124,6 +144,10 @@ namespace Gs2.Gs2Account.Request
                 .WithDoTakeOverScript(!data.Keys.Contains("doTakeOverScript") || data["doTakeOverScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["doTakeOverScript"]))
                 .WithBanScript(!data.Keys.Contains("banScript") || data["banScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["banScript"]))
                 .WithUnBanScript(!data.Keys.Contains("unBanScript") || data["unBanScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["unBanScript"]))
+                .WithAccountDeletionSetting(!data.Keys.Contains("accountDeletionSetting") || data["accountDeletionSetting"] == null ? null : Gs2.Gs2Account.Model.AccountDeletionSetting.FromJson(data["accountDeletionSetting"]))
+                .WithRequestDeletionScript(!data.Keys.Contains("requestDeletionScript") || data["requestDeletionScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["requestDeletionScript"]))
+                .WithCancelDeletionScript(!data.Keys.Contains("cancelDeletionScript") || data["cancelDeletionScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["cancelDeletionScript"]))
+                .WithExecuteDeletionScript(!data.Keys.Contains("executeDeletionScript") || data["executeDeletionScript"] == null ? null : Gs2.Gs2Account.Model.ScriptSetting.FromJson(data["executeDeletionScript"]))
                 .WithLogSetting(!data.Keys.Contains("logSetting") || data["logSetting"] == null ? null : Gs2.Gs2Account.Model.LogSetting.FromJson(data["logSetting"]));
         }
 
@@ -141,6 +165,10 @@ namespace Gs2.Gs2Account.Request
                 ["doTakeOverScript"] = DoTakeOverScript?.ToJson(),
                 ["banScript"] = BanScript?.ToJson(),
                 ["unBanScript"] = UnBanScript?.ToJson(),
+                ["accountDeletionSetting"] = AccountDeletionSetting?.ToJson(),
+                ["requestDeletionScript"] = RequestDeletionScript?.ToJson(),
+                ["cancelDeletionScript"] = CancelDeletionScript?.ToJson(),
+                ["executeDeletionScript"] = ExecuteDeletionScript?.ToJson(),
                 ["logSetting"] = LogSetting?.ToJson(),
             };
         }
@@ -188,6 +216,18 @@ namespace Gs2.Gs2Account.Request
             if (UnBanScript != null) {
                 UnBanScript.WriteJson(writer);
             }
+            if (AccountDeletionSetting != null) {
+                AccountDeletionSetting.WriteJson(writer);
+            }
+            if (RequestDeletionScript != null) {
+                RequestDeletionScript.WriteJson(writer);
+            }
+            if (CancelDeletionScript != null) {
+                CancelDeletionScript.WriteJson(writer);
+            }
+            if (ExecuteDeletionScript != null) {
+                ExecuteDeletionScript.WriteJson(writer);
+            }
             if (LogSetting != null) {
                 LogSetting.WriteJson(writer);
             }
@@ -207,6 +247,10 @@ namespace Gs2.Gs2Account.Request
             key += DoTakeOverScript + ":";
             key += BanScript + ":";
             key += UnBanScript + ":";
+            key += AccountDeletionSetting + ":";
+            key += RequestDeletionScript + ":";
+            key += CancelDeletionScript + ":";
+            key += ExecuteDeletionScript + ":";
             key += LogSetting + ":";
             return key;
         }
