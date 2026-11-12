@@ -210,7 +210,6 @@ namespace Gs2.Gs2AdReward.Model.Cache
             );
         }
 
-        /* diff +++ start */
         public static string PutUserData(
             this Point self,
             CacheDatabase cache,
@@ -230,7 +229,6 @@ namespace Gs2.Gs2AdReward.Model.Cache
                 timeOffset
             );
         }
-        /* diff +++ end */
 
         public static void DeleteCache(
             this Point self,

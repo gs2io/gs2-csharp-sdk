@@ -118,8 +118,13 @@ namespace Gs2.Gs2Friend.Domain.Model
                 .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
                 .WithNamespaceName(this.NamespaceName)
                 .WithAccessToken(this.AccessToken?.Token)
+/* diff --- start
+                .WithTargetUserId(this.TargetUserId);
+ diff --- end */
+/* diff +++ start */
                 .WithTargetUserId(this.TargetUserId)
-                .WithWithProfile(this.WithProfile); /* diff +++ */
+                .WithWithProfile(this.WithProfile);
+/* diff +++ end */
             var result = await request.InvokeAsync(
                 _gs2.Cache,
                 this.UserId,
@@ -232,7 +237,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                         (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                             this.NamespaceName,
                             this.UserId,
-                            this.WithProfile, /* diff +++ */
+                            this.WithProfile,
                             this.AccessToken?.TimeOffset
                         ),
                         (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
@@ -249,7 +254,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                         this.NamespaceName,
                         this.UserId,
-                        this.WithProfile, /* diff +++ */
+                        this.WithProfile,
                         this.AccessToken?.TimeOffset
                     ),
                     (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
@@ -266,7 +271,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                     this._gs2.Cache,
                     this.NamespaceName,
                     this.UserId,
-                    this.WithProfile, /* diff +++ */
+                    this.WithProfile,
                     this.TargetUserId,
                     this.AccessToken?.TimeOffset,
                     () => this.GetAsync(
@@ -323,7 +328,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 this._gs2.Cache,
                 this.NamespaceName,
                 this.UserId,
-                this.WithProfile, /* diff +++ */
+                this.WithProfile,
                 this.TargetUserId,
                 this.AccessToken?.TimeOffset
             );
@@ -338,7 +343,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.WithProfile, /* diff +++ */
+                    this.WithProfile,
                     this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
@@ -373,7 +378,7 @@ namespace Gs2.Gs2Friend.Domain.Model
                 (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                     this.NamespaceName,
                     this.UserId,
-                    this.WithProfile, /* diff +++ */
+                    this.WithProfile,
                     this.AccessToken?.TimeOffset
                 ),
                 (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(

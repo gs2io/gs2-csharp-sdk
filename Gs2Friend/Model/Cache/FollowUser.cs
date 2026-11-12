@@ -215,7 +215,6 @@ namespace Gs2.Gs2Friend.Model.Cache
             );
         }
 
-        /* diff +++ start */
         public static string PutUserData(
             this FollowUser self,
             CacheDatabase cache,
@@ -227,18 +226,23 @@ namespace Gs2.Gs2Friend.Model.Cache
                 cache,
                 namespaceName,
                 userId,
-                false,
+/* diff --- start
+                default,
+ diff --- end */
+                false, /* diff +++ */
                 self.UserId,
                 timeOffset
             );
             return self.CacheParentKey(
                 namespaceName,
                 userId,
-                false,
+/* diff --- start
+                default,
+ diff --- end */
+                false, /* diff +++ */
                 timeOffset
             );
         }
-        /* diff +++ end */
 
         public static void DeleteCache(
             this FollowUser self,

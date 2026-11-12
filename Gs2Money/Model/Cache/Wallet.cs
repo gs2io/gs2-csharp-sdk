@@ -201,13 +201,14 @@ namespace Gs2.Gs2Money.Model.Cache
             );
 /* diff --- start
             if (find && (value?.Revision ?? -1) > (self?.Revision ?? -1) && (self?.Revision ?? -1) > 1) {
-                return;
-            }
-            if (find && (value?.Revision ?? -1) == (self?.Revision ?? -1)) {
  diff --- end */
             if (find && (value?.Revision ?? 0) > (self?.Revision ?? 0) && (self?.Revision ?? 0) > 1) { /* diff +++ */
                 return;
             }
+/* diff --- start
+            if (find && (value?.Revision ?? -1) == (self?.Revision ?? -1)) {
+                return;
+ diff --- end */
 /* diff +++ start */
             if ((self?.ShareFree ?? false) &&
                 (slot ?? 0) == 0 &&
@@ -219,8 +220,8 @@ namespace Gs2.Gs2Money.Model.Cache
                         timeOffset
                     )
                 );
-            }
 /* diff +++ end */
+            }
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
@@ -235,7 +236,6 @@ namespace Gs2.Gs2Money.Model.Cache
             );
         }
 
-        /* diff +++ start */
         public static string PutUserData(
             this Wallet self,
             CacheDatabase cache,
@@ -243,6 +243,15 @@ namespace Gs2.Gs2Money.Model.Cache
             string userId,
             int? timeOffset
         ) {
+/* diff --- start
+            self.PutCache(
+                cache,
+                namespaceName,
+                userId,
+                self.Slot,
+                timeOffset
+ diff --- end */
+/* diff +++ start */
             cache.Put(
                 self.CacheParentKey(
                     namespaceName,
@@ -254,6 +263,7 @@ namespace Gs2.Gs2Money.Model.Cache
                 ),
                 self,
                 UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+/* diff +++ end */
             );
             return self.CacheParentKey(
                 namespaceName,
@@ -261,7 +271,6 @@ namespace Gs2.Gs2Money.Model.Cache
                 timeOffset
             );
         }
-        /* diff +++ end */
 
         public static void DeleteCache(
             this Wallet self,

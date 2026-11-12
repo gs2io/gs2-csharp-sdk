@@ -239,7 +239,6 @@ namespace Gs2.Gs2Enchant.Model.Cache
             );
         }
 
-        /* diff +++ start */
         public static string PutUserData(
             this RarityParameterStatus self,
             CacheDatabase cache,
@@ -261,7 +260,6 @@ namespace Gs2.Gs2Enchant.Model.Cache
                 timeOffset
             );
         }
-        /* diff +++ end */
 
         public static void DeleteCache(
             this RarityParameterStatus self,

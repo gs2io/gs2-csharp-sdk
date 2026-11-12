@@ -65,9 +65,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
         private readonly Gs2DistributorRestClient _client;
         public string NamespaceName { get; } = null!;
         public string UserId { get; } = null!;
-/* diff +++ start */
         public string NextPageToken { get; set; } = null!;
-/* diff +++ end */
 
         public UserDomain(
             Gs2.Core.Domain.Gs2 gs2,
@@ -81,8 +79,6 @@ namespace Gs2.Gs2Distributor.Domain.Model
             this.NamespaceName = namespaceName;
             this.UserId = userId;
         }
-
-/* diff +++ start */
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Distributor.Model.UserDataEntry> UserData(
             string timeOffsetToken = null
@@ -112,7 +108,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 timeOffsetToken
             );
         }
-/* diff +++ end */
+
         public Gs2.Gs2Distributor.Domain.Model.StampSheetResultDomain StampSheetResult(
             string transactionId
         ) {
@@ -138,9 +134,9 @@ namespace Gs2.Gs2Distributor.Domain.Model
     }
 
     public partial class UserDomain {
+/* diff +++ start */
 
         #if UNITY_2017_1_OR_NEWER
-/* diff +++ start */
         public IFuture<Gs2.Core.Domain.Gs2> FreezeMasterDataFuture(
             FreezeMasterDataByUserIdRequest request
         ) => FreezeMasterDataAsync(request).ToGs2Future();
@@ -172,9 +168,9 @@ namespace Gs2.Gs2Distributor.Domain.Model
             newGs2.DefaultContextStack = result?.NewContextStack;
             return newGs2;
         }
+/* diff +++ end */
 
         #if UNITY_2017_1_OR_NEWER
-/* diff +++ end */
         public IFuture<Gs2.Gs2Distributor.Domain.Model.TransactionResultDomain> RunTransactionFuture(
             RunTransactionRequest request
         ) => RunTransactionAsync(request).ToGs2Future();

@@ -66,9 +66,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
         public string NamespaceName { get; } = null!;
         public AccessToken AccessToken { get; }
         public string UserId => this.AccessToken.UserId;
-/* diff +++ start */
         public string NextPageToken { get; set; } = null!;
-/* diff +++ end */
 
 /* diff +++ start */
         public Gs2.Core.Domain.Gs2 Gs2 => this._gs2;
@@ -86,8 +84,6 @@ namespace Gs2.Gs2Distributor.Domain.Model
             this.NamespaceName = namespaceName;
             this.AccessToken = accessToken;
         }
-
-/* diff +++ start */
         #if UNITY_2017_1_OR_NEWER
         public Gs2Iterator<Gs2.Gs2Distributor.Model.UserDataEntry> UserData(
         )
@@ -113,7 +109,7 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 this.AccessToken
             );
         }
-/* diff +++ end */
+
         public Gs2.Gs2Distributor.Domain.Model.StampSheetResultAccessTokenDomain StampSheetResult(
             string transactionId
         ) {
@@ -123,8 +119,8 @@ namespace Gs2.Gs2Distributor.Domain.Model
                 this.AccessToken,
                 transactionId
             );
-        }
 /* diff +++ start */
+        }
     
         #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Core.Domain.Gs2> FreezeMasterDataFuture(
@@ -190,8 +186,8 @@ namespace Gs2.Gs2Distributor.Domain.Model
             );
             newGs2.DefaultContextStack = result?.NewContextStack;
             return newGs2;
-        }
 /* diff +++ end */
+        }
 
         public Gs2.Gs2Distributor.Domain.Model.TransactionResultAccessTokenDomain TransactionResult(
             string transactionId

@@ -240,7 +240,6 @@ namespace Gs2.Gs2Inventory.Model.Cache
             );
         }
 
-        /* diff +++ start */
         public static string PutUserData(
             this SimpleItem self,
             CacheDatabase cache,
@@ -263,7 +262,6 @@ namespace Gs2.Gs2Inventory.Model.Cache
                 timeOffset
             );
         }
-        /* diff +++ end */
 
         public static void DeleteCache(
             this SimpleItem self,

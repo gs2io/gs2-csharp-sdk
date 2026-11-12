@@ -226,7 +226,6 @@ namespace Gs2.Gs2Schedule.Model.Cache
             );
         }
 
-        /* diff +++ start */
         public static string PutUserData(
             this Trigger self,
             CacheDatabase cache,
@@ -247,7 +246,6 @@ namespace Gs2.Gs2Schedule.Model.Cache
                 timeOffset
             );
         }
-        /* diff +++ end */
 
         public static void DeleteCache(
             this Trigger self,

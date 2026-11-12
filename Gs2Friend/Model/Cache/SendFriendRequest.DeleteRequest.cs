@@ -50,6 +50,17 @@ namespace Gs2.Gs2Friend.Model.Cache
             if (userId == null) {
                 throw new NullReferenceException();
             }
+/* diff --- start
+            cache.Delete<FriendRequest>(
+                (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
+                    request.NamespaceName,
+                    userId,
+                    timeOffset
+                ),
+                (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
+                    self.Item.TargetUserId
+                )
+ diff --- end */
 /* diff +++ start */
             if (self.Item == null) {
                 return;
@@ -69,8 +80,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                 self.Item.UserId,
                 self.Item.TargetUserId,
                 timeOffset
-            );
 /* diff +++ end */
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER
@@ -88,21 +99,32 @@ namespace Gs2.Gs2Friend.Model.Cache
                 yield return future;
                 if (future.Error != null) {
                     if (future.Error is Gs2.Core.Exception.NotFoundException) {
-                        /* diff +++ start */
-                        (null as SendFriendRequest).DeleteCacheForEachWithProfile(
+/* diff --- start
+                        (null as SendFriendRequest).DeleteCache(
+ diff --- end */
+                        (null as SendFriendRequest).DeleteCacheForEachWithProfile( /* diff +++ */
                             cache,
                             request.NamespaceName,
                             userId,
                             request.TargetUserId,
                             timeOffset
                         );
+/* diff --- start
+                        cache.ClearListCache<SendFriendRequest>(
+                            (null as SendFriendRequest).CacheParentKey(
+                                request.NamespaceName,
+                                userId,
+                                timeOffset
+                            )
+ diff --- end */
+/* diff +++ start */
                         (null as SendFriendRequest).ClearListCacheForEachWithProfile(
                             cache,
                             request.NamespaceName,
                             userId,
                             timeOffset
+/* diff +++ end */
                         );
-                        /* diff +++ end */
                     }
                     self.OnError(future.Error);
                     yield break;
@@ -144,21 +166,32 @@ namespace Gs2.Gs2Friend.Model.Cache
                 result = await invokeImpl();
             }
             catch (Gs2.Core.Exception.NotFoundException) {
-                /* diff +++ start */
-                (null as SendFriendRequest).DeleteCacheForEachWithProfile(
+/* diff --- start
+                (null as SendFriendRequest).DeleteCache(
+ diff --- end */
+                (null as SendFriendRequest).DeleteCacheForEachWithProfile( /* diff +++ */
                     cache,
                     request.NamespaceName,
                     userId,
                     request.TargetUserId,
                     timeOffset
                 );
+/* diff --- start
+                cache.ClearListCache<SendFriendRequest>(
+                    (null as SendFriendRequest).CacheParentKey(
+                        request.NamespaceName,
+                        userId,
+                        timeOffset
+                    )
+ diff --- end */
+/* diff +++ start */
                 (null as SendFriendRequest).ClearListCacheForEachWithProfile(
                     cache,
                     request.NamespaceName,
                     userId,
                     timeOffset
+/* diff +++ end */
                 );
-                /* diff +++ end */
                 throw;
             }
             result.PutCache(

@@ -210,7 +210,6 @@ namespace Gs2.Gs2Friend.Model.Cache
             );
         }
 
-        /* diff +++ start */
         public static string PutUserData(
             this Profile self,
             CacheDatabase cache,
@@ -230,7 +229,6 @@ namespace Gs2.Gs2Friend.Model.Cache
                 timeOffset
             );
         }
-        /* diff +++ end */
 
         public static void DeleteCache(
             this Profile self,

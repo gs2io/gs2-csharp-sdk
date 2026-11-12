@@ -239,7 +239,6 @@ namespace Gs2.Gs2Grade.Model.Cache
             );
         }
 
-        /* diff +++ start */
         public static string PutUserData(
             this Status self,
             CacheDatabase cache,
@@ -261,7 +260,6 @@ namespace Gs2.Gs2Grade.Model.Cache
                 timeOffset
             );
         }
-        /* diff +++ end */
 
         public static void DeleteCache(
             this Status self,

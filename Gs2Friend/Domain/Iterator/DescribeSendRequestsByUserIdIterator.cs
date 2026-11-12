@@ -278,7 +278,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
         {
 /* diff --- start
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.FriendRequest>(
-                    (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
+                            (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
                         NamespaceName,
                         UserId,
                         null
@@ -291,7 +291,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                         (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
                             NamespaceName,
                             UserId,
-                            this.WithProfile, /* diff +++ */
+                            this.WithProfile,
                             null
                        ),
                        "ListFriendRequest"

@@ -131,11 +131,13 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                     (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                         NamespaceName,
                         AccessToken?.UserId,
-                        this.WithProfile, /* diff +++ */
 /* diff --- start
                         this.AccessToken?.TimeOffset
  diff --- end */
-                        AccessToken?.TimeOffset /* diff +++ */
+/* diff +++ start */
+                        this.WithProfile,
+                        AccessToken?.TimeOffset
+/* diff +++ end */
                     ),
                     out var list
             )) {
@@ -186,11 +188,13 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                         (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                             NamespaceName,
                             AccessToken?.UserId,
-                            this.WithProfile, /* diff +++ */
 /* diff --- start
                             this.AccessToken?.TimeOffset
  diff --- end */
-                            AccessToken?.TimeOffset /* diff +++ */
+/* diff +++ start */
+                            this.WithProfile,
+                            AccessToken?.TimeOffset
+/* diff +++ end */
                         )
                     );
                 }
@@ -278,7 +282,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
         {
 /* diff --- start
             using (await this._gs2.Cache.GetLockObject<Gs2.Gs2Friend.Model.FriendRequest>(
-                    (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
+                            (null as Gs2.Gs2Friend.Model.FriendRequest).CacheParentKey(
                         NamespaceName,
                         AccessToken?.UserId,
                         this.AccessToken?.TimeOffset
@@ -291,7 +295,7 @@ namespace Gs2.Gs2Friend.Domain.Iterator
                         (null as Gs2.Gs2Friend.Model.ReceiveFriendRequest).CacheParentKey(
                             NamespaceName,
                             AccessToken?.UserId,
-                            this.WithProfile, /* diff +++ */
+                            this.WithProfile,
                             AccessToken?.TimeOffset
                        ),
                        "ListReceiveFriendRequest"

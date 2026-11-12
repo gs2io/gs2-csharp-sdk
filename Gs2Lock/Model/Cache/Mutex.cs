@@ -222,7 +222,6 @@ namespace Gs2.Gs2Lock.Model.Cache
             );
         }
 
-        /* diff +++ start */
         public static string PutUserData(
             this Mutex self,
             CacheDatabase cache,
@@ -243,7 +242,6 @@ namespace Gs2.Gs2Lock.Model.Cache
                 timeOffset
             );
         }
-        /* diff +++ end */
 
         public static void DeleteCache(
             this Mutex self,

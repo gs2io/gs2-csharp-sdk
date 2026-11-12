@@ -47,19 +47,28 @@ namespace Gs2.Gs2Friend.Model.Cache
             int? timeOffset,
             DescribeReceiveRequestsRequest request
         ) {
-/* diff +++ start */
-            foreach (var item in self.Items ?? Array.Empty<ReceiveFriendRequest>())
+/* diff --- start
+            foreach (var item in self.Items ?? Array.Empty<FriendRequest>())
+ diff --- end */
+            foreach (var item in self.Items ?? Array.Empty<ReceiveFriendRequest>()) /* diff +++ */
             {
-                item?.PutCacheForEachWithProfile(
+/* diff --- start
+                item.PutCache(
+ diff --- end */
+                item?.PutCacheForEachWithProfile( /* diff +++ */
                     cache,
                     request.NamespaceName,
+/* diff --- start
+                    userId,
+ diff --- end */
                     item.TargetUserId,
+/* diff +++ start */
                     request.WithProfile,
                     item.UserId,
+/* diff +++ end */
                     timeOffset
                 );
             }
-/* diff +++ end */
         }
 
 #if UNITY_2017_1_OR_NEWER

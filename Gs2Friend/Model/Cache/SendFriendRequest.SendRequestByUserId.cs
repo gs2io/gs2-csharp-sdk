@@ -50,6 +50,20 @@ namespace Gs2.Gs2Friend.Model.Cache
             if (userId == null) {
                 throw new NullReferenceException();
             }
+/* diff --- start
+            cache.Put(
+                (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheParentKey(
+                    request.NamespaceName,
+                    request.UserId,
+                    request.WithProfile ?? default,
+                    timeOffset
+                ),
+                (null as Gs2.Gs2Friend.Model.SendFriendRequest).CacheKey(
+                    self.Item.TargetUserId
+                ),
+                self.Item,
+                UnixTime.ToUnixTime(DateTime.Now) + 1000 * 60 * Gs2.Core.Domain.Gs2.DefaultCacheMinutes
+ diff --- end */
 /* diff +++ start */
             if (self.Item == null) {
                 return;
@@ -77,8 +91,8 @@ namespace Gs2.Gs2Friend.Model.Cache
                 false,
                 self.Item.UserId,
                 timeOffset
-            );
 /* diff +++ end */
+            );
         }
 
 #if UNITY_2017_1_OR_NEWER

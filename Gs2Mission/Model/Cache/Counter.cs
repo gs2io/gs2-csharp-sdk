@@ -231,7 +231,6 @@ namespace Gs2.Gs2Mission.Model.Cache
             );
         }
 
-        /* diff +++ start */
         public static string PutUserData(
             this Counter self,
             CacheDatabase cache,
@@ -252,7 +251,6 @@ namespace Gs2.Gs2Mission.Model.Cache
                 timeOffset
             );
         }
-        /* diff +++ end */
 
         public static void DeleteCache(
             this Counter self,
