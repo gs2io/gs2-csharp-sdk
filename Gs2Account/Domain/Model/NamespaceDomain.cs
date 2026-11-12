@@ -68,6 +68,9 @@ namespace Gs2.Gs2Account.Domain.Model
         public string Url { get; set; } = null!;
         public string UploadToken { get; set; } = null!;
         public string UploadUrl { get; set; } = null!;
+        public Gs2.Gs2Account.Model.BanStatus[] BanStatuses { get; set; } = null!;
+        public string Token { get; set; } = null!;
+        public long? Expire { get; set; } = null!;
         public string AuthorizationUrl { get; set; } = null!; /* diff +++ */
         public string NextPageToken { get; set; } = null!;
 
@@ -566,6 +569,74 @@ namespace Gs2.Gs2Account.Domain.Model
                 this.NamespaceName,
                 result?.Item?.UserId
             );
+
+            return domain;
+        }
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Account.Domain.Model.AccountDomain> PreviewTakeOverFuture(
+            PreviewTakeOverRequest request
+        ) => PreviewTakeOverAsync(request).ToGs2Future();
+        #endif
+
+        #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Account.Domain.Model.AccountDomain> PreviewTakeOverAsync(
+        #else
+        public async Task<Gs2.Gs2Account.Domain.Model.AccountDomain> PreviewTakeOverAsync(
+        #endif
+            PreviewTakeOverRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                null,
+                () => this._client.PreviewTakeOverAsync(request)
+            );
+            var domain = new Gs2.Gs2Account.Domain.Model.AccountDomain(
+                this._gs2,
+                this.NamespaceName,
+                result?.Item?.UserId
+            );
+            domain.BanStatuses = result?.BanStatuses;
+            domain.Token = result?.Token;
+            domain.Expire = result?.Expire;
+
+            return domain;
+        }
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Account.Domain.Model.AccountDomain> PreviewTakeOverOpenIdConnectFuture(
+            PreviewTakeOverOpenIdConnectRequest request
+        ) => PreviewTakeOverOpenIdConnectAsync(request).ToGs2Future();
+        #endif
+
+        #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Account.Domain.Model.AccountDomain> PreviewTakeOverOpenIdConnectAsync(
+        #else
+        public async Task<Gs2.Gs2Account.Domain.Model.AccountDomain> PreviewTakeOverOpenIdConnectAsync(
+        #endif
+            PreviewTakeOverOpenIdConnectRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                null,
+                null,
+                () => this._client.PreviewTakeOverOpenIdConnectAsync(request)
+            );
+            var domain = new Gs2.Gs2Account.Domain.Model.AccountDomain(
+                this._gs2,
+                this.NamespaceName,
+                result?.Item?.UserId
+            );
+            domain.BanStatuses = result?.BanStatuses;
+            domain.Token = result?.Token;
+            domain.Expire = result?.Expire;
 
             return domain;
         }

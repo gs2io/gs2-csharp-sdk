@@ -2506,6 +2506,233 @@ namespace Gs2.Gs2Account
 #endif
 
 
+        public class PreviewTakeOverTask : Gs2RestSessionTask<PreviewTakeOverRequest, PreviewTakeOverResult>
+        {
+            public PreviewTakeOverTask(IGs2Session session, RestSessionRequestFactory factory, PreviewTakeOverRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(PreviewTakeOverRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/takeover/type/{type}/preview";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{type}",request.Type != null ? request.Type.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.UserIdentifier != null)
+                {
+                    jsonWriter.WritePropertyName("userIdentifier");
+                    jsonWriter.Write(request.UserIdentifier);
+                }
+                if (request.Password != null)
+                {
+                    jsonWriter.WritePropertyName("password");
+                    jsonWriter.Write(request.Password);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2AccountErrorResolver.Resolve("PreviewTakeOver", error));
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator PreviewTakeOver(
+                Request.PreviewTakeOverRequest request,
+                UnityAction<AsyncResult<Result.PreviewTakeOverResult>> callback
+        ) =>
+            new PreviewTakeOverTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.PreviewTakeOverResult> PreviewTakeOverFuture(
+                Request.PreviewTakeOverRequest request
+        ) =>
+            new PreviewTakeOverTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.PreviewTakeOverResult> PreviewTakeOverAsync(
+                Request.PreviewTakeOverRequest request
+        ) =>
+            new PreviewTakeOverTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.PreviewTakeOverResult>();
+    #else
+		public PreviewTakeOverTask PreviewTakeOverAsync(
+                Request.PreviewTakeOverRequest request
+        )
+		{
+			return new PreviewTakeOverTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.PreviewTakeOverResult> PreviewTakeOverAsync(
+                Request.PreviewTakeOverRequest request
+        ) =>
+            new PreviewTakeOverTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class PreviewTakeOverOpenIdConnectTask : Gs2RestSessionTask<PreviewTakeOverOpenIdConnectRequest, PreviewTakeOverOpenIdConnectResult>
+        {
+            public PreviewTakeOverOpenIdConnectTask(IGs2Session session, RestSessionRequestFactory factory, PreviewTakeOverOpenIdConnectRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(PreviewTakeOverOpenIdConnectRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/takeover/type/{type}/openIdConnect/preview";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{type}",request.Type != null ? request.Type.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.IdToken != null)
+                {
+                    jsonWriter.WritePropertyName("idToken");
+                    jsonWriter.Write(request.IdToken);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+
+            public override void OnError(Gs2.Core.Exception.Gs2Exception error)
+            {
+                base.OnError(Gs2AccountErrorResolver.Resolve("PreviewTakeOverOpenIdConnect", error));
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator PreviewTakeOverOpenIdConnect(
+                Request.PreviewTakeOverOpenIdConnectRequest request,
+                UnityAction<AsyncResult<Result.PreviewTakeOverOpenIdConnectResult>> callback
+        ) =>
+            new PreviewTakeOverOpenIdConnectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.PreviewTakeOverOpenIdConnectResult> PreviewTakeOverOpenIdConnectFuture(
+                Request.PreviewTakeOverOpenIdConnectRequest request
+        ) =>
+            new PreviewTakeOverOpenIdConnectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.PreviewTakeOverOpenIdConnectResult> PreviewTakeOverOpenIdConnectAsync(
+                Request.PreviewTakeOverOpenIdConnectRequest request
+        ) =>
+            new PreviewTakeOverOpenIdConnectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.PreviewTakeOverOpenIdConnectResult>();
+    #else
+		public PreviewTakeOverOpenIdConnectTask PreviewTakeOverOpenIdConnectAsync(
+                Request.PreviewTakeOverOpenIdConnectRequest request
+        )
+		{
+			return new PreviewTakeOverOpenIdConnectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.PreviewTakeOverOpenIdConnectResult> PreviewTakeOverOpenIdConnectAsync(
+                Request.PreviewTakeOverOpenIdConnectRequest request
+        ) =>
+            new PreviewTakeOverOpenIdConnectTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
         public class RequestDeletionTask : Gs2RestSessionTask<RequestDeletionRequest, RequestDeletionResult>
         {
             public RequestDeletionTask(IGs2Session session, RestSessionRequestFactory factory, RequestDeletionRequest request) : base(session, factory, request)

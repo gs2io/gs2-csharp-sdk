@@ -68,6 +68,8 @@ namespace Gs2.Gs2Account.Domain.Model
         public Gs2.Gs2Account.Model.BanStatus[] BanStatuses { get; set; } = null!;
         public string Body { get; set; } = null!;
         public string Signature { get; set; } = null!;
+        public string Token { get; set; } = null!;
+        public long? Expire { get; set; } = null!;
         public string AuthorizationUrl { get; set; } = null!;
         public string NextPageToken { get; set; } = null!;
 
@@ -540,6 +542,118 @@ namespace Gs2.Gs2Account.Domain.Model
             domain.BanStatuses = result?.BanStatuses;
             domain.Body = result?.Body;
             domain.Signature = result?.Signature;
+
+            return domain;
+        }
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Account.Domain.Model.AccountDomain> RequestDeletionFuture(
+            RequestDeletionByUserIdRequest request
+        ) => RequestDeletionAsync(request).ToGs2Future();
+        #endif
+
+        #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Account.Domain.Model.AccountDomain> RequestDeletionAsync(
+        #else
+        public async Task<Gs2.Gs2Account.Domain.Model.AccountDomain> RequestDeletionAsync(
+        #endif
+            RequestDeletionByUserIdRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                null,
+                () => this._client.RequestDeletionByUserIdAsync(request)
+            );
+            var domain = this;
+
+            return domain;
+        }
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Account.Domain.Model.AccountDomain> CancelDeletionFuture(
+            CancelDeletionRequest request
+        ) => CancelDeletionAsync(request).ToGs2Future();
+        #endif
+
+        #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Account.Domain.Model.AccountDomain> CancelDeletionAsync(
+        #else
+        public async Task<Gs2.Gs2Account.Domain.Model.AccountDomain> CancelDeletionAsync(
+        #endif
+            CancelDeletionRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                null,
+                () => this._client.CancelDeletionAsync(request)
+            );
+            var domain = this;
+
+            return domain;
+        }
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Account.Domain.Model.AccountDomain> CancelDeletionFuture(
+            CancelDeletionByUserIdRequest request
+        ) => CancelDeletionAsync(request).ToGs2Future();
+        #endif
+
+        #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Account.Domain.Model.AccountDomain> CancelDeletionAsync(
+        #else
+        public async Task<Gs2.Gs2Account.Domain.Model.AccountDomain> CancelDeletionAsync(
+        #endif
+            CancelDeletionByUserIdRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                null,
+                () => this._client.CancelDeletionByUserIdAsync(request)
+            );
+            var domain = this;
+
+            return domain;
+        }
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Account.Domain.Model.AccountDomain> ExecuteDeletionFuture(
+            ExecuteDeletionByUserIdRequest request
+        ) => ExecuteDeletionAsync(request).ToGs2Future();
+        #endif
+
+        #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Account.Domain.Model.AccountDomain> ExecuteDeletionAsync(
+        #else
+        public async Task<Gs2.Gs2Account.Domain.Model.AccountDomain> ExecuteDeletionAsync(
+        #endif
+            ExecuteDeletionByUserIdRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                null,
+                () => this._client.ExecuteDeletionByUserIdAsync(request)
+            );
+            var domain = this;
 
             return domain;
         }

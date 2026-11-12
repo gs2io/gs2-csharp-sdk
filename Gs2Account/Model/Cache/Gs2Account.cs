@@ -242,6 +242,22 @@ namespace Gs2.Gs2Account.Model.Cache
                         Request.AuthenticationRequest.FromJson(requestPayload)
                     );
                     break;
+                case "previewTakeOver":
+                    Result.PreviewTakeOverResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.PreviewTakeOverRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "previewTakeOverOpenIdConnect":
+                    Result.PreviewTakeOverOpenIdConnectResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.PreviewTakeOverOpenIdConnectRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "requestDeletion":
                     Result.RequestDeletionResult.FromJson(resultPayload).PutCache(
                         cache,

@@ -35,10 +35,16 @@ namespace Gs2.Gs2Account
 			Gs2Exception resolved = null;
 			switch (method) {
 				case "Authentication":
+				case "PreviewTakeOver":
 					if (error.Errors.Any(v => v != null && v.code == "account.password.invalid")) {
 						resolved = new Exception.PasswordIncorrectException(error);
 					}
 					else if (error.Errors.Any(v => v != null && v.code == "account.banned.infinity")) {
+						resolved = new Exception.BannedInfinityException(error);
+					}
+					break;
+				case "PreviewTakeOverOpenIdConnect":
+					if (error.Errors.Any(v => v != null && v.code == "account.banned.infinity")) {
 						resolved = new Exception.BannedInfinityException(error);
 					}
 					break;

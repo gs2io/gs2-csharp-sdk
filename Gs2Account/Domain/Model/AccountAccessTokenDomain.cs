@@ -69,6 +69,8 @@ namespace Gs2.Gs2Account.Domain.Model
         public Gs2.Gs2Account.Model.BanStatus[] BanStatuses { get; set; } = null!;
         public string Body { get; set; } = null!;
         public string Signature { get; set; } = null!;
+        public string Token { get; set; } = null!;
+        public long? Expire { get; set; } = null!;
 /* diff --- start
         public string AuthorizationUrl { get; set; } = null!;
  diff --- end */
@@ -85,6 +87,34 @@ namespace Gs2.Gs2Account.Domain.Model
             );
             this.NamespaceName = namespaceName;
             this.AccessToken = accessToken;
+        }
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Account.Domain.Model.AccountAccessTokenDomain> RequestDeletionFuture(
+            RequestDeletionRequest request
+        ) => RequestDeletionAsync(request).ToGs2Future();
+        #endif
+
+        #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Account.Domain.Model.AccountAccessTokenDomain> RequestDeletionAsync(
+        #else
+        public async Task<Gs2.Gs2Account.Domain.Model.AccountAccessTokenDomain> RequestDeletionAsync(
+        #endif
+            RequestDeletionRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this.AccessToken?.Token);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                this.AccessToken?.TimeOffset,
+                () => this._client.RequestDeletionAsync(request)
+            );
+            var domain = this;
+
+            return domain;
         }
 
         #if UNITY_2017_1_OR_NEWER
