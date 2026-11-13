@@ -54,7 +54,6 @@ namespace Gs2.Gs2Mission.Model.Transaction
                 UserId = userId,
                 Name = counterName,
                 Values = Array.Empty<ScopedValue>(),
-                CreatedAt = createdAtMillis,
                 UpdatedAt = createdAtMillis,
                 Revision = 0,
             };

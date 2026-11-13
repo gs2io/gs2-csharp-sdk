@@ -216,6 +216,22 @@ namespace Gs2.Gs2AdReward.Model.Cache
                         Request.ConsumePointByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
+                case "verifyPoint":
+                    Result.VerifyPointResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.VerifyPointRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "verifyPointByUserId":
+                    Result.VerifyPointByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.VerifyPointByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "deletePointByUserId":
                     Result.DeletePointByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,

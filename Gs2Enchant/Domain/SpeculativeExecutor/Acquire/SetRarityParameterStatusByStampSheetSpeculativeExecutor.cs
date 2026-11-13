@@ -362,7 +362,6 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
                 .WithParameterName(parameterName)
                 .WithPropertyId(propertyId)
                 .WithParameterValues(Array.Empty<RarityParameterValue>())
-                .WithCreatedAt(currentTimeMillis)
                 .WithUpdatedAt(currentTimeMillis)
                 .WithRevision(0);
             var preparedItem = Transform(source);

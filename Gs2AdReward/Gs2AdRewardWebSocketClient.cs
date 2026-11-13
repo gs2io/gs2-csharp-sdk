@@ -1447,6 +1447,248 @@ namespace Gs2.Gs2AdReward
 #endif
 
 
+        public class VerifyPointTask : Gs2WebSocketSessionTask<Request.VerifyPointRequest, Result.VerifyPointResult>
+        {
+            public VerifyPointTask(IGs2Session session, Request.VerifyPointRequest request) : base(session, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyPointRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.Point != null)
+                {
+                    jsonWriter.WritePropertyName("point");
+                    jsonWriter.Write(request.Point.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "adReward",
+                    "point",
+                    "verifyPoint",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+        public IEnumerator VerifyPoint(
+                Request.VerifyPointRequest request,
+                UnityAction<AsyncResult<Result.VerifyPointResult>> callback
+        ) =>
+            new VerifyPointTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
+
+        public IFuture<Result.VerifyPointResult> VerifyPointFuture(
+                Request.VerifyPointRequest request
+        ) =>
+            new VerifyPointTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+        public UniTask<Result.VerifyPointResult> VerifyPointAsync(
+            Request.VerifyPointRequest request
+        ) =>
+            new VerifyPointTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.VerifyPointResult>();
+    #else
+        public VerifyPointTask VerifyPointAsync(
+                Request.VerifyPointRequest request
+        )
+        {
+            return new VerifyPointTask(
+                Gs2WebSocketSession,
+                request
+            );
+        }
+    #endif
+#else
+        public Task<Result.VerifyPointResult> VerifyPointAsync(
+            Request.VerifyPointRequest request
+        ) =>
+            new VerifyPointTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class VerifyPointByUserIdTask : Gs2WebSocketSessionTask<Request.VerifyPointByUserIdRequest, Result.VerifyPointByUserIdResult>
+        {
+            public VerifyPointByUserIdTask(IGs2Session session, Request.VerifyPointByUserIdRequest request) : base(session, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyPointByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.Point != null)
+                {
+                    jsonWriter.WritePropertyName("point");
+                    jsonWriter.Write(request.Point.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "adReward",
+                    "point",
+                    "verifyPointByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+        public IEnumerator VerifyPointByUserId(
+                Request.VerifyPointByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyPointByUserIdResult>> callback
+        ) =>
+            new VerifyPointByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
+
+        public IFuture<Result.VerifyPointByUserIdResult> VerifyPointByUserIdFuture(
+                Request.VerifyPointByUserIdRequest request
+        ) =>
+            new VerifyPointByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+        public UniTask<Result.VerifyPointByUserIdResult> VerifyPointByUserIdAsync(
+            Request.VerifyPointByUserIdRequest request
+        ) =>
+            new VerifyPointByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.VerifyPointByUserIdResult>();
+    #else
+        public VerifyPointByUserIdTask VerifyPointByUserIdAsync(
+                Request.VerifyPointByUserIdRequest request
+        )
+        {
+            return new VerifyPointByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            );
+        }
+    #endif
+#else
+        public Task<Result.VerifyPointByUserIdResult> VerifyPointByUserIdAsync(
+            Request.VerifyPointByUserIdRequest request
+        ) =>
+            new VerifyPointByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
+#endif
+
+
         public class DeletePointByUserIdTask : Gs2WebSocketSessionTask<Request.DeletePointByUserIdRequest, Result.DeletePointByUserIdResult>
         {
             public DeletePointByUserIdTask(IGs2Session session, Request.DeletePointByUserIdRequest request) : base(session, request)

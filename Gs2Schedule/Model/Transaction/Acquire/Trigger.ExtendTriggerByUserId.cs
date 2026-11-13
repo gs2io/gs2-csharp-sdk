@@ -119,7 +119,6 @@ namespace Gs2.Gs2Schedule.Model.Transaction
                 clone.TriggeredAt = currentTimeMillis;
             }
             clone.ExpiresAt = expiresAt;
-            clone.CreatedAt = currentTimeMillis;
             clone.Revision = 0;
             return clone;
 /* diff +++ end */

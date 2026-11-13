@@ -34,7 +34,18 @@ namespace Gs2.Core.SpeculativeExecutor
             }
             verifyAction = verifyAction.Clone() as VerifyAction;
 
-            var commit = await Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
+            var commit = await Gs2.Gs2AdReward.Domain.SpeculativeExecutor
+                .VerifyActionSpeculativeExecutorIndex.ExecuteInverseAsync(
+                    domain,
+                    accessToken,
+                    verifyAction,
+                    rate
+                );
+            if (commit != null) {
+                return commit;
+            }
+
+            commit = await Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
                 .VerifyActionSpeculativeExecutorIndex.ExecuteInverseAsync(
                     domain,
                     accessToken,
@@ -200,7 +211,18 @@ namespace Gs2.Core.SpeculativeExecutor
             }
             verifyAction = verifyAction.Clone() as VerifyAction;
 
-            var commit = await Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
+            var commit = await Gs2.Gs2AdReward.Domain.SpeculativeExecutor
+                .VerifyActionSpeculativeExecutorIndex.ExecuteAsync(
+                    domain,
+                    accessToken,
+                    verifyAction,
+                    rate
+                );
+            if (commit != null) {
+                return commit;
+            }
+
+            commit = await Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
                 .VerifyActionSpeculativeExecutorIndex.ExecuteAsync(
                     domain,
                     accessToken,

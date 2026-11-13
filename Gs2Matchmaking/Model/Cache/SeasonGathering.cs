@@ -229,6 +229,15 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                     seasonGatheringName
                 )
             );
+            if (find && value?.CreatedAt != null && self?.CreatedAt != null &&
+                value.Revision != null && self.Revision != null &&
+                value.CreatedAt != self.CreatedAt) {
+                if (value.CreatedAt > self.CreatedAt) {
+                    return;
+                }
+                // A recreated model starts a separate revision sequence.
+                find = false;
+            }
             if (find && (value?.Revision ?? 0) > (self?.Revision ?? 0) && (self?.Revision ?? 0) > 1) {
                 return;
             }

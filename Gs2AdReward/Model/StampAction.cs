@@ -32,12 +32,16 @@ namespace Gs2.Gs2AdReward.Model
             switch (action.Action) {
                 case "Gs2AdReward:ConsumePointByUserId":
                     return ConsumePointByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2AdReward:VerifyPointByUserId":
+                    return VerifyPointByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }
 
         public static Gs2Request ToRequest(Gs2.Core.Model.VerifyAction action) {
             switch (action.Action) {
+                case "Gs2AdReward:VerifyPointByUserId":
+                    return VerifyPointByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }

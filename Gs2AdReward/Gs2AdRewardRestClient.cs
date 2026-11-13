@@ -2046,6 +2046,245 @@ namespace Gs2.Gs2AdReward
 #endif
 
 
+        public class VerifyPointTask : Gs2RestSessionTask<VerifyPointRequest, VerifyPointResult>
+        {
+            public VerifyPointTask(IGs2Session session, RestSessionRequestFactory factory, VerifyPointRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyPointRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "ad-reward")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/point/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Point != null)
+                {
+                    jsonWriter.WritePropertyName("point");
+                    jsonWriter.Write(request.Point.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyPoint(
+                Request.VerifyPointRequest request,
+                UnityAction<AsyncResult<Result.VerifyPointResult>> callback
+        ) =>
+            new VerifyPointTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.VerifyPointResult> VerifyPointFuture(
+                Request.VerifyPointRequest request
+        ) =>
+            new VerifyPointTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.VerifyPointResult> VerifyPointAsync(
+                Request.VerifyPointRequest request
+        ) =>
+            new VerifyPointTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyPointResult>();
+    #else
+		public VerifyPointTask VerifyPointAsync(
+                Request.VerifyPointRequest request
+        )
+		{
+			return new VerifyPointTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.VerifyPointResult> VerifyPointAsync(
+                Request.VerifyPointRequest request
+        ) =>
+            new VerifyPointTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class VerifyPointByUserIdTask : Gs2RestSessionTask<VerifyPointByUserIdRequest, VerifyPointByUserIdResult>
+        {
+            public VerifyPointByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, VerifyPointByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyPointByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "ad-reward")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/point/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.Point != null)
+                {
+                    jsonWriter.WritePropertyName("point");
+                    jsonWriter.Write(request.Point.ToString());
+                }
+                if (request.MultiplyValueSpecifyingQuantity != null)
+                {
+                    jsonWriter.WritePropertyName("multiplyValueSpecifyingQuantity");
+                    jsonWriter.Write(request.MultiplyValueSpecifyingQuantity.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyPointByUserId(
+                Request.VerifyPointByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyPointByUserIdResult>> callback
+        ) =>
+            new VerifyPointByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.VerifyPointByUserIdResult> VerifyPointByUserIdFuture(
+                Request.VerifyPointByUserIdRequest request
+        ) =>
+            new VerifyPointByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.VerifyPointByUserIdResult> VerifyPointByUserIdAsync(
+                Request.VerifyPointByUserIdRequest request
+        ) =>
+            new VerifyPointByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyPointByUserIdResult>();
+    #else
+		public VerifyPointByUserIdTask VerifyPointByUserIdAsync(
+                Request.VerifyPointByUserIdRequest request
+        )
+		{
+			return new VerifyPointByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.VerifyPointByUserIdResult> VerifyPointByUserIdAsync(
+                Request.VerifyPointByUserIdRequest request
+        ) =>
+            new VerifyPointByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
         public class DeletePointByUserIdTask : Gs2RestSessionTask<DeletePointByUserIdRequest, DeletePointByUserIdResult>
         {
             public DeletePointByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DeletePointByUserIdRequest request) : base(session, factory, request)
@@ -2256,6 +2495,114 @@ namespace Gs2.Gs2AdReward
                 Request.ConsumePointByStampTaskRequest request
         ) =>
             new ConsumePointByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class VerifyPointByStampTaskTask : Gs2RestSessionTask<VerifyPointByStampTaskRequest, VerifyPointByStampTaskResult>
+        {
+            public VerifyPointByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, VerifyPointByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyPointByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "ad-reward")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/point/verify";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyPointByStampTask(
+                Request.VerifyPointByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.VerifyPointByStampTaskResult>> callback
+        ) =>
+            new VerifyPointByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.VerifyPointByStampTaskResult> VerifyPointByStampTaskFuture(
+                Request.VerifyPointByStampTaskRequest request
+        ) =>
+            new VerifyPointByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.VerifyPointByStampTaskResult> VerifyPointByStampTaskAsync(
+                Request.VerifyPointByStampTaskRequest request
+        ) =>
+            new VerifyPointByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyPointByStampTaskResult>();
+    #else
+		public VerifyPointByStampTaskTask VerifyPointByStampTaskAsync(
+                Request.VerifyPointByStampTaskRequest request
+        )
+		{
+			return new VerifyPointByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.VerifyPointByStampTaskResult> VerifyPointByStampTaskAsync(
+                Request.VerifyPointByStampTaskRequest request
+        ) =>
+            new VerifyPointByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
                 request

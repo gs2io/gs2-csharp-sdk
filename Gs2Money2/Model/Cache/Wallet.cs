@@ -199,6 +199,15 @@ namespace Gs2.Gs2Money2.Model.Cache
                     slot
                 )
             );
+            if (find && value?.CreatedAt != null && self?.CreatedAt != null &&
+                value.Revision != null && self.Revision != null &&
+                value.CreatedAt != self.CreatedAt) {
+                if (value.CreatedAt > self.CreatedAt) {
+                    return;
+                }
+                // A recreated model starts a separate revision sequence.
+                find = false;
+            }
 /* diff --- start
             if (find && (value?.Revision ?? -1) > (self?.Revision ?? -1) && (self?.Revision ?? -1) > 1) {
  diff --- end */

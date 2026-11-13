@@ -452,6 +452,20 @@ namespace Gs2.Gs2AdReward.Domain
                         );
                         break;
                     }
+                    case "VerifyPointByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyPointByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyPointByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
                 }
         }
 

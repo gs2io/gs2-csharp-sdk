@@ -92,7 +92,6 @@ namespace Gs2.Gs2Friend.Model.Transaction
                 clone = new Profile {
                     ProfileId = $"grn:gs2:{region}:{ownerId}:friend:{request.NamespaceName}:user:{request.UserId}",
                     UserId = request.UserId,
-                    CreatedAt = createdAtMillis,
                     UpdatedAt = createdAtMillis,
                     Revision = 0,
                 };
