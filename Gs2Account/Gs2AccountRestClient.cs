@@ -3726,6 +3726,217 @@ namespace Gs2.Gs2Account
 #endif
 
 
+        public class IssueTakeOverCodeTask : Gs2RestSessionTask<IssueTakeOverCodeRequest, IssueTakeOverCodeResult>
+        {
+            public IssueTakeOverCodeTask(IGs2Session session, RestSessionRequestFactory factory, IssueTakeOverCodeRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(IssueTakeOverCodeRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/account/me/takeover/type/{type}/issue";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{type}",request.Type != null ? request.Type.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator IssueTakeOverCode(
+                Request.IssueTakeOverCodeRequest request,
+                UnityAction<AsyncResult<Result.IssueTakeOverCodeResult>> callback
+        ) =>
+            new IssueTakeOverCodeTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.IssueTakeOverCodeResult> IssueTakeOverCodeFuture(
+                Request.IssueTakeOverCodeRequest request
+        ) =>
+            new IssueTakeOverCodeTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.IssueTakeOverCodeResult> IssueTakeOverCodeAsync(
+                Request.IssueTakeOverCodeRequest request
+        ) =>
+            new IssueTakeOverCodeTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.IssueTakeOverCodeResult>();
+    #else
+		public IssueTakeOverCodeTask IssueTakeOverCodeAsync(
+                Request.IssueTakeOverCodeRequest request
+        )
+		{
+			return new IssueTakeOverCodeTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.IssueTakeOverCodeResult> IssueTakeOverCodeAsync(
+                Request.IssueTakeOverCodeRequest request
+        ) =>
+            new IssueTakeOverCodeTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class IssueTakeOverCodeByUserIdTask : Gs2RestSessionTask<IssueTakeOverCodeByUserIdRequest, IssueTakeOverCodeByUserIdResult>
+        {
+            public IssueTakeOverCodeByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, IssueTakeOverCodeByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(IssueTakeOverCodeByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "account")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/account/{userId}/takeover/type/{type}/issue";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{type}",request.Type != null ? request.Type.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator IssueTakeOverCodeByUserId(
+                Request.IssueTakeOverCodeByUserIdRequest request,
+                UnityAction<AsyncResult<Result.IssueTakeOverCodeByUserIdResult>> callback
+        ) =>
+            new IssueTakeOverCodeByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.IssueTakeOverCodeByUserIdResult> IssueTakeOverCodeByUserIdFuture(
+                Request.IssueTakeOverCodeByUserIdRequest request
+        ) =>
+            new IssueTakeOverCodeByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.IssueTakeOverCodeByUserIdResult> IssueTakeOverCodeByUserIdAsync(
+                Request.IssueTakeOverCodeByUserIdRequest request
+        ) =>
+            new IssueTakeOverCodeByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.IssueTakeOverCodeByUserIdResult>();
+    #else
+		public IssueTakeOverCodeByUserIdTask IssueTakeOverCodeByUserIdAsync(
+                Request.IssueTakeOverCodeByUserIdRequest request
+        )
+		{
+			return new IssueTakeOverCodeByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.IssueTakeOverCodeByUserIdResult> IssueTakeOverCodeByUserIdAsync(
+                Request.IssueTakeOverCodeByUserIdRequest request
+        ) =>
+            new IssueTakeOverCodeByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
         public class CreateTakeOverOpenIdConnectTask : Gs2RestSessionTask<CreateTakeOverOpenIdConnectRequest, CreateTakeOverOpenIdConnectResult>
         {
             public CreateTakeOverOpenIdConnectTask(IGs2Session session, RestSessionRequestFactory factory, CreateTakeOverOpenIdConnectRequest request) : base(session, factory, request)
@@ -6704,10 +6915,20 @@ namespace Gs2.Gs2Account
                     jsonWriter.WritePropertyName("metadata");
                     jsonWriter.Write(request.Metadata);
                 }
+                if (request.TakeOverMethod != null)
+                {
+                    jsonWriter.WritePropertyName("takeOverMethod");
+                    jsonWriter.Write(request.TakeOverMethod);
+                }
                 if (request.OpenIdConnectSetting != null)
                 {
                     jsonWriter.WritePropertyName("openIdConnectSetting");
                     request.OpenIdConnectSetting.WriteJson(jsonWriter);
+                }
+                if (request.IssuedCodeSetting != null)
+                {
+                    jsonWriter.WritePropertyName("issuedCodeSetting");
+                    request.IssuedCodeSetting.WriteJson(jsonWriter);
                 }
                 if (request.ContextStack != null)
                 {
@@ -6908,10 +7129,20 @@ namespace Gs2.Gs2Account
                     jsonWriter.WritePropertyName("metadata");
                     jsonWriter.Write(request.Metadata);
                 }
+                if (request.TakeOverMethod != null)
+                {
+                    jsonWriter.WritePropertyName("takeOverMethod");
+                    jsonWriter.Write(request.TakeOverMethod);
+                }
                 if (request.OpenIdConnectSetting != null)
                 {
                     jsonWriter.WritePropertyName("openIdConnectSetting");
                     request.OpenIdConnectSetting.WriteJson(jsonWriter);
+                }
+                if (request.IssuedCodeSetting != null)
+                {
+                    jsonWriter.WritePropertyName("issuedCodeSetting");
+                    request.IssuedCodeSetting.WriteJson(jsonWriter);
                 }
                 if (request.ContextStack != null)
                 {

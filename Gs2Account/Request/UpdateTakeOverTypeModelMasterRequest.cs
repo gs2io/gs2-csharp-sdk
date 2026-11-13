@@ -40,7 +40,9 @@ namespace Gs2.Gs2Account.Request
          public int? Type { set; get; } = null!;
          public string Description { set; get; } = null!;
          public string Metadata { set; get; } = null!;
+         public string TakeOverMethod { set; get; } = null!;
          public Gs2.Gs2Account.Model.OpenIdConnectSetting OpenIdConnectSetting { set; get; } = null!;
+         public Gs2.Gs2Account.Model.IssuedCodeSetting IssuedCodeSetting { set; get; } = null!;
         public UpdateTakeOverTypeModelMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -57,8 +59,16 @@ namespace Gs2.Gs2Account.Request
             this.Metadata = metadata;
             return this;
         }
+        public UpdateTakeOverTypeModelMasterRequest WithTakeOverMethod(string takeOverMethod) {
+            this.TakeOverMethod = takeOverMethod;
+            return this;
+        }
         public UpdateTakeOverTypeModelMasterRequest WithOpenIdConnectSetting(Gs2.Gs2Account.Model.OpenIdConnectSetting openIdConnectSetting) {
             this.OpenIdConnectSetting = openIdConnectSetting;
+            return this;
+        }
+        public UpdateTakeOverTypeModelMasterRequest WithIssuedCodeSetting(Gs2.Gs2Account.Model.IssuedCodeSetting issuedCodeSetting) {
+            this.IssuedCodeSetting = issuedCodeSetting;
             return this;
         }
 
@@ -75,7 +85,9 @@ namespace Gs2.Gs2Account.Request
                 .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["type"].ToString()))
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
-                .WithOpenIdConnectSetting(!data.Keys.Contains("openIdConnectSetting") || data["openIdConnectSetting"] == null ? null : Gs2.Gs2Account.Model.OpenIdConnectSetting.FromJson(data["openIdConnectSetting"]));
+                .WithTakeOverMethod(!data.Keys.Contains("takeOverMethod") || data["takeOverMethod"] == null ? null : data["takeOverMethod"].ToString())
+                .WithOpenIdConnectSetting(!data.Keys.Contains("openIdConnectSetting") || data["openIdConnectSetting"] == null ? null : Gs2.Gs2Account.Model.OpenIdConnectSetting.FromJson(data["openIdConnectSetting"]))
+                .WithIssuedCodeSetting(!data.Keys.Contains("issuedCodeSetting") || data["issuedCodeSetting"] == null ? null : Gs2.Gs2Account.Model.IssuedCodeSetting.FromJson(data["issuedCodeSetting"]));
         }
 
         public override JsonData ToJson()
@@ -85,7 +97,9 @@ namespace Gs2.Gs2Account.Request
                 ["type"] = Type,
                 ["description"] = Description,
                 ["metadata"] = Metadata,
+                ["takeOverMethod"] = TakeOverMethod,
                 ["openIdConnectSetting"] = OpenIdConnectSetting?.ToJson(),
+                ["issuedCodeSetting"] = IssuedCodeSetting?.ToJson(),
             };
         }
 
@@ -108,8 +122,15 @@ namespace Gs2.Gs2Account.Request
                 writer.WritePropertyName("metadata");
                 writer.Write(Metadata.ToString());
             }
+            if (TakeOverMethod != null) {
+                writer.WritePropertyName("takeOverMethod");
+                writer.Write(TakeOverMethod.ToString());
+            }
             if (OpenIdConnectSetting != null) {
                 OpenIdConnectSetting.WriteJson(writer);
+            }
+            if (IssuedCodeSetting != null) {
+                IssuedCodeSetting.WriteJson(writer);
             }
             writer.WriteObjectEnd();
         }
@@ -120,7 +141,9 @@ namespace Gs2.Gs2Account.Request
             key += Type + ":";
             key += Description + ":";
             key += Metadata + ":";
+            key += TakeOverMethod + ":";
             key += OpenIdConnectSetting + ":";
+            key += IssuedCodeSetting + ":";
             return key;
         }
     }

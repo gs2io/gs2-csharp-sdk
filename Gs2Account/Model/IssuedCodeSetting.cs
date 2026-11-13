@@ -1,0 +1,164 @@
+/*
+ * Copyright 2016 Game Server Services, Inc. or its affiliates. All Rights
+ * Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+
+#pragma warning disable CS0618 // Obsolete with a message
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using Gs2.Core.Model;
+using Gs2.Util.LitJson;
+#if UNITY_2017_1_OR_NEWER
+using UnityEngine.Scripting;
+#endif
+
+namespace Gs2.Gs2Account.Model
+{
+
+#if UNITY_2017_1_OR_NEWER
+	[Preserve]
+#endif
+	public partial class IssuedCodeSetting : IComparable
+	{
+        public int? ExpiresDays { set; get; }
+        public int? MaxFailedAttempts { set; get; }
+        public bool? DeleteOnUse { set; get; }
+        public IssuedCodeSetting WithExpiresDays(int? expiresDays) {
+            this.ExpiresDays = expiresDays;
+            return this;
+        }
+        public IssuedCodeSetting WithMaxFailedAttempts(int? maxFailedAttempts) {
+            this.MaxFailedAttempts = maxFailedAttempts;
+            return this;
+        }
+        public IssuedCodeSetting WithDeleteOnUse(bool? deleteOnUse) {
+            this.DeleteOnUse = deleteOnUse;
+            return this;
+        }
+
+#if UNITY_2017_1_OR_NEWER
+    	[Preserve]
+#endif
+        public static IssuedCodeSetting FromJson(JsonData data)
+        {
+            if (data == null) {
+                return null;
+            }
+            if (data.IsString) {
+                data = JsonMapper.ToObject(data.ToString());
+            }
+            return new IssuedCodeSetting()
+                .WithExpiresDays(!data.Keys.Contains("expiresDays") || data["expiresDays"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["expiresDays"].ToString()))
+                .WithMaxFailedAttempts(!data.Keys.Contains("maxFailedAttempts") || data["maxFailedAttempts"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["maxFailedAttempts"].ToString()))
+                .WithDeleteOnUse(!data.Keys.Contains("deleteOnUse") || data["deleteOnUse"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableBool(data["deleteOnUse"].ToString()));
+        }
+
+        public JsonData ToJson()
+        {
+            return new JsonData {
+                ["expiresDays"] = ExpiresDays,
+                ["maxFailedAttempts"] = MaxFailedAttempts,
+                ["deleteOnUse"] = DeleteOnUse,
+            };
+        }
+
+        public void WriteJson(JsonWriter writer)
+        {
+            writer.WriteObjectStart();
+            if (ExpiresDays != null) {
+                writer.WritePropertyName("expiresDays");
+                writer.Write((ExpiresDays.ToString().Contains(".") ? (int)double.Parse(ExpiresDays.ToString()) : int.Parse(ExpiresDays.ToString())));
+            }
+            if (MaxFailedAttempts != null) {
+                writer.WritePropertyName("maxFailedAttempts");
+                writer.Write((MaxFailedAttempts.ToString().Contains(".") ? (int)double.Parse(MaxFailedAttempts.ToString()) : int.Parse(MaxFailedAttempts.ToString())));
+            }
+            if (DeleteOnUse != null) {
+                writer.WritePropertyName("deleteOnUse");
+                writer.Write(bool.Parse(DeleteOnUse.ToString()));
+            }
+            writer.WriteObjectEnd();
+        }
+
+        public int CompareTo(object obj)
+        {
+            var other = obj as IssuedCodeSetting;
+            if (ReferenceEquals(other, null))
+            {
+                if (ReferenceEquals(obj, null))
+                {
+                    return 1;
+                }
+                throw new ArgumentException("Object must be of type IssuedCodeSetting.", nameof(obj));
+            }
+            var diff = 0;
+            diff = ModelComparer.Compare(ExpiresDays, other.ExpiresDays);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(MaxFailedAttempts, other.MaxFailedAttempts);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(DeleteOnUse, other.DeleteOnUse);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            return 0;
+        }
+
+        public void Validate() {
+            {
+                if (ExpiresDays < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("issuedCodeSetting", "account.issuedCodeSetting.expiresDays.error.invalid"),
+                    });
+                }
+                if (ExpiresDays > 365) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("issuedCodeSetting", "account.issuedCodeSetting.expiresDays.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (MaxFailedAttempts < 1) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("issuedCodeSetting", "account.issuedCodeSetting.maxFailedAttempts.error.invalid"),
+                    });
+                }
+                if (MaxFailedAttempts > 100) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("issuedCodeSetting", "account.issuedCodeSetting.maxFailedAttempts.error.invalid"),
+                    });
+                }
+            }
+            {
+            }
+        }
+
+        public object Clone() {
+            return new IssuedCodeSetting {
+                ExpiresDays = ExpiresDays,
+                MaxFailedAttempts = MaxFailedAttempts,
+                DeleteOnUse = DeleteOnUse,
+            };
+        }
+    }
+}

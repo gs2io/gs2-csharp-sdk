@@ -68,6 +68,7 @@ namespace Gs2.Gs2Account.Domain.Model
         public string UserId => this.AccessToken.UserId;
         public int? Type { get; } = null!;
         public string UserIdentifier { get; } = null!;
+        public string Password { get; set; } = null!;
         public string AuthorizationUrl { get; set; } = null!;
         public string Payload { get; set; } = null!;
 

@@ -38,7 +38,9 @@ namespace Gs2.Gs2Account.Model
         public int? Type { set; get; }
         public string Description { set; get; }
         public string Metadata { set; get; }
+        public string TakeOverMethod { set; get; }
         public Gs2.Gs2Account.Model.OpenIdConnectSetting OpenIdConnectSetting { set; get; }
+        public Gs2.Gs2Account.Model.IssuedCodeSetting IssuedCodeSetting { set; get; }
         public long? CreatedAt { set; get; }
         public long? UpdatedAt { set; get; }
         public long? Revision { set; get; }
@@ -58,8 +60,16 @@ namespace Gs2.Gs2Account.Model
             this.Metadata = metadata;
             return this;
         }
+        public TakeOverTypeModelMaster WithTakeOverMethod(string takeOverMethod) {
+            this.TakeOverMethod = takeOverMethod;
+            return this;
+        }
         public TakeOverTypeModelMaster WithOpenIdConnectSetting(Gs2.Gs2Account.Model.OpenIdConnectSetting openIdConnectSetting) {
             this.OpenIdConnectSetting = openIdConnectSetting;
+            return this;
+        }
+        public TakeOverTypeModelMaster WithIssuedCodeSetting(Gs2.Gs2Account.Model.IssuedCodeSetting issuedCodeSetting) {
+            this.IssuedCodeSetting = issuedCodeSetting;
             return this;
         }
         public TakeOverTypeModelMaster WithCreatedAt(long? createdAt) {
@@ -159,7 +169,9 @@ namespace Gs2.Gs2Account.Model
                 .WithType(!data.Keys.Contains("type") || data["type"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["type"].ToString()))
                 .WithDescription(!data.Keys.Contains("description") || data["description"] == null ? null : data["description"].ToString())
                 .WithMetadata(!data.Keys.Contains("metadata") || data["metadata"] == null ? null : data["metadata"].ToString())
+                .WithTakeOverMethod(!data.Keys.Contains("takeOverMethod") || data["takeOverMethod"] == null ? null : data["takeOverMethod"].ToString())
                 .WithOpenIdConnectSetting(!data.Keys.Contains("openIdConnectSetting") || data["openIdConnectSetting"] == null ? null : Gs2.Gs2Account.Model.OpenIdConnectSetting.FromJson(data["openIdConnectSetting"]))
+                .WithIssuedCodeSetting(!data.Keys.Contains("issuedCodeSetting") || data["issuedCodeSetting"] == null ? null : Gs2.Gs2Account.Model.IssuedCodeSetting.FromJson(data["issuedCodeSetting"]))
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()))
                 .WithUpdatedAt(!data.Keys.Contains("updatedAt") || data["updatedAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["updatedAt"].ToString()))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["revision"].ToString()));
@@ -172,7 +184,9 @@ namespace Gs2.Gs2Account.Model
                 ["type"] = Type,
                 ["description"] = Description,
                 ["metadata"] = Metadata,
+                ["takeOverMethod"] = TakeOverMethod,
                 ["openIdConnectSetting"] = OpenIdConnectSetting?.ToJson(),
+                ["issuedCodeSetting"] = IssuedCodeSetting?.ToJson(),
                 ["createdAt"] = CreatedAt,
                 ["updatedAt"] = UpdatedAt,
                 ["revision"] = Revision,
@@ -198,9 +212,17 @@ namespace Gs2.Gs2Account.Model
                 writer.WritePropertyName("metadata");
                 writer.Write(Metadata.ToString());
             }
+            if (TakeOverMethod != null) {
+                writer.WritePropertyName("takeOverMethod");
+                writer.Write(TakeOverMethod.ToString());
+            }
             if (OpenIdConnectSetting != null) {
                 writer.WritePropertyName("openIdConnectSetting");
                 OpenIdConnectSetting.WriteJson(writer);
+            }
+            if (IssuedCodeSetting != null) {
+                writer.WritePropertyName("issuedCodeSetting");
+                IssuedCodeSetting.WriteJson(writer);
             }
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
@@ -249,7 +271,17 @@ namespace Gs2.Gs2Account.Model
             {
                 return diff;
             }
+            diff = ModelComparer.Compare(TakeOverMethod, other.TakeOverMethod);
+            if (diff != 0)
+            {
+                return diff;
+            }
             diff = ModelComparer.Compare(OpenIdConnectSetting, other.OpenIdConnectSetting);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(IssuedCodeSetting, other.IssuedCodeSetting);
             if (diff != 0)
             {
                 return diff;
@@ -307,6 +339,19 @@ namespace Gs2.Gs2Account.Model
                 }
             }
             {
+                switch (TakeOverMethod) {
+                    case "openIdConnect":
+                    case "issuedCode":
+                        break;
+                    default:
+                        throw new Gs2.Core.Exception.BadRequestException(new [] {
+                            new RequestError("takeOverTypeModelMaster", "account.takeOverTypeModelMaster.takeOverMethod.error.invalid"),
+                        });
+                }
+            }
+            if (TakeOverMethod == "openIdConnect") {
+            }
+            if (TakeOverMethod == "issuedCode") {
             }
             {
                 if (CreatedAt < 0) {
@@ -352,7 +397,9 @@ namespace Gs2.Gs2Account.Model
                 Type = Type,
                 Description = Description,
                 Metadata = Metadata,
+                TakeOverMethod = TakeOverMethod,
                 OpenIdConnectSetting = OpenIdConnectSetting?.Clone() as Gs2.Gs2Account.Model.OpenIdConnectSetting,
+                IssuedCodeSetting = IssuedCodeSetting?.Clone() as Gs2.Gs2Account.Model.IssuedCodeSetting,
                 CreatedAt = CreatedAt,
                 UpdatedAt = UpdatedAt,
                 Revision = Revision,

@@ -2451,6 +2451,218 @@ namespace Gs2.Gs2Account
 #endif
 
 
+        public class IssueTakeOverCodeTask : Gs2WebSocketSessionTask<Request.IssueTakeOverCodeRequest, Result.IssueTakeOverCodeResult>
+        {
+            public IssueTakeOverCodeTask(IGs2Session session, Request.IssueTakeOverCodeRequest request) : base(session, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(Request.IssueTakeOverCodeRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "takeOver",
+                    "issueTakeOverCode",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+        public IEnumerator IssueTakeOverCode(
+                Request.IssueTakeOverCodeRequest request,
+                UnityAction<AsyncResult<Result.IssueTakeOverCodeResult>> callback
+        ) =>
+            new IssueTakeOverCodeTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
+
+        public IFuture<Result.IssueTakeOverCodeResult> IssueTakeOverCodeFuture(
+                Request.IssueTakeOverCodeRequest request
+        ) =>
+            new IssueTakeOverCodeTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+        public UniTask<Result.IssueTakeOverCodeResult> IssueTakeOverCodeAsync(
+            Request.IssueTakeOverCodeRequest request
+        ) =>
+            new IssueTakeOverCodeTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.IssueTakeOverCodeResult>();
+    #else
+        public IssueTakeOverCodeTask IssueTakeOverCodeAsync(
+                Request.IssueTakeOverCodeRequest request
+        )
+        {
+            return new IssueTakeOverCodeTask(
+                Gs2WebSocketSession,
+                request
+            );
+        }
+    #endif
+#else
+        public Task<Result.IssueTakeOverCodeResult> IssueTakeOverCodeAsync(
+            Request.IssueTakeOverCodeRequest request
+        ) =>
+            new IssueTakeOverCodeTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class IssueTakeOverCodeByUserIdTask : Gs2WebSocketSessionTask<Request.IssueTakeOverCodeByUserIdRequest, Result.IssueTakeOverCodeByUserIdResult>
+        {
+            public IssueTakeOverCodeByUserIdTask(IGs2Session session, Request.IssueTakeOverCodeByUserIdRequest request) : base(session, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(Request.IssueTakeOverCodeByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.Type != null)
+                {
+                    jsonWriter.WritePropertyName("type");
+                    jsonWriter.Write(request.Type.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "account",
+                    "takeOver",
+                    "issueTakeOverCodeByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+        public IEnumerator IssueTakeOverCodeByUserId(
+                Request.IssueTakeOverCodeByUserIdRequest request,
+                UnityAction<AsyncResult<Result.IssueTakeOverCodeByUserIdResult>> callback
+        ) =>
+            new IssueTakeOverCodeByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
+
+        public IFuture<Result.IssueTakeOverCodeByUserIdResult> IssueTakeOverCodeByUserIdFuture(
+                Request.IssueTakeOverCodeByUserIdRequest request
+        ) =>
+            new IssueTakeOverCodeByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+        public UniTask<Result.IssueTakeOverCodeByUserIdResult> IssueTakeOverCodeByUserIdAsync(
+            Request.IssueTakeOverCodeByUserIdRequest request
+        ) =>
+            new IssueTakeOverCodeByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.IssueTakeOverCodeByUserIdResult>();
+    #else
+        public IssueTakeOverCodeByUserIdTask IssueTakeOverCodeByUserIdAsync(
+                Request.IssueTakeOverCodeByUserIdRequest request
+        )
+        {
+            return new IssueTakeOverCodeByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            );
+        }
+    #endif
+#else
+        public Task<Result.IssueTakeOverCodeByUserIdResult> IssueTakeOverCodeByUserIdAsync(
+            Request.IssueTakeOverCodeByUserIdRequest request
+        ) =>
+            new IssueTakeOverCodeByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
+#endif
+
+
         public class CreateTakeOverOpenIdConnectTask : Gs2WebSocketSessionTask<Request.CreateTakeOverOpenIdConnectRequest, Result.CreateTakeOverOpenIdConnectResult>
         {
             public CreateTakeOverOpenIdConnectTask(IGs2Session session, Request.CreateTakeOverOpenIdConnectRequest request) : base(session, request)

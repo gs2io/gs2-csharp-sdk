@@ -40,6 +40,8 @@ namespace Gs2.Gs2Account.Model
         public string UserIdentifier { set; get; }
         public string Password { set; get; }
         public long? CreatedAt { set; get; }
+        public long? ExpiresAt { set; get; }
+        public int? FailedAttempts { set; get; }
         public long? Revision { set; get; }
         public TakeOver WithTakeOverId(string takeOverId) {
             this.TakeOverId = takeOverId;
@@ -63,6 +65,14 @@ namespace Gs2.Gs2Account.Model
         }
         public TakeOver WithCreatedAt(long? createdAt) {
             this.CreatedAt = createdAt;
+            return this;
+        }
+        public TakeOver WithExpiresAt(long? expiresAt) {
+            this.ExpiresAt = expiresAt;
+            return this;
+        }
+        public TakeOver WithFailedAttempts(int? failedAttempts) {
+            this.FailedAttempts = failedAttempts;
             return this;
         }
         public TakeOver WithRevision(long? revision) {
@@ -173,6 +183,8 @@ namespace Gs2.Gs2Account.Model
                 .WithUserIdentifier(!data.Keys.Contains("userIdentifier") || data["userIdentifier"] == null ? null : data["userIdentifier"].ToString())
                 .WithPassword(!data.Keys.Contains("password") || data["password"] == null ? null : data["password"].ToString())
                 .WithCreatedAt(!data.Keys.Contains("createdAt") || data["createdAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["createdAt"].ToString()))
+                .WithExpiresAt(!data.Keys.Contains("expiresAt") || data["expiresAt"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["expiresAt"].ToString()))
+                .WithFailedAttempts(!data.Keys.Contains("failedAttempts") || data["failedAttempts"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableInt(data["failedAttempts"].ToString()))
                 .WithRevision(!data.Keys.Contains("revision") || data["revision"] == null ? null : Gs2.Core.Util.JsonValue.ToNullableLong(data["revision"].ToString()));
         }
 
@@ -185,6 +197,8 @@ namespace Gs2.Gs2Account.Model
                 ["userIdentifier"] = UserIdentifier,
                 ["password"] = Password,
                 ["createdAt"] = CreatedAt,
+                ["expiresAt"] = ExpiresAt,
+                ["failedAttempts"] = FailedAttempts,
                 ["revision"] = Revision,
             };
         }
@@ -215,6 +229,14 @@ namespace Gs2.Gs2Account.Model
             if (CreatedAt != null) {
                 writer.WritePropertyName("createdAt");
                 writer.Write((CreatedAt.ToString().Contains(".") ? (long)double.Parse(CreatedAt.ToString()) : long.Parse(CreatedAt.ToString())));
+            }
+            if (ExpiresAt != null) {
+                writer.WritePropertyName("expiresAt");
+                writer.Write((ExpiresAt.ToString().Contains(".") ? (long)double.Parse(ExpiresAt.ToString()) : long.Parse(ExpiresAt.ToString())));
+            }
+            if (FailedAttempts != null) {
+                writer.WritePropertyName("failedAttempts");
+                writer.Write((FailedAttempts.ToString().Contains(".") ? (int)double.Parse(FailedAttempts.ToString()) : int.Parse(FailedAttempts.ToString())));
             }
             if (Revision != null) {
                 writer.WritePropertyName("revision");
@@ -261,6 +283,16 @@ namespace Gs2.Gs2Account.Model
                 return diff;
             }
             diff = ModelComparer.Compare(CreatedAt, other.CreatedAt);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(ExpiresAt, other.ExpiresAt);
+            if (diff != 0)
+            {
+                return diff;
+            }
+            diff = ModelComparer.Compare(FailedAttempts, other.FailedAttempts);
             if (diff != 0)
             {
                 return diff;
@@ -327,6 +359,30 @@ namespace Gs2.Gs2Account.Model
                 }
             }
             {
+                if (ExpiresAt < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("takeOver", "account.takeOver.expiresAt.error.invalid"),
+                    });
+                }
+                if (ExpiresAt > 32503680000000) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("takeOver", "account.takeOver.expiresAt.error.invalid"),
+                    });
+                }
+            }
+            {
+                if (FailedAttempts < 0) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("takeOver", "account.takeOver.failedAttempts.error.invalid"),
+                    });
+                }
+                if (FailedAttempts > 2147483645) {
+                    throw new Gs2.Core.Exception.BadRequestException(new [] {
+                        new RequestError("takeOver", "account.takeOver.failedAttempts.error.invalid"),
+                    });
+                }
+            }
+            {
                 if (Revision < 0) {
                     throw new Gs2.Core.Exception.BadRequestException(new [] {
                         new RequestError("takeOver", "account.takeOver.revision.error.invalid"),
@@ -348,6 +404,8 @@ namespace Gs2.Gs2Account.Model
                 UserIdentifier = UserIdentifier,
                 Password = Password,
                 CreatedAt = CreatedAt,
+                ExpiresAt = ExpiresAt,
+                FailedAttempts = FailedAttempts,
                 Revision = Revision,
             };
         }

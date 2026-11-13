@@ -71,6 +71,7 @@ namespace Gs2.Gs2Account.Domain.Model
         public string Signature { get; set; } = null!;
         public string Token { get; set; } = null!;
         public long? Expire { get; set; } = null!;
+        public string Password { get; set; } = null!;
 /* diff --- start
         public string AuthorizationUrl { get; set; } = null!;
  diff --- end */
@@ -113,6 +114,40 @@ namespace Gs2.Gs2Account.Domain.Model
                 () => this._client.RequestDeletionAsync(request)
             );
             var domain = this;
+
+            return domain;
+        }
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> IssueTakeOverCodeFuture(
+            IssueTakeOverCodeRequest request
+        ) => IssueTakeOverCodeAsync(request).ToGs2Future();
+        #endif
+
+        #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> IssueTakeOverCodeAsync(
+        #else
+        public async Task<Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain> IssueTakeOverCodeAsync(
+        #endif
+            IssueTakeOverCodeRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this.AccessToken?.Token);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                this.AccessToken?.TimeOffset,
+                () => this._client.IssueTakeOverCodeAsync(request)
+            );
+            var domain = new Gs2.Gs2Account.Domain.Model.TakeOverAccessTokenDomain(
+                this._gs2,
+                this.NamespaceName,
+                this.AccessToken,
+                result?.Item?.Type
+            );
+            domain.Password = result?.Password;
 
             return domain;
         }

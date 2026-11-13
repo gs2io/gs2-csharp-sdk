@@ -330,6 +330,22 @@ namespace Gs2.Gs2Account.Model.Cache
                         Request.CreateTakeOverByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
+                case "issueTakeOverCode":
+                    Result.IssueTakeOverCodeResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.IssueTakeOverCodeRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "issueTakeOverCodeByUserId":
+                    Result.IssueTakeOverCodeByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.IssueTakeOverCodeByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "createTakeOverOpenIdConnect":
                     Result.CreateTakeOverOpenIdConnectResult.FromJson(resultPayload).PutCache(
                         cache,
