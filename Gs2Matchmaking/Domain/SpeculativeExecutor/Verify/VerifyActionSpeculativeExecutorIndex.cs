@@ -63,17 +63,27 @@ namespace Gs2.Gs2Matchmaking.Domain.SpeculativeExecutor
             verifyAction.Action = verifyAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
             verifyAction.Action = verifyAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
             verifyAction.Action = verifyAction.Action.Replace("{userId}", accessToken.UserId);
-            if (VerifyIncludeParticipantByUserIdSpeculativeExecutor.Action() != verifyAction.Action) {
-                return null;
+            if (VerifyIncludeParticipantByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                var request = VerifyIncludeParticipantByUserIdRequest.FromJson(
+                    JsonMapper.ToObject(verifyAction.Request)
+                );
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
+                return await VerifyIncludeParticipantByUserIdSpeculativeExecutor
+                    .ExecuteInverseAsync(domain, accessToken, request);
             }
-            var request = VerifyIncludeParticipantByUserIdRequest.FromJson(
-                JsonMapper.ToObject(verifyAction.Request)
-            );
-            if (rate != 1) {
-                request = request.Rate(rate);
+            if (VerifyRatingByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                var request = VerifyRatingByUserIdRequest.FromJson(
+                    JsonMapper.ToObject(verifyAction.Request)
+                );
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
+                return await VerifyRatingByUserIdSpeculativeExecutor
+                    .ExecuteInverseAsync(domain, accessToken, request);
             }
-            return await VerifyIncludeParticipantByUserIdSpeculativeExecutor
-                .ExecuteInverseAsync(domain, accessToken, request);
+            return null;
         }
 
 /* diff +++ end */
@@ -105,6 +115,17 @@ namespace Gs2.Gs2Matchmaking.Domain.SpeculativeExecutor
                     request = request.Rate(rate);
                 }
                 return await VerifyIncludeParticipantByUserIdSpeculativeExecutor.ExecuteAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
+            if (VerifyRatingByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                var request = VerifyRatingByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
+                return await VerifyRatingByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
                     request

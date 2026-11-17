@@ -590,6 +590,22 @@ namespace Gs2.Gs2Matchmaking.Model.Cache
                         Request.GetRatingByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
+                case "verifyRating":
+                    Result.VerifyRatingResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.VerifyRatingRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "verifyRatingByUserId":
+                    Result.VerifyRatingByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.VerifyRatingByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "putResult":
                     Result.PutResultResult.FromJson(resultPayload).PutCache(
                         cache,

@@ -401,6 +401,20 @@ namespace Gs2.Gs2Matchmaking.Domain
                         );
                         break;
                     }
+                    case "VerifyRatingByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyRatingByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyRatingByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
                 }
         }
 

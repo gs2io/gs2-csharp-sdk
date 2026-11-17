@@ -7075,6 +7075,237 @@ namespace Gs2.Gs2Matchmaking
 #endif
 
 
+        public class VerifyRatingTask : Gs2RestSessionTask<VerifyRatingRequest, VerifyRatingResult>
+        {
+            public VerifyRatingTask(IGs2Session session, RestSessionRequestFactory factory, VerifyRatingRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyRatingRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "matchmaking")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/rating/{ratingName}/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{ratingName}", !string.IsNullOrEmpty(request.RatingName) ? request.RatingName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.RateValue != null)
+                {
+                    jsonWriter.WritePropertyName("rateValue");
+                    jsonWriter.Write(request.RateValue.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyRating(
+                Request.VerifyRatingRequest request,
+                UnityAction<AsyncResult<Result.VerifyRatingResult>> callback
+        ) =>
+            new VerifyRatingTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.VerifyRatingResult> VerifyRatingFuture(
+                Request.VerifyRatingRequest request
+        ) =>
+            new VerifyRatingTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.VerifyRatingResult> VerifyRatingAsync(
+                Request.VerifyRatingRequest request
+        ) =>
+            new VerifyRatingTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyRatingResult>();
+    #else
+		public VerifyRatingTask VerifyRatingAsync(
+                Request.VerifyRatingRequest request
+        )
+		{
+			return new VerifyRatingTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.VerifyRatingResult> VerifyRatingAsync(
+                Request.VerifyRatingRequest request
+        ) =>
+            new VerifyRatingTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class VerifyRatingByUserIdTask : Gs2RestSessionTask<VerifyRatingByUserIdRequest, VerifyRatingByUserIdResult>
+        {
+            public VerifyRatingByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, VerifyRatingByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyRatingByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "matchmaking")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/rating/{ratingName}/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{ratingName}", !string.IsNullOrEmpty(request.RatingName) ? request.RatingName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.RateValue != null)
+                {
+                    jsonWriter.WritePropertyName("rateValue");
+                    jsonWriter.Write(request.RateValue.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyRatingByUserId(
+                Request.VerifyRatingByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyRatingByUserIdResult>> callback
+        ) =>
+            new VerifyRatingByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.VerifyRatingByUserIdResult> VerifyRatingByUserIdFuture(
+                Request.VerifyRatingByUserIdRequest request
+        ) =>
+            new VerifyRatingByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.VerifyRatingByUserIdResult> VerifyRatingByUserIdAsync(
+                Request.VerifyRatingByUserIdRequest request
+        ) =>
+            new VerifyRatingByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyRatingByUserIdResult>();
+    #else
+		public VerifyRatingByUserIdTask VerifyRatingByUserIdAsync(
+                Request.VerifyRatingByUserIdRequest request
+        )
+		{
+			return new VerifyRatingByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.VerifyRatingByUserIdResult> VerifyRatingByUserIdAsync(
+                Request.VerifyRatingByUserIdRequest request
+        ) =>
+            new VerifyRatingByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
         public class PutResultTask : Gs2RestSessionTask<PutResultRequest, PutResultResult>
         {
             public PutResultTask(IGs2Session session, RestSessionRequestFactory factory, PutResultRequest request) : base(session, factory, request)
@@ -7276,6 +7507,114 @@ namespace Gs2.Gs2Matchmaking
                 Request.DeleteRatingRequest request
         ) =>
             new DeleteRatingTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class VerifyRatingByStampTaskTask : Gs2RestSessionTask<VerifyRatingByStampTaskRequest, VerifyRatingByStampTaskResult>
+        {
+            public VerifyRatingByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, VerifyRatingByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyRatingByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "matchmaking")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/rating/verify";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyRatingByStampTask(
+                Request.VerifyRatingByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.VerifyRatingByStampTaskResult>> callback
+        ) =>
+            new VerifyRatingByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.VerifyRatingByStampTaskResult> VerifyRatingByStampTaskFuture(
+                Request.VerifyRatingByStampTaskRequest request
+        ) =>
+            new VerifyRatingByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.VerifyRatingByStampTaskResult> VerifyRatingByStampTaskAsync(
+                Request.VerifyRatingByStampTaskRequest request
+        ) =>
+            new VerifyRatingByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyRatingByStampTaskResult>();
+    #else
+		public VerifyRatingByStampTaskTask VerifyRatingByStampTaskAsync(
+                Request.VerifyRatingByStampTaskRequest request
+        )
+		{
+			return new VerifyRatingByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.VerifyRatingByStampTaskResult> VerifyRatingByStampTaskAsync(
+                Request.VerifyRatingByStampTaskRequest request
+        ) =>
+            new VerifyRatingByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
                 request

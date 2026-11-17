@@ -32,6 +32,8 @@ namespace Gs2.Gs2Matchmaking.Model
             switch (action.Action) {
                 case "Gs2Matchmaking:VerifyIncludeParticipantByUserId":
                     return VerifyIncludeParticipantByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Matchmaking:VerifyRatingByUserId":
+                    return VerifyRatingByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }
@@ -40,6 +42,8 @@ namespace Gs2.Gs2Matchmaking.Model
             switch (action.Action) {
                 case "Gs2Matchmaking:VerifyIncludeParticipantByUserId":
                     return VerifyIncludeParticipantByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Matchmaking:VerifyRatingByUserId":
+                    return VerifyRatingByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }

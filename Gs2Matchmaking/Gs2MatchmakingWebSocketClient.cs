@@ -2487,6 +2487,248 @@ namespace Gs2.Gs2Matchmaking
 #endif
 
 
+        public class VerifyRatingTask : Gs2WebSocketSessionTask<Request.VerifyRatingRequest, Result.VerifyRatingResult>
+        {
+            public VerifyRatingTask(IGs2Session session, Request.VerifyRatingRequest request) : base(session, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyRatingRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.RatingName != null)
+                {
+                    jsonWriter.WritePropertyName("ratingName");
+                    jsonWriter.Write(request.RatingName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.RateValue != null)
+                {
+                    jsonWriter.WritePropertyName("rateValue");
+                    jsonWriter.Write(request.RateValue.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "matchmaking",
+                    "rating",
+                    "verifyRating",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+        public IEnumerator VerifyRating(
+                Request.VerifyRatingRequest request,
+                UnityAction<AsyncResult<Result.VerifyRatingResult>> callback
+        ) =>
+            new VerifyRatingTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
+
+        public IFuture<Result.VerifyRatingResult> VerifyRatingFuture(
+                Request.VerifyRatingRequest request
+        ) =>
+            new VerifyRatingTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+        public UniTask<Result.VerifyRatingResult> VerifyRatingAsync(
+            Request.VerifyRatingRequest request
+        ) =>
+            new VerifyRatingTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.VerifyRatingResult>();
+    #else
+        public VerifyRatingTask VerifyRatingAsync(
+                Request.VerifyRatingRequest request
+        )
+        {
+            return new VerifyRatingTask(
+                Gs2WebSocketSession,
+                request
+            );
+        }
+    #endif
+#else
+        public Task<Result.VerifyRatingResult> VerifyRatingAsync(
+            Request.VerifyRatingRequest request
+        ) =>
+            new VerifyRatingTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class VerifyRatingByUserIdTask : Gs2WebSocketSessionTask<Request.VerifyRatingByUserIdRequest, Result.VerifyRatingByUserIdResult>
+        {
+            public VerifyRatingByUserIdTask(IGs2Session session, Request.VerifyRatingByUserIdRequest request) : base(session, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyRatingByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.RatingName != null)
+                {
+                    jsonWriter.WritePropertyName("ratingName");
+                    jsonWriter.Write(request.RatingName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.RateValue != null)
+                {
+                    jsonWriter.WritePropertyName("rateValue");
+                    jsonWriter.Write(request.RateValue.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "matchmaking",
+                    "rating",
+                    "verifyRatingByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+        public IEnumerator VerifyRatingByUserId(
+                Request.VerifyRatingByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyRatingByUserIdResult>> callback
+        ) =>
+            new VerifyRatingByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
+
+        public IFuture<Result.VerifyRatingByUserIdResult> VerifyRatingByUserIdFuture(
+                Request.VerifyRatingByUserIdRequest request
+        ) =>
+            new VerifyRatingByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+        public UniTask<Result.VerifyRatingByUserIdResult> VerifyRatingByUserIdAsync(
+            Request.VerifyRatingByUserIdRequest request
+        ) =>
+            new VerifyRatingByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.VerifyRatingByUserIdResult>();
+    #else
+        public VerifyRatingByUserIdTask VerifyRatingByUserIdAsync(
+                Request.VerifyRatingByUserIdRequest request
+        )
+        {
+            return new VerifyRatingByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            );
+        }
+    #endif
+#else
+        public Task<Result.VerifyRatingByUserIdResult> VerifyRatingByUserIdAsync(
+            Request.VerifyRatingByUserIdRequest request
+        ) =>
+            new VerifyRatingByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
+#endif
+
+
         public class DeleteRatingTask : Gs2WebSocketSessionTask<Request.DeleteRatingRequest, Result.DeleteRatingResult>
         {
             public DeleteRatingTask(IGs2Session session, Request.DeleteRatingRequest request) : base(session, request)
