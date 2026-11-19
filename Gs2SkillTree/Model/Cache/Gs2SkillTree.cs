@@ -320,6 +320,22 @@ namespace Gs2.Gs2SkillTree.Model.Cache
                         Request.GetStatusByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
+                case "verifyStatus":
+                    Result.VerifyStatusResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.VerifyStatusRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "verifyStatusByUserId":
+                    Result.VerifyStatusByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.VerifyStatusByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "reset":
                     Result.ResetResult.FromJson(resultPayload).PutCache(
                         cache,

@@ -174,6 +174,17 @@ namespace Gs2.Core.SpeculativeExecutor
                 return commit;
             }
 
+            commit = await Gs2.Gs2SkillTree.Domain.SpeculativeExecutor
+                .VerifyActionSpeculativeExecutorIndex.ExecuteInverseAsync(
+                    domain,
+                    accessToken,
+                    verifyAction,
+                    rate
+                );
+            if (commit != null) {
+                return commit;
+            }
+
             commit = await Gs2.Gs2Limit.Domain.SpeculativeExecutor
                 .VerifyActionSpeculativeExecutorIndex.ExecuteInverseAsync(
                     domain,
@@ -341,6 +352,17 @@ namespace Gs2.Core.SpeculativeExecutor
             }
 
             commit = await Gs2.Gs2SerialKey.Domain.SpeculativeExecutor
+                .VerifyActionSpeculativeExecutorIndex.ExecuteAsync(
+                    domain,
+                    accessToken,
+                    verifyAction,
+                    rate
+                );
+            if (commit != null) {
+                return commit;
+            }
+
+            commit = await Gs2.Gs2SkillTree.Domain.SpeculativeExecutor
                 .VerifyActionSpeculativeExecutorIndex.ExecuteAsync(
                     domain,
                     accessToken,

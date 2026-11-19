@@ -3464,6 +3464,229 @@ namespace Gs2.Gs2SkillTree
 #endif
 
 
+        public class VerifyStatusTask : Gs2RestSessionTask<VerifyStatusRequest, VerifyStatusResult>
+        {
+            public VerifyStatusTask(IGs2Session session, RestSessionRequestFactory factory, VerifyStatusRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyStatusRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "skill-tree")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/status/{propertyId}/node/{nodeModelName}/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{propertyId}", !string.IsNullOrEmpty(request.PropertyId) ? request.PropertyId.ToString() : "null");
+                url = url.Replace("{nodeModelName}", !string.IsNullOrEmpty(request.NodeModelName) ? request.NodeModelName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyStatus(
+                Request.VerifyStatusRequest request,
+                UnityAction<AsyncResult<Result.VerifyStatusResult>> callback
+        ) =>
+            new VerifyStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.VerifyStatusResult> VerifyStatusFuture(
+                Request.VerifyStatusRequest request
+        ) =>
+            new VerifyStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.VerifyStatusResult> VerifyStatusAsync(
+                Request.VerifyStatusRequest request
+        ) =>
+            new VerifyStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyStatusResult>();
+    #else
+		public VerifyStatusTask VerifyStatusAsync(
+                Request.VerifyStatusRequest request
+        )
+		{
+			return new VerifyStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.VerifyStatusResult> VerifyStatusAsync(
+                Request.VerifyStatusRequest request
+        ) =>
+            new VerifyStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class VerifyStatusByUserIdTask : Gs2RestSessionTask<VerifyStatusByUserIdRequest, VerifyStatusByUserIdResult>
+        {
+            public VerifyStatusByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, VerifyStatusByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyStatusByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "skill-tree")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/status/{propertyId}/node/{nodeModelName}/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{propertyId}", !string.IsNullOrEmpty(request.PropertyId) ? request.PropertyId.ToString() : "null");
+                url = url.Replace("{nodeModelName}", !string.IsNullOrEmpty(request.NodeModelName) ? request.NodeModelName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyStatusByUserId(
+                Request.VerifyStatusByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyStatusByUserIdResult>> callback
+        ) =>
+            new VerifyStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.VerifyStatusByUserIdResult> VerifyStatusByUserIdFuture(
+                Request.VerifyStatusByUserIdRequest request
+        ) =>
+            new VerifyStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.VerifyStatusByUserIdResult> VerifyStatusByUserIdAsync(
+                Request.VerifyStatusByUserIdRequest request
+        ) =>
+            new VerifyStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyStatusByUserIdResult>();
+    #else
+		public VerifyStatusByUserIdTask VerifyStatusByUserIdAsync(
+                Request.VerifyStatusByUserIdRequest request
+        )
+		{
+			return new VerifyStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.VerifyStatusByUserIdResult> VerifyStatusByUserIdAsync(
+                Request.VerifyStatusByUserIdRequest request
+        ) =>
+            new VerifyStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
         public class ResetTask : Gs2RestSessionTask<ResetRequest, ResetResult>
         {
             public ResetTask(IGs2Session session, RestSessionRequestFactory factory, ResetRequest request) : base(session, factory, request)
@@ -3889,6 +4112,114 @@ namespace Gs2.Gs2SkillTree
                 Request.MarkRestrainByStampTaskRequest request
         ) =>
             new MarkRestrainByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class VerifyStatusByStampTaskTask : Gs2RestSessionTask<VerifyStatusByStampTaskRequest, VerifyStatusByStampTaskResult>
+        {
+            public VerifyStatusByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, VerifyStatusByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyStatusByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "skill-tree")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/status/verify";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyStatusByStampTask(
+                Request.VerifyStatusByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.VerifyStatusByStampTaskResult>> callback
+        ) =>
+            new VerifyStatusByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.VerifyStatusByStampTaskResult> VerifyStatusByStampTaskFuture(
+                Request.VerifyStatusByStampTaskRequest request
+        ) =>
+            new VerifyStatusByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.VerifyStatusByStampTaskResult> VerifyStatusByStampTaskAsync(
+                Request.VerifyStatusByStampTaskRequest request
+        ) =>
+            new VerifyStatusByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyStatusByStampTaskResult>();
+    #else
+		public VerifyStatusByStampTaskTask VerifyStatusByStampTaskAsync(
+                Request.VerifyStatusByStampTaskRequest request
+        )
+		{
+			return new VerifyStatusByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.VerifyStatusByStampTaskResult> VerifyStatusByStampTaskAsync(
+                Request.VerifyStatusByStampTaskRequest request
+        ) =>
+            new VerifyStatusByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
                 request

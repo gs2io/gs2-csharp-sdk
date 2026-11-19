@@ -32,12 +32,16 @@ namespace Gs2.Gs2SkillTree.Model
             switch (action.Action) {
                 case "Gs2SkillTree:MarkRestrainByUserId":
                     return MarkRestrainByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2SkillTree:VerifyStatusByUserId":
+                    return VerifyStatusByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }
 
         public static Gs2Request ToRequest(Gs2.Core.Model.VerifyAction action) {
             switch (action.Action) {
+                case "Gs2SkillTree:VerifyStatusByUserId":
+                    return VerifyStatusByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }
