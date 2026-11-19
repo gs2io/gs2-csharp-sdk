@@ -1,12 +1,12 @@
-[⇒README in English](README-en.md)
+**日本語** | [English](README-en.md) | [한국어](README-ko.md)
 
 # GS2-CSharp-SDK
 
 Game Server Services(https://gs2.io) を C# で利用するためのSDKです。
 
-NET Coreランタイムと組み合わせて利用することができます。
+NuGet パッケージは .NET 6.0 と .NET Standard 2.1 を対象としています。
 
-[GS2 SDK for Unity](https://github.com/gs2io/gs2-sdk-for-unity) は GS2-CSharp-SDK（C#環境向け）とGS2 SDK for Unity（Unity環境向け）で構成されています。
+[GS2 SDK for Unity](https://github.com/gs2io/gs2-sdk-for-unity) は GS2-CSharp-SDK（C# 共通モジュール）と Unity 専用モジュールで構成されています。
 
 ## Game Server Services とは
 
