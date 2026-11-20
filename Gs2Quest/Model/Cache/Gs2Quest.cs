@@ -414,6 +414,22 @@ namespace Gs2.Gs2Quest.Model.Cache
                         Request.GetCompletedQuestListByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
+                case "verifyCompletedQuestList":
+                    Result.VerifyCompletedQuestListResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.VerifyCompletedQuestListRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "verifyCompletedQuestListByUserId":
+                    Result.VerifyCompletedQuestListByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.VerifyCompletedQuestListByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "deleteCompletedQuestListByUserId":
                     Result.DeleteCompletedQuestListByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,

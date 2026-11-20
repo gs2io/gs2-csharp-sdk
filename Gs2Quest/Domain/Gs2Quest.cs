@@ -452,6 +452,20 @@ namespace Gs2.Gs2Quest.Domain
                         );
                         break;
                     }
+                    case "VerifyCompletedQuestListByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyCompletedQuestListByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyCompletedQuestListByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
                 }
         }
 

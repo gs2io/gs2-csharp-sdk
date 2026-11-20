@@ -4966,6 +4966,229 @@ namespace Gs2.Gs2Quest
 #endif
 
 
+        public class VerifyCompletedQuestListTask : Gs2RestSessionTask<VerifyCompletedQuestListRequest, VerifyCompletedQuestListResult>
+        {
+            public VerifyCompletedQuestListTask(IGs2Session session, RestSessionRequestFactory factory, VerifyCompletedQuestListRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyCompletedQuestListRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "quest")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/completed/group/{questGroupName}/quest/{questName}/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(request.QuestGroupName) ? request.QuestGroupName.ToString() : "null");
+                url = url.Replace("{questName}", !string.IsNullOrEmpty(request.QuestName) ? request.QuestName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyCompletedQuestList(
+                Request.VerifyCompletedQuestListRequest request,
+                UnityAction<AsyncResult<Result.VerifyCompletedQuestListResult>> callback
+        ) =>
+            new VerifyCompletedQuestListTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.VerifyCompletedQuestListResult> VerifyCompletedQuestListFuture(
+                Request.VerifyCompletedQuestListRequest request
+        ) =>
+            new VerifyCompletedQuestListTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.VerifyCompletedQuestListResult> VerifyCompletedQuestListAsync(
+                Request.VerifyCompletedQuestListRequest request
+        ) =>
+            new VerifyCompletedQuestListTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyCompletedQuestListResult>();
+    #else
+		public VerifyCompletedQuestListTask VerifyCompletedQuestListAsync(
+                Request.VerifyCompletedQuestListRequest request
+        )
+		{
+			return new VerifyCompletedQuestListTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.VerifyCompletedQuestListResult> VerifyCompletedQuestListAsync(
+                Request.VerifyCompletedQuestListRequest request
+        ) =>
+            new VerifyCompletedQuestListTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class VerifyCompletedQuestListByUserIdTask : Gs2RestSessionTask<VerifyCompletedQuestListByUserIdRequest, VerifyCompletedQuestListByUserIdResult>
+        {
+            public VerifyCompletedQuestListByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, VerifyCompletedQuestListByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyCompletedQuestListByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "quest")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/completed/group/{questGroupName}/quest/{questName}/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{questGroupName}", !string.IsNullOrEmpty(request.QuestGroupName) ? request.QuestGroupName.ToString() : "null");
+                url = url.Replace("{questName}", !string.IsNullOrEmpty(request.QuestName) ? request.QuestName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyCompletedQuestListByUserId(
+                Request.VerifyCompletedQuestListByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyCompletedQuestListByUserIdResult>> callback
+        ) =>
+            new VerifyCompletedQuestListByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.VerifyCompletedQuestListByUserIdResult> VerifyCompletedQuestListByUserIdFuture(
+                Request.VerifyCompletedQuestListByUserIdRequest request
+        ) =>
+            new VerifyCompletedQuestListByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.VerifyCompletedQuestListByUserIdResult> VerifyCompletedQuestListByUserIdAsync(
+                Request.VerifyCompletedQuestListByUserIdRequest request
+        ) =>
+            new VerifyCompletedQuestListByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyCompletedQuestListByUserIdResult>();
+    #else
+		public VerifyCompletedQuestListByUserIdTask VerifyCompletedQuestListByUserIdAsync(
+                Request.VerifyCompletedQuestListByUserIdRequest request
+        )
+		{
+			return new VerifyCompletedQuestListByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.VerifyCompletedQuestListByUserIdResult> VerifyCompletedQuestListByUserIdAsync(
+                Request.VerifyCompletedQuestListByUserIdRequest request
+        ) =>
+            new VerifyCompletedQuestListByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
         public class DeleteCompletedQuestListByUserIdTask : Gs2RestSessionTask<DeleteCompletedQuestListByUserIdRequest, DeleteCompletedQuestListByUserIdResult>
         {
             public DeleteCompletedQuestListByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DeleteCompletedQuestListByUserIdRequest request) : base(session, factory, request)
@@ -5056,6 +5279,114 @@ namespace Gs2.Gs2Quest
                 Request.DeleteCompletedQuestListByUserIdRequest request
         ) =>
             new DeleteCompletedQuestListByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class VerifyCompletedQuestListByStampTaskTask : Gs2RestSessionTask<VerifyCompletedQuestListByStampTaskRequest, VerifyCompletedQuestListByStampTaskResult>
+        {
+            public VerifyCompletedQuestListByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, VerifyCompletedQuestListByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyCompletedQuestListByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "quest")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/completed/verify";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyCompletedQuestListByStampTask(
+                Request.VerifyCompletedQuestListByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.VerifyCompletedQuestListByStampTaskResult>> callback
+        ) =>
+            new VerifyCompletedQuestListByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.VerifyCompletedQuestListByStampTaskResult> VerifyCompletedQuestListByStampTaskFuture(
+                Request.VerifyCompletedQuestListByStampTaskRequest request
+        ) =>
+            new VerifyCompletedQuestListByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.VerifyCompletedQuestListByStampTaskResult> VerifyCompletedQuestListByStampTaskAsync(
+                Request.VerifyCompletedQuestListByStampTaskRequest request
+        ) =>
+            new VerifyCompletedQuestListByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyCompletedQuestListByStampTaskResult>();
+    #else
+		public VerifyCompletedQuestListByStampTaskTask VerifyCompletedQuestListByStampTaskAsync(
+                Request.VerifyCompletedQuestListByStampTaskRequest request
+        )
+		{
+			return new VerifyCompletedQuestListByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.VerifyCompletedQuestListByStampTaskResult> VerifyCompletedQuestListByStampTaskAsync(
+                Request.VerifyCompletedQuestListByStampTaskRequest request
+        ) =>
+            new VerifyCompletedQuestListByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
                 request

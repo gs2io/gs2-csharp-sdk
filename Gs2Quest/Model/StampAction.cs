@@ -32,12 +32,16 @@ namespace Gs2.Gs2Quest.Model
             switch (action.Action) {
                 case "Gs2Quest:DeleteProgressByUserId":
                     return DeleteProgressByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Quest:VerifyCompletedQuestListByUserId":
+                    return VerifyCompletedQuestListByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }
 
         public static Gs2Request ToRequest(Gs2.Core.Model.VerifyAction action) {
             switch (action.Action) {
+                case "Gs2Quest:VerifyCompletedQuestListByUserId":
+                    return VerifyCompletedQuestListByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }

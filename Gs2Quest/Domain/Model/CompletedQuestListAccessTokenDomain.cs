@@ -110,6 +110,35 @@ namespace Gs2.Gs2Quest.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Quest.Domain.Model.CompletedQuestListAccessTokenDomain> VerifyFuture(
+            VerifyCompletedQuestListRequest request
+        ) => VerifyAsync(request).ToGs2Future();
+        #endif
+
+        #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Quest.Domain.Model.CompletedQuestListAccessTokenDomain> VerifyAsync(
+        #else
+        public async Task<Gs2.Gs2Quest.Domain.Model.CompletedQuestListAccessTokenDomain> VerifyAsync(
+        #endif
+            VerifyCompletedQuestListRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this.AccessToken?.Token)
+                .WithQuestGroupName(this.QuestGroupName);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                this.AccessToken?.TimeOffset,
+                () => this._client.VerifyCompletedQuestListAsync(request)
+            );
+            var domain = this;
+
+            return domain;
+        }
+
+        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Quest.Model.CompletedQuestList> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
