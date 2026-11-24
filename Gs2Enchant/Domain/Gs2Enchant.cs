@@ -524,6 +524,20 @@ namespace Gs2.Gs2Enchant.Domain
                 string result
         ) {
                 switch (method) {
+                    case "VerifyBalanceParameterStatusByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyBalanceParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyBalanceParameterStatusByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
                     case "VerifyRarityParameterStatusByUserId": {
                         if (result == null) {
                             break;

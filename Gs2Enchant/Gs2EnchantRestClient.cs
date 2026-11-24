@@ -3849,6 +3849,249 @@ namespace Gs2.Gs2Enchant
 #endif
 
 
+        public class VerifyBalanceParameterStatusTask : Gs2RestSessionTask<VerifyBalanceParameterStatusRequest, VerifyBalanceParameterStatusResult>
+        {
+            public VerifyBalanceParameterStatusTask(IGs2Session session, RestSessionRequestFactory factory, VerifyBalanceParameterStatusRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyBalanceParameterStatusRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "enchant")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/status/balance/{parameterName}/{propertyId}/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{parameterName}", !string.IsNullOrEmpty(request.ParameterName) ? request.ParameterName.ToString() : "null");
+                url = url.Replace("{propertyId}", !string.IsNullOrEmpty(request.PropertyId) ? request.PropertyId.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ParameterValueName != null)
+                {
+                    jsonWriter.WritePropertyName("parameterValueName");
+                    jsonWriter.Write(request.ParameterValueName);
+                }
+                if (request.ParameterValue != null)
+                {
+                    jsonWriter.WritePropertyName("parameterValue");
+                    jsonWriter.Write(request.ParameterValue.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyBalanceParameterStatus(
+                Request.VerifyBalanceParameterStatusRequest request,
+                UnityAction<AsyncResult<Result.VerifyBalanceParameterStatusResult>> callback
+        ) =>
+            new VerifyBalanceParameterStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.VerifyBalanceParameterStatusResult> VerifyBalanceParameterStatusFuture(
+                Request.VerifyBalanceParameterStatusRequest request
+        ) =>
+            new VerifyBalanceParameterStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.VerifyBalanceParameterStatusResult> VerifyBalanceParameterStatusAsync(
+                Request.VerifyBalanceParameterStatusRequest request
+        ) =>
+            new VerifyBalanceParameterStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyBalanceParameterStatusResult>();
+    #else
+		public VerifyBalanceParameterStatusTask VerifyBalanceParameterStatusAsync(
+                Request.VerifyBalanceParameterStatusRequest request
+        )
+		{
+			return new VerifyBalanceParameterStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.VerifyBalanceParameterStatusResult> VerifyBalanceParameterStatusAsync(
+                Request.VerifyBalanceParameterStatusRequest request
+        ) =>
+            new VerifyBalanceParameterStatusTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class VerifyBalanceParameterStatusByUserIdTask : Gs2RestSessionTask<VerifyBalanceParameterStatusByUserIdRequest, VerifyBalanceParameterStatusByUserIdResult>
+        {
+            public VerifyBalanceParameterStatusByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, VerifyBalanceParameterStatusByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyBalanceParameterStatusByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "enchant")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/status/balance/{parameterName}/{propertyId}/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{parameterName}", !string.IsNullOrEmpty(request.ParameterName) ? request.ParameterName.ToString() : "null");
+                url = url.Replace("{propertyId}", !string.IsNullOrEmpty(request.PropertyId) ? request.PropertyId.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.ParameterValueName != null)
+                {
+                    jsonWriter.WritePropertyName("parameterValueName");
+                    jsonWriter.Write(request.ParameterValueName);
+                }
+                if (request.ParameterValue != null)
+                {
+                    jsonWriter.WritePropertyName("parameterValue");
+                    jsonWriter.Write(request.ParameterValue.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyBalanceParameterStatusByUserId(
+                Request.VerifyBalanceParameterStatusByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyBalanceParameterStatusByUserIdResult>> callback
+        ) =>
+            new VerifyBalanceParameterStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.VerifyBalanceParameterStatusByUserIdResult> VerifyBalanceParameterStatusByUserIdFuture(
+                Request.VerifyBalanceParameterStatusByUserIdRequest request
+        ) =>
+            new VerifyBalanceParameterStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.VerifyBalanceParameterStatusByUserIdResult> VerifyBalanceParameterStatusByUserIdAsync(
+                Request.VerifyBalanceParameterStatusByUserIdRequest request
+        ) =>
+            new VerifyBalanceParameterStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyBalanceParameterStatusByUserIdResult>();
+    #else
+		public VerifyBalanceParameterStatusByUserIdTask VerifyBalanceParameterStatusByUserIdAsync(
+                Request.VerifyBalanceParameterStatusByUserIdRequest request
+        )
+		{
+			return new VerifyBalanceParameterStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.VerifyBalanceParameterStatusByUserIdResult> VerifyBalanceParameterStatusByUserIdAsync(
+                Request.VerifyBalanceParameterStatusByUserIdRequest request
+        ) =>
+            new VerifyBalanceParameterStatusByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
         public class DeleteBalanceParameterStatusByUserIdTask : Gs2RestSessionTask<DeleteBalanceParameterStatusByUserIdRequest, DeleteBalanceParameterStatusByUserIdResult>
         {
             public DeleteBalanceParameterStatusByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, DeleteBalanceParameterStatusByUserIdRequest request) : base(session, factory, request)
@@ -4398,6 +4641,114 @@ namespace Gs2.Gs2Enchant
                 Request.SetBalanceParameterStatusByStampSheetRequest request
         ) =>
             new SetBalanceParameterStatusByStampSheetTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class VerifyBalanceParameterStatusByStampTaskTask : Gs2RestSessionTask<VerifyBalanceParameterStatusByStampTaskRequest, VerifyBalanceParameterStatusByStampTaskResult>
+        {
+            public VerifyBalanceParameterStatusByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, VerifyBalanceParameterStatusByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyBalanceParameterStatusByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "enchant")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/balance/parameter/verify";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyBalanceParameterStatusByStampTask(
+                Request.VerifyBalanceParameterStatusByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.VerifyBalanceParameterStatusByStampTaskResult>> callback
+        ) =>
+            new VerifyBalanceParameterStatusByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.VerifyBalanceParameterStatusByStampTaskResult> VerifyBalanceParameterStatusByStampTaskFuture(
+                Request.VerifyBalanceParameterStatusByStampTaskRequest request
+        ) =>
+            new VerifyBalanceParameterStatusByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.VerifyBalanceParameterStatusByStampTaskResult> VerifyBalanceParameterStatusByStampTaskAsync(
+                Request.VerifyBalanceParameterStatusByStampTaskRequest request
+        ) =>
+            new VerifyBalanceParameterStatusByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyBalanceParameterStatusByStampTaskResult>();
+    #else
+		public VerifyBalanceParameterStatusByStampTaskTask VerifyBalanceParameterStatusByStampTaskAsync(
+                Request.VerifyBalanceParameterStatusByStampTaskRequest request
+        )
+		{
+			return new VerifyBalanceParameterStatusByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.VerifyBalanceParameterStatusByStampTaskResult> VerifyBalanceParameterStatusByStampTaskAsync(
+                Request.VerifyBalanceParameterStatusByStampTaskRequest request
+        ) =>
+            new VerifyBalanceParameterStatusByStampTaskTask(
                 Gs2RestSession,
                 new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
                 request

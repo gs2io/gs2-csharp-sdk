@@ -115,6 +115,36 @@ namespace Gs2.Gs2Enchant.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusAccessTokenDomain> VerifyFuture(
+            VerifyBalanceParameterStatusRequest request
+        ) => VerifyAsync(request).ToGs2Future();
+        #endif
+
+        #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusAccessTokenDomain> VerifyAsync(
+        #else
+        public async Task<Gs2.Gs2Enchant.Domain.Model.BalanceParameterStatusAccessTokenDomain> VerifyAsync(
+        #endif
+            VerifyBalanceParameterStatusRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this.AccessToken?.Token)
+                .WithParameterName(this.ParameterName)
+                .WithPropertyId(this.PropertyId);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                this.AccessToken?.TimeOffset,
+                () => this._client.VerifyBalanceParameterStatusAsync(request)
+            );
+            var domain = this;
+
+            return domain;
+        }
+
+        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Enchant.Model.BalanceParameterStatus> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 

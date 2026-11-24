@@ -63,6 +63,16 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
             verifyAction.Action = verifyAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
             verifyAction.Action = verifyAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
             verifyAction.Action = verifyAction.Action.Replace("{userId}", accessToken.UserId);
+            if (VerifyBalanceParameterStatusByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                var balanceRequest = VerifyBalanceParameterStatusByUserIdRequest.FromJson(
+                    JsonMapper.ToObject(verifyAction.Request)
+                );
+                if (rate != 1) {
+                    balanceRequest = balanceRequest.Rate(rate);
+                }
+                return await VerifyBalanceParameterStatusByUserIdSpeculativeExecutor
+                    .ExecuteInverseAsync(domain, accessToken, balanceRequest);
+            }
             if (VerifyRarityParameterStatusByUserIdSpeculativeExecutor.Action() != verifyAction.Action) {
                 return null;
             }
@@ -99,6 +109,17 @@ namespace Gs2.Gs2Enchant.Domain.SpeculativeExecutor
             verifyAction.Action = verifyAction.Action.Replace("{region}", domain.RestSession.Region.DisplayName());
             verifyAction.Action = verifyAction.Action.Replace("{ownerId}", domain.RestSession.OwnerId);
             verifyAction.Action = verifyAction.Action.Replace("{userId}", accessToken.UserId);
+            if (VerifyBalanceParameterStatusByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                var request = VerifyBalanceParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
+                return await VerifyBalanceParameterStatusByUserIdSpeculativeExecutor.ExecuteAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
             if (VerifyRarityParameterStatusByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
                 var request = VerifyRarityParameterStatusByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
                 if (rate != 1) {

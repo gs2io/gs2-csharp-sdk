@@ -2169,6 +2169,268 @@ namespace Gs2.Gs2Enchant
 #endif
 
 
+        public class VerifyBalanceParameterStatusTask : Gs2WebSocketSessionTask<Request.VerifyBalanceParameterStatusRequest, Result.VerifyBalanceParameterStatusResult>
+        {
+            public VerifyBalanceParameterStatusTask(IGs2Session session, Request.VerifyBalanceParameterStatusRequest request) : base(session, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyBalanceParameterStatusRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.ParameterName != null)
+                {
+                    jsonWriter.WritePropertyName("parameterName");
+                    jsonWriter.Write(request.ParameterName.ToString());
+                }
+                if (request.PropertyId != null)
+                {
+                    jsonWriter.WritePropertyName("propertyId");
+                    jsonWriter.Write(request.PropertyId.ToString());
+                }
+                if (request.ParameterValueName != null)
+                {
+                    jsonWriter.WritePropertyName("parameterValueName");
+                    jsonWriter.Write(request.ParameterValueName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.ParameterValue != null)
+                {
+                    jsonWriter.WritePropertyName("parameterValue");
+                    jsonWriter.Write(request.ParameterValue.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "enchant",
+                    "balanceParameterStatus",
+                    "verifyBalanceParameterStatus",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+        public IEnumerator VerifyBalanceParameterStatus(
+                Request.VerifyBalanceParameterStatusRequest request,
+                UnityAction<AsyncResult<Result.VerifyBalanceParameterStatusResult>> callback
+        ) =>
+            new VerifyBalanceParameterStatusTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
+
+        public IFuture<Result.VerifyBalanceParameterStatusResult> VerifyBalanceParameterStatusFuture(
+                Request.VerifyBalanceParameterStatusRequest request
+        ) =>
+            new VerifyBalanceParameterStatusTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+        public UniTask<Result.VerifyBalanceParameterStatusResult> VerifyBalanceParameterStatusAsync(
+            Request.VerifyBalanceParameterStatusRequest request
+        ) =>
+            new VerifyBalanceParameterStatusTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.VerifyBalanceParameterStatusResult>();
+    #else
+        public VerifyBalanceParameterStatusTask VerifyBalanceParameterStatusAsync(
+                Request.VerifyBalanceParameterStatusRequest request
+        )
+        {
+            return new VerifyBalanceParameterStatusTask(
+                Gs2WebSocketSession,
+                request
+            );
+        }
+    #endif
+#else
+        public Task<Result.VerifyBalanceParameterStatusResult> VerifyBalanceParameterStatusAsync(
+            Request.VerifyBalanceParameterStatusRequest request
+        ) =>
+            new VerifyBalanceParameterStatusTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class VerifyBalanceParameterStatusByUserIdTask : Gs2WebSocketSessionTask<Request.VerifyBalanceParameterStatusByUserIdRequest, Result.VerifyBalanceParameterStatusByUserIdResult>
+        {
+            public VerifyBalanceParameterStatusByUserIdTask(IGs2Session session, Request.VerifyBalanceParameterStatusByUserIdRequest request) : base(session, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyBalanceParameterStatusByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.ParameterName != null)
+                {
+                    jsonWriter.WritePropertyName("parameterName");
+                    jsonWriter.Write(request.ParameterName.ToString());
+                }
+                if (request.PropertyId != null)
+                {
+                    jsonWriter.WritePropertyName("propertyId");
+                    jsonWriter.Write(request.PropertyId.ToString());
+                }
+                if (request.ParameterValueName != null)
+                {
+                    jsonWriter.WritePropertyName("parameterValueName");
+                    jsonWriter.Write(request.ParameterValueName.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.ParameterValue != null)
+                {
+                    jsonWriter.WritePropertyName("parameterValue");
+                    jsonWriter.Write(request.ParameterValue.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "enchant",
+                    "balanceParameterStatus",
+                    "verifyBalanceParameterStatusByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+        public IEnumerator VerifyBalanceParameterStatusByUserId(
+                Request.VerifyBalanceParameterStatusByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyBalanceParameterStatusByUserIdResult>> callback
+        ) =>
+            new VerifyBalanceParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
+
+        public IFuture<Result.VerifyBalanceParameterStatusByUserIdResult> VerifyBalanceParameterStatusByUserIdFuture(
+                Request.VerifyBalanceParameterStatusByUserIdRequest request
+        ) =>
+            new VerifyBalanceParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+        public UniTask<Result.VerifyBalanceParameterStatusByUserIdResult> VerifyBalanceParameterStatusByUserIdAsync(
+            Request.VerifyBalanceParameterStatusByUserIdRequest request
+        ) =>
+            new VerifyBalanceParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.VerifyBalanceParameterStatusByUserIdResult>();
+    #else
+        public VerifyBalanceParameterStatusByUserIdTask VerifyBalanceParameterStatusByUserIdAsync(
+                Request.VerifyBalanceParameterStatusByUserIdRequest request
+        )
+        {
+            return new VerifyBalanceParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            );
+        }
+    #endif
+#else
+        public Task<Result.VerifyBalanceParameterStatusByUserIdResult> VerifyBalanceParameterStatusByUserIdAsync(
+            Request.VerifyBalanceParameterStatusByUserIdRequest request
+        ) =>
+            new VerifyBalanceParameterStatusByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
+#endif
+
+
         public class DeleteBalanceParameterStatusByUserIdTask : Gs2WebSocketSessionTask<Request.DeleteBalanceParameterStatusByUserIdRequest, Result.DeleteBalanceParameterStatusByUserIdResult>
         {
             public DeleteBalanceParameterStatusByUserIdTask(IGs2Session session, Request.DeleteBalanceParameterStatusByUserIdRequest request) : base(session, request)

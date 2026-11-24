@@ -366,6 +366,22 @@ namespace Gs2.Gs2Enchant.Model.Cache
                         Request.GetBalanceParameterStatusByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
+                case "verifyBalanceParameterStatus":
+                    Result.VerifyBalanceParameterStatusResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.VerifyBalanceParameterStatusRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "verifyBalanceParameterStatusByUserId":
+                    Result.VerifyBalanceParameterStatusByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.VerifyBalanceParameterStatusByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "deleteBalanceParameterStatusByUserId":
                     Result.DeleteBalanceParameterStatusByUserIdResult.FromJson(resultPayload).PutCache(
                         cache,
