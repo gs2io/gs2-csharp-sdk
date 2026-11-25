@@ -334,6 +334,22 @@ namespace Gs2.Gs2Dictionary.Model.Cache
                         Request.DeleteEntriesByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
+                case "verifyEntryCount":
+                    Result.VerifyEntryCountResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.VerifyEntryCountRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "verifyEntryCountByUserId":
+                    Result.VerifyEntryCountByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.VerifyEntryCountByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "describeLikes":
                     Result.DescribeLikesResult.FromJson(resultPayload).PutCache(
                         cache,

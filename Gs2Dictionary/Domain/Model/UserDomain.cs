@@ -428,6 +428,33 @@ namespace Gs2.Gs2Dictionary.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Dictionary.Domain.Model.UserDomain> VerifyEntryCountFuture(
+            VerifyEntryCountByUserIdRequest request
+        ) => VerifyEntryCountAsync(request).ToGs2Future();
+        #endif
+
+        #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Dictionary.Domain.Model.UserDomain> VerifyEntryCountAsync(
+        #else
+        public async Task<Gs2.Gs2Dictionary.Domain.Model.UserDomain> VerifyEntryCountAsync(
+        #endif
+            VerifyEntryCountByUserIdRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                null,
+                () => this._client.VerifyEntryCountByUserIdAsync(request)
+            );
+            var domain = this;
+            return domain;
+        }
+
+        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Dictionary.Domain.Model.LikeDomain[]> AddLikesFuture(
             AddLikesByUserIdRequest request
         ) => AddLikesAsync(request).ToGs2Future();

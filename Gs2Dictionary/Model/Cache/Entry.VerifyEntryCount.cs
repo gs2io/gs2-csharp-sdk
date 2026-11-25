@@ -1,0 +1,130 @@
+/*
+ * Copyright 2016 Game Server Services, Inc. or its affiliates. All Rights
+ * Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License").
+ * You may not use this file except in compliance with the License.
+ * A copy of the License is located at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * or in the "license" file accompanying this file. This file is distributed
+ * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+
+// ReSharper disable ConvertSwitchStatementToSwitchExpression
+
+#pragma warning disable CS1522 // Empty switch block
+
+using System;
+using Gs2.Core.Domain;
+using Gs2.Core.Net;
+using Gs2.Core.Util;
+using Gs2.Gs2Dictionary.Request;
+using Gs2.Gs2Dictionary.Result;
+#if UNITY_2017_1_OR_NEWER
+using System.Collections;
+#endif
+#if GS2_ENABLE_UNITASK
+using Cysharp.Threading;
+using Cysharp.Threading.Tasks;
+#else
+using System.Threading;
+using System.Threading.Tasks;
+#endif
+
+namespace Gs2.Gs2Dictionary.Model.Cache
+{
+    public static partial class EntryExt
+    {
+        public static void PutCache(
+            this VerifyEntryCountResult self,
+            CacheDatabase cache,
+            string userId,
+            int? timeOffset,
+            VerifyEntryCountRequest request
+        ) {
+        }
+
+#if UNITY_2017_1_OR_NEWER
+        public static IFuture<VerifyEntryCountResult> InvokeFuture(
+            this VerifyEntryCountRequest request,
+            CacheDatabase cache,
+            string userId,
+            int? timeOffset,
+            Func<IFuture<VerifyEntryCountResult>> invokeImpl
+        )
+        {
+            IEnumerator Impl(IFuture<VerifyEntryCountResult> self)
+            {
+                var future = invokeImpl();
+                yield return future;
+                if (future.Error != null) {
+                    if (future.Error is Gs2.Core.Exception.Gs2Exception failed && failed.Result != null) {
+                        VerifyEntryCountResult.FromJson(Gs2.Util.LitJson.JsonMapper.ToObject(failed.Result))?.PutCache(
+                            cache,
+                            userId,
+                            timeOffset,
+                            request
+                        );
+                    }
+                    self.OnError(future.Error);
+                    yield break;
+                }
+
+                future.Result.PutCache(
+                    cache,
+                    userId,
+                    timeOffset,
+                    request
+                );
+
+                self.OnComplete(future.Result);
+            }
+            return new Gs2InlineFuture<VerifyEntryCountResult>(Impl);
+        }
+#endif
+
+#if GS2_ENABLE_UNITASK
+        public static async UniTask<VerifyEntryCountResult> InvokeAsync(
+#else
+        public static async Task<VerifyEntryCountResult> InvokeAsync(
+#endif
+            this VerifyEntryCountRequest request,
+            CacheDatabase cache,
+            string userId,
+            int? timeOffset,
+#if GS2_ENABLE_UNITASK
+            Func<UniTask<VerifyEntryCountResult>> invokeImpl
+#elif UNITY_2017_1_OR_NEWER
+            Func<TaskFuture<VerifyEntryCountResult>> invokeImpl
+#else
+            Func<Task<VerifyEntryCountResult>> invokeImpl
+#endif
+        )
+        {
+            VerifyEntryCountResult result;
+            try {
+                result = await invokeImpl();
+            }
+            catch (Gs2.Core.Exception.Gs2Exception e) when (e.Result != null) {
+                VerifyEntryCountResult.FromJson(Gs2.Util.LitJson.JsonMapper.ToObject(e.Result))?.PutCache(
+                    cache,
+                    userId,
+                    timeOffset,
+                    request
+                );
+                throw;
+            }
+            result.PutCache(
+                cache,
+                userId,
+                timeOffset,
+                request
+            );
+            return result;
+        }
+    }
+}

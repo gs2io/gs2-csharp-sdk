@@ -3705,6 +3705,363 @@ namespace Gs2.Gs2Dictionary
 #endif
 
 
+        public class VerifyEntryCountTask : Gs2RestSessionTask<VerifyEntryCountRequest, VerifyEntryCountResult>
+        {
+            public VerifyEntryCountTask(IGs2Session session, RestSessionRequestFactory factory, VerifyEntryCountRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyEntryCountRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "dictionary")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/entryCount/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.EntryModelNames != null)
+                {
+                    jsonWriter.WritePropertyName("entryModelNames");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.EntryModelNames)
+                    {
+                        jsonWriter.Write(item);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.Count != null)
+                {
+                    jsonWriter.WritePropertyName("count");
+                    jsonWriter.Write(request.Count.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyEntryCount(
+                Request.VerifyEntryCountRequest request,
+                UnityAction<AsyncResult<Result.VerifyEntryCountResult>> callback
+        ) =>
+            new VerifyEntryCountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.VerifyEntryCountResult> VerifyEntryCountFuture(
+                Request.VerifyEntryCountRequest request
+        ) =>
+            new VerifyEntryCountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.VerifyEntryCountResult> VerifyEntryCountAsync(
+                Request.VerifyEntryCountRequest request
+        ) =>
+            new VerifyEntryCountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyEntryCountResult>();
+    #else
+		public VerifyEntryCountTask VerifyEntryCountAsync(
+                Request.VerifyEntryCountRequest request
+        )
+		{
+			return new VerifyEntryCountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.VerifyEntryCountResult> VerifyEntryCountAsync(
+                Request.VerifyEntryCountRequest request
+        ) =>
+            new VerifyEntryCountTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class VerifyEntryCountByUserIdTask : Gs2RestSessionTask<VerifyEntryCountByUserIdRequest, VerifyEntryCountByUserIdResult>
+        {
+            public VerifyEntryCountByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, VerifyEntryCountByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyEntryCountByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "dictionary")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/entryCount/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.EntryModelNames != null)
+                {
+                    jsonWriter.WritePropertyName("entryModelNames");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.EntryModelNames)
+                    {
+                        jsonWriter.Write(item);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
+                if (request.Count != null)
+                {
+                    jsonWriter.WritePropertyName("count");
+                    jsonWriter.Write(request.Count.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyEntryCountByUserId(
+                Request.VerifyEntryCountByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyEntryCountByUserIdResult>> callback
+        ) =>
+            new VerifyEntryCountByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.VerifyEntryCountByUserIdResult> VerifyEntryCountByUserIdFuture(
+                Request.VerifyEntryCountByUserIdRequest request
+        ) =>
+            new VerifyEntryCountByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.VerifyEntryCountByUserIdResult> VerifyEntryCountByUserIdAsync(
+                Request.VerifyEntryCountByUserIdRequest request
+        ) =>
+            new VerifyEntryCountByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyEntryCountByUserIdResult>();
+    #else
+		public VerifyEntryCountByUserIdTask VerifyEntryCountByUserIdAsync(
+                Request.VerifyEntryCountByUserIdRequest request
+        )
+		{
+			return new VerifyEntryCountByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.VerifyEntryCountByUserIdResult> VerifyEntryCountByUserIdAsync(
+                Request.VerifyEntryCountByUserIdRequest request
+        ) =>
+            new VerifyEntryCountByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class VerifyEntryCountByStampTaskTask : Gs2RestSessionTask<VerifyEntryCountByStampTaskRequest, VerifyEntryCountByStampTaskResult>
+        {
+            public VerifyEntryCountByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, VerifyEntryCountByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyEntryCountByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "dictionary")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/entry/count/verify";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyEntryCountByStampTask(
+                Request.VerifyEntryCountByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.VerifyEntryCountByStampTaskResult>> callback
+        ) =>
+            new VerifyEntryCountByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.VerifyEntryCountByStampTaskResult> VerifyEntryCountByStampTaskFuture(
+                Request.VerifyEntryCountByStampTaskRequest request
+        ) =>
+            new VerifyEntryCountByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.VerifyEntryCountByStampTaskResult> VerifyEntryCountByStampTaskAsync(
+                Request.VerifyEntryCountByStampTaskRequest request
+        ) =>
+            new VerifyEntryCountByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyEntryCountByStampTaskResult>();
+    #else
+		public VerifyEntryCountByStampTaskTask VerifyEntryCountByStampTaskAsync(
+                Request.VerifyEntryCountByStampTaskRequest request
+        )
+		{
+			return new VerifyEntryCountByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.VerifyEntryCountByStampTaskResult> VerifyEntryCountByStampTaskAsync(
+                Request.VerifyEntryCountByStampTaskRequest request
+        ) =>
+            new VerifyEntryCountByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
         public class DescribeLikesTask : Gs2RestSessionTask<DescribeLikesRequest, DescribeLikesResult>
         {
             public DescribeLikesTask(IGs2Session session, RestSessionRequestFactory factory, DescribeLikesRequest request) : base(session, factory, request)

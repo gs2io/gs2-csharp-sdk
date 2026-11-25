@@ -69,6 +69,12 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
                 return await VerifyEntryByUserIdSpeculativeExecutor
                     .ExecuteInverseAsync(domain, accessToken, request);
             }
+            if (VerifyEntryCountByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                var request = VerifyEntryCountByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
+                if (rate != 1) request = request.Rate(rate);
+                return await VerifyEntryCountByUserIdSpeculativeExecutor
+                    .ExecuteInverseAsync(domain, accessToken, request);
+            }
             return null;
         }
 
@@ -101,6 +107,17 @@ namespace Gs2.Gs2Dictionary.Domain.SpeculativeExecutor
                     request = request.Rate(rate);
                 }
                 return await VerifyEntryByUserIdSpeculativeExecutor.ExecuteAsync(
+                    domain,
+                    accessToken,
+                    request
+                );
+            }
+            if (VerifyEntryCountByUserIdSpeculativeExecutor.Action() == verifyAction.Action) {
+                var request = VerifyEntryCountByUserIdRequest.FromJson(JsonMapper.ToObject(verifyAction.Request));
+                if (rate != 1) {
+                    request = request.Rate(rate);
+                }
+                return await VerifyEntryCountByUserIdSpeculativeExecutor.ExecuteAsync(
                     domain,
                     accessToken,
                     request
