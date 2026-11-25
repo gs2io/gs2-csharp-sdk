@@ -240,6 +240,22 @@ namespace Gs2.Gs2Friend.Model.Cache
                         Request.DeleteProfileByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
+                case "verifyFollow":
+                    Result.VerifyFollowResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.VerifyFollowRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "verifyFollowByUserId":
+                    Result.VerifyFollowByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.VerifyFollowByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "describeFriends":
                     Result.DescribeFriendsResult.FromJson(resultPayload).PutCache(
                         cache,
@@ -254,6 +270,38 @@ namespace Gs2.Gs2Friend.Model.Cache
                         userId,
                         null,
                         Request.DescribeFriendsByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "verifyFriend":
+                    Result.VerifyFriendResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.VerifyFriendRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "verifyFriendByUserId":
+                    Result.VerifyFriendByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.VerifyFriendByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "verifyFriendCount":
+                    Result.VerifyFriendCountResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.VerifyFriendCountRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "verifyFriendCountByUserId":
+                    Result.VerifyFriendCountByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.VerifyFriendCountByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
                 case "describeBlackList":

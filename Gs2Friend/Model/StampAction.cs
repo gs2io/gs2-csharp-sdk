@@ -30,12 +30,24 @@ namespace Gs2.Gs2Friend.Model
     {
         public static Gs2Request ToRequest(Gs2.Core.Model.ConsumeAction action) {
             switch (action.Action) {
+                case "Gs2Friend:VerifyFollowByUserId":
+                    return VerifyFollowByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Friend:VerifyFriendByUserId":
+                    return VerifyFriendByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Friend:VerifyFriendCountByUserId":
+                    return VerifyFriendCountByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }
 
         public static Gs2Request ToRequest(Gs2.Core.Model.VerifyAction action) {
             switch (action.Action) {
+                case "Gs2Friend:VerifyFollowByUserId":
+                    return VerifyFollowByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Friend:VerifyFriendByUserId":
+                    return VerifyFriendByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Friend:VerifyFriendCountByUserId":
+                    return VerifyFriendCountByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }

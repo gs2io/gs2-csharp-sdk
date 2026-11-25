@@ -366,6 +366,50 @@ namespace Gs2.Gs2Friend.Domain
                 string request,
                 string result
         ) {
+                switch (method) {
+                    case "VerifyFollowByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyFollowByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyFollowByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
+                    case "VerifyFriendByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyFriendByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyFriendByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
+                    case "VerifyFriendCountByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyFriendCountByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyFriendCountByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
+                }
         }
 
         public void UpdateCacheFromJobResult(

@@ -738,6 +738,87 @@ namespace Gs2.Gs2Friend.Domain.Model
     public partial class UserDomain {
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Friend.Domain.Model.UserDomain> VerifyFollowFuture(
+            VerifyFollowByUserIdRequest request
+        ) => VerifyFollowAsync(request).ToGs2Future();
+        #endif
+
+        #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Friend.Domain.Model.UserDomain> VerifyFollowAsync(
+        #else
+        public async Task<Gs2.Gs2Friend.Domain.Model.UserDomain> VerifyFollowAsync(
+        #endif
+            VerifyFollowByUserIdRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                null,
+                () => this._client.VerifyFollowByUserIdAsync(request)
+            );
+            var domain = this;
+            return domain;
+        }
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Friend.Domain.Model.UserDomain> VerifyFriendFuture(
+            VerifyFriendByUserIdRequest request
+        ) => VerifyFriendAsync(request).ToGs2Future();
+        #endif
+
+        #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Friend.Domain.Model.UserDomain> VerifyFriendAsync(
+        #else
+        public async Task<Gs2.Gs2Friend.Domain.Model.UserDomain> VerifyFriendAsync(
+        #endif
+            VerifyFriendByUserIdRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                null,
+                () => this._client.VerifyFriendByUserIdAsync(request)
+            );
+            var domain = this;
+            return domain;
+        }
+
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Friend.Domain.Model.UserDomain> VerifyFriendCountFuture(
+            VerifyFriendCountByUserIdRequest request
+        ) => VerifyFriendCountAsync(request).ToGs2Future();
+        #endif
+
+        #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Friend.Domain.Model.UserDomain> VerifyFriendCountAsync(
+        #else
+        public async Task<Gs2.Gs2Friend.Domain.Model.UserDomain> VerifyFriendCountAsync(
+        #endif
+            VerifyFriendCountByUserIdRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                null,
+                () => this._client.VerifyFriendCountByUserIdAsync(request)
+            );
+            var domain = this;
+            return domain;
+        }
+
+        #if UNITY_2017_1_OR_NEWER
 /* diff --- start
         public IFuture<Gs2.Gs2Friend.Domain.Model.FriendRequestDomain> SendRequestFuture(
  diff --- end */
