@@ -4095,5 +4095,287 @@ namespace Gs2.Gs2Formation
                 request
             ).Invoke().AsTask();
 #endif
+
+
+        public class VerifyFormTask : Gs2WebSocketSessionTask<Request.VerifyFormRequest, Result.VerifyFormResult>
+        {
+            public VerifyFormTask(IGs2Session session, Request.VerifyFormRequest request) : base(session, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyFormRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("accessToken");
+                    jsonWriter.Write(request.AccessToken.ToString());
+                }
+                if (request.MoldModelName != null)
+                {
+                    jsonWriter.WritePropertyName("moldModelName");
+                    jsonWriter.Write(request.MoldModelName.ToString());
+                }
+                if (request.Index != null)
+                {
+                    jsonWriter.WritePropertyName("index");
+                    jsonWriter.Write(request.Index.ToString());
+                }
+                if (request.SlotName != null)
+                {
+                    jsonWriter.WritePropertyName("slotName");
+                    jsonWriter.Write(request.SlotName.ToString());
+                }
+                if (request.PropertyIdRegex != null)
+                {
+                    jsonWriter.WritePropertyName("propertyIdRegex");
+                    jsonWriter.Write(request.PropertyIdRegex.ToString());
+                }
+                if (request.CountType != null)
+                {
+                    jsonWriter.WritePropertyName("countType");
+                    jsonWriter.Write(request.CountType.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.Count != null)
+                {
+                    jsonWriter.WritePropertyName("count");
+                    jsonWriter.Write(request.Count.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.AccessToken != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2AccessToken");
+                    jsonWriter.Write(request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "formation",
+                    "form",
+                    "verifyForm",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+        public IEnumerator VerifyForm(
+                Request.VerifyFormRequest request,
+                UnityAction<AsyncResult<Result.VerifyFormResult>> callback
+        ) =>
+            new VerifyFormTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
+
+        public IFuture<Result.VerifyFormResult> VerifyFormFuture(
+                Request.VerifyFormRequest request
+        ) =>
+            new VerifyFormTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+        public UniTask<Result.VerifyFormResult> VerifyFormAsync(
+            Request.VerifyFormRequest request
+        ) =>
+            new VerifyFormTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.VerifyFormResult>();
+    #else
+        public VerifyFormTask VerifyFormAsync(
+                Request.VerifyFormRequest request
+        )
+        {
+            return new VerifyFormTask(
+                Gs2WebSocketSession,
+                request
+            );
+        }
+    #endif
+#else
+        public Task<Result.VerifyFormResult> VerifyFormAsync(
+            Request.VerifyFormRequest request
+        ) =>
+            new VerifyFormTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class VerifyFormByUserIdTask : Gs2WebSocketSessionTask<Request.VerifyFormByUserIdRequest, Result.VerifyFormByUserIdResult>
+        {
+            public VerifyFormByUserIdTask(IGs2Session session, Request.VerifyFormByUserIdRequest request) : base(session, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(Request.VerifyFormByUserIdRequest request)
+            {
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+
+                jsonWriter.WriteObjectStart();
+
+                if (request.NamespaceName != null)
+                {
+                    jsonWriter.WritePropertyName("namespaceName");
+                    jsonWriter.Write(request.NamespaceName.ToString());
+                }
+                if (request.UserId != null)
+                {
+                    jsonWriter.WritePropertyName("userId");
+                    jsonWriter.Write(request.UserId.ToString());
+                }
+                if (request.MoldModelName != null)
+                {
+                    jsonWriter.WritePropertyName("moldModelName");
+                    jsonWriter.Write(request.MoldModelName.ToString());
+                }
+                if (request.Index != null)
+                {
+                    jsonWriter.WritePropertyName("index");
+                    jsonWriter.Write(request.Index.ToString());
+                }
+                if (request.SlotName != null)
+                {
+                    jsonWriter.WritePropertyName("slotName");
+                    jsonWriter.Write(request.SlotName.ToString());
+                }
+                if (request.PropertyIdRegex != null)
+                {
+                    jsonWriter.WritePropertyName("propertyIdRegex");
+                    jsonWriter.Write(request.PropertyIdRegex.ToString());
+                }
+                if (request.CountType != null)
+                {
+                    jsonWriter.WritePropertyName("countType");
+                    jsonWriter.Write(request.CountType.ToString());
+                }
+                if (request.VerifyType != null)
+                {
+                    jsonWriter.WritePropertyName("verifyType");
+                    jsonWriter.Write(request.VerifyType.ToString());
+                }
+                if (request.Count != null)
+                {
+                    jsonWriter.WritePropertyName("count");
+                    jsonWriter.Write(request.Count.ToString());
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    jsonWriter.WritePropertyName("timeOffsetToken");
+                    jsonWriter.Write(request.TimeOffsetToken.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    jsonWriter.WritePropertyName("xGs2DuplicationAvoider");
+                    jsonWriter.Write(request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    jsonWriter.WritePropertyName("xGs2DryRun");
+                    jsonWriter.Write("true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    "formation",
+                    "form",
+                    "verifyFormByUserId",
+                    jsonWriter
+                );
+
+                jsonWriter.WriteObjectEnd();
+
+                return WebSocketSessionRequestFactory.New<WebSocketSessionRequest>(stringBuilder.ToString());
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+        public IEnumerator VerifyFormByUserId(
+                Request.VerifyFormByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyFormByUserIdResult>> callback
+        ) =>
+            new VerifyFormByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToCoroutine(callback);
+
+        public IFuture<Result.VerifyFormByUserIdResult> VerifyFormByUserIdFuture(
+                Request.VerifyFormByUserIdRequest request
+        ) =>
+            new VerifyFormByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+        public UniTask<Result.VerifyFormByUserIdResult> VerifyFormByUserIdAsync(
+            Request.VerifyFormByUserIdRequest request
+        ) =>
+            new VerifyFormByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsUniTask<Result.VerifyFormByUserIdResult>();
+    #else
+        public VerifyFormByUserIdTask VerifyFormByUserIdAsync(
+                Request.VerifyFormByUserIdRequest request
+        )
+        {
+            return new VerifyFormByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            );
+        }
+    #endif
+#else
+        public Task<Result.VerifyFormByUserIdResult> VerifyFormByUserIdAsync(
+            Request.VerifyFormByUserIdRequest request
+        ) =>
+            new VerifyFormByUserIdTask(
+                Gs2WebSocketSession,
+                request
+            ).Invoke().AsTask();
+#endif
 	}
 }

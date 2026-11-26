@@ -32,12 +32,16 @@ namespace Gs2.Gs2Formation.Model
             switch (action.Action) {
                 case "Gs2Formation:SubMoldCapacityByUserId":
                     return SubMoldCapacityByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
+                case "Gs2Formation:VerifyFormByUserId":
+                    return VerifyFormByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }
 
         public static Gs2Request ToRequest(Gs2.Core.Model.VerifyAction action) {
             switch (action.Action) {
+                case "Gs2Formation:VerifyFormByUserId":
+                    return VerifyFormByUserIdRequest.FromJson(JsonMapper.ToObject(action.Request));
             }
             throw new ArgumentException($"unknown action {action.Action}");
         }

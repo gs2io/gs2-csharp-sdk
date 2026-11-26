@@ -564,6 +564,22 @@ namespace Gs2.Gs2Formation.Model.Cache
                         Request.DeleteFormByUserIdRequest.FromJson(requestPayload)
                     );
                     break;
+                case "verifyForm":
+                    Result.VerifyFormResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.VerifyFormRequest.FromJson(requestPayload)
+                    );
+                    break;
+                case "verifyFormByUserId":
+                    Result.VerifyFormByUserIdResult.FromJson(resultPayload).PutCache(
+                        cache,
+                        userId,
+                        null,
+                        Request.VerifyFormByUserIdRequest.FromJson(requestPayload)
+                    );
+                    break;
                 case "describePropertyForms":
                     Result.DescribePropertyFormsResult.FromJson(resultPayload).PutCache(
                         cache,

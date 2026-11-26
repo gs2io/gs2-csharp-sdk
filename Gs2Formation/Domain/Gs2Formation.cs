@@ -548,6 +548,20 @@ namespace Gs2.Gs2Formation.Domain
                         );
                         break;
                     }
+                    case "VerifyFormByUserId": {
+                        if (result == null) {
+                            break;
+                        }
+                        var requestModel = VerifyFormByUserIdRequest.FromJson(JsonMapper.ToObject(request));
+                        var resultModel = VerifyFormByUserIdResult.FromJson(JsonMapper.ToObject(result));
+                        resultModel.PutCache(
+                            _gs2.Cache,
+                            requestModel.UserId,
+                            timeOffset,
+                            requestModel
+                        );
+                        break;
+                    }
                 }
         }
 

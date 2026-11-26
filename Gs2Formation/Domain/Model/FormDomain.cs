@@ -254,6 +254,35 @@ namespace Gs2.Gs2Formation.Domain.Model
             return domain;
         }
 
+        #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Formation.Domain.Model.FormDomain> VerifyFuture(
+            VerifyFormByUserIdRequest request
+        ) => VerifyAsync(request).ToGs2Future();
+        #endif
+
+        #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Formation.Domain.Model.FormDomain> VerifyAsync(
+        #else
+        public async Task<Gs2.Gs2Formation.Domain.Model.FormDomain> VerifyAsync(
+        #endif
+            VerifyFormByUserIdRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithUserId(this.UserId)
+                .WithMoldModelName(this.MoldModelName)
+                .WithIndex(this.Index);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                null,
+                () => this._client.VerifyFormByUserIdAsync(request)
+            );
+            var domain = this;
+            return domain;
+        }
+
     }
 
     public partial class FormDomain {

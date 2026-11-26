@@ -6911,6 +6911,377 @@ namespace Gs2.Gs2Formation
 #endif
 
 
+        public class VerifyFormTask : Gs2RestSessionTask<VerifyFormRequest, VerifyFormResult>
+        {
+            public VerifyFormTask(IGs2Session session, RestSessionRequestFactory factory, VerifyFormRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyFormRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "formation")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/me/mold/{moldModelName}/form/{index}/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{moldModelName}", !string.IsNullOrEmpty(request.MoldModelName) ? request.MoldModelName.ToString() : "null");
+                url = url.Replace("{index}",request.Index != null ? request.Index.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.SlotName != null)
+                {
+                    jsonWriter.WritePropertyName("slotName");
+                    jsonWriter.Write(request.SlotName);
+                }
+                if (request.PropertyIdRegex != null)
+                {
+                    jsonWriter.WritePropertyName("propertyIdRegex");
+                    jsonWriter.Write(request.PropertyIdRegex);
+                }
+                if (request.CountType != null)
+                {
+                    jsonWriter.WritePropertyName("countType");
+                    jsonWriter.Write(request.CountType);
+                }
+                if (request.Count != null)
+                {
+                    jsonWriter.WritePropertyName("count");
+                    jsonWriter.Write(request.Count.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.AccessToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-ACCESS-TOKEN", request.AccessToken);
+                }
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyForm(
+                Request.VerifyFormRequest request,
+                UnityAction<AsyncResult<Result.VerifyFormResult>> callback
+        ) =>
+            new VerifyFormTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.VerifyFormResult> VerifyFormFuture(
+                Request.VerifyFormRequest request
+        ) =>
+            new VerifyFormTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.VerifyFormResult> VerifyFormAsync(
+                Request.VerifyFormRequest request
+        ) =>
+            new VerifyFormTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyFormResult>();
+    #else
+		public VerifyFormTask VerifyFormAsync(
+                Request.VerifyFormRequest request
+        )
+		{
+			return new VerifyFormTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.VerifyFormResult> VerifyFormAsync(
+                Request.VerifyFormRequest request
+        ) =>
+            new VerifyFormTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class VerifyFormByUserIdTask : Gs2RestSessionTask<VerifyFormByUserIdRequest, VerifyFormByUserIdResult>
+        {
+            public VerifyFormByUserIdTask(IGs2Session session, RestSessionRequestFactory factory, VerifyFormByUserIdRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyFormByUserIdRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "formation")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/{namespaceName}/user/{userId}/mold/{moldModelName}/form/{index}/verify/{verifyType}";
+
+                url = url.Replace("{namespaceName}", !string.IsNullOrEmpty(request.NamespaceName) ? request.NamespaceName.ToString() : "null");
+                url = url.Replace("{userId}", !string.IsNullOrEmpty(request.UserId) ? request.UserId.ToString() : "null");
+                url = url.Replace("{moldModelName}", !string.IsNullOrEmpty(request.MoldModelName) ? request.MoldModelName.ToString() : "null");
+                url = url.Replace("{index}",request.Index != null ? request.Index.ToString() : "null");
+                url = url.Replace("{verifyType}", !string.IsNullOrEmpty(request.VerifyType) ? request.VerifyType.ToString() : "null");
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.SlotName != null)
+                {
+                    jsonWriter.WritePropertyName("slotName");
+                    jsonWriter.Write(request.SlotName);
+                }
+                if (request.PropertyIdRegex != null)
+                {
+                    jsonWriter.WritePropertyName("propertyIdRegex");
+                    jsonWriter.Write(request.PropertyIdRegex);
+                }
+                if (request.CountType != null)
+                {
+                    jsonWriter.WritePropertyName("countType");
+                    jsonWriter.Write(request.CountType);
+                }
+                if (request.Count != null)
+                {
+                    jsonWriter.WritePropertyName("count");
+                    jsonWriter.Write(request.Count.ToString());
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DuplicationAvoider != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-DUPLICATION-AVOIDER", request.DuplicationAvoider);
+                }
+                if (request.TimeOffsetToken != null)
+                {
+                    sessionRequest.AddHeader("X-GS2-TIME-OFFSET-TOKEN", request.TimeOffsetToken);
+                }
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyFormByUserId(
+                Request.VerifyFormByUserIdRequest request,
+                UnityAction<AsyncResult<Result.VerifyFormByUserIdResult>> callback
+        ) =>
+            new VerifyFormByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.VerifyFormByUserIdResult> VerifyFormByUserIdFuture(
+                Request.VerifyFormByUserIdRequest request
+        ) =>
+            new VerifyFormByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.VerifyFormByUserIdResult> VerifyFormByUserIdAsync(
+                Request.VerifyFormByUserIdRequest request
+        ) =>
+            new VerifyFormByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyFormByUserIdResult>();
+    #else
+		public VerifyFormByUserIdTask VerifyFormByUserIdAsync(
+                Request.VerifyFormByUserIdRequest request
+        )
+		{
+			return new VerifyFormByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.VerifyFormByUserIdResult> VerifyFormByUserIdAsync(
+                Request.VerifyFormByUserIdRequest request
+        ) =>
+            new VerifyFormByUserIdTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
+        public class VerifyFormByStampTaskTask : Gs2RestSessionTask<VerifyFormByStampTaskRequest, VerifyFormByStampTaskResult>
+        {
+            public VerifyFormByStampTaskTask(IGs2Session session, RestSessionRequestFactory factory, VerifyFormByStampTaskRequest request) : base(session, factory, request)
+            {
+            }
+
+            protected override IGs2SessionRequest CreateRequest(VerifyFormByStampTaskRequest request)
+            {
+                var url = Gs2RestSession.EndpointHost
+                    .Replace("{service}", "formation")
+                    .Replace("{region}", Session.Region.DisplayName())
+                    + "/stamp/form/verify";
+
+                var sessionRequest = Factory.Post(url);
+
+                var stringBuilder = new StringBuilder();
+                var jsonWriter = new JsonWriter(stringBuilder);
+                jsonWriter.WriteObjectStart();
+                if (request.StampTask != null)
+                {
+                    jsonWriter.WritePropertyName("stampTask");
+                    jsonWriter.Write(request.StampTask);
+                }
+                if (request.KeyId != null)
+                {
+                    jsonWriter.WritePropertyName("keyId");
+                    jsonWriter.Write(request.KeyId);
+                }
+                if (request.ContextStack != null)
+                {
+                    jsonWriter.WritePropertyName("contextStack");
+                    jsonWriter.Write(request.ContextStack.ToString());
+                }
+                jsonWriter.WriteObjectEnd();
+
+                var body = stringBuilder.ToString();
+                if (!string.IsNullOrEmpty(body))
+                {
+                    sessionRequest.Body = body;
+                }
+                sessionRequest.AddHeader("Content-Type", "application/json");
+                if (request.DryRun)
+                {
+                    sessionRequest.AddHeader("X-GS2-DRY-RUN", "true");
+                }
+
+                AddHeader(
+                    Session.Credential,
+                    sessionRequest
+                );
+
+                return sessionRequest;
+            }
+        }
+
+#if UNITY_2017_1_OR_NEWER
+		public IEnumerator VerifyFormByStampTask(
+                Request.VerifyFormByStampTaskRequest request,
+                UnityAction<AsyncResult<Result.VerifyFormByStampTaskResult>> callback
+        ) =>
+            new VerifyFormByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToCoroutine(callback);
+
+		public IFuture<Result.VerifyFormByStampTaskResult> VerifyFormByStampTaskFuture(
+                Request.VerifyFormByStampTaskRequest request
+        ) =>
+            new VerifyFormByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().ToGs2Future();
+
+    #if GS2_ENABLE_UNITASK
+		public UniTask<Result.VerifyFormByStampTaskResult> VerifyFormByStampTaskAsync(
+                Request.VerifyFormByStampTaskRequest request
+        ) =>
+            new VerifyFormByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+                request
+            ).Invoke().AsUniTask<Result.VerifyFormByStampTaskResult>();
+    #else
+		public VerifyFormByStampTaskTask VerifyFormByStampTaskAsync(
+                Request.VerifyFormByStampTaskRequest request
+        )
+		{
+			return new VerifyFormByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new UnityRestSessionRequest(_certificateHandler)),
+			    request
+            );
+        }
+    #endif
+#else
+		public Task<Result.VerifyFormByStampTaskResult> VerifyFormByStampTaskAsync(
+                Request.VerifyFormByStampTaskRequest request
+        ) =>
+            new VerifyFormByStampTaskTask(
+                Gs2RestSession,
+                new RestSessionRequestFactory(() => new DotNetRestSessionRequest()),
+                request
+            ).Invoke().AsTask();
+#endif
+
+
         public class DescribePropertyFormsTask : Gs2RestSessionTask<DescribePropertyFormsRequest, DescribePropertyFormsResult>
         {
             public DescribePropertyFormsTask(IGs2Session session, RestSessionRequestFactory factory, DescribePropertyFormsRequest request) : base(session, factory, request)

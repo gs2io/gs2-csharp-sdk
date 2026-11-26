@@ -240,6 +240,35 @@ namespace Gs2.Gs2Formation.Domain.Model
         }
 
         #if UNITY_2017_1_OR_NEWER
+        public IFuture<Gs2.Gs2Formation.Domain.Model.FormAccessTokenDomain> VerifyFuture(
+            VerifyFormRequest request
+        ) => VerifyAsync(request).ToGs2Future();
+        #endif
+
+        #if GS2_ENABLE_UNITASK
+        public async UniTask<Gs2.Gs2Formation.Domain.Model.FormAccessTokenDomain> VerifyAsync(
+        #else
+        public async Task<Gs2.Gs2Formation.Domain.Model.FormAccessTokenDomain> VerifyAsync(
+        #endif
+            VerifyFormRequest request
+        ) {
+            request = request
+                .WithContextStack(string.IsNullOrEmpty(request.ContextStack) ? this._gs2.DefaultContextStack : request.ContextStack)
+                .WithNamespaceName(this.NamespaceName)
+                .WithAccessToken(this.AccessToken?.Token)
+                .WithMoldModelName(this.MoldModelName)
+                .WithIndex(this.Index);
+            var result = await request.InvokeAsync(
+                _gs2.Cache,
+                this.UserId,
+                this.AccessToken?.TimeOffset,
+                () => this._client.VerifyFormAsync(request)
+            );
+            var domain = this;
+            return domain;
+        }
+
+        #if UNITY_2017_1_OR_NEWER
         public IFuture<Gs2.Gs2Formation.Model.Form> ModelFuture() => ModelAsync().ToGs2Future();
         #endif
 
