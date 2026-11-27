@@ -4360,6 +4360,16 @@ namespace Gs2.Gs2Inbox
                     jsonWriter.WritePropertyName("messageReceptionPeriodEventId");
                     jsonWriter.Write(request.MessageReceptionPeriodEventId);
                 }
+                if (request.VerifyActions != null)
+                {
+                    jsonWriter.WritePropertyName("verifyActions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.VerifyActions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
+                }
                 if (request.ContextStack != null)
                 {
                     jsonWriter.WritePropertyName("contextStack");
@@ -4578,6 +4588,16 @@ namespace Gs2.Gs2Inbox
                 {
                     jsonWriter.WritePropertyName("messageReceptionPeriodEventId");
                     jsonWriter.Write(request.MessageReceptionPeriodEventId);
+                }
+                if (request.VerifyActions != null)
+                {
+                    jsonWriter.WritePropertyName("verifyActions");
+                    jsonWriter.WriteArrayStart();
+                    foreach(var item in request.VerifyActions)
+                    {
+                        item.WriteJson(jsonWriter);
+                    }
+                    jsonWriter.WriteArrayEnd();
                 }
                 if (request.ContextStack != null)
                 {

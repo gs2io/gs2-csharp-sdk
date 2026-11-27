@@ -44,6 +44,7 @@ namespace Gs2.Gs2Inbox.Request
         [Obsolete("This method is deprecated")]
          public long? ExpiresAt { set; get; } = null!;
          public string MessageReceptionPeriodEventId { set; get; } = null!;
+         public Gs2.Core.Model.VerifyAction[] VerifyActions { set; get; } = null!;
         public CreateGlobalMessageMasterRequest WithNamespaceName(string namespaceName) {
             this.NamespaceName = namespaceName;
             return this;
@@ -73,6 +74,10 @@ namespace Gs2.Gs2Inbox.Request
             this.MessageReceptionPeriodEventId = messageReceptionPeriodEventId;
             return this;
         }
+        public CreateGlobalMessageMasterRequest WithVerifyActions(Gs2.Core.Model.VerifyAction[] verifyActions) {
+            this.VerifyActions = verifyActions;
+            return this;
+        }
 
 #if UNITY_2017_1_OR_NEWER
     	[Preserve]
@@ -90,7 +95,10 @@ namespace Gs2.Gs2Inbox.Request
                     return Gs2.Core.Model.AcquireAction.FromJson(v);
                 }).ToArray())
                 .WithExpiresTimeSpan(!data.Keys.Contains("expiresTimeSpan") || data["expiresTimeSpan"] == null ? null : Gs2.Gs2Inbox.Model.TimeSpan_.FromJson(data["expiresTimeSpan"]))
-                .WithMessageReceptionPeriodEventId(!data.Keys.Contains("messageReceptionPeriodEventId") || data["messageReceptionPeriodEventId"] == null ? null : data["messageReceptionPeriodEventId"].ToString());
+                .WithMessageReceptionPeriodEventId(!data.Keys.Contains("messageReceptionPeriodEventId") || data["messageReceptionPeriodEventId"] == null ? null : data["messageReceptionPeriodEventId"].ToString())
+                .WithVerifyActions(!data.Keys.Contains("verifyActions") || data["verifyActions"] == null || !data["verifyActions"].IsArray ? null : data["verifyActions"].Cast<JsonData>().Select(v => {
+                    return Gs2.Core.Model.VerifyAction.FromJson(v);
+                }).ToArray());
         }
 
         public override JsonData ToJson()
@@ -104,6 +112,15 @@ namespace Gs2.Gs2Inbox.Request
                     readAcquireActionsJsonData.Add(readAcquireAction.ToJson());
                 }
             }
+            JsonData verifyActionsJsonData = null;
+            if (VerifyActions != null && VerifyActions.Length > 0)
+            {
+                verifyActionsJsonData = new JsonData();
+                foreach (var verifyAction in VerifyActions)
+                {
+                    verifyActionsJsonData.Add(verifyAction.ToJson());
+                }
+            }
             return new JsonData {
                 ["namespaceName"] = NamespaceName,
                 ["name"] = Name,
@@ -111,6 +128,7 @@ namespace Gs2.Gs2Inbox.Request
                 ["readAcquireActions"] = readAcquireActionsJsonData,
                 ["expiresTimeSpan"] = ExpiresTimeSpan?.ToJson(),
                 ["messageReceptionPeriodEventId"] = MessageReceptionPeriodEventId,
+                ["verifyActions"] = verifyActionsJsonData,
             };
         }
 
@@ -151,6 +169,17 @@ namespace Gs2.Gs2Inbox.Request
                 writer.WritePropertyName("messageReceptionPeriodEventId");
                 writer.Write(MessageReceptionPeriodEventId.ToString());
             }
+            if (VerifyActions != null) {
+                writer.WritePropertyName("verifyActions");
+                writer.WriteArrayStart();
+                foreach (var verifyAction in VerifyActions)
+                {
+                    if (verifyAction != null) {
+                        verifyAction.WriteJson(writer);
+                    }
+                }
+                writer.WriteArrayEnd();
+            }
             writer.WriteObjectEnd();
         }
 
@@ -162,6 +191,7 @@ namespace Gs2.Gs2Inbox.Request
             key += ReadAcquireActions + ":";
             key += ExpiresTimeSpan + ":";
             key += MessageReceptionPeriodEventId + ":";
+            key += VerifyActions + ":";
             return key;
         }
     }
